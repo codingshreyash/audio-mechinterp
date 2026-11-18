@@ -1,0 +1,154 @@
+{
+  "schema": "voxtral_stage_a_fp32_continuation_attempt_manifest_v1",
+  "status": "launch_completed_v2_audited_native_old_fit_case",
+  "attempt_id": "20261118T134440087432Z",
+  "arm": "fp32",
+  "audit_scope": "saved_tensor_and_receipt_arithmetic_only_no_model_execution_attestation",
+  "original_bf16_launch_status": "launch_failed",
+  "original_bf16_launch_finish_sha256": "15ed053c8ca4e619735cce3319b5d2326ff4b19216475754acc2cbf4e3bcdf9a",
+  "posthoc_bf16_receipt_sha256": "df4e16989a67a4cc3e4584aa74c99f3b0a2601e82d8226adc7beb2d41bd38ba7",
+  "continuation_freeze_sha256": "31e41dcee185432e7236f5ff4226e1062c8066a034a66d75f89916a4a4ef1dcf",
+  "reservation_path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32_reservation.json",
+  "reservation_sha256": "5d34ac57ba14baedeae63fb1f0d7db0eb7e597c4302265397b5fa3e765aece84",
+  "launch_start_sha256": "1e9a29bd19ac11e51df1343f45dd78c41d23216bd832e9cb1fb7bd0c0d022e54",
+  "launch_finish_sha256": "1dee115a133d3734861909c3be526c15eef224ee1974db0a97a2f3c1ffc6acb9",
+  "runner_result_sha256": "f4b87e1ee4fad0b3b03e06447dc15286897daa607a2eb50d5096a089fa22eb9b",
+  "audit_sha256": "122a89b7d4bd659ced83dcd5677767f556381cabed63297ae01edd7348dd41d8",
+  "runner_source_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+  "native_source_sha256": "dc63b8c10ef605e1cc8538e3d37d8d2531e50ca7a46140ee1ee551054e3de978",
+  "protocol_sha256": "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b",
+  "v2_auditor_sha256": "8d5f8b23bd32add8464bd976d42cd0225fbc5ee86510adc441b714de5a8fd275",
+  "details_sha256": "40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716",
+  "probes_sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e",
+  "planned_counts": {
+    "native_patch_forwards": 72,
+    "native_pairs": 36,
+    "parity_prompt_forwards": 6,
+    "donor_prompt_forwards": 1,
+    "clean_grad_prompt_forwards": 1,
+    "vjps": 44,
+    "greedy_generations": 6,
+    "lm0_control_zero_forwards": 24,
+    "lm0_control_edited_forwards": 24,
+    "lm0_control_self_forwards": 1
+  },
+  "actual_counts": {
+    "native_patch_forwards": 72,
+    "native_pairs": 36,
+    "parity_prompt_forwards": 6,
+    "donor_prompt_forwards": 1,
+    "clean_grad_prompt_forwards": 1,
+    "vjps": 44,
+    "greedy_generations": 6,
+    "lm0_control_zero_forwards": 24,
+    "lm0_control_edited_forwards": 24,
+    "lm0_control_self_forwards": 1
+  },
+  "audited_counts": {
+    "audited_native_pairs": 36,
+    "audited_patch_forwards": 72,
+    "audited_vjps": 44,
+    "audited_lm0_control_cells": 24
+  },
+  "prior_model_work_seconds": 63.245136791840196,
+  "model_work_elapsed_seconds": 155.3182365419343,
+  "cumulative_model_work_seconds": 218.5633733337745,
+  "cumulative_model_work_cap_seconds": 4500,
+  "runner_cap_seconds": 1200,
+  "process_timeout_seconds": 1320,
+  "runner_mps_driver_cap_bytes": 32212254720,
+  "peak_mps_driver_bytes": 28793487360,
+  "arm_output_cap_bytes": 1610612736,
+  "entire_attempt_bytes": 1414419896,
+  "local_large_sidecars_required": true,
+  "local_tensor_sidecars": {
+    "details": {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/blobs/40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716.pt",
+      "bytes": 1412670803,
+      "sha256": "40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716"
+    },
+    "probes": {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/blobs/dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e.pt",
+      "bytes": 985057,
+      "sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e"
+    }
+  },
+  "files": [
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/audit.json",
+      "bytes": 1056,
+      "sha256": "122a89b7d4bd659ced83dcd5677767f556381cabed63297ae01edd7348dd41d8",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/audit_stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/launch_finish.json",
+      "bytes": 812,
+      "sha256": "1dee115a133d3734861909c3be526c15eef224ee1974db0a97a2f3c1ffc6acb9",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/launch_start.json",
+      "bytes": 1319,
+      "sha256": "1e9a29bd19ac11e51df1343f45dd78c41d23216bd832e9cb1fb7bd0c0d022e54",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/blobs/40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716.pt",
+      "bytes": 1412670803,
+      "sha256": "40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716",
+      "git_committed": false
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/blobs/dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e.pt",
+      "bytes": 985057,
+      "sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e",
+      "git_committed": false
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/meta.json",
+      "bytes": 4177,
+      "sha256": "db69fbe6cb98d2e4a8c1205b9d2510df0181ef96c8bd5bd2beac4cee69ef7c17",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/model_layout.json",
+      "bytes": 156750,
+      "sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/progress.jsonl",
+      "bytes": 39689,
+      "sha256": "aa8177ec91b839bff344a0796b81a29a73c084f00e578f76bd9fb6f638cb9c0a",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner/result.json",
+      "bytes": 559748,
+      "sha256": "f4b87e1ee4fad0b3b03e06447dc15286897daa607a2eb50d5096a089fa22eb9b",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner_stderr.txt",
+      "bytes": 485,
+      "sha256": "a9d7a037e366dec0cf89571f3c245cada8df9333a0f3285c0c9b91d72b9078e3",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner_stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_committed": true
+    }
+  ],
+  "launch_started_utc": "2026-11-18T13:44:41.646634+00:00",
+  "launch_finished_utc": "2026-11-18T13:47:22.863178+00:00",
+  "launch_elapsed_seconds": 161.21771649993025,
+  "max_capture_bytes_per_stream": 8388608
+}
