@@ -24,6 +24,8 @@ P = {
                "6f428f9840e2e9defd6eb6ba3be8c67d0ca624c1e25fee8122eb2e356944a6ed"),
     "first_helper": (HERE / "voxtral_fit_v2_causal_first_record.py",
                      "64d799bbb40b58b128b049877d18bde7774c2dc16717af97e692aa4531e907b5"),
+    "base_helper": (HERE / "voxtral_fit_pilot_capability_v1.py",
+                    "1d4d65a528d558e5bdda3b733eaab6e7e849ab9456d6842d5ee178d3efdfb8d8"),
     "preprocess_helper": (HERE / "voxtral_preprocessing_decomposition.py",
                           "026445da1ac2c4c2f4b8f45ab2f8d7a1f4679924774714951b16d5cd29de0788"),
     "mask_builder": (HERE / "voxtral_dev_transfer_masks.py",
@@ -454,6 +456,26 @@ def verify_row(row: dict, record: dict, byslot: dict, processor, special: set[in
                 "opposite word donor/source support")
 
 
+def verify_patch_norm_groups(byslot: dict, record: dict) -> None:
+    """Bind every control target to its whole-word BF16 edit in this direction."""
+    for site in SITES:
+        for word in record["words"]:
+            for arm in ARMS:
+                whole = byslot[("patch", site, word, arm, "whole")]
+                require(whole["type"] == "generation", "whole-word edit missing")
+                whole_edit = whole["edit"]
+                target = whole_edit.get("target_bf16_norm")
+                effective = whole_edit.get("effective_bf16_norm")
+                require(isinstance(target, (int, float)) and target > 0
+                        and near(target, effective, 1e-6),
+                        "whole-word target/effective BF16 norm mismatch")
+                for name in CONTROLS:
+                    row = byslot[("patch", site, word, arm, name)]
+                    edit = row["edit"]
+                    require(near(edit.get("target_bf16_norm"), effective, 1e-6),
+                            "control target differs from whole-word BF16 norm")
+
+
 def verify_receipts(run_dir: Path, checkpoints: list[dict]) -> dict:
     starts = sorted(run_dir.glob("invocation_*.start.json"))
     errors = sorted(run_dir.glob("invocation_*.error.json"))
@@ -604,6 +626,7 @@ def audit(run_dir: Path) -> dict:
         byslot={slot(row):row for row in rows}
         for row in rows:
             verify_row(row,record,byslot,processor,special)
+        verify_patch_norm_groups(byslot, record)
         all_rows.extend(rows)
     require(len(all_rows)==5184 and final["progress_rows"]==5184 and
             final["captures"]==384 and

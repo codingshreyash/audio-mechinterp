@@ -77,6 +77,33 @@ class DevelopmentAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "self patch invalid"):
             audit.verify_row(invalid, self.records[0], byslot, FakeProcessor(), {2})
 
+    def test_control_norm_cannot_move_with_its_own_saved_target(self):
+        record = self.records[0]
+        byslot = {}
+        for site in audit.SITES:
+            for word in record["words"]:
+                for arm in audit.ARMS:
+                    byslot[("patch", site, word, arm, "whole")] = {
+                        "type": "generation", "edit": {"target_bf16_norm": 10.0,
+                                                         "effective_bf16_norm": 10.0}}
+                    for name in audit.CONTROLS:
+                        byslot[("patch", site, word, arm, name)] = {
+                            "type": "generation", "edit": {"target_bf16_norm": 10.0,
+                                                             "effective_bf16_norm": 9.9,
+                                                             "alpha": 2.0,
+                                                             "unscaled_edit_norm": 5.0}}
+        audit.verify_patch_norm_groups(byslot, record)
+        first_word = record["words"][0]
+        changed = byslot[("patch", "encoder31", first_word, "restore", "pre")]["edit"]
+        changed.update(target_bf16_norm=11.0, effective_bf16_norm=10.9, alpha=2.2)
+        # This remains within the row's own 5% tolerance, with matching alpha.
+        self.assertLessEqual(abs(changed["effective_bf16_norm"] - changed["target_bf16_norm"]),
+                             .05 * changed["target_bf16_norm"])
+        self.assertAlmostEqual(changed["alpha"], changed["target_bf16_norm"] /
+                               changed["unscaled_edit_norm"])
+        with self.assertRaisesRegex(AssertionError, "control target differs"):
+            audit.verify_patch_norm_groups(byslot, record)
+
     def synthetic_rows(self):
         rows, cases = [], []
         for record in self.records:
