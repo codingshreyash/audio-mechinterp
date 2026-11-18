@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "voxtral_old_fit_grad_leaf_cuda_environment_receipt_v1",
+  "title": "Voxtral CUDA gradient-leaf environment receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "collected_utc", "workspace", "machine", "software", "wheelhouse", "sources", "checkpoint", "inputs", "cuda_controls", "storage", "provenance"],
+  "properties": {
+    "schema": {"const": "voxtral_old_fit_grad_leaf_cuda_environment_receipt_v1"},
+    "collected_utc": {"type": "string", "format": "date-time"},
+    "workspace": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "id", "instance_type", "provider", "gpu_type", "gpu_count", "quoted_usd_per_hour", "quote_utc", "started_utc"],
+      "properties": {
+        "name": {"const": "garak-calendar-languages"},
+        "id": {"const": "elfvr4yal"},
+        "instance_type": {"const": "l40s-48gb.1x"},
+        "provider": {"const": "crusoe"},
+        "gpu_type": {"const": "L40S"},
+        "gpu_count": {"const": 1},
+        "quoted_usd_per_hour": {"type": "number", "exclusiveMinimum": 0},
+        "quote_utc": {"type": "string", "format": "date-time"},
+        "started_utc": {"type": "string", "format": "date-time"}
+      }
+    },
+    "machine": {
+      "type": "object", "additionalProperties": false,
+      "required": ["uname", "os_release_sha256", "python_version", "cpu_arch", "ram_bytes", "gpu_name", "gpu_uuid", "gpu_memory_bytes", "compute_capability", "driver_version", "nvidia_smi_q_sha256"],
+      "properties": {
+        "uname": {"type": "string", "minLength": 1},
+        "os_release_sha256": {"$ref": "#/$defs/sha256"},
+        "python_version": {"type": "string", "minLength": 1},
+        "cpu_arch": {"const": "x86_64"},
+        "ram_bytes": {"type": "integer", "minimum": 118111600640},
+        "gpu_name": {"type": "string", "pattern": "L40S"},
+        "gpu_uuid": {"type": "string", "minLength": 1},
+        "gpu_memory_bytes": {"type": "integer", "minimum": 45000000000},
+        "compute_capability": {"type": "string", "minLength": 1},
+        "driver_version": {"type": "string", "minLength": 1},
+        "nvidia_smi_q_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "software": {
+      "type": "object", "additionalProperties": false,
+      "required": ["torch", "torch_cuda", "cudnn", "transformers", "accelerate", "safetensors", "pip_freeze_sha256", "pip_list_sha256", "pip_check_sha256", "pip_debug_sha256"],
+      "properties": {
+        "torch": {"type": "string", "minLength": 1},
+        "torch_cuda": {"type": "string", "minLength": 1},
+        "cudnn": {"type": "integer", "minimum": 1},
+        "transformers": {"const": "5.20.2"},
+        "accelerate": {"type": "string", "minLength": 1},
+        "safetensors": {"type": "string", "minLength": 1},
+        "pip_freeze_sha256": {"$ref": "#/$defs/sha256"},
+        "pip_list_sha256": {"$ref": "#/$defs/sha256"},
+        "pip_check_sha256": {"$ref": "#/$defs/sha256"},
+        "pip_debug_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "wheelhouse": {
+      "type": "object", "additionalProperties": false,
+      "required": ["linux_lock_sha256", "manifest_sha256", "wheel_count", "offline_install"],
+      "properties": {
+        "linux_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "wheel_count": {"type": "integer", "minimum": 1},
+        "offline_install": {"const": true}
+      }
+    },
+    "sources": {
+      "type": "object", "additionalProperties": false,
+      "required": ["modeling_voxtral", "processing_voxtral", "feature_extraction_whisper", "modeling_llama", "runner", "auditor", "gate"],
+      "properties": {
+        "modeling_voxtral": {"$ref": "#/$defs/sha256"},
+        "processing_voxtral": {"$ref": "#/$defs/sha256"},
+        "feature_extraction_whisper": {"$ref": "#/$defs/sha256"},
+        "modeling_llama": {"$ref": "#/$defs/sha256"},
+        "runner": {"$ref": "#/$defs/sha256"},
+        "auditor": {"$ref": "#/$defs/sha256"},
+        "gate": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checkpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repo_id", "revision", "tree_sha256", "config_sha256", "weight_index_sha256", "weight_shard_sha256", "tokenizer_sha256", "preprocessor_sha256", "generation_config_sha256"],
+      "properties": {
+        "repo_id": {"const": "mistralai/Voxtral-Mini-3B-2507"},
+        "revision": {"const": "3060fe34b35ba5d44202ce9ff3c097642914f8f3"},
+        "tree_sha256": {"const": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"},
+        "config_sha256": {"const": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"},
+        "weight_index_sha256": {"const": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"},
+        "weight_shard_sha256": {
+          "type": "array", "prefixItems": [
+            {"const": "1facdc4c5a0e84f2881a59c4756441b7030a1f1036b2124c117540408d0e5fe9"},
+            {"const": "0a103ba715bc0d656e94bf79d637d4f8f0f4fe6d76fb1d4db7ee46c6b940f631"}
+          ], "items": false, "minItems": 2, "maxItems": 2
+        },
+        "tokenizer_sha256": {"const": "4aaf3836c2a5332f029ce85a7a62255c966f47b6797ef81dedd0ade9c862e4a8"},
+        "preprocessor_sha256": {"const": "86d67d926e17d3a9bb0bae334c9fc46bc163181992357a0357c0aec2c7e131d1"},
+        "generation_config_sha256": {"const": "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"}
+      }
+    },
+    "inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["beaver_archive_sha256", "beaver_encoder31_fp32_sha256", "beaver_projector_fp32_sha256", "waterfall_wav_sha256", "waterfall_cpu_feature_sha256"],
+      "properties": {
+        "beaver_archive_sha256": {"const": "40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716"},
+        "beaver_encoder31_fp32_sha256": {"const": "f0efa8b0692c7cd32f89bb9aff0e6dfcb7a799dc785b09f61ab571eddb2299fd"},
+        "beaver_projector_fp32_sha256": {"const": "36ca0e274eae938d23d32d9924d1ec6d854f2607a7eaee40b9a2b47babb5daee"},
+        "waterfall_wav_sha256": {"const": "05b367cfc538c4c6a7dfd5e9d113b37be42eee1be497dd9c48f7548131adeaef"},
+        "waterfall_cpu_feature_sha256": {"const": "caed5dc4c8328c670c081401c7ddf236f8def0ab3550c9fa62d6aee3a1f8b045"}
+      }
+    },
+    "cuda_controls": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tf32_matmul", "tf32_cudnn", "matmul_precision", "deterministic_algorithms", "warn_only", "sdpa_implementation", "seed", "offline_hf", "offline_transformers"],
+      "properties": {
+        "tf32_matmul": {"const": false},
+        "tf32_cudnn": {"const": false},
+        "matmul_precision": {"const": "highest"},
+        "deterministic_algorithms": {"const": true},
+        "warn_only": {"const": false},
+        "sdpa_implementation": {"const": "sdpa"},
+        "seed": {"type": "integer", "minimum": 0},
+        "offline_hf": {"const": true},
+        "offline_transformers": {"const": true}
+      }
+    },
+    "storage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["free_bytes_before_model", "input_bundle_path", "input_bundle_sha256", "input_bundle_bytes", "output_root"],
+      "properties": {
+        "free_bytes_before_model": {"type": "integer", "minimum": 32212254720},
+        "input_bundle_path": {"type": "string", "minLength": 1},
+        "input_bundle_sha256": {"$ref": "#/$defs/sha256"},
+        "input_bundle_bytes": {"type": "integer", "minimum": 1},
+        "output_root": {"type": "string", "minLength": 1}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["protocol_v1_sha256", "protocol_v2_sha256", "concept_review_sha256", "brev_inventory_sha256", "command_log_sha256", "environment_source_review_sha256"],
+      "properties": {
+        "protocol_v1_sha256": {"const": "188925bc4022aa9841502d310899b5f9b28bf8ec0ba32ab7f7acb3fc45579050"},
+        "protocol_v2_sha256": {"const": "c86537552b55f6542c88d2be9a7c71d5e1cecd589c6a11cc89eec514c49419ca"},
+        "concept_review_sha256": {"$ref": "#/$defs/sha256"},
+        "brev_inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "command_log_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_source_review_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}
