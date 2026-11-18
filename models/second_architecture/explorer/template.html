@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voxtral FIT causal trace</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10161c; --panel:#18232c; --line:#33434e; --ink:#f0f3f5; --muted:#adc0ca; --accent:#75d3c6; --good:#92d9a5; --bad:#f1ba93; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .wrap { max-width:1360px; margin:auto; padding:28px 24px 72px; }
+    h1 { font-size:clamp(1.65rem,3vw,2.35rem); margin:0 0 6px; letter-spacing:-.02em; }
+    h2 { font-size:1.16rem; margin:0 0 14px; }
+    h3 { font-size:1rem; margin:0 0 10px; }
+    p { margin:0 0 13px; }
+    a { color:var(--accent); }
+    .eyebrow { text-transform:uppercase; letter-spacing:.14em; color:var(--accent); font-size:.73rem; font-weight:800; margin-bottom:8px; }
+    .sub { color:var(--muted); max-width:90ch; }
+    .caution { background:#3b2b22; border:1px solid #846449; border-radius:10px; padding:11px 14px; margin:18px 0 25px; color:#ffe4ce; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .card,.panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; }
+    .card { padding:15px; }
+    .card strong { display:block; font-size:1.45rem; line-height:1.1; margin:5px 0; }
+    .label { color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.07em; }
+    .small { font-size:.84rem; color:var(--muted); }
+    .panel { margin-top:16px; padding:18px; }
+    .controls { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+    label { display:block; font-size:.8rem; color:var(--muted); font-weight:700; }
+    select { display:block; width:100%; margin-top:5px; padding:9px 10px; border:1px solid #58707d; border-radius:7px; background:#101b22; color:var(--ink); font:inherit; }
+    .row { display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+    .gate { font-size:.74rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:3px 8px; border-radius:999px; }
+    .pass { color:#11251c; background:var(--good); }
+    .fail { color:#311e15; background:var(--bad); }
+    .table-wrap { overflow:auto; }
+    table { width:100%; border-collapse:collapse; min-width:780px; font-size:.88rem; }
+    th,td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { color:var(--muted); white-space:nowrap; font-size:.77rem; text-transform:uppercase; letter-spacing:.045em; }
+    td code, .hash { font: .81rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere; }
+    .out { white-space:pre-wrap; max-width:260px; }
+    .class { font-size:.78rem; font-weight:700; }
+    .class-recipient { color:var(--good); }
+    .class-opposite { color:#b8b5fa; }
+    .class-other { color:#ead08c; }
+    .class-malformed_surface,.class-missing_eos,.class-malformed_special { color:var(--bad); }
+    .mono { font-variant-numeric:tabular-nums; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    details { color:var(--muted); }
+    details summary { cursor:pointer; color:var(--accent); }
+    .mask-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }
+    .mask { background:#101b22; border:1px solid var(--line); border-radius:8px; padding:8px; }
+    .mask b { display:block; font-size:.8rem; }
+    .mask span { font-size:.78rem; color:var(--muted); }
+    .prov { display:grid; grid-template-columns:180px minmax(0,1fr); gap:5px 12px; margin:0; }
+    .prov dt { color:var(--muted); }
+    .prov dd { margin:0; }
+    .foot { color:var(--muted); font-size:.8rem; margin-top:18px; }
+    @media(max-width:900px) { .grid { grid-template-columns:repeat(2,1fr); } .controls { grid-template-columns:repeat(2,1fr); } .mask-grid { grid-template-columns:repeat(3,1fr); } }
+    @media(max-width:540px) { .wrap { padding:20px 13px 55px; } .grid,.controls { grid-template-columns:1fr; } .mask-grid { grid-template-columns:repeat(2,1fr); } .prov { grid-template-columns:1fr; } .prov dt { margin-top:7px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="eyebrow">Audited model-internal assay · FIT split</div>
+    <h1>Voxtral word-state intervention explorer</h1>
+    <p class="sub">Inspect exact generated answers, teacher-forced candidate scores, edited row supports, and the frozen decision gates across four lexical pairs and two synthetic voices.</p>
+    <p class="caution"><strong>Scope:</strong> These are constructed mel-feature blanks and internal state patches on FIT audio. This page does not show an attacker-reachable waveform, held-out transfer, or a security vulnerability. Post-encoder rows can contain information from other times.</p>
+
+    <section class="grid" aria-label="Run summary" id="cards"></section>
+
+    <section class="panel" aria-labelledby="gate-title">
+      <h2 id="gate-title">Frozen population gates</h2>
+      <div class="table-wrap"><table><thead><tr><th>Site</th><th>Intervention</th><th>Complete-answer effect</th><th>Time preference</th><th>Wrong-time/random answer successes</th><th>Valid paired scores</th></tr></thead><tbody id="gates"></tbody></table></div>
+      <p class="small" style="margin-top:12px">Restoration’s time-preference gate fails because malformed control answers leave fewer than 14 valid paired score comparisons per control. Its 16/16 complete-answer restoration result still passes the separate effect gate.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="inspect-title">
+      <h2 id="inspect-title">Inspect one paired direction</h2>
+      <div class="controls">
+        <label>Lexical pair<select id="pair"></select></label>
+        <label>Synthetic voice<select id="voice"></select></label>
+        <label>Recipient word<select id="recipient"></select></label>
+        <label>Model site<select id="site"><option value="encoder31">Post-encoder block 31</option><option value="projector">Post-projector</option></select></label>
+        <label>Patch arm<select id="arm"><option value="restore">Restore clean state into blank run</option><option value="loss">Replace clean state with blank state</option></select></label>
+      </div>
+      <p class="small" id="case-context" style="margin-top:14px"></p>
+      <div class="table-wrap"><table><thead><tr><th>Condition</th><th>Complete generated suffix</th><th>Class</th><th>Candidate contrast C</th><th>Signed movement</th><th>Edited rows / norm</th><th>Raw evidence</th></tr></thead><tbody id="evidence"></tbody></table></div>
+      <p class="small" style="margin-top:12px"><span class="mono">C = LL(recipient + EOS) − LL(opposite + EOS)</span>. Movement is <span class="mono">Ccondition − Cblank</span> for restoration, and <span class="mono">Cclean − Ccondition</span> for loss. This score measures two teacher-forced candidates; the generated suffix and its class remain the behavioral endpoint.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="mask-title">
+      <h2 id="mask-title">Frozen nominal time supports</h2>
+      <p class="small">The bins below are selected row indices at the chosen hook. They are intervention supports, not a map of acoustic origin or individual neurons.</p>
+      <div class="mask-grid" id="masks"></div>
+      <p class="small" id="sample-slot" style="margin-top:12px"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="provenance-title">
+      <h2 id="provenance-title">Provenance and raw files</h2>
+      <dl class="prov" id="provenance"></dl>
+      <p class="small" style="margin-top:14px">Open the <a href="../runs/voxtral_fit_v2_causal_full/20261118T0928Z/result.json">saved result</a>, <a href="../runs/voxtral_fit_v2_causal_full/20261118T0928Z/audit.json">independent audit</a>, <a href="../VOXTRAL_FIT_V2_CAUSAL_FULL_RESULT_INDEPENDENT_REVIEW.md">review</a>, and <a href="../VOXTRAL_FIT_V2_CAUSAL_DESIGN.md">frozen design</a>. The generated page embeds only data verified against those local artifacts.</p>
+    </section>
+    <p class="foot">The controls and thresholds were fixed before the full run. No row was omitted because its answer was malformed.</p>
+  </main>
+  <script type="application/json" id="embedded-data">__EMBEDDED_JSON__</script>
+  <script>__APP_JS__</script>
+</body>
+</html>
