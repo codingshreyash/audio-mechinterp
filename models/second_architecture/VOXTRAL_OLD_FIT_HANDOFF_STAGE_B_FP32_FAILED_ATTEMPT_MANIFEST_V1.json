@@ -1,0 +1,93 @@
+{
+  "attempt_id": "20261118T143734566440Z",
+  "audit_present": false,
+  "auditor_returncode": null,
+  "auditor_sha256": "45cbf7f1b1767d8a736ab5569a06a152b8c2705c010fbfb9cc45f7d039575cf0",
+  "driver_sha256": "f685a920a61bb1885ce86df44e41899adca886f42b90f5a6577ae7e6cffaf71e",
+  "failure_checkpoint": "first_encoder31_source_parity_clean_graph_vs_clean_repeat_at_lm0",
+  "file_count": 10,
+  "files": [
+    {
+      "bytes": 702,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_launch_v1/fp32_replay/20261118T143734566440Z/launch_finish.json",
+      "sha256": "fb5792d11554c814277e47648e4eeb91ee0de8851f825b1098120410a61fec84"
+    },
+    {
+      "bytes": 1528,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_launch_v1/fp32_replay/20261118T143734566440Z/launch_start.json",
+      "sha256": "efd9b27d51dc860aad595b7a4c95e1bd3e7e94f88973a4acfae4ad4ea53e83a8"
+    },
+    {
+      "bytes": 271,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_launch_v1/fp32_replay/20261118T143734566440Z/worker_claim.json",
+      "sha256": "6494eb8f11a49ee8e6cd91d5ec54589ff44ddedbb4292a1e19d77e89e050f44e"
+    },
+    {
+      "bytes": 1997,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_launch_v1/fp32_replay/20261118T143734566440Z/worker_stderr.txt",
+      "sha256": "4cf99dc421c0fdfe8b2db8bf9d4be213f9cca5b6f9c71962080dade3e9a0271f"
+    },
+    {
+      "bytes": 0,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_launch_v1/fp32_replay/20261118T143734566440Z/worker_stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 205,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_launch_v1/fp32_replay_reservation.json",
+      "sha256": "f2288eecd86a088b6de94d25838ca0a9894a072f6922cd02048f3dcc1c958175"
+    },
+    {
+      "bytes": 332,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_v1/fp32_replay/20261118T143734566440Z/error.json",
+      "sha256": "6ce313cebb6c1dbef1611c3176399e59c45be38089419d841bc5fed682f95432"
+    },
+    {
+      "bytes": 1953,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_v1/fp32_replay/20261118T143734566440Z/meta.json",
+      "sha256": "0cbf3eacb3c459aea6dec0fbc6bf03b24b0c0b231e99b824b3ae0b7c084b4640"
+    },
+    {
+      "bytes": 156750,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_v1/fp32_replay/20261118T143734566440Z/model_layout.json",
+      "sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad"
+    },
+    {
+      "bytes": 566,
+      "git_committed": true,
+      "path": "runs/voxtral_old_fit_handoff_stage_b_v1/fp32_replay/20261118T143734566440Z/progress.jsonl",
+      "sha256": "6e3c52dd72ff0be7c79a6da596956d286b9dfedcb056ac6d283f543e96c4c5ef"
+    }
+  ],
+  "fp32_freeze_review_sha256": "9895fc29c68c410bd1c118a95255cc9d6ba63e1bb756988f285154ed5b461e12",
+  "fp32_freeze_sha256": "bc2025eb6beab51965a468544bec53b598919b4a4aea7d4f00d8dbe7ca3c462c",
+  "launcher_gate_sha256": "8bf750e1f79095c714a57cb78a4c0793f6b98122fb64d5453398c820e2058858",
+  "launcher_status": "launch_failed",
+  "original_stage_a_bf16_launch_status": "launch_failed",
+  "parent_model_work_elapsed_seconds": 41.18471045792103,
+  "phase": "fp32_replay",
+  "prior_model_work_seconds": 246.84183400077745,
+  "result_present": false,
+  "runner_returncode": 1,
+  "schema": "voxtral_old_fit_handoff_stage_b_fp32_failed_attempt_manifest_v1",
+  "scope": "raw_receipt_and_error_provenance_only_no_forward_attestation_or_security_claim",
+  "stage_a_manifest_sha256": {
+    "bf16": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+    "fp32": "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f"
+  },
+  "status": "frozen_failed_before_saved_result_or_audit_no_retry",
+  "tensor_sidecar_present": false,
+  "total_raw_bytes": 164304,
+  "worker_entry_sha256": "f4128106dccb07510b7be75437941ff3dc1ff2d0fd36c9181155842821ae1a7c",
+  "worker_error": "Direct LM replay mismatch at lm0",
+  "worker_error_type": "ValueError"
+}
