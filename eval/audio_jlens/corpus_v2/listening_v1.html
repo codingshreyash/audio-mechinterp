@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blinded speech listening</title>
+  <style>
+    body { max-width: 48rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; color: #16202d; }
+    h1 { line-height: 1.2; }
+    label { display: block; margin: 1rem 0 .3rem; font-weight: 600; }
+    input, select, textarea, button { font: inherit; }
+    input[type=text], input[type=number], textarea, select { box-sizing: border-box; width: 100%; padding: .5rem; }
+    textarea { min-height: 4rem; }
+    audio { display: block; width: 100%; margin: 1rem 0; }
+    button { padding: .6rem 1rem; margin: .7rem .5rem .7rem 0; cursor: pointer; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .muted { color: #536273; }
+    .card { border: 1px solid #bdc6d0; border-radius: .5rem; padding: 1rem; margin-top: 1rem; }
+    #status { min-height: 1.5rem; }
+    @media (max-width: 36rem) { .grid { grid-template-columns: 1fr; } }
+  </style>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Blinded speech listening</h1>
+    <p>Listen to each clip. Enter the <strong>one word between the opening sentence and final question or request</strong>. Mark whether that word is clear. Your answer is saved before any reference is checked.</p>
+    <p class="muted">Use a real listener who has not seen the internal case map. This page records observations; it does not decide whether the corpus passes.</p>
+    <div class="grid">
+      <div><label for="reviewer">Listener ID</label><input id="reviewer" type="text" autocomplete="off" required maxlength="64"></div>
+      <div><label for="stage">Review stage</label><select id="stage"><option value="primary">First review</option><option value="secondary">Second review</option><option value="tertiary">Third review</option></select></div>
+    </div>
+    <div class="card">
+      <p id="position">Loading queue…</p>
+      <p class="muted" id="opaque"></p>
+      <audio id="audio" controls preload="none" aria-label="Selected speech clip"></audio>
+      <p id="plays">Plays recorded: 0</p>
+      <button id="previous" type="button">Previous clip</button>
+      <button id="next" type="button">Next clip</button>
+      <button id="next-unreviewed" type="button">Next unreviewed clip</button>
+    </div>
+    <form id="response" class="card">
+      <div class="grid">
+        <div><label for="kind">Record type</label><select id="kind"><option value="initial">Initial blinded answer</option><option value="correction">Append correction</option><option value="adjudication">Append adjudication</option></select></div>
+        <div><label for="confidence">Confidence</label><select id="confidence"><option value="1">1 — very unsure</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 — very sure</option></select></div>
+      </div>
+      <label for="word">Word heard</label><input id="word" type="text" autocomplete="off" required maxlength="120">
+      <label><input id="clear" type="checkbox"> The word was clear</label>
+      <label for="note">Optional note</label><textarea id="note" maxlength="500"></textarea>
+      <div class="grid">
+        <div><label for="prior">Prior record number, for correction or adjudication</label><input id="prior" type="number" min="1" step="1"></div>
+        <div><label for="reason">Reason, for correction or adjudication</label><input id="reason" type="text" maxlength="500"></div>
+      </div>
+      <button type="submit">Save append-only response</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+</body>
+</html>
