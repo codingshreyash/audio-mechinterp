@@ -1,0 +1,9 @@
+# Independent source review: Whisper FIT saved-result auditor V1
+
+18 November 2026. Reviewed auditor and fake tests at commit `22d7024` against the committed runner through `4e8a07a` and V1/V2/V3 prospective plans. **Decision: HOLD before treating any saved run as audited.** No model weights or real result were loaded. The nine CPU-only fake/corruption tests passed, but the fixture omitted fields that every real runner row includes.
+
+The auditor independently pins the FIT manifest and PCM pair, checks an externally hashed preflight receipt and cached model files, requires 4 baseline + 2 trace + 48 unique intervention + complete rows, recomputes target-word control outcomes, checks self/full-donor token equality and random edit hashes/norms, and labels stopped attempts invalid. These are useful source checks.
+
+**Blocking schema mismatch:** `audit_rows` compares each saved `outcome` dictionary for exact equality with `recompute_outcome` plus `token_difference_count`. At `22d7024`, `recompute_outcome` omits the runner's `wer_to_recipient` and `wer_to_single_word_donor_counterfactual`. The runner writes both on every intervention. Therefore a legitimate completed run would always fail the independent auditor at `stored outcome differs from raw transcript`. The fake rows construct their outcomes from the same incomplete auditor function and cannot catch the mismatch. Recompute and verify both WER fields from the raw complete transcripts; make the fake rows mirror the runner's actual schema.
+
+The auditor also ignores the runner's saved `*_maxabs.npy` trace files, their hashes, and `global_max_abs_difference` while checking the L2 sidecars. Verify those byte identities and recompute the reported max absolute value. Tighten step-score coverage enough that a nonempty generated sequence cannot pass with an empty score list, while preserving V3's optional alias margin. Rereview the corrected source and tests before using the auditor on real output.
