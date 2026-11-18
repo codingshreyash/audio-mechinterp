@@ -1,0 +1,63 @@
+Voxtral context1 local power-log evidence, 2026-11-18
+Capture completed UTC: 2026-11-18T19:04:36Z
+Source: macOS `pmset -g log` on the local Mac; timestamps are EST (-0500).
+Campaign: 20261118T182308460007Z, context _01 (Piper teal).
+Context parent UTC interval: 2026-11-18T18:28:15.345155Z through 2026-11-18T18:32:10.910491Z.
+Extraction bounds: 2026-11-18 13:28:15 through 13:32:13 -0500. The final 13:32:13 DarkWake is three seconds after the context end and is included to show the continuation of the cycle.
+
+Exact extraction command (writes only matching raw event lines to the file named here):
+pmset -g log | awk '$1=="2026-11-18" && $2 >= "13:28:15" && $2 <= "13:32:13" && ($4=="Sleep" || $4=="DarkWake" || ($4=="Wake" && $5!="Requests")) {print}' > /tmp/voxtral_context1_power_events_20261118.log
+
+SHA-256 of raw event lines, including their original whitespace and final newlines: 9576089fe580f9d7a99db8de3d43dc98b8ff2a64a05ac031c5a3193b4eb828df
+Raw event line count: 46 (23 Sleep, 23 DarkWake, 0 Wake).
+
+Observation: The first matching event is Clamshell Sleep at 13:29:59. The subsequent event sequence includes repeated DarkWake and Thermal Emergency Sleep or Dark Wake Thermal Emergency entries from 13:30:05 onward. These logs corroborate that the Mac entered sleep/wake states during the context's recorded interval. They do not prove that any particular sleep transition caused exactly the 25.124338-second gap between UTC and monotonic parent durations, nor do they establish a model outcome or a model-specific failure. The log's event timestamps have second resolution and are system-level observations.
+
+BEGIN RAW POWER EVENT LINES
+2026-11-18 13:29:59 -0500 Sleep               	Entering Sleep state due to 'Clamshell Sleep':TCPKeepAlive=active Using Batt (Charge:83%) 6 secs    
+2026-11-18 13:30:05 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:83%) 6 secs    
+2026-11-18 13:30:11 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 4 secs    
+2026-11-18 13:30:15 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:30:17 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 6 secs    
+2026-11-18 13:30:23 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 4 secs    
+2026-11-18 13:30:27 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 7 secs    
+2026-11-18 13:30:34 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 1 secs    
+2026-11-18 13:30:35 -0500 Sleep               	Entering Sleep state due to 'Dark Wake Thermal Emergency':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:30:38 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 4 secs    
+2026-11-18 13:30:42 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:30:44 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:30:46 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:30:48 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:30:50 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:30:52 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 3 secs    
+2026-11-18 13:30:55 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:30:57 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 3 secs    
+2026-11-18 13:31:00 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:31:02 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 3 secs    
+2026-11-18 13:31:05 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:31:08 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:31:10 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:31:13 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:31:15 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:31:17 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 3 secs    
+2026-11-18 13:31:20 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:31:23 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 3 secs    
+2026-11-18 13:31:26 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:31:29 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:31:31 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:31:34 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 3 secs    
+2026-11-18 13:31:37 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:31:39 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:31:41 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 4 secs    
+2026-11-18 13:31:45 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:31:47 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 5 secs    
+2026-11-18 13:31:52 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 4 secs    
+2026-11-18 13:31:56 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 2 secs    
+2026-11-18 13:31:58 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:32:00 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:32:03 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:32:05 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:32:08 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+2026-11-18 13:32:10 -0500 Sleep               	Entering Sleep state due to 'Thermal Emergency Sleep':TCPKeepAlive=inactive Using Batt (Charge:82%) 3 secs    
+2026-11-18 13:32:13 -0500 DarkWake            	DarkWake from Deep Idle [CDNP] : due to smc.sysState.Wake(0x70070000) wifibt SMC.OutboxNotEmpty centauri-beta/ Using BATT (Charge:82%) 2 secs    
+END RAW POWER EVENT LINES
