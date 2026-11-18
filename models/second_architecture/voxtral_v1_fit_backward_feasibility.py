@@ -23,7 +23,7 @@ import voxtral_fit_pilot_capability_v1 as base
 HERE = Path(__file__).resolve().parent
 PROTOCOL = HERE / "VOXTRAL_V1_FIT_BACKWARD_FEASIBILITY_PROTOCOL.md"
 RUNS = HERE / "runs/voxtral_v1_fit_backward_feasibility"
-PROTOCOL_SHA = "96b8648bd6c9be4bcd3b1c0860933ecb8581039ab79d732bd51f73e28ac4bff2"
+PROTOCOL_SHA = "8fa6aa224e150b2579e335d14f7dafddd542eacdf733bc92ab7f3ff281384148"
 PRIOR_SHA = "64d799bbb40b58b128b049877d18bde7774c2dc16717af97e692aa4531e907b5"
 FRONTEND_SHA = "026445da1ac2c4c2f4b8f45ab2f8d7a1f4679924774714951b16d5cd29de0788"
 LLAMA_SHA = "affc6a4ab36b562a6b4c90b84c4e7939c5417a69ad7bd37e858be5583f189830"
@@ -365,6 +365,7 @@ def run(output: Path) -> None:
                 del ge, gp
             del clean
             measured = {}
+            measured_terminals = {}
             for site in prior.SITES:
                 rows = meta["source_rows"][site]
                 zero_capture = capture_prompt(model, batch, grad=True, patch_site=site,
@@ -379,6 +380,7 @@ def run(output: Path) -> None:
                 alpha_hooks = alpha_capture["hook_events"]
                 del alpha_capture
                 receipt(f"alpha_patch_{site}", memory)
+                measured_terminals[site] = {"zero": z0.clone(), "alpha": za.clone()}
                 delta = (za - z0)[list(TARGET_COORDS)].tolist()
                 measured[site] = {"zero_hook_events": zero_hooks, "alpha_hook_events": alpha_hooks,
                                   "delta_four": delta, "zero_minus_clean_four":
@@ -391,7 +393,8 @@ def run(output: Path) -> None:
                        "effective_edits": {s: edits[s]["effective"] for s in prior.SITES},
                        "uniform_means": {s: edits[s]["mean"] for s in prior.SITES},
                        "intended_edits": {s: edits[s]["intended"] for s in prior.SITES},
-                       "clean_terminal": z_clean, "no_grad_terminal": no_grad_z}
+                       "clean_terminal": z_clean, "no_grad_terminal": no_grad_z,
+                       "measured_terminals": measured_terminals}
             with (output / "details.pt").open("xb") as file:
                 torch.save(details, file)
                 file.flush()
@@ -416,6 +419,10 @@ def run(output: Path) -> None:
                       "source_hashes": {s: prior.tensor_sha(rec_states[s]) for s in prior.SITES},
                       "donor_hashes": {s: prior.tensor_sha(donor_states[s]) for s in prior.SITES},
                       "terminal_shape": list(z_clean.shape),
+                      "measured_terminal_hashes": {
+                          s: {phase: prior.tensor_sha(measured_terminals[s][phase])
+                              for phase in ("zero", "alpha")}
+                          for s in prior.SITES},
                       "no_grad_minus_grad_four": (no_grad_z-z_clean)[list(TARGET_COORDS)].tolist(),
                       "edits": {s: {"intended_norm": edits[s]["intended_norm"],
                                     "realized_norm": edits[s]["realized_norm"],
