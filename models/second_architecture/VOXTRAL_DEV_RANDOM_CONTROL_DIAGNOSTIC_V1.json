@@ -1,0 +1,129 @@
+{
+  "status": "posthoc_dev_random_control_description_only",
+  "result_sha256": "1c43c22720237a703441854f4e8a7fb7f41fad62bacb1be7f72d4958452e6edd",
+  "audit_sha256": "e79a0ae2fb09526be4830a9be1fa975459f7b9f61099e373c6113261a5490467",
+  "planned_directions": 96,
+  "development_advance_gate": false,
+  "sites": {
+    "encoder31": {
+      "eligible_of_96": 87,
+      "all_random_classes_of_96": {
+        "recipient": 82,
+        "other": 14
+      },
+      "groups": {
+        "random_valid_loss": {
+          "count_of_96": 6,
+          "raw_output_counts": {
+            "Grey": 1,
+            "None": 3,
+            "Nothing": 1,
+            "Wreath": 1
+          },
+          "median_clean_recipient_minus_opposite": 8.460777282714844,
+          "median_random_effective_bf16_norm": 134.79652404785156,
+          "median_main_effective_bf16_norm": 134.79674530029297,
+          "median_random_to_main_effective_norm_ratio": 0.9999899670154432
+        },
+        "random_recipient": {
+          "count_of_96": 81,
+          "raw_output_counts": {
+            "Bear": 4,
+            "Blanket": 1,
+            "Chair": 2,
+            "Clock": 4,
+            "Forest": 3,
+            "Fox": 2,
+            "Gold": 3,
+            "Goose": 4,
+            "Gray": 1,
+            "Lamp": 4,
+            "Lavender": 3,
+            "Meadow": 3,
+            "Mirror": 1,
+            "Mouse": 2,
+            "Navy": 3,
+            "Ocean": 4,
+            "Olive": 3,
+            "Rabbit": 3,
+            "Rain": 4,
+            "Reef": 3,
+            "Swamp": 4,
+            "TURQUOISE": 2,
+            "Table": 2,
+            "Turquoise": 1,
+            "Wolf": 2,
+            "blanket": 2,
+            "chair": 1,
+            "forest": 1,
+            "gold": 1,
+            "lavender": 1,
+            "mirror": 1,
+            "mouse": 2,
+            "table": 2,
+            "wolf": 2
+          },
+          "median_clean_recipient_minus_opposite": 9.083192825317383,
+          "median_random_effective_bf16_norm": 137.4927215576172,
+          "median_main_effective_bf16_norm": 137.49200439453125,
+          "median_random_to_main_effective_norm_ratio": 0.9999986451461684
+        }
+      }
+    },
+    "projector": {
+      "eligible_of_96": 87,
+      "all_random_classes_of_96": {
+        "other": 65,
+        "recipient": 31
+      },
+      "groups": {
+        "random_valid_loss": {
+          "count_of_96": 56,
+          "raw_output_counts": {
+            "Blank": 1,
+            "Listen": 6,
+            "None": 34,
+            "Nothing": 11,
+            "Ole": 1,
+            "Oliv": 1,
+            "Swarm": 1,
+            "Wulf": 1
+          },
+          "median_clean_recipient_minus_opposite": 9.103065490722656,
+          "median_random_effective_bf16_norm": 61.515830993652344,
+          "median_main_effective_bf16_norm": 61.51611518859863,
+          "median_random_to_main_effective_norm_ratio": 1.0000007124088497
+        },
+        "random_recipient": {
+          "count_of_96": 31,
+          "raw_output_counts": {
+            "Bear": 2,
+            "Chair": 1,
+            "Clock": 1,
+            "Forest": 1,
+            "GRAY": 1,
+            "Gold": 1,
+            "Goose": 3,
+            "Lamp": 2,
+            "Lavender": 3,
+            "Mouse": 2,
+            "Navy": 1,
+            "Ocean": 2,
+            "Rabbit": 2,
+            "Rain": 4,
+            "Table": 1,
+            "Turquoise": 1,
+            "Wolf": 1,
+            "gold": 1,
+            "table": 1
+          },
+          "median_clean_recipient_minus_opposite": 8.488800048828125,
+          "median_random_effective_bf16_norm": 62.33589172363281,
+          "median_main_effective_bf16_norm": 62.33494567871094,
+          "median_random_to_main_effective_norm_ratio": 1.000003777429401
+        }
+      }
+    }
+  },
+  "limits": "Constructed hidden-state edits; descriptive, not a new effect or security gate"
+}
