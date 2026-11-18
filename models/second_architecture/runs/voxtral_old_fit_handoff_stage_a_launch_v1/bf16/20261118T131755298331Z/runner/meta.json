@@ -1,0 +1,117 @@
+{
+  "status": "started_old_fit_handoff_stage_a_native_only",
+  "arm": "bf16",
+  "protocol_sha256": "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b",
+  "script_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+  "native_source_sha256": "dc63b8c10ef605e1cc8538e3d37d8d2531e50ca7a46140ee1ee551054e3de978",
+  "prior_runner_sha256": "93d2c607f4c218b9e027ffb4c221347663efb0729cc6e419b9c940dffda89b48",
+  "probes_sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e",
+  "probes_path": "blobs/dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e.pt",
+  "old_fit_snapshot": {
+    "model_id": "mistralai/Voxtral-Mini-3B-2507",
+    "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+    "config": {
+      "size_bytes": 1361,
+      "sha256": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"
+    },
+    "snapshot_tree": {
+      "size_bytes": 2013,
+      "sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"
+    },
+    "weight_index": {
+      "size_bytes": 68088,
+      "sha256": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"
+    },
+    "weight_shards": {
+      "model-00001-of-00002.safetensors": {
+        "size_bytes": 4977385976,
+        "sha256": "1facdc4c5a0e84f2881a59c4756441b7030a1f1036b2124c117540408d0e5fe9"
+      },
+      "model-00002-of-00002.safetensors": {
+        "size_bytes": 4379088336,
+        "sha256": "0a103ba715bc0d656e94bf79d637d4f8f0f4fe6d76fb1d4db7ee46c6b940f631"
+      }
+    },
+    "processor_config": {
+      "size_bytes": 357,
+      "sha256": "86d67d926e17d3a9bb0bae334c9fc46bc163181992357a0357c0aec2c7e131d1"
+    },
+    "tokenizer_asset": {
+      "size_bytes": 14894206,
+      "sha256": "4aaf3836c2a5332f029ce85a7a62255c966f47b6797ef81dedd0ade9c862e4a8"
+    },
+    "generation_config": {
+      "size_bytes": 108,
+      "sha256": "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"
+    }
+  },
+  "installed_source_hashes": {
+    "modeling_voxtral": "2d3ec9d78c469b77c42a8d5ba258185fb1c58f4c2c7bf6007ec724436dfc7056",
+    "processing_voxtral": "239e84657d1a0287ab27a540c946a787a69b4b0bf45727d6b24bee21ccec0296",
+    "feature_extraction_whisper": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb",
+    "modeling_llama": "affc6a4ab36b562a6b4c90b84c4e7939c5417a69ad7bd37e858be5583f189830"
+  },
+  "wav_hashes": {
+    "beaver": "267b68d794afcd3cabcac9f98eabd310207b08bf3c1527ae6dc43c87d57b304a",
+    "monkey": "83b85c468f21dfb3f5aa90d451b31063a4f33e1e01245294f33d342be6340001"
+  },
+  "rows": {
+    "encoder31": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107
+    ],
+    "projector": [
+      24,
+      25,
+      26
+    ]
+  },
+  "directions_sha256": {
+    "encoder31": "0dcff219dd21578a00a0c34d9f8ce861c55b28538b1b85867885e661135851ac",
+    "projector": "03c6f5d400ad758ca6362a4aefbbcb5102ffaa363ac5fd74225306e427017e96"
+  },
+  "planned_counts": {
+    "native_patch_forwards": 72,
+    "native_pairs": 36,
+    "parity_prompt_forwards": 6,
+    "donor_prompt_forwards": 1,
+    "clean_grad_prompt_forwards": 1,
+    "vjps": 44,
+    "greedy_generations": 6,
+    "lm0_control_zero_forwards": 24,
+    "lm0_control_edited_forwards": 24,
+    "lm0_control_self_forwards": 1
+  },
+  "archive_estimate": {
+    "native_trace_bytes": 351633408,
+    "first_cycle_full_source_bytes": 307200000,
+    "selected_vjp_fp32_bytes": 4325376,
+    "probe_float64_bytes": 1966080,
+    "first_answer_logit_bytes": 19136512,
+    "per_coordinate_native_ulp_bytes": 9867264,
+    "source_effective_edit_bytes": 3538944,
+    "compact_lm0_control_bytes": 1505280,
+    "control_prepatch_and_edit_bytes": 903168,
+    "control_unit_and_directions_bytes": 29696,
+    "donor_terminal_and_logit_bytes": 292864,
+    "parity_state_bytes": 14598144,
+    "parity_logit_bytes": 1572864,
+    "estimated_tensor_payload_bytes": 716569600,
+    "draft_hard_archive_cap_bytes": 1610612736
+  },
+  "max_seconds": 900,
+  "max_driver_bytes": 32212254720,
+  "max_output_bytes": 1610612736,
+  "mps_fraction": 0.8012819990316539,
+  "fresh_v2_corpus_opened": false
+}

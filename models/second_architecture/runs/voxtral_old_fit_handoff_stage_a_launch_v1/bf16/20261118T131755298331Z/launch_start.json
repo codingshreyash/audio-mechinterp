@@ -1,0 +1,29 @@
+{
+  "status": "launch_started",
+  "arm": "bf16",
+  "wall_utc": "2026-11-18T13:17:55.706077+00:00",
+  "freeze_receipt_sha256": "6397da3c8d5b9be7ce67e04464530fbab90ac595b5760e2b53dfdccfed62fc4e",
+  "source_review_commit": "6430f8d4e3c41c0578eecc08eafa083b6bda3941",
+  "auditor_review_commit": "d6e9e97fb232b6395987f51e24b666e5e3acf813",
+  "launcher_review_commit": "3094df22238ca1100dbdc81df3bf2e85189b4a73",
+  "runner_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+  "auditor_sha256": "4f800ed604295ae0e4fbd53c893fccd14b8968badb43b835e6ec975e49b0cf3d",
+  "runner_command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_runner_v1.py",
+    "--run",
+    "--arm",
+    "bf16",
+    "--output-dir",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner"
+  ],
+  "runner_cap_seconds": 900,
+  "process_timeout_seconds": 1020,
+  "runner_mps_driver_cap_bytes": 32212254720,
+  "arm_output_cap_bytes": 1610612736,
+  "max_capture_bytes_per_stream": 8388608,
+  "runner_parent_reserve_bytes": 17825792,
+  "cumulative_model_work_cap_seconds": 4500,
+  "prior_model_work_seconds": 0.0,
+  "audit_scope": "posthoc_one_old_fit_case_native_stage_only_no_security_claim"
+}

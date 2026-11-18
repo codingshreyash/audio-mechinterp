@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_audit_v1.py", line 700, in <module>
+    main()
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_audit_v1.py", line 696, in main
+    print(json.dumps(audit(args.attempt), indent=2, allow_nan=False))
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_audit_v1.py", line 645, in audit
+    validate_layout(layout, arm)
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_audit_v1.py", line 282, in validate_layout
+    require(row["dtype"] == expected and row["device"] == "mps" and
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_audit_v1.py", line 50, in require
+    raise ValueError(reason)
+ValueError: model parameter dtype/device/shape differs

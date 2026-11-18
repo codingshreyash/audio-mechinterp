@@ -1,0 +1,82 @@
+{
+  "schema": "voxtral_stage_a_bf16_failed_attempt_manifest_v1",
+  "attempt_id": "20261118T131755298331Z",
+  "arm": "bf16",
+  "status": "frozen_auditor_rejected_no_scientific_interpretation",
+  "freeze_receipt_sha256": "6397da3c8d5b9be7ce67e04464530fbab90ac595b5760e2b53dfdccfed62fc4e",
+  "local_large_sidecars_required": true,
+  "files": [
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/audit_stderr.txt",
+      "bytes": 1025,
+      "sha256": "6b45288dae8f10db995fc2d21af95bbb45f192879a1005dd736c8c405e26b6b6",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/audit_stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/launch_finish.json",
+      "bytes": 700,
+      "sha256": "15ed053c8ca4e619735cce3319b5d2326ff4b19216475754acc2cbf4e3bcdf9a",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/launch_start.json",
+      "bytes": 1410,
+      "sha256": "84cc8f40e8e912b8e577396ff51af465070e45da023eee1f148e15317a4a03ec",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner/blobs/dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e.pt",
+      "bytes": 985057,
+      "sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e",
+      "git_committed": false
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner/blobs/df9fe20d1fd961a0b3502e073f933eed658f7a15de3214087552987ee8e8e849.pt",
+      "bytes": 716431763,
+      "sha256": "df9fe20d1fd961a0b3502e073f933eed658f7a15de3214087552987ee8e8e849",
+      "git_committed": false
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner/meta.json",
+      "bytes": 4174,
+      "sha256": "ace491db68916297cdcdbfc6e215d51f587c0892f484791926ed183a40baa027",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner/model_layout.json",
+      "bytes": 157578,
+      "sha256": "5eea970f04c218a8e444373935467cff4f592a62239a7813884a72a09912f01e",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner/progress.jsonl",
+      "bytes": 37974,
+      "sha256": "5aef495376cacb11619f25452dafa582dc8bb48d04edafbcd73a13b793a7fcfe",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner/result.json",
+      "bytes": 550993,
+      "sha256": "f7b3906aff2b1bb9c7b8fb818402982a9020d8507fcba9cf51cc58821dddd325",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner_stderr.txt",
+      "bytes": 323,
+      "sha256": "c275478e8f90ac97aec7ab904b280dd034d40fcd50714cff45019b1b094e1590",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/runner_stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_committed": true
+    }
+  ]
+}

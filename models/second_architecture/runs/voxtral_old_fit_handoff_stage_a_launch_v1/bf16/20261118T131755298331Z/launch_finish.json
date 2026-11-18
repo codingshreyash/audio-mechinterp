@@ -1,0 +1,18 @@
+{
+  "status": "launch_failed",
+  "arm": "bf16",
+  "freeze_receipt_sha256": "6397da3c8d5b9be7ce67e04464530fbab90ac595b5760e2b53dfdccfed62fc4e",
+  "runner_returncode": 0,
+  "auditor_returncode": 1,
+  "auditor_status": null,
+  "runner_result_sha256": "f7b3906aff2b1bb9c7b8fb818402982a9020d8507fcba9cf51cc58821dddd325",
+  "runner_error_sha256": null,
+  "audit_sha256": null,
+  "post_run_source_verified": true,
+  "model_work_elapsed_seconds": 63.245136791840196,
+  "failure_reason": "Frozen CPU auditor rejected runner result",
+  "exception_type": "ValueError",
+  "elapsed_seconds": 64.84385958313942,
+  "wall_utc": "2026-11-18T13:19:00.549916+00:00",
+  "entire_attempt_bytes_before_finish": 718170297
+}
