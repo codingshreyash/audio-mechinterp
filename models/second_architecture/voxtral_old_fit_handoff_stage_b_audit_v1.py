@@ -104,6 +104,10 @@ def first_add(path: Path, *, repo: Path = REPO) -> str:
     need(result.returncode == 0 and len(lines) == 1 and
          re.fullmatch(r"[0-9a-f]{40}", lines[0]) is not None,
          f"Receipt first-add history invalid: {path.name}")
+    added = subprocess.run(["git", "-C", str(repo), "show", f"{lines[0]}:{relative}"],
+                           capture_output=True, check=False)
+    need(added.returncode == 0 and path.read_bytes() == added.stdout,
+         f"Receipt changed after first-add: {path.name}")
     return lines[0]
 
 
