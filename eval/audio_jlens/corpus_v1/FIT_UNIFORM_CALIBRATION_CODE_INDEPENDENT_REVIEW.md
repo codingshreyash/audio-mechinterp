@@ -1,0 +1,21 @@
+# FIT uniform calibration and baseline code: independent static review
+
+**Verdict:** No static blocker for a fresh-prefix FIT-only calibration smoke or the subsequent 48-case calibration under final protocol SHA-256 `f6bbc9b6…`, calibration runner SHA-256 `62af1fa5…`, and baseline runner SHA-256 `b20a0ce9…`. Seven CPU tests and `--validate-only` pass independently. No model inference or development/test input was used in this review. The earlier smoke used the prior protocol hash and is documented separately as integration evidence.
+
+The calibration script selects exactly the 48 preselected `fit_chosen` map-fit contexts, binds the saved rank-16 lens and stage-1 checkpoint, and opens fit-pool audio only. The clean hook captures both source tensors and the **3D** terminal block output, then uses its final prompt position; the corrected source hook checks current recipient and saved donor/recipient **full tensor shapes**. It checks row-index equality against stage 1, current source means against saved fit means, and the clean residual's final norm/head logits against the model's complete forward logits. Per site, it applies the same six-bin uniform additive edit at α=0 three times and α=.025 once, requiring one source and target hook call and a small zero-score/clean-state departure. The donor-minus-recipient `δ_b` and the measured `(h_patched−h_clean)/.025` are saved for comparator fitting. The rank-16 diagnostic uses `α·UΣ_b J_bδ_b` and compares it with the measured projection, without treating fit diagnostics as held-out calibration.
+
+The full run stores a SHA-bound metadata record and an atomic checkpoint after each complete context. Checkpoint case IDs must be an exact prefix of the frozen list. The 30 GiB MPS process cap is set before loading, and memory is sampled after load and each fit forward. The numerical floor is computed per site from all 48 × three repeated-zero V2 scores as `max(1e−4, 5×max departure from each context's zero-score mean)`; missing contexts prevent finalization.
+
+The CPU-only baseline script uses the **same uniform-edit terminal target** at α=.025, projected through the saved basis. Global features are recipient-row-count-weighted averages of six donor-minus-recipient bin vectors; six-bin features concatenate those vectors. Both ridge maps are no-intercept, rank-16 output, with a fixed six-value γ grid and leave-one-**pair**-out CV across 12 groups of four related contexts. Final refits use all 48 examples; zero change is a separate comparator. This is substantially fairer than fitting ridge to natural donor terminal differences while testing uniform state edits. The absolute category-centered anchor is frozen in the lens and is reserved for the evaluator, not estimated from development data.
+
+**Final corrections reviewed:**
+
+- Calibration now checks lens and stage-1 bytes against the FIT report's recorded hashes before model loading; baselines check calibration raw bytes against the calibration report. The reports serve as the Git-frozen provenance roots. Keep them committed and unmodified before development.
+- The protocol now says each leave-one-pair-out fold uses its **44 training rows** for RMS and `λ=γ trace(K)/44`, and the final refit uses 48 rows and `/48`, matching code.
+- Baseline artifacts now save explicit X/Y arrays and CPU peak RSS alongside fold errors, γ, dual coefficients, and hashes.
+- The protocol now defines donor/recipient equality by full source tensor shape plus the six selected row-index lists, rather than claiming all unselected row-map metadata match. Calibration checks both shapes and lists. It stores the α=.025 effective Frobenius edit norm as `|α|sqrt(Σ_b n_b||δ_b||²)`.
+- A failed FIT calibration case now writes a structured, uniquely named failure JSON with case ID/index, exception, completed prefix, checkpoint hash, and memory hash; it does not substitute another case.
+
+Stage A full-answer, EOS, prefix-purity, and time-control requirements belong to the later evaluator; they remain unimplemented and must be statically reviewed before development.
+
+The development/test gate is prospective and separate. A FIT smoke or completed FIT calibration cannot establish held-out prediction quality, lexical answer flips, or a security finding.
