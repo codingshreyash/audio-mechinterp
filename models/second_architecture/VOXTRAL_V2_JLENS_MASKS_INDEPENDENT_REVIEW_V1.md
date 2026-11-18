@@ -19,4 +19,12 @@ Review scope: `voxtral_v2_jlens_masks.py` at SHA-256 `e0a2d6b5ca3f52a9a426af1fc1
 
 The nominal `[1,1500,1280]` encoder and `[375,3072]` projector shapes are explicit assumptions. A processor-only check and hook-shape check must verify the true sample-to-mel-to-row alignment before model intervention or interpretation. If either differs, stop and review a new mask design; this builder has no silent shape adaptation. Independently verify intelligibility before claiming spoken-word fidelity.
 
-Minor documentation correction: the protocol says “three CPU tests”; the current test module has four. The freeze receipt should also name or hash this independent review for provenance, although the builder currently gates on builder and source hashes rather than review-file hash.
+Minor documentation correction: the protocol says “three CPU tests”; the current test module has four. The later freeze receipt hashes the original independent review for provenance. The builder itself gates on builder and source hashes.
+
+## Frozen manifest audit
+
+After the CPU freeze receipt and prospective manifest were committed, I ran a separate read-only script over the frozen artifacts. **Result: pass.** The manifest SHA-256 is `8075ae2ec35ae2fe4e56a332d139cf08570a17bc96676438af06cd4e684f8f6c`; the receipt SHA-256 is `5d0d0c9f5f7e4322644d1ea3a7aa829199be21da0ce4df2db7ddc2d76b24b78c`.
+
+The script rehashed all seven pinned source files and the builder; checked the receipt's builder, source, original-review hash, 240-record/480-WAV counts, and `model_inference_authorized: false`; and rehashed all 480 distinct WAV and PCM payloads. It recomputed the six half-open sample intervals, direct-overlap mel frames, both sites' six row bins, whole-word rows, and equal-count padding rows for **all 240 records** using independent formulas. Every field matched. Split counts were 144 FIT, 48 development, and 48 locked test; FIT role counts were 64 basis and 80 map records. A separate regeneration with the pinned builder produced an exactly equal JSON object.
+
+This addendum changes this review file's hash after the receipt was made. The receipt's `independent_review_sha256` correctly points to the original review version that preceded this audit; it is a historical provenance link, not a hash of this addendum. No model, processor, ASR, or active development-run output was opened for this audit.
