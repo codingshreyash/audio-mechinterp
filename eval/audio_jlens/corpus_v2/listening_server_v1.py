@@ -40,6 +40,7 @@ PINS = {
 }
 STAGES = ("primary", "secondary", "tertiary")
 KINDS = ("initial", "correction", "adjudication")
+SERVER_VERSION = "BlindListening/1"
 OPAQUE = re.compile(r"[0-9a-f]{20}\Z")
 REVIEWER = re.compile(r"[A-Za-z0-9_.-]{3,64}\Z")
 
@@ -123,7 +124,8 @@ class ResponseLog:
             meta_fd = os.open(self.meta_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             with os.fdopen(meta_fd, "w", encoding="utf-8") as stream:
                 json.dump({"status": "blind_listening_collection_no_quality_verdict",
-                           "started_utc": utc_now(), "provenance": expected}, stream, indent=2)
+                           "started_utc": utc_now(), "server_version": SERVER_VERSION,
+                           "provenance": expected}, stream, indent=2)
                 stream.write("\n")
             os.close(os.open(self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600))
         else:
@@ -131,6 +133,7 @@ class ResponseLog:
                     "listening run is incomplete")
             meta = json.loads(self.meta_path.read_text())
             require(meta["status"] == "blind_listening_collection_no_quality_verdict"
+                    and meta["server_version"] == SERVER_VERSION
                     and meta["provenance"] == expected,
                     "listening run source/provenance changed")
         require(not self.run_dir.stat().st_mode & 0o077
@@ -167,7 +170,8 @@ class ResponseLog:
                 records.append(record)
         return records
 
-    def append(self, submission: dict, allowed_ids: set[str]) -> dict:
+    def append(self, submission: dict, allowed_ids: set[str],
+               browser_user_agent: str = "direct_test_client_no_browser") -> dict:
         require(isinstance(submission, dict), "response must be an object")
         required = {"kind", "stage", "reviewer_id", "opaque_id", "middle_word",
                     "clear", "confidence", "play_count"}
@@ -194,6 +198,10 @@ class ResponseLog:
         require(isinstance(note, str) and len(note) <= 500
                 and isinstance(reason, str) and len(reason) <= 500,
                 "response note/reason invalid")
+        require(isinstance(browser_user_agent, str)
+                and 1 <= len(browser_user_agent.strip()) <= 500
+                and "\n" not in browser_user_agent and "\r" not in browser_user_agent,
+                "browser user-agent/version missing or invalid")
         with self.mutex:
             self.records = self._read_verified()
             initials = [r for r in self.records if r["kind"] == "initial"]
@@ -239,6 +247,7 @@ class ResponseLog:
                            "prior_sequence": submission.get("prior_sequence"),
                            "sequence": len(self.records) + 1,
                            "timestamp_utc": utc_now(),
+                           "browser_user_agent": browser_user_agent,
                            "previous_sha256": (self.records[-1]["record_sha256"]
                                                if self.records else "0" * 64)})
             record["record_sha256"] = hashlib.sha256(canonical(record)).hexdigest()
@@ -269,7 +278,7 @@ def handler_for(corpus: BlindCorpus, responses: ResponseLog):
             "listening interface changed during initialization")
 
     class Handler(BaseHTTPRequestHandler):
-        server_version = "BlindListening/1"
+        server_version = SERVER_VERSION
         sys_version = ""
 
         def _headers(self, status: int, content_type: str, length: int) -> None:
@@ -348,7 +357,10 @@ def handler_for(corpus: BlindCorpus, responses: ResponseLog):
                 length = int(self.headers.get("Content-Length", "-1"))
                 require(0 < length <= 4096, "response length invalid")
                 payload = json.loads(self.rfile.read(length))
-                result = responses.append(payload, set(corpus.ordered_ids))
+                browser = self.headers.get("User-Agent", "")
+                require(browser and browser != "direct_test_client_no_browser",
+                        "browser user-agent/version missing")
+                result = responses.append(payload, set(corpus.ordered_ids), browser)
             except (ValueError, KeyError, TypeError, json.JSONDecodeError):
                 self._error(HTTPStatus.CONFLICT)
                 return
