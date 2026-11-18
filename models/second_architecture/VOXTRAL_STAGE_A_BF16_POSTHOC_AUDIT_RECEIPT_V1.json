@@ -1,0 +1,19 @@
+{
+  "schema": "voxtral_stage_a_bf16_posthoc_audit_receipt_v1",
+  "status": "posthoc_saved_tensor_audit_passed_original_launch_failed",
+  "arm": "bf16",
+  "attempt_id": "20261118T131755298331Z",
+  "original_launch_status": "launch_failed",
+  "failed_attempt_manifest_sha256": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+  "original_freeze_sha256": "6397da3c8d5b9be7ce67e04464530fbab90ac595b5760e2b53dfdccfed62fc4e",
+  "original_launch_finish_sha256": "15ed053c8ca4e619735cce3319b5d2326ff4b19216475754acc2cbf4e3bcdf9a",
+  "original_result_sha256": "f7b3906aff2b1bb9c7b8fb818402982a9020d8507fcba9cf51cc58821dddd325",
+  "original_layout_sha256": "5eea970f04c218a8e444373935467cff4f592a62239a7813884a72a09912f01e",
+  "original_details_sha256": "df9fe20d1fd961a0b3502e073f933eed658f7a15de3214087552987ee8e8e849",
+  "original_probes_sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e",
+  "original_v1_auditor_sha256": "4f800ed604295ae0e4fbd53c893fccd14b8968badb43b835e6ec975e49b0cf3d",
+  "v2_auditor_sha256": "8d5f8b23bd32add8464bd976d42cd0225fbc5ee86510adc441b714de5a8fd275",
+  "v2_auditor_source_review_commit": "a8b6c248f285485702ef46dca08f91012e51dbbf",
+  "posthoc_audit_sha256": "934a4517a0de2880051cc3be4f135cc475dc1098e742c7cc62a7e5990ac5f7f9",
+  "model_work_elapsed_seconds": 63.245136791840196
+}
