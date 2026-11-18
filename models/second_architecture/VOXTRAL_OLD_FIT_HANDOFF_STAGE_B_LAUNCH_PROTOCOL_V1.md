@@ -38,8 +38,10 @@ a crash or manual child reinvocation cannot reuse that same reservation. The
 worker writes its model products only to
 `runs/voxtral_old_fit_handoff_stage_b_v1/bf16_direct_lm/<id>/` and never
 inherits a previous model allocator. Its required work is 24 direct-LM
-forwards and zero VJPs. The parent enforces a 600-second model-work ceiling,
-120-second process grace, 1-GiB worker output ceiling, 8-MiB capture ceiling
+forwards and zero VJPs. The parent kills the child process group at the
+600-second model-work ceiling. The 120-second grace bounds reaping and parent
+receipts after execution stops. It also enforces a 1-GiB combined phase
+output ceiling, 8-MiB capture ceiling
 per stream, 30-GiB observed MPS driver cap in the worker, cumulative
 4,500-second model-work cap, and 5-GiB serialized-output cap. The model-work
 clock includes the 63.245136791840196-second failed BF16 Stage A process and

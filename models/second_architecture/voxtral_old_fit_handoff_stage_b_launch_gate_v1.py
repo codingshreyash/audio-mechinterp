@@ -355,6 +355,7 @@ def _prior_bf16_b(stage_a: dict, freeze_sha: str) -> dict:
                  gate_attempt / "launch_finish.json", attempt / "audit.json",
                  attempt / "result.json"):
         committed_same(REPO, path)
+    first_add(REPO, gate_attempt / "worker_claim.json")
     if (_dirs(RUNS / "bf16_direct_lm") != [gate_attempt] or
             _dirs(driver.RUNS / "bf16_direct_lm") != [attempt]):
         raise ValueError("Stage-B BF16 attempt tree differs")
@@ -441,7 +442,8 @@ def _checked_start(phase: str, attempt_id: str, freeze_sha: str,
     expected_keys = {"status", "phase", "attempt_id", "wall_utc", "stage_b_freeze_sha256",
                      "worker_output", "worker_command", "driver_sha256", "auditor_sha256",
                      "prior_model_work_seconds", "process_cap_seconds",
-                     "process_timeout_seconds", "worker_output_cap_bytes",
+                     "process_timeout_seconds", "process_grace_seconds",
+                     "worker_output_cap_bytes",
                      "max_mps_driver_bytes", "max_capture_bytes_per_stream",
                      "total_output_cap_bytes", "total_model_work_cap_seconds",
                      "stage_a_manifest_sha256"}
@@ -456,7 +458,8 @@ def _checked_start(phase: str, attempt_id: str, freeze_sha: str,
             start.get("auditor_sha256") != AUDITOR_SHA or
             start.get("prior_model_work_seconds") != expected_prior or
             start.get("process_cap_seconds") != driver.CAP_SECONDS[phase] or
-            start.get("process_timeout_seconds") != driver.CAP_SECONDS[phase] + PROCESS_GRACE_SECONDS or
+            start.get("process_timeout_seconds") != driver.CAP_SECONDS[phase] or
+            start.get("process_grace_seconds") != PROCESS_GRACE_SECONDS or
             start.get("worker_output_cap_bytes") != driver.MAX_B_BYTES or
             start.get("max_mps_driver_bytes") != driver.MAX_MPS_DRIVER_BYTES or
             start.get("max_capture_bytes_per_stream") != MAX_CAPTURE_BYTES or
@@ -506,7 +509,8 @@ def exclusive_json(path: Path, value: dict) -> None:
 
 
 def _bounded(command: list[str], *, capture_dir: Path, worker_output: Path | None,
-             timeout: float, output_name: str, error_name: str) -> tuple[int | None, float, str | None]:
+             timeout: float, output_name: str, error_name: str,
+             termination_grace: float = 5.0) -> tuple[int | None, float, str | None]:
     """Bound wall time, stdout/stderr, and both output trees; kill process group."""
     began = time.monotonic()
     reason = None
@@ -529,9 +533,12 @@ def _bounded(command: list[str], *, capture_dir: Path, worker_output: Path | Non
                                                 driver.MAX_B_BYTES - FINAL_RECEIPT_RESERVE_BYTES):
                 reason = "combined_phase_output_byte_cap"
             if reason and code is None:
-                os.killpg(proc.pid, signal.SIGTERM)
+                # A time-cap hit must stop model work immediately; grace is
+                # for reaping and parent receipts after execution stops.
+                os.killpg(proc.pid, signal.SIGKILL if reason == "child_process_timeout"
+                          else signal.SIGTERM)
                 try:
-                    code = proc.wait(timeout=5)
+                    code = proc.wait(timeout=termination_grace)
                 except subprocess.TimeoutExpired:
                     os.killpg(proc.pid, signal.SIGKILL)
                     code = proc.wait(timeout=5)
@@ -566,7 +573,8 @@ def launch(phase: str, attempt_id: str) -> dict:
         "driver_sha256": sha(Path(driver.__file__)), "auditor_sha256": AUDITOR_SHA,
         "prior_model_work_seconds": prior_seconds,
         "process_cap_seconds": driver.CAP_SECONDS[phase],
-        "process_timeout_seconds": driver.CAP_SECONDS[phase] + PROCESS_GRACE_SECONDS,
+        "process_timeout_seconds": driver.CAP_SECONDS[phase],
+        "process_grace_seconds": PROCESS_GRACE_SECONDS,
         "worker_output_cap_bytes": driver.MAX_B_BYTES,
         "max_mps_driver_bytes": driver.MAX_MPS_DRIVER_BYTES,
         "max_capture_bytes_per_stream": MAX_CAPTURE_BYTES,
@@ -583,8 +591,9 @@ def launch(phase: str, attempt_id: str) -> dict:
     try:
         code, elapsed, reason = _bounded(worker_cmd, capture_dir=gate_attempt,
                                          worker_output=worker_output,
-                                         timeout=driver.CAP_SECONDS[phase] + PROCESS_GRACE_SECONDS,
-                                         output_name="worker_stdout.txt", error_name="worker_stderr.txt")
+                                         timeout=driver.CAP_SECONDS[phase],
+                                         output_name="worker_stdout.txt", error_name="worker_stderr.txt",
+                                         termination_grace=PROCESS_GRACE_SECONDS)
         finish["runner_returncode"] = code
         finish["model_work_elapsed_seconds"] = elapsed
         if (reason or code != 0 or elapsed >= driver.CAP_SECONDS[phase] or

@@ -235,6 +235,30 @@ class GateTest(unittest.TestCase):
             self.assertLess(elapsed, 2.0)
             self.assertNotEqual(code, 0)
 
+    def test_launcher_passes_hard_phase_deadline_not_cap_plus_grace(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            freeze = root / "freeze.json"
+            freeze.write_text("{}\n")
+            stage_a = {"stage_a_model_work_seconds": 218.5633733337745}
+            with (mock.patch.object(gate, "RUNS", root / "gate_runs"),
+                  mock.patch.object(gate.driver, "RUNS", root / "driver_runs"),
+                  mock.patch.object(gate, "FREEZE", freeze),
+                  mock.patch.object(gate, "admission", return_value=(
+                      {"reviewed_utc": "2026-11-18T14:00:00+00:00"}, stage_a, None)),
+                  mock.patch.object(gate, "_bounded", return_value=(1, .2, "child_process_timeout")) as child):
+                result = gate.launch("bf16_direct_lm", "20261118T140000000000Z")
+                self.assertEqual(result["status"], "launch_failed")
+                self.assertEqual(child.call_args.kwargs["timeout"],
+                                 gate.driver.CAP_SECONDS["bf16_direct_lm"])
+                self.assertEqual(child.call_args.kwargs["termination_grace"],
+                                 gate.PROCESS_GRACE_SECONDS)
+                start = json.loads((root / "gate_runs" / "bf16_direct_lm" /
+                                    "20261118T140000000000Z" / "launch_start.json").read_text())
+                self.assertEqual(start["process_timeout_seconds"],
+                                 gate.driver.CAP_SECONDS["bf16_direct_lm"])
+                self.assertEqual(start["process_grace_seconds"], gate.PROCESS_GRACE_SECONDS)
+
     def test_fast_exiting_child_cannot_bypass_stream_cap(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             capture = Path(tmp) / "launch"
