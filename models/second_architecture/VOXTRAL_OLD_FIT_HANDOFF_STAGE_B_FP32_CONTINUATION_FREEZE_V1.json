@@ -1,0 +1,15 @@
+{
+  "audit_scope": "old_fit_one_case_saved_data_arithmetic_only_no_execution_attestation",
+  "base_freeze_sha256": "18a8602ab5eac1a5099f98349ef6a0ef6456c721faca6cabeccbc351f9e3bb55",
+  "bf16_b_manifest_commit": "efaa17e2df5293c7f12b9a1a3e0b76dc5c62684d",
+  "bf16_b_manifest_sha256": "c5bab618791e2f2c9c7255b60032cf6f8624aa844ecea7ad6d5eb3c0658dc4b5",
+  "bf16_b_model_work_seconds": 28.278460667002946,
+  "bf16_b_review_commit": "2bbfaee211e1809d00a31ede90330daa6bb04b00",
+  "bf16_b_review_sha256": "05eb656551f8245aa3bb9c8c5da9ecb420bb36bacb378989b2fc3b1da0ed89ad",
+  "max_total_bytes": 5368709120,
+  "max_total_seconds": 4500,
+  "permitted_phase": "fp32_replay",
+  "reviewed_utc": "2026-11-18T14:34:25.888327+00:00",
+  "stage_a_model_work_seconds": 218.5633733337745,
+  "status": "frozen_old_fit_handoff_stage_b_fp32_continuation_v1"
+}
