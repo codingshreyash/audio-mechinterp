@@ -1,0 +1,18 @@
+# Independent VoiceChat audio QA v2 source review
+
+18 November 2026. Reviewed implementation commit `f82c3e0` against the accepted amendment `f8f5bb6` and independent protocol acceptance `a623422`. **Verdict: NO-GO for a live calendar assay.** No human listening record, VoiceChat inference, or external calendar action was created by this review.
+
+## Checks that passed
+
+`python3 -m unittest models.second_architecture.voicechat_calendar_fixture_v1.test_audio_qa_v2 models.second_architecture.voicechat_calendar_fixture_v1.test_two_pass_adapter -v` passed **14/14** synthetic source tests. The old preflight `--self-test` passed. The v2 validator joins all 12 render rows to the pinned WAV bytes and both committed ASR logs, derives secondary and tertiary triggers, requires 12/12 eligible rows, and checks two signed C grants against the exact receipt hashes. The new live entry invokes the full-cohort validator before calling NeMo and uses the same hash-checked WAV path with the official loader. These are source properties, not evidence that a person listened or the model made a call.
+
+## Blocking defects
+
+1. **A v2-valid receipt fails at the live WAV loader.** `check_audio_qa_v2` does not require or verify `final_sample_count` and `final_exact_zero_tail_frames`, and the implementation guide does not list them as v2 receipt fields. `load_bound_wav` nevertheless indexes both. I instantiated the committed synthetic 12/12 cohort: `check_audio_qa_v2` returned `human_eligible=12`, then `load_bound_wav` with that A receipt raised `KeyError('final_sample_count')` before its fake audio loader ran. Add those fields to the v2 receipt contract, compare them with the pinned render row and actual WAV, and exercise the v2 live load path in a source test. This must be fixed before freezing human records.
+2. **The validator accepts physically impossible listening chronology.** Its positive test sets blind assignment at `2026-11-17T09:00:00Z` and human stage records at 10:00/10:01 that day, while the pinned render metadata says the WAV generation began `2026-11-18T11:43:36.448059+00:00`. The test passes because only `assignment_time < anchor` and `assignment_time < listener < anchor` are checked. Require assignment and listening stages after the bound render's completion or at least its start timestamp, and test rejection of pre-render records. Keep the synthetic records clearly synthetic.
+
+## Evidence and remaining gates
+
+The local ledger is self-reported; the validator cannot authenticate an external immutable anchor, reviewer identity, or that someone actually heard the file. This limit is disclosed in the implementation guide and needs an independent external receipt before inference. The saved adapter trace currently carries the per-WAV QA receipt hash but not the complete 12-clip manifest and ledger hashes, so a future model result cannot be joined to the exact accepted cohort from that trace alone; bind and archive those bytes or hashes in the live trace before using it as evidence. The lower-level `run_two_pass` accepts caller-supplied audio tensors and a v1 receipt when the v2 paths are omitted; only `run_live_case_from_audited_wav` has the full v2 gate. The live entry also accepts an already loaded model, so checkpoint identity and official-helper waveform/codec parity remain separate HOLD gates.
+
+After the two source blockers are corrected, independently review the exact revision and rerun the source tests. Actual blind primary/secondary/tertiary records, the external C controller review/grants, an external pre-inference manifest anchor, and the pinned live stock-versus-adapter parity check are still absent. No speech/action mismatch or security effect is established here.
