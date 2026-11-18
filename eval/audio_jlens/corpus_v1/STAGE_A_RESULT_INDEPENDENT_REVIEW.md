@@ -1,0 +1,22 @@
+# Qwen corpus Stage A: independent completed-result review
+
+**Verdict:** The frozen primary development gate **failed at both sites**. The read-only independent auditor returned `independent_stage_a_audit_passed`, which means the saved data and gate arithmetic agree; it does **not** mean the model passed the research gate. This review uses the completed result and audit only. No Stage B or locked-test inference was run, and no frozen threshold or case was changed.
+
+The auditor binds result SHA-256 `036bab4a9acf00ad92f5c9ddee969831f0ebbf37c67ef181464b1ba8afd16c32` and summary SHA-256 `2a7ddd3accc4e93f2e9f64c455c56bd1b164de230a703ae2c70c36573c4dd286`. It verified all **96/96** planned directions from 12 pairs, 576/576 edited α conditions per site, 288/288 primary small-step conditions per site, exact case/clip hashes, complete-answer classifications, hook/zero-edit invariants, and all **1,345** expected memory phases. Peak MPS driver allocation was **18.625 GiB**, below the 30 GiB stop.
+
+The clean task gate **passed**: **92/96** unpatched answers were the expected semantic one-word answer with terminal EOS (threshold 72), **92/96** first tokens landed in either frozen V2 pair class (threshold 72), and **92/92 classified** outputs matched that class as complete answers (100% purity; threshold 75%). The remaining four stay in every all-planned denominator.
+
+| Site | Above-floor effects | Sign matches | Map MAE | Zero MAE | Global MAE | Six-bin MAE | Map/zero | Map/global | Map/six-bin | Absolute anchor |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Encoder31 | 288/288 | **210/288 (72.9%)** | .01542 | .01821 | .01719 | .01737 | **.847** | **.897** | **.887** | 70/96 |
+| Connector | 288/288 | **234/288 (81.3%)** | .01963 | .02386 | .02226 | .02213 | **.823** | **.882** | **.887** | 68/96 |
+
+All 288 effects at each site exceeded the frozen `1e−4` numerical floor (minimum 48 required). The encoder sign gate failed its **≥75%** threshold; connector sign passed. Both anchor counts passed the **≥68/96** threshold. **Both sites failed the map accuracy gate:** the prespecified ratio must be **≤.75 against each** of zero, global ridge, and six-bin ridge; all six observed ratios are above .75. The map has lower point MAE than all three comparators, but the improvement is smaller than the frozen 25% requirement. The overall gate is therefore false regardless of the passing task-fidelity and anchor checks.
+
+The 12-pair bootstrap 95% intervals for map/zero, map/global, and map/six-bin ratios are **[.761,.923]**, **[.818,.975]**, **[.809,.959]** for encoder31 and **[.719,.914]**, **[.796,.961]**, **[.805,.960]** for connector. Sign intervals are **[57.6%,86.1%]** and **[64.6%,94.8%]**. These pair-clustered intervals show uncertainty and do not override the point gates. Clean answer-rate interval is **[89.6%,100%]**; anchor-improvement intervals are **[50.0%,91.7%]** and **[47.9%,90.6%]**.
+
+All four prespecified categories contain 24 directions. The descriptive map/zero ratio and sign rate, respectively, are animal **.677/87.5%**, color **.758/69.4%**, nature **.934/62.5%**, object **.921/72.2%** for encoder31; animal **.620/100%**, color **.740/75.0%**, nature **.940/66.7%**, object **.904/83.3%** for connector. Both voices show similar overall ratios (encoder Kokoro/Piper **.868/.826**; connector **.828/.819**). Pair-level sign rates vary substantially across the fixed 12 pairs; the saved per-pair table remains part of the result, with no pair excluded or promoted. These subgroup rows are descriptive and were not separate gates.
+
+As a separate behavioral observation, the large **α=1** uniform edit produced an exact donor word with valid terminal EOS in **79/96** encoder31 and **87/96** connector directions; the small **α=.025** edit did so in **0/96** at both sites. This shows that the source hooks can causally change complete generated words at a large edit strength. It does not establish that the rank-16 map accurately predicts the small edits, that the timing controls localize the mechanism, or that any security policy was violated.
+
+**Required stop:** Under the frozen protocol, a failed Stage A at either site stops v1. Do not run Stage B or open the locked test for this version. FIT-only diagnostics and a separately versioned prospective design can investigate why the corpus map's improvement was too small; this completed development result must remain a negative result.
