@@ -1,0 +1,28 @@
+{
+  "status": "synthetic_source_only_counterexample_no_human_or_asr_inference",
+  "auditor_commit_under_review": "458673eb9abaaaa8bf0763eb94ae57f41005b4b9",
+  "auditor_sha256": "fddc10a2c921c8ea87d348481f10d7bf54cdf8cfab0899a3266a65aecb152e23",
+  "case": {
+    "opaque_id": "aaaaaaaaaaaaaaaaaaaa",
+    "reference_script": "Say otter now.",
+    "target_word": "otter",
+    "paired_alternative": "other"
+  },
+  "whisper_raw_transcript": "Otter say other now.",
+  "wav2vec2_raw_transcript": "Otter say other now.",
+  "primary_synthetic_response": {
+    "middle_word": "otter",
+    "clear": true,
+    "confidence": 5
+  },
+  "observed_from_audit_function": {
+    "status": "go",
+    "requires_secondary": false,
+    "flag_reasons": [],
+    "normalized_script_exact": false,
+    "whisper_wer": 0.6666666666666666,
+    "wav2vec2_wer": 0.6666666666666666,
+    "target_exactly_once": true
+  },
+  "interpretation": "Both synthetic ASR transcripts put 'other' in the middle slot and 'otter' elsewhere. The target-occurrence test passes, so the second listener is not required despite the ASR middle-word discrepancy. This is a logic counterexample, not a corpus outcome."
+}
