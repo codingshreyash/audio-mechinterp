@@ -158,6 +158,27 @@ class WhisperObject02FitCausalTest(unittest.TestCase):
         self.assertFalse(decoded["eos_terminated"])
         self.assertTrue(decoded["censored"])
 
+    def test_duplicate_eos_is_censored_even_when_final(self) -> None:
+        class Model:
+            generation_config = SimpleNamespace(eos_token_id=2)
+
+            def generate(self, **_kwargs):
+                return SimpleNamespace(
+                    sequences=torch.tensor([[1, 2, 2]]),
+                    scores=[torch.tensor([[0.0, 1.0, 2.0]])],
+                )
+
+        class Processor:
+            tokenizer = SimpleNamespace(encode=lambda *_args, **_kwargs: [1])
+
+            def batch_decode(self, *_args, **_kwargs):
+                return ["plate"]
+
+        decoded = assay.run_model(Model(), Processor(), {})
+        self.assertTrue(decoded["eos_seen"])
+        self.assertFalse(decoded["eos_terminated"])
+        self.assertTrue(decoded["censored"])
+
 
 if __name__ == "__main__":
     unittest.main()

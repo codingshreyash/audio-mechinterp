@@ -427,7 +427,7 @@ def run_model(model: Any, processor: Any, batch: Any, *, hook: Any = None, hook_
             "alias_margin_status": margin_status,
         })
     eos_seen = any(token in eos_ids for token in ids)
-    eos_terminated = bool(ids) and ids[-1] in eos_ids
+    eos_terminated = bool(ids) and ids[-1] in eos_ids and sum(token in eos_ids for token in ids) == 1
     return {
         "token_ids": ids,
         "transcript": transcript,
