@@ -147,6 +147,22 @@ class AuditorTests(unittest.TestCase):
         self.assertAlmostEqual(odd["even"][0], 0)
         self.assertAlmostEqual(odd["odd"][0], plus["measured"][0])
 
+    def test_discordant_paired_zero_sets_null_resolution(self):
+        source = copy.deepcopy(self.source)
+        probes = copy.deepcopy(self.probes)
+        probes["lm"][0, 0] = 1
+        discordant = source["pairs"][1]
+        discordant["zero"]["trace"]["lm_terminal"]["lm29"][0] = 1
+        discordant["terminal_delta_l2"] = 1.0
+        report = audit.check_source(source, self.native, probes)
+        summary = report["stage_summary"]["encoder31"]["lm29"]
+        cell = report["cells"][1]["stages"]["lm29"]
+        self.assertEqual(summary["zero_repeat_spread_l2"], 1.0)
+        self.assertEqual(summary["resolution_l2"], 3.0)
+        self.assertEqual(cell["measured_l2"], 1.0)
+        self.assertFalse(cell["resolved"])
+        self.assertIsNone(cell["relative_l2_error_if_resolved"])
+
     def test_direct_lm_hash_and_order(self):
         report = audit.check_direct(self.direct, self.native, "fp32_replay")
         self.assertEqual(report["forwards"], 24)

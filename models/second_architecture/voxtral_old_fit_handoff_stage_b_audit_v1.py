@@ -537,10 +537,11 @@ def check_source(source: dict, native: tuple[dict, ...], probes: dict) -> dict:
     for site in SITES:
         summaries[site] = {}
         for stage in TARGETS[site]:
-            parity = source["parity"][site]
-            repeat_spread = float(torch.linalg.vector_norm(
-                (source_projection(parity["repeat"], stage, probes) -
-                 source_projection(parity["clean"], stage, probes)).double()))
+            paired_zeros = torch.stack([
+                source_projection(record["zero"]["trace"], stage, probes).double()
+                for record in source["pairs"] if record["site"] == site])
+            need(paired_zeros.shape[0] == 6, "Source paired-zero grid incomplete")
+            repeat_spread = float(torch.cdist(paired_zeros, paired_zeros).max())
             resolution = max(3 * repeat_spread, 1e-6)
             rows = [cell for cell in analysis if cell["site"] == site]
             for row in rows:
