@@ -1,0 +1,7 @@
+# Whisper Tiny FIT word-window causal assay — prospective v3 metric clarification
+
+18 November 2026. This clarification applies before the first model inference under the committed [v1](WHISPER_FIT_WORD_WINDOW_CAUSAL_PROSPECTIVE_V1.md) and [v2](WHISPER_FIT_WORD_WINDOW_CAUSAL_PROSPECTIVE_V2.md) plans. Their frozen inputs, causal sites, all 52 decode arms, complete-transcript primary outcome, controls, and stop rules remain unchanged.
+
+The v1 phrase “target-token logit margins” is replaced by a narrower descriptive secondary measure: at each greedy generation step, save the selected token ID and score from Hugging Face `generation.scores`, and, **only if** both candidate aliases (`" silver"` and `" teal"`) each tokenize to one ID, save the difference between those two scores. These are **generation-processed first-token scores**. They are not raw model logits, a probability of the complete word, or evidence that the target word was causally localized at that step. If either alias uses multiple tokens, record the field as unavailable. Do not use this measure to select an arm, rescue a failed complete-transcript outcome, or claim a security effect.
+
+The runner must still save full token IDs and decoded text for every arm, and the auditor must recompute the predeclared primary outcome from complete uncensored transcripts. Word error rate and token differences remain descriptive secondary metrics. A later raw-logit or sequence-probability analysis would require its own prospective method and independent review.
