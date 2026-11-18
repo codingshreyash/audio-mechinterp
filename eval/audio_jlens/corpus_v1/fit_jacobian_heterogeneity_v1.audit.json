@@ -1,0 +1,59 @@
+{
+  "status": "passed_read_only_fit_audit",
+  "result_sha256": "336a2589743c06a2e5be71f3fce694e7a01c78450dc81dc07c6368a01bc58903",
+  "checkpoint_sha256": "f9d710708f06832133dedc0ee0f9776e13c78c4626e2596c0292b765139d42b1",
+  "memory_sha256": "fadeb8d678724db4f4b83de9adbe24b5f7021d13f2fc3fddb9c1813a19ef5309",
+  "contexts": 48,
+  "vjps": 768,
+  "matrix_shapes": {
+    "encoder31": [
+      6,
+      16,
+      1280
+    ],
+    "connector": [
+      6,
+      16,
+      2048
+    ]
+  },
+  "peak_mps_driver_bytes": 22819700736,
+  "max_logged_postload_segment_seconds": 166.49962520599365,
+  "metrics": {
+    "encoder31": {
+      "local": {
+        "score_mae": 0.0175814804070773,
+        "full_terminal_l2_mean": 1.3559318731228511,
+        "projected_terminal_l2_mean": 0.03520177370713403
+      },
+      "frozen_average": {
+        "score_mae": 0.029741709718350478,
+        "full_terminal_l2_mean": 1.4644460044801235,
+        "projected_terminal_l2_mean": 0.5304214439044396
+      },
+      "pair_heldout_average": {
+        "score_mae": 0.031012539653042553,
+        "full_terminal_l2_mean": 1.4711011213560898,
+        "projected_terminal_l2_mean": 0.5469328031564752
+      }
+    },
+    "connector": {
+      "local": {
+        "score_mae": 0.0252250382535754,
+        "full_terminal_l2_mean": 1.8006357612709205,
+        "projected_terminal_l2_mean": 0.056755888974294066
+      },
+      "frozen_average": {
+        "score_mae": 0.0399701285152498,
+        "full_terminal_l2_mean": 1.94093207269907,
+        "projected_terminal_l2_mean": 0.6956709834436575
+      },
+      "pair_heldout_average": {
+        "score_mae": 0.041682372769501784,
+        "full_terminal_l2_mean": 1.9490612410008907,
+        "projected_terminal_l2_mean": 0.7166848148529729
+      }
+    }
+  },
+  "limits": "saved scalar score deltas cannot be independently recomputed from artifacts without pinned final norm/head weights; score error and frozen calibration cross-checks audited"
+}
