@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "ordinal": 35,
+  "invocation_stamp": "20261118T101534148733Z",
+  "record_key": "nature_11|kokoro|dev_listen",
+  "attempt_file": "record_35_attempt_01.jsonl",
+  "attempt_sha256": "b14eddbe9db9eff387c1c6e1ecf22235379a0de136e5361c612cb9301b981089",
+  "run_meta_sha256": "2fac062d7ba5e21327d41939d8a93e5c0a90d5bfc89199adc9fac9d509a576c9",
+  "progress_records": 108,
+  "capture_records": 8,
+  "generation_records": 100,
+  "teacher_forced_forwards": 200,
+  "invalid_conditions": 0,
+  "seconds": 80.52474233298562,
+  "cumulative_budget_seconds": 2861.0003820830025,
+  "mps_driver_observed_max_bytes": 10680057856
+}

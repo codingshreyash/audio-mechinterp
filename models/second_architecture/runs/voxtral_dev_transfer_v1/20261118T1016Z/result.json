@@ -1,0 +1,441 @@
+{
+  "status": "development_transfer_complete",
+  "meta_sha256": "2fac062d7ba5e21327d41939d8a93e5c0a90d5bfc89199adc9fac9d509a576c9",
+  "checkpoint_sha256": {
+    "1": "f02825d53ee9e402a3c04435876bc1185b6196210aa0cf27c5f1528aea02a90f",
+    "2": "0c0eee05845725a52eae77843199937293e4f222a936848881be101c02174fbd",
+    "3": "ced61dbd467c406ace722d86a35cf073bf7d770e499924db0f148c6cd1635c05",
+    "4": "bccc4e7f7214654f63428683d4bec7469ab2974e3d683fed465c0056aaf25baa",
+    "5": "ff62332f49d791e3d557544627efcb5869c20e9cbea9dca19f3a200382ce9344",
+    "6": "fc03367e309a429962507f604764755c350f49be42102bafcccb0f450269e4d3",
+    "7": "2c2a9c4d9dff343531e0e27e7f1540714fc07797009430d58d04ecb24e0c313d",
+    "8": "69df5f01667bbc4e40345bc999a924c9f559cbe233b579b5f734ec5991942937",
+    "9": "050b5db0f07b3a8b60bcde9691ed6d2c25b9601dc20223bcf2dc530d4146a299",
+    "10": "64ba048adae563041abf43bfd5f5efac1305463c9871ed54771810ca695a8bde",
+    "11": "4ee9018959ec73d9939c47a719ff1326bfe157bd501c435e8b44efc1abce757e",
+    "12": "0b507f5291fe3db8661fa0f35381c56fcddd189b9d577294b086cd72ec12b78e",
+    "13": "8d1940473de85b8e2b09873115c02e9dcec86304a3718e758eb13d48c6383038",
+    "14": "a62d0ea0a0dd7737a32c78d8df7db667b0d882445f718f9e93f7e097782ed46d",
+    "15": "a8b475c843a358adf1c7069fb9458d8f8892313fdb5155ec12b5b5edd181b959",
+    "16": "f82c98989193d44a759f5df2c03a9168a403fe469795c595349da792dc680e22",
+    "17": "36050102b90a7e7dd82d02078c7e420b87629f80ca07a7705850495663264e31",
+    "18": "9bc05cee2f42ef0fe5779812389c509523303a2f3cceea356691a2668a3af187",
+    "19": "f35a57329ab7fa8f78ca62891be5441a504a481e92068050b76fd88351f252b5",
+    "20": "ebad6ffb588188d1c1eb9a646e5286ce7cb2236bb3fa9967dd6840bf5f12eff9",
+    "21": "94995534f8b8f5566ef89912500dcf8c0b4458cdec87d12c0fdc8bc3bfb949ae",
+    "22": "d2f280fce43555146b6b221921f48425383a0dd322a36aa42f34ef274fa1b1b5",
+    "23": "1d8a84bfefe88dc85b07fceb91d38a0d5640550035f4702e303021ec07ffe73c",
+    "24": "bcf5a3a22c960f1d2c104a801bfb932f0c417c6414ae7150bd9fd99f460f9f05",
+    "25": "96ab7d0a8c681d99998b33a4a76206a6c620b20113e03388a25a003da52e206a",
+    "26": "1438a5ae56fb0e20942c7dfa4e1d17055e0fe25e3ec5b4763aabd1ea13f667ac",
+    "27": "0edf1a59ee07c4eb967b57fb70a11852173aa0418c2a68d1411953e516ff0ee9",
+    "28": "0d424ea91a7fbb60bc3c7557940aa89557b0ab78ef2dd0dbd7af773c44ba3a29",
+    "29": "fbdda748acf3c7b522f988e33dc20ad65e0189b075b2831192a2ca0f7d6b9d48",
+    "30": "3c72d373ea3adfa4865ffba91174b4c2a2c89be0e5c6c143db445bcce766abfc",
+    "31": "4d669d473255f1385fef3e90022b45756f90a79efe9c2bc1f0796283266837dd",
+    "32": "609544b26efe323f86c504d3ed3f124458647383e6a6ab34a63656e2f4fd0560",
+    "33": "a3b60b385423d9ddfd4203b4db1cb8722782ca33758c7ede068003a1ab4b29ae",
+    "34": "5d981c244b3dd01bc5c03e1c84cfd643a71d5d10530b34a849fb0139951dd5b9",
+    "35": "311f827f8c14bedf0d7394deccb73f32417d0fd14722254638e6a645b8cf3a3b",
+    "36": "5f951103ef634789064d7608c5c1312b0d17365bc90bc8a79751110cc7652485",
+    "37": "7e8b89531446c3d19210e262651d27d1cd2f42d208b437471c823948217b3e0b",
+    "38": "54077dbf771b9401721e1ede792f8f56255ca3b37f5a7d351c92a6b1b768cd4a",
+    "39": "bb7ff54a797dc5e8d894a0fa140350da185182bf3be9022ad6d284866ce63a4a",
+    "40": "3296ca8a6acab367b42a9545e9ab37cc9957b79788d7bc906c768ef0b65c5837",
+    "41": "e9ad9937043eecfbbc569bdf3454c5007ebbc66c5200e93991991cd8be90dcea",
+    "42": "a7e2d9199bdc714714e36f7f7fa933d45f286a60934fae97796f8f307b6cde41",
+    "43": "805d097b9447be7c55c274085e261c5c10e51dbd8d6ebf6daf2163d18e787842",
+    "44": "ac8ab5859161d3540d349a2545706b92d2b965bced33b7ed5b482eb38acf48a4",
+    "45": "451310335562ced1443b5eb9568a79e52bf33d0562f1d3fb0c2675e03865d723",
+    "46": "a7d1e124e76d95ee2785c966870d22c19565daa8523df8e5bfedd7efeaa9b004",
+    "47": "4183dd1d8275b50822f401138f953e1421e2987f9517642c5357b0af00749fa6",
+    "48": "199c63e1f5cfd28b94f5a6a180c190137c92f1518fa6fc437bfd2d6c0c0299fa"
+  },
+  "directions": 96,
+  "progress_rows": 5184,
+  "generations": 4800,
+  "captures": 384,
+  "invalid_conditions": 0,
+  "summary": {
+    "planned_directions": 96,
+    "clean_correct": 87,
+    "restoration_eligible": 87,
+    "blank_classes": {
+      "other": 84,
+      "malformed_surface": 12
+    },
+    "task_validity_gate": true,
+    "sites": {
+      "encoder31": {
+        "restore": {
+          "whole_word_success_of_96": 82,
+          "eligible_success_rate": 0.9425287356321839,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_96": {
+            "word_0": 0,
+            "word_1": 43,
+            "word_2": 12,
+            "word_3": 0
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 20
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 18
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 23
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 21
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 94,
+              "strict_wins_of_96": 94,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 80,
+              "strict_wins_of_96": 80,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_96": 84,
+              "strict_wins_of_96": 84,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "random": {
+              "valid_of_96": 89,
+              "strict_wins_of_96": 89,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_96": 83,
+          "eligible_success_rate": 0.9540229885057471,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_96": {
+            "word_0": 2,
+            "word_1": 73,
+            "word_2": 16,
+            "word_3": 1
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 21
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 22
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 22
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 18
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 43
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 41
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 42
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 4,
+            "post": 1,
+            "padding": 2,
+            "random": 6
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "random": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_96": {
+          "opposite": 84,
+          "other": 12
+        }
+      },
+      "projector": {
+        "restore": {
+          "whole_word_success_of_96": 82,
+          "eligible_success_rate": 0.9425287356321839,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_96": {
+            "word_0": 0,
+            "word_1": 35,
+            "word_2": 13,
+            "word_3": 0
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 20
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 18
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 23
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 21
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 96,
+              "strict_wins_of_96": 96,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 76,
+              "strict_wins_of_96": 76,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_96": 81,
+              "strict_wins_of_96": 81,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            },
+            "random": {
+              "valid_of_96": 82,
+              "strict_wins_of_96": 82,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_96": 84,
+          "eligible_success_rate": 0.9655172413793104,
+          "whole_word_effect_gate": false,
+          "word_quarter_success_of_96": {
+            "word_0": 0,
+            "word_1": 69,
+            "word_2": 16,
+            "word_3": 4
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 21
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 21
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 23
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 19
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 43
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 41
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 42
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 12,
+            "post": 1,
+            "padding": 2,
+            "random": 56
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 93,
+              "strict_wins_of_96": 93,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_96": 93,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 95,
+              "passes": true
+            },
+            "random": {
+              "valid_of_96": 93,
+              "strict_wins_of_96": 93,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_96": {
+          "opposite": 84,
+          "other": 12
+        }
+      }
+    },
+    "development_advance_gate": false
+  },
+  "scope": "One-shot development transfer with synthetic speech and constructed hidden-state edits; no locked test or security claim"
+}

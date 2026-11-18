@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "ordinal": 45,
+  "invocation_stamp": "20261118T101534148733Z",
+  "record_key": "object_08|piper|dev_listen",
+  "attempt_file": "record_45_attempt_01.jsonl",
+  "attempt_sha256": "b4e03b1e739d73879337d7ffdef8337c72acab81186cfe27ab3b86df21887c73",
+  "run_meta_sha256": "2fac062d7ba5e21327d41939d8a93e5c0a90d5bfc89199adc9fac9d509a576c9",
+  "progress_records": 108,
+  "capture_records": 8,
+  "generation_records": 100,
+  "teacher_forced_forwards": 200,
+  "invalid_conditions": 0,
+  "seconds": 80.49640299985185,
+  "cumulative_budget_seconds": 3667.7042313329875,
+  "mps_driver_observed_max_bytes": 10680057856
+}

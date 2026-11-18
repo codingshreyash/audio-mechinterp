@@ -1,0 +1,10 @@
+{
+  "status": "started",
+  "stamp": "20261118T101534148733Z",
+  "prior_budget_seconds": 0.0,
+  "wall_start_utc": "2026-11-18T10:15:34.149559+00:00",
+  "runner_sha256": "6f428f9840e2e9defd6eb6ba3be8c67d0ca624c1e25fee8122eb2e356944a6ed",
+  "protocol_sha256": "779fb190e93ab233f386cb1c33bd01d69fd9dc7e8a5d8c4276549bba55ec64b9",
+  "masks_sha256": "eeed0dc96aeda651be1034381a770fd0ed2022706d3f33c08f967391638c1181",
+  "wall_cap_seconds": 7200
+}
