@@ -1,0 +1,5 @@
+W1118 07:09:15.552000 24651 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/762 [00:00<?, ?it/s]Loading weights:  35%|███▍      | 266/762 [00:00<00:00, 2557.69it/s]Loading weights:  69%|██████▊   | 522/762 [00:00<00:00, 1494.02it/s]Loading weights:  91%|█████████ | 695/762 [00:00<00:00, 954.07it/s] Loading weights: 100%|██████████| 762/762 [00:00<00:00, 1076.50it/s]
+/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_v1_fit_backward_numerical_followup_v1.py:96: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:821.)
+  mean_norm = float(torch.linalg.vector_norm(mean))

@@ -1,0 +1,14 @@
+{
+  "status": "launch_completed_audited_numerical_consistency_only",
+  "arm": "fp32",
+  "freeze_receipt_sha256": "a487b199b28d80b70c58c4732c8d2d53e64c423226e15d76bf5c91c624bc5df8",
+  "runner_returncode": 0,
+  "auditor_returncode": 0,
+  "auditor_status": "audited_completed_numerical_consistency_only",
+  "post_run_source_verified": true,
+  "runner_result_sha256": "b1a124c9df14c980af18dee46cc058a98cc167a1269f33252d0e0980fc7e37fb",
+  "runner_error_sha256": null,
+  "audit_sha256": "214f682be2e9b219b2375d3cb140cd10cd5b2714f4343d9ba35ea1c484399eb3",
+  "elapsed_seconds": 82.61388254212216,
+  "wall_utc": "2026-11-18T12:10:32.162025+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "audited_completed_numerical_consistency_only",
+  "arm": "fp32",
+  "result_sha256": "b1a124c9df14c980af18dee46cc058a98cc167a1269f33252d0e0980fc7e37fb",
+  "details_sha256": "5ceb99186098360351a673b430e4bd9108eafc7457ce6ca892134340fcfdaac9",
+  "auditor_sha256": "c619576f3daf188940c4fee67ecf798a2bc12ea3876b317673a12f964e916c5e",
+  "runner_sha256": "ae9d2620ad4e06d01ea01c920f1f8f4aee8c21764598bac343e383869c2940d2",
+  "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82",
+  "pairs_verified": 36,
+  "patch_forwards_verified": 72,
+  "claim_limit": "one old-FIT case; no efficacy or v2 transfer"
+}
