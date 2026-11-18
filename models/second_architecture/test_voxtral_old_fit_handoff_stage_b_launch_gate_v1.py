@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import ExitStack
 from pathlib import Path
 from unittest import mock
 
@@ -57,6 +58,77 @@ class GitFixture(unittest.TestCase):
             (repo / "link").symlink_to("actual", target_is_directory=True)
             with self.assertRaisesRegex(ValueError, "contains symlink"):
                 gate.regular(repo, repo / "link" / "x.txt")
+
+    def test_reviewed_external_freeze_accepts_then_rejects_recommit(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            self.git(repo, "init", "-q")
+            source_keys = {"prospective_protocol_sha256", "replay_primitives_sha256",
+                           "driver_sha256", "driver_tests_sha256", "driver_amendment_sha256",
+                           "auditor_sha256", "auditor_tests_sha256",
+                           *gate.REVIEWED_SOURCE_KEYS}
+            bound = {key: repo / f"{key}.txt" for key in source_keys}
+            bound["driver_review_sha256"] = repo / "driver_review.md"
+            bound["auditor_review_sha256"] = repo / "auditor_review.md"
+            review = bound["stage_b_launcher_review_sha256"]
+            fp32_result_review = repo / "fp32_result_review.md"
+            for key in source_keys - {"stage_b_launcher_review_sha256"}:
+                bound[key].write_text(f"reviewed {key}\n")
+            self.commit(repo, "sources")
+            bound["driver_review_sha256"].write_text(gate.DRIVER_REVIEW_GO + "\n")
+            self.commit(repo, "driver review")
+            bound["auditor_review_sha256"].write_text(gate.AUDITOR_REVIEW_GO + "\n")
+            self.commit(repo, "auditor review")
+            fp32_result_review.write_text("Stage A result GO\n")
+            self.commit(repo, "Stage A result review")
+            review.write_text(gate.LAUNCHER_REVIEW_GO + "\n")
+            launcher_review_commit = self.commit(repo, "launcher review")
+            freeze = repo / "freeze.json"
+            receipt = {
+                "status": gate.STATUS, "permitted_phases": ["bf16_direct_lm"],
+                "audit_scope": gate.AUDIT_SCOPE,
+                "launcher_review_commit": launcher_review_commit,
+                "reviewed_utc": "2026-11-18T15:00:00+00:00",
+                "stage_a_model_work_seconds": 218.5633733337745,
+                "max_total_bytes": gate.MAX_TOTAL_BYTES,
+                "max_total_seconds": gate.driver.MAX_TOTAL_SECONDS,
+                **{key: gate.sha(path) for key, path in bound.items()},
+            }
+            freeze.write_text(json.dumps(receipt, sort_keys=True) + "\n")
+            self.commit(repo, "external BF16 freeze")
+            freeze_review = repo / "freeze_review.md"
+            freeze_review.write_text(gate.FREEZE_REVIEW_GO + "\n")
+            self.commit(repo, "independent freeze review")
+            pins = {
+                "AUDITOR_SHA": gate.sha(bound["auditor_sha256"]),
+                "AUDITOR_TEST_SHA": gate.sha(bound["auditor_tests_sha256"]),
+                "DRIVER_SHA": gate.sha(bound["driver_sha256"]),
+                "DRIVER_TEST_SHA": gate.sha(bound["driver_tests_sha256"]),
+                "DRIVER_AMENDMENT_SHA": gate.sha(bound["driver_amendment_sha256"]),
+            }
+            with ExitStack() as stack:
+                for name, value in {"REPO": repo, "BOUND_FILES": bound, "FREEZE": freeze,
+                                    "FREEZE_REVIEW": freeze_review,
+                                    "REVIEW": review,
+                                    "DRIVER_REVIEW": bound["driver_review_sha256"],
+                                    "AUDITOR_REVIEW": bound["auditor_review_sha256"],
+                                    **pins}.items():
+                    stack.enter_context(mock.patch.object(gate, name, value))
+                stack.enter_context(mock.patch.object(gate.driver, "STAGE_A_FP32_RESULT_REVIEW",
+                                                      fp32_result_review))
+                stack.enter_context(mock.patch.object(gate.auditor, "PROTOCOL_SHA",
+                                                      gate.sha(bound["prospective_protocol_sha256"])))
+                stack.enter_context(mock.patch.object(gate.auditor, "PRIMITIVES_SHA",
+                                                      gate.sha(bound["replay_primitives_sha256"])))
+                stack.enter_context(mock.patch.object(gate, "same_stage_a", return_value={
+                    "stage_a_model_work_seconds": 218.5633733337745}))
+                accepted, _ = gate.verify_freeze()
+                self.assertEqual(accepted["launcher_review_commit"], launcher_review_commit)
+                receipt["reviewed_utc"] = "2026-11-18T15:00:01+00:00"
+                freeze.write_text(json.dumps(receipt, sort_keys=True) + "\n")
+                self.commit(repo, "later timestamp edit")
+                with self.assertRaisesRegex(ValueError, "changed after first-add"):
+                    gate.verify_freeze()
 
 
 class GateTest(unittest.TestCase):
