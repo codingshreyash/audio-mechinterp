@@ -1,0 +1,17 @@
+{
+  "status": "audited_completed_numerical_consistency_only",
+  "arm": "bf16",
+  "result_sha256": "904619af29e62ba716f3e9f924dcfdcc684ef449dc6cbf45f26265962d352a64",
+  "details_sha256": "a97f68178118c01469e0ea2d48c3f3a3a1293202af772a17337a62704350fe5a",
+  "auditor_sha256": "d0902608d90b1040b7e54318964d0a0b5b747d4cbd5eaf8a3eaeeda71f220ec9",
+  "runner_sha256": "93d2c607f4c218b9e027ffb4c221347663efb0729cc6e419b9c940dffda89b48",
+  "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82",
+  "amendment_sha256": "8c1515c7f967392213189aefea8d84df814e86c4a4ce96ad6bcc62e068e33ffa",
+  "model_layout_counts": {
+    "torch.bfloat16/mps": 761,
+    "torch.float32/mps": 1
+  },
+  "pairs_verified": 36,
+  "patch_forwards_verified": 72,
+  "claim_limit": "one old-FIT case; no efficacy or v2 transfer"
+}

@@ -1,0 +1,165 @@
+{"amendment_sha256": "8c1515c7f967392213189aefea8d84df814e86c4a4ce96ad6bcc62e068e33ffa", "arm": "bf16", "elapsed_seconds": 0.00048362486995756626, "phase": "attempt_started", "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82", "script_sha256": "93d2c607f4c218b9e027ffb4c221347663efb0729cc6e419b9c940dffda89b48", "wall_utc": "2026-11-18T12:23:32.401211+00:00"}
+{"elapsed_seconds": 6.761532000033185, "phase": "preflight_validated"}
+{"elapsed_seconds": 6.763733624946326, "fraction_limit": 0.8012819990316539, "phase": "mps_ready", "recommended_bytes": 40200896512}
+{"current_bytes": 0, "driver_bytes": 458752, "elapsed_seconds": 6.765460832975805, "peak_driver_bytes": 458752, "phase": "before_model_load"}
+{"current_bytes": 512, "driver_bytes": 9365192704, "elapsed_seconds": 7.558259665966034, "model_layout_sha256": "5eea970f04c218a8e444373935467cff4f592a62239a7813884a72a09912f01e", "named_parameter_count": 762, "parameter_count": 4676271104, "peak_driver_bytes": 9365192704, "phase": "model_loaded"}
+{"current_bytes": 512, "driver_bytes": 10659446784, "elapsed_seconds": 8.00063679087907, "peak_driver_bytes": 10659446784, "phase": "natural_generation"}
+{"current_bytes": 512, "driver_bytes": 10659446784, "elapsed_seconds": 8.32206808286719, "peak_driver_bytes": 10659479552, "phase": "passive_generation"}
+{"current_bytes": 512, "driver_bytes": 10659430400, "elapsed_seconds": 8.560094165848568, "peak_driver_bytes": 10659479552, "phase": "donor_capture"}
+{"current_bytes": 512, "driver_bytes": 10659430400, "elapsed_seconds": 8.793177374871448, "peak_driver_bytes": 10659479552, "phase": "no_grad_clean_0"}
+{"current_bytes": 512, "driver_bytes": 10659430400, "elapsed_seconds": 9.02649666601792, "peak_driver_bytes": 10659479552, "phase": "no_grad_clean_1"}
+{"current_bytes": 512, "driver_bytes": 10659430400, "elapsed_seconds": 9.260365082882345, "peak_driver_bytes": 10659479552, "phase": "no_grad_clean_2"}
+{"current_bytes": 2564413440, "driver_bytes": 12942180352, "elapsed_seconds": 9.540192082989961, "peak_driver_bytes": 12942180352, "phase": "clean_shared_graph"}
+{"current_bytes": 2564413440, "driver_bytes": 12942180352, "elapsed_seconds": 9.542282624868676, "peak_driver_bytes": 12942180352, "phase": "before_vjp_0"}
+{"current_bytes": 2570770432, "driver_bytes": 12942196736, "elapsed_seconds": 9.792650332907215, "peak_driver_bytes": 12942196736, "phase": "after_vjp_0"}
+{"current_bytes": 2566903808, "driver_bytes": 12942196736, "elapsed_seconds": 9.794346916023642, "peak_driver_bytes": 12942196736, "phase": "before_vjp_1"}
+{"current_bytes": 2570639360, "driver_bytes": 12942196736, "elapsed_seconds": 10.022371707949787, "peak_driver_bytes": 12942213120, "phase": "after_vjp_1"}
+{"current_bytes": 2566772736, "driver_bytes": 12942196736, "elapsed_seconds": 10.024300666060299, "peak_driver_bytes": 12942213120, "phase": "before_vjp_2"}
+{"current_bytes": 2570639360, "driver_bytes": 12942196736, "elapsed_seconds": 10.253977332962677, "peak_driver_bytes": 12942213120, "phase": "after_vjp_2"}
+{"current_bytes": 2566772736, "driver_bytes": 12942196736, "elapsed_seconds": 10.255886874860153, "peak_driver_bytes": 12942213120, "phase": "before_vjp_3"}
+{"current_bytes": 15073792, "driver_bytes": 12942196736, "elapsed_seconds": 10.485996583011001, "peak_driver_bytes": 12942213120, "phase": "after_vjp_3"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 10.488121415954083, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 10.759853249881417, "patch_count": 1, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 10.76171087496914, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.030160832917318, "patch_count": 2, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.032480041030794, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.300767249893397, "patch_count": 3, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.302902415860444, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.570518166059628, "patch_count": 4, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.572828915901482, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.840616832952946, "patch_count": 5, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 11.842724916059524, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.110311083029956, "patch_count": 6, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.11248479085043, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.380473291035742, "patch_count": 7, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.382502374937758, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.65023324987851, "patch_count": 8, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.652475582901388, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.920176665997133, "patch_count": 9, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 12.922134415945038, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.189260457875207, "patch_count": 10, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.191608249908313, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.460158000001684, "patch_count": 11, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.462234708014876, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_0_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.72898737504147, "patch_count": 12, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_0_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.731357165845111, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 13.999059458030388, "patch_count": 13, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.001222915947437, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.269440250005573, "patch_count": 14, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.271677582990378, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.53916791593656, "patch_count": 15, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.541310499887913, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.808225916000083, "patch_count": 16, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 14.810523290885612, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 15.078321582870558, "patch_count": 17, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 15.080384915927425, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 15.348321040859446, "patch_count": 18, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12942196736, "elapsed_seconds": 15.350694583030418, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 15.618632207857445, "patch_count": 19, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 15.620847915997729, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 15.888783332891762, "patch_count": 20, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 15.890858249971643, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.159034540876746, "patch_count": 21, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.161192457890138, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.429114165948704, "patch_count": 22, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.431425582850352, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.698934790911153, "patch_count": 23, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.70111699984409, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_1_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.969222040846944, "patch_count": 24, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_1_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 16.971598082920536, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 17.239514166023582, "patch_count": 25, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 17.2416600829456, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 17.509829374961555, "patch_count": 26, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 17.512122082989663, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 17.780825125053525, "patch_count": 27, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 17.783056082902476, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.05075795785524, "patch_count": 28, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.05311133293435, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.321088958065957, "patch_count": 29, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.323148750001565, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.591638416051865, "patch_count": 30, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.593967499909922, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.861825166037306, "patch_count": 31, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 18.863950541010126, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.131323707988486, "patch_count": 32, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.133656291058287, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.40173158305697, "patch_count": 33, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.403938750037923, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.672733665909618, "patch_count": 34, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.67530566593632, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.94634566595778, "patch_count": 35, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 19.948501790873706, "peak_driver_bytes": 12942213120, "phase": "before_encoder31_2_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 20.219042083015665, "patch_count": 36, "peak_driver_bytes": 12942213120, "phase": "after_encoder31_2_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 20.220858291024342, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 20.48968245787546, "patch_count": 37, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 20.490366250043735, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 20.75913262506947, "patch_count": 38, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 20.761454707942903, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.030174541054294, "patch_count": 39, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.03236920805648, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.30037449998781, "patch_count": 40, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.30265420791693, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.571067749988288, "patch_count": 41, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.573068500030786, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.841362790903077, "patch_count": 42, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 21.84364974987693, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.111455040983856, "patch_count": 43, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.11354791605845, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.380610124906525, "patch_count": 44, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.38287308299914, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.65112324990332, "patch_count": 45, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.65325995790772, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.921214875066653, "patch_count": 46, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 22.923448415938765, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 23.191187958000228, "patch_count": 47, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 23.19333350006491, "peak_driver_bytes": 12942213120, "phase": "before_projector_0_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 23.461903415853158, "patch_count": 48, "peak_driver_bytes": 12942213120, "phase": "after_projector_0_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 23.464016082929447, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 23.732121999841183, "patch_count": 49, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 23.73420454096049, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.00198108283803, "patch_count": 50, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.00419379095547, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.27205270784907, "patch_count": 51, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.27414087485522, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.54202845785767, "patch_count": 52, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.54428237490356, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.81260558287613, "patch_count": 53, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 24.81474924995564, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.082777915988117, "patch_count": 54, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.085026207845658, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.353227332932875, "patch_count": 55, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.355407166061923, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.62370333285071, "patch_count": 56, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.626063582953066, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.89437024993822, "patch_count": 57, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 25.896528790937737, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.164024415891618, "patch_count": 58, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.16635058284737, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.43456779094413, "patch_count": 59, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.436824416043237, "peak_driver_bytes": 12942213120, "phase": "before_projector_1_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.70507879089564, "patch_count": 60, "peak_driver_bytes": 12942213120, "phase": "after_projector_1_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.70733133284375, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.97499895794317, "patch_count": 61, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_zero_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 26.977180500049144, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 27.244653166038916, "patch_count": 62, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_alpha_0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 27.247047040844336, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 27.515137874986976, "patch_count": 63, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_zero_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 27.517389749875292, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 27.78638037503697, "patch_count": 64, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_alpha_-0.00625"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 27.78847345802933, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.05686420784332, "patch_count": 65, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_zero_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.058807665947825, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.3269312500488, "patch_count": 66, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_alpha_0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.329254291020334, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.59761729091406, "patch_count": 67, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_zero_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.59970570798032, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.867933499859646, "patch_count": 68, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_alpha_-0.025"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 28.870296540902928, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.138092499924824, "patch_count": 69, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_zero_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.140266832895577, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.407902624923736, "patch_count": 70, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_alpha_0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.410239208023995, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.67814787500538, "patch_count": 71, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_zero_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.680263249902055, "peak_driver_bytes": 12942213120, "phase": "before_projector_2_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.94819137500599, "patch_count": 72, "peak_driver_bytes": 12942213120, "phase": "after_projector_2_alpha_-0.1"}
+{"current_bytes": 2359808, "driver_bytes": 12940099584, "elapsed_seconds": 29.957257041009143, "peak_driver_bytes": 12942213120, "phase": "details_saved"}

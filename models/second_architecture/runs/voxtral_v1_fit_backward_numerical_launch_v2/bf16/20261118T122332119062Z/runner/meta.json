@@ -1,0 +1,101 @@
+{
+  "arm": "bf16",
+  "purpose": "old_fit_numerical_diagnostic_only",
+  "script_sha256": "93d2c607f4c218b9e027ffb4c221347663efb0729cc6e419b9c940dffda89b48",
+  "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82",
+  "amendment_sha256": "8c1515c7f967392213189aefea8d84df814e86c4a4ce96ad6bcc62e068e33ffa",
+  "modeling_utils_sha256": "553412f58334f65abba617f3b344828698dbf63615e109159fd03dafd3422d38",
+  "expected_parameter_layout": {
+    "named_parameter_count": 762,
+    "fp32_exception": "model.audio_tower.embed_positions.weight",
+    "fp32_exception_shape": [
+      1500,
+      1280
+    ],
+    "all_parameters_on": "mps"
+  },
+  "old_result_sha256": "d4ccfd213cf3a5ebebd3a7c0ecebab691dc15632f61076669d7535bd58154ebe",
+  "old_details_sha256": "1bc49aa650b96c7ac6cb2f545da98e198edfa18998ebae8dc263c70ad5ad7b3c",
+  "model_snapshot": {
+    "model_id": "mistralai/Voxtral-Mini-3B-2507",
+    "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+    "config": {
+      "size_bytes": 1361,
+      "sha256": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"
+    },
+    "snapshot_tree": {
+      "size_bytes": 2013,
+      "sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"
+    },
+    "weight_index": {
+      "size_bytes": 68088,
+      "sha256": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"
+    },
+    "weight_shards": {
+      "model-00001-of-00002.safetensors": {
+        "size_bytes": 4977385976,
+        "sha256": "1facdc4c5a0e84f2881a59c4756441b7030a1f1036b2124c117540408d0e5fe9"
+      },
+      "model-00002-of-00002.safetensors": {
+        "size_bytes": 4379088336,
+        "sha256": "0a103ba715bc0d656e94bf79d637d4f8f0f4fe6d76fb1d4db7ee46c6b940f631"
+      }
+    },
+    "processor_config": {
+      "size_bytes": 357,
+      "sha256": "86d67d926e17d3a9bb0bae334c9fc46bc163181992357a0357c0aec2c7e131d1"
+    },
+    "tokenizer_asset": {
+      "size_bytes": 14894206,
+      "sha256": "4aaf3836c2a5332f029ce85a7a62255c966f47b6797ef81dedd0ade9c862e4a8"
+    },
+    "generation_config": {
+      "size_bytes": 108,
+      "sha256": "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"
+    }
+  },
+  "source_hashes": {
+    "modeling_voxtral": "2d3ec9d78c469b77c42a8d5ba258185fb1c58f4c2c7bf6007ec724436dfc7056",
+    "processing_voxtral": "239e84657d1a0287ab27a540c946a787a69b4b0bf45727d6b24bee21ccec0296",
+    "feature_extraction_whisper": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb",
+    "modeling_llama": "affc6a4ab36b562a6b4c90b84c4e7939c5417a69ad7bd37e858be5583f189830"
+  },
+  "rows": {
+    "encoder31": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107
+    ],
+    "projector": [
+      24,
+      25,
+      26
+    ]
+  },
+  "wav_hashes": {
+    "beaver": "267b68d794afcd3cabcac9f98eabd310207b08bf3c1527ae6dc43c87d57b304a",
+    "monkey": "83b85c468f21dfb3f5aa90d451b31063a4f33e1e01245294f33d342be6340001"
+  },
+  "direction_hashes": {
+    "encoder31": "0dcff219dd21578a00a0c34d9f8ce861c55b28538b1b85867885e661135851ac",
+    "projector": "03c6f5d400ad758ca6362a4aefbbcb5102ffaa363ac5fd74225306e427017e96"
+  },
+  "max_seconds": 900,
+  "max_mps_driver_bytes": 32212254720,
+  "mps_fraction_limit": 0.8012819990316539,
+  "fresh_v2_corpus_opened": false,
+  "planned_patch_forwards": 72,
+  "planned_pairs": 36,
+  "planned_other_prompt_forwards": 5,
+  "planned_vjps": 4,
+  "planned_generations": 2
+}

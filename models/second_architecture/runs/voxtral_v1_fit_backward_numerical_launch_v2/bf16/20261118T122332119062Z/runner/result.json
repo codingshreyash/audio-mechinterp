@@ -1,0 +1,2630 @@
+{
+  "status": "completed_old_fit_numerical_diagnostic_only",
+  "arm": "bf16",
+  "meta_sha256": "62a2743c83697b5579e611ab455e173cde330eab1a3316d8eb9c09cc1257de3f",
+  "progress_sha256": "99f8061b9636d4f6651f734146ac51bea955643a344e1717b0beb25b507a31cb",
+  "details_sha256": "a97f68178118c01469e0ea2d48c3f3a3a1293202af772a17337a62704350fe5a",
+  "amendment_sha256": "8c1515c7f967392213189aefea8d84df814e86c4a4ce96ad6bcc62e068e33ffa",
+  "model_layout_sha256": "5eea970f04c218a8e444373935467cff4f592a62239a7813884a72a09912f01e",
+  "model_layout_counts": {
+    "torch.bfloat16/mps": 761,
+    "torch.float32/mps": 1
+  },
+  "natural_suffix_ids": [
+    5934,
+    14844,
+    2
+  ],
+  "passive_suffix_ids": [
+    5934,
+    14844,
+    2
+  ],
+  "passive_hook_shapes": {
+    "encoder31": [
+      [
+        1,
+        1500,
+        1280
+      ]
+    ],
+    "projector": [
+      [
+        375,
+        3072
+      ]
+    ],
+    "lm29": [
+      [
+        1,
+        396,
+        3072
+      ],
+      [
+        1,
+        1,
+        3072
+      ],
+      [
+        1,
+        1,
+        3072
+      ],
+      [
+        1,
+        1,
+        3072
+      ]
+    ]
+  },
+  "clean_hook_events": {
+    "encoder31": {
+      "calls": 1,
+      "shape": [
+        1,
+        1500,
+        1280
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "projector": {
+      "calls": 1,
+      "shape": [
+        375,
+        3072
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "lm29": {
+      "calls": 1,
+      "shape": [
+        1,
+        396,
+        3072
+      ],
+      "dtype": "torch.bfloat16"
+    }
+  },
+  "clean_terminal_sha256": "076cd3e8760d67e6b41ac940f48a3bd320969b190cd9951cea1eb9408066aca0",
+  "clean_selected_source_row_hashes": {
+    "encoder31": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+    "projector": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511"
+  },
+  "clean_source_hashes": {
+    "encoder31": "e0abb561ad91255d1945c81c1dead1a75266f09d0e7f3695a123040fef47b2b6",
+    "projector": "a96b5e19ffefe48e537b30ddecb9de11c8c40becf4b4dd3f2813ab5583fce100"
+  },
+  "donor_source_hashes": {
+    "encoder31": "6277e1dd59e29e91dcfe89b50a1c22c22f01c0971794f0fc5c3d0d5422702e7d",
+    "projector": "97c3e9bb93ecbde1029789626b8040dc69c9add5cb361b8502e6dd579cc50e1e"
+  },
+  "raw_vjp_dtypes": {
+    "encoder31": [
+      "torch.bfloat16",
+      "torch.bfloat16",
+      "torch.bfloat16",
+      "torch.bfloat16"
+    ],
+    "projector": [
+      "torch.bfloat16",
+      "torch.bfloat16",
+      "torch.bfloat16",
+      "torch.bfloat16"
+    ]
+  },
+  "selected_gradient_storage_dtype": "torch.float32",
+  "gradient_hashes": {
+    "encoder31": "459f996e150bb6f6b8ec9b86c9baaa1ea816dd2b9ce28cd8a07c1c3e075a2342",
+    "projector": "78bd96920344fccf96986892486e8924f8f63b52da39b97aed15c5073a476106"
+  },
+  "patch_forward_count": 72,
+  "zero_nonzero_pair_count": 36,
+  "paired_observations_per_site": 18,
+  "source_element_unchanged_label": "unchanged_by_bf16_cast",
+  "analysis": {
+    "encoder31": {
+      "zero_repeatability_l2_four": 0.0,
+      "zero_repeatability_l2_full": 0.0,
+      "alpha_groups": {
+        "0.00625": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.03125,
+                0.0,
+                0.0,
+                -0.1875
+              ],
+              "rowwise_prediction_four": [
+                3.560504046618007e-05,
+                6.263653631322086e-05,
+                -0.00011882042599609122,
+                -0.00012975718709640205
+              ],
+              "uniform_prediction_four": [
+                7.05958082107827e-05,
+                7.144508708734065e-05,
+                -0.000123675461509265,
+                -0.0001464355445932597
+              ],
+              "ideal_prediction_four": [
+                0.0002836503554135561,
+                0.00014336656022351235,
+                -0.00015673811140004545,
+                -0.0002860043023247272
+              ],
+              "absolute_l2_error": 0.18995253192859932,
+              "measured_l2": 0.19008632907181935,
+              "uniform_absolute_l2_error": 0.18993033922973301,
+              "ideal_absolute_l2_error": 0.1897578459937984,
+              "edit_metrics": {
+                "effective_norm": 0.06887087970972061,
+                "mean_fidelity_ratio": 0.6931495959296767,
+                "row_nonuniformity_ratio": 0.8321134999514037,
+                "unchanged_fraction": 0.8444661498069763
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "f07ee505f6b8dd6d9a88eb3dac2d8e21dc347c1a11b960131a906d391bbde963",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                2.0,
+                0.0,
+                0.0,
+                -12.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.03125,
+                0.0,
+                0.0,
+                -0.1875
+              ],
+              "rowwise_prediction_four": [
+                3.560504046618007e-05,
+                6.263653631322086e-05,
+                -0.00011882042599609122,
+                -0.00012975718709640205
+              ],
+              "uniform_prediction_four": [
+                7.05958082107827e-05,
+                7.144508708734065e-05,
+                -0.000123675461509265,
+                -0.0001464355445932597
+              ],
+              "ideal_prediction_four": [
+                0.0002836503554135561,
+                0.00014336656022351235,
+                -0.00015673811140004545,
+                -0.0002860043023247272
+              ],
+              "absolute_l2_error": 0.18995253192859932,
+              "measured_l2": 0.19008632907181935,
+              "uniform_absolute_l2_error": 0.18993033922973301,
+              "ideal_absolute_l2_error": 0.1897578459937984,
+              "edit_metrics": {
+                "effective_norm": 0.06887087970972061,
+                "mean_fidelity_ratio": 0.6931495959296767,
+                "row_nonuniformity_ratio": 0.8321134999514037,
+                "unchanged_fraction": 0.8444661498069763
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "f07ee505f6b8dd6d9a88eb3dac2d8e21dc347c1a11b960131a906d391bbde963",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                2.0,
+                0.0,
+                0.0,
+                -12.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.03125,
+                0.0,
+                0.0,
+                -0.1875
+              ],
+              "rowwise_prediction_four": [
+                3.560504046618007e-05,
+                6.263653631322086e-05,
+                -0.00011882042599609122,
+                -0.00012975718709640205
+              ],
+              "uniform_prediction_four": [
+                7.05958082107827e-05,
+                7.144508708734065e-05,
+                -0.000123675461509265,
+                -0.0001464355445932597
+              ],
+              "ideal_prediction_four": [
+                0.0002836503554135561,
+                0.00014336656022351235,
+                -0.00015673811140004545,
+                -0.0002860043023247272
+              ],
+              "absolute_l2_error": 0.18995253192859932,
+              "measured_l2": 0.19008632907181935,
+              "uniform_absolute_l2_error": 0.18993033922973301,
+              "ideal_absolute_l2_error": 0.1897578459937984,
+              "edit_metrics": {
+                "effective_norm": 0.06887087970972061,
+                "mean_fidelity_ratio": 0.6931495959296767,
+                "row_nonuniformity_ratio": 0.8321134999514037,
+                "unchanged_fraction": 0.8444661498069763
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "f07ee505f6b8dd6d9a88eb3dac2d8e21dc347c1a11b960131a906d391bbde963",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                2.0,
+                0.0,
+                0.0,
+                -12.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            3.560504046618007e-05,
+            6.263653631322086e-05,
+            -0.00011882042599609122,
+            -0.00012975718709640205
+          ],
+          "median_uniform_prediction_four": [
+            7.05958082107827e-05,
+            7.144508708734065e-05,
+            -0.000123675461509265,
+            -0.0001464355445932597
+          ],
+          "median_ideal_prediction_four": [
+            0.0002836503554135561,
+            0.00014336656022351235,
+            -0.00015673811140004545,
+            -0.0002860043023247272
+          ],
+          "median_measured_four": [
+            0.03125,
+            0.0,
+            0.0,
+            -0.1875
+          ],
+          "median_absolute_l2_error": 0.18995253192859932,
+          "median_relative_l2_error": 0.9992961243248089,
+          "median_uniform_absolute_l2_error": 0.18993033922973301,
+          "median_uniform_relative_l2_error": 0.9991793736937946,
+          "median_ideal_absolute_l2_error": 0.1897578459937984,
+          "median_ideal_relative_l2_error": 0.9982719268680451,
+          "median_measured_l2": 0.19008632907181935,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.7039969962576557
+        },
+        "-0.00625": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                -0.03125,
+                -0.0625,
+                0.5,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -3.370844206074253e-05,
+                -5.8744812122313306e-05,
+                0.00012695811165031046,
+                0.00012866112228948623
+              ],
+              "uniform_prediction_four": [
+                -6.73568865749985e-05,
+                -6.68182474328205e-05,
+                0.00012373174831736833,
+                0.00014170871872920543
+              ],
+              "ideal_prediction_four": [
+                -0.0002836503554135561,
+                -0.00014336656022351235,
+                0.00015673811140004545,
+                0.0002860043023247272
+              ],
+              "absolute_l2_error": 0.5047241244169572,
+              "measured_l2": 0.5048592006688597,
+              "uniform_absolute_l2_error": 0.5047242445711098,
+              "ideal_absolute_l2_error": 0.5046688347799475,
+              "edit_metrics": {
+                "effective_norm": 0.06877853721380234,
+                "mean_fidelity_ratio": 0.6940416234799327,
+                "row_nonuniformity_ratio": 0.8337571096065748,
+                "unchanged_fraction": 0.8445963263511658
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "09d2099cdd4031bebc9544a8a44b33a54dc243b595b2300d31fb7304de28efe9",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                -1.0,
+                16.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                -0.03125,
+                -0.0625,
+                0.5,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -3.370844206074253e-05,
+                -5.8744812122313306e-05,
+                0.00012695811165031046,
+                0.00012866112228948623
+              ],
+              "uniform_prediction_four": [
+                -6.73568865749985e-05,
+                -6.68182474328205e-05,
+                0.00012373174831736833,
+                0.00014170871872920543
+              ],
+              "ideal_prediction_four": [
+                -0.0002836503554135561,
+                -0.00014336656022351235,
+                0.00015673811140004545,
+                0.0002860043023247272
+              ],
+              "absolute_l2_error": 0.5047241244169572,
+              "measured_l2": 0.5048592006688597,
+              "uniform_absolute_l2_error": 0.5047242445711098,
+              "ideal_absolute_l2_error": 0.5046688347799475,
+              "edit_metrics": {
+                "effective_norm": 0.06877853721380234,
+                "mean_fidelity_ratio": 0.6940416234799327,
+                "row_nonuniformity_ratio": 0.8337571096065748,
+                "unchanged_fraction": 0.8445963263511658
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "09d2099cdd4031bebc9544a8a44b33a54dc243b595b2300d31fb7304de28efe9",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                -1.0,
+                16.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                -0.03125,
+                -0.0625,
+                0.5,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -3.370844206074253e-05,
+                -5.8744812122313306e-05,
+                0.00012695811165031046,
+                0.00012866112228948623
+              ],
+              "uniform_prediction_four": [
+                -6.73568865749985e-05,
+                -6.68182474328205e-05,
+                0.00012373174831736833,
+                0.00014170871872920543
+              ],
+              "ideal_prediction_four": [
+                -0.0002836503554135561,
+                -0.00014336656022351235,
+                0.00015673811140004545,
+                0.0002860043023247272
+              ],
+              "absolute_l2_error": 0.5047241244169572,
+              "measured_l2": 0.5048592006688597,
+              "uniform_absolute_l2_error": 0.5047242445711098,
+              "ideal_absolute_l2_error": 0.5046688347799475,
+              "edit_metrics": {
+                "effective_norm": 0.06877853721380234,
+                "mean_fidelity_ratio": 0.6940416234799327,
+                "row_nonuniformity_ratio": 0.8337571096065748,
+                "unchanged_fraction": 0.8445963263511658
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "09d2099cdd4031bebc9544a8a44b33a54dc243b595b2300d31fb7304de28efe9",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                -1.0,
+                16.0,
+                0.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            -3.370844206074253e-05,
+            -5.8744812122313306e-05,
+            0.00012695811165031046,
+            0.00012866112228948623
+          ],
+          "median_uniform_prediction_four": [
+            -6.73568865749985e-05,
+            -6.68182474328205e-05,
+            0.00012373174831736833,
+            0.00014170871872920543
+          ],
+          "median_ideal_prediction_four": [
+            -0.0002836503554135561,
+            -0.00014336656022351235,
+            0.00015673811140004545,
+            0.0002860043023247272
+          ],
+          "median_measured_four": [
+            -0.03125,
+            -0.0625,
+            0.5,
+            0.0
+          ],
+          "median_absolute_l2_error": 0.5047241244169572,
+          "median_relative_l2_error": 0.9997324476770484,
+          "median_uniform_absolute_l2_error": 0.5047242445711098,
+          "median_uniform_relative_l2_error": 0.9997326856724189,
+          "median_ideal_absolute_l2_error": 0.5046688347799475,
+          "median_ideal_relative_l2_error": 0.9996229327133982,
+          "median_measured_l2": 0.5048592006688597,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.6998781530997699
+        },
+        "0.025": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                -0.03125,
+                0.0,
+                0.25,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                0.0008620871230959892,
+                0.0004415359580889344,
+                -0.0005421475507318974,
+                -0.0010637387167662382
+              ],
+              "uniform_prediction_four": [
+                0.000975687347818166,
+                0.0005876250797882676,
+                -0.000693547772243619,
+                -0.001083125127479434
+              ],
+              "ideal_prediction_four": [
+                0.0011346014216542244,
+                0.0005734662408940494,
+                -0.0006269524456001818,
+                -0.0011440172092989087
+              ],
+              "absolute_l2_error": 0.281359104444129,
+              "measured_l2": 0.28125,
+              "uniform_absolute_l2_error": 0.2814986447588688,
+              "ideal_absolute_l2_error": 0.2814307464332716,
+              "edit_metrics": {
+                "effective_norm": 0.3722463548183441,
+                "mean_fidelity_ratio": 0.2599633563570216,
+                "row_nonuniformity_ratio": 0.2864844383212095,
+                "unchanged_fraction": 0.42135417461395264
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "b18e82643acbb59db0f5755d48a3f3c24d97a834341c70578df274aec2494d87",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                0.0,
+                8.0,
+                -8.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                -0.03125,
+                0.0,
+                0.25,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                0.0008620871230959892,
+                0.0004415359580889344,
+                -0.0005421475507318974,
+                -0.0010637387167662382
+              ],
+              "uniform_prediction_four": [
+                0.000975687347818166,
+                0.0005876250797882676,
+                -0.000693547772243619,
+                -0.001083125127479434
+              ],
+              "ideal_prediction_four": [
+                0.0011346014216542244,
+                0.0005734662408940494,
+                -0.0006269524456001818,
+                -0.0011440172092989087
+              ],
+              "absolute_l2_error": 0.281359104444129,
+              "measured_l2": 0.28125,
+              "uniform_absolute_l2_error": 0.2814986447588688,
+              "ideal_absolute_l2_error": 0.2814307464332716,
+              "edit_metrics": {
+                "effective_norm": 0.3722463548183441,
+                "mean_fidelity_ratio": 0.2599633563570216,
+                "row_nonuniformity_ratio": 0.2864844383212095,
+                "unchanged_fraction": 0.42135417461395264
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "b18e82643acbb59db0f5755d48a3f3c24d97a834341c70578df274aec2494d87",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                0.0,
+                8.0,
+                -8.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                -0.03125,
+                0.0,
+                0.25,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                0.0008620871230959892,
+                0.0004415359580889344,
+                -0.0005421475507318974,
+                -0.0010637387167662382
+              ],
+              "uniform_prediction_four": [
+                0.000975687347818166,
+                0.0005876250797882676,
+                -0.000693547772243619,
+                -0.001083125127479434
+              ],
+              "ideal_prediction_four": [
+                0.0011346014216542244,
+                0.0005734662408940494,
+                -0.0006269524456001818,
+                -0.0011440172092989087
+              ],
+              "absolute_l2_error": 0.281359104444129,
+              "measured_l2": 0.28125,
+              "uniform_absolute_l2_error": 0.2814986447588688,
+              "ideal_absolute_l2_error": 0.2814307464332716,
+              "edit_metrics": {
+                "effective_norm": 0.3722463548183441,
+                "mean_fidelity_ratio": 0.2599633563570216,
+                "row_nonuniformity_ratio": 0.2864844383212095,
+                "unchanged_fraction": 0.42135417461395264
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "b18e82643acbb59db0f5755d48a3f3c24d97a834341c70578df274aec2494d87",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                0.0,
+                8.0,
+                -8.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            0.0008620871230959892,
+            0.0004415359580889344,
+            -0.0005421475507318974,
+            -0.0010637387167662382
+          ],
+          "median_uniform_prediction_four": [
+            0.000975687347818166,
+            0.0005876250797882676,
+            -0.000693547772243619,
+            -0.001083125127479434
+          ],
+          "median_ideal_prediction_four": [
+            0.0011346014216542244,
+            0.0005734662408940494,
+            -0.0006269524456001818,
+            -0.0011440172092989087
+          ],
+          "median_measured_four": [
+            -0.03125,
+            0.0,
+            0.25,
+            -0.125
+          ],
+          "median_absolute_l2_error": 0.281359104444129,
+          "median_relative_l2_error": 1.0003879269124587,
+          "median_uniform_absolute_l2_error": 0.2814986447588688,
+          "median_uniform_relative_l2_error": 1.0008840702537558,
+          "median_ideal_absolute_l2_error": 0.2814307464332716,
+          "median_ideal_relative_l2_error": 1.0006426539849658,
+          "median_measured_l2": 0.28125,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": -0.06824725512254258
+        },
+        "-0.025": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                -0.03125,
+                -0.0625,
+                0.25,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                -0.0008561230497434735,
+                -0.00045280871563591063,
+                0.0005892841145396233,
+                0.0010787688661366701
+              ],
+              "uniform_prediction_four": [
+                -0.0009614675655029714,
+                -0.0005720541812479496,
+                0.0007037892937660217,
+                0.0010785242775455117
+              ],
+              "ideal_prediction_four": [
+                -0.0011346014216542244,
+                -0.0005734662408940494,
+                0.0006269524456001818,
+                0.0011440172092989087
+              ],
+              "absolute_l2_error": 0.2878805357429438,
+              "measured_l2": 0.2881107642904027,
+              "uniform_absolute_l2_error": 0.2877444363091257,
+              "ideal_absolute_l2_error": 0.2878212339964152,
+              "edit_metrics": {
+                "effective_norm": 0.37181493639945984,
+                "mean_fidelity_ratio": 0.2588225994702233,
+                "row_nonuniformity_ratio": 0.28720746259880886,
+                "unchanged_fraction": 0.4212239682674408
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "761b934c6dfe1bc7b8a2fb5e1d0ed662b63a04e0b23f9baf5eae777d8b452afc",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                -1.0,
+                8.0,
+                -8.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                -0.03125,
+                -0.0625,
+                0.25,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                -0.0008561230497434735,
+                -0.00045280871563591063,
+                0.0005892841145396233,
+                0.0010787688661366701
+              ],
+              "uniform_prediction_four": [
+                -0.0009614675655029714,
+                -0.0005720541812479496,
+                0.0007037892937660217,
+                0.0010785242775455117
+              ],
+              "ideal_prediction_four": [
+                -0.0011346014216542244,
+                -0.0005734662408940494,
+                0.0006269524456001818,
+                0.0011440172092989087
+              ],
+              "absolute_l2_error": 0.2878805357429438,
+              "measured_l2": 0.2881107642904027,
+              "uniform_absolute_l2_error": 0.2877444363091257,
+              "ideal_absolute_l2_error": 0.2878212339964152,
+              "edit_metrics": {
+                "effective_norm": 0.37181493639945984,
+                "mean_fidelity_ratio": 0.2588225994702233,
+                "row_nonuniformity_ratio": 0.28720746259880886,
+                "unchanged_fraction": 0.4212239682674408
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "761b934c6dfe1bc7b8a2fb5e1d0ed662b63a04e0b23f9baf5eae777d8b452afc",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                -1.0,
+                8.0,
+                -8.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                -0.03125,
+                -0.0625,
+                0.25,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                -0.0008561230497434735,
+                -0.00045280871563591063,
+                0.0005892841145396233,
+                0.0010787688661366701
+              ],
+              "uniform_prediction_four": [
+                -0.0009614675655029714,
+                -0.0005720541812479496,
+                0.0007037892937660217,
+                0.0010785242775455117
+              ],
+              "ideal_prediction_four": [
+                -0.0011346014216542244,
+                -0.0005734662408940494,
+                0.0006269524456001818,
+                0.0011440172092989087
+              ],
+              "absolute_l2_error": 0.2878805357429438,
+              "measured_l2": 0.2881107642904027,
+              "uniform_absolute_l2_error": 0.2877444363091257,
+              "ideal_absolute_l2_error": 0.2878212339964152,
+              "edit_metrics": {
+                "effective_norm": 0.37181493639945984,
+                "mean_fidelity_ratio": 0.2588225994702233,
+                "row_nonuniformity_ratio": 0.28720746259880886,
+                "unchanged_fraction": 0.4212239682674408
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "761b934c6dfe1bc7b8a2fb5e1d0ed662b63a04e0b23f9baf5eae777d8b452afc",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -2.0,
+                -1.0,
+                8.0,
+                -8.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            -0.0008561230497434735,
+            -0.00045280871563591063,
+            0.0005892841145396233,
+            0.0010787688661366701
+          ],
+          "median_uniform_prediction_four": [
+            -0.0009614675655029714,
+            -0.0005720541812479496,
+            0.0007037892937660217,
+            0.0010785242775455117
+          ],
+          "median_ideal_prediction_four": [
+            -0.0011346014216542244,
+            -0.0005734662408940494,
+            0.0006269524456001818,
+            0.0011440172092989087
+          ],
+          "median_measured_four": [
+            -0.03125,
+            -0.0625,
+            0.25,
+            -0.125
+          ],
+          "median_absolute_l2_error": 0.2878805357429438,
+          "median_relative_l2_error": 0.9992009026527491,
+          "median_uniform_absolute_l2_error": 0.2877444363091257,
+          "median_uniform_relative_l2_error": 0.9987285168529567,
+          "median_ideal_absolute_l2_error": 0.2878212339964152,
+          "median_ideal_relative_l2_error": 0.9989950729723666,
+          "median_measured_l2": 0.2881107642904027,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.1497752908854343
+        },
+        "0.1": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.046875,
+                0.0,
+                -0.25,
+                0.0625
+              ],
+              "rowwise_prediction_four": [
+                0.004727623891085386,
+                0.0026603294536471367,
+                -0.0027187783271074295,
+                -0.004728017374873161
+              ],
+              "uniform_prediction_four": [
+                0.004734125919640064,
+                0.0024733347818255424,
+                -0.002636317629367113,
+                -0.00478965463116765
+              ],
+              "ideal_prediction_four": [
+                0.004538405686616898,
+                0.0022938649635761976,
+                -0.0025078097824007273,
+                -0.004576068837195635
+              ],
+              "absolute_l2_error": 0.2597134720761761,
+              "measured_l2": 0.2619227283475033,
+              "uniform_absolute_l2_error": 0.25980504157837453,
+              "ideal_absolute_l2_error": 0.2599023514012208,
+              "edit_metrics": {
+                "effective_norm": 1.4262760877609253,
+                "mean_fidelity_ratio": 0.06543105574264338,
+                "row_nonuniformity_ratio": 0.07401236537576751,
+                "unchanged_fraction": 0.1149088516831398
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "a5715ac7e9558b51cf44ce80c5103dd298ca9606af8b5d91a52b78ed8e6836a3",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                3.0,
+                0.0,
+                -8.0,
+                4.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.046875,
+                0.0,
+                -0.25,
+                0.0625
+              ],
+              "rowwise_prediction_four": [
+                0.004727623891085386,
+                0.0026603294536471367,
+                -0.0027187783271074295,
+                -0.004728017374873161
+              ],
+              "uniform_prediction_four": [
+                0.004734125919640064,
+                0.0024733347818255424,
+                -0.002636317629367113,
+                -0.00478965463116765
+              ],
+              "ideal_prediction_four": [
+                0.004538405686616898,
+                0.0022938649635761976,
+                -0.0025078097824007273,
+                -0.004576068837195635
+              ],
+              "absolute_l2_error": 0.2597134720761761,
+              "measured_l2": 0.2619227283475033,
+              "uniform_absolute_l2_error": 0.25980504157837453,
+              "ideal_absolute_l2_error": 0.2599023514012208,
+              "edit_metrics": {
+                "effective_norm": 1.4262760877609253,
+                "mean_fidelity_ratio": 0.06543105574264338,
+                "row_nonuniformity_ratio": 0.07401236537576751,
+                "unchanged_fraction": 0.1149088516831398
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "a5715ac7e9558b51cf44ce80c5103dd298ca9606af8b5d91a52b78ed8e6836a3",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                3.0,
+                0.0,
+                -8.0,
+                4.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.046875,
+                0.0,
+                -0.25,
+                0.0625
+              ],
+              "rowwise_prediction_four": [
+                0.004727623891085386,
+                0.0026603294536471367,
+                -0.0027187783271074295,
+                -0.004728017374873161
+              ],
+              "uniform_prediction_four": [
+                0.004734125919640064,
+                0.0024733347818255424,
+                -0.002636317629367113,
+                -0.00478965463116765
+              ],
+              "ideal_prediction_four": [
+                0.004538405686616898,
+                0.0022938649635761976,
+                -0.0025078097824007273,
+                -0.004576068837195635
+              ],
+              "absolute_l2_error": 0.2597134720761761,
+              "measured_l2": 0.2619227283475033,
+              "uniform_absolute_l2_error": 0.25980504157837453,
+              "ideal_absolute_l2_error": 0.2599023514012208,
+              "edit_metrics": {
+                "effective_norm": 1.4262760877609253,
+                "mean_fidelity_ratio": 0.06543105574264338,
+                "row_nonuniformity_ratio": 0.07401236537576751,
+                "unchanged_fraction": 0.1149088516831398
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "a5715ac7e9558b51cf44ce80c5103dd298ca9606af8b5d91a52b78ed8e6836a3",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                3.0,
+                0.0,
+                -8.0,
+                4.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            0.004727623891085386,
+            0.0026603294536471367,
+            -0.0027187783271074295,
+            -0.004728017374873161
+          ],
+          "median_uniform_prediction_four": [
+            0.004734125919640064,
+            0.0024733347818255424,
+            -0.002636317629367113,
+            -0.00478965463116765
+          ],
+          "median_ideal_prediction_four": [
+            0.004538405686616898,
+            0.0022938649635761976,
+            -0.0025078097824007273,
+            -0.004576068837195635
+          ],
+          "median_measured_four": [
+            0.046875,
+            0.0,
+            -0.25,
+            0.0625
+          ],
+          "median_absolute_l2_error": 0.2597134720761761,
+          "median_relative_l2_error": 0.9915652364906795,
+          "median_uniform_absolute_l2_error": 0.25980504157837453,
+          "median_uniform_relative_l2_error": 0.9919148415164676,
+          "median_ideal_absolute_l2_error": 0.2599023514012208,
+          "median_ideal_relative_l2_error": 0.9922863626267593,
+          "median_measured_l2": 0.2619227283475033,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.3006715928402186
+        },
+        "-0.1": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -0.0047265635803341866,
+                -0.0026497356593608856,
+                0.0027398995589464903,
+                0.004705302882939577
+              ],
+              "uniform_prediction_four": [
+                -0.004746746737509966,
+                -0.0025019622407853603,
+                0.0026341876946389675,
+                0.004817836917936802
+              ],
+              "ideal_prediction_four": [
+                -0.004538405686616898,
+                -0.0022938649635761976,
+                0.0025078097824007273,
+                0.004576068837195635
+              ],
+              "absolute_l2_error": 0.007681694289461464,
+              "measured_l2": 0.0,
+              "uniform_absolute_l2_error": 0.007677363937107538,
+              "ideal_absolute_l2_error": 0.007286182714899264,
+              "edit_metrics": {
+                "effective_norm": 1.426040530204773,
+                "mean_fidelity_ratio": 0.06559944116475624,
+                "row_nonuniformity_ratio": 0.0739490291181153,
+                "unchanged_fraction": 0.11503906548023224
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "4039d6b9489069c3d4d607df29cccc146277df3c0bdf6cf93c1eecf23da245e2",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -0.0047265635803341866,
+                -0.0026497356593608856,
+                0.0027398995589464903,
+                0.004705302882939577
+              ],
+              "uniform_prediction_four": [
+                -0.004746746737509966,
+                -0.0025019622407853603,
+                0.0026341876946389675,
+                0.004817836917936802
+              ],
+              "ideal_prediction_four": [
+                -0.004538405686616898,
+                -0.0022938649635761976,
+                0.0025078097824007273,
+                0.004576068837195635
+              ],
+              "absolute_l2_error": 0.007681694289461464,
+              "measured_l2": 0.0,
+              "uniform_absolute_l2_error": 0.007677363937107538,
+              "ideal_absolute_l2_error": 0.007286182714899264,
+              "edit_metrics": {
+                "effective_norm": 1.426040530204773,
+                "mean_fidelity_ratio": 0.06559944116475624,
+                "row_nonuniformity_ratio": 0.0739490291181153,
+                "unchanged_fraction": 0.11503906548023224
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "4039d6b9489069c3d4d607df29cccc146277df3c0bdf6cf93c1eecf23da245e2",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -0.0047265635803341866,
+                -0.0026497356593608856,
+                0.0027398995589464903,
+                0.004705302882939577
+              ],
+              "uniform_prediction_four": [
+                -0.004746746737509966,
+                -0.0025019622407853603,
+                0.0026341876946389675,
+                0.004817836917936802
+              ],
+              "ideal_prediction_four": [
+                -0.004538405686616898,
+                -0.0022938649635761976,
+                0.0025078097824007273,
+                0.004576068837195635
+              ],
+              "absolute_l2_error": 0.007681694289461464,
+              "measured_l2": 0.0,
+              "uniform_absolute_l2_error": 0.007677363937107538,
+              "ideal_absolute_l2_error": 0.007286182714899264,
+              "edit_metrics": {
+                "effective_norm": 1.426040530204773,
+                "mean_fidelity_ratio": 0.06559944116475624,
+                "row_nonuniformity_ratio": 0.0739490291181153,
+                "unchanged_fraction": 0.11503906548023224
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "4039d6b9489069c3d4d607df29cccc146277df3c0bdf6cf93c1eecf23da245e2",
+              "zero_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "alpha_source_sha256": "925abdc6d3e2045c0f93ec798bf232dc055970f7bebaa3d2bd812ff35579c41b",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            -0.0047265635803341866,
+            -0.0026497356593608856,
+            0.0027398995589464903,
+            0.004705302882939577
+          ],
+          "median_uniform_prediction_four": [
+            -0.004746746737509966,
+            -0.0025019622407853603,
+            0.0026341876946389675,
+            0.004817836917936802
+          ],
+          "median_ideal_prediction_four": [
+            -0.004538405686616898,
+            -0.0022938649635761976,
+            0.0025078097824007273,
+            0.004576068837195635
+          ],
+          "median_measured_four": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "median_absolute_l2_error": 0.007681694289461464,
+          "median_relative_l2_error": 7681.694289461464,
+          "median_uniform_absolute_l2_error": 0.007677363937107538,
+          "median_uniform_relative_l2_error": 7677.363937107538,
+          "median_ideal_absolute_l2_error": 0.007286182714899264,
+          "median_ideal_relative_l2_error": 7286.182714899264,
+          "median_measured_l2": 0.0,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": true,
+          "cosine_if_resolved": null
+        }
+      },
+      "odd_even": {
+        "0.00625": {
+          "measured_odd_four": [
+            0.03125,
+            0.03125,
+            -0.25,
+            -0.09375
+          ],
+          "measured_even_four": [
+            0.0,
+            -0.03125,
+            0.25,
+            -0.09375
+          ],
+          "predicted_rowwise_odd_four": [
+            3.4656739444471896e-05,
+            6.0690676036756486e-05,
+            -0.00012288926518522203,
+            -0.00012920916196890175
+          ]
+        },
+        "0.025": {
+          "measured_odd_four": [
+            0.0,
+            0.03125,
+            0.0,
+            0.0
+          ],
+          "measured_even_four": [
+            -0.03125,
+            -0.03125,
+            0.25,
+            -0.125
+          ],
+          "predicted_rowwise_odd_four": [
+            0.0008591050864197314,
+            0.0004471723223105073,
+            -0.0005657158326357603,
+            -0.0010712537914514542
+          ]
+        },
+        "0.1": {
+          "measured_odd_four": [
+            0.0234375,
+            0.0,
+            -0.125,
+            0.03125
+          ],
+          "measured_even_four": [
+            0.0234375,
+            0.0,
+            -0.125,
+            0.03125
+          ],
+          "predicted_rowwise_odd_four": [
+            0.004727093502879143,
+            0.002655032556504011,
+            -0.0027293390594422817,
+            -0.0047166598960757256
+          ]
+        }
+      }
+    },
+    "projector": {
+      "zero_repeatability_l2_four": 0.0,
+      "zero_repeatability_l2_full": 0.0,
+      "alpha_groups": {
+        "0.00625": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.078125,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                5.8216108300257474e-05,
+                4.338318103691563e-05,
+                -0.0001118671425501816,
+                -0.00016735887038521469
+              ],
+              "uniform_prediction_four": [
+                8.662549953442067e-05,
+                -6.84020051266998e-07,
+                -6.181831849971786e-05,
+                -0.00016806158237159252
+              ],
+              "ideal_prediction_four": [
+                0.00016349984798580408,
+                -9.847346518654376e-06,
+                4.713816451840103e-06,
+                -0.00013726060569752008
+              ],
+              "absolute_l2_error": 0.07806705548784856,
+              "measured_l2": 0.078125,
+              "uniform_absolute_l2_error": 0.07803857995467864,
+              "ideal_absolute_l2_error": 0.07796162174824664,
+              "edit_metrics": {
+                "effective_norm": 0.054463960230350494,
+                "mean_fidelity_ratio": 0.4822464449016355,
+                "row_nonuniformity_ratio": 0.5235483511450759,
+                "unchanged_fraction": 0.6115451455116272
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "5183b28564793c7413fec53793ebd0ccbc7bb889a56b5ea394a95daf17d45231",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                5.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.078125,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                5.8216108300257474e-05,
+                4.338318103691563e-05,
+                -0.0001118671425501816,
+                -0.00016735887038521469
+              ],
+              "uniform_prediction_four": [
+                8.662549953442067e-05,
+                -6.84020051266998e-07,
+                -6.181831849971786e-05,
+                -0.00016806158237159252
+              ],
+              "ideal_prediction_four": [
+                0.00016349984798580408,
+                -9.847346518654376e-06,
+                4.713816451840103e-06,
+                -0.00013726060569752008
+              ],
+              "absolute_l2_error": 0.07806705548784856,
+              "measured_l2": 0.078125,
+              "uniform_absolute_l2_error": 0.07803857995467864,
+              "ideal_absolute_l2_error": 0.07796162174824664,
+              "edit_metrics": {
+                "effective_norm": 0.054463960230350494,
+                "mean_fidelity_ratio": 0.4822464449016355,
+                "row_nonuniformity_ratio": 0.5235483511450759,
+                "unchanged_fraction": 0.6115451455116272
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "5183b28564793c7413fec53793ebd0ccbc7bb889a56b5ea394a95daf17d45231",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                5.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.078125,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                5.8216108300257474e-05,
+                4.338318103691563e-05,
+                -0.0001118671425501816,
+                -0.00016735887038521469
+              ],
+              "uniform_prediction_four": [
+                8.662549953442067e-05,
+                -6.84020051266998e-07,
+                -6.181831849971786e-05,
+                -0.00016806158237159252
+              ],
+              "ideal_prediction_four": [
+                0.00016349984798580408,
+                -9.847346518654376e-06,
+                4.713816451840103e-06,
+                -0.00013726060569752008
+              ],
+              "absolute_l2_error": 0.07806705548784856,
+              "measured_l2": 0.078125,
+              "uniform_absolute_l2_error": 0.07803857995467864,
+              "ideal_absolute_l2_error": 0.07796162174824664,
+              "edit_metrics": {
+                "effective_norm": 0.054463960230350494,
+                "mean_fidelity_ratio": 0.4822464449016355,
+                "row_nonuniformity_ratio": 0.5235483511450759,
+                "unchanged_fraction": 0.6115451455116272
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "5183b28564793c7413fec53793ebd0ccbc7bb889a56b5ea394a95daf17d45231",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                5.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            5.8216108300257474e-05,
+            4.338318103691563e-05,
+            -0.0001118671425501816,
+            -0.00016735887038521469
+          ],
+          "median_uniform_prediction_four": [
+            8.662549953442067e-05,
+            -6.84020051266998e-07,
+            -6.181831849971786e-05,
+            -0.00016806158237159252
+          ],
+          "median_ideal_prediction_four": [
+            0.00016349984798580408,
+            -9.847346518654376e-06,
+            4.713816451840103e-06,
+            -0.00013726060569752008
+          ],
+          "median_measured_four": [
+            0.078125,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "median_absolute_l2_error": 0.07806705548784856,
+          "median_relative_l2_error": 0.9992583102444617,
+          "median_uniform_absolute_l2_error": 0.07803857995467864,
+          "median_uniform_relative_l2_error": 0.9988938234198865,
+          "median_ideal_absolute_l2_error": 0.07796162174824664,
+          "median_ideal_relative_l2_error": 0.997908758377557,
+          "median_measured_l2": 0.078125,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.27204244924777493
+        },
+        "-0.00625": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.03125,
+                0.0,
+                0.25,
+                -0.0625
+              ],
+              "rowwise_prediction_four": [
+                -5.5541604524478316e-05,
+                -3.6479053960647434e-05,
+                0.00011175480904057622,
+                0.00014802676741965115
+              ],
+              "uniform_prediction_four": [
+                -8.791864092927426e-05,
+                -4.44697798229754e-06,
+                6.451001536333933e-05,
+                0.00016126754053402692
+              ],
+              "ideal_prediction_four": [
+                -0.00016349984798580408,
+                9.847346518654376e-06,
+                -4.713816451840103e-06,
+                0.00013726060569752008
+              ],
+              "absolute_l2_error": 0.2595167597831446,
+              "measured_l2": 0.25958199571618984,
+              "uniform_absolute_l2_error": 0.2595693525209937,
+              "ideal_absolute_l2_error": 0.25963934874417954,
+              "edit_metrics": {
+                "effective_norm": 0.0544065423309803,
+                "mean_fidelity_ratio": 0.4821074634366424,
+                "row_nonuniformity_ratio": 0.5258142795309492,
+                "unchanged_fraction": 0.6123046875
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "ff92102d306f9cd2c0c09a67aa0aea7355a8e63518ba897bcfac110a6be19251",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                2.0,
+                0.0,
+                8.0,
+                -4.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.03125,
+                0.0,
+                0.25,
+                -0.0625
+              ],
+              "rowwise_prediction_four": [
+                -5.5541604524478316e-05,
+                -3.6479053960647434e-05,
+                0.00011175480904057622,
+                0.00014802676741965115
+              ],
+              "uniform_prediction_four": [
+                -8.791864092927426e-05,
+                -4.44697798229754e-06,
+                6.451001536333933e-05,
+                0.00016126754053402692
+              ],
+              "ideal_prediction_four": [
+                -0.00016349984798580408,
+                9.847346518654376e-06,
+                -4.713816451840103e-06,
+                0.00013726060569752008
+              ],
+              "absolute_l2_error": 0.2595167597831446,
+              "measured_l2": 0.25958199571618984,
+              "uniform_absolute_l2_error": 0.2595693525209937,
+              "ideal_absolute_l2_error": 0.25963934874417954,
+              "edit_metrics": {
+                "effective_norm": 0.0544065423309803,
+                "mean_fidelity_ratio": 0.4821074634366424,
+                "row_nonuniformity_ratio": 0.5258142795309492,
+                "unchanged_fraction": 0.6123046875
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "ff92102d306f9cd2c0c09a67aa0aea7355a8e63518ba897bcfac110a6be19251",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                2.0,
+                0.0,
+                8.0,
+                -4.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.03125,
+                0.0,
+                0.25,
+                -0.0625
+              ],
+              "rowwise_prediction_four": [
+                -5.5541604524478316e-05,
+                -3.6479053960647434e-05,
+                0.00011175480904057622,
+                0.00014802676741965115
+              ],
+              "uniform_prediction_four": [
+                -8.791864092927426e-05,
+                -4.44697798229754e-06,
+                6.451001536333933e-05,
+                0.00016126754053402692
+              ],
+              "ideal_prediction_four": [
+                -0.00016349984798580408,
+                9.847346518654376e-06,
+                -4.713816451840103e-06,
+                0.00013726060569752008
+              ],
+              "absolute_l2_error": 0.2595167597831446,
+              "measured_l2": 0.25958199571618984,
+              "uniform_absolute_l2_error": 0.2595693525209937,
+              "ideal_absolute_l2_error": 0.25963934874417954,
+              "edit_metrics": {
+                "effective_norm": 0.0544065423309803,
+                "mean_fidelity_ratio": 0.4821074634366424,
+                "row_nonuniformity_ratio": 0.5258142795309492,
+                "unchanged_fraction": 0.6123046875
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "ff92102d306f9cd2c0c09a67aa0aea7355a8e63518ba897bcfac110a6be19251",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                2.0,
+                0.0,
+                8.0,
+                -4.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            -5.5541604524478316e-05,
+            -3.6479053960647434e-05,
+            0.00011175480904057622,
+            0.00014802676741965115
+          ],
+          "median_uniform_prediction_four": [
+            -8.791864092927426e-05,
+            -4.44697798229754e-06,
+            6.451001536333933e-05,
+            0.00016126754053402692
+          ],
+          "median_ideal_prediction_four": [
+            -0.00016349984798580408,
+            9.847346518654376e-06,
+            -4.713816451840103e-06,
+            0.00013726060569752008
+          ],
+          "median_measured_four": [
+            0.03125,
+            0.0,
+            0.25,
+            -0.0625
+          ],
+          "median_absolute_l2_error": 0.2595167597831446,
+          "median_relative_l2_error": 0.999748688529552,
+          "median_uniform_absolute_l2_error": 0.2595693525209937,
+          "median_uniform_relative_l2_error": 0.9999512940211387,
+          "median_ideal_absolute_l2_error": 0.25963934874417954,
+          "median_ideal_relative_l2_error": 1.000220943782451,
+          "median_measured_l2": 0.25958199571618984,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.33145211223071475
+        },
+        "0.025": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.0,
+                0.0625,
+                0.0,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                0.0006623670342378318,
+                9.43975755944848e-05,
+                0.00024211849085986614,
+                -0.0006041828310117126
+              ],
+              "uniform_prediction_four": [
+                0.0006724453996866941,
+                3.8399186450988054e-05,
+                0.00010987778659909964,
+                -0.0006644974928349257
+              ],
+              "ideal_prediction_four": [
+                0.0006539993919432163,
+                -3.9389386074617505e-05,
+                1.885526580736041e-05,
+                -0.0005490424227900803
+              ],
+              "absolute_l2_error": 0.13917354595807707,
+              "measured_l2": 0.13975424859373686,
+              "uniform_absolute_l2_error": 0.13914464781601896,
+              "ideal_absolute_l2_error": 0.13928260529367362,
+              "edit_metrics": {
+                "effective_norm": 0.22519417107105255,
+                "mean_fidelity_ratio": 0.14960194816879968,
+                "row_nonuniformity_ratio": 0.16076483656443585,
+                "unchanged_fraction": 0.2120225727558136
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "ccd5e3d38c848451d2f381d6c4e99b05b3a83f21ebfc7472ff692fc4dea65e62",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                0.0,
+                1.0,
+                0.0,
+                -8.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.0,
+                0.0625,
+                0.0,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                0.0006623670342378318,
+                9.43975755944848e-05,
+                0.00024211849085986614,
+                -0.0006041828310117126
+              ],
+              "uniform_prediction_four": [
+                0.0006724453996866941,
+                3.8399186450988054e-05,
+                0.00010987778659909964,
+                -0.0006644974928349257
+              ],
+              "ideal_prediction_four": [
+                0.0006539993919432163,
+                -3.9389386074617505e-05,
+                1.885526580736041e-05,
+                -0.0005490424227900803
+              ],
+              "absolute_l2_error": 0.13917354595807707,
+              "measured_l2": 0.13975424859373686,
+              "uniform_absolute_l2_error": 0.13914464781601896,
+              "ideal_absolute_l2_error": 0.13928260529367362,
+              "edit_metrics": {
+                "effective_norm": 0.22519417107105255,
+                "mean_fidelity_ratio": 0.14960194816879968,
+                "row_nonuniformity_ratio": 0.16076483656443585,
+                "unchanged_fraction": 0.2120225727558136
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "ccd5e3d38c848451d2f381d6c4e99b05b3a83f21ebfc7472ff692fc4dea65e62",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                0.0,
+                1.0,
+                0.0,
+                -8.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.0,
+                0.0625,
+                0.0,
+                -0.125
+              ],
+              "rowwise_prediction_four": [
+                0.0006623670342378318,
+                9.43975755944848e-05,
+                0.00024211849085986614,
+                -0.0006041828310117126
+              ],
+              "uniform_prediction_four": [
+                0.0006724453996866941,
+                3.8399186450988054e-05,
+                0.00010987778659909964,
+                -0.0006644974928349257
+              ],
+              "ideal_prediction_four": [
+                0.0006539993919432163,
+                -3.9389386074617505e-05,
+                1.885526580736041e-05,
+                -0.0005490424227900803
+              ],
+              "absolute_l2_error": 0.13917354595807707,
+              "measured_l2": 0.13975424859373686,
+              "uniform_absolute_l2_error": 0.13914464781601896,
+              "ideal_absolute_l2_error": 0.13928260529367362,
+              "edit_metrics": {
+                "effective_norm": 0.22519417107105255,
+                "mean_fidelity_ratio": 0.14960194816879968,
+                "row_nonuniformity_ratio": 0.16076483656443585,
+                "unchanged_fraction": 0.2120225727558136
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "ccd5e3d38c848451d2f381d6c4e99b05b3a83f21ebfc7472ff692fc4dea65e62",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                0.0,
+                1.0,
+                0.0,
+                -8.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            0.0006623670342378318,
+            9.43975755944848e-05,
+            0.00024211849085986614,
+            -0.0006041828310117126
+          ],
+          "median_uniform_prediction_four": [
+            0.0006724453996866941,
+            3.8399186450988054e-05,
+            0.00010987778659909964,
+            -0.0006644974928349257
+          ],
+          "median_ideal_prediction_four": [
+            0.0006539993919432163,
+            -3.9389386074617505e-05,
+            1.885526580736041e-05,
+            -0.0005490424227900803
+          ],
+          "median_measured_four": [
+            0.0,
+            0.0625,
+            0.0,
+            -0.125
+          ],
+          "median_absolute_l2_error": 0.13917354595807707,
+          "median_relative_l2_error": 0.9958448301822446,
+          "median_uniform_absolute_l2_error": 0.13914464781601896,
+          "median_uniform_relative_l2_error": 0.9956380519100353,
+          "median_ideal_absolute_l2_error": 0.13928260529367362,
+          "median_ideal_relative_l2_error": 0.996625195263764,
+          "median_measured_l2": 0.13975424859373686,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.6241612794697614
+        },
+        "-0.025": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.015625,
+                0.0,
+                -0.25,
+                -0.0625
+              ],
+              "rowwise_prediction_four": [
+                -0.0006632663425989449,
+                -8.739909389987588e-05,
+                -0.00027713633608072996,
+                0.0005821501254104078
+              ],
+              "uniform_prediction_four": [
+                -0.0006803200230933726,
+                -3.038259455934167e-05,
+                -0.00013630872126668692,
+                0.0006620085914619267
+              ],
+              "ideal_prediction_four": [
+                -0.0006539993919432163,
+                3.9389386074617505e-05,
+                -1.885526580736041e-05,
+                0.0005490424227900803
+              ],
+              "absolute_l2_error": 0.2580817342626213,
+              "measured_l2": 0.258167369404036,
+              "uniform_absolute_l2_error": 0.25823858722681164,
+              "ideal_absolute_l2_error": 0.2583229797090742,
+              "edit_metrics": {
+                "effective_norm": 0.22532933950424194,
+                "mean_fidelity_ratio": 0.14987391369224629,
+                "row_nonuniformity_ratio": 0.16096636065225053,
+                "unchanged_fraction": 0.2122395783662796
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "07d5ed686eb21b23998e5e1f50419e66d1aacfa3200134a1297fd3bf0bfd0b03",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                1.0,
+                0.0,
+                -8.0,
+                -4.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.015625,
+                0.0,
+                -0.25,
+                -0.0625
+              ],
+              "rowwise_prediction_four": [
+                -0.0006632663425989449,
+                -8.739909389987588e-05,
+                -0.00027713633608072996,
+                0.0005821501254104078
+              ],
+              "uniform_prediction_four": [
+                -0.0006803200230933726,
+                -3.038259455934167e-05,
+                -0.00013630872126668692,
+                0.0006620085914619267
+              ],
+              "ideal_prediction_four": [
+                -0.0006539993919432163,
+                3.9389386074617505e-05,
+                -1.885526580736041e-05,
+                0.0005490424227900803
+              ],
+              "absolute_l2_error": 0.2580817342626213,
+              "measured_l2": 0.258167369404036,
+              "uniform_absolute_l2_error": 0.25823858722681164,
+              "ideal_absolute_l2_error": 0.2583229797090742,
+              "edit_metrics": {
+                "effective_norm": 0.22532933950424194,
+                "mean_fidelity_ratio": 0.14987391369224629,
+                "row_nonuniformity_ratio": 0.16096636065225053,
+                "unchanged_fraction": 0.2122395783662796
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "07d5ed686eb21b23998e5e1f50419e66d1aacfa3200134a1297fd3bf0bfd0b03",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                1.0,
+                0.0,
+                -8.0,
+                -4.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.015625,
+                0.0,
+                -0.25,
+                -0.0625
+              ],
+              "rowwise_prediction_four": [
+                -0.0006632663425989449,
+                -8.739909389987588e-05,
+                -0.00027713633608072996,
+                0.0005821501254104078
+              ],
+              "uniform_prediction_four": [
+                -0.0006803200230933726,
+                -3.038259455934167e-05,
+                -0.00013630872126668692,
+                0.0006620085914619267
+              ],
+              "ideal_prediction_four": [
+                -0.0006539993919432163,
+                3.9389386074617505e-05,
+                -1.885526580736041e-05,
+                0.0005490424227900803
+              ],
+              "absolute_l2_error": 0.2580817342626213,
+              "measured_l2": 0.258167369404036,
+              "uniform_absolute_l2_error": 0.25823858722681164,
+              "ideal_absolute_l2_error": 0.2583229797090742,
+              "edit_metrics": {
+                "effective_norm": 0.22532933950424194,
+                "mean_fidelity_ratio": 0.14987391369224629,
+                "row_nonuniformity_ratio": 0.16096636065225053,
+                "unchanged_fraction": 0.2122395783662796
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "07d5ed686eb21b23998e5e1f50419e66d1aacfa3200134a1297fd3bf0bfd0b03",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                1.0,
+                0.0,
+                -8.0,
+                -4.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            -0.0006632663425989449,
+            -8.739909389987588e-05,
+            -0.00027713633608072996,
+            0.0005821501254104078
+          ],
+          "median_uniform_prediction_four": [
+            -0.0006803200230933726,
+            -3.038259455934167e-05,
+            -0.00013630872126668692,
+            0.0006620085914619267
+          ],
+          "median_ideal_prediction_four": [
+            -0.0006539993919432163,
+            3.9389386074617505e-05,
+            -1.885526580736041e-05,
+            0.0005490424227900803
+          ],
+          "median_measured_four": [
+            0.015625,
+            0.0,
+            -0.25,
+            -0.0625
+          ],
+          "median_absolute_l2_error": 0.2580817342626213,
+          "median_relative_l2_error": 0.9996682960297718,
+          "median_uniform_absolute_l2_error": 0.25823858722681164,
+          "median_uniform_relative_l2_error": 1.0002758591178276,
+          "median_ideal_absolute_l2_error": 0.2583229797090742,
+          "median_ideal_relative_l2_error": 1.0006027497022472,
+          "median_measured_l2": 0.258167369404036,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": 0.0939521668100873
+        },
+        "0.1": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                -0.046875,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                0.0025245726574212313,
+                -0.00027537206187844276,
+                0.0001237110118381679,
+                -0.002069762907922268
+              ],
+              "uniform_prediction_four": [
+                0.0025638998486101627,
+                -0.0001517364289611578,
+                0.00019729865016415715,
+                -0.0021042069420218468
+              ],
+              "ideal_prediction_four": [
+                0.0026159975677728653,
+                -0.00015755754429847002,
+                7.542106322944164e-05,
+                -0.0021961696911603212
+              ],
+              "absolute_l2_error": 0.04944383512044513,
+              "measured_l2": 0.046875,
+              "uniform_absolute_l2_error": 0.049484284937715214,
+              "ideal_absolute_l2_error": 0.049540009227716286,
+              "edit_metrics": {
+                "effective_norm": 0.8822425007820129,
+                "mean_fidelity_ratio": 0.036439585939052506,
+                "row_nonuniformity_ratio": 0.04096618697093932,
+                "unchanged_fraction": 0.0544704869389534
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "84cf55930cb2fe15b8388e03d7241750d81860516e5ae07a0f474313e48fa059",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -3.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                -0.046875,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                0.0025245726574212313,
+                -0.00027537206187844276,
+                0.0001237110118381679,
+                -0.002069762907922268
+              ],
+              "uniform_prediction_four": [
+                0.0025638998486101627,
+                -0.0001517364289611578,
+                0.00019729865016415715,
+                -0.0021042069420218468
+              ],
+              "ideal_prediction_four": [
+                0.0026159975677728653,
+                -0.00015755754429847002,
+                7.542106322944164e-05,
+                -0.0021961696911603212
+              ],
+              "absolute_l2_error": 0.04944383512044513,
+              "measured_l2": 0.046875,
+              "uniform_absolute_l2_error": 0.049484284937715214,
+              "ideal_absolute_l2_error": 0.049540009227716286,
+              "edit_metrics": {
+                "effective_norm": 0.8822425007820129,
+                "mean_fidelity_ratio": 0.036439585939052506,
+                "row_nonuniformity_ratio": 0.04096618697093932,
+                "unchanged_fraction": 0.0544704869389534
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "84cf55930cb2fe15b8388e03d7241750d81860516e5ae07a0f474313e48fa059",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -3.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                -0.046875,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                0.0025245726574212313,
+                -0.00027537206187844276,
+                0.0001237110118381679,
+                -0.002069762907922268
+              ],
+              "uniform_prediction_four": [
+                0.0025638998486101627,
+                -0.0001517364289611578,
+                0.00019729865016415715,
+                -0.0021042069420218468
+              ],
+              "ideal_prediction_four": [
+                0.0026159975677728653,
+                -0.00015755754429847002,
+                7.542106322944164e-05,
+                -0.0021961696911603212
+              ],
+              "absolute_l2_error": 0.04944383512044513,
+              "measured_l2": 0.046875,
+              "uniform_absolute_l2_error": 0.049484284937715214,
+              "ideal_absolute_l2_error": 0.049540009227716286,
+              "edit_metrics": {
+                "effective_norm": 0.8822425007820129,
+                "mean_fidelity_ratio": 0.036439585939052506,
+                "row_nonuniformity_ratio": 0.04096618697093932,
+                "unchanged_fraction": 0.0544704869389534
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "84cf55930cb2fe15b8388e03d7241750d81860516e5ae07a0f474313e48fa059",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                -3.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            0.0025245726574212313,
+            -0.00027537206187844276,
+            0.0001237110118381679,
+            -0.002069762907922268
+          ],
+          "median_uniform_prediction_four": [
+            0.0025638998486101627,
+            -0.0001517364289611578,
+            0.00019729865016415715,
+            -0.0021042069420218468
+          ],
+          "median_ideal_prediction_four": [
+            0.0026159975677728653,
+            -0.00015755754429847002,
+            7.542106322944164e-05,
+            -0.0021961696911603212
+          ],
+          "median_measured_four": [
+            -0.046875,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "median_absolute_l2_error": 0.04944383512044513,
+          "median_relative_l2_error": 1.0548018159028294,
+          "median_uniform_absolute_l2_error": 0.049484284937715214,
+          "median_uniform_relative_l2_error": 1.0556647453379246,
+          "median_ideal_absolute_l2_error": 0.049540009227716286,
+          "median_ideal_relative_l2_error": 1.0568535301912807,
+          "median_measured_l2": 0.046875,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": -0.7700404588938742
+        },
+        "-0.1": {
+          "per_repeat": [
+            {
+              "cycle": 0,
+              "paired_delta_four": [
+                0.046875,
+                0.0625,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -0.002526511438190937,
+                0.00026571599300950766,
+                -9.774911450222135e-05,
+                0.002073026727885008
+              ],
+              "uniform_prediction_four": [
+                -0.0025728449691087008,
+                0.0001408598618581891,
+                -0.00017855229089036584,
+                0.0021097129210829735
+              ],
+              "ideal_prediction_four": [
+                -0.0026159975677728653,
+                0.00015755754429847002,
+                -7.542106322944164e-05,
+                0.0021961696911603212
+              ],
+              "absolute_l2_error": 0.07948535986547695,
+              "measured_l2": 0.078125,
+              "uniform_absolute_l2_error": 0.07961302971491152,
+              "ideal_absolute_l2_error": 0.07962893834056126,
+              "edit_metrics": {
+                "effective_norm": 0.8822733163833618,
+                "mean_fidelity_ratio": 0.0366060836225579,
+                "row_nonuniformity_ratio": 0.041223403248491115,
+                "unchanged_fraction": 0.0543619804084301
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "2d959c927ea7528c3b8ca239f21d58154da9877fd774931bea51f2ffd3047703",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                3.0,
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 1,
+              "paired_delta_four": [
+                0.046875,
+                0.0625,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -0.002526511438190937,
+                0.00026571599300950766,
+                -9.774911450222135e-05,
+                0.002073026727885008
+              ],
+              "uniform_prediction_four": [
+                -0.0025728449691087008,
+                0.0001408598618581891,
+                -0.00017855229089036584,
+                0.0021097129210829735
+              ],
+              "ideal_prediction_four": [
+                -0.0026159975677728653,
+                0.00015755754429847002,
+                -7.542106322944164e-05,
+                0.0021961696911603212
+              ],
+              "absolute_l2_error": 0.07948535986547695,
+              "measured_l2": 0.078125,
+              "uniform_absolute_l2_error": 0.07961302971491152,
+              "ideal_absolute_l2_error": 0.07962893834056126,
+              "edit_metrics": {
+                "effective_norm": 0.8822733163833618,
+                "mean_fidelity_ratio": 0.0366060836225579,
+                "row_nonuniformity_ratio": 0.041223403248491115,
+                "unchanged_fraction": 0.0543619804084301
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "2d959c927ea7528c3b8ca239f21d58154da9877fd774931bea51f2ffd3047703",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                3.0,
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "cycle": 2,
+              "paired_delta_four": [
+                0.046875,
+                0.0625,
+                0.0,
+                0.0
+              ],
+              "rowwise_prediction_four": [
+                -0.002526511438190937,
+                0.00026571599300950766,
+                -9.774911450222135e-05,
+                0.002073026727885008
+              ],
+              "uniform_prediction_four": [
+                -0.0025728449691087008,
+                0.0001408598618581891,
+                -0.00017855229089036584,
+                0.0021097129210829735
+              ],
+              "ideal_prediction_four": [
+                -0.0026159975677728653,
+                0.00015755754429847002,
+                -7.542106322944164e-05,
+                0.0021961696911603212
+              ],
+              "absolute_l2_error": 0.07948535986547695,
+              "measured_l2": 0.078125,
+              "uniform_absolute_l2_error": 0.07961302971491152,
+              "ideal_absolute_l2_error": 0.07962893834056126,
+              "edit_metrics": {
+                "effective_norm": 0.8822733163833618,
+                "mean_fidelity_ratio": 0.0366060836225579,
+                "row_nonuniformity_ratio": 0.041223403248491115,
+                "unchanged_fraction": 0.0543619804084301
+              },
+              "zero_terminal_sha256": "e91d279a38b9d98f18e86526259717737afc692be921042aa8a564a23c125cbb",
+              "alpha_terminal_sha256": "2d959c927ea7528c3b8ca239f21d58154da9877fd774931bea51f2ffd3047703",
+              "zero_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "alpha_source_sha256": "5f04aa04f9a5506f6b72479ab0be7bc25ffee99409202be3fb9b3afdb7a7c511",
+              "zero_terminal_ulp_four": [
+                0.015625,
+                0.0625,
+                0.03125,
+                0.015625
+              ],
+              "measured_change_in_ulp_four": [
+                3.0,
+                1.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "median_prediction_four": [
+            -0.002526511438190937,
+            0.00026571599300950766,
+            -9.774911450222135e-05,
+            0.002073026727885008
+          ],
+          "median_uniform_prediction_four": [
+            -0.0025728449691087008,
+            0.0001408598618581891,
+            -0.00017855229089036584,
+            0.0021097129210829735
+          ],
+          "median_ideal_prediction_four": [
+            -0.0026159975677728653,
+            0.00015755754429847002,
+            -7.542106322944164e-05,
+            0.0021961696911603212
+          ],
+          "median_measured_four": [
+            0.046875,
+            0.0625,
+            0.0,
+            0.0
+          ],
+          "median_absolute_l2_error": 0.07948535986547695,
+          "median_relative_l2_error": 1.0174126062781048,
+          "median_uniform_absolute_l2_error": 0.07961302971491152,
+          "median_uniform_relative_l2_error": 1.0190467803508674,
+          "median_ideal_absolute_l2_error": 0.07962893834056126,
+          "median_ideal_relative_l2_error": 1.019250410759184,
+          "median_measured_l2": 0.078125,
+          "below_repeatability_resolution": false,
+          "zero_measured_signal": false,
+          "cosine_if_resolved": -0.39731253065841077
+        }
+      },
+      "odd_even": {
+        "0.00625": {
+          "measured_odd_four": [
+            0.0234375,
+            0.0,
+            -0.125,
+            0.03125
+          ],
+          "measured_even_four": [
+            0.0546875,
+            0.0,
+            0.125,
+            -0.03125
+          ],
+          "predicted_rowwise_odd_four": [
+            5.6878856412367895e-05,
+            3.993111749878153e-05,
+            -0.00011181097943335772,
+            -0.00015769281890243292
+          ]
+        },
+        "0.025": {
+          "measured_odd_four": [
+            -0.0078125,
+            0.03125,
+            0.125,
+            -0.03125
+          ],
+          "measured_even_four": [
+            0.0078125,
+            0.03125,
+            -0.125,
+            -0.09375
+          ],
+          "predicted_rowwise_odd_four": [
+            0.0006628166884183884,
+            9.089833474718034e-05,
+            0.00025962741347029805,
+            -0.0005931664491072297
+          ]
+        },
+        "0.1": {
+          "measured_odd_four": [
+            -0.046875,
+            -0.03125,
+            0.0,
+            0.0
+          ],
+          "measured_even_four": [
+            0.0,
+            0.03125,
+            0.0,
+            0.0
+          ],
+          "predicted_rowwise_odd_four": [
+            0.0025255419313907623,
+            -0.0002705440274439752,
+            0.00011073006317019463,
+            -0.002071394817903638
+          ]
+        }
+      }
+    }
+  },
+  "peak_mps_driver_bytes": 12942213120,
+  "peak_mps_current_bytes": 2571584000,
+  "elapsed_seconds": 29.965553916059434,
+  "scope": "one old v1 FIT case; no v2 transfer or efficacy"
+}

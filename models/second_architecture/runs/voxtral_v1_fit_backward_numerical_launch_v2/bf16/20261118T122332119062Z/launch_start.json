@@ -1,0 +1,25 @@
+{
+  "status": "launch_started",
+  "arm": "bf16",
+  "wall_utc": "2026-11-18T12:23:32.366279+00:00",
+  "freeze_receipt_sha256": "7c8029a9204b55ea2cf010e7e516a7ae34d125b1dff012f4b396b1244589f862",
+  "launcher_review_commit": "790149594b11379296c43b0b3fffc38d88014f8c",
+  "launcher_sha256": "f1284aef40b60606d3002f7fd89c8e8f95d9a9a50c67f475d052cea1cc1aeca0",
+  "runner_sha256": "93d2c607f4c218b9e027ffb4c221347663efb0729cc6e419b9c940dffda89b48",
+  "auditor_sha256": "d0902608d90b1040b7e54318964d0a0b5b747d4cbd5eaf8a3eaeeda71f220ec9",
+  "fp32_v1_result_sha256": "b1a124c9df14c980af18dee46cc058a98cc167a1269f33252d0e0980fc7e37fb",
+  "fp32_v1_audit_sha256": "214f682be2e9b219b2375d3cb140cd10cd5b2714f4343d9ba35ea1c484399eb3",
+  "runner_command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_v1_fit_backward_numerical_followup_v2.py",
+    "--run",
+    "--arm",
+    "bf16",
+    "--output-dir",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_v1_fit_backward_numerical_launch_v2/bf16/20261118T122332119062Z/runner"
+  ],
+  "runner_cap_seconds": 900,
+  "runner_mps_driver_cap_bytes": 32212254720,
+  "launcher_process_timeout_seconds": 1020,
+  "audit_scope": "amended_bf16_paired_edit_numerical_consistency_only; donor_and_no_grad_report_only"
+}
