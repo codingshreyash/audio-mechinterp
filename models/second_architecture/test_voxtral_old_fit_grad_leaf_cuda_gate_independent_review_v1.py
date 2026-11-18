@@ -1,7 +1,6 @@
 """CPU-only negative checks for the CUDA launch gate source review.
 
-These expected failures document admission gaps in the reviewed source.  Remove
-expectedFailure only after the gate rejects both fixtures.
+These negative fixtures must be rejected by the corrected gate.
 """
 
 from __future__ import annotations
@@ -23,7 +22,6 @@ SPEC.loader.exec_module(gate)
 
 
 class IndependentGateNegativeTests(unittest.TestCase):
-    @unittest.expectedFailure
     def test_quoted_go_inside_hold_review_must_not_admit_source(self) -> None:
         with tempfile.TemporaryDirectory(dir=gate.REPO) as directory:
             source = Path(directory) / "source.py"
@@ -47,7 +45,6 @@ class IndependentGateNegativeTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     gate.reviewed_source((source,), review, gate.GO_SOURCE)
 
-    @unittest.expectedFailure
     def test_final_campaign_audit_must_bind_two_distinct_case_and_cell_ids(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -58,9 +55,13 @@ class IndependentGateNegativeTests(unittest.TestCase):
                 "schema": "voxtral_old_fit_grad_leaf_cuda_audit_v1",
                 "planned_case_count": 2,
                 "planned_forward_count": 66,
+                "saved_forward_count": 66,
                 "planned_cell_count": 4,
                 "direct_full_comparison_count": 96,
-                "cases": [{"case_id": gate.CASE_IDS[0], "status": "audited_saved_data_only"}] * 2,
+                "cases": [{"case_id": gate.CASE_IDS[0], "case_index": index,
+                           "saved_forwards": 32 if index == 0 else 34,
+                           "direct_full_comparison_count": 48,
+                           "status": "audited_saved_data_only"} for index in range(2)],
                 "cells": [{"case_id": gate.CASE_IDS[0], "site": "encoder31",
                            "label": "same_pattern"}] * 4,
             }
@@ -69,7 +70,7 @@ class IndependentGateNegativeTests(unittest.TestCase):
                     patch.object(gate, "WORKER_RUNS", root / "worker"), \
                     patch.object(gate, "bounded", return_value=(0, 1.0, None)):
                 with self.assertRaises(ValueError):
-                    gate._audit_campaign(attempts, capture, root / "worker" / attempts[1])
+                    gate._audit_campaign(attempts, capture, root / "worker" / attempts[1], "f" * 64)
 
 
 if __name__ == "__main__":

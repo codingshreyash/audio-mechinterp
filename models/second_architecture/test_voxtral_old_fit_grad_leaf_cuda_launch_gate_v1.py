@@ -133,6 +133,59 @@ class GateTests(unittest.TestCase):
         with self.assertRaises((FileNotFoundError, ValueError)):
             gate.verify_freeze()
 
+    def test_review_decision_must_be_one_standalone_line(self) -> None:
+        review = self.root / "review.md"
+        review.write_text("Decision: HOLD. A future review might say: " + gate.GO_SOURCE + "\n")
+        with self.assertRaises(ValueError):
+            gate.require_decision(review, gate.GO_SOURCE)
+        review.write_text(gate.GO_SOURCE + "\nDecision: HOLD\n")
+        with self.assertRaises(ValueError):
+            gate.require_decision(review, gate.GO_SOURCE)
+        review.write_text(gate.GO_SOURCE + "\n18 November. Decision: HOLD pending corrections.\n")
+        with self.assertRaises(ValueError):
+            gate.require_decision(review, gate.GO_SOURCE)
+        review.write_text("# Review\n\n" + gate.GO_SOURCE + "\n")
+        gate.require_decision(review, gate.GO_SOURCE)
+
+    def test_final_audit_rejects_duplicate_site_with_valid_case_counts(self) -> None:
+        self.run_root.mkdir()
+        self.worker_root.mkdir()
+        for attempt in self.attempts:
+            gate.put(self.worker_root / attempt / "result.json", {"fake": attempt})
+        capture = self.run_root / self.attempts[1]
+        capture.mkdir()
+        cases = [{"case_id": gate.CASE_IDS[index], "case_index": index,
+                  "status": "audited_saved_data_only", "saved_forwards": 32 + 2 * index,
+                  "direct_full_comparison_count": 48,
+                  "result_sha256": gate.sha(self.worker_root / self.attempts[index] / "result.json")}
+                 for index in range(2)]
+        cells = [{"case_id": case_id, "site": site, "label": "same_pattern"}
+                 for case_id in gate.CASE_IDS for site in ("encoder31", "projector")]
+        cells[3] = {"case_id": gate.CASE_IDS[0], "site": "encoder31", "label": "same_pattern"}
+        gate.put(self.run_root / "campaign_audit.json", {
+            "schema": "voxtral_old_fit_grad_leaf_cuda_audit_v1", "planned_case_count": 2,
+            "planned_forward_count": 66, "saved_forward_count": 66, "planned_cell_count": 4,
+            "direct_full_comparison_count": 96, "cases": cases, "cells": cells})
+        with patch.object(gate, "bounded", return_value=(0, 1.0, None)):
+            with self.assertRaisesRegex(ValueError, "invalid/incomplete"):
+                gate._audit_campaign(self.attempts, capture,
+                                     self.worker_root / self.attempts[1], "f" * 64)
+
+    def test_single_case_audit_cli_binds_freeze_and_environment(self) -> None:
+        capture = self.run_root / self.attempts[0]
+        output = self.worker_root / self.attempts[0]
+        capture.mkdir(parents=True)
+        gate.put(output / "result.json", {"fake": "result"})
+        gate.put(capture / "case_audit.json", {
+            "status": "audited_saved_data_only", "case_index": 0,
+            "case_id": gate.CASE_IDS[0], "result_sha256": gate.sha(output / "result.json")})
+        with patch.object(gate, "bounded", return_value=(0, 1.0, None)) as bounded:
+            gate._audit_one(0, capture, output, "f" * 64)
+        command = bounded.call_args.args[0]
+        self.assertEqual(command[command.index("--expected-freeze-sha256") + 1], "f" * 64)
+        self.assertEqual(command[command.index("--freeze") + 1], str(self.freeze))
+        self.assertEqual(command[command.index("--environment-receipt") + 1], str(self.receipt))
+
 
 if __name__ == "__main__":
     unittest.main()

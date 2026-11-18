@@ -150,8 +150,7 @@ def ancestor(before: str, after: str) -> None:
 
 def reviewed_source(paths: tuple[Path, ...], review: Path, phrase: str) -> str:
     committed_same(review)
-    if phrase not in review.read_text():
-        raise ValueError(f"Independent GO absent: {review.name}")
+    require_decision(review, phrase)
     commit = first_add(review)
     for path in paths:
         committed_same(path)
@@ -161,6 +160,17 @@ def reviewed_source(paths: tuple[Path, ...], review: Path, phrase: str) -> str:
         source_commit = git("log", "-1", "--format=%H", "HEAD", "--", rel).decode().strip()
         ancestor(source_commit, commit)
     return commit
+
+
+def require_decision(review: Path, phrase: str) -> None:
+    """Only one standalone decision line counts; prose quotations never do."""
+    content = review.read_text()
+    if re.search(r"\bDecision:\s*HOLD\b", content, flags=re.IGNORECASE):
+        raise ValueError(f"Contradictory HOLD decision: {review.name}")
+    lines = [line.strip() for line in content.splitlines()]
+    decisions = [line for line in lines if line.startswith("Decision: ")]
+    if decisions != [phrase]:
+        raise ValueError(f"Independent exact GO decision absent/contradicted: {review.name}")
 
 
 def checkpoint_tree(path: Path = CHECKPOINT) -> str:
@@ -320,7 +330,8 @@ def verify_freeze() -> tuple[dict, dict]:
         ancestor(earlier, freeze_commit)
     committed_same(FREEZE_REVIEW)
     review_commit = first_add(FREEZE_REVIEW)
-    if GO_FREEZE not in FREEZE_REVIEW.read_text() or sha(FREEZE) not in FREEZE_REVIEW.read_text():
+    require_decision(FREEZE_REVIEW, GO_FREEZE)
+    if sha(FREEZE) not in FREEZE_REVIEW.read_text():
         raise ValueError("Independent freeze GO/hash absent")
     ancestor(freeze_commit, review_commit)
     datetime.fromisoformat(freeze["reviewed_utc"].replace("Z", "+00:00"))
@@ -474,10 +485,12 @@ def _case_receipts(case_index: int, attempt_id: str, freeze_sha: str,
     return capture, output
 
 
-def _audit_one(case_index: int, capture: Path, output: Path) -> dict:
+def _audit_one(case_index: int, capture: Path, output: Path, freeze_sha: str) -> dict:
     audit_path = capture / "case_audit.json"
     command = [sys.executable, str(AUDITOR), "--case-index", str(case_index),
-               "--run-dir", str(output), "--output", str(audit_path)]
+               "--run-dir", str(output), "--output", str(audit_path),
+               "--freeze", str(FREEZE), "--expected-freeze-sha256", freeze_sha,
+               "--environment-receipt", str(ENV_RECEIPT)]
     code, elapsed, reason = bounded(command, capture, ("audit_stdout.txt", "audit_stderr.txt"),
                                     output, MAX_AUDIT_SECONDS, campaign=True)
     if reason or code != 0 or elapsed >= MAX_AUDIT_SECONDS or not audit_path.is_file():
@@ -490,21 +503,35 @@ def _audit_one(case_index: int, capture: Path, output: Path) -> dict:
     return audit
 
 
-def _audit_campaign(attempt_ids: list[str], capture: Path, output: Path) -> dict:
+def _audit_campaign(attempt_ids: list[str], capture: Path, output: Path,
+                    freeze_sha: str) -> dict:
     audit_path = RUNS / "campaign_audit.json"
     command = [sys.executable, str(AUDITOR), "--beaver-dir", str(WORKER_RUNS / attempt_ids[0]),
-               "--waterfall-dir", str(WORKER_RUNS / attempt_ids[1]), "--output", str(audit_path)]
+               "--waterfall-dir", str(WORKER_RUNS / attempt_ids[1]), "--output", str(audit_path),
+               "--freeze", str(FREEZE), "--expected-freeze-sha256", freeze_sha,
+               "--environment-receipt", str(ENV_RECEIPT)]
     code, elapsed, reason = bounded(command, capture, ("campaign_audit_stdout.txt", "campaign_audit_stderr.txt"),
                                     output, 2 * MAX_AUDIT_SECONDS, campaign=True)
     if reason or code != 0 or elapsed >= 2 * MAX_AUDIT_SECONDS or not audit_path.is_file():
         raise ValueError(reason or "Two-case CPU audit failed")
     audit = read_json(audit_path)
+    expected_case_ids = list(CASE_IDS)
+    expected_cells = [(case_id, site) for case_id in CASE_IDS for site in ("encoder31", "projector")]
     if audit.get("schema") != "voxtral_old_fit_grad_leaf_cuda_audit_v1" or \
             audit.get("planned_case_count") != 2 or audit.get("planned_forward_count") != 66 or \
-            audit.get("planned_cell_count") != 4 or audit.get("direct_full_comparison_count") != 96 or \
+            audit.get("saved_forward_count") != 66 or audit.get("planned_cell_count") != 4 or \
+            audit.get("direct_full_comparison_count") != 96 or \
             len(audit.get("cases", [])) != 2 or \
+            [x.get("case_id") for x in audit["cases"]] != expected_case_ids or \
+            [x.get("case_index") for x in audit["cases"]] != [0, 1] or \
+            [x.get("saved_forwards") for x in audit["cases"]] != [32, 34] or \
+            [x.get("direct_full_comparison_count") for x in audit["cases"]] != [48, 48] or \
+            [x.get("result_sha256") for x in audit["cases"]] != [
+                sha(WORKER_RUNS / attempt_ids[0] / "result.json"),
+                sha(WORKER_RUNS / attempt_ids[1] / "result.json")] or \
             any(x.get("status") != "audited_saved_data_only" for x in audit["cases"]) or \
             len(audit.get("cells", [])) != 4 or \
+            [(x.get("case_id"), x.get("site")) for x in audit["cells"]] != expected_cells or \
             any(x.get("label") not in ("same_pattern", "different_pattern") for x in audit["cells"]):
         raise ValueError("Two-case CPU audit invalid/incomplete")
     return audit
@@ -567,10 +594,10 @@ def launch(case_index: int) -> dict:
         finish["result_sha256"] = sha(output / "result.json")
         if sha(FREEZE) != freeze_sha or verify_freeze()[0] != freeze:
             raise ValueError("Source/freeze changed after worker")
-        audit = _audit_one(case_index, capture, output)
+        audit = _audit_one(case_index, capture, output, freeze_sha)
         finish["audit_sha256"] = sha(capture / "case_audit.json")
         if case_index == 1:
-            _audit_campaign(freeze["attempt_ids"], capture, output)
+            _audit_campaign(freeze["attempt_ids"], capture, output, freeze_sha)
             finish["campaign_audit_sha256"] = sha(RUNS / "campaign_audit.json")
         if sha(FREEZE) != freeze_sha or verify_freeze()[0] != freeze:
             raise ValueError("Source/freeze changed after audit")
