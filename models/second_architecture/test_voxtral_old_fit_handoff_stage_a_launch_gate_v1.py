@@ -111,12 +111,10 @@ class StageALaunchGateTests(unittest.TestCase):
         self._commit("external BF16 attempt manifest")
         return attempt
 
-    def test_reviewed_source_pins_match_and_live_freeze_is_absent(self):
+    def test_reviewed_source_pins_match(self):
         self.assertEqual(set(gate.LIVE_SOURCE_PINS), set(gate.FILES) - set(gate.REVIEWED_LAUNCH_FILES))
         for name, expected in gate.LIVE_SOURCE_PINS.items():
             self.assertEqual(gate.sha(gate.FILES[name]), expected, name)
-        with self.assertRaisesRegex(ValueError, "External freeze receipt absent"):
-            gate.verify_freeze()
 
     def test_absent_and_uncommitted_freeze_fail(self):
         with self.assertRaisesRegex(ValueError, "absent"):
