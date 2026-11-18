@@ -9,6 +9,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from .audio_qa_v2 import RENDER, canonical_bytes, check_audio_qa_v2, digest
 from .audio_qa_v2_build import build_receipts, finalize_manifest
@@ -58,6 +59,23 @@ class QABuilderTests(unittest.TestCase):
             self.bundle, self.records, self.out, primary_id="primary",
             secondary_id="secondary", tertiary_id=tertiary_id,
             completed_at_utc=fixtures.QA_TIME, controller_id=fixtures.CONTROLLER)
+
+    def external_grants(self, *, duplicate_id=False):
+        grants = self.root / "external-grants"
+        grants.mkdir()
+        index = json.loads((self.out / "prepared_index.json").read_bytes())
+        for row in [r for r in index["rows"] if r["case_id"] == "C"]:
+            grant = {"grant_id": "same-id" if duplicate_id else
+                     "synthetic-" + row["voice_id"],
+                     "controller_id": fixtures.CONTROLLER, "case_id": "C",
+                     "source_wav_sha256": row["wav_sha256"],
+                     "qa_receipt_sha256": row["receipt"]["sha256"],
+                     "authorized_date": "2026-11-19",
+                     "authorized_event_ids": ["DR19"]}
+            grant["signature_hmac_sha256"] = hmac.new(
+                fixtures.KEY, grant_signing_bytes(grant), hashlib.sha256).hexdigest()
+            (grants / f"{row['voice_id']}.json").write_bytes(canonical_bytes(grant))
+        return grants
 
     def test_full_synthetic_cohort_builds_without_changing_human_stages(self):
         before = {p.relative_to(self.records): digest(p)
@@ -183,6 +201,43 @@ class QABuilderTests(unittest.TestCase):
                                     controller_key=fixtures.KEY,
                                     trusted_controller_id=fixtures.CONTROLLER)
         self.assertEqual((checked["primary_reviews"], checked["secondary_reviews"]), (12, 11))
+
+    def test_duplicate_signed_c_grant_ids_rejected_before_copy(self):
+        self.build()
+        grants = self.external_grants(duplicate_id=True)
+        with self.assertRaisesRegex(ValueError, "C grant ID reused"):
+            finalize_manifest(self.out, grants, controller_key=fixtures.KEY,
+                              trusted_controller_id=fixtures.CONTROLLER)
+        self.assertFalse((self.out / "grants").exists())
+        self.assertFalse((self.out / "manifest.json").exists())
+
+    def test_second_grant_copy_failure_leaves_retryable_prepared_evidence(self):
+        self.build()
+        grants = self.external_grants()
+        before = {p.relative_to(self.out): digest(p) for p in self.out.rglob("*")
+                  if p.is_file()}
+        original_copy = shutil.copyfile
+        calls = 0
+
+        def fail_second(source, target, *args, **kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise OSError("synthetic second grant copy failure")
+            return original_copy(source, target, *args, **kwargs)
+
+        with patch("models.second_architecture.voicechat_calendar_fixture_v1."
+                   "audio_qa_v2_build.shutil.copyfile", side_effect=fail_second):
+            with self.assertRaisesRegex(OSError, "second grant copy failure"):
+                finalize_manifest(self.out, grants, controller_key=fixtures.KEY,
+                                  trusted_controller_id=fixtures.CONTROLLER)
+        self.assertFalse((self.out / "grants").exists())
+        self.assertFalse((self.out / "manifest.json").exists())
+        self.assertEqual(before, {p.relative_to(self.out): digest(p)
+                                  for p in self.out.rglob("*") if p.is_file()})
+        finalize_manifest(self.out, grants, controller_key=fixtures.KEY,
+                          trusted_controller_id=fixtures.CONTROLLER)
+        self.assertTrue((self.out / "manifest.json").is_file())
 
 
 if __name__ == "__main__":

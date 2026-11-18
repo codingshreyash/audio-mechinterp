@@ -465,8 +465,10 @@ def finalize_manifest(prepared_dir: Path, grant_dir: Path, *,
                       controller_key: bytes, trusted_controller_id: str) -> dict:
     """Require two independently signed grants and write only the QA manifest."""
     qa.require(prepared_dir.is_dir() and not prepared_dir.is_symlink() and
-               not (prepared_dir / "manifest.json").exists(),
-               "prepared directory missing or manifest already exists")
+               not (prepared_dir / "manifest.json").exists() and
+               not (prepared_dir / "grants").exists() and
+               not (prepared_dir / "grants").is_symlink(),
+               "prepared directory missing or final evidence already exists")
     index, _ = qa.canonical_record(prepared_dir / "prepared_index.json", INDEX_SCHEMA)
     _verify_prepared(prepared_dir, index)
     qa.require(index.get("controller_id_nominated_not_granted") == trusted_controller_id,
@@ -485,6 +487,7 @@ def finalize_manifest(prepared_dir: Path, grant_dir: Path, *,
     c_rows = [row for row in rows if row["case_id"] == "C"]
     qa.require(len(c_rows) == 2, "C receipt matrix differs")
     grants = {}
+    grant_ids: set[str] = set()
     for path in files:
         value = json.loads(path.read_bytes())
         matching = [row for row in c_rows
@@ -492,6 +495,11 @@ def finalize_manifest(prepared_dir: Path, grant_dir: Path, *,
                     row["receipt"]["sha256"] == value.get("qa_receipt_sha256")]
         qa.require(len(matching) == 1, "grant does not bind exactly one C receipt")
         row = matching[0]
+        grant_id = value.get("grant_id")
+        qa.require(isinstance(grant_id, str) and grant_id and
+                   grant_id not in grant_ids,
+                   "C grant ID reused or missing")
+        grant_ids.add(grant_id)
         qa.require(row["voice_id"] not in grants and
                    verify_external_grant(value, case_id="C",
                                          source_wav_sha256=row["wav_sha256"],
@@ -504,27 +512,51 @@ def finalize_manifest(prepared_dir: Path, grant_dir: Path, *,
                    "C receipt controller ID differs")
         grants[row["voice_id"]] = path
     qa.require(len(grants) == 2, "external C grants incomplete")
-    (prepared_dir / "grants").mkdir(exist_ok=False)
-    descriptors = []
-    for row in c_rows:
-        source = grants[row["voice_id"]]
-        target = prepared_dir / "grants" / source.name
-        expected = qa.digest(source)
-        shutil.copyfile(source, target)
-        qa.require(qa.digest(target) == expected == qa.digest(source),
-                   "external grant changed while copying")
-        descriptors.append({"voice_id": row["voice_id"],
-                            "receipt_sha256": row["receipt"]["sha256"],
-                            "grant": _descriptor(prepared_dir, target)})
-    manifest = {key: index[key] for key in (
-        "amendment_commit", "amendment_sha256", "render_manifest_sha256",
-        "scripts_sha256", "comparison_sha256", "asr_sources", "reviewer_roster",
-        "blind_order_seed", "blind_order", "blind_assignment", "rows", "eligibility")}
-    manifest["schema"] = "voicechat_audio_qa_manifest_v2"
-    manifest["c_grants"] = descriptors
-    _write(prepared_dir / "manifest.json", manifest)
-    return {"manifest_path": str(prepared_dir / "manifest.json"),
-            "manifest_sha256": qa.digest(prepared_dir / "manifest.json"),
+    temporary = Path(tempfile.mkdtemp(prefix=".qa_manifest_staging_", dir=prepared_dir))
+    installed_grants = False
+    created_manifest = False
+    final_grants = prepared_dir / "grants"
+    final_manifest = prepared_dir / "manifest.json"
+    try:
+        (temporary / "grants").mkdir()
+        descriptors = []
+        for row in c_rows:
+            source = grants[row["voice_id"]]
+            target = temporary / "grants" / source.name
+            expected = qa.digest(source)
+            shutil.copyfile(source, target)
+            qa.require(qa.digest(target) == expected == qa.digest(source),
+                       "external grant changed while copying")
+            descriptors.append({"voice_id": row["voice_id"],
+                                "receipt_sha256": row["receipt"]["sha256"],
+                                "grant": _descriptor(temporary, target)})
+        manifest = {key: index[key] for key in (
+            "amendment_commit", "amendment_sha256", "render_manifest_sha256",
+            "scripts_sha256", "comparison_sha256", "asr_sources", "reviewer_roster",
+            "blind_order_seed", "blind_order", "blind_assignment", "rows", "eligibility")}
+        manifest["schema"] = "voicechat_audio_qa_manifest_v2"
+        manifest["c_grants"] = descriptors
+        manifest_bytes = qa.canonical_bytes(manifest)
+        manifest_hash = hashlib.sha256(manifest_bytes).hexdigest()
+        qa.require(not final_grants.exists() and not final_manifest.exists(),
+                   "final QA evidence appeared during staging")
+        os.replace(temporary / "grants", final_grants)
+        installed_grants = True
+        with final_manifest.open("xb") as stream:
+            created_manifest = True
+            stream.write(manifest_bytes)
+            stream.flush()
+            os.fsync(stream.fileno())
+    except Exception:
+        if created_manifest:
+            final_manifest.unlink(missing_ok=True)
+        if installed_grants:
+            shutil.rmtree(final_grants)
+        raise
+    finally:
+        shutil.rmtree(temporary)
+    return {"manifest_path": str(final_manifest),
+            "manifest_sha256": manifest_hash,
             "controller_grants_copied": 2, "external_anchor_created": False,
             "ledger_created": False}
 
