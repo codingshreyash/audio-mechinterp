@@ -134,6 +134,29 @@ class WhisperObject02FitCausalTest(unittest.TestCase):
         self.assertEqual(decoded["token_ids"], [1, 2])
         self.assertEqual(decoded["hook_count"], 0)
         self.assertTrue(decoded["eos_seen"])
+        self.assertTrue(decoded["eos_terminated"])
+        self.assertFalse(decoded["censored"])
+
+    def test_midsequence_eos_is_censored_and_not_eligible(self) -> None:
+        class Model:
+            generation_config = SimpleNamespace(eos_token_id=2)
+
+            def generate(self, **_kwargs):
+                return SimpleNamespace(
+                    sequences=torch.tensor([[1, 2, 3]]),
+                    scores=[torch.tensor([[0.0, 1.0, 2.0, 3.0]])],
+                )
+
+        class Processor:
+            tokenizer = SimpleNamespace(encode=lambda *_args, **_kwargs: [1])
+
+            def batch_decode(self, *_args, **_kwargs):
+                return ["plate"]
+
+        decoded = assay.run_model(Model(), Processor(), {})
+        self.assertTrue(decoded["eos_seen"])
+        self.assertFalse(decoded["eos_terminated"])
+        self.assertTrue(decoded["censored"])
 
 
 if __name__ == "__main__":

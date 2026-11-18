@@ -426,11 +426,14 @@ def run_model(model: Any, processor: Any, batch: Any, *, hook: Any = None, hook_
             "generation_processed_plate_minus_cup_first_token_score": margin,
             "alias_margin_status": margin_status,
         })
+    eos_seen = any(token in eos_ids for token in ids)
+    eos_terminated = bool(ids) and ids[-1] in eos_ids
     return {
         "token_ids": ids,
         "transcript": transcript,
-        "eos_seen": any(token in eos_ids for token in ids),
-        "censored": not any(token in eos_ids for token in ids),
+        "eos_seen": eos_seen,
+        "eos_terminated": eos_terminated,
+        "censored": not eos_terminated,
         "step_scores": step_scores,
         "elapsed_seconds": time.monotonic() - start,
         "rss_bytes": current_rss_bytes(),
