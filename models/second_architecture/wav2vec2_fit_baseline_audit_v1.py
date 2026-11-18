@@ -32,8 +32,13 @@ MODEL_REVISION = "22aad52d435eb6dbaf354bdad9b0da84ce7d6156"
 WEIGHTS_SHA = "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a"
 CONFIG_SHA = "d3ec255c063d9f95057b553b19c20135b259875834a4fe9deb218a6be25b4cf3"
 PREPROCESSOR_SHA = "b225d617c025463b9e157e06afea8b90dc7078fc70b013c533328423e0486b4a"
+SPECIAL_TOKENS_SHA = "bb7068de1150661a10b55f9e4b12a0e77af8bf91f5e45e1b58afaf1d0e17f675"
+TOKENIZER_CONFIG_SHA = "dc790594f5bc351a4311c6624f40acd95850d4aaf2a5cb3c656c9b610720b608"
+VOCAB_SHA = "19727f8944fe6459fc3f240ae2c198395b740f6a029bd23e06656266b83bcf64"
 FEATURE_EXTRACTOR_SOURCE_SHA = "e5e9a0baf70716fee503f4f66a7a61312a132be989b2d7e2649e057ccbefa2cc"
 MODEL_SOURCE_SHA = "c404982e3a063a5f68ee85809356c8a5ed29ad24c8441eea1d56346a57b5da0c"
+PROCESSOR_SOURCE_SHA = "95adaf4e8398ca3d72570eba32925dcd964ed3b0027ef9abff1fd2454a96d559"
+TOKENIZER_SOURCE_SHA = "b4f8f80838e462bc5d77b3998aa500879bdcce951779223c94ce126f7ffa68f2"
 PAIRS = {"color_05": ("silver", "teal"), "object_02": ("plate", "cup")}
 ENGINES = ("piper", "kokoro")
 MODES = ("S", "C")
@@ -378,7 +383,9 @@ def audit_preflight(record: dict[str, Any], expected_path: Path,
             "external preflight SHA mismatch")
     expected = parse_json(expected_path.read_text())
     receipt = record.get("receipt")
-    require(record.get("type") == "preflight" and receipt == expected
+    require(record.get("type") == "preflight"
+            and record.get("schema") == "wav2vec2_fit_baseline_run_v1"
+            and receipt == expected
             and record.get("expected_receipt_sha256") == expected_sha,
             "preflight record differs from external receipt")
     require(receipt.get("schema") == "wav2vec2_fit_baseline_preflight_v1"
@@ -391,14 +398,14 @@ def audit_preflight(record: dict[str, Any], expected_path: Path,
             "preflight model/execution identity changed")
     require(sha(LOCALITY_PREFLIGHT) == LOCALITY_PREFLIGHT_SHA,
             "prior no-model locality receipt changed")
-    require(sha(RUNNER) == receipt.get("runner_sha256"), "runner SHA differs from preflight")
     commit = receipt.get("runner_source_git_commit")
     require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit) is not None,
             "source commit identity malformed")
     source = subprocess.run(["git", "show", f"{commit}:models/second_architecture/{RUNNER.name}"],
                             cwd=ROOT, check=False, capture_output=True)
-    require(source.returncode == 0 and hashlib.sha256(source.stdout).hexdigest() == sha(RUNNER),
-            "source commit does not bind runner bytes")
+    require(source.returncode == 0
+            and hashlib.sha256(source.stdout).hexdigest() == receipt.get("runner_sha256"),
+            "source commit does not bind frozen runner bytes")
     snapshot = (Path.home() / ".cache/huggingface/hub"
                 / "models--facebook--wav2vec2-base-960h/snapshots" / MODEL_REVISION)
     assets = receipt.get("snapshot_files_sha256")
@@ -414,12 +421,21 @@ def audit_preflight(record: dict[str, Any], expected_path: Path,
     require(assets["config.json"] == CONFIG_SHA
             and assets["preprocessor_config.json"] == PREPROCESSOR_SHA,
             "pinned model or preprocessor config differs")
+    require(assets["special_tokens_map.json"] == SPECIAL_TOKENS_SHA
+            and assets["tokenizer_config.json"] == TOKENIZER_CONFIG_SHA
+            and assets["vocab.json"] == VOCAB_SHA,
+            "pinned tokenizer assets differ")
     source_hashes = receipt.get("source_hashes")
     require(isinstance(source_hashes, dict), "installed source hash inventory absent")
     require(source_hashes.get("transformers.models.wav2vec2.feature_extraction_wav2vec2")
             == FEATURE_EXTRACTOR_SOURCE_SHA
             and source_hashes.get("transformers.models.wav2vec2.modeling_wav2vec2")
-            == MODEL_SOURCE_SHA, "pinned Wav2Vec2 implementation changed")
+            == MODEL_SOURCE_SHA
+            and source_hashes.get("transformers.models.wav2vec2.processing_wav2vec2")
+            == PROCESSOR_SOURCE_SHA
+            and source_hashes.get("transformers.models.wav2vec2.tokenization_wav2vec2")
+            == TOKENIZER_SOURCE_SHA,
+            "pinned Wav2Vec2 implementation changed")
     import inspect
     from transformers.models.wav2vec2 import (
         feature_extraction_wav2vec2, modeling_wav2vec2,

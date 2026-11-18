@@ -1,0 +1,41 @@
+{
+  "schema": "wav2vec2_fit_baseline_failure_review_v1",
+  "attempt": "20261118T2345Z",
+  "status": "failed_no_scientific_baseline",
+  "records_path": "models/second_architecture/runs/wav2vec2_fit_baseline_stage_capture_v1/20261118T2345Z/records.jsonl",
+  "records_sha256": "9625b3596da2ce7041c1f8dc394cf226734d33c0168102f2dd17889a0c8391f4",
+  "records_rows": ["preflight", "failure"],
+  "output_files": ["records.jsonl"],
+  "final_output_bytes": 6478,
+  "failure_record_preappend_output_bytes": 5342,
+  "failure_record_bytes": 1136,
+  "frozen_preflight_sha256": "bf6db18d379d649905c7cfb37ebad572bd5de0d773ec479e33e69f67edfcd30b",
+  "runner_source_commit": "3fe010f6e91469acee5428833b0a77b093793a67",
+  "runner_source_sha256": "4fa1bdeeb91096da168b9276b7c25509d87bb2f34318443f8a91a2e8a3337116",
+  "model_id": "facebook/wav2vec2-base-960h",
+  "model_revision": "22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
+  "failure": {
+    "type": "NameError",
+    "message": "cannot access free variable 'target' where it is not associated with a value in enclosing scope",
+    "source_cause": "At frozen runner line 488, the generator condition reads target before the same assignment statement binds target.",
+    "case_key": "color_05_piper_silver",
+    "mode": "S",
+    "full_ctc_argmax_frame_count": 271,
+    "argmax_compact_json_sha256": "ea5f31ab8146b96f964dba12540627d26dc24a73b3b8824d88f56f60069ad054",
+    "hook_counts": "All ten declared stages fired once, as recorded in the failure row.",
+    "rss_bytes": 1134952448,
+    "elapsed_seconds": 0.22271374985575676
+  },
+  "independent_saved_argmax_decode": {
+    "text": "THE WORD I CHOSE IS SILVER WHAT WORD DID I CHOOSE",
+    "normalized_words": ["the", "word", "i", "chose", "is", "silver", "what", "word", "did", "i", "choose"],
+    "one_word_eligibility_if_capture_had_completed": true,
+    "qualification": "Decoded the saved frame IDs with the pinned processor; no logits or stage arrays were saved, so this cannot independently establish the model output or count as a baseline."
+  },
+  "masked_spec_embed_warning_review": {
+    "assessment": "No effect on this evaluation path is expected.",
+    "basis": "The pinned config has mask_time_prob=0.05, which creates masked_spec_embed. The frozen runner calls eval() and passes no mask_time_indices. Installed Wav2Vec2 _mask_hidden_states uses masked_spec_embed only for an explicit mask_time_indices input or when self.training is true with mask_time_prob > 0. The missing checkpoint parameter is therefore inactive in this forward.",
+    "limit": "This is a source-path assessment, not a measured ablation."
+  },
+  "independent_audit_result": "Pinned preflight and provisional argmax/hook fields passed validation. The auditor rejected the attempt because it has a failure row and no 16-baseline/8-trace completion matrix."
+}
