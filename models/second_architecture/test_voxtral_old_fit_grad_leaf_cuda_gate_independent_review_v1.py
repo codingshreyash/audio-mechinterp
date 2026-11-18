@@ -22,9 +22,8 @@ SPEC.loader.exec_module(gate)
 
 
 class IndependentGateNegativeTests(unittest.TestCase):
-    @unittest.expectedFailure
     def test_gate_auditor_review_target_has_exact_independent_go(self) -> None:
-        """Current gate target is absent; the existing rereview uses another path."""
+        """The gate binds the new canonical decision without rewriting history."""
         self.assertTrue(gate.AUDITOR_REVIEW.is_file())
         gate.require_decision(gate.AUDITOR_REVIEW, gate.GO_AUDITOR)
 
