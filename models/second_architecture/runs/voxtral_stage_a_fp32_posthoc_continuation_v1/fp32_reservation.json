@@ -1,0 +1,7 @@
+{
+  "status": "arm_reserved_no_retry",
+  "arm": "fp32",
+  "attempt": "20261118T134440087432Z",
+  "continuation_freeze_sha256": "31e41dcee185432e7236f5ff4226e1062c8066a034a66d75f89916a4a4ef1dcf",
+  "original_launch_status": "launch_failed"
+}
