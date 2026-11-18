@@ -1,8 +1,7 @@
 """External committed-freeze launch gate for the old-FIT Stage-A native arms.
 
-Source scaffold only. LIVE_SOURCE_PINS is deliberately unset until the final
-runner, auditor, and their independent reviews are committed. This module
-imports no model code and cannot launch a model in its current state.
+This module imports no model code. Live use still requires a separately
+committed external freeze receipt after independent launcher review.
 """
 
 from __future__ import annotations
@@ -12,6 +11,7 @@ import hashlib
 import json
 import os
 import re
+import selectors
 import subprocess
 import sys
 import time
@@ -31,6 +31,9 @@ AUDITOR_SECONDS = 120
 CUMULATIVE_MODEL_SECONDS = 4500
 MAX_DRIVER_BYTES = 30 * 1024**3
 MAX_ARM_BYTES = int(1.5 * 1024**3)
+MAX_CAPTURE_BYTES_PER_STREAM = 8 * 1024**2
+PARENT_RECEIPT_RESERVE_BYTES = 1024**2
+RUNNER_PARENT_RESERVE_BYTES = 2 * MAX_CAPTURE_BYTES_PER_STREAM + PARENT_RECEIPT_RESERVE_BYTES
 SCOPE = "posthoc_one_old_fit_case_native_stage_only_no_security_claim"
 AUDIT_STATUS = "audited_completed_old_fit_handoff_stage_a_native_only"
 RESULT_STATUS = "completed_old_fit_handoff_stage_a_native_only"
@@ -59,9 +62,21 @@ REVIEWED_SOURCE_FILES = ("native_source_sha256", "native_tests_sha256",
                          "runner_sha256", "runner_schema_sha256", "runner_review_sha256")
 REVIEWED_AUDITOR_FILES = ("auditor_sha256", "auditor_tests_sha256",
                           "auditor_hold_review_sha256", "auditor_review_sha256")
-# A separate final source-review commit must pin these values. None is an
-# intentional live-use stop, not a wildcard.
-LIVE_SOURCE_PINS: dict[str, str] | None = None
+# Independently reviewed Stage-A source and auditor bytes. These are explicit
+# expected values, never populated from the external freeze self-report.
+LIVE_SOURCE_PINS: dict[str, str] | None = {
+    "protocol_sha256": "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b",
+    "plan_review_sha256": "8377420a6ae632a7a4cce5b6f69790eb834ec6218e48fd53952c3445edf58e19",
+    "native_source_sha256": "dc63b8c10ef605e1cc8538e3d37d8d2531e50ca7a46140ee1ee551054e3de978",
+    "native_tests_sha256": "e2e3c1b51f72d54c573665c96d984ea73857af6560d2a38ef0d51be28b8a0a77",
+    "runner_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+    "runner_schema_sha256": "b6a9674f65ee352ed6635a48a39ef9bffb932419844e52bb6d28db8c7e9d41d5",
+    "runner_review_sha256": "f82b000baa4aaa817292860d72e4bb61dbc761f90d2d607e69215368186bf1ef",
+    "auditor_sha256": "4f800ed604295ae0e4fbd53c893fccd14b8968badb43b835e6ec975e49b0cf3d",
+    "auditor_tests_sha256": "ea9588c657b5dde9bfbb5963e68ed8512987e4371d05206d917f5c8803e23351",
+    "auditor_hold_review_sha256": "e0f31b8bf4b13f537e3257df7e68bf55559c543f0e5ef046733df0beb4fb0fcb",
+    "auditor_review_sha256": "055c02fda105f6c0bc3a8b295294833ef7f170b6206baae75b57e779e48a8f51",
+}
 
 
 def sha_bytes(data: bytes) -> str:
@@ -103,6 +118,17 @@ def ancestor(repo: Path, earlier: str, later: str) -> None:
         raise ValueError("Review commit is not an ancestor of freeze")
 
 
+def first_add_commit(repo: Path, path: Path) -> str:
+    relative = path.resolve().relative_to(repo.resolve()).as_posix()
+    result = subprocess.run(["git", "-C", str(repo), "log", "--diff-filter=A",
+                             "--format=%H", "HEAD", "--", relative],
+                            capture_output=True, text=True, check=False)
+    additions = result.stdout.splitlines()
+    if result.returncode or len(additions) != 1 or not re.fullmatch(r"[0-9a-f]{40}", additions[0]):
+        raise ValueError("Bound receipt must have exactly one Git first-add commit")
+    return additions[0]
+
+
 def utc(value: str) -> datetime:
     try:
         parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -118,6 +144,8 @@ def verify_freeze(freeze: Path = FREEZE, *, files: dict[str, Path] = FILES,
     """Reject absent, dirty, unreviewed, or self-frozen source before model load."""
     if pinned is None:
         raise ValueError("Live source pins absent; source scaffold cannot launch")
+    if set(files).difference(REVIEWED_LAUNCH_FILES).difference(pinned):
+        raise ValueError("Source pins incomplete; launch cannot trust freeze self-report")
     if not freeze.is_file():
         raise ValueError("External freeze receipt absent")
     committed_same(repo, "HEAD", freeze)
@@ -159,7 +187,11 @@ def verify_freeze(freeze: Path = FREEZE, *, files: dict[str, Path] = FILES,
                                capture_output=True, check=False)
     if premature.returncode == 0:
         raise ValueError("External freeze predates launcher review")
-    return {"receipt": receipt, "receipt_sha256": sha_bytes(raw)}
+    freeze_add = first_add_commit(repo, freeze)
+    if freeze_add == receipt["launcher_review_commit"]:
+        raise ValueError("External freeze was added in launcher review commit")
+    ancestor(repo, receipt["launcher_review_commit"], freeze_add)
+    return {"receipt": receipt, "receipt_sha256": sha_bytes(raw), "freeze_path": freeze}
 
 
 def exclusive_json(path: Path, value: dict) -> None:
@@ -168,6 +200,81 @@ def exclusive_json(path: Path, value: dict) -> None:
         stream.write("\n")
         stream.flush()
         os.fsync(stream.fileno())
+
+
+def directory_bytes(root: Path) -> int:
+    total = 0
+    for path in root.rglob("*"):
+        if path.is_symlink():
+            raise ValueError("Attempt directory contains a symlink")
+        if path.is_file():
+            total += path.stat().st_size
+    return total
+
+
+def run_bounded_child(command: list[str], *, output: Path, env: dict[str, str],
+                      timeout_seconds: float, cap_bytes: int = MAX_ARM_BYTES,
+                      stream_cap_bytes: int = MAX_CAPTURE_BYTES_PER_STREAM,
+                      stdout_name: str = "runner_stdout.txt",
+                      stderr_name: str = "runner_stderr.txt") -> tuple[int, float, str | None]:
+    """Drain both pipes and kill on wall, log, or entire-attempt byte cap.
+
+    The runner also enforces its own exact write cap. This independent parent
+    watchdog includes stdout, stderr and launch receipts in the same ceiling.
+    """
+    begun = time.monotonic()
+    process = subprocess.Popen(command, cwd=REPO, env=env,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    reason = None
+    selector = selectors.DefaultSelector()
+    counts = {"stdout": 0, "stderr": 0}
+    with (output / stdout_name).open("xb") as stdout_file, \
+            (output / stderr_name).open("xb") as stderr_file:
+        targets = {"stdout": stdout_file, "stderr": stderr_file}
+        assert process.stdout is not None and process.stderr is not None
+        selector.register(process.stdout, selectors.EVENT_READ, "stdout")
+        selector.register(process.stderr, selectors.EVENT_READ, "stderr")
+        try:
+            while selector.get_map() or process.poll() is None:
+                elapsed = time.monotonic() - begun
+                if elapsed >= timeout_seconds:
+                    reason = "runner_process_timeout"
+                elif directory_bytes(output) >= cap_bytes:
+                    reason = "entire_attempt_byte_cap_reached"
+                if reason:
+                    process.kill()
+                    break
+                for key, _ in selector.select(timeout=0.2):
+                    chunk = os.read(key.fileobj.fileno(), 65536)
+                    if not chunk:
+                        selector.unregister(key.fileobj)
+                        continue
+                    label = key.data
+                    left = stream_cap_bytes - counts[label]
+                    if len(chunk) > left:
+                        if left:
+                            targets[label].write(chunk[:left])
+                            counts[label] += left
+                        reason = f"runner_{label}_capture_cap_reached"
+                        process.kill()
+                        break
+                    targets[label].write(chunk)
+                    counts[label] += len(chunk)
+                if reason:
+                    break
+            process.wait(timeout=5)
+            stdout_file.flush()
+            stderr_file.flush()
+            os.fsync(stdout_file.fileno())
+            os.fsync(stderr_file.fileno())
+        finally:
+            selector.close()
+            if process.poll() is None:
+                process.kill()
+                process.wait(timeout=5)
+            process.stdout.close()
+            process.stderr.close()
+    return process.returncode, time.monotonic() - begun, reason
 
 
 def _attempt_dirs(runs: Path, arm: str) -> list[Path]:
@@ -187,6 +294,11 @@ def verify_bf16_manifest(manifest: Path, *, frozen: dict, runs: Path = RUNS,
         raise ValueError("Committed BF16 manifest schema/status invalid")
     if value["freeze_receipt_sha256"] != frozen["receipt_sha256"]:
         raise ValueError("BF16 manifest belongs to another freeze")
+    freeze_add = first_add_commit(repo, frozen["freeze_path"])
+    manifest_add = first_add_commit(repo, manifest)
+    if manifest_add == freeze_add:
+        raise ValueError("BF16 manifest was added with freeze, before run")
+    ancestor(repo, freeze_add, manifest_add)
     relative = Path(value["attempt_relative_path"])
     if relative.is_absolute() or ".." in relative.parts or len(relative.parts) != 1:
         raise ValueError("BF16 attempt path invalid")
@@ -201,6 +313,24 @@ def verify_bf16_manifest(manifest: Path, *, frozen: dict, runs: Path = RUNS,
         if not path.is_file() or sha(path) != value[key]:
             raise ValueError(f"BF16 manifest file hash mismatch: {key}")
     start, finish, result, audit = (read_json(fields[k]) for k in fields)
+    for key in ("meta", "model_layout", "progress"):
+        path = attempt / "runner" / ("progress.jsonl" if key == "progress" else f"{key}.json")
+        if not path.is_file() or path.is_symlink() or sha(path) != result.get(f"{key}_sha256"):
+            raise ValueError(f"BF16 runner receipt file mismatch: {key}")
+    for key in ("probes", "details"):
+        relative_blob = result.get(f"{key}_path")
+        digest = result.get(f"{key}_sha256")
+        if (not isinstance(relative_blob, str) or not isinstance(digest, str) or
+                not re.fullmatch(r"[0-9a-f]{64}", digest) or
+                relative_blob != f"blobs/{digest}.pt"):
+            raise ValueError(f"BF16 {key} sidecar path invalid")
+        blob = attempt / "runner" / relative_blob
+        if (not blob.is_file() or blob.is_symlink() or sha(blob) != digest or
+                blob.stat().st_size != result.get(f"{key}_bytes") or
+                audit.get(f"{key}_sha256") != digest):
+            raise ValueError(f"BF16 {key} sidecar missing or changed")
+    if directory_bytes(attempt) > MAX_ARM_BYTES:
+        raise ValueError("BF16 entire attempt exceeds output cap")
     if (start.get("arm") != "bf16" or start.get("freeze_receipt_sha256") != frozen["receipt_sha256"] or
             start.get("runner_sha256") != frozen["receipt"]["runner_sha256"] or
             start.get("auditor_sha256") != frozen["receipt"]["auditor_sha256"] or
@@ -271,6 +401,8 @@ def reserve_attempt(output: Path, arm: str, frozen: dict, command: list[str],
         "process_timeout_seconds": RUNNER_SECONDS[arm] + PROCESS_GRACE_SECONDS,
         "runner_mps_driver_cap_bytes": MAX_DRIVER_BYTES,
         "arm_output_cap_bytes": MAX_ARM_BYTES,
+        "max_capture_bytes_per_stream": MAX_CAPTURE_BYTES_PER_STREAM,
+        "runner_parent_reserve_bytes": RUNNER_PARENT_RESERVE_BYTES,
         "cumulative_model_work_cap_seconds": CUMULATIVE_MODEL_SECONDS,
         "prior_model_work_seconds": spent, "audit_scope": SCOPE})
     return started
@@ -293,20 +425,20 @@ def launch(arm: str, output: Path) -> dict:
               "runner_error_sha256": None, "audit_sha256": None,
               "post_run_source_verified": False, "model_work_elapsed_seconds": 0.0}
     try:
-        process_start = time.monotonic()
-        with (output / "runner_stdout.txt").open("xb") as out, (output / "runner_stderr.txt").open("xb") as err:
-            try:
-                process = subprocess.run(command, cwd=REPO, env=env, stdout=out, stderr=err,
-                                         timeout=RUNNER_SECONDS[arm] + PROCESS_GRACE_SECONDS,
-                                         check=False)
-                finish["runner_returncode"] = process.returncode
-            except subprocess.TimeoutExpired:
-                finish["failure_reason"] = "runner_process_timeout"
-        finish["model_work_elapsed_seconds"] = time.monotonic() - process_start
+        returncode, process_elapsed, stop_reason = run_bounded_child(
+            command, output=output, env=env,
+            timeout_seconds=RUNNER_SECONDS[arm] + PROCESS_GRACE_SECONDS,
+            cap_bytes=MAX_ARM_BYTES - RUNNER_PARENT_RESERVE_BYTES)
+        finish["runner_returncode"] = returncode
+        finish["model_work_elapsed_seconds"] = process_elapsed
+        if stop_reason:
+            raise ValueError(stop_reason)
         if finish["model_work_elapsed_seconds"] >= RUNNER_SECONDS[arm]:
             raise ValueError("Arm model-process wall cap exceeded")
         if spent + finish["model_work_elapsed_seconds"] > CUMULATIVE_MODEL_SECONDS:
             raise ValueError("Cumulative model-work cap exceeded")
+        if directory_bytes(output) >= MAX_ARM_BYTES:
+            raise ValueError("Entire attempt byte cap reached before audit")
         result_file, error_file = runner_dir / "result.json", runner_dir / "error.json"
         finish["runner_result_sha256"] = sha(result_file) if result_file.is_file() else None
         finish["runner_error_sha256"] = sha(error_file) if error_file.is_file() else None
@@ -317,13 +449,18 @@ def launch(arm: str, output: Path) -> dict:
         if finish["runner_returncode"] != 0 or not result_file.is_file() or error_file.exists():
             raise ValueError("Runner failed or lacked exclusive success receipt")
         audit_command = [sys.executable, str(FILES["auditor_sha256"]), str(runner_dir)]
-        audited = subprocess.run(audit_command, cwd=REPO, env=env, capture_output=True,
-                                 timeout=AUDITOR_SECONDS, check=False)
-        finish["auditor_returncode"] = audited.returncode
-        if audited.returncode:
-            (output / "audit_error.txt").write_bytes(audited.stderr)
+        audit_code, _, audit_stop_reason = run_bounded_child(
+            audit_command, output=output, env=env, timeout_seconds=AUDITOR_SECONDS,
+            cap_bytes=MAX_ARM_BYTES - PARENT_RECEIPT_RESERVE_BYTES,
+            stdout_name="audit_stdout.txt", stderr_name="audit_stderr.txt")
+        finish["auditor_returncode"] = audit_code
+        if audit_stop_reason:
+            raise ValueError(audit_stop_reason)
+        if audit_code:
             raise ValueError("Frozen CPU auditor rejected runner result")
-        audit = json.loads(audited.stdout, parse_constant=lambda v: (_ for _ in ()).throw(ValueError(v)))
+        audit_stdout = output / "audit_stdout.txt"
+        audit = json.loads(audit_stdout.read_bytes(),
+                           parse_constant=lambda v: (_ for _ in ()).throw(ValueError(v)))
         if (not isinstance(audit, dict) or audit.get("status") != AUDIT_STATUS or
                 audit.get("arm") != arm or audit.get("result_sha256") != finish["runner_result_sha256"] or
                 audit.get("auditor_sha256") != frozen["receipt"]["auditor_sha256"] or
@@ -331,12 +468,11 @@ def launch(arm: str, output: Path) -> dict:
                 audit.get("native_source_sha256") != frozen["receipt"]["native_source_sha256"] or
                 audit.get("protocol_sha256") != frozen["receipt"]["protocol_sha256"]):
             raise ValueError("Frozen auditor receipt invalid")
-        with (output / "audit.json").open("xb") as stream:
-            stream.write(audited.stdout)
-            stream.flush()
-            os.fsync(stream.fileno())
+        audit_stdout.rename(output / "audit.json")
         finish["audit_sha256"] = sha(output / "audit.json")
         finish["auditor_status"] = audit["status"]
+        if directory_bytes(output) >= MAX_ARM_BYTES:
+            raise ValueError("Entire attempt byte cap reached after audit")
         after_audit = verify_freeze()
         if after_audit["receipt_sha256"] != frozen["receipt_sha256"]:
             raise ValueError("External freeze changed during audit")
@@ -347,7 +483,18 @@ def launch(arm: str, output: Path) -> dict:
     finally:
         finish["elapsed_seconds"] = time.monotonic() - started
         finish["wall_utc"] = datetime.now(timezone.utc).isoformat()
+        try:
+            finish["entire_attempt_bytes_before_finish"] = directory_bytes(output)
+            if finish["entire_attempt_bytes_before_finish"] > MAX_ARM_BYTES - 65536:
+                finish["status"] = "launch_failed"
+                finish["failure_reason"] = "entire_attempt_byte_cap_reached_before_finish"
+        except ValueError as exc:
+            finish["entire_attempt_bytes_before_finish"] = None
+            finish["attempt_size_error"] = str(exc)
+            finish["status"] = "launch_failed"
         exclusive_json(output / "launch_finish.json", finish)
+        if "attempt_size_error" not in finish and directory_bytes(output) > MAX_ARM_BYTES:
+            raise ValueError("Entire attempt byte cap exceeded including finish receipt")
     return finish
 
 
