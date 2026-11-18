@@ -28,6 +28,7 @@ SCRIPTS = HERE / "scripts.json"
 RECIPE = HERE / "audio_recipe.json"
 PADDING = HERE / "append_trailing_silence.py"
 PIPER = Path("/Users/shrranjan/Garak/garak/.venv/bin/piper")
+APPLE_SAY = Path("/usr/bin/say")
 PIPER_MODEL = Path("/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx")
 PIPER_CONFIG = PIPER_MODEL.with_suffix(".onnx.json")
 EXPECTED = {
@@ -37,8 +38,11 @@ EXPECTED = {
     "piper": "0b8f50b978d1da0ba9b6c770c0e58f385e093d1d33bbbb4ca0e6e9b8dabec67c",
     "model": "cf9ccdec59f05adee47173f6fb4d89e8b0c5f30c178748d2572fe4efd1d2724c",
     "config": "27490c2197e3e7b566b051fc0b1dae21200e72b44c209731419effdbbe0789e5",
+    "apple_say": "b9f92936d6bb411e891f4136ae714b85a8876585ba449ea3c8d5e557765ebe8f",
 }
 VOICES = ("apple_samantha_en_us", "piper_amy_en_us")
+APPLE_OS_BUILD = "25G241"
+APPLE_VOICE_LINE = "Samantha            en_US    # Hello! My name is Samantha."
 
 
 def sha(path: Path) -> str:
@@ -49,9 +53,10 @@ def sha(path: Path) -> str:
     return digest.hexdigest()
 
 
-def checked_inputs() -> list[dict]:
+def checked_inputs() -> tuple[list[dict], dict]:
     for key, path in (("scripts", SCRIPTS), ("recipe", RECIPE), ("padding", PADDING),
-                      ("piper", PIPER), ("model", PIPER_MODEL), ("config", PIPER_CONFIG)):
+                      ("piper", PIPER), ("model", PIPER_MODEL), ("config", PIPER_CONFIG),
+                      ("apple_say", APPLE_SAY)):
         if not path.is_file() or sha(path) != EXPECTED[key]:
             raise ValueError(f"Frozen renderer dependency changed: {key}")
     scripts = json.loads(SCRIPTS.read_text(encoding="ascii"))
@@ -65,12 +70,22 @@ def checked_inputs() -> list[dict]:
             != list(VOICES)
             or recipe["output_format"]["appended_zero_frames"] != 80000):
         raise ValueError("Frozen VoiceChat scripts or audio recipe changed")
-    return scripts["cases"]
+    voice_result = subprocess.run([str(APPLE_SAY), "-v", "?"], check=True,
+                                  capture_output=True, text=True, timeout=30)
+    voice_lines = [line for line in voice_result.stdout.splitlines()
+                   if line.startswith("Samantha ")]
+    os_build = subprocess.run(["/usr/bin/sw_vers", "-buildVersion"], check=True,
+                              capture_output=True, text=True, timeout=10).stdout.strip()
+    if voice_lines != [APPLE_VOICE_LINE] or os_build != APPLE_OS_BUILD:
+        raise ValueError("Selected Samantha voice or macOS build changed")
+    return scripts["cases"], {"apple_say_sha256": sha(APPLE_SAY),
+                              "apple_voice_line": voice_lines[0],
+                              "apple_os_build": os_build}
 
 
 def render_one(voice: str, script: str, source: Path) -> list[str]:
     if voice == VOICES[0]:
-        command = ["/usr/bin/say", "-v", "Samantha", "-o", str(source), script]
+        command = [str(APPLE_SAY), "-v", "Samantha", "-o", str(source), script]
         subprocess.run(command, check=True, capture_output=True, timeout=120)
     elif voice == VOICES[1]:
         command = [str(PIPER), "--model", str(PIPER_MODEL), "--output_file", str(source)]
@@ -110,20 +125,26 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    cases = checked_inputs()
     output = args.output_dir
     output.mkdir(parents=True, exist_ok=False)
     meta = {"status": "started_synthetic_render_no_qa", "started_utc": datetime.now(timezone.utc).isoformat(),
             "script_sha256": sha(Path(__file__)), "dependencies_sha256": EXPECTED,
             "platform": platform.platform(), "python": platform.python_version(),
             "numpy": np.__version__, "soundfile": sf.__version__,
-            "scipy": __import__("scipy").__version__,
-            "voices": list(VOICES), "scripts": [case["id"] for case in cases]}
+            "scipy": __import__("scipy").__version__, "voices": list(VOICES),
+            "planned_scripts": ["A", "B", "C", "D", "A_literal", "B_literal"]}
     (output / "meta.json").write_text(json.dumps(meta, indent=2) + "\n")
     rows = []
+    active_case = None
+    active_voice = None
     try:
+        cases, apple_identity = checked_inputs()
+        (output / "preflight.json").write_text(json.dumps({
+            "status": "render_inputs_verified_no_audio_yet", "apple_identity": apple_identity,
+            "dependency_sha256": EXPECTED}, indent=2) + "\n")
         for voice in VOICES:
             for case in cases:
+                active_case, active_voice = case["id"], voice
                 stem = f"{case['id']}__{voice}"
                 source = output / f"{stem}.{'aiff' if voice == VOICES[0] else 'wav'}"
                 converted = output / f"{stem}.converted.wav"
@@ -140,6 +161,7 @@ def main() -> None:
                              "conversion": conversion, "padding": padding})
         result = {"status": "complete_synthetic_render_no_qa", "planned": 12,
                   "rendered": len(rows), "meta_sha256": sha(output / "meta.json"),
+                  "preflight_sha256": sha(output / "preflight.json"),
                   "rows": rows, "model_inference_authorized": False}
         with (output / "render_manifest.json").open("x") as stream:
             json.dump(result, stream, indent=2, ensure_ascii=True)
@@ -148,7 +170,11 @@ def main() -> None:
                           "manifest_sha256": sha(output / "render_manifest.json")}, indent=2))
     except BaseException as exc:
         (output / "error.json").write_text(json.dumps({"status": "incomplete_synthetic_render",
-                  "type": type(exc).__name__, "error": str(exc), "rendered": len(rows)}, indent=2) + "\n")
+                  "type": type(exc).__name__, "error": str(exc), "rendered": len(rows),
+                  "active_case": active_case, "active_voice": active_voice,
+                  "stderr": exc.stderr.decode("utf-8", "replace")[:4096]
+                            if isinstance(exc, subprocess.CalledProcessError)
+                            and isinstance(exc.stderr, bytes) else None}, indent=2) + "\n")
         raise
 
 
