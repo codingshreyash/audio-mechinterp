@@ -1,0 +1,9 @@
+# Independent source review: Whisper object-word FIT causal replication V1
+
+18 November 2026. Review target: runner/test commit `bf1b899` and saved-result auditor/test commit `576df20`, against the approved [prospective plan](WHISPER_OBJECT02_FIT_CAUSAL_REPLICATION_PROSPECTIVE_V1.md). **Decision: HOLD before model inference.** I did not load the checkpoint or run the assay.
+
+Verified so far: the runner pins the already-open `object_02` plate/cup WAVs and prior ASR screen, checks identical PCM outside the word slot, uses the specified three causal sites and windows, and derives eight distinct 63-bit arm seeds from the frozen SHA-256 strings. Each realized random-edit hash is required to be unique. The source preserves decoded outputs before failed baseline, hook, self, and full-donor gates. Its no-weight preflight succeeded independently and reported source commit `bf1b89998b26e57d30fcb626c6759cdd891c6e87`, four cases, 11 cached snapshot-file hashes, and eight distinct random seeds. I reran 10/10 runner fake tests and 15/15 auditor corruption tests, with two subtests.
+
+**Blocking discrepancy:** the protocol requires an uncensored, **EOS-terminated** full transcript. At these reviewed commits, `run_model` defines `eos_seen` and `censored` by whether EOS occurs *anywhere* in the token sequence. The auditor repeats this rule. Thus a saved sequence with EOS followed by another token could pass baseline eligibility and contribute to the primary complete-transcript outcome. The model's normal greedy generator is expected to stop at EOS, but the source and saved-data gate must enforce the condition they claim. A fake EOS-then-extra-token case is absent. Preserve this HOLD, correct both modules, add a corruption/fake test, and obtain a separate rereview before inference.
+
+This review is source-only. Passing fake tests or preflight does not establish model behavior, and the earlier silver/teal result's random-control deviation remains unchanged.
