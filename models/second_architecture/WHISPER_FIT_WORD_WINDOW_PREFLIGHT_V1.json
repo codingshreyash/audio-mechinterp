@@ -1,0 +1,119 @@
+{
+  "asset_sha256": {
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d"
+  },
+  "capture_sites": [
+    "post_conv_pos",
+    "post_block0",
+    "post_block1",
+    "post_block2",
+    "post_block3",
+    "post_norm"
+  ],
+  "cases": [
+    {
+      "file_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e",
+      "frames": 91840,
+      "key": "kokoro_silver",
+      "pcm_sha256": "96bff0e029bd9f033b76e84258bc8ea75fe0f8c23bf965fbfe8f68a673f16386"
+    },
+    {
+      "file_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365",
+      "frames": 91840,
+      "key": "kokoro_teal",
+      "pcm_sha256": "84e07ded47cb6410b0840e7d502f10810018319b5d55b50fe22aaed890848006"
+    },
+    {
+      "file_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9",
+      "frames": 86876,
+      "key": "piper_silver",
+      "pcm_sha256": "79fc004685c31d196182f02deee103ec73b031917e88111338db853739e6cdc6"
+    },
+    {
+      "file_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9",
+      "frames": 86876,
+      "key": "piper_teal",
+      "pcm_sha256": "dde8bdd8bb927aab4c4cc60925ba9a518e59d0d18d3995e36bffb6b8f331dd85"
+    }
+  ],
+  "checkpoint_sha256": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+  "config_sha256": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+  "device": "cpu",
+  "generation": {
+    "do_sample": false,
+    "max_new_tokens": 128,
+    "num_beams": 1,
+    "output_scores": true,
+    "return_dict_in_generate": true
+  },
+  "intervention_sites": [
+    "post_conv_pos",
+    "post_block1",
+    "post_norm"
+  ],
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "model_id": "openai/whisper-tiny.en",
+  "model_revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+  "python_version": "3.12.13",
+  "schema": "whisper_fit_word_window_preflight_v1",
+  "script_sha256": "8309042c3ef95947efd75ce05719cf6d526c28d619f08f603291af9914ffa89a",
+  "script_source_git_commit": "4e8a07a432980bf3339a170413d2fa9404b2ee74",
+  "snapshot_files_sha256": {
+    "added_tokens.json": "560be47bea388757f8d4cc185c5d82067426cbb6361e38016dd90ddc01ab203a",
+    "config.json": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "model.safetensors": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+    "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d",
+    "vocab.json": "3ba3c3109ff33976c4bd966589c11ee14fcaa1f4c9e5e154c2ed7f99d80709e7"
+  },
+  "soundfile_version": "0.14.0",
+  "source_hashes": {
+    "transformers.models.whisper.feature_extraction_whisper": "34a6d8aad9f7f274819622929e4ff74be2a136fcd61f80ec968f9e05c45c7f3a",
+    "transformers.models.whisper.generation_whisper": "f1977185be107a5a184b88f30c56a3bfaef75a34908bc52bbbf596e13186476f",
+    "transformers.models.whisper.modeling_whisper": "a9065b02eae60ad0b47ec2e72379971d974238ee412842dd0f8ad58766f48e5d",
+    "transformers.models.whisper.processing_whisper": "940603025729c0ed1f0ddfb33be37320286476c20ed5482abd806e639a0230d6",
+    "transformers.models.whisper.tokenization_whisper": "c89b322886fa13312b2ec948338a4001b66b6a33614575e96d1a692df211aaf2"
+  },
+  "threads": 4,
+  "torch_version": "2.15.0",
+  "transformers_version": "5.12.1",
+  "windows": {
+    "kokoro": {
+      "prefix_window": [
+        10,
+        93
+      ],
+      "slot_samples": [
+        33920,
+        57120
+      ],
+      "word_window": [
+        101,
+        184
+      ]
+    },
+    "piper": {
+      "prefix_window": [
+        10,
+        81
+      ],
+      "slot_samples": [
+        30527,
+        49847
+      ],
+      "word_window": [
+        90,
+        161
+      ]
+    }
+  }
+}
