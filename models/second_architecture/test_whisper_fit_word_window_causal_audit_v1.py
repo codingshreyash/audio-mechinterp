@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -222,6 +223,17 @@ class WhisperSavedAuditTests(unittest.TestCase):
     def test_trusted_fit_pcm_pair(self) -> None:
         cases = audit.trusted_inputs()
         self.assertEqual(set(cases), self.cases.keys())
+
+    def test_runner_commit_must_contain_exact_source_bytes(self) -> None:
+        relative = audit.RUNNER.relative_to(audit.ROOT).as_posix()
+        commit = subprocess.check_output(
+            ["git", "log", "-1", "--format=%H", "--", relative],
+            cwd=audit.ROOT, text=True).strip()
+        valid = {"script_source_git_commit": commit,
+                 "script_sha256": audit.sha(audit.RUNNER)}
+        audit.check_runner_commit(valid)
+        with self.assertRaisesRegex(ValueError, "source commit"):
+            audit.check_runner_commit({**valid, "script_source_git_commit": "0" * 40})
 
 
 if __name__ == "__main__":

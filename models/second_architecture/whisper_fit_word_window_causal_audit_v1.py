@@ -12,6 +12,7 @@ import hashlib
 import json
 import math
 import re
+import subprocess
 import wave
 from collections import Counter
 from pathlib import Path
@@ -168,6 +169,7 @@ def audit_preflight(row: dict[str, Any], expected_path: Path,
             and receipt.get("device") == "cpu" and receipt.get("threads") == 4,
             "preflight model or execution identity changed")
     require(sha(RUNNER) == receipt.get("script_sha256"), "runner bytes differ from preflight")
+    check_runner_commit(receipt)
     require(receipt.get("generation") == {"do_sample": False, "num_beams": 1,
             "max_new_tokens": 128, "output_scores": True,
             "return_dict_in_generate": True}
@@ -211,6 +213,18 @@ def audit_preflight(row: dict[str, Any], expected_path: Path,
                 and entry.get("slot_samples") == list(SLOTS[engine]),
                 f"preflight window changed: {engine}")
     return receipt
+
+
+def check_runner_commit(receipt: dict[str, Any]) -> None:
+    commit = receipt.get("script_source_git_commit")
+    require(isinstance(commit, str) and re.fullmatch(r"[0-9a-f]{40}", commit) is not None,
+            "runner source commit ID invalid")
+    relative = RUNNER.relative_to(ROOT).as_posix()
+    shown = subprocess.run(["git", "show", f"{commit}:{relative}"], cwd=ROOT,
+                           capture_output=True, check=False)
+    require(shown.returncode == 0
+            and hashlib.sha256(shown.stdout).hexdigest() == receipt.get("script_sha256"),
+            "runner source commit does not contain pinned runner bytes")
 
 
 def checked_result(value: dict[str, Any], tokenizer: Any | None = None) -> dict[str, Any]:
