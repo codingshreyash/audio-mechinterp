@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -83,6 +84,10 @@ class FourEntryGateTests(unittest.TestCase):
         self.assertIn(gate.AUDITOR_GO, rereview)
         self.assertIn(gate.sha(gate.AUDITOR), rereview)
         self.assertIn(gate.sha(gate.AUDITOR_TESTS), rereview)
+        self.assertIn("Decision: HOLD for the combined runner",
+                      gate.SOURCE_REVIEW_HOLD_V1.read_text())
+        self.assertIn("Decision: HOLD for the combined runner",
+                      gate.SOURCE_REVIEW_HOLD_V2.read_text())
 
     def test_missing_external_reviews_hold_without_reservation(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -260,11 +265,34 @@ class FourEntryGateTests(unittest.TestCase):
                 })
                 (capture / "worker_stdout.txt").write_bytes(b"")
                 (capture / "worker_stderr.txt").write_bytes(b"")
+                gate._put(output / "meta.json", {"context": context})
+                (output / "progress.jsonl").write_text(
+                    json.dumps({"phase": "all_model_work_complete",
+                                "counts": gate.runner.COUNTS,
+                                "elapsed_seconds": 5}) + "\n" +
+                    json.dumps({"phase": "details_saved",
+                                "counts": gate.runner.COUNTS,
+                                "elapsed_seconds": 6}) + "\n")
+                gate._put(output / "model_layout.json", {"arm": "fp32", "valid": True})
+                detail_bytes = b"CPU-only placeholder; semantic audit is mocked"
+                detail_sha = hashlib.sha256(detail_bytes).hexdigest()
+                detail = output / "blobs" / f"{detail_sha}.pt"
+                detail.parent.mkdir()
+                detail.write_bytes(detail_bytes)
+                before_result = gate._tree_bytes(output)
                 gate._put(output / "result.json", {
                     "status": "completed_fp32_nonbeaver_local_linearity_raw_only",
                     "context": context, "attempt_id": attempt,
                     "freeze_sha256": reservation["freeze_sha256"],
-                    "actual_counts": gate.runner.COUNTS, "elapsed_seconds": 6,
+                    "actual_counts": gate.runner.COUNTS,
+                    "planned_counts": gate.runner.COUNTS, "elapsed_seconds": 6,
+                    "meta_sha256": gate.sha(output / "meta.json"),
+                    "progress_sha256": gate.sha(output / "progress.jsonl"),
+                    "model_layout_sha256": gate.sha(output / "model_layout.json"),
+                    "details_sha256": detail_sha,
+                    "details_path": f"blobs/{detail_sha}.pt",
+                    "details_bytes": len(detail_bytes),
+                    "output_bytes_before_result": before_result,
                 })
                 result_sha = gate.sha(output / "result.json")
                 gate._put(output / "audit.json", {
@@ -275,6 +303,8 @@ class FourEntryGateTests(unittest.TestCase):
                     "preflight_receipt_sha256": gate.sha(gate.CPU_PREFLIGHT),
                     "protocol_v5_sha256": gate.PROTOCOL_SHA,
                     "worker_invalidity_disagreement": False,
+                    "meta_sha256": gate.sha(output / "meta.json"),
+                    "details_sha256": detail_sha,
                 })
                 finish_path = capture / "launch_finish.json"
                 saved = gate._json(finish_path)
@@ -290,10 +320,133 @@ class FourEntryGateTests(unittest.TestCase):
                     gate._tree_bytes(capture) - finish_path.stat().st_size +
                     gate._tree_bytes(output))
                 finish_path.write_text(json.dumps(saved))
-                self.assertEqual(gate._check_prior_entries(1, reservation), 8)
+                with mock.patch.object(gate, "_rerun_saved_prior_audit") as rerun:
+                    self.assertEqual(gate._check_prior_entries(1, reservation), 8)
+                    rerun.assert_called_once_with(output)
+                    for missing in (output / "meta.json", output / "progress.jsonl",
+                                    detail):
+                        original = missing.read_bytes()
+                        missing.unlink()
+                        with self.subTest(missing=missing.name), \
+                                self.assertRaisesRegex(ValueError, "evidence|sidecar"):
+                            gate._check_prior_entries(1, reservation)
+                        missing.write_bytes(original)
+                    sparse_paths = [output / "meta.json", output / "progress.jsonl",
+                                    output / "model_layout.json", detail]
+                    held = {path: path.read_bytes() for path in sparse_paths}
+                    for path in sparse_paths:
+                        path.unlink()
+                    with self.assertRaisesRegex(ValueError, "evidence"):
+                        gate._check_prior_entries(1, reservation)
+                    for path, content in held.items():
+                        path.write_bytes(content)
                 (capture / "worker_claim.json").unlink()
                 with self.assertRaisesRegex(ValueError, "claim absent"):
                     gate._check_prior_entries(1, reservation)
+
+    def test_saved_cpu_revalidation_recomputes_tensor_audit(self):
+        import torch
+        import voxtral_fp32_nonbeaver_linearity_audit_v1 as auditor
+        from test_voxtral_fp32_nonbeaver_linearity_audit_v1 import small_payload
+
+        payload, spec = small_payload()
+        context = payload["context"]
+        engine = context["engine"]
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            meta = {
+                "schema": "voxtral_fp32_nonbeaver_linearity_meta_v1",
+                "status": "started_source_only_reviewed_context",
+                "scope": auditor.SCOPE, "context": context,
+                "planned_counts": gate.runner.COUNTS,
+                "attempt_id": "20261118T170000000001Z_00",
+                "freeze_sha256": "f" * 64,
+                "patched_schedule": [list(row) for row in auditor.patched_schedule(engine)],
+                "runner_sha256": gate.sha(Path(gate.runner.__file__).resolve()),
+                "source_dependencies": {key: gate.sha(path) for key, path in
+                                        gate.runner.SOURCE_DEPENDENCIES.items()},
+                "selection_sha256": auditor.SELECTION_SHA256,
+                "masks_sha256": auditor.MASKS_SHA256,
+                "basis_sha256": auditor.BASIS_SHA256,
+                "wav_sha256": {word: auditor.WAV_SHA256[(engine, word)]
+                               for word in (context["recipient"], context["donor"])},
+                "device": "mps", "fresh_v2_corpus_opened": False,
+                "model_seconds_cap": gate.runner.MODEL_SECONDS,
+                "max_mps_driver_bytes": gate.runner.MAX_DRIVER_BYTES,
+                "max_worker_bytes": gate.runner.MAX_WORKER_BYTES,
+                "max_output_bytes": gate.MAX_OUTPUT_BYTES,
+                "rows": spec.rows,
+            }
+            report = auditor.audit_payload(payload, spec)
+            meta["batch_sha256"] = report["batch_sha256"]
+            protocols = {
+                "protocol_v2_sha256": auditor.PROTOCOL_V2_SHA256,
+                "protocol_v3_sha256": auditor.PROTOCOL_V3_SHA256,
+                "protocol_v4_sha256": auditor.PROTOCOL_V4_SHA256,
+                "protocol_v5_sha256": gate.PROTOCOL_SHA,
+            }
+            meta.update(protocols)
+            meta["preflight_receipt_sha256"] = gate.sha(gate.CPU_PREFLIGHT)
+            gate._put(output / "meta.json", meta)
+            (output / "progress.jsonl").write_text(
+                json.dumps({"phase": "all_model_work_complete",
+                            "counts": gate.runner.COUNTS, "elapsed_seconds": 5}) + "\n" +
+                json.dumps({"phase": "details_saved",
+                            "counts": gate.runner.COUNTS, "elapsed_seconds": 6}) + "\n")
+            gate._put(output / "model_layout.json", {"arm": "fp32", "valid": True})
+            raw = output / "details.pt"
+            torch.save(payload, raw)
+            detail_sha = gate.sha(raw)
+            detail = output / "blobs" / f"{detail_sha}.pt"
+            detail.parent.mkdir()
+            raw.rename(detail)
+            before_result = gate._tree_bytes(output)
+            result = {
+                "status": auditor.RESULT_STATUS, "scope": auditor.SCOPE,
+                "context": context, "attempt_id": meta["attempt_id"],
+                "freeze_sha256": meta["freeze_sha256"],
+                "planned_counts": gate.runner.COUNTS,
+                "actual_counts": gate.runner.COUNTS,
+                "meta_sha256": gate.sha(output / "meta.json"),
+                "progress_sha256": gate.sha(output / "progress.jsonl"),
+                "model_layout_sha256": gate.sha(output / "model_layout.json"),
+                "details_sha256": detail_sha,
+                "details_path": f"blobs/{detail_sha}.pt",
+                "details_bytes": detail.stat().st_size,
+                "output_bytes_before_result": before_result,
+                "elapsed_seconds": 6, "peak_mps_driver_bytes": 0,
+                "preflight_receipt_sha256": gate.sha(gate.CPU_PREFLIGHT),
+                "invalidities": report["computed_invalidities"],
+            }
+            result.update(protocols)
+            gate._put(output / "result.json", result)
+            report.update({
+                "worker_invalidity_disagreement": False,
+                "result_sha256": gate.sha(output / "result.json"),
+                "meta_sha256": gate.sha(output / "meta.json"),
+                "details_sha256": detail_sha,
+                "preflight_receipt_sha256": gate.sha(gate.CPU_PREFLIGHT),
+                "attempt_id": meta["attempt_id"],
+                "freeze_sha256": meta["freeze_sha256"],
+                "actual_attempt_bytes_before_audit": gate._tree_bytes(output),
+                "elapsed_seconds": 6, "peak_mps_driver_bytes": 0,
+            })
+            report.update(protocols)
+            gate._put(output / "audit.json", report)
+            with mock.patch.object(auditor, "frozen_rows", return_value=spec.rows), \
+                    mock.patch.object(auditor, "production_spec", return_value=spec):
+                gate._verify_saved_prior_cpu(output)
+                changed = gate._json(output / "audit.json")
+                changed["sites"]["encoder31"]["cells"][0]["valid"] = False
+                (output / "audit.json").write_text(json.dumps(changed))
+                with self.assertRaisesRegex(ValueError, "recomputation"):
+                    gate._verify_saved_prior_cpu(output)
+
+    def test_prior_cpu_revalidation_has_hard_timeout(self):
+        with mock.patch.object(gate.subprocess, "run",
+                               side_effect=subprocess.TimeoutExpired("auditor", 120)):
+            with self.assertRaisesRegex(ValueError, "120 seconds"):
+                gate._rerun_saved_prior_audit(Path("/tmp/unused"))
 
     def test_prior_output_overshoot_blocks_next_entry(self):
         with tempfile.TemporaryDirectory() as temp:

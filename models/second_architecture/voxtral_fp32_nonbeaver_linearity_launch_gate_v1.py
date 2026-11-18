@@ -39,6 +39,8 @@ CPU_PREFLIGHT = HERE / "VOXTRAL_FP32_NONBEAVER_CPU_PREFLIGHT_V5.json"
 BYTE_BUDGET = HERE / "VOXTRAL_FP32_NONBEAVER_BYTE_BUDGET_V1.json"
 BYTE_BUDGET_PROBE = HERE / "voxtral_fp32_nonbeaver_byte_budget_probe_v5.py"
 SOURCE_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_INDEPENDENT_SOURCE_REVIEW_V1.md"
+SOURCE_REVIEW_HOLD_V1 = HERE / "VOXTRAL_FP32_NONBEAVER_INDEPENDENT_SOURCE_REVIEW_HOLD_V1.md"
+SOURCE_REVIEW_HOLD_V2 = HERE / "VOXTRAL_FP32_NONBEAVER_INDEPENDENT_SOURCE_REREVIEW_HOLD_V2.md"
 AUDITOR_REVIEW_HOLD = HERE / "VOXTRAL_FP32_NONBEAVER_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md"
 AUDITOR_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_AUDITOR_INDEPENDENT_SOURCE_REREVIEW_V2.md"
 FREEZE = HERE / "VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_V1.json"
@@ -46,6 +48,8 @@ FREEZE_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_INDEPENDENT_REVIE
 PREVIOUS_MANIFEST = HERE / "VOXTRAL_OLD_FIT_GRAD_LEAF_FACTORIAL_ATTEMPT_MANIFEST_V1.json"
 PREVIOUS_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_LEAF_FACTORIAL_RESULT_INDEPENDENT_REVIEW_V1.md"
 PROTOCOL_SHA = "99de95003190de6b5fb55c5ba8bed446dfea7cdd8cf53c0569d304bcb942b49b"
+AUDITOR_SHA = "70a1ac3c4e4da92bb1fa1034bd866195024dcd423ea35a2386e233bce5dca8e2"
+AUDITOR_TESTS_SHA = "3ffaa2224ca0c29ed5a49a985cf58b230aaaca9faa539214fa26548ca978c15a"
 CONCEPTUAL_REVIEW_GO = ("Decision: GO for V5 non-beaver FP32 local-linearity "
                         "protocol design only; model launch HOLD until source "
                         "and external freeze reviews.")
@@ -95,6 +99,8 @@ BOUND = {
     "byte_budget_sha256": BYTE_BUDGET,
     "byte_budget_probe_sha256": BYTE_BUDGET_PROBE,
     "source_review_sha256": SOURCE_REVIEW,
+    "source_review_hold_v1_sha256": SOURCE_REVIEW_HOLD_V1,
+    "source_review_hold_v2_sha256": SOURCE_REVIEW_HOLD_V2,
     "auditor_review_hold_sha256": AUDITOR_REVIEW_HOLD,
     "auditor_review_sha256": AUDITOR_REVIEW,
     "selection_sha256": HERE / "VOXTRAL_FIT_V2_SELECTION.json",
@@ -267,13 +273,23 @@ def verify_freeze() -> tuple[dict, dict]:
     if (SOURCE_GO not in SOURCE_REVIEW.read_text() or
             AUDITOR_GO not in AUDITOR_REVIEW.read_text()):
         raise ValueError("Independent source review absent")
+    if ("Decision: HOLD for the combined runner" not in
+            SOURCE_REVIEW_HOLD_V1.read_text() or
+            "Decision: HOLD for the combined runner" not in
+            SOURCE_REVIEW_HOLD_V2.read_text()):
+        raise ValueError("Prior combined source HOLD reviews absent")
     source_commit = old_gate.first_add(REPO, SOURCE_REVIEW)
+    source_hold_v1_commit = old_gate.first_add(REPO, SOURCE_REVIEW_HOLD_V1)
+    source_hold_v2_commit = old_gate.first_add(REPO, SOURCE_REVIEW_HOLD_V2)
+    old_gate.ancestor(REPO, source_hold_v1_commit, source_hold_v2_commit)
+    old_gate.ancestor(REPO, source_hold_v2_commit, source_commit)
     auditor_hold_commit = old_gate.first_add(REPO, AUDITOR_REVIEW_HOLD)
     auditor_commit = old_gate.first_add(REPO, AUDITOR_REVIEW)
     if ("Decision: HOLD for V5 CPU saved-data auditor source. No model launch."
             not in AUDITOR_REVIEW_HOLD.read_text() or
-            sha(AUDITOR) not in AUDITOR_REVIEW.read_text() or
-            sha(AUDITOR_TESTS) not in AUDITOR_REVIEW.read_text()):
+            sha(AUDITOR) != AUDITOR_SHA or sha(AUDITOR_TESTS) != AUDITOR_TESTS_SHA or
+            AUDITOR_SHA not in AUDITOR_REVIEW.read_text() or
+            AUDITOR_TESTS_SHA not in AUDITOR_REVIEW.read_text()):
         raise ValueError("V1 auditor HOLD or V2 auditor rereview binding differs")
     old_gate.ancestor(REPO, auditor_hold_commit, auditor_commit)
     if source_commit == auditor_commit:
@@ -358,6 +374,172 @@ def _reservation(freeze: dict, upstream: dict) -> dict:
                 old_gate.utc(freeze["reviewed_utc"])):
         raise ValueError("Four-entry campaign reservation differs")
     return reservation
+
+
+def _success_files(output: Path, result: dict, audit: dict) -> None:
+    """Require the exact complete worker and auditor file set and hash links."""
+    detail_sha = result.get("details_sha256")
+    detail_rel = result.get("details_path")
+    if (not isinstance(detail_sha, str) or HEX64.fullmatch(detail_sha) is None or
+            detail_rel != f"blobs/{detail_sha}.pt" or
+            not output.is_dir() or output.is_symlink()):
+        raise ValueError("Prior success content-addressed sidecar absent")
+    names = {"meta.json", "progress.jsonl", "model_layout.json",
+             "result.json", "audit.json", "blobs"}
+    if {path.name for path in output.iterdir()} != names:
+        raise ValueError("Prior success saved evidence file set incomplete")
+    blobs = output / "blobs"
+    if (not blobs.is_dir() or blobs.is_symlink() or
+            {path.name for path in blobs.iterdir()} != {f"{detail_sha}.pt"}):
+        raise ValueError("Prior success tensor sidecar missing or extra")
+    files = [output / name for name in names if name != "blobs"]
+    files.append(blobs / f"{detail_sha}.pt")
+    if any(not path.is_file() or path.is_symlink() or
+           path.stat().st_nlink != 1 for path in files):
+        raise ValueError("Prior success saved evidence is not regular and exclusive")
+    detail = blobs / f"{detail_sha}.pt"
+    if (result.get("details_bytes") != detail.stat().st_size or
+            detail.stat().st_size >= runner.MAX_WORKER_BYTES or
+            sha(detail) != detail_sha or
+            result.get("meta_sha256") != sha(output / "meta.json") or
+            result.get("progress_sha256") != sha(output / "progress.jsonl") or
+            result.get("model_layout_sha256") != sha(output / "model_layout.json") or
+            audit.get("meta_sha256") != sha(output / "meta.json") or
+            audit.get("details_sha256") != detail_sha):
+        raise ValueError("Prior success saved evidence hash or size differs")
+    before_result = sum(path.stat().st_size for path in files
+                        if path.name not in ("result.json", "audit.json"))
+    before_audit = before_result + (output / "result.json").stat().st_size
+    if (result.get("output_bytes_before_result") != before_result or
+            before_audit >= runner.MAX_WORKER_BYTES):
+        raise ValueError("Prior success pre-result byte count differs")
+    progress = (output / "progress.jsonl").read_text().splitlines()
+    if not progress:
+        raise ValueError("Prior success progress is empty")
+    records = [json.loads(line) for line in progress]
+    if (records[-1].get("phase") != "details_saved" or
+            records[-1].get("counts") != runner.COUNTS or
+            not any(row.get("phase") == "all_model_work_complete" and
+                    row.get("counts") == runner.COUNTS for row in records)):
+        raise ValueError("Prior success fixed model-work progress differs")
+    times = [row.get("elapsed_seconds") for row in records]
+    if any(type(value) not in (int, float) or not math.isfinite(value) or
+           value < 0 or value >= runner.MODEL_SECONDS for value in times) or \
+            times != sorted(times):
+        raise ValueError("Prior success progress time order differs")
+
+
+def _verify_saved_prior_cpu(output: Path) -> None:
+    """Recompute the pinned auditor's saved-data report without writing files."""
+    import torch
+    import voxtral_fp32_nonbeaver_linearity_audit_v1 as auditor
+
+    if (sha(AUDITOR) != AUDITOR_SHA or
+            sha(AUDITOR_TESTS) != AUDITOR_TESTS_SHA):
+        raise ValueError("Pinned CPU auditor source differs")
+    result = _json(output / "result.json")
+    audit = _json(output / "audit.json")
+    meta = _json(output / "meta.json")
+    layout = _json(output / "model_layout.json")
+    _success_files(output, result, audit)
+    context = result["context"]
+    engine = context["engine"]
+    elapsed = result.get("elapsed_seconds")
+    peak = result.get("peak_mps_driver_bytes")
+    if (context.get("index") not in range(4) or
+            context.get("label") != runner.CONTEXT_LABELS[context["index"]] or
+            result.get("status") != auditor.RESULT_STATUS or
+            result.get("scope") != auditor.SCOPE or
+            meta.get("schema") != "voxtral_fp32_nonbeaver_linearity_meta_v1" or
+            meta.get("status") != "started_source_only_reviewed_context" or
+            meta.get("scope") != auditor.SCOPE or
+            meta.get("context") != context or
+            result.get("planned_counts") != auditor.COUNTS or
+            result.get("actual_counts") != auditor.COUNTS or
+            meta.get("planned_counts") != auditor.COUNTS or
+            meta.get("attempt_id") != result.get("attempt_id") or
+            meta.get("freeze_sha256") != result.get("freeze_sha256") or
+            meta.get("patched_schedule") !=
+                [list(row) for row in auditor.patched_schedule(engine)] or
+            meta.get("runner_sha256") != sha(Path(runner.__file__).resolve()) or
+            meta.get("source_dependencies") !=
+                {key: sha(path) for key, path in runner.SOURCE_DEPENDENCIES.items()} or
+            meta.get("selection_sha256") != auditor.SELECTION_SHA256 or
+            meta.get("masks_sha256") != auditor.MASKS_SHA256 or
+            meta.get("basis_sha256") != auditor.BASIS_SHA256 or
+            meta.get("wav_sha256") !=
+                {word: auditor.WAV_SHA256[(engine, word)]
+                 for word in (context["recipient"], context["donor"])} or
+            layout.get("valid") is not True or layout.get("arm") != "fp32" or
+            meta.get("device") != "mps" or
+            meta.get("fresh_v2_corpus_opened") is not False or
+            meta.get("model_seconds_cap") != runner.MODEL_SECONDS or
+            meta.get("max_mps_driver_bytes") != runner.MAX_DRIVER_BYTES or
+            meta.get("max_worker_bytes") != runner.MAX_WORKER_BYTES or
+            meta.get("max_output_bytes") != MAX_OUTPUT_BYTES or
+            type(elapsed) not in (int, float) or not math.isfinite(elapsed) or
+            elapsed < 0 or elapsed >= runner.MODEL_SECONDS or
+            type(peak) is not int or peak < 0 or peak >= runner.MAX_DRIVER_BYTES or
+            sha(auditor.SELECTION_PATH) != auditor.SELECTION_SHA256 or
+            sha(auditor.MASKS_PATH) != auditor.MASKS_SHA256 or
+            sha(auditor.PREFLIGHT_PATH) != auditor.PREFLIGHT_SHA256 or
+            sha(auditor.BYTE_BUDGET_PATH) != auditor.BYTE_BUDGET_SHA256):
+        raise ValueError("Prior success saved result/meta/layout schema differs")
+    for key, expected in (("protocol_v2_sha256", auditor.PROTOCOL_V2_SHA256),
+                          ("protocol_v3_sha256", auditor.PROTOCOL_V3_SHA256),
+                          ("protocol_v4_sha256", auditor.PROTOCOL_V4_SHA256),
+                          ("protocol_v5_sha256", PROTOCOL_SHA)):
+        if result.get(key) != expected or meta.get(key) != expected:
+            raise ValueError("Prior success protocol linkage differs")
+    if (result.get("preflight_receipt_sha256") != sha(CPU_PREFLIGHT) or
+            meta.get("preflight_receipt_sha256") != sha(CPU_PREFLIGHT)):
+        raise ValueError("Prior success preflight linkage differs")
+    rows = auditor.frozen_rows(engine)
+    spec = auditor.production_spec(engine, rows)
+    detail = output / result["details_path"]
+    payload = torch.load(detail, map_location="cpu", weights_only=True, mmap=True)
+    recomputed = auditor.audit_payload(payload, spec)
+    if (recomputed.get("context") != context or
+            meta.get("rows") != rows or
+            meta.get("batch_sha256") != recomputed.get("batch_sha256") or
+            auditor._invalidity_set(result.get("invalidities", [])) !=
+                auditor._invalidity_set(recomputed.get("computed_invalidities", []))):
+        raise ValueError("Prior success saved tensor semantics differ")
+    recomputed.update({
+        "worker_invalidity_disagreement": False,
+        "result_sha256": sha(output / "result.json"),
+        "meta_sha256": sha(output / "meta.json"),
+        "details_sha256": result["details_sha256"],
+        "preflight_receipt_sha256": sha(CPU_PREFLIGHT),
+        "protocol_v2_sha256": auditor.PROTOCOL_V2_SHA256,
+        "protocol_v3_sha256": auditor.PROTOCOL_V3_SHA256,
+        "protocol_v4_sha256": auditor.PROTOCOL_V4_SHA256,
+        "protocol_v5_sha256": PROTOCOL_SHA,
+        "attempt_id": result["attempt_id"],
+        "freeze_sha256": result["freeze_sha256"],
+        "actual_attempt_bytes_before_audit":
+            _tree_bytes(output) - (output / "audit.json").stat().st_size,
+        "elapsed_seconds": result["elapsed_seconds"],
+        "peak_mps_driver_bytes": result["peak_mps_driver_bytes"],
+    })
+    if audit != recomputed:
+        raise ValueError("Prior success saved CPU audit differs on recomputation")
+
+
+def _rerun_saved_prior_audit(output: Path) -> None:
+    """Hard 120-second, read-only, independent-process CPU revalidation."""
+    command = [sys.executable, str(Path(__file__).resolve()),
+               "--verify-saved-prior", str(output)]
+    try:
+        checked = subprocess.run(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            timeout=AUDIT_SECONDS, check=False,
+            env={**os.environ, "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"})
+    except subprocess.TimeoutExpired as exc:
+        raise ValueError("Prior success CPU revalidation exceeded 120 seconds") from exc
+    if checked.returncode != 0:
+        raise ValueError("Prior success CPU revalidation rejected saved evidence: " +
+                         checked.stderr.decode(errors="replace")[-1000:])
 
 
 def reserve_all(campaign_id: str) -> dict:
@@ -502,6 +684,8 @@ def _check_prior_entries(index: int, reservation: dict) -> float:
                     not math.isfinite(result_elapsed) or
                     result_elapsed < 0 or result_elapsed > elapsed):
                 raise ValueError("Earlier worker elapsed time differs")
+            _success_files(output, result, audit)
+            _rerun_saved_prior_audit(output)
         else:
             if (not isinstance(finish.get("failure_reason"), str) or
                     not finish["failure_reason"]):
@@ -801,8 +985,17 @@ def main() -> None:
     mode.add_argument("--check-freeze", action="store_true")
     mode.add_argument("--reserve-all", action="store_true")
     mode.add_argument("--run-context", type=int)
+    mode.add_argument("--verify-saved-prior", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--campaign-id")
     args = parser.parse_args()
+    if args.verify_saved_prior is not None:
+        if args.campaign_id is not None:
+            parser.error("--verify-saved-prior takes no campaign ID")
+        if not args.verify_saved_prior.resolve().is_relative_to(runner.RUNS.resolve()):
+            raise ValueError("Prior saved audit path lies outside frozen run root")
+        _verify_saved_prior_cpu(args.verify_saved_prior)
+        print(json.dumps({"status": "prior_saved_cpu_revalidated_read_only"}))
+        return
     if args.check_freeze:
         if args.campaign_id is not None:
             parser.error("--check-freeze takes no campaign ID")
