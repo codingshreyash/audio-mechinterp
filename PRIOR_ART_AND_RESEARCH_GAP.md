@@ -1,0 +1,20 @@
+# Audio interpretability: prior art and the testable gap
+
+**18 November 2026.** This note positions the current experiments against released primary work. It is a research map, not a novelty or security claim.
+
+| Released work | What it already does | Boundary relevant here |
+| --- | --- | --- |
+| [Anthropic Jacobian Lens](https://github.com/anthropics/jacobian-lens) | Fits a map from an intermediate text-model residual to a later workspace and tests readouts and interventions. | Its released text-model lens is not an end-to-end audio-time transport. |
+| [J++ Lens](https://github.com/safety-research/jpp_lens) | Clusters source activations during fitting, averages expert Jacobians, and learns signed weights. The deployed lens combines these into one **fixed** map per layer. It also uses an LRP backward graph and token filtering. | A context-routed map at inference would ask a different question, but must be compared with this stronger fixed-map method on a matched fit budget. A plain-gradient comparator is *J++-inspired*, not an exact reproduction of J++'s LRP. |
+| [Audio Jacobian Lens](https://github.com/kennethli319/audio-jacobian-lens) | Releases Whisper readouts, an [LFM speech-to-speech language-stream slice](https://github.com/kennethli319/audio-jacobian-lens/blob/main/docs/MLX_LFM.md), a [Chatterbox speech-code pilot](https://github.com/kennethli319/audio-jacobian-lens/blob/main/docs/CHATTERBOX.md), and an explorer. | Its LFM slice does not explain generated speech; its Chatterbox pilot lacks an acoustic-frame Jacobian and full waveform attribution. Audio lenses and an audio UI already exist. |
+| [Represented but Ignored](https://arxiv.org/abs/2608.19211) | Uses probes and hidden-state interventions to study prosodic underuse in four understanding-only audio language models, including Qwen2.5-Omni. | Its causal sweep assesses answer-token log odds, not complete free-generated answers; it does not fit a held-out reusable audio-time map or study generated speech. |
+| [Where Does the Sound Go?](https://arxiv.org/html/2609.05871v1) | Traces acoustic information through several encoders, projector, LM and readout; evaluates greedy ASR, caption and choice outputs. | It does not fit a reusable sample-level audio-time Jacobian or validate activation patches on complete generated answers. |
+| [BFCL Audio](https://proceedings.mlr.press/v306/mao26b.html) | Releases an audio tool-calling benchmark with 6.2K tasks and controlled accent, rate, disfluency and noise variations. | It can supply a later action endpoint, but a benchmark error alone does not identify a model mechanism or violated security property. |
+
+## Current position
+
+The local Qwen corpus-average rank-16 map beat simple baselines on FIT, then failed its prespecified one-shot development accuracy gate. A subsequent **FIT-only** diagnostic found that each input's local derivative predicts its own small edit better than the shared average, while the rank-16 target basis captures only about 22% of measured terminal-change energy. The local derivative is an in-sample oracle. This motivates, but does not validate, a reusable context-conditioned, higher-rank audio-time map. The [prospective v2 design](eval/audio_jlens/PROSPECTIVE_AUDIO_LENS_V2_DESIGN.md) is still a draft and requires fresh words and a frozen protocol.
+
+The separate Voxtral assay tests whether word-time audio states can restore and remove a complete lexical answer, with wrong-time, random, self and opposite-word controls. It is FIT-only, uses synthetic speech and constructed feature/state edits, and does not show an attacker-reachable vulnerability. Cross-model agreement on the shared source corpus would not be an independent stimulus replication.
+
+**Narrow research target:** predict a later decision from an incoming audio state with a reusable, time-resolved map; beat matched fixed-map and non-Jacobian controls on fresh inputs; then validate the predicted pathway by complete-answer causal interventions in distinct architectures. Only after that should a separately specified attacker-controlled audio input and consequential output channel be used for a security claim.
