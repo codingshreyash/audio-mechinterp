@@ -230,6 +230,9 @@ def checked_trace(row: Any, *, site: str, mode: str, alpha: float,
          all(type(v) is bool for v in checks.values()) and
          checks["selected_edit_bitwise"] == selected_edit_bitwise,
          "Trace runtime check fields or selected edit claim differ")
+    need(checks["projector_lm_input_bitwise"] and
+         checks["lm_input_lm0_pre_bitwise"],
+         "Trace recorded projector/LM-input/LM0 handoff failure")
     need(isinstance(row["lm_terminal"], dict) and
          set(row["lm_terminal"]) == {"lm0", "lm14", "lm29"},
          "LM terminal stage set differs")
@@ -243,6 +246,8 @@ def checked_trace(row: Any, *, site: str, mode: str, alpha: float,
         need(isinstance(row[name], str) and len(row[name]) == 64 and
              all(char in "0123456789abcdef" for char in row[name]),
              f"{name} digest syntax invalid")
+    need(row["lm_input_sha256"] == row["lm0_pre_sha256"],
+         "LM-input/LM0 pre-input digest claims differ")
     metrics = row["edit_metrics"]
     need(isinstance(metrics, dict) and set(metrics) == TRACE_METRICS and
          all(type(v) in (int, float) and math.isfinite(v) for v in metrics.values()),
@@ -268,9 +273,8 @@ def checked_trace(row: Any, *, site: str, mode: str, alpha: float,
              row["lm_input_sha256"] == tensor_sha(lm_input) and
              row["lm0_pre_sha256"] == tensor_sha(lm_input),
              "Full retained source/projector/LM hash differs")
-        need(checks["projector_lm_input_bitwise"] ==
-             exact_equal(lm_input[0, positions], projector),
-             "Projector/LM handoff runtime claim differs")
+        need(exact_equal(lm_input[0, positions], projector),
+             "Retained projector/LM-input handoff differs")
         if site == "projector":
             need(exact_equal(source_post, projector),
                  "Projector posthook differs from returned source")
@@ -670,10 +674,11 @@ def audit_payload(payload: Any, spec: AuditSpec) -> dict[str, Any]:
             "sites": site_reports,
             "interpretation_limit":
                 "One already-inspected FIT pair, saved tensors only. Edited full-source, "
-                "projector, LM-input and LM0-pre hashes are claims where full tensors "
-                "were not retained. This audit does not attest model execution, a "
-                "reusable lens, an audio security finding, or time-localized acoustic "
-                "causality."}
+                "projector and LM-input hashes and handoff flags are runner claims "
+                "where full tensors were not retained. The LM0-pre digest remains a "
+                "claim even when matched to retained full LM input. This audit does "
+                "not attest model execution, a reusable lens, an audio security "
+                "finding, or time-localized acoustic causality."}
 
 
 def exact_equal(a: torch.Tensor, b: torch.Tensor) -> bool:

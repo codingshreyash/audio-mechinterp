@@ -271,6 +271,32 @@ class ArithmeticTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "finiteness"):
             audit.audit_payload(payload, spec)
 
+    def test_false_handoff_flags_rejected_on_full_and_edited_traces(self) -> None:
+        for ordinal, key in (
+            (0, "lm_input_lm0_pre_bitwise"),
+            (1, "projector_lm_input_bitwise"),
+            (1, "lm_input_lm0_pre_bitwise"),
+        ):
+            with self.subTest(ordinal=ordinal, key=key):
+                payload, spec = small_payload()
+                payload["forwards"][ordinal]["trace"]["runtime_checks"][key] = False
+                with self.assertRaisesRegex(ValueError, "handoff failure"):
+                    audit.audit_payload(payload, spec)
+
+    def test_edited_lm_input_lm0_digest_claims_must_agree(self) -> None:
+        payload, spec = small_payload()
+        payload["forwards"][1]["trace"]["lm0_pre_sha256"] = "f" * 64
+        with self.assertRaisesRegex(ValueError, "digest claims differ"):
+            audit.audit_payload(payload, spec)
+
+    def test_full_projector_handoff_recomputed_from_retained_tensors(self) -> None:
+        payload, spec = small_payload()
+        zero = payload["forwards"][0]["trace"]
+        zero["projector_full"][1, 1] = 1.0
+        zero["projector_sha256"] = audit.tensor_sha(zero["projector_full"])
+        with self.assertRaisesRegex(ValueError, "Retained projector/LM-input handoff"):
+            audit.audit_payload(payload, spec)
+
     def test_clean_zero_parity_failure_keeps_planned_cells(self) -> None:
         payload, spec = small_payload()
         trace = payload["forwards"][0]["trace"]
