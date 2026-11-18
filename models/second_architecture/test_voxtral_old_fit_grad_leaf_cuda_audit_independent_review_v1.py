@@ -1,7 +1,7 @@
-"""Independent negative reproductions for the saved-data auditor source review.
+"""Independent negative reproductions for the corrected saved-data auditor.
 
-These tests characterize what the current auditor accepts. They are not CUDA
-evidence and do not assert that any model forward took place.
+These compact synthetic tests require rejection of the prior accepted forgeries.
+They are not CUDA evidence and do not assert that a model forward took place.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ import unittest
 from pathlib import Path
 
 import voxtral_old_fit_grad_leaf_cuda_audit_v1 as audit
-from test_voxtral_old_fit_grad_leaf_cuda_audit_v1 import SPEC, write_case
+from test_voxtral_old_fit_grad_leaf_cuda_audit_v1 import SPEC, synthetic_pins, write_case
 
 
 def _write_json(path: Path, value: dict) -> None:
@@ -23,13 +23,14 @@ class IdentityNegativeReproductions(unittest.TestCase):
     def _saved_case(self, root: Path) -> tuple[Path, dict]:
         path, batch, bf16, fp32 = write_case(root, 0)
         kwargs = {"spec": SPEC, "expected_batch_hashes": (batch, batch),
-                  "expected_bf16": bf16, "expected_fp32": fp32}
+                  "expected_bf16": bf16, "expected_fp32": fp32,
+                  "pins": synthetic_pins(root)}
         return path, kwargs
 
     def _audit(self, path: Path, kwargs: dict) -> dict:
         return audit.audit_one_case(path, 0, path.parent / "review_audit.json", **kwargs)
 
-    def test_forged_runner_checkpoint_environment_hashes_still_audit(self):
+    def test_forged_runner_checkpoint_environment_hashes_are_invalid(self):
         with tempfile.TemporaryDirectory() as temp:
             path, kwargs = self._saved_case(Path(temp))
             meta_path, result_path = path / "meta.json", path / "result.json"
@@ -41,10 +42,10 @@ class IdentityNegativeReproductions(unittest.TestCase):
             result["meta_sha256"] = audit.sha(meta_path)
             _write_json(result_path, result)
             report = self._audit(path, kwargs)
-            self.assertEqual(report["status"], "audited_saved_data_only")
-            self.assertEqual({x["label"] for x in report["cells"].values()}, {"same_pattern"})
+            self.assertEqual(report["status"], "invalid")
+            self.assertEqual({x["label"] for x in report["cells"].values()}, {"invalid"})
 
-    def test_unsupported_model_layout_still_audits(self):
+    def test_unsupported_model_layout_is_invalid(self):
         with tempfile.TemporaryDirectory() as temp:
             path, kwargs = self._saved_case(Path(temp))
             layout_path, result_path = path / "model_layout.json", path / "result.json"
@@ -55,7 +56,29 @@ class IdentityNegativeReproductions(unittest.TestCase):
             result["model_layout_sha256"] = audit.sha(layout_path)
             _write_json(result_path, result)
             report = self._audit(path, kwargs)
-            self.assertEqual(report["status"], "audited_saved_data_only")
+            self.assertEqual(report["status"], "invalid")
+
+    def test_receipt_bytes_changed_after_trusted_pin_are_invalid(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path, kwargs = self._saved_case(root)
+            receipt = root / "synthetic_environment_receipt.json"
+            receipt.write_bytes(receipt.read_bytes() + b" ")
+            report = self._audit(path, kwargs)
+            self.assertEqual(report["status"], "invalid")
+            self.assertIn("receipt hash", report["error"])
+
+    def test_runtime_metadata_disagrees_with_hashed_receipt_is_invalid(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path, kwargs = self._saved_case(root)
+            result_path = path / "result.json"
+            result = json.loads(result_path.read_text())
+            result["execution_metadata"]["gpu_name"] = "forged GPU"
+            _write_json(result_path, result)
+            report = self._audit(path, kwargs)
+            self.assertEqual(report["status"], "invalid")
+            self.assertIn("environment receipt", report["error"])
 
     def test_campaign_keeps_invalid_case_in_four_cell_denominator(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -65,7 +88,8 @@ class IdentityNegativeReproductions(unittest.TestCase):
             (waterfall / "source_receipt.json").write_text("{}", encoding="utf-8")
             report = audit.audit_campaign([beaver, waterfall], root / "review_campaign.json",
                                           spec=SPEC, expected_batch_hashes=(b_hash, w_hash),
-                                          expected_bf16=bf16, expected_fp32=fp32)
+                                          expected_bf16=bf16, expected_fp32=fp32,
+                                          pins=synthetic_pins(root))
             self.assertEqual(report["planned_cell_count"], 4)
             self.assertEqual(report["planned_forward_count"], 66)
             self.assertEqual(len(report["cells"]), 4)

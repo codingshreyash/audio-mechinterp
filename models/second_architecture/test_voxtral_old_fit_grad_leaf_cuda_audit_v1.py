@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -15,6 +16,18 @@ import voxtral_old_fit_grad_leaf_cuda_audit_v1 as audit
 
 SPEC = audit.ShapeSpec({"encoder31": (1, 4, 2), "projector": (3, 4)},
                        (3, 4), (1, 5, 4), (1, 2, 3), (6,), 3)
+SYNTHETIC_LAYOUT_ROWS = [{"name": "synthetic.weight", "dtype": "torch.float32",
+                          "device": "cuda:0", "shape": [2, 3], "numel": 6}]
+SYNTHETIC_STRUCTURE_SHA = hashlib.sha256(json.dumps(
+    [{"name": "synthetic.weight", "shape": [2, 3], "numel": 6}],
+    sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def synthetic_pins(root: Path) -> audit.AuditPins:
+    """Explicit compact test-only trust anchor; production CLI cannot use it."""
+    receipt = root / "synthetic_environment_receipt.json"
+    return audit.AuditPins("f" * 64, "a" * 64, "c" * 64, audit.sha(receipt), receipt,
+                           SYNTHETIC_STRUCTURE_SHA, 1, 6, synthetic_fixture=True)
 
 
 def fixture(case_index: int):
@@ -108,7 +121,20 @@ def write_case(root: Path, index: int):
                "archived_sidecar_sha256": audit.BEAVER_ARCHIVE_SHA if index == 0 else None,
                "passive_source_sha256": [fp32, fp32] if index else [],
                "passive_equal": dict.fromkeys(audit.SITES, True) if index else {}}
-    layout = {"valid": True, "errors": []}
+    layout = {"valid": True, "errors": [], "named_parameter_count": 1,
+              "parameter_count": 6, "dtype_device_counts": {"torch.float32/cuda": 1},
+              "parameters": copy.deepcopy(SYNTHETIC_LAYOUT_ROWS)}
+    environment_receipt = {"schema": "voxtral_old_fit_grad_leaf_cuda_environment_receipt_v1",
+                           "machine": {"gpu_name": "synthetic", "gpu_memory_bytes": 48_000_000_000,
+                                       "driver_version": "synthetic"},
+                           "software": {"torch": "synthetic", "torch_cuda": "synthetic", "cudnn": 1,
+                                        "transformers": "synthetic", "accelerate": "synthetic"},
+                           "cuda_controls": {"tf32_matmul": False, "tf32_cudnn": False,
+                                             "matmul_precision": "highest", "deterministic_algorithms": True,
+                                             "warn_only": False, "sdpa_implementation": "sdpa"}}
+    environment_path = root / "synthetic_environment_receipt.json"
+    environment_path.write_text(json.dumps(environment_receipt, sort_keys=True))
+    meta["environment_receipt_sha256"] = audit.sha(environment_path)
     for name, value in (("meta.json", meta), ("source_receipt.json", receipt),
                         ("model_layout.json", layout)):
         (path / name).write_text(json.dumps(value))
@@ -144,7 +170,8 @@ def write_case(root: Path, index: int):
                                      "requested_attention_implementation": "sdpa",
                                      "model_eval": True, "language_model_eval": True,
                                      "torch_version": "synthetic", "cuda_runtime_version": "synthetic",
-                                     "cudnn_version": 1, "gpu_name": "synthetic", "gpu_capability": [8, 9],
+                                     "cudnn_version": 1, "gpu_name": "synthetic", "gpu_total_memory_bytes": 48_000_000_000,
+                                     "gpu_capability": [8, 9],
                                      "platform": "synthetic", "transformers_version": "synthetic",
                                      "accelerate_version": "synthetic",
                                      "cublas_workspace_config": ":4096:8", "flash_sdp_enabled": True,
@@ -155,6 +182,44 @@ def write_case(root: Path, index: int):
 
 
 class SavedAuditTests(unittest.TestCase):
+    def test_production_layout_structure_pin_matches_reviewed_mps_file(self):
+        prior = (Path(__file__).resolve().parent / "runs/voxtral_old_fit_grad_leaf_factorial_v1"
+                 / "20261118T154253722766Z/model_layout.json")
+        self.assertEqual(audit.sha(prior),
+                         "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad")
+        layout = json.loads(prior.read_text())
+        self.assertEqual(layout["named_parameter_count"], audit.MODEL_NAMED_PARAMETERS)
+        self.assertEqual(layout["parameter_count"], audit.MODEL_PARAMETER_COUNT)
+        structure = [{"name": r["name"], "shape": r["shape"], "numel": r["numel"]}
+                     for r in layout["parameters"]]
+        digest = hashlib.sha256(json.dumps(structure, sort_keys=True,
+                                           separators=(",", ":")).encode()).hexdigest()
+        self.assertEqual(digest, audit.MODEL_STRUCTURE_SHA256)
+
+    def test_trusted_freeze_and_actual_receipt_hash_required(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            receipt_path = root / "receipt.json"
+            receipt = {"schema": "voxtral_old_fit_grad_leaf_cuda_environment_receipt_v1",
+                       "sources": {"runner": "a" * 64},
+                       "checkpoint": {"repo_id": "mistralai/Voxtral-Mini-3B-2507",
+                                      "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+                                      "tree_sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"}}
+            receipt_path.write_text(json.dumps(receipt))
+            freeze_path = root / "freeze.json"
+            freeze = {"status": "frozen_voxtral_old_fit_grad_leaf_cuda_v1",
+                      "environment_receipt_sha256": audit.sha(receipt_path),
+                      "checkpoint_tree_sha256": receipt["checkpoint"]["tree_sha256"],
+                      "runner_sha256": "a" * 64}
+            freeze_path.write_text(json.dumps(freeze))
+            trusted = audit.trusted_pins(freeze_path, audit.sha(freeze_path), receipt_path)
+            self.assertFalse(trusted.synthetic_fixture)
+            with self.assertRaisesRegex(ValueError, "trusted freeze hash"):
+                audit.trusted_pins(freeze_path, "0" * 64, receipt_path)
+            receipt_path.write_bytes(receipt_path.read_bytes() + b" ")
+            with self.assertRaisesRegex(ValueError, "environment receipt hash"):
+                audit.trusted_pins(freeze_path, audit.sha(freeze_path), receipt_path)
+
     def check(self, payload, case_index, bh, bf16, fp32):
         return audit.audit_payload(payload, case_index, spec=SPEC,
                                    expected_batch_hashes=(bh, bh),
@@ -234,24 +299,30 @@ class SavedAuditTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             output = root / "audit.json"
-            report = audit.audit_campaign([root / "missing_beaver", root / "missing_waterfall"], output)
+            pins = audit.AuditPins("f" * 64, "a" * 64, "c" * 64, "b" * 64,
+                                   root / "absent_synthetic_receipt.json", SYNTHETIC_STRUCTURE_SHA,
+                                   1, 6, synthetic_fixture=True)
+            report = audit.audit_campaign([root / "missing_beaver", root / "missing_waterfall"],
+                                          output, pins=pins, spec=SPEC)
             self.assertEqual(len(report["cells"]), 4)
             self.assertEqual({x["label"] for x in report["cells"]}, {"invalid"})
             self.assertEqual(report["planned_forward_count"], 66)
             with self.assertRaisesRegex(ValueError, "already exists"):
-                audit.audit_campaign([root / "missing_beaver", root / "missing_waterfall"], output)
+                audit.audit_campaign([root / "missing_beaver", root / "missing_waterfall"],
+                                     output, pins=pins, spec=SPEC)
 
     def test_saved_receipts_content_addressing_and_single_case_gate(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             cases = [write_case(root, index) for index in (0, 1)]
+            pins = synthetic_pins(root)
             bh = tuple(x[1] for x in cases)
-            case0 = audit.audit_one_case(cases[0][0], 0, root / "case0_audit.json", spec=SPEC,
+            case0 = audit.audit_one_case(cases[0][0], 0, root / "case0_audit.json", pins=pins, spec=SPEC,
                                          expected_batch_hashes=bh, expected_bf16=cases[0][2],
                                          expected_fp32=cases[0][3])
             self.assertEqual(case0["status"], "audited_saved_data_only")
             self.assertEqual(case0["direct_full_comparison_count"], 48)
-            report = audit.audit_campaign([x[0] for x in cases], root / "campaign.json", spec=SPEC,
+            report = audit.audit_campaign([x[0] for x in cases], root / "campaign.json", pins=pins, spec=SPEC,
                                           expected_batch_hashes=bh, expected_bf16=cases[0][2],
                                           expected_fp32=cases[0][3])
             self.assertEqual(report["direct_full_comparison_count"], 96)
@@ -260,7 +331,7 @@ class SavedAuditTests(unittest.TestCase):
             # A changed receipt invalidates the case even if the tensor file is unchanged.
             receipt = cases[1][0] / "source_receipt.json"
             receipt.write_bytes(receipt.read_bytes() + b" ")
-            bad = audit.audit_one_case(cases[1][0], 1, root / "bad.json", spec=SPEC,
+            bad = audit.audit_one_case(cases[1][0], 1, root / "bad.json", pins=pins, spec=SPEC,
                                        expected_batch_hashes=bh, expected_bf16=cases[0][2],
                                        expected_fp32=cases[0][3])
             self.assertEqual(bad["status"], "invalid")

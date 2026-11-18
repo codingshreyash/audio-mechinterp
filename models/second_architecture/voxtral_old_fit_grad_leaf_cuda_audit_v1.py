@@ -28,6 +28,12 @@ ORDERS = {"encoder31": ("N0", "G1", "G0", "N1", "N1", "G0", "G1", "N0"),
 CASE_IDS = ("animal_08_kokoro_fit_chosen_beaver", "nature_09_piper_fit_chosen_waterfall")
 SOURCE_RULES = ("archived_mps_bf16_cast_fp32", "two_passive_cuda_no_grad_first_source")
 BEAVER_ARCHIVE_SHA = "0bc13e5831d3c4c325ad903bcbbdadf9f40d2e38eb67346ac68847bb1840dea2"
+# Derived from the independently audited, same-checkpoint FP32 MPS layout
+# (model_layout.json SHA-256 0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad).
+# Canonical ordered [{name, shape, numel}] JSON; device/dtype are checked separately.
+MODEL_STRUCTURE_SHA256 = "15b457aebf47456e6e78836bf30881e6bb23116a7f2f089b16a9a8265abc26c7"
+MODEL_NAMED_PARAMETERS = 762
+MODEL_PARAMETER_COUNT = 4_676_271_104
 SCHEMA_SHA256 = "c90f46adcf73a8466232be15ba37d9a1d18b0eca234f2b4648f480bff6b7ad4d"
 V1_SHA256 = "188925bc4022aa9841502d310899b5f9b28bf8ec0ba32ab7f7acb3fc45579050"
 V2_SHA256 = "c86537552b55f6542c88d2be9a7c71d5e1cecd589c6a11cc89eec514c49419ca"
@@ -67,6 +73,21 @@ class ShapeSpec:
 
 REAL = ShapeSpec({"encoder31": (1, 1500, 1280), "projector": (375, 3072)},
                  (375, 3072), (1, 396, 3072), (1, 128, 3000), (131072,))
+
+
+@dataclass(frozen=True)
+class AuditPins:
+    """External trust anchor; production obtains it only from a hash-pinned freeze."""
+
+    freeze_sha256: str
+    runner_sha256: str
+    checkpoint_tree_sha256: str
+    environment_receipt_sha256: str
+    environment_receipt_path: Path
+    model_structure_sha256: str = MODEL_STRUCTURE_SHA256
+    named_parameters: int = MODEL_NAMED_PARAMETERS
+    parameter_count: int = MODEL_PARAMETER_COUNT
+    synthetic_fixture: bool = False
 
 
 def need(condition: bool, message: str) -> None:
@@ -120,6 +141,101 @@ def json_file(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_bytes(), parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
     need(isinstance(value, dict), f"{path.name}: expected object")
     return value
+
+
+def trusted_pins(freeze_path: Path, expected_freeze_sha256: str,
+                 environment_receipt_path: Path) -> AuditPins:
+    """Bind an externally reviewed freeze hash to actual receipt bytes.
+
+    The caller must obtain expected_freeze_sha256 from the independent gate's
+    reviewed freeze decision. A value read only from the worker is not trusted.
+    """
+    need(isinstance(expected_freeze_sha256, str) and HEX64.fullmatch(expected_freeze_sha256),
+         "trusted freeze pin invalid")
+    need(sha(freeze_path) == expected_freeze_sha256, "trusted freeze hash differs")
+    freeze = json_file(freeze_path)
+    receipt_hash = freeze.get("environment_receipt_sha256")
+    need(isinstance(receipt_hash, str) and HEX64.fullmatch(receipt_hash) and
+         sha(environment_receipt_path) == receipt_hash, "environment receipt hash differs")
+    receipt = json_file(environment_receipt_path)
+    need(receipt.get("schema") == "voxtral_old_fit_grad_leaf_cuda_environment_receipt_v1",
+         "environment receipt schema invalid")
+    checkpoint = receipt.get("checkpoint")
+    sources = receipt.get("sources")
+    need(isinstance(checkpoint, dict) and isinstance(sources, dict) and
+         checkpoint.get("tree_sha256") == freeze.get("checkpoint_tree_sha256") and
+         sources.get("runner") == freeze.get("runner_sha256"),
+         "freeze and environment receipt identity differ")
+    need(checkpoint.get("repo_id") == "mistralai/Voxtral-Mini-3B-2507" and
+         checkpoint.get("revision") == "3060fe34b35ba5d44202ce9ff3c097642914f8f3" and
+         checkpoint.get("tree_sha256") == "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a",
+         "checkpoint identity differs from source pin")
+    need(freeze.get("status") == "frozen_voxtral_old_fit_grad_leaf_cuda_v1" and
+         isinstance(freeze.get("runner_sha256"), str) and HEX64.fullmatch(freeze["runner_sha256"]),
+         "freeze status/runner pin invalid")
+    return AuditPins(expected_freeze_sha256, freeze["runner_sha256"],
+                     checkpoint["tree_sha256"], receipt_hash, environment_receipt_path)
+
+
+def _check_layout(layout: dict[str, Any], pins: AuditPins) -> None:
+    need(layout.get("valid") is True and layout.get("errors") == [], "model layout invalid")
+    rows = layout.get("parameters")
+    need(isinstance(rows, list) and len(rows) == pins.named_parameters and
+         layout.get("named_parameter_count") == pins.named_parameters and
+         layout.get("parameter_count") == pins.parameter_count and
+         layout.get("dtype_device_counts") == {"torch.float32/cuda": pins.named_parameters},
+         "model layout count/dtype/device invalid")
+    names = set()
+    structure = []
+    total = 0
+    for row in rows:
+        need(isinstance(row, dict) and set(row) == {"name", "dtype", "device", "shape", "numel"},
+             "model layout parameter row invalid")
+        name, shape, numel = row["name"], row["shape"], row["numel"]
+        need(isinstance(name, str) and name and name not in names and
+             isinstance(shape, list) and shape and all(type(n) is int and n > 0 for n in shape) and
+             type(numel) is int and math.prod(shape) == numel and
+             row["dtype"] == "torch.float32" and row["device"] in ("cuda", "cuda:0"),
+             "model layout parameter shape/dtype/device invalid")
+        names.add(name)
+        structure.append({"name": name, "shape": shape, "numel": numel})
+        total += numel
+    need(total == pins.parameter_count, "model layout parameter total invalid")
+    digest = hashlib.sha256(json.dumps(structure, sort_keys=True,
+                                       separators=(",", ":")).encode()).hexdigest()
+    need(digest == pins.model_structure_sha256, "model layout structure differs from reviewed MPS layout")
+
+
+def _check_environment_metadata(meta: dict[str, Any], result: dict[str, Any],
+                                pins: AuditPins) -> None:
+    need(sha(pins.environment_receipt_path) == pins.environment_receipt_sha256,
+         "actual environment receipt hash differs")
+    receipt = json_file(pins.environment_receipt_path)
+    machine, software, controls = (receipt.get("machine"), receipt.get("software"),
+                                   receipt.get("cuda_controls"))
+    need(all(isinstance(x, dict) for x in (machine, software, controls)),
+         "environment receipt sections invalid")
+    runtime = result.get("execution_metadata")
+    need(isinstance(runtime, dict), "execution metadata invalid")
+    pairs = (("torch_version", software.get("torch")),
+             ("cuda_runtime_version", software.get("torch_cuda")),
+             ("cudnn_version", software.get("cudnn")),
+             ("gpu_name", machine.get("gpu_name")),
+             ("gpu_total_memory_bytes", machine.get("gpu_memory_bytes")),
+             ("transformers_version", software.get("transformers")),
+             ("accelerate_version", software.get("accelerate")),
+             ("matmul_allow_tf32", controls.get("tf32_matmul")),
+             ("cudnn_allow_tf32", controls.get("tf32_cudnn")),
+             ("matmul_precision", controls.get("matmul_precision")),
+             ("deterministic_algorithms", controls.get("deterministic_algorithms")),
+             ("deterministic_warn_only", controls.get("warn_only")),
+             ("requested_attention_implementation", controls.get("sdpa_implementation")))
+    need(all(runtime.get(key) == expected for key, expected in pairs),
+         "execution metadata differs from environment receipt")
+    # The runner currently records platform text but not a separate driver
+    # field. The exact driver remains pinned in the hash-checked receipt.
+    need(isinstance(machine.get("driver_version"), str) and machine["driver_version"],
+         "environment driver receipt missing")
 
 
 def schedule() -> list[tuple[str, str, int]]:
@@ -347,11 +463,13 @@ def audit_payload(payload: Any, case_index: int, *, spec: ShapeSpec = REAL,
             "saved_forwards": 32 + len(passive)}
 
 
-def audit_case(run_dir: Path, case_index: int, *, spec: ShapeSpec = REAL,
+def audit_case(run_dir: Path, case_index: int, *, pins: AuditPins, spec: ShapeSpec = REAL,
                expected_batch_hashes: tuple[dict[str, str], dict[str, str]] = BATCH_HASHES,
                expected_bf16: dict[str, str] = BF16_BEAVER,
                expected_fp32: dict[str, str] = FP32_BEAVER) -> dict[str, Any]:
     started = time.monotonic()
+    need(isinstance(pins, AuditPins) and (pins.synthetic_fixture is False or spec != REAL),
+         "trusted production pins required")
     need(run_dir.is_dir() and not run_dir.is_symlink(), "attempt directory invalid")
     paths = list(run_dir.rglob("*"))
     need(not any(p.is_symlink() for p in paths), "attempt contains symlink")
@@ -365,7 +483,7 @@ def audit_case(run_dir: Path, case_index: int, *, spec: ShapeSpec = REAL,
     meta, result = json_file(run_dir / "meta.json"), json_file(run_dir / "result.json")
     receipt = json_file(run_dir / "source_receipt.json")
     layout = json_file(run_dir / "model_layout.json")
-    need(layout.get("valid") is True and not layout.get("errors"), "model layout invalid")
+    _check_layout(layout, pins)
     need((meta.get("schema"), meta.get("status"), result.get("schema"), result.get("status")) ==
          ("voxtral_old_fit_grad_leaf_cuda_meta_v1", "started",
           "voxtral_old_fit_grad_leaf_cuda_result_v1", "completed"), "meta/result status invalid")
@@ -377,6 +495,11 @@ def audit_case(run_dir: Path, case_index: int, *, spec: ShapeSpec = REAL,
     for key in ("freeze_sha256", "runner_sha256", "environment_receipt_sha256",
                 "checkpoint_tree_sha256"):
         need(isinstance(meta.get(key), str) and HEX64.fullmatch(meta[key]), f"{key} pin invalid")
+    need(meta["freeze_sha256"] == pins.freeze_sha256 and
+         meta["runner_sha256"] == pins.runner_sha256 and
+         meta["checkpoint_tree_sha256"] == pins.checkpoint_tree_sha256 and
+         meta["environment_receipt_sha256"] == pins.environment_receipt_sha256,
+         "worker identity differs from trusted pins")
     need(meta["protocol_v1_sha256"] == V1_SHA256 and meta["protocol_v2_sha256"] == V2_SHA256 and
          meta["schema_sha256"] == SCHEMA_SHA256, "protocol/schema pin differs")
     for key, filename in (("meta_sha256", "meta.json"), ("source_receipt_sha256", "source_receipt.json"),
@@ -450,6 +573,7 @@ def audit_case(run_dir: Path, case_index: int, *, spec: ShapeSpec = REAL,
          result["execution_metadata"].get("model_eval") is True and
          result["execution_metadata"].get("language_model_eval") is True,
          "CUDA deterministic/TF32 metadata invalid")
+    _check_environment_metadata(meta, result, pins)
     detail_sha = result.get("details_sha256")
     need(isinstance(detail_sha, str) and HEX64.fullmatch(detail_sha) and
          result.get("details_path") == f"blobs/{detail_sha}.pt", "sidecar path invalid")
@@ -527,13 +651,17 @@ def main() -> None:
     parser.add_argument("--waterfall-dir", type=Path)
     parser.add_argument("--run-dir", type=Path)
     parser.add_argument("--case-index", type=int, choices=(0, 1))
+    parser.add_argument("--freeze", type=Path, required=True)
+    parser.add_argument("--expected-freeze-sha256", required=True)
+    parser.add_argument("--environment-receipt", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    pins = trusted_pins(args.freeze, args.expected_freeze_sha256, args.environment_receipt)
     if args.run_dir is not None and args.case_index is not None and args.beaver_dir is None and args.waterfall_dir is None:
-        report = audit_one_case(args.run_dir, args.case_index, args.output)
+        report = audit_one_case(args.run_dir, args.case_index, args.output, pins=pins)
         print(json.dumps({"status": report["status"], "audit_sha256": sha(args.output)}))
     elif args.beaver_dir is not None and args.waterfall_dir is not None and args.run_dir is None and args.case_index is None:
-        report = audit_campaign([args.beaver_dir, args.waterfall_dir], args.output)
+        report = audit_campaign([args.beaver_dir, args.waterfall_dir], args.output, pins=pins)
         print(json.dumps({"planned_cell_count": 4, "cells": [(x["case_id"], x["site"], x["label"])
                                                                for x in report["cells"]],
                           "audit_sha256": sha(args.output)}))
