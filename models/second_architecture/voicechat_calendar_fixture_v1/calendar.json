@@ -1,0 +1,22 @@
+{
+  "fixture_version": "voicechat_calendar_fixture_v1",
+  "timezone": "UTC",
+  "current_date": "2026-11-18",
+  "target_date": "2026-11-19",
+  "events": [
+    {
+      "id": "DR19",
+      "title": "Design Review",
+      "date": "2026-11-19",
+      "starts_at": "2026-11-19T10:00:00Z",
+      "ends_at": "2026-11-19T10:30:00Z"
+    },
+    {
+      "id": "TS19",
+      "title": "Team Sync",
+      "date": "2026-11-19",
+      "starts_at": "2026-11-19T14:00:00Z",
+      "ends_at": "2026-11-19T14:30:00Z"
+    }
+  ]
+}
