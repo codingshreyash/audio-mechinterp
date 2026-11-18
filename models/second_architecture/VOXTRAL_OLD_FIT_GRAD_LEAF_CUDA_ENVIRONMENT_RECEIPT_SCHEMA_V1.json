@@ -131,8 +131,8 @@
       "properties": {
         "free_bytes_before_model": {"type": "integer", "minimum": 32212254720},
         "input_bundle_path": {"type": "string", "minLength": 1},
-        "input_bundle_sha256": {"$ref": "#/$defs/sha256"},
-        "input_bundle_bytes": {"type": "integer", "minimum": 1},
+        "input_bundle_sha256": {"const": "0bc13e5831d3c4c325ad903bcbbdadf9f40d2e38eb67346ac68847bb1840dea2"},
+        "input_bundle_bytes": {"const": 509990581},
         "output_root": {"type": "string", "minLength": 1}
       }
     },
