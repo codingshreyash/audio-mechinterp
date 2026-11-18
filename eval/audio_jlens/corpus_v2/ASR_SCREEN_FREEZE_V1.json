@@ -1,0 +1,21 @@
+{
+  "amendment_sha256": "9a6c12199e591ac623ee74938d13a4a6b11dbbbadce21e79cb75bd888176246d",
+  "app_sha256": "9053555674e5a6eac6f0160fc5a85900dd38e9ba4a3dd8a8abf4a0d479575962",
+  "auditor_sha256": "2b39238dcad768a428b184a185b07217f592db4fcb5ebb5276fa5a0958857573",
+  "binding_sha256": "858f8f68fce65ee60e328b1536b34608ced6b3e84d725f229460c6376e14af93",
+  "candidate_model_inference_authorized": false,
+  "cases_sha256": "d9a08a61b76e8ab56ab3a9b2d72a4aedc5871555487c7a33b712097fe3206ed8",
+  "created_at_utc": "2026-11-18T11:00:01.468312+00:00",
+  "html_sha256": "3c912bf01cac53f1c6b019e441a54a98294addbd2dcd814f4c7e27e675347cc3",
+  "independent_review_sha256": "e495481b63ad70c98ca2ff844367d63da1beb260b7ccc50e17d3f4e0755d08eb",
+  "inputs_sha256": "74f38f6704d1995b8e7040b329f7c0c0ea68b3cae36e774b875b4c358ae76d33",
+  "manifest_sha256": "15395c7d132eb3f1c1a6b2b7d555146faa83be4ee2b77fba4f481cf70f26761d",
+  "pins_sha256": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
+  "planned_clips": 480,
+  "protocol_sha256": "30285a6c897e742eff59f593b3d12a1bd92d62585cd72171837c3e18fabe662e",
+  "queue_sha256": "19319ac394a24f8d742285d4bb3ecfd78020b1d131fa57def5b3362fd0b73873",
+  "scope": "two raw ASR screens and blinded listening provenance only",
+  "script_sha256": "6cc4e6eaa3cf93c3cdf1617589fb1d2ad5eb23890f376aafc5124029474ddcb5",
+  "server_sha256": "05c9629d40f36103b61a6ad05a0a97e8db007d0af957be88484559546cfb38a7",
+  "status": "independently_reviewed_asr_screen_frozen"
+}
