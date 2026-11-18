@@ -1,0 +1,10 @@
+{
+  "status": "complete_raw_asr_no_reference_comparison",
+  "model_key": "whisper",
+  "planned_clips": 12,
+  "raw_rows": 12,
+  "raw_sha256": "18a062d27abb29aac18e9b85939f9559c5e86d97f5afe03b9572755e7ab694bb",
+  "meta_sha256": "4bbe8beef58b7c23f463716a255dfcee7b58514a685a236a372fe61dbcdd0c37",
+  "elapsed_seconds": 3.852008166955784,
+  "no_voicechat_inference": true
+}

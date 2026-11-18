@@ -1,0 +1,29 @@
+{
+  "status": "started_raw_asr_only",
+  "model_key": "whisper",
+  "model_id": "openai/whisper-tiny.en",
+  "model_revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+  "model_files_sha256": {
+    "added_tokens.json": "560be47bea388757f8d4cc185c5d82067426cbb6361e38016dd90ddc01ab203a",
+    "config.json": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "model.safetensors": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+    "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d",
+    "vocab.json": "3ba3c3109ff33976c4bd966589c11ee14fcaa1f4c9e5e154c2ed7f99d80709e7"
+  },
+  "runner_sha256": "29da8e97fa40a7f54965215c48a325a21262abf33423eddd26fa4ea2c5c1b3b1",
+  "freeze_sha256": "e06e4638da92401ea655937dfdde67e675ec205d18ed145f67db026ae3e9ce5c",
+  "manifest_sha256": "bfafef903eaff14a444c015d0c38886e3bedde928ef8c5ca9100aac00370ca7c",
+  "pins_sha256": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
+  "planned_clips": 12,
+  "device": "cpu",
+  "threads": 4,
+  "python": "3.12.13",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "scope": "audio-only raw transcripts; no reference comparison or VoiceChat"
+}
