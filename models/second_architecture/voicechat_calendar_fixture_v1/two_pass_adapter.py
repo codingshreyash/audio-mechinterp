@@ -350,6 +350,8 @@ def run_two_pass(
     The optional callback can persist each unmodified result before pass 2.
     """
     source_wav_sha256 = sha256_file(wav_path)
+    qa_manifest_sha256 = sha256_file(qa_manifest_path) if qa_manifest_path is not None else None
+    qa_ledger_sha256 = sha256_file(qa_ledger_path) if qa_ledger_path is not None else None
     _qa_receipt, qa_receipt_bytes, qa_receipt_sha256 = read_bound_qa_receipt(
         qa_receipt_path, case_id=case_id, wav_path=wav_path,
         observed_sha256=source_wav_sha256, confirmation_state=confirmation_state,
@@ -451,12 +453,18 @@ def run_two_pass(
         raise RuntimeError("Input WAV changed during two-pass inference")
     if Path(qa_receipt_path).read_bytes() != qa_receipt_bytes:
         raise RuntimeError("Audio QA receipt changed during two-pass inference")
+    if qa_manifest_path is not None and sha256_file(qa_manifest_path) != qa_manifest_sha256:
+        raise RuntimeError("Full-cohort QA manifest changed during two-pass inference")
+    if qa_ledger_path is not None and sha256_file(qa_ledger_path) != qa_ledger_sha256:
+        raise RuntimeError("Pre-inference QA ledger changed during two-pass inference")
     return {
         "source": {"nemo_speech_revision": NEMO_SPEECH_REVISION,
                    "case_id": case_id, "wav_path": str(wav_path),
                    "source_wav_sha256": source_wav_sha256,
                    "qa_receipt_path": str(qa_receipt_path),
-                   "qa_receipt_sha256": qa_receipt_sha256},
+                   "qa_receipt_sha256": qa_receipt_sha256,
+                   "qa_manifest_sha256": qa_manifest_sha256,
+                   "qa_ledger_sha256": qa_ledger_sha256},
         "qa_receipt_exact_bytes": qa_receipt_bytes,
         "pass1": {"raw_result": pass1_result, "codec_codes_per_step": pass1_codes,
                   "all_extracted_positions": positions1, "stock_first_parse": stock},
@@ -520,6 +528,9 @@ def run_live_case_from_audited_wav(
     # Run the all-12 v2 gate before any model or NeMo import and bind this case
     # to the exact receipt bytes. A v1 per-WAV receipt cannot enter this path.
     source_sha = sha256_file(wav_path)
+    cohort = check_audio_qa_v2(Path(qa_manifest_path), Path(qa_ledger_path),
+                               controller_key=controller_key,
+                               trusted_controller_id=trusted_controller_id)
     read_bound_qa_receipt(
         qa_receipt_path, case_id=case_id, wav_path=wav_path,
         observed_sha256=source_sha, confirmation_state=confirmation_state,
@@ -560,6 +571,20 @@ def run_live_case_from_audited_wav(
     (out / "qa_receipt_exact.json").write_bytes(receipt_bytes)
     if sha256_file(out / "qa_receipt_exact.json") != hashlib.sha256(receipt_bytes).hexdigest():
         raise RuntimeError("Archived QA receipt bytes differ")
+    manifest_bytes = Path(qa_manifest_path).read_bytes()
+    ledger_bytes = Path(qa_ledger_path).read_bytes()
+    (out / "qa_manifest_exact.json").write_bytes(manifest_bytes)
+    (out / "qa_ledger_exact.json").write_bytes(ledger_bytes)
+    if sha256_file(out / "qa_manifest_exact.json") != cohort["qa_manifest_sha256"] or \
+            sha256_file(out / "qa_ledger_exact.json") != cohort["qa_ledger_sha256"]:
+        raise RuntimeError("Archived QA cohort manifest or ledger differs from preflight")
+    (out / "input_provenance.json").write_text(json.dumps({
+        "source_wav_sha256": source_sha,
+        "qa_receipt_sha256": hashlib.sha256(receipt_bytes).hexdigest(),
+        "qa_manifest_sha256": cohort["qa_manifest_sha256"],
+        "qa_ledger_sha256": cohort["qa_ledger_sha256"],
+        "human_eligible": cohort["human_eligible"],
+    }, sort_keys=True, indent=2) + "\n")
     (out / "rendered_prompt.txt").write_text(prompt, encoding="ascii")
     (out / "system_message_exact.txt").write_bytes(system_bytes)
     (out / "tools_exact.json").write_bytes(tools_bytes)
@@ -581,8 +606,10 @@ def run_live_case_from_audited_wav(
         on_pass_complete=snapshot,
     )
     if sha256_file(out / "input_wav_exact.wav") != trace["source"]["source_wav_sha256"] or \
-            sha256_file(out / "qa_receipt_exact.json") != trace["source"]["qa_receipt_sha256"]:
-        raise RuntimeError("Archived input or receipt differs from modeled evidence")
+            sha256_file(out / "qa_receipt_exact.json") != trace["source"]["qa_receipt_sha256"] or \
+            sha256_file(out / "qa_manifest_exact.json") != trace["source"]["qa_manifest_sha256"] or \
+            sha256_file(out / "qa_ledger_exact.json") != trace["source"]["qa_ledger_sha256"]:
+        raise RuntimeError("Archived input or QA cohort differs from modeled evidence")
     trace["source"].update({
         "template_sha256": OFFICIAL_TEMPLATE_SHA256,
         "system_message_sha256": hashlib.sha256(system_bytes).hexdigest(),

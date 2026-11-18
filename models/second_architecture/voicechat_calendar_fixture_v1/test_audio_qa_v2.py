@@ -17,15 +17,16 @@ from .audio_qa_v2 import (ASR_DIRS, COMPARISON, HERE, RENDER, PINS,
 from .calendar_stub import CASES, grant_signing_bytes
 from .audio_qa_v2_listen import prepare, listen
 from .two_pass_adapter import run_two_pass
+from .two_pass_adapter import load_bound_wav
 from .test_two_pass_adapter import FakeModel, FakeRunner
 
 
 KEY = b"synthetic-test-secret-exactly-32-bytes-long"
 CONTROLLER = "synthetic-controller"
-BLIND_TIME = "2026-11-17T10:00:00Z"
-AWARE_TIME = "2026-11-17T10:01:00Z"
-QA_TIME = "2026-11-17T11:00:00Z"
-ANCHOR_TIME = "2026-11-18T00:00:00Z"
+BLIND_TIME = "2026-11-18T11:47:00Z"
+AWARE_TIME = "2026-11-18T11:48:00Z"
+QA_TIME = "2026-11-18T11:49:00Z"
+ANCHOR_TIME = "2026-11-18T11:59:00Z"
 
 
 def write_record(root: Path, name: str, value: dict) -> dict:
@@ -76,7 +77,7 @@ class AudioQAV2Tests(unittest.TestCase):
                      for r in [json.loads(line) for line in
                                (ASR_DIRS["whisper"] / "raw.jsonl").read_text().splitlines()]}
         assignment = {"schema": "voicechat_blind_bundle_v2",
-                      "created_utc": "2026-11-17T09:00:00Z",
+                      "created_utc": "2026-11-18T11:46:00Z",
                       "blind_order_seed": self.manifest["blind_order_seed"],
                       "render_manifest_sha256": PINS["render_manifest"],
                       "comparison_sha256": PINS["comparison"],
@@ -110,7 +111,8 @@ class AudioQAV2Tests(unittest.TestCase):
         voice = render_row["voice_id"]
         wav = RENDER.parent / render_row["final_path"]
         with wave.open(str(wav), "rb") as stream:
-            pcm = stream.readframes(stream.getnframes())
+            frames = stream.getnframes()
+            pcm = stream.readframes(frames)
         comparisons = {engine: next(row for row in self.comparison["rows"][engine]
                                     if (row["case_id"], row["voice_id"]) == (case, voice))
                        for engine in ASR_DIRS}
@@ -138,6 +140,7 @@ class AudioQAV2Tests(unittest.TestCase):
             "schema": "voicechat_wav_qa_receipt_v2", "case_id": case,
             "voice_id": voice, "wav_path": str(wav.resolve()),
             "wav_sha256": digest(wav), "pcm_int16_sha256": hashlib.sha256(pcm).hexdigest(),
+            "final_sample_count": frames, "final_exact_zero_tail_frames": 80000,
             "script": render_row["script"],
             "script_sha256": hashlib.sha256(render_row["script"].encode()).hexdigest(),
             "asr_observations": obs,
@@ -218,6 +221,49 @@ class AudioQAV2Tests(unittest.TestCase):
         self.save()
         with self.assertRaisesRegex(ValueError, "C grant"):
             self.validate()
+
+    def test_pre_render_assignment_rejected(self):
+        assignment_desc = self.manifest["blind_assignment"]
+        path = self.root / assignment_desc["path"]
+        assignment = json.loads(path.read_bytes())
+        assignment["created_utc"] = "2026-11-17T09:00:00Z"
+        path.write_bytes(canonical_bytes(assignment))
+        assignment_desc["sha256"] = digest(path)
+        self.save()
+        with self.assertRaisesRegex(ValueError, "precedes render"):
+            self.validate()
+
+    def test_receipt_frame_count_mismatch_rejected_before_loader(self):
+        row = self.manifest["rows"][0]
+        path = self.root / row["receipt"]["path"]
+        receipt = json.loads(path.read_bytes())
+        receipt["final_sample_count"] += 1
+        path.write_bytes(canonical_bytes(receipt))
+        row["receipt"]["sha256"] = digest(path)
+        self.manifest["eligibility"][0]["receipt_sha256"] = digest(path)
+        self.save()
+        with self.assertRaisesRegex(ValueError, "WAV/script/PCM"):
+            self.validate()
+
+    def test_v2_valid_cohort_reaches_bound_live_wav_loader(self):
+        row = self.manifest["rows"][0]
+        wav = next(RENDER.parent / r["final_path"] for r in self.render["rows"]
+                   if (r["case_id"], r["voice_id"]) == (row["case_id"], row["voice_id"]))
+        loaded = []
+
+        def fake_official_loader(path, device):
+            loaded.append((path, device))
+            return [1] * self.render["rows"][0]["padding"]["final_frames"], "fake-signal", [1]
+
+        wav_1d, signal, lengths = load_bound_wav(
+            wav, self.root / row["receipt"]["path"], case_id=row["case_id"],
+            confirmation_state=None, loader=fake_official_loader, device="cpu",
+            qa_manifest_path=self.manifest_path, qa_ledger_path=self.ledger_path,
+            controller_key=KEY, trusted_controller_id=CONTROLLER)
+        self.assertEqual(loaded, [(str(wav), "cpu")])
+        self.assertEqual(signal, "fake-signal")
+        self.assertEqual(lengths, [1])
+        self.assertEqual(len(wav_1d), self.render["rows"][0]["padding"]["final_frames"])
 
     def test_v2_adapter_uses_full_cohort_gate_before_first_pass(self):
         row = self.manifest["rows"][0]

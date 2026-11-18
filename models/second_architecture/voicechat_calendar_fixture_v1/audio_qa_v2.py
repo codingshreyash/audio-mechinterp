@@ -22,6 +22,7 @@ from .calendar_stub import CASES, verify_external_grant
 
 HERE = Path(__file__).resolve().parent
 RENDER = HERE / "rendered_v1/20261118T1145Z/render_manifest.json"
+RENDER_META = RENDER.parent / "meta.json"
 SCRIPTS = HERE / "scripts.json"
 COMPARISON = HERE / "asr_runs/comparison_20261118T1157Z/comparison.json"
 AMENDMENT = HERE / "VOICECHAT_AUDIO_QA_AMENDMENT_V2_PROPOSAL.md"
@@ -219,14 +220,16 @@ def check_audio_qa_v2(manifest_path: Path, ledger_path: Path, *,
     planned = {(r["case_id"], r["voice_id"]): r for r in render["rows"]}
     require(render["rendered"] == 12 and len(planned) == 12,
             "frozen render matrix is incomplete")
+    require(digest(RENDER_META) == render["meta_sha256"], "render metadata differs")
+    render_started = utc(json.loads(RENDER_META.read_bytes()).get("started_utc"))
     assignment_path = local_file(base, manifest.get("blind_assignment"))
     assignment, _ = canonical_record(assignment_path, "voicechat_blind_bundle_v2")
     assignment_time = utc(assignment.get("created_utc"))
-    require(assignment_time < anchor and
+    require(render_started < assignment_time < anchor and
             assignment.get("blind_order_seed") == manifest["blind_order_seed"] and
             assignment.get("render_manifest_sha256") == PINS["render_manifest"] and
             assignment.get("comparison_sha256") == PINS["comparison"],
-            "blind assignment source/time mismatch")
+            "blind assignment precedes render or differs from source")
     opaque_to_wav = {r["opaque_id"]: r["wav_sha256"]
                      for r in raw_by_engine["whisper"].values()}
     expected_order = list(raw_by_engine["whisper"])
@@ -257,8 +260,17 @@ def check_audio_qa_v2(manifest_path: Path, ledger_path: Path, *,
         with wave.open(str(wav), "rb") as stream:
             require((stream.getnchannels(), stream.getframerate(), stream.getsampwidth(),
                      stream.getcomptype()) == (1, 16000, 2, "NONE"), "invalid PCM WAV")
-            pcm = stream.readframes(stream.getnframes())
-            require(pcm[-160000:] == bytes(160000), "missing exact 80000-frame silence")
+            frame_count = stream.getnframes()
+            pcm = stream.readframes(frame_count)
+            require(frame_count == source["padding"]["final_frames"],
+                    "final frame count differs from pinned render")
+        zero_tail = 0
+        for pos in range(len(pcm) - 2, -1, -2):
+            if pcm[pos:pos + 2] != b"\0\0":
+                break
+            zero_tail += 1
+        require(zero_tail == source["padding"]["appended_zero_frames"] == 80000,
+                "exact zero tail differs from pinned render")
         receipt_path = local_file(base, row["receipt"])
         receipt, receipt_hash = canonical_record(receipt_path, "voicechat_wav_qa_receipt_v2")
         require(receipt_hash == row["receipt"]["sha256"] and
@@ -266,6 +278,8 @@ def check_audio_qa_v2(manifest_path: Path, ledger_path: Path, *,
                 receipt.get("wav_sha256") == row["wav_sha256"] and
                 receipt.get("wav_path") == str(wav.resolve()) and
                 receipt.get("pcm_int16_sha256") == hashlib.sha256(pcm).hexdigest() and
+                receipt.get("final_sample_count") == frame_count and
+                receipt.get("final_exact_zero_tail_frames") == zero_tail and
                 receipt.get("script") == source["script"] and
                 receipt.get("script_sha256") == hashlib.sha256(source["script"].encode()).hexdigest(),
                 "QA receipt does not bind frozen WAV/script/PCM")
