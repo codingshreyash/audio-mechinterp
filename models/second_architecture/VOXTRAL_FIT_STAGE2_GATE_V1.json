@@ -1,0 +1,275 @@
+{
+  "schema_version": "voxtral_fit_stage2_gate_v1",
+  "index_sha256": "bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971",
+  "pilot_result_sha256": "a4700406fb5deacf947d2e32fe7f61dc4c0ed8d9a47e2816fb06bf37afbe21d3",
+  "gate_script_sha256": "6f25f15562b43f232be7fcaa711b7eacfad44cfbebf78861e6a44b9e2932adcc",
+  "status": "gate_failed",
+  "v1_capability_gate_passed": true,
+  "v1_stage2_all_eight_records_natural_endpoints_pass": false,
+  "stage2_pair_records": 8,
+  "required_natural_endpoints": 16,
+  "passing_natural_endpoints": 14,
+  "failures": [
+    {
+      "pair_id": "animal_06",
+      "engine": "kokoro",
+      "phrasing_id": "fit_chosen",
+      "word": "deer",
+      "passed": false,
+      "raw_decoded": "dear",
+      "generated_token_ids": [
+        1558,
+        1277,
+        2
+      ],
+      "stopped_on_eos": true
+    },
+    {
+      "pair_id": "animal_06",
+      "engine": "piper",
+      "phrasing_id": "fit_chosen",
+      "word": "deer",
+      "passed": false,
+      "raw_decoded": "dear",
+      "generated_token_ids": [
+        1558,
+        1277,
+        2
+      ],
+      "stopped_on_eos": true
+    }
+  ],
+  "selected_records": [
+    {
+      "pair_id": "animal_06",
+      "engine": "kokoro",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "deer",
+          "passed": false,
+          "raw_decoded": "dear",
+          "generated_token_ids": [
+            1558,
+            1277,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "moose",
+          "passed": true,
+          "raw_decoded": "Moose",
+          "generated_token_ids": [
+            37042,
+            1842,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": false
+    },
+    {
+      "pair_id": "animal_06",
+      "engine": "piper",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "deer",
+          "passed": false,
+          "raw_decoded": "dear",
+          "generated_token_ids": [
+            1558,
+            1277,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "moose",
+          "passed": true,
+          "raw_decoded": "moose",
+          "generated_token_ids": [
+            5464,
+            1842,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": false
+    },
+    {
+      "pair_id": "color_03",
+      "engine": "kokoro",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "black",
+          "passed": true,
+          "raw_decoded": "Black",
+          "generated_token_ids": [
+            21288,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "white",
+          "passed": true,
+          "raw_decoded": "White",
+          "generated_token_ids": [
+            25826,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": true
+    },
+    {
+      "pair_id": "color_03",
+      "engine": "piper",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "black",
+          "passed": true,
+          "raw_decoded": "Black",
+          "generated_token_ids": [
+            21288,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "white",
+          "passed": true,
+          "raw_decoded": "White",
+          "generated_token_ids": [
+            25826,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": true
+    },
+    {
+      "pair_id": "nature_00",
+      "engine": "kokoro",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "river",
+          "passed": true,
+          "raw_decoded": "River",
+          "generated_token_ids": [
+            106610,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "lake",
+          "passed": true,
+          "raw_decoded": "Lake",
+          "generated_token_ids": [
+            1076,
+            2082,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": true
+    },
+    {
+      "pair_id": "nature_00",
+      "engine": "piper",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "river",
+          "passed": true,
+          "raw_decoded": "River",
+          "generated_token_ids": [
+            106610,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "lake",
+          "passed": true,
+          "raw_decoded": "Lake",
+          "generated_token_ids": [
+            1076,
+            2082,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": true
+    },
+    {
+      "pair_id": "object_02",
+      "engine": "kokoro",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "plate",
+          "passed": true,
+          "raw_decoded": "Plate",
+          "generated_token_ids": [
+            100342,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "cup",
+          "passed": true,
+          "raw_decoded": "cup",
+          "generated_token_ids": [
+            29892,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": true
+    },
+    {
+      "pair_id": "object_02",
+      "engine": "piper",
+      "phrasing_id": "fit_chosen",
+      "endpoints": [
+        {
+          "word": "plate",
+          "passed": true,
+          "raw_decoded": "plate",
+          "generated_token_ids": [
+            50807,
+            2
+          ],
+          "stopped_on_eos": true
+        },
+        {
+          "word": "cup",
+          "passed": true,
+          "raw_decoded": "cup",
+          "generated_token_ids": [
+            29892,
+            2
+          ],
+          "stopped_on_eos": true
+        }
+      ],
+      "both_natural_endpoints_pass": true
+    }
+  ],
+  "consequence": "Under frozen v1 protocol, do not run feature hybrids or hidden-state interventions"
+}

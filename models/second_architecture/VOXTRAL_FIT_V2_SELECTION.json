@@ -1,0 +1,376 @@
+{
+  "status": "fit_informed_v2_selection_only_no_model_inference",
+  "adaptation_disclosure": "Selection rule was written after v1 deer-to-dear strict-surface failures; v1 remains failed.",
+  "source_index_sha256": "bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971",
+  "v1_gate_report_sha256": "bee8741a9560a2eb228b5d7b106cb9befe1ac9b5913f53f370e752b8b19ba156",
+  "selector_script_sha256": "e58eca65e662ff6bfa0a68e42fc2bc89a7a0f3b6672f2f75399fd68f6947703c",
+  "selection_rule": "exclude all v1 pilot pair IDs; among remaining map_fit pairs reject non-ASCII, nonalphabetic, <4-letter, or fixed common-homophone-list words; select lexicographically first pair ID per category",
+  "homophone_families_excluded": {
+    "deer": [
+      "dear"
+    ],
+    "bear": [
+      "bare"
+    ],
+    "hare": [
+      "hair"
+    ],
+    "sea": [
+      "see"
+    ],
+    "sun": [
+      "son"
+    ],
+    "rain": [
+      "reign",
+      "rein"
+    ],
+    "one": [
+      "won"
+    ],
+    "two": [
+      "to",
+      "too"
+    ],
+    "four": [
+      "for",
+      "fore"
+    ],
+    "blue": [
+      "blew"
+    ],
+    "red": [
+      "read"
+    ]
+  },
+  "selected_pair_ids": [
+    "animal_08",
+    "color_05",
+    "nature_09",
+    "object_05"
+  ],
+  "planned_clips": 32,
+  "clips": [
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "beaver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_08_fit_chosen_beaver.wav",
+      "wav_sha256": "b334e7ecb1d1397f1f92c1e1f505a9b2a0b05a8feb1db757d655ea93bad85319"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "monkey",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_08_fit_chosen_monkey.wav",
+      "wav_sha256": "b2784dd16113845f8dafd17d49ff4a74cdcf4a8b0275b9b83e31fd496d9c6d29"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "beaver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_08_fit_remember_beaver.wav",
+      "wav_sha256": "e2b8a6c58679d0812897ef247e814cdde37ef2ab5470b8a5955f7a4408a124ff"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "monkey",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_08_fit_remember_monkey.wav",
+      "wav_sha256": "ed32176d334ba68024686d861159a0bcac4ec8ec955eca4590e1edcd91efe76f"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "beaver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_08_fit_chosen_beaver.wav",
+      "wav_sha256": "267b68d794afcd3cabcac9f98eabd310207b08bf3c1527ae6dc43c87d57b304a"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "monkey",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_08_fit_chosen_monkey.wav",
+      "wav_sha256": "83b85c468f21dfb3f5aa90d451b31063a4f33e1e01245294f33d342be6340001"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "beaver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_08_fit_remember_beaver.wav",
+      "wav_sha256": "5255b75314a7745dbaa5345a210c78f5173250cf82278632c6b8aa32e1741f1c"
+    },
+    {
+      "pair_id": "animal_08",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "monkey",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_08_fit_remember_monkey.wav",
+      "wav_sha256": "3ec4742a2c2f64b29e5250c3eb3552f955d68aeceb7e32ce6320c88270f0d26a"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "silver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_05_fit_chosen_silver.wav",
+      "wav_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "teal",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_05_fit_chosen_teal.wav",
+      "wav_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "silver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_05_fit_remember_silver.wav",
+      "wav_sha256": "e16b78cad78d51f7072ef0f66ee576829dfd57b19226466683c6a2d6c1b723ed"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "teal",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_05_fit_remember_teal.wav",
+      "wav_sha256": "fc02af895cb57c1f1ff6288517504d30a0bbbc8324fd0b964b1a9eec8556a9a3"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "silver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_05_fit_chosen_silver.wav",
+      "wav_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "teal",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_05_fit_chosen_teal.wav",
+      "wav_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "silver",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_05_fit_remember_silver.wav",
+      "wav_sha256": "0fc62fc2675bff0fb695139568f4aa1d44e5a3fdad35de893c19c6c08bdff4ac"
+    },
+    {
+      "pair_id": "color_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "teal",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_05_fit_remember_teal.wav",
+      "wav_sha256": "e9161af17c1fd84b74f947792cdf4dca52570aaec44b1d6ade31a3e02bacfa79"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "waterfall",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_09_fit_chosen_waterfall.wav",
+      "wav_sha256": "63893f7571eba35d5eac9c9ebdbcfeba1ae88f14057a8b33ba1f852d3cc64514"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "garden",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_09_fit_chosen_garden.wav",
+      "wav_sha256": "e2beb015842d6912ef32d8b2979b0f56443a7fc61655d5e011606ffd07bd3823"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "waterfall",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_09_fit_remember_waterfall.wav",
+      "wav_sha256": "c59d29439655cf18ee4bd8ba7241e786098b65e4f7b08a873977bc22fa38a56d"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "garden",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_09_fit_remember_garden.wav",
+      "wav_sha256": "599488bd9fa4af1d0c5c1f0fbd09cd39cf34f5dae1f0e237780a0baec7c1d77a"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "waterfall",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_09_fit_chosen_waterfall.wav",
+      "wav_sha256": "05b367cfc538c4c6a7dfd5e9d113b37be42eee1be497dd9c48f7548131adeaef"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "garden",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_09_fit_chosen_garden.wav",
+      "wav_sha256": "e64137502eac21d71e9c39f6b9a571399518e5ac9a96ec03e34456ee8273b7a7"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "waterfall",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_09_fit_remember_waterfall.wav",
+      "wav_sha256": "9224aeadd747f026017de1a01910d4029e68d4aace0b335f42e6b5f5ef445374"
+    },
+    {
+      "pair_id": "nature_09",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "garden",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_09_fit_remember_garden.wav",
+      "wav_sha256": "3a2580c41257669eb7215b65ee0127db6c1740ab0926ea9c463b788a9af9689c"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "phone",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_05_fit_chosen_phone.wav",
+      "wav_sha256": "b0e18ead56814cf52de617ff5de953b6f4b36a1b05d380f733025d341a5b1164"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_chosen",
+      "word": "book",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_05_fit_chosen_book.wav",
+      "wav_sha256": "34c71fadb25453acefab4015fa6e21cb08f65a9b4775319c5362588b48b4a3c8"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "phone",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_05_fit_remember_phone.wav",
+      "wav_sha256": "ec0ef935da7c00bdb861183ca8f501698925b971e124762da2b6f44f65fe634f"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "phrasing_id": "fit_remember",
+      "word": "book",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_05_fit_remember_book.wav",
+      "wav_sha256": "3d7724503c00262f7e08bbc1cd9185adbe960ac53fcd9091ff671420a091845f"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "phone",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_05_fit_chosen_phone.wav",
+      "wav_sha256": "5149cff88931330d05a439ec92d04ecde485275d92684d1486172d8141578696"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_chosen",
+      "word": "book",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_05_fit_chosen_book.wav",
+      "wav_sha256": "dc0c32935a9b4ca7d32687487fab349f31769745d2d1e1695d3f8552d216eb37"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "phone",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_05_fit_remember_phone.wav",
+      "wav_sha256": "de4d0c266a4e2b516d27f43743b3a684e70c2449a9d98bd66d27267e7668e28a"
+    },
+    {
+      "pair_id": "object_05",
+      "split": "fit_pool",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "phrasing_id": "fit_remember",
+      "word": "book",
+      "wav_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_05_fit_remember_book.wav",
+      "wav_sha256": "97936cc53e42c873f7565790d12e586ba0ef64ef4817e1e30a2b6ee57e7d2e36"
+    }
+  ],
+  "candidate_model_inference_run": false
+}
