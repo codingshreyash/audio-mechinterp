@@ -39,7 +39,8 @@ CPU_PREFLIGHT = HERE / "VOXTRAL_FP32_NONBEAVER_CPU_PREFLIGHT_V5.json"
 BYTE_BUDGET = HERE / "VOXTRAL_FP32_NONBEAVER_BYTE_BUDGET_V1.json"
 BYTE_BUDGET_PROBE = HERE / "voxtral_fp32_nonbeaver_byte_budget_probe_v5.py"
 SOURCE_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_INDEPENDENT_SOURCE_REVIEW_V1.md"
-AUDITOR_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md"
+AUDITOR_REVIEW_HOLD = HERE / "VOXTRAL_FP32_NONBEAVER_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md"
+AUDITOR_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_AUDITOR_INDEPENDENT_SOURCE_REREVIEW_V2.md"
 FREEZE = HERE / "VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_V1.json"
 FREEZE_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_INDEPENDENT_REVIEW_V1.md"
 PREVIOUS_MANIFEST = HERE / "VOXTRAL_OLD_FIT_GRAD_LEAF_FACTORIAL_ATTEMPT_MANIFEST_V1.json"
@@ -94,6 +95,7 @@ BOUND = {
     "byte_budget_sha256": BYTE_BUDGET,
     "byte_budget_probe_sha256": BYTE_BUDGET_PROBE,
     "source_review_sha256": SOURCE_REVIEW,
+    "auditor_review_hold_sha256": AUDITOR_REVIEW_HOLD,
     "auditor_review_sha256": AUDITOR_REVIEW,
     "selection_sha256": HERE / "VOXTRAL_FIT_V2_SELECTION.json",
     "masks_sha256": HERE / "VOXTRAL_FIT_V2_CAUSAL_MASKS.json",
@@ -266,7 +268,14 @@ def verify_freeze() -> tuple[dict, dict]:
             AUDITOR_GO not in AUDITOR_REVIEW.read_text()):
         raise ValueError("Independent source review absent")
     source_commit = old_gate.first_add(REPO, SOURCE_REVIEW)
+    auditor_hold_commit = old_gate.first_add(REPO, AUDITOR_REVIEW_HOLD)
     auditor_commit = old_gate.first_add(REPO, AUDITOR_REVIEW)
+    if ("Decision: HOLD for V5 CPU saved-data auditor source. No model launch."
+            not in AUDITOR_REVIEW_HOLD.read_text() or
+            sha(AUDITOR) not in AUDITOR_REVIEW.read_text() or
+            sha(AUDITOR_TESTS) not in AUDITOR_REVIEW.read_text()):
+        raise ValueError("V1 auditor HOLD or V2 auditor rereview binding differs")
+    old_gate.ancestor(REPO, auditor_hold_commit, auditor_commit)
     if source_commit == auditor_commit:
         raise ValueError("Runner and auditor reviews share commit")
     _reviewed_at(source_commit, REVIEWED_RUNNER_KEYS)

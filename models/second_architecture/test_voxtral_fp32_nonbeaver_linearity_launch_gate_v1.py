@@ -77,6 +77,12 @@ class FourEntryGateTests(unittest.TestCase):
         self.assertEqual(gate.runner.COUNTS["recipient_passive_captures"], 1)
         self.assertTrue(set(gate.runner.SOURCE_DEPENDENCIES).issubset(
             gate.REVIEWED_RUNNER_KEYS))
+        self.assertIn("Decision: HOLD for V5 CPU saved-data auditor source.",
+                      gate.AUDITOR_REVIEW_HOLD.read_text())
+        rereview = gate.AUDITOR_REVIEW.read_text()
+        self.assertIn(gate.AUDITOR_GO, rereview)
+        self.assertIn(gate.sha(gate.AUDITOR), rereview)
+        self.assertIn(gate.sha(gate.AUDITOR_TESTS), rereview)
 
     def test_missing_external_reviews_hold_without_reservation(self):
         with tempfile.TemporaryDirectory() as temp:
