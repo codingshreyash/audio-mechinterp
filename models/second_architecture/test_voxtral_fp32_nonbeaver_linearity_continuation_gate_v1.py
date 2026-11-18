@@ -54,13 +54,37 @@ class ContinuationGateTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "changed or absent"):
                     gate._verify_manifest()
 
-    def test_fixed_scope_and_absent_external_freeze_hold(self):
+    def test_fixed_scope_and_missing_reviews_or_freeze_hold(self):
         self.assertEqual(gate.CAMPAIGN, "20261118T182308460007Z")
         self.assertEqual(gate.PRIOR_WORK, (138.8538012499921, 151.86878254101612))
-        self.assertFalse(gate.FREEZE.exists())
-        self.assertFalse(gate.SOURCE_REVIEW.exists())
-        with self.assertRaises((ValueError, FileNotFoundError)):
-            gate.verify_freeze()
+        missing_review = gate.HERE / ".missing_continuation_source_review_test.md"
+        missing_freeze = gate.HERE / ".missing_continuation_freeze_test.json"
+        with mock.patch.object(gate.v1, "verify_freeze", return_value=({}, {})), \
+                mock.patch.object(gate, "_verify_manifest", return_value={}):
+            with mock.patch.object(gate, "SOURCE_REVIEW", missing_review):
+                with self.assertRaisesRegex(ValueError, "Bound file absent"):
+                    gate.verify_freeze()
+            with tempfile.TemporaryDirectory() as temp:
+                review = Path(temp) / "source_review.md"
+                review.write_text("\n".join((
+                    gate.SOURCE_GO,
+                    gate.v1.sha(Path(gate.__file__)),
+                    gate.v1.sha(gate.WORKER),
+                    gate.v1.sha(gate.TESTS),
+                    "")))
+                committed_same = gate.v1.old_gate.committed_same
+
+                def allow_temporary_review(repo, path, ref="HEAD"):
+                    if path == review:
+                        return None
+                    return committed_same(repo, path, ref)
+
+                with mock.patch.object(gate, "SOURCE_REVIEW", review), \
+                        mock.patch.object(gate, "FREEZE", missing_freeze), \
+                        mock.patch.object(gate.v1.old_gate, "committed_same",
+                                          side_effect=allow_temporary_review):
+                    with self.assertRaisesRegex(ValueError, "Bound file absent"):
+                        gate.verify_freeze()
 
     def test_gap_arithmetic_and_narrow_exception(self):
         start = {"wall_utc": "2026-11-18T18:28:15.345155+00:00"}
