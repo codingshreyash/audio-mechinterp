@@ -1,0 +1,13 @@
+# Independent audit: completed VoiceChat synthetic audio render
+
+**Verdict:** the saved render at `rendered_v1/20261118T1145Z` is internally complete and valid for the next, blinded audio QA step. This is a file and receipt audit, not a speech-quality or VoiceChat result.
+
+Anchor: commit `cdb893b`; manifest SHA-256 `bfafef903eaff14a444c015d0c38886e3bedde928ef8c5ca9100aac00370ca7c`. The directory is unchanged from that commit. The manifest declares 12/12 completed case–voice pairs, exactly the six frozen case IDs crossed with Apple Samantha and Piper Amy. It contains 36 distinct source, converted, and final paths. The directory has exactly those 36 audio files plus `meta.json`, `preflight.json`, and `render_manifest.json`; there is no error receipt or extra artifact.
+
+I recomputed the SHA-256 of every audio file and both receipts. All match the manifest. The meta receipt's renderer SHA-256 matches the patched `render_synthetic_v1.py` (`149a568fb06d73a57eddbbd64a7a9d48b99d4d46387762e04c4633bb6fed38c2`). The frozen script, recipe, padding helper, both Piper inputs, Piper executable, and Apple `say` hashes match the renderer's pinned dependencies. The preflight receipt matches those pins and records Samantha `en_US` and build `25G241`. Each row's script and command match the frozen case text, voice, and source filename.
+
+I decoded all 12 sources and converted WAVs. Each source is mono; its rate/frame count matches its row. Independently resampling the source to 16 kHz and applying the recorded RMS/peak gain reproduces each converted recording within one PCM16 quantization step. All converted and final WAVs are mono, 16 kHz, signed PCM16. Each final WAV equals its converted WAV through the last nonzero sample, then has **exactly 80,000 zero frames**, with a nonzero sample immediately before that tail. The recorded trim counts agree (0–176 frames). Final durations span 6.8795–13.7655625 seconds, including the five-second tail; peak magnitude is at most 30,465/32,768.
+
+This is a separate new directory from the failed `20261118T1143Z` attempt in `b1fc8ca`. Its meta receipt has a later start time and the patched renderer hash; no path or file from that failed directory occurs in the complete manifest. This supports that the failed attempt was not resumed or mixed into this run. File receipts alone cannot prove how the TTS executables behaved at runtime; they establish the saved artifacts and their consistency.
+
+**Next gate:** independent listening and ASR QA against the scripts must precede any VoiceChat inference. This audit makes no claim that the speech is intelligible, correctly worded, suitable for the planned test, or evidence of a model security behavior. No TTS or VoiceChat run was performed for this audit.
