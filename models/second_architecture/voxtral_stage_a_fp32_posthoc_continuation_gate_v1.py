@@ -25,7 +25,7 @@ FAILED_MANIFEST = HERE / "VOXTRAL_STAGE_A_BF16_FAILED_ATTEMPT_MANIFEST_V1.json"
 POSTHOC_AUDIT = HERE / "VOXTRAL_STAGE_A_BF16_POSTHOC_AUDIT_V2.json"
 POSTHOC_RESULT_REVIEW = HERE / "VOXTRAL_STAGE_A_BF16_POSTHOC_AUDIT_RESULT_INDEPENDENT_REVIEW_V1.md"
 POSTHOC_RECEIPT = HERE / "VOXTRAL_STAGE_A_BF16_POSTHOC_AUDIT_RECEIPT_V1.json"
-POSTHOC_REVIEW = HERE / "VOXTRAL_STAGE_A_BF16_POSTHOC_AUDIT_INDEPENDENT_REVIEW_V1.md"
+POSTHOC_REVIEW = HERE / "VOXTRAL_STAGE_A_BF16_POSTHOC_AUDIT_RECEIPT_INDEPENDENT_REVIEW_V1.md"
 FREEZE = HERE / "VOXTRAL_STAGE_A_FP32_POSTHOC_CONTINUATION_FREEZE_V1.json"
 RUNS = HERE / "runs/voxtral_stage_a_fp32_posthoc_continuation_v1"
 REVIEW = HERE / "VOXTRAL_STAGE_A_FP32_POSTHOC_CONTINUATION_INDEPENDENT_REVIEW_V1.md"
@@ -85,6 +85,14 @@ FIXED_PINS = {
 
 def _hex(value: object, size: int) -> bool:
     return isinstance(value, str) and re.fullmatch(rf"[0-9a-f]{{{size}}}", value) is not None
+
+
+def require_first_add_bytes(repo: Path, path: Path) -> str:
+    """Reject a receipt or review changed in any later committed revision."""
+    first_add = old.first_add_commit(repo, path)
+    if path.read_bytes() != old.git_blob(repo, first_add, path):
+        raise ValueError(f"Bound receipt/review changed after first-add: {path.name}")
+    return first_add
 
 
 def verify_preserved_bf16() -> dict:
@@ -171,7 +179,7 @@ def verify_posthoc_receipt(preserved: dict) -> dict:
         if old.sha_bytes(old.git_blob(REPO, POSTHOC_RESULT_REVIEW_COMMIT, path)) != digest:
             raise ValueError("Posthoc result review commit did not contain reviewed evidence")
     old.ancestor(REPO, V2_SOURCE_REVIEW_COMMIT, POSTHOC_RESULT_REVIEW_COMMIT)
-    audit_add = old.first_add_commit(REPO, POSTHOC_AUDIT)
+    audit_add = require_first_add_bytes(REPO, POSTHOC_AUDIT)
     if audit_add == POSTHOC_RESULT_REVIEW_COMMIT:
         raise ValueError("Posthoc audit output was added with its review")
     old.ancestor(REPO, audit_add, POSTHOC_RESULT_REVIEW_COMMIT)
@@ -213,8 +221,8 @@ def verify_posthoc_receipt(preserved: dict) -> dict:
         raise ValueError("Posthoc receipt schema, hash, or original failure differs")
     if "Decision: GO for receipt provenance; FP32 HOLD pending launcher review and freeze." not in POSTHOC_REVIEW.read_text():
         raise ValueError("Posthoc receipt review lacks required GO decision")
-    receipt_add = old.first_add_commit(REPO, POSTHOC_RECEIPT)
-    review_add = old.first_add_commit(REPO, POSTHOC_REVIEW)
+    receipt_add = require_first_add_bytes(REPO, POSTHOC_RECEIPT)
+    review_add = require_first_add_bytes(REPO, POSTHOC_REVIEW)
     old.ancestor(REPO, POSTHOC_RESULT_REVIEW_COMMIT, receipt_add)
     if receipt_add == POSTHOC_RESULT_REVIEW_COMMIT or receipt_add == review_add:
         raise ValueError("Posthoc receipt/review chronology invalid")
@@ -259,7 +267,7 @@ def verify_continuation_freeze(preserved: dict, posthoc: dict) -> dict:
     old.ancestor(REPO, V2_SOURCE_REVIEW_COMMIT, freeze["receipt_review_commit"])
     old.ancestor(REPO, freeze["receipt_review_commit"], freeze["launcher_review_commit"])
     old.ancestor(REPO, freeze["launcher_review_commit"], "HEAD")
-    freeze_add = old.first_add_commit(REPO, FREEZE)
+    freeze_add = require_first_add_bytes(REPO, FREEZE)
     if freeze_add == freeze["launcher_review_commit"]:
         raise ValueError("Continuation freeze was self-authored in launcher review")
     old.ancestor(REPO, freeze["launcher_review_commit"], freeze_add)
