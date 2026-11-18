@@ -1,0 +1,1262 @@
+{
+  "metadata": {
+    "status": "development_stage_a_once_no_locked_test",
+    "script_sha256": "6f314b7a2322ff33ab0fdccb190a805702f26e59197f30460fcd36b8faac8745",
+    "metrics_script_sha256": "448f619332a9f96ea58358dcb07cab37f332b818817033b6ce449621d599b67c",
+    "protocol_sha256": "f6bbc9b61fb846ee1ca586ab4863d79f43ecc43d1d5a66c9fb6c38653077564a",
+    "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+    "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+    "scoring_v2_sha256": "e7ea18cd0d5e2638bec64b8733049a5a2754ecd674080d93766db8409b46dd9b",
+    "lens_sha256": "fef84a20f437c37ca665e4026bb3645ccd558e549c7ffe2adff20e6a867ba12c",
+    "baselines_sha256": "d84c358d2756aa7531cd8319884f14085d68c8e7fe84d3d85737eefd606385cf",
+    "baseline_report_sha256": "8ca3859fb1ecbd902c29b36c1dc9396570d0dba5af63d5045aed1c482ad39a67",
+    "calibration_raw_sha256": "76085f0dab8f37b6052024b582ff34533cac3d1c579b27b39a631c536d9cd110",
+    "calibration_report_sha256": "b130aa4af85a807671f537aaabbaddf922bc8f2632d8721c9188c2b6aa8e7bfa",
+    "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+    "alphas": [
+      0.0,
+      0.005,
+      0.01,
+      0.025,
+      0.05,
+      1.0
+    ],
+    "case_ids": [
+      "animal_00/dev_hear/kokoro/bear",
+      "animal_00/dev_hear/kokoro/wolf",
+      "animal_00/dev_hear/piper/bear",
+      "animal_00/dev_hear/piper/wolf",
+      "animal_00/dev_listen/kokoro/bear",
+      "animal_00/dev_listen/kokoro/wolf",
+      "animal_00/dev_listen/piper/bear",
+      "animal_00/dev_listen/piper/wolf",
+      "animal_04/dev_hear/kokoro/goose",
+      "animal_04/dev_hear/kokoro/mouse",
+      "animal_04/dev_hear/piper/goose",
+      "animal_04/dev_hear/piper/mouse",
+      "animal_04/dev_listen/kokoro/goose",
+      "animal_04/dev_listen/kokoro/mouse",
+      "animal_04/dev_listen/piper/goose",
+      "animal_04/dev_listen/piper/mouse",
+      "animal_05/dev_hear/kokoro/fox",
+      "animal_05/dev_hear/kokoro/rabbit",
+      "animal_05/dev_hear/piper/fox",
+      "animal_05/dev_hear/piper/rabbit",
+      "animal_05/dev_listen/kokoro/fox",
+      "animal_05/dev_listen/kokoro/rabbit",
+      "animal_05/dev_listen/piper/fox",
+      "animal_05/dev_listen/piper/rabbit",
+      "color_04/dev_hear/kokoro/gold",
+      "color_04/dev_hear/kokoro/gray",
+      "color_04/dev_hear/piper/gold",
+      "color_04/dev_hear/piper/gray",
+      "color_04/dev_listen/kokoro/gold",
+      "color_04/dev_listen/kokoro/gray",
+      "color_04/dev_listen/piper/gold",
+      "color_04/dev_listen/piper/gray",
+      "color_08/dev_hear/kokoro/navy",
+      "color_08/dev_hear/kokoro/olive",
+      "color_08/dev_hear/piper/navy",
+      "color_08/dev_hear/piper/olive",
+      "color_08/dev_listen/kokoro/navy",
+      "color_08/dev_listen/kokoro/olive",
+      "color_08/dev_listen/piper/navy",
+      "color_08/dev_listen/piper/olive",
+      "color_09/dev_hear/kokoro/lavender",
+      "color_09/dev_hear/kokoro/turquoise",
+      "color_09/dev_hear/piper/lavender",
+      "color_09/dev_hear/piper/turquoise",
+      "color_09/dev_listen/kokoro/lavender",
+      "color_09/dev_listen/kokoro/turquoise",
+      "color_09/dev_listen/piper/lavender",
+      "color_09/dev_listen/piper/turquoise",
+      "nature_01/dev_hear/kokoro/forest",
+      "nature_01/dev_hear/kokoro/ocean",
+      "nature_01/dev_hear/piper/forest",
+      "nature_01/dev_hear/piper/ocean",
+      "nature_01/dev_listen/kokoro/forest",
+      "nature_01/dev_listen/kokoro/ocean",
+      "nature_01/dev_listen/piper/forest",
+      "nature_01/dev_listen/piper/ocean",
+      "nature_06/dev_hear/kokoro/meadow",
+      "nature_06/dev_hear/kokoro/swamp",
+      "nature_06/dev_hear/piper/meadow",
+      "nature_06/dev_hear/piper/swamp",
+      "nature_06/dev_listen/kokoro/meadow",
+      "nature_06/dev_listen/kokoro/swamp",
+      "nature_06/dev_listen/piper/meadow",
+      "nature_06/dev_listen/piper/swamp",
+      "nature_11/dev_hear/kokoro/rain",
+      "nature_11/dev_hear/kokoro/reef",
+      "nature_11/dev_hear/piper/rain",
+      "nature_11/dev_hear/piper/reef",
+      "nature_11/dev_listen/kokoro/rain",
+      "nature_11/dev_listen/kokoro/reef",
+      "nature_11/dev_listen/piper/rain",
+      "nature_11/dev_listen/piper/reef",
+      "object_00/dev_hear/kokoro/chair",
+      "object_00/dev_hear/kokoro/table",
+      "object_00/dev_hear/piper/chair",
+      "object_00/dev_hear/piper/table",
+      "object_00/dev_listen/kokoro/chair",
+      "object_00/dev_listen/kokoro/table",
+      "object_00/dev_listen/piper/chair",
+      "object_00/dev_listen/piper/table",
+      "object_04/dev_hear/kokoro/clock",
+      "object_04/dev_hear/kokoro/lamp",
+      "object_04/dev_hear/piper/clock",
+      "object_04/dev_hear/piper/lamp",
+      "object_04/dev_listen/kokoro/clock",
+      "object_04/dev_listen/kokoro/lamp",
+      "object_04/dev_listen/piper/clock",
+      "object_04/dev_listen/piper/lamp",
+      "object_08/dev_hear/kokoro/blanket",
+      "object_08/dev_hear/kokoro/mirror",
+      "object_08/dev_hear/piper/blanket",
+      "object_08/dev_hear/piper/mirror",
+      "object_08/dev_listen/kokoro/blanket",
+      "object_08/dev_listen/kokoro/mirror",
+      "object_08/dev_listen/piper/blanket",
+      "object_08/dev_listen/piper/mirror"
+    ],
+    "planned": 96,
+    "max_mps_driver_bytes": 32212254720
+  },
+  "summary": {
+    "status": "development_primary_stage_a",
+    "clean_task": {
+      "planned_directions": 96,
+      "available_directions": 96,
+      "semantic_word_plus_eos": 92,
+      "prefix_classified": 92,
+      "prefix_class_pure": 92,
+      "prefix_purity": 1.0,
+      "task_fidelity_gate_passed": true
+    },
+    "sites": {
+      "encoder31": {
+        "site": "encoder31",
+        "planned_directions": 96,
+        "available_directions": 96,
+        "invalid_conditions": 0,
+        "invalid_absolute_anchor_directions": 0,
+        "small_alpha_planned_conditions": 288,
+        "small_alpha_valid_conditions": 288,
+        "mae": {
+          "map": 0.015419929029661062,
+          "zero": 0.018211940483679072,
+          "global": 0.017186877332766734,
+          "six_bin": 0.017374627062915357
+        },
+        "map_to_comparator_mae_ratio": {
+          "zero": 0.8466933572224159,
+          "global": 0.8971920105732651,
+          "six_bin": 0.8874969790041463
+        },
+        "determinate_conditions": 288,
+        "determinate_sign_agreement": 0.7291666666666666,
+        "absolute_anchor_improved_directions": 70,
+        "absolute_anchor_minimum": 68,
+        "site_primary_gate_passed": false,
+        "descriptive_groups": {
+          "category": {
+            "animal": {
+              "site": "encoder31",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.01072928963825078,
+                "zero": 0.01584734367522637,
+                "global": 0.014211276887597194,
+                "six_bin": 0.01401392958874026
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.6770402572276844,
+                "global": 0.7549842088865851,
+                "six_bin": 0.7656160658086522
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 20,
+              "absolute_anchor_minimum": 68
+            },
+            "color": {
+              "site": "encoder31",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.00863384808492139,
+                "zero": 0.011383864722858942,
+                "global": 0.01061405000894311,
+                "six_bin": 0.01139653528239933
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.7584285561286157,
+                "global": 0.8134357834800802,
+                "six_bin": 0.7575853424729356
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.6944444444444444,
+              "absolute_anchor_improved_directions": 14,
+              "absolute_anchor_minimum": 68
+            },
+            "nature": {
+              "site": "encoder31",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.02046063478533548,
+                "zero": 0.02189866650159041,
+                "global": 0.021517998880374374,
+                "six_bin": 0.02180972980697445
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.934332452793393,
+                "global": 0.9508614113739327,
+                "six_bin": 0.9381425155846017
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.625,
+              "absolute_anchor_improved_directions": 16,
+              "absolute_anchor_minimum": 68
+            },
+            "object": {
+              "site": "encoder31",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.021855943610136604,
+                "zero": 0.023717887035040568,
+                "global": 0.022404183554152263,
+                "six_bin": 0.022278313573547395
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9214962352188816,
+                "global": 0.9755295727384785,
+                "six_bin": 0.9810412057440335
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.7222222222222222,
+              "absolute_anchor_improved_directions": 20,
+              "absolute_anchor_minimum": 68
+            }
+          },
+          "engine": {
+            "kokoro": {
+              "site": "encoder31",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.015274519219543543,
+                "zero": 0.01759051434540377,
+                "global": 0.016701131760395598,
+                "six_bin": 0.01692252845814805
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8683384078268653,
+                "global": 0.9145798882782862,
+                "six_bin": 0.9026144797049519
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.7222222222222222,
+              "absolute_anchor_improved_directions": 34,
+              "absolute_anchor_minimum": 68
+            },
+            "piper": {
+              "site": "encoder31",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.015565338839778583,
+                "zero": 0.018833366621954378,
+                "global": 0.017672622905137873,
+                "six_bin": 0.017826725667682668
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8264767076553271,
+                "global": 0.8807599711332804,
+                "six_bin": 0.8731462597192675
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.7361111111111112,
+              "absolute_anchor_improved_directions": 36,
+              "absolute_anchor_minimum": 68
+            }
+          },
+          "template": {
+            "dev_hear": {
+              "site": "encoder31",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.01758418066529562,
+                "zero": 0.020334102154883887,
+                "global": 0.019400806910332278,
+                "six_bin": 0.019721587581335083
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.86476307295782,
+                "global": 0.9063633665634196,
+                "six_bin": 0.8916209505332953
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.6944444444444444,
+              "absolute_anchor_improved_directions": 35,
+              "absolute_anchor_minimum": 68
+            },
+            "dev_listen": {
+              "site": "encoder31",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.013255677394026506,
+                "zero": 0.01608977881247426,
+                "global": 0.014972947755201194,
+                "six_bin": 0.015027666544495635
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8238570305111652,
+                "global": 0.8853084650229842,
+                "six_bin": 0.8820848769020513
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.7638888888888888,
+              "absolute_anchor_improved_directions": 35,
+              "absolute_anchor_minimum": 68
+            }
+          },
+          "pair_id": {
+            "animal_00": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.010718115992886116,
+                "zero": 0.018665187977183157,
+                "global": 0.015395254504890618,
+                "six_bin": 0.015072064933904524
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.5742302732760173,
+                "global": 0.6961960901316238,
+                "six_bin": 0.7111245897551685
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "animal_04": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.014242200296509985,
+                "zero": 0.018466097296322353,
+                "global": 0.018101409452643935,
+                "six_bin": 0.018014381677203078
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.771262063010272,
+                "global": 0.7868006264246863,
+                "six_bin": 0.7906016732471739
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 4,
+              "absolute_anchor_minimum": 68
+            },
+            "animal_05": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.007227552625356237,
+                "zero": 0.0104107457521736,
+                "global": 0.00913716670525703,
+                "six_bin": 0.008955342155113177
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.6942396632678536,
+                "global": 0.7910058838258796,
+                "six_bin": 0.8070660506510704
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.75,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "color_04": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.013581038970341686,
+                "zero": 0.020173590856029506,
+                "global": 0.019009790137516802,
+                "six_bin": 0.02000656906915303
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.6732088038893963,
+                "global": 0.7144234035250502,
+                "six_bin": 0.6788289847898761
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "color_08": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.0069627213772398555,
+                "zero": 0.007326479631025802,
+                "global": 0.0069070909689281645,
+                "six_bin": 0.007065929539576595
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9503501992627507,
+                "global": 1.0080541010045976,
+                "six_bin": 0.9853935477620226
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.5,
+              "absolute_anchor_improved_directions": 0,
+              "absolute_anchor_minimum": 68
+            },
+            "color_09": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.00535778390718263,
+                "zero": 0.006651523681521517,
+                "global": 0.005925268920384363,
+                "six_bin": 0.007117107238468368
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8054972309678453,
+                "global": 0.9042262856206497,
+                "six_bin": 0.7528035938848167
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.7083333333333334,
+              "absolute_anchor_improved_directions": 6,
+              "absolute_anchor_minimum": 68
+            },
+            "nature_01": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.012625016306914816,
+                "zero": 0.014308684380605285,
+                "global": 0.013919600247241704,
+                "six_bin": 0.014291682417044926
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8823324333037496,
+                "global": 0.9069956092608751,
+                "six_bin": 0.8833820916603655
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.75,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "nature_06": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.02460877003140623,
+                "zero": 0.0229022307762059,
+                "global": 0.021661700042338028,
+                "six_bin": 0.022733403301898363
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 1.0745141061530707,
+                "global": 1.136049801414853,
+                "six_bin": 1.0824938837622813
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.125,
+              "absolute_anchor_improved_directions": 0,
+              "absolute_anchor_minimum": 68
+            },
+            "nature_11": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.024148118017685388,
+                "zero": 0.028485084347960044,
+                "global": 0.028972696351543387,
+                "six_bin": 0.02840410370198006
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8477460597519612,
+                "global": 0.8334784489742187,
+                "six_bin": 0.8501630000738947
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "object_00": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.023623381679778843,
+                "zero": 0.025348012769938144,
+                "global": 0.02372368841659167,
+                "six_bin": 0.02386420568952996
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9319618817533242,
+                "global": 0.9957718742949484,
+                "six_bin": 0.9899085679664262
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "object_04": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.018984373724294363,
+                "zero": 0.01995954820404607,
+                "global": 0.019280032809007846,
+                "six_bin": 0.01896836208998069
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9511424572448978,
+                "global": 0.9846650113284378,
+                "six_bin": 1.0008441231898526
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.4166666666666667,
+              "absolute_anchor_improved_directions": 4,
+              "absolute_anchor_minimum": 68
+            },
+            "object_08": {
+              "site": "encoder31",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.0229600754263366,
+                "zero": 0.02584610013113749,
+                "global": 0.024208829436857277,
+                "six_bin": 0.02400237294113154
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8883380978113593,
+                "global": 0.9484174146553537,
+                "six_bin": 0.9565752304011238
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            }
+          }
+        },
+        "pair_bootstrap": {
+          "map_zero_ratio": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.7612112842125154,
+              0.9232377826055803
+            ]
+          },
+          "map_global_ratio": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.8178646886165587,
+              0.975472069833066
+            ]
+          },
+          "map_six_bin_ratio": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.8085724355266777,
+              0.9592246324090701
+            ]
+          },
+          "sign": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.5763888888888888,
+              0.8611111111111112
+            ]
+          },
+          "clean": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.8958333333333334,
+              1.0
+            ]
+          },
+          "absolute": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.5,
+              0.9166666666666666
+            ]
+          }
+        }
+      },
+      "connector": {
+        "site": "connector",
+        "planned_directions": 96,
+        "available_directions": 96,
+        "invalid_conditions": 0,
+        "invalid_absolute_anchor_directions": 0,
+        "small_alpha_planned_conditions": 288,
+        "small_alpha_valid_conditions": 288,
+        "mae": {
+          "map": 0.019631719959946465,
+          "zero": 0.023856251614060697,
+          "global": 0.022255166970192503,
+          "six_bin": 0.0221278497550596
+        },
+        "map_to_comparator_mae_ratio": {
+          "zero": 0.8229172075119997,
+          "global": 0.8821196437771167,
+          "six_bin": 0.8871951037835302
+        },
+        "determinate_conditions": 288,
+        "determinate_sign_agreement": 0.8125,
+        "absolute_anchor_improved_directions": 68,
+        "absolute_anchor_minimum": 68,
+        "site_primary_gate_passed": false,
+        "descriptive_groups": {
+          "category": {
+            "animal": {
+              "site": "connector",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.012474749114733008,
+                "zero": 0.020117088396544667,
+                "global": 0.017469696618956327,
+                "six_bin": 0.01699075480479591
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.6201070885027122,
+                "global": 0.7140793218582105,
+                "six_bin": 0.7342080595037374
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 20,
+              "absolute_anchor_minimum": 68
+            },
+            "color": {
+              "site": "connector",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.013069718680428895,
+                "zero": 0.01766509316631891,
+                "global": 0.016158568005449767,
+                "six_bin": 0.01639397581970666
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.739861293533862,
+                "global": 0.8088413946100235,
+                "six_bin": 0.7972269096992455
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.75,
+              "absolute_anchor_improved_directions": 14,
+              "absolute_anchor_minimum": 68
+            },
+            "nature": {
+              "site": "connector",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.022612022709074524,
+                "zero": 0.02406366370083419,
+                "global": 0.02323733715619948,
+                "six_bin": 0.02352625707730718
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9396749800941848,
+                "global": 0.9730900987956733,
+                "six_bin": 0.9611398292032394
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.6666666666666666,
+              "absolute_anchor_improved_directions": 16,
+              "absolute_anchor_minimum": 68
+            },
+            "object": {
+              "site": "connector",
+              "planned_directions": 24,
+              "available_directions": 24,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 72,
+              "small_alpha_valid_conditions": 72,
+              "mae": {
+                "map": 0.030370389335549437,
+                "zero": 0.03357916119254502,
+                "global": 0.032155066100164435,
+                "six_bin": 0.031600411318428646
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9044415720036518,
+                "global": 0.9444978045121831,
+                "six_bin": 0.9610757603600594
+              },
+              "determinate_conditions": 72,
+              "determinate_sign_agreement": 0.8333333333333334,
+              "absolute_anchor_improved_directions": 18,
+              "absolute_anchor_minimum": 68
+            }
+          },
+          "engine": {
+            "kokoro": {
+              "site": "connector",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.018117703258276687,
+                "zero": 0.021879008296714204,
+                "global": 0.020344040938254426,
+                "six_bin": 0.020376882759121126
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.828086127697004,
+                "global": 0.8905656114861925,
+                "six_bin": 0.8891302694553129
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.7916666666666666,
+              "absolute_anchor_improved_directions": 33,
+              "absolute_anchor_minimum": 68
+            },
+            "piper": {
+              "site": "connector",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.021145736661616246,
+                "zero": 0.025833494931407186,
+                "global": 0.02416629300213058,
+                "six_bin": 0.023878816750998073
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8185395246660266,
+                "global": 0.8750095291715602,
+                "six_bin": 0.8855437387085945
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.8333333333333334,
+              "absolute_anchor_improved_directions": 35,
+              "absolute_anchor_minimum": 68
+            }
+          },
+          "template": {
+            "dev_hear": {
+              "site": "connector",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.02061511790746246,
+                "zero": 0.024970567888038624,
+                "global": 0.02342687587647519,
+                "six_bin": 0.023186169840901993
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8255766548800636,
+                "global": 0.8799772541657489,
+                "six_bin": 0.8891126929940787
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.8541666666666666,
+              "absolute_anchor_improved_directions": 34,
+              "absolute_anchor_minimum": 68
+            },
+            "dev_listen": {
+              "site": "connector",
+              "planned_directions": 48,
+              "available_directions": 48,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 144,
+              "small_alpha_valid_conditions": 144,
+              "mae": {
+                "map": 0.018648322012430472,
+                "zero": 0.02274193534008277,
+                "global": 0.021083458063909814,
+                "six_bin": 0.021069529669217206
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8199971433197559,
+                "global": 0.8845001591248566,
+                "six_bin": 0.885084873995828
+              },
+              "determinate_conditions": 144,
+              "determinate_sign_agreement": 0.7708333333333334,
+              "absolute_anchor_improved_directions": 34,
+              "absolute_anchor_minimum": 68
+            }
+          },
+          "pair_id": {
+            "animal_00": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.008844260696093453,
+                "zero": 0.020183061735980612,
+                "global": 0.0165628608573134,
+                "six_bin": 0.014816085168269932
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.4382021326490159,
+                "global": 0.5339814644514286,
+                "six_bin": 0.5969364103706886
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "animal_04": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.016559218699201184,
+                "zero": 0.02058226575133082,
+                "global": 0.020225332289844394,
+                "six_bin": 0.019719548969007555
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8045381834665354,
+                "global": 0.8187365459264148,
+                "six_bin": 0.8397361788155835
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 4,
+              "absolute_anchor_minimum": 68
+            },
+            "animal_05": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.012020767948904387,
+                "zero": 0.01958593770232257,
+                "global": 0.015620896709711193,
+                "six_bin": 0.01643663027711025
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.613744827110265,
+                "global": 0.7695312357728683,
+                "six_bin": 0.7313401680418998
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "color_04": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.01997803034117629,
+                "zero": 0.03116153609483722,
+                "global": 0.026576780369462278,
+                "six_bin": 0.027881576226508813
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.641111859196383,
+                "global": 0.7517099537057468,
+                "six_bin": 0.7165315970257767
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "color_08": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.01069962206412963,
+                "zero": 0.011080549085461522,
+                "global": 0.010714201421814895,
+                "six_bin": 0.010977846082473874
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9656220085851435,
+                "global": 0.9986392492439444,
+                "six_bin": 0.9746558645244234
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.5,
+              "absolute_anchor_improved_directions": 0,
+              "absolute_anchor_minimum": 68
+            },
+            "color_09": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.008531503635980764,
+                "zero": 0.010753194318657991,
+                "global": 0.011184722225072127,
+                "six_bin": 0.010322505150137292
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.793392491864269,
+                "global": 0.7627818969751613,
+                "six_bin": 0.82649545937667
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.75,
+              "absolute_anchor_improved_directions": 6,
+              "absolute_anchor_minimum": 68
+            },
+            "nature_01": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.009155426543670112,
+                "zero": 0.011419794513342815,
+                "global": 0.009907549532959617,
+                "six_bin": 0.010415413088880351
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8017155241254972,
+                "global": 0.9240858714067081,
+                "six_bin": 0.8790267333174313
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "nature_06": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.0323755700103047,
+                "zero": 0.030024193199176336,
+                "global": 0.028490125491682505,
+                "six_bin": 0.029348619751968934
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 1.07831606982841,
+                "global": 1.1363786382673717,
+                "six_bin": 1.1031377381259198
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.125,
+              "absolute_anchor_improved_directions": 0,
+              "absolute_anchor_minimum": 68
+            },
+            "nature_11": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.026305071573248757,
+                "zero": 0.030747003389983412,
+                "global": 0.031314336443956314,
+                "six_bin": 0.030814738391072256
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8555328543599887,
+                "global": 0.8400328590812485,
+                "six_bin": 0.8536522763688283
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            },
+            "object_00": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.033137492801570266,
+                "zero": 0.03594723775661546,
+                "global": 0.03479309526605756,
+                "six_bin": 0.0339158708756114
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9218369718956192,
+                "global": 0.9524157752615238,
+                "six_bin": 0.9770497394303722
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.875,
+              "absolute_anchor_improved_directions": 7,
+              "absolute_anchor_minimum": 68
+            },
+            "object_04": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.02983858850737116,
+                "zero": 0.03142537966110415,
+                "global": 0.030710993892440214,
+                "six_bin": 0.030595405062981824
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.9495060625887365,
+                "global": 0.9715930592111575,
+                "six_bin": 0.9752637183899764
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 0.625,
+              "absolute_anchor_improved_directions": 3,
+              "absolute_anchor_minimum": 68
+            },
+            "object_08": {
+              "site": "connector",
+              "planned_directions": 8,
+              "available_directions": 8,
+              "invalid_conditions": 0,
+              "invalid_absolute_anchor_directions": 0,
+              "small_alpha_planned_conditions": 24,
+              "small_alpha_valid_conditions": 24,
+              "mae": {
+                "map": 0.028135086697706885,
+                "zero": 0.03336486615991544,
+                "global": 0.03096110914199553,
+                "six_bin": 0.030289958016692726
+              },
+              "map_to_comparator_mae_ratio": {
+                "zero": 0.8432548946205091,
+                "global": 0.9087234752693197,
+                "six_bin": 0.9288585570901652
+              },
+              "determinate_conditions": 24,
+              "determinate_sign_agreement": 1.0,
+              "absolute_anchor_improved_directions": 8,
+              "absolute_anchor_minimum": 68
+            }
+          }
+        },
+        "pair_bootstrap": {
+          "map_zero_ratio": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.7189467948405822,
+              0.9136941228089065
+            ]
+          },
+          "map_global_ratio": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.795756663733964,
+              0.9607291782544337
+            ]
+          },
+          "map_six_bin_ratio": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.8048593122171989,
+              0.9595854155024744
+            ]
+          },
+          "sign": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.6458333333333334,
+              0.9479166666666666
+            ]
+          },
+          "clean": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.8958333333333334,
+              1.0
+            ]
+          },
+          "absolute": {
+            "n_valid_replicates": 10000,
+            "interval_95": [
+              0.4791666666666667,
+              0.90625
+            ]
+          }
+        }
+      }
+    },
+    "development_primary_gate_passed": false,
+    "secondary_stage_b_required_for_positive_claim": true
+  },
+  "result_sha256": "036bab4a9acf00ad92f5c9ddee969831f0ebbf37c67ef181464b1ba8afd16c32",
+  "progress_sha256": "dbfb55ee9cd5eb7446996b98463a5c7531ba22743d256fcf5c0e98f136f4cfbe",
+  "memory_sha256": "fce26d0cce2ecf8ff8b5426baa775266a0b552d707670a151b9ec43096839e83"
+}

@@ -1,0 +1,63 @@
+{
+  "status": "independent_stage_a_audit_passed",
+  "result_sha256": "036bab4a9acf00ad92f5c9ddee969831f0ebbf37c67ef181464b1ba8afd16c32",
+  "summary_sha256": "2a7ddd3accc4e93f2e9f64c455c56bd1b164de230a703ae2c70c36573c4dd286",
+  "cases": {
+    "planned": 96,
+    "pairs": 12,
+    "conditions_per_site": 576,
+    "small_conditions_per_site": 288
+  },
+  "task": {
+    "planned_directions": 96,
+    "available_directions": 96,
+    "semantic_word_plus_eos": 92,
+    "prefix_classified": 92,
+    "prefix_class_pure": 92,
+    "prefix_purity": 1.0,
+    "task_fidelity_gate_passed": true
+  },
+  "sites": {
+    "encoder31": {
+      "mae": {
+        "map": 0.015419929029661062,
+        "zero": 0.018211940483679072,
+        "global": 0.017186877332766734,
+        "six_bin": 0.017374627062915357
+      },
+      "ratios": {
+        "zero": 0.8466933572224159,
+        "global": 0.8971920105732651,
+        "six_bin": 0.8874969790041463
+      },
+      "determinate": 288,
+      "sign_rate": 0.7291666666666666,
+      "absolute_improved": 70,
+      "site_gate": false
+    },
+    "connector": {
+      "mae": {
+        "map": 0.019631719959946465,
+        "zero": 0.023856251614060697,
+        "global": 0.022255166970192503,
+        "six_bin": 0.0221278497550596
+      },
+      "ratios": {
+        "zero": 0.8229172075119997,
+        "global": 0.8821196437771167,
+        "six_bin": 0.8871951037835302
+      },
+      "determinate": 288,
+      "sign_rate": 0.8125,
+      "absolute_improved": 68,
+      "site_gate": false
+    }
+  },
+  "development_primary_gate_passed": false,
+  "memory": {
+    "samples": 1345,
+    "expected_unique_phases": 1345,
+    "peak_driver_gib": 18.624740600585938
+  },
+  "scope": "read-only Stage A artifact audit; no new model inference"
+}
