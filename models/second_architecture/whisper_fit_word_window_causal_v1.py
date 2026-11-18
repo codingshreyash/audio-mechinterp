@@ -161,6 +161,9 @@ def preflight() -> dict[str, Any]:
         "python_version": sys.version.split()[0],
         "device": "cpu",
         "threads": 4,
+        "generation": {"do_sample": False, "num_beams": 1, "max_new_tokens": 128, "output_scores": True, "return_dict_in_generate": True},
+        "capture_sites": list(CAPTURE_SITES),
+        "intervention_sites": list(SITES),
         "cases": [{"key": c.key, "file_sha256": c.file_sha256, "pcm_sha256": c.pcm_sha256, "frames": c.frames} for c in cases],
         "windows": windows,
     }
