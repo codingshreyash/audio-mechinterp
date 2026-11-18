@@ -1,0 +1,21 @@
+{
+  "status": "frozen_old_fit_numerical_launch_v1",
+  "permitted_arms": [
+    "bf16",
+    "fp32"
+  ],
+  "audit_scope": "paired_edit_numerical_consistency_only; donor_and_no_grad_report_only",
+  "launcher_review_commit": "5c4997d57373ba3656a05659413169edc1b463bd",
+  "reviewed_utc": "2026-11-18T12:06:54.472729+00:00",
+  "runner_sha256": "ae9d2620ad4e06d01ea01c920f1f8f4aee8c21764598bac343e383869c2940d2",
+  "runner_tests_sha256": "4b5bea10dfad7bd1b3fd31e5dcf6ea39f64218f78f54993abe87caa617e3ef39",
+  "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82",
+  "runner_review_sha256": "7af4bef3f6e3010a8df40c29b96bef755766d3c5ce3c164b1c7c398030285e36",
+  "auditor_sha256": "c619576f3daf188940c4fee67ecf798a2bc12ea3876b317673a12f964e916c5e",
+  "auditor_tests_sha256": "238998077b489a38cd32a3ba2d21d18bd4c5812f4c0954fc4c65f4abb21c29a8",
+  "auditor_review_sha256": "5bf02fbd7310e297b7585d2d9228a1b0f647fc693e13d5509cb32ff9a4d3db3c",
+  "launcher_sha256": "6d84fa8aa10b2b23b7c17dd66a240a263d1dd7429a0ebf414c02ff1d6db32f0d",
+  "launcher_tests_sha256": "da2f7a59945947860f3a63802e8a89d83fcab439fd8dddb650c95601d083c2e4",
+  "launcher_protocol_sha256": "e84de4e53d10283be59b2ec004a9487c5db07363423fbd4610832fe51f6e6f40",
+  "launcher_review_sha256": "077346733f46394cb247d2f4dc41d0e1b12c9e24143411569d62d673e02b0735"
+}
