@@ -1,0 +1,332 @@
+{
+  "status": "passed_read_only_full_fit_audit",
+  "run_dir": "models/second_architecture/runs/voxtral_fit_v2_causal_full/20261118T0928Z",
+  "meta_sha256": "90a46945c2036efd286f9c842b5900bd5fdf5a484c55253da0ff4f9cb18e1d21",
+  "result_sha256": "e29a686e30505a69a3e4b26bddde606a02db753a3a5410c38432cdd14ac3baaf",
+  "records": 8,
+  "directions": 16,
+  "captures": 64,
+  "generations": 800,
+  "invalid_conditions": 0,
+  "teacher_forced_forwards": 1600,
+  "last_checkpoint_cumulative_seconds": 670.7627835420426,
+  "peak_checkpoint_mps_driver_bytes": 10671669248,
+  "summary": {
+    "planned_directions": 16,
+    "restoration_eligible": 16,
+    "restoration_eligibility_gate": true,
+    "sites": {
+      "encoder31": {
+        "restore": {
+          "whole_word_success_of_16": 16,
+          "eligible_success_rate": 1.0,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 0,
+            "word_1": 15,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 2,
+              "strict_wins_of_16": 2,
+              "passes": false
+            },
+            "post": {
+              "valid_of_16": 9,
+              "strict_wins_of_16": 9,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_16": 8,
+              "strict_wins_of_16": 8,
+              "passes": false
+            },
+            "random": {
+              "valid_of_16": 4,
+              "strict_wins_of_16": 4,
+              "passes": false
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_16": 15,
+          "eligible_success_rate": null,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 0,
+            "word_1": 6,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 1
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 1
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "post": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "random": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_16": {
+          "opposite": 16
+        }
+      },
+      "projector": {
+        "restore": {
+          "whole_word_success_of_16": 16,
+          "eligible_success_rate": 1.0,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 1,
+            "word_1": 15,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 1,
+              "strict_wins_of_16": 1,
+              "passes": false
+            },
+            "post": {
+              "valid_of_16": 6,
+              "strict_wins_of_16": 6,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_16": 5,
+              "strict_wins_of_16": 5,
+              "passes": false
+            },
+            "random": {
+              "valid_of_16": 3,
+              "strict_wins_of_16": 3,
+              "passes": false
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_16": 15,
+          "eligible_success_rate": null,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 0,
+            "word_1": 5,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 1
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 2
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "post": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "random": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_16": {
+          "opposite": 16
+        }
+      }
+    }
+  },
+  "limits": "scalar model scores checked by saved arithmetic and frozen code, not recomputed by a second model forward"
+}
