@@ -1,0 +1,68 @@
+{
+  "schema_version": 0,
+  "status": "unfrozen_cpu_only_candidate_proposal_no_wavs_or_model_answers",
+  "seed_text": "qwen-audio-transport-v2/2026-11-18",
+  "selection_rule": "For each category sort the 15 fixed pair IDs by SHA-256(seed_text + '/' + category + '/' + pair_id), ascending hex; first 9 FIT, next 3 development, last 3 locked test. Within the 9 FIT pairs per category, first 4 are basis and last 5 are map. No selection from model answers.",
+  "pairs_by_category": {
+    "animal": [
+      ["otter", "badger"], ["squirrel", "raccoon"], ["dolphin", "whale"],
+      ["shark", "eagle"], ["hawk", "owl"], ["parrot", "penguin"],
+      ["zebra", "giraffe"], ["hippo", "rhino"], ["buffalo", "bison"],
+      ["donkey", "ostrich"], ["flamingo", "walrus"], ["lobster", "crab"],
+      ["shrimp", "butterfly"], ["moth", "beetle"], ["spider", "scorpion"]
+    ],
+    "color": [
+      ["azure", "indigo"], ["magenta", "maroon"], ["burgundy", "scarlet"],
+      ["ruby", "sapphire"], ["emerald", "jade"], ["amber", "bronze"],
+      ["copper", "charcoal"], ["ivory", "khaki"], ["mint", "peach"],
+      ["plum", "lilac"], ["mauve", "blush"], ["ochre", "cobalt"],
+      ["mustard", "auburn"], ["rust", "salmon"], ["slate", "sand"]
+    ],
+    "nature": [
+      ["thunder", "lightning"], ["breeze", "gust"], ["storm", "drizzle"],
+      ["hail", "snow"], ["fog", "mist"], ["cloud", "sunshine"],
+      ["sunrise", "dusk"], ["dawn", "sunset"], ["hill", "ridge"],
+      ["peak", "crater"], ["geyser", "lagoon"], ["bay", "inlet"],
+      ["estuary", "prairie"], ["savanna", "tundra"], ["jungle", "oasis"]
+    ],
+    "object": [
+      ["desk", "sofa"], ["couch", "shelf"], ["drawer", "cabinet"],
+      ["stool", "bench"], ["bed", "mattress"], ["curtain", "rug"],
+      ["towel", "toothbrush"], ["comb", "razor"], ["soap", "bottle"],
+      ["jar", "mug"], ["kettle", "teapot"], ["skillet", "pan"],
+      ["pot", "scissors"], ["stapler", "backpack"], ["suitcase", "umbrella"]
+    ]
+  },
+  "ordered_reserve_pairs_by_category": {
+    "animal": [["hedgehog", "koala"], ["kangaroo", "porcupine"], ["ant", "wasp"]],
+    "color": [["chartreuse", "tangerine"], ["vermilion", "eggplant"], ["sepia", "pewter"]],
+    "nature": [["delta", "dune"], ["whirlpool", "aurora"], ["rapids", "creek"]],
+    "object": [["bicycle", "scooter"], ["bucket", "broom"], ["zipper", "button"]]
+  },
+  "templates_by_split": {
+    "fit_pool": [
+      {"id": "v2_fit_keyword", "prefix": "My keyword for this task is", "suffix": "Return my keyword."},
+      {"id": "v2_fit_label", "prefix": "Remember this label:", "suffix": "Which label did I say?"}
+    ],
+    "development": [
+      {"id": "v2_dev_listen", "prefix": "Listen carefully. I am saying", "suffix": "Name the word you heard."},
+      {"id": "v2_dev_answer", "prefix": "The answer I give aloud is", "suffix": "Repeat my answer word."}
+    ],
+    "locked_test": [
+      {"id": "v2_test_term", "prefix": "Here is my selected term:", "suffix": "Respond with the term I said."},
+      {"id": "v2_test_token", "prefix": "I am about to say my token:", "suffix": "What token did I speak?"}
+    ]
+  },
+  "render_intent": {
+    "voices": ["piper", "kokoro"],
+    "source_pins": "eval/heldout_flow/plan_v1.json render.voices and eval/tts/pins.json",
+    "sample_rate": 16000,
+    "channels": 1,
+    "subtype": "PCM_16",
+    "gap_samples": 1920,
+    "word_slot": "reuse pinned CPU assembly: render each word fragment, right-pad pair members to same slot length, reuse exact prefix/gap/suffix PCM",
+    "expected_pairs": 60,
+    "expected_matched_pair_records": 240,
+    "expected_wavs": 480
+  }
+}

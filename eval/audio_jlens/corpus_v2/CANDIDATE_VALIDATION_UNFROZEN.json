@@ -1,0 +1,1395 @@
+{
+  "status": "unfrozen_cpu_candidate_check_passed_no_wavs_or_model_answers",
+  "proposal_sha256": "ac2f9598e4459191569662aa34803c5a72e57ff686d415e60935a4f716a11a93",
+  "validator_sha256": "73ccd48bf622445778332edd8e9e63d245afb6cb83d3419c0686655ebf7d9d5b",
+  "prior_metadata_sha256": {
+    "v1_spec": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+    "old_plan": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+    "old_test_metadata": "88bb12c02bc000ffee7dee8329ac3aeddd57d5b44898786f8e6c88d63454f845"
+  },
+  "prior_word_count": 106,
+  "cmudict_commit": "74790861f652b15e4ac49015a90074ad62a27690",
+  "cmudict_dict_sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+  "model_for_tokenizer_only": "Qwen/Qwen2.5-Omni-3B",
+  "revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "tokenizer_json_sha256": "8441917e39ae0244e06d704b95b3124795cec478e297f9afac39ba670d7e9d99",
+  "candidate_pairs": 60,
+  "reserve_pairs": 12,
+  "distinct_candidate_and_reserve_words": 144,
+  "split_counts": {
+    "fit_pool": 36,
+    "development": 12,
+    "locked_test": 12
+  },
+  "fit_basis_pairs": 16,
+  "fit_map_pairs": 20,
+  "rendered_pair_records_planned": 240,
+  "wavs_planned": 480,
+  "assigned_pairs": {
+    "fit_pool": [
+      {
+        "pair_id": "v2_animal_01",
+        "category": "animal",
+        "words": [
+          "otter",
+          "badger"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_animal_14",
+        "category": "animal",
+        "words": [
+          "moth",
+          "beetle"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_animal_09",
+        "category": "animal",
+        "words": [
+          "buffalo",
+          "bison"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_animal_07",
+        "category": "animal",
+        "words": [
+          "zebra",
+          "giraffe"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_animal_05",
+        "category": "animal",
+        "words": [
+          "hawk",
+          "owl"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_animal_11",
+        "category": "animal",
+        "words": [
+          "flamingo",
+          "walrus"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_animal_08",
+        "category": "animal",
+        "words": [
+          "hippo",
+          "rhino"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_animal_10",
+        "category": "animal",
+        "words": [
+          "donkey",
+          "ostrich"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_animal_02",
+        "category": "animal",
+        "words": [
+          "squirrel",
+          "raccoon"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_color_03",
+        "category": "color",
+        "words": [
+          "burgundy",
+          "scarlet"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_color_05",
+        "category": "color",
+        "words": [
+          "emerald",
+          "jade"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_color_15",
+        "category": "color",
+        "words": [
+          "slate",
+          "sand"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_color_02",
+        "category": "color",
+        "words": [
+          "magenta",
+          "maroon"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_color_09",
+        "category": "color",
+        "words": [
+          "mint",
+          "peach"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_color_04",
+        "category": "color",
+        "words": [
+          "ruby",
+          "sapphire"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_color_14",
+        "category": "color",
+        "words": [
+          "rust",
+          "salmon"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_color_08",
+        "category": "color",
+        "words": [
+          "ivory",
+          "khaki"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_color_12",
+        "category": "color",
+        "words": [
+          "ochre",
+          "cobalt"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_nature_10",
+        "category": "nature",
+        "words": [
+          "peak",
+          "crater"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_nature_01",
+        "category": "nature",
+        "words": [
+          "thunder",
+          "lightning"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_nature_15",
+        "category": "nature",
+        "words": [
+          "jungle",
+          "oasis"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_nature_14",
+        "category": "nature",
+        "words": [
+          "savanna",
+          "tundra"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_nature_11",
+        "category": "nature",
+        "words": [
+          "geyser",
+          "lagoon"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_nature_06",
+        "category": "nature",
+        "words": [
+          "cloud",
+          "sunshine"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_nature_13",
+        "category": "nature",
+        "words": [
+          "estuary",
+          "prairie"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_nature_03",
+        "category": "nature",
+        "words": [
+          "storm",
+          "drizzle"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_nature_08",
+        "category": "nature",
+        "words": [
+          "dawn",
+          "sunset"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_object_08",
+        "category": "object",
+        "words": [
+          "comb",
+          "razor"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_object_14",
+        "category": "object",
+        "words": [
+          "stapler",
+          "backpack"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_object_03",
+        "category": "object",
+        "words": [
+          "drawer",
+          "cabinet"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_object_07",
+        "category": "object",
+        "words": [
+          "towel",
+          "toothbrush"
+        ],
+        "fit_role": "basis"
+      },
+      {
+        "pair_id": "v2_object_11",
+        "category": "object",
+        "words": [
+          "kettle",
+          "teapot"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_object_09",
+        "category": "object",
+        "words": [
+          "soap",
+          "bottle"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_object_04",
+        "category": "object",
+        "words": [
+          "stool",
+          "bench"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_object_01",
+        "category": "object",
+        "words": [
+          "desk",
+          "sofa"
+        ],
+        "fit_role": "map"
+      },
+      {
+        "pair_id": "v2_object_13",
+        "category": "object",
+        "words": [
+          "pot",
+          "scissors"
+        ],
+        "fit_role": "map"
+      }
+    ],
+    "development": [
+      {
+        "pair_id": "v2_animal_03",
+        "category": "animal",
+        "words": [
+          "dolphin",
+          "whale"
+        ]
+      },
+      {
+        "pair_id": "v2_animal_12",
+        "category": "animal",
+        "words": [
+          "lobster",
+          "crab"
+        ]
+      },
+      {
+        "pair_id": "v2_animal_04",
+        "category": "animal",
+        "words": [
+          "shark",
+          "eagle"
+        ]
+      },
+      {
+        "pair_id": "v2_color_10",
+        "category": "color",
+        "words": [
+          "plum",
+          "lilac"
+        ]
+      },
+      {
+        "pair_id": "v2_color_01",
+        "category": "color",
+        "words": [
+          "azure",
+          "indigo"
+        ]
+      },
+      {
+        "pair_id": "v2_color_11",
+        "category": "color",
+        "words": [
+          "mauve",
+          "blush"
+        ]
+      },
+      {
+        "pair_id": "v2_nature_07",
+        "category": "nature",
+        "words": [
+          "sunrise",
+          "dusk"
+        ]
+      },
+      {
+        "pair_id": "v2_nature_02",
+        "category": "nature",
+        "words": [
+          "breeze",
+          "gust"
+        ]
+      },
+      {
+        "pair_id": "v2_nature_12",
+        "category": "nature",
+        "words": [
+          "bay",
+          "inlet"
+        ]
+      },
+      {
+        "pair_id": "v2_object_10",
+        "category": "object",
+        "words": [
+          "jar",
+          "mug"
+        ]
+      },
+      {
+        "pair_id": "v2_object_02",
+        "category": "object",
+        "words": [
+          "couch",
+          "shelf"
+        ]
+      },
+      {
+        "pair_id": "v2_object_12",
+        "category": "object",
+        "words": [
+          "skillet",
+          "pan"
+        ]
+      }
+    ],
+    "locked_test": [
+      {
+        "pair_id": "v2_animal_15",
+        "category": "animal",
+        "words": [
+          "spider",
+          "scorpion"
+        ]
+      },
+      {
+        "pair_id": "v2_animal_13",
+        "category": "animal",
+        "words": [
+          "shrimp",
+          "butterfly"
+        ]
+      },
+      {
+        "pair_id": "v2_animal_06",
+        "category": "animal",
+        "words": [
+          "parrot",
+          "penguin"
+        ]
+      },
+      {
+        "pair_id": "v2_color_13",
+        "category": "color",
+        "words": [
+          "mustard",
+          "auburn"
+        ]
+      },
+      {
+        "pair_id": "v2_color_07",
+        "category": "color",
+        "words": [
+          "copper",
+          "charcoal"
+        ]
+      },
+      {
+        "pair_id": "v2_color_06",
+        "category": "color",
+        "words": [
+          "amber",
+          "bronze"
+        ]
+      },
+      {
+        "pair_id": "v2_nature_05",
+        "category": "nature",
+        "words": [
+          "fog",
+          "mist"
+        ]
+      },
+      {
+        "pair_id": "v2_nature_04",
+        "category": "nature",
+        "words": [
+          "hail",
+          "snow"
+        ]
+      },
+      {
+        "pair_id": "v2_nature_09",
+        "category": "nature",
+        "words": [
+          "hill",
+          "ridge"
+        ]
+      },
+      {
+        "pair_id": "v2_object_06",
+        "category": "object",
+        "words": [
+          "curtain",
+          "rug"
+        ]
+      },
+      {
+        "pair_id": "v2_object_05",
+        "category": "object",
+        "words": [
+          "bed",
+          "mattress"
+        ]
+      },
+      {
+        "pair_id": "v2_object_15",
+        "category": "object",
+        "words": [
+          "suitcase",
+          "umbrella"
+        ]
+      }
+    ]
+  },
+  "first_token_prefix_ids": {
+    "v2_animal_01": {
+      "otter": [
+        354,
+        14147,
+        30576,
+        84795
+      ],
+      "badger": [
+        3873,
+        11461,
+        13855,
+        17082
+      ]
+    },
+    "v2_animal_02": {
+      "squirrel": [
+        50,
+        82,
+        328,
+        90524
+      ],
+      "raccoon": [
+        49,
+        81,
+        431,
+        8971
+      ]
+    },
+    "v2_animal_03": {
+      "dolphin": [
+        35,
+        67,
+        94996,
+        98169
+      ],
+      "whale": [
+        1312,
+        1639,
+        50019,
+        96002
+      ]
+    },
+    "v2_animal_04": {
+      "shark": [
+        927,
+        2016,
+        43792,
+        60436
+      ],
+      "eagle": [
+        36,
+        68,
+        35795,
+        59889
+      ]
+    },
+    "v2_animal_05": {
+      "hawk": [
+        39,
+        55323,
+        75820,
+        81154
+      ],
+      "owl": [
+        46,
+        9605,
+        52269,
+        73695
+      ]
+    },
+    "v2_animal_06": {
+      "parrot": [
+        1346,
+        1732,
+        4270,
+        4272
+      ],
+      "penguin": [
+        47,
+        79,
+        281,
+        70144
+      ]
+    },
+    "v2_animal_07": {
+      "zebra": [
+        57,
+        1147,
+        1863,
+        2986
+      ],
+      "giraffe": [
+        38,
+        70,
+        40289,
+        46935
+      ]
+    },
+    "v2_animal_08": {
+      "hippo": [
+        39,
+        2151,
+        43556,
+        74363
+      ],
+      "rhino": [
+        21669,
+        40096,
+        72162,
+        79465
+      ]
+    },
+    "v2_animal_09": {
+      "buffalo": [
+        25976,
+        31389,
+        34261,
+        81355
+      ],
+      "bison": [
+        33,
+        65,
+        293,
+        88043
+      ]
+    },
+    "v2_animal_10": {
+      "donkey": [
+        1513,
+        4320,
+        8002,
+        15007
+      ],
+      "ostrich": [
+        46,
+        78,
+        506,
+        65994
+      ]
+    },
+    "v2_animal_11": {
+      "flamingo": [
+        1489,
+        2988,
+        3882,
+        84623
+      ],
+      "walrus": [
+        14574,
+        26397,
+        40826,
+        88298
+      ]
+    },
+    "v2_animal_12": {
+      "lobster": [
+        43,
+        1684,
+        67517,
+        79715
+      ],
+      "crab": [
+        5082,
+        16001,
+        59412,
+        74104
+      ]
+    },
+    "v2_animal_13": {
+      "shrimp": [
+        927,
+        1417,
+        2016,
+        55526
+      ],
+      "butterfly": [
+        65,
+        3983,
+        55169,
+        77720
+      ]
+    },
+    "v2_animal_14": {
+      "moth": [
+        44,
+        6050,
+        67404,
+        97078
+      ],
+      "beetle": [
+        1371,
+        3430,
+        91696,
+        97386
+      ]
+    },
+    "v2_animal_15": {
+      "spider": [
+        2154,
+        28390,
+        34354,
+        72908
+      ],
+      "scorpion": [
+        1136,
+        2388,
+        2463,
+        3326
+      ]
+    },
+    "v2_color_01": {
+      "azure": [
+        34119,
+        39495,
+        76530,
+        78107
+      ],
+      "indigo": [
+        484,
+        1257,
+        1425,
+        2263
+      ]
+    },
+    "v2_color_02": {
+      "magenta": [
+        44,
+        76,
+        4878,
+        6879
+      ],
+      "maroon": [
+        2876,
+        3594,
+        5612,
+        12061
+      ]
+    },
+    "v2_color_03": {
+      "burgundy": [
+        33,
+        10269,
+        29775,
+        40009
+      ],
+      "scarlet": [
+        22290,
+        24513,
+        80718,
+        94956
+      ]
+    },
+    "v2_color_04": {
+      "ruby": [
+        23726,
+        45207,
+        46275,
+        61716
+      ],
+      "sapphire": [
+        50,
+        82,
+        274,
+        81999
+      ]
+    },
+    "v2_color_05": {
+      "emerald": [
+        336,
+        976,
+        58287,
+        63096
+      ],
+      "jade": [
+        41,
+        73,
+        57527,
+        85015
+      ]
+    },
+    "v2_color_06": {
+      "amber": [
+        6091,
+        15221,
+        46664,
+        67605
+      ],
+      "bronze": [
+        39807,
+        40959,
+        44867,
+        67457
+      ]
+    },
+    "v2_color_07": {
+      "copper": [
+        34,
+        66,
+        23285,
+        42540
+      ],
+      "charcoal": [
+        1762,
+        4768,
+        4864,
+        60103
+      ]
+    },
+    "v2_color_08": {
+      "ivory": [
+        40,
+        344,
+        69816,
+        76609
+      ],
+      "khaki": [
+        20165,
+        23165,
+        30664,
+        46788
+      ]
+    },
+    "v2_color_09": {
+      "mint": [
+        44,
+        28337,
+        41310,
+        67791
+      ],
+      "peach": [
+        47,
+        375,
+        63595,
+        72088
+      ]
+    },
+    "v2_color_10": {
+      "plum": [
+        500,
+        2120,
+        41172,
+        83309
+      ],
+      "lilac": [
+        43,
+        75,
+        40478,
+        61371
+      ]
+    },
+    "v2_color_11": {
+      "mauve": [
+        44,
+        386,
+        1728,
+        58914
+      ],
+      "blush": [
+        2024,
+        2502,
+        4923,
+        69226
+      ]
+    },
+    "v2_color_12": {
+      "ochre": [
+        46,
+        506,
+        4953,
+        11952
+      ],
+      "cobalt": [
+        34,
+        33828,
+        45951,
+        85556
+      ]
+    },
+    "v2_color_13": {
+      "mustard": [
+        15465,
+        24812,
+        31776,
+        64307
+      ],
+      "auburn": [
+        32,
+        264,
+        43506,
+        52349
+      ]
+    },
+    "v2_color_14": {
+      "rust": [
+        49,
+        23071,
+        33789,
+        35788
+      ],
+      "salmon": [
+        17245,
+        19222,
+        40320,
+        61726
+      ]
+    },
+    "v2_color_15": {
+      "slate": [
+        50,
+        3226,
+        50580,
+        68319
+      ],
+      "sand": [
+        8677,
+        9278,
+        47044,
+        91246
+      ]
+    },
+    "v2_nature_01": {
+      "thunder": [
+        339,
+        26691,
+        36843,
+        95912
+      ],
+      "lightning": [
+        4145,
+        13911,
+        32438,
+        33844
+      ]
+    },
+    "v2_nature_02": {
+      "breeze": [
+        33,
+        65,
+        425,
+        45285
+      ],
+      "gust": [
+        38,
+        70,
+        29814,
+        48620
+      ]
+    },
+    "v2_nature_03": {
+      "storm": [
+        13458,
+        21862,
+        26413,
+        34291
+      ],
+      "drizzle": [
+        1353,
+        2926,
+        3612,
+        8847
+      ]
+    },
+    "v2_nature_04": {
+      "hail": [
+        39,
+        71,
+        472,
+        64250
+      ],
+      "snow": [
+        11794,
+        18901,
+        62285,
+        74478
+      ]
+    },
+    "v2_nature_05": {
+      "fog": [
+        37,
+        69,
+        30249,
+        58148
+      ],
+      "mist": [
+        44,
+        8600,
+        34098,
+        78924
+      ]
+    },
+    "v2_nature_06": {
+      "cloud": [
+        9437,
+        12361,
+        14817,
+        16055
+      ],
+      "sunshine": [
+        30092,
+        39519,
+        51395,
+        61294
+      ]
+    },
+    "v2_nature_07": {
+      "sunrise": [
+        30092,
+        39519,
+        63819,
+        87188
+      ],
+      "dusk": [
+        35,
+        67,
+        422,
+        92885
+      ]
+    },
+    "v2_nature_08": {
+      "dawn": [
+        35,
+        67,
+        34507,
+        38393
+      ],
+      "sunset": [
+        82,
+        30092,
+        42984,
+        62690
+      ]
+    },
+    "v2_nature_09": {
+      "hill": [
+        39,
+        8108,
+        23946,
+        27507
+      ],
+      "ridge": [
+        49,
+        11183,
+        34205,
+        57833
+      ]
+    },
+    "v2_nature_10": {
+      "peak": [
+        16162,
+        22792,
+        43162,
+        56767
+      ],
+      "crater": [
+        4553,
+        5082,
+        16001,
+        74707
+      ]
+    },
+    "v2_nature_11": {
+      "geyser": [
+        38,
+        342,
+        479,
+        709
+      ],
+      "lagoon": [
+        43,
+        75,
+        326,
+        444
+      ]
+    },
+    "v2_nature_12": {
+      "bay": [
+        9154,
+        22587,
+        22708,
+        46264
+      ],
+      "inlet": [
+        258,
+        641,
+        758,
+        79107
+      ]
+    },
+    "v2_nature_13": {
+      "estuary": [
+        477,
+        1788,
+        9403,
+        13782
+      ],
+      "prairie": [
+        47,
+        548,
+        649,
+        70949
+      ]
+    },
+    "v2_nature_14": {
+      "savanna": [
+        50,
+        11179,
+        20079,
+        94251
+      ],
+      "tundra": [
+        51,
+        83,
+        259,
+        350
+      ]
+    },
+    "v2_nature_15": {
+      "jungle": [
+        41,
+        73,
+        44420,
+        59663
+      ],
+      "oasis": [
+        46,
+        78,
+        85710,
+        87291
+      ]
+    },
+    "v2_object_01": {
+      "desk": [
+        18010,
+        38694,
+        50069,
+        69521
+      ],
+      "sofa": [
+        50,
+        704,
+        31069,
+        60848
+      ]
+    },
+    "v2_object_02": {
+      "couch": [
+        34,
+        66,
+        26148,
+        61128
+      ],
+      "shelf": [
+        2016,
+        27645,
+        53950,
+        70346
+      ]
+    },
+    "v2_object_03": {
+      "drawer": [
+        23492,
+        26482,
+        48260,
+        80127
+      ],
+      "cabinet": [
+        34,
+        66,
+        21921,
+        32946
+      ]
+    },
+    "v2_object_04": {
+      "stool": [
+        267,
+        623,
+        794,
+        63072
+      ],
+      "bench": [
+        33,
+        13425,
+        27024,
+        35258
+      ]
+    },
+    "v2_object_05": {
+      "bed": [
+        2721,
+        4845,
+        13093,
+        15686
+      ],
+      "mattress": [
+        76,
+        13374,
+        32226,
+        39817
+      ]
+    },
+    "v2_object_06": {
+      "curtain": [
+        34,
+        2352,
+        45766,
+        83557
+      ],
+      "rug": [
+        49,
+        28642,
+        36350,
+        71947
+      ]
+    },
+    "v2_object_07": {
+      "towel": [
+        51,
+        83,
+        40393,
+        42613
+      ],
+      "toothbrush": [
+        983,
+        1249,
+        25507,
+        82399
+      ]
+    },
+    "v2_object_08": {
+      "comb": [
+        3614,
+        21873,
+        22454,
+        36192
+      ],
+      "razor": [
+        49,
+        8703,
+        59130,
+        73868
+      ]
+    },
+    "v2_object_09": {
+      "soap": [
+        26785,
+        35012,
+        60631,
+        95531
+      ],
+      "bottle": [
+        33,
+        65,
+        16486,
+        53985
+      ]
+    },
+    "v2_object_10": {
+      "jar": [
+        19033,
+        29595,
+        30551,
+        71735
+      ],
+      "mug": [
+        44,
+        76,
+        51489,
+        63474
+      ]
+    },
+    "v2_object_11": {
+      "kettle": [
+        42,
+        74,
+        730,
+        72318
+      ],
+      "teapot": [
+        665,
+        1013,
+        2655,
+        6639
+      ]
+    },
+    "v2_object_12": {
+      "skillet": [
+        4818,
+        4886,
+        19290,
+        77985
+      ],
+      "pan": [
+        848,
+        7215,
+        10990,
+        35693
+      ]
+    },
+    "v2_object_13": {
+      "pot": [
+        3338,
+        13706,
+        19099,
+        44616
+      ],
+      "scissors": [
+        2388,
+        2463,
+        3326,
+        71624
+      ]
+    },
+    "v2_object_14": {
+      "stapler": [
+        267,
+        623,
+        35014,
+        62506
+      ],
+      "backpack": [
+        1419,
+        3707,
+        33136,
+        71660
+      ]
+    },
+    "v2_object_15": {
+      "suitcase": [
+        32611,
+        62898,
+        72040,
+        87849
+      ],
+      "umbrella": [
+        52,
+        3551,
+        47898,
+        65959
+      ]
+    }
+  },
+  "limits": "CMU dictionary is an accent-dependent homophone screen, not a human or ASR intelligibility check; proposal remains unfrozen"
+}
