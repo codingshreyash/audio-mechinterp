@@ -1,0 +1,91 @@
+{
+  "evidence": "no weights loaded; no model inference",
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "records": [
+    {
+      "common_normalized_outside_max_abs": 0.0,
+      "ctc_conv_frames": 271,
+      "engine": "piper",
+      "frames": 86876,
+      "nominal_raw_receptive_field_intersection": [
+        95,
+        156
+      ],
+      "pair_id": "color_05",
+      "raw_outside_max_abs": 0.0,
+      "slot_samples": [
+        30527,
+        49847
+      ],
+      "stock_normalized_outside_max_abs": 0.2664613723754883,
+      "words": [
+        "silver",
+        "teal"
+      ]
+    },
+    {
+      "common_normalized_outside_max_abs": 0.0,
+      "ctc_conv_frames": 286,
+      "engine": "kokoro",
+      "frames": 91840,
+      "nominal_raw_receptive_field_intersection": [
+        105,
+        179
+      ],
+      "pair_id": "color_05",
+      "raw_outside_max_abs": 0.0,
+      "slot_samples": [
+        33920,
+        57120
+      ],
+      "stock_normalized_outside_max_abs": 0.22046661376953125,
+      "words": [
+        "silver",
+        "teal"
+      ]
+    },
+    {
+      "common_normalized_outside_max_abs": 0.0,
+      "ctc_conv_frames": 249,
+      "engine": "piper",
+      "frames": 79817,
+      "nominal_raw_receptive_field_intersection": [
+        95,
+        134
+      ],
+      "pair_id": "object_02",
+      "raw_outside_max_abs": 0.0,
+      "slot_samples": [
+        30527,
+        42788
+      ],
+      "stock_normalized_outside_max_abs": 0.18251419067382812,
+      "words": [
+        "plate",
+        "cup"
+      ]
+    },
+    {
+      "common_normalized_outside_max_abs": 0.0,
+      "ctc_conv_frames": 278,
+      "engine": "kokoro",
+      "frames": 89040,
+      "nominal_raw_receptive_field_intersection": [
+        105,
+        170
+      ],
+      "pair_id": "object_02",
+      "raw_outside_max_abs": 0.0,
+      "slot_samples": [
+        33920,
+        54320
+      ],
+      "stock_normalized_outside_max_abs": 0.2661409378051758,
+      "words": [
+        "plate",
+        "cup"
+      ]
+    }
+  ],
+  "schema": "wav2vec2_input_locality_preflight_v1"
+}
