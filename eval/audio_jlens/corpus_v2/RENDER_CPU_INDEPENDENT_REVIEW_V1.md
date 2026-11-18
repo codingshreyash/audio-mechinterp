@@ -1,6 +1,6 @@
 # Independent CPU review of prospective Qwen v2 corpus renderer
 
-**Verdict: blocked before freeze or rendering.** This review covers committed implementation `fd2330a` and no v2 WAV, ASR, Qwen, or Voxtral output. The current technical auditor does not prove that a named word fragment is the audio inside its assembled clip.
+**Current verdict: technical-audit blocker cleared by `f5d914e`; exact-source freeze may proceed.** The initial review below covers committed implementation `fd2330a`, and the re-review at the end covers the revised auditor. No v2 WAV, ASR, Qwen, or Voxtral output was opened in either review.
 
 ## Sources and checks
 
@@ -20,3 +20,9 @@ The renderer's CPU preflight passed in the pinned TTS environment (`eval/tts/.ve
 Before creating `RENDER_FREEZE_V1.json`, make the CPU auditor independently assemble each of the 480 expected PCM arrays from the already audited processed fragment files: `prefix + 1920 zero samples + right-padded word fragment + 1920 zero samples + suffix`. Require exact integer-sample equality to the reopened clip, in addition to the current matched-pair outside-slot invariant. Add a synthetic regression that changes only the word-slot samples, refreshes the clip hashes and peak, and expects the audit to fail because the clip no longer equals the named word fragment. Keep the failed first review and source hash in the record; re-review the revised auditor before rendering.
 
 Passing the revised technical audit would still establish waveform and provenance integrity only. The protocol separately requires ASR and listening evidence for intelligibility before Qwen inference. No v2 audio has been rendered by this review.
+
+## Re-review of exact assembly fix
+
+The revised `audit_wavs_v2.py` has SHA-256 `24d7d4a5ff3b36b3c53657ced10189f4551366fde007d9393eae4796035ead5e`; the revised synthetic test has SHA-256 `037821b3c773dc6deef472c4ff029962d77f6f7f0b0d824ad0fb62de4bf0e51b`. The renderer and protocol retain the hashes listed above. `audit_pair()` now reads the audited processed prefix, selected word, and suffix PCM, independently forms `prefix + 1920 zeros + right-padded word + 1920 zeros + suffix`, and requires exact int16 sample equality with each reopened clip. The auditor still verifies both matched clips' outside-slot identity and all file/PCM hashes. The synthetic test changes first an outside-slot sample and then a word-slot sample, refreshes the corresponding clip hashes each time, and confirms both are rejected by the exact-assembly check.
+
+I reran all three synthetic tests and `render_v2.py --validate-only` in the pinned `eval/tts/.venv`; all passed and the preflight still reports 240 records and 480 planned WAVs. This resolves the identified technical-audit blocker. The independent reviewer can now create a receipt binding the **revised** auditor hash; the original auditor hash must never be used for a freeze. Rendering and the subsequent independent WAV, ASR, and listening audits remain future work. The technical receipt alone does not authorize Qwen inference.
