@@ -1,0 +1,54 @@
+{
+  "status": "fit_only_corpus_transport_no_efficacy_evaluation",
+  "metadata": {
+    "purpose": "FIT-only rank16 corpus-average rectangular audio transport",
+    "script_sha256": "cd02101b6dcb7a62a49e19814e6e3eb65e7e9ec7b4f1061f017ca5f5e211ffa3",
+    "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+    "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+    "scoring_v2_sha256": "e7ea18cd0d5e2638bec64b8733049a5a2754ecd674080d93766db8409b46dd9b",
+    "proposal_sha256": "78b972e7f40347e82341853369ee894b1cb9d90e7f6207bd1f13d81ee665a12d",
+    "cases_sha256": "90dec22441194a9db1f39f163857ef1a593641a7d50f6bac3c667c8e70d4493f",
+    "model_id": "Qwen/Qwen2.5-Omni-3B",
+    "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+    "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+    "target": "text.residual.35",
+    "sites": [
+      "encoder31",
+      "connector"
+    ],
+    "rank": 16,
+    "n_fit": 48,
+    "basis_definition": "uncentered SVD of 24 undirected natural-audio pair/voice terminal-state differences; first fit template only",
+    "svd_relative_rank_tolerance": 1e-06,
+    "grad_vs_no_grad_terminal_max_abs_tolerance": 0.001,
+    "site_definition": "post-encoder31 and post-connector output; terminal post-text-block35 prompt-last",
+    "bin_definition": "four equal quarters of frozen swapped-word sample interval plus one quarter before and after; nominal row-center tie earlier",
+    "averaging": "each of 48 contexts equal weight; four contexts per lexical pair, so pairs equal weight",
+    "dtype": "float32",
+    "device": "mps",
+    "max_mps_driver_bytes": 32212254720
+  },
+  "stage1_sha256": "8276aca0e24fcaa1397693e0353f9c7ee59190036f3516c0c13ebcbc6208b641",
+  "checkpoint_sha256": "b8af2db202344b8144c8fafd6917a06d46de82a004bf5132d910c63c82a8ff37",
+  "lens_sha256": "fef84a20f437c37ca665e4026bb3645ccd558e549c7ffe2adff20e6a867ba12c",
+  "basis_sha256": "333cd6b93e09a7acace2b624a89cadd4d65d1080cc85e450fa479a2ea220defd",
+  "matrix_shapes": {
+    "encoder31": [
+      6,
+      16,
+      1280
+    ],
+    "connector": [
+      6,
+      16,
+      2048
+    ]
+  },
+  "matrix_sha256": {
+    "encoder31": "2cdc75ad8edd46fa7a5c753841e2ae298ea1e0f91974a563e91fa8e359b9d6f5",
+    "connector": "3f8ab28ecda3826322e31694217e480114d968fdd54f2781c521a5dc3de1009a"
+  },
+  "completed_fit_contexts": 48,
+  "progress_sha256": "1d12d4db2a419293c2e21e4fc8a0cea4bb05011d3c440cf4df5268aab1c01aff",
+  "memory_sha256": "8af0d6001d3c75558813307812e6cb7ecd9721fa06895dc723f3e0bffbc0bf50"
+}
