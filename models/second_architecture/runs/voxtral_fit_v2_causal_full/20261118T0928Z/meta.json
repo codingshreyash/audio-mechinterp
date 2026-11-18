@@ -1,0 +1,343 @@
+{
+  "status": "voxtral_v2_fit_only_causal_full",
+  "script_sha256": "4e0a17f80d70ca1498f2487d8cca81b20e36381bfeb35945807b2587b89373cd",
+  "first_runner_sha256": "64d799bbb40b58b128b049877d18bde7774c2dc16717af97e692aa4531e907b5",
+  "first_run_sha256": "7803ff057c309b64b603735ddf229a29ef9fc076594314c32758d1f5e2d176f4",
+  "design_sha256": "cd2cbd762af3568f85d43c2dec47824666a95d689a3dc89d9cbdf6471ef54ab0",
+  "masks_sha256": "a634fc0ab8454b7a82802c56a5365dc90e79f446e4d280cee6321adfead4108e",
+  "selection_sha256": "f897d360dbcec9c09f1813f9c070294753fbabc25c6213ba6bdac34b1d79b56b",
+  "index_sha256": "bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971",
+  "pilot_sha256": "6cc84dc1a4ced9ce17380eab3836079c462c9974f31337f146416730b5536ccf",
+  "gate_sha256": "79622d883e954a5076afac2e97b3809833e7fff5ea89b4ae5ccbd137b819429f",
+  "snapshot": {
+    "model_id": "mistralai/Voxtral-Mini-3B-2507",
+    "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+    "config": {
+      "size_bytes": 1361,
+      "sha256": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"
+    },
+    "snapshot_tree": {
+      "size_bytes": 2013,
+      "sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"
+    },
+    "weight_index": {
+      "size_bytes": 68088,
+      "sha256": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"
+    },
+    "weight_shards": {
+      "model-00001-of-00002.safetensors": {
+        "size_bytes": 4977385976,
+        "sha256": "1facdc4c5a0e84f2881a59c4756441b7030a1f1036b2124c117540408d0e5fe9"
+      },
+      "model-00002-of-00002.safetensors": {
+        "size_bytes": 4379088336,
+        "sha256": "0a103ba715bc0d656e94bf79d637d4f8f0f4fe6d76fb1d4db7ee46c6b940f631"
+      }
+    },
+    "processor_config": {
+      "size_bytes": 357,
+      "sha256": "86d67d926e17d3a9bb0bae334c9fc46bc163181992357a0357c0aec2c7e131d1"
+    },
+    "tokenizer_asset": {
+      "size_bytes": 14894206,
+      "sha256": "4aaf3836c2a5332f029ce85a7a62255c966f47b6797ef81dedd0ade9c862e4a8"
+    },
+    "generation_config": {
+      "size_bytes": 108,
+      "sha256": "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"
+    }
+  },
+  "installed_sources": {
+    "modeling_voxtral": "2d3ec9d78c469b77c42a8d5ba258185fb1c58f4c2c7bf6007ec724436dfc7056",
+    "processing_voxtral": "239e84657d1a0287ab27a540c946a787a69b4b0bf45727d6b24bee21ccec0296",
+    "feature_extraction_whisper": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb"
+  },
+  "versions": {
+    "python": "3.12.13",
+    "platform": "macOS-26.7.1-arm64-arm-64bit",
+    "torch": "2.15.0",
+    "transformers": "5.20.2"
+  },
+  "prompt": "Answer the question in the audio with exactly one word. No explanation or punctuation.",
+  "case_ids": [
+    "animal_08|piper|fit_chosen|beaver",
+    "animal_08|piper|fit_chosen|monkey",
+    "animal_08|kokoro|fit_chosen|beaver",
+    "animal_08|kokoro|fit_chosen|monkey",
+    "color_05|piper|fit_chosen|silver",
+    "color_05|piper|fit_chosen|teal",
+    "color_05|kokoro|fit_chosen|silver",
+    "color_05|kokoro|fit_chosen|teal",
+    "nature_09|piper|fit_chosen|waterfall",
+    "nature_09|piper|fit_chosen|garden",
+    "nature_09|kokoro|fit_chosen|waterfall",
+    "nature_09|kokoro|fit_chosen|garden",
+    "object_05|piper|fit_chosen|phone",
+    "object_05|piper|fit_chosen|book",
+    "object_05|kokoro|fit_chosen|phone",
+    "object_05|kokoro|fit_chosen|book"
+  ],
+  "record_keys": [
+    "animal_08|piper|fit_chosen",
+    "animal_08|kokoro|fit_chosen",
+    "color_05|piper|fit_chosen",
+    "color_05|kokoro|fit_chosen",
+    "nature_09|piper|fit_chosen",
+    "nature_09|kokoro|fit_chosen",
+    "object_05|piper|fit_chosen",
+    "object_05|kokoro|fit_chosen"
+  ],
+  "frontend_checks": {
+    "animal_08|piper|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "beaver": 1.839543342590332,
+        "monkey": 1.839543342590332
+      },
+      "independent_reproduction_error": {
+        "beaver": 0.0,
+        "monkey": 0.0
+      },
+      "shared_maximum": 1.839543342590332,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "animal_08|kokoro|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "beaver": 1.4507282972335815,
+        "monkey": 1.4546947479248047
+      },
+      "independent_reproduction_error": {
+        "beaver": 0.0,
+        "monkey": 0.0
+      },
+      "shared_maximum": 1.4546947479248047,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "color_05|piper|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "silver": 1.830114483833313,
+        "teal": 1.830114483833313
+      },
+      "independent_reproduction_error": {
+        "silver": 0.0,
+        "teal": 0.0
+      },
+      "shared_maximum": 1.830114483833313,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "color_05|kokoro|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "silver": 1.2706263065338135,
+        "teal": 1.2706263065338135
+      },
+      "independent_reproduction_error": {
+        "silver": 0.0,
+        "teal": 0.0
+      },
+      "shared_maximum": 1.2706263065338135,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "nature_09|piper|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "waterfall": 1.8253939151763916,
+        "garden": 1.8253939151763916
+      },
+      "independent_reproduction_error": {
+        "waterfall": 0.0,
+        "garden": 0.0
+      },
+      "shared_maximum": 1.8253939151763916,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "nature_09|kokoro|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "waterfall": 1.2863173484802246,
+        "garden": 1.2863173484802246
+      },
+      "independent_reproduction_error": {
+        "waterfall": 0.0,
+        "garden": 0.0
+      },
+      "shared_maximum": 1.2863173484802246,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "object_05|piper|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "phone": 1.8415600061416626,
+        "book": 1.8415600061416626
+      },
+      "independent_reproduction_error": {
+        "phone": 0.0,
+        "book": 0.0
+      },
+      "shared_maximum": 1.8415600061416626,
+      "shared_max_off_word_max_abs_error": 0.0
+    },
+    "object_05|kokoro|fit_chosen": {
+      "raw_log_mel_maximum": {
+        "phone": 1.2863173484802246,
+        "book": 1.2863173484802246
+      },
+      "independent_reproduction_error": {
+        "phone": 0.0,
+        "book": 0.0
+      },
+      "shared_maximum": 1.2863173484802246,
+      "shared_max_off_word_max_abs_error": 0.0
+    }
+  },
+  "feature_hashes": {
+    "animal_08|piper|fit_chosen": {
+      "native": {
+        "beaver": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+        "monkey": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625"
+      },
+      "blank": {
+        "beaver": "7da07702ab5cbbbe8b0772deb4d94e1a2da30c52ce6cb157728adb8f2ccdac9c",
+        "monkey": "7da07702ab5cbbbe8b0772deb4d94e1a2da30c52ce6cb157728adb8f2ccdac9c"
+      },
+      "six_conditions": {
+        "native_beaver": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+        "native_monkey": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625",
+        "word_beaver_outside_monkey": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+        "beaver_with_monkey_padding": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+        "word_monkey_outside_beaver": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625",
+        "monkey_with_beaver_padding": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625"
+      }
+    },
+    "animal_08|kokoro|fit_chosen": {
+      "native": {
+        "beaver": "376dcc32b308f3093427e4c855ed843e4cd2f3370b191a06b8e96c6e0428765f",
+        "monkey": "f1647244285ec36eaf32dcc3a9e1d2d0bf3b5c20c886f674292ecaa6dbe22b51"
+      },
+      "blank": {
+        "beaver": "585dbdf92dda87896a61baf2577621db517f53f9d2542ebf642e5bf0549e8c5d",
+        "monkey": "a121a695d33be83fe72c333de06e16524dc2a0c436a6e50f856777821ee8b06e"
+      },
+      "six_conditions": {
+        "native_beaver": "376dcc32b308f3093427e4c855ed843e4cd2f3370b191a06b8e96c6e0428765f",
+        "native_monkey": "f1647244285ec36eaf32dcc3a9e1d2d0bf3b5c20c886f674292ecaa6dbe22b51",
+        "word_beaver_outside_monkey": "445d79fcde3650a394e190605ff39649874461b6fa4ed25996dde972dcdc9140",
+        "beaver_with_monkey_padding": "8006189553ffe69fa8ad5611067120df23ae09ec0bc80ebfe5b67c3710dcbc73",
+        "word_monkey_outside_beaver": "aae9824b147649102d595b15aff3ce6a30960d11ef0466a789c56d19b5906f65",
+        "monkey_with_beaver_padding": "5c82273b54c71494302a40d7dc29df51188d2219af1584f5350b5ba12f69df81"
+      }
+    },
+    "color_05|piper|fit_chosen": {
+      "native": {
+        "silver": "36ec6b38ba8202821e6cabf8e4047ff493a58dce826279385eecb86f6b325d48",
+        "teal": "6879a7f915bc01a7d9c117f96dffe119d259e5d947e00f309b9aafdf93b66c4c"
+      },
+      "blank": {
+        "silver": "2c347fbf4b9239441e850cc0b6b20711ccd359d7e1f5ba035acfe97591ab558a",
+        "teal": "2c347fbf4b9239441e850cc0b6b20711ccd359d7e1f5ba035acfe97591ab558a"
+      },
+      "six_conditions": {
+        "native_silver": "36ec6b38ba8202821e6cabf8e4047ff493a58dce826279385eecb86f6b325d48",
+        "native_teal": "6879a7f915bc01a7d9c117f96dffe119d259e5d947e00f309b9aafdf93b66c4c",
+        "word_silver_outside_teal": "36ec6b38ba8202821e6cabf8e4047ff493a58dce826279385eecb86f6b325d48",
+        "silver_with_teal_padding": "36ec6b38ba8202821e6cabf8e4047ff493a58dce826279385eecb86f6b325d48",
+        "word_teal_outside_silver": "6879a7f915bc01a7d9c117f96dffe119d259e5d947e00f309b9aafdf93b66c4c",
+        "teal_with_silver_padding": "6879a7f915bc01a7d9c117f96dffe119d259e5d947e00f309b9aafdf93b66c4c"
+      }
+    },
+    "color_05|kokoro|fit_chosen": {
+      "native": {
+        "silver": "5b8fd75b50812f0f6866470fecddcb96d67819da26473dbd7ea78e93bc5f74bc",
+        "teal": "8e3aaa1a3857682797cae8931c20093abd7fc1e2e9ac2e2647c3aa7df4888221"
+      },
+      "blank": {
+        "silver": "a9e84a86c33c88357a30a86c2244b5d0e94ed864387879b2f7f05d70cd48fd74",
+        "teal": "a9e84a86c33c88357a30a86c2244b5d0e94ed864387879b2f7f05d70cd48fd74"
+      },
+      "six_conditions": {
+        "native_silver": "5b8fd75b50812f0f6866470fecddcb96d67819da26473dbd7ea78e93bc5f74bc",
+        "native_teal": "8e3aaa1a3857682797cae8931c20093abd7fc1e2e9ac2e2647c3aa7df4888221",
+        "word_silver_outside_teal": "5b8fd75b50812f0f6866470fecddcb96d67819da26473dbd7ea78e93bc5f74bc",
+        "silver_with_teal_padding": "5b8fd75b50812f0f6866470fecddcb96d67819da26473dbd7ea78e93bc5f74bc",
+        "word_teal_outside_silver": "8e3aaa1a3857682797cae8931c20093abd7fc1e2e9ac2e2647c3aa7df4888221",
+        "teal_with_silver_padding": "8e3aaa1a3857682797cae8931c20093abd7fc1e2e9ac2e2647c3aa7df4888221"
+      }
+    },
+    "nature_09|piper|fit_chosen": {
+      "native": {
+        "waterfall": "caed5dc4c8328c670c081401c7ddf236f8def0ab3550c9fa62d6aee3a1f8b045",
+        "garden": "0f217c721995a88eb2cf3eaf48c2d5958b70627f820df81ffd478ffc232eb45b"
+      },
+      "blank": {
+        "waterfall": "f00e0e56cfe3235a9735e989733c2995664a77d33405efed31771477d86734d3",
+        "garden": "f00e0e56cfe3235a9735e989733c2995664a77d33405efed31771477d86734d3"
+      },
+      "six_conditions": {
+        "native_waterfall": "caed5dc4c8328c670c081401c7ddf236f8def0ab3550c9fa62d6aee3a1f8b045",
+        "native_garden": "0f217c721995a88eb2cf3eaf48c2d5958b70627f820df81ffd478ffc232eb45b",
+        "word_waterfall_outside_garden": "caed5dc4c8328c670c081401c7ddf236f8def0ab3550c9fa62d6aee3a1f8b045",
+        "waterfall_with_garden_padding": "caed5dc4c8328c670c081401c7ddf236f8def0ab3550c9fa62d6aee3a1f8b045",
+        "word_garden_outside_waterfall": "0f217c721995a88eb2cf3eaf48c2d5958b70627f820df81ffd478ffc232eb45b",
+        "garden_with_waterfall_padding": "0f217c721995a88eb2cf3eaf48c2d5958b70627f820df81ffd478ffc232eb45b"
+      }
+    },
+    "nature_09|kokoro|fit_chosen": {
+      "native": {
+        "waterfall": "11adb4caca97376951d1c1907153a6750250072cf9d2a16e99dd5c732c47e5b0",
+        "garden": "ffeb719d263bd7266ea97dc20bc1da2043836db117c1d4bee71a2abb5d98c69d"
+      },
+      "blank": {
+        "waterfall": "67f1173832421f3e64fea063f33729b484b56f998008d423ae2d3c7a38167fcf",
+        "garden": "67f1173832421f3e64fea063f33729b484b56f998008d423ae2d3c7a38167fcf"
+      },
+      "six_conditions": {
+        "native_waterfall": "11adb4caca97376951d1c1907153a6750250072cf9d2a16e99dd5c732c47e5b0",
+        "native_garden": "ffeb719d263bd7266ea97dc20bc1da2043836db117c1d4bee71a2abb5d98c69d",
+        "word_waterfall_outside_garden": "11adb4caca97376951d1c1907153a6750250072cf9d2a16e99dd5c732c47e5b0",
+        "waterfall_with_garden_padding": "11adb4caca97376951d1c1907153a6750250072cf9d2a16e99dd5c732c47e5b0",
+        "word_garden_outside_waterfall": "ffeb719d263bd7266ea97dc20bc1da2043836db117c1d4bee71a2abb5d98c69d",
+        "garden_with_waterfall_padding": "ffeb719d263bd7266ea97dc20bc1da2043836db117c1d4bee71a2abb5d98c69d"
+      }
+    },
+    "object_05|piper|fit_chosen": {
+      "native": {
+        "phone": "070d03c736279f79879f2a9fe6e6936e8b525f95bb8314f8ddf4766319832440",
+        "book": "61a037c64d48b968945c667b6ef92fd033c4140a16dc71edda75bffc492b68db"
+      },
+      "blank": {
+        "phone": "61bbea431aaff3a4634c5d1f412109f94cb13b0a01d6d8b8379e1ed9a3e08397",
+        "book": "61bbea431aaff3a4634c5d1f412109f94cb13b0a01d6d8b8379e1ed9a3e08397"
+      },
+      "six_conditions": {
+        "native_phone": "070d03c736279f79879f2a9fe6e6936e8b525f95bb8314f8ddf4766319832440",
+        "native_book": "61a037c64d48b968945c667b6ef92fd033c4140a16dc71edda75bffc492b68db",
+        "word_phone_outside_book": "070d03c736279f79879f2a9fe6e6936e8b525f95bb8314f8ddf4766319832440",
+        "phone_with_book_padding": "070d03c736279f79879f2a9fe6e6936e8b525f95bb8314f8ddf4766319832440",
+        "word_book_outside_phone": "61a037c64d48b968945c667b6ef92fd033c4140a16dc71edda75bffc492b68db",
+        "book_with_phone_padding": "61a037c64d48b968945c667b6ef92fd033c4140a16dc71edda75bffc492b68db"
+      }
+    },
+    "object_05|kokoro|fit_chosen": {
+      "native": {
+        "phone": "49edb53ee61b4a8df8c478b4de83194c4b10ea03200e9d238d5f33c0d22c5e34",
+        "book": "27d76d2a5bd9e05a99b2502e91ee79e25f9c5d15245c6d629fcd3f84744f494d"
+      },
+      "blank": {
+        "phone": "952485293312d87593e511181308c782932396af897cb133185c6776f2caf4e4",
+        "book": "952485293312d87593e511181308c782932396af897cb133185c6776f2caf4e4"
+      },
+      "six_conditions": {
+        "native_phone": "49edb53ee61b4a8df8c478b4de83194c4b10ea03200e9d238d5f33c0d22c5e34",
+        "native_book": "27d76d2a5bd9e05a99b2502e91ee79e25f9c5d15245c6d629fcd3f84744f494d",
+        "word_phone_outside_book": "49edb53ee61b4a8df8c478b4de83194c4b10ea03200e9d238d5f33c0d22c5e34",
+        "phone_with_book_padding": "49edb53ee61b4a8df8c478b4de83194c4b10ea03200e9d238d5f33c0d22c5e34",
+        "word_book_outside_phone": "27d76d2a5bd9e05a99b2502e91ee79e25f9c5d15245c6d629fcd3f84744f494d",
+        "book_with_phone_padding": "27d76d2a5bd9e05a99b2502e91ee79e25f9c5d15245c6d629fcd3f84744f494d"
+      }
+    }
+  },
+  "planned": {
+    "records": 8,
+    "directions": 16,
+    "generations": 800,
+    "captures": 64,
+    "teacher_forced_forwards": 1600
+  },
+  "memory_cap_bytes": 32212254720,
+  "wall_cap_seconds": 2700
+}

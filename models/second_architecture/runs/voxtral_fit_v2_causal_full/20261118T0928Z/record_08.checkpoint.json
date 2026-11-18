@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "ordinal": 8,
+  "invocation_stamp": "20261118T092813055584Z",
+  "record_key": "object_05|kokoro|fit_chosen",
+  "attempt_file": "record_08_attempt_01.jsonl",
+  "attempt_sha256": "47235f8db6e2d6104fc2467feac3a683621c9f3dc7f9e4bd7ba3d77a5a8a3152",
+  "run_meta_sha256": "90a46945c2036efd286f9c842b5900bd5fdf5a484c55253da0ff4f9cb18e1d21",
+  "progress_records": 108,
+  "capture_records": 8,
+  "generation_records": 100,
+  "teacher_forced_forwards": 200,
+  "invalid_conditions": 0,
+  "seconds": 82.92589308298193,
+  "cumulative_budget_seconds": 670.7627835420426,
+  "mps_driver_observed_max_bytes": 10671669248
+}

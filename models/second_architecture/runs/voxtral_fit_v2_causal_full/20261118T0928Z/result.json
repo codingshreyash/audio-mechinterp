@@ -1,0 +1,337 @@
+{
+  "status": "eight_record_fit_complete",
+  "meta_sha256": "90a46945c2036efd286f9c842b5900bd5fdf5a484c55253da0ff4f9cb18e1d21",
+  "checkpoint_sha256": {
+    "1": "fd6f9176f09d3465786578497c827e907c08fa2faad8200e925abceac06b4e75",
+    "2": "e5160a51873000ea1e3ac64b387f24cbc82878b8fd4137ed29bfd74343d4e0a1",
+    "3": "61872c365b4b694bc7af98bf29267a313309831821c96e55d2fadceff0a78ddb",
+    "4": "387256cc7460d8a5a6fda4670b7f9771979c7b09ef4655ca3b96700647d882f3",
+    "5": "59852c9f574477e34b7f377e0548703bccd3b9100e427569a41662bf3294666b",
+    "6": "73812bc4d2d55dc2ed49cef9545fa53155cbbcf3fa06126e2000377cff05512f",
+    "7": "b17c121b028d2873ba53d7b8d954912b660f7979fe5a721b8951c868d2a37f11",
+    "8": "2d625bc8f600ba5b3ef5c66f38eb5e66a4d4bb1944dac5b80367ddd05652cca1"
+  },
+  "directions": 16,
+  "progress_rows": 864,
+  "generations": 800,
+  "captures": 64,
+  "invalid_conditions": 0,
+  "summary": {
+    "planned_directions": 16,
+    "restoration_eligible": 16,
+    "restoration_eligibility_gate": true,
+    "sites": {
+      "encoder31": {
+        "restore": {
+          "whole_word_success_of_16": 16,
+          "eligible_success_rate": 1.0,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 0,
+            "word_1": 15,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 2,
+              "strict_wins_of_16": 2,
+              "passes": false
+            },
+            "post": {
+              "valid_of_16": 9,
+              "strict_wins_of_16": 9,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_16": 8,
+              "strict_wins_of_16": 8,
+              "passes": false
+            },
+            "random": {
+              "valid_of_16": 4,
+              "strict_wins_of_16": 4,
+              "passes": false
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_16": 15,
+          "eligible_success_rate": null,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 0,
+            "word_1": 6,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 1
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 1
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "post": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "random": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_16": {
+          "opposite": 16
+        }
+      },
+      "projector": {
+        "restore": {
+          "whole_word_success_of_16": 16,
+          "eligible_success_rate": 1.0,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 1,
+            "word_1": 15,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 1,
+              "strict_wins_of_16": 1,
+              "passes": false
+            },
+            "post": {
+              "valid_of_16": 6,
+              "strict_wins_of_16": 6,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_16": 5,
+              "strict_wins_of_16": 5,
+              "passes": false
+            },
+            "random": {
+              "valid_of_16": 3,
+              "strict_wins_of_16": 3,
+              "passes": false
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_16": 15,
+          "eligible_success_rate": null,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_16": {
+            "word_0": 0,
+            "word_1": 5,
+            "word_2": 1,
+            "word_3": 0
+          },
+          "pair_voice_breakdown": {
+            "animal_08|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "animal_08|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "color_05|kokoro": {
+              "planned": 2,
+              "whole_success": 1
+            },
+            "nature_09|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "nature_09|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|piper": {
+              "planned": 2,
+              "whole_success": 2
+            },
+            "object_05|kokoro": {
+              "planned": 2,
+              "whole_success": 2
+            }
+          },
+          "control_success_of_16": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 2
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "post": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            },
+            "random": {
+              "valid_of_16": 15,
+              "strict_wins_of_16": 15,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_16": {
+          "opposite": 16
+        }
+      }
+    }
+  },
+  "scope": "FIT-only constructed feature and hidden-state edits; no dev/test, security claim, or Stage A rescue"
+}

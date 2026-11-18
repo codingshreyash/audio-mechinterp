@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "ordinal": 3,
+  "invocation_stamp": "20261118T092813055584Z",
+  "record_key": "color_05|piper|fit_chosen",
+  "attempt_file": "record_03_attempt_01.jsonl",
+  "attempt_sha256": "af820f78b579487b156c7a8f65483d658988764c18a8fac87721dea114b25747",
+  "run_meta_sha256": "90a46945c2036efd286f9c842b5900bd5fdf5a484c55253da0ff4f9cb18e1d21",
+  "progress_records": 108,
+  "capture_records": 8,
+  "generation_records": 100,
+  "teacher_forced_forwards": 200,
+  "invalid_conditions": 0,
+  "seconds": 80.51057183300145,
+  "cumulative_budget_seconds": 255.75674920808524,
+  "mps_driver_observed_max_bytes": 10671669248
+}
