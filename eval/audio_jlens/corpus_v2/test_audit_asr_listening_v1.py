@@ -45,6 +45,27 @@ class AuditorTests(unittest.TestCase):
         cases, order, pins = auditor.frozen_cases()
         self.assertEqual((len(cases), len(order)), (480, 480))
         self.assertEqual(set(pins["models"]), {"whisper", "wav2vec2"})
+        self.assertEqual(auditor.sha(auditor.AMENDMENT), auditor.EXPECTED["amendment"])
+
+    def test_freeze_must_pin_amendment(self):
+        with tempfile.TemporaryDirectory() as temp:
+            freeze = Path(temp) / "freeze.json"
+            receipt = {"status": "independently_reviewed_asr_screen_frozen",
+                       "script_sha256": auditor.EXPECTED["runner"],
+                       "auditor_sha256": auditor.sha(Path(auditor.__file__)),
+                       "queue_sha256": auditor.EXPECTED["queue"],
+                       "server_sha256": auditor.sha(auditor.SERVER),
+                       "html_sha256": auditor.sha(auditor.HTML),
+                       "app_sha256": auditor.sha(auditor.APP)}
+            receipt.update({f"{key}_sha256": auditor.EXPECTED[key] for key in
+                            ("manifest", "binding", "cases", "inputs", "pins", "protocol")})
+            freeze.write_text(json.dumps(receipt))
+            with mock.patch.object(auditor, "FREEZE", freeze):
+                with self.assertRaisesRegex(ValueError, "freeze does not bind"):
+                    auditor.verify_freeze()
+                receipt["amendment_sha256"] = auditor.EXPECTED["amendment"]
+                freeze.write_text(json.dumps(receipt))
+                self.assertEqual(auditor.verify_freeze(), auditor.sha(freeze))
 
     def test_tokenization_and_wer_are_literal(self):
         self.assertEqual(auditor.tokens("  O’NEILL, café 10!"),
@@ -88,6 +109,25 @@ class AuditorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "coverage mismatch"):
             auditor.audit(cases, [ident], {"whisper": asr["whisper"], "wav2vec2": {}},
                           [first])
+
+    def test_target_elsewhere_does_not_hide_middle_slot_mismatch(self):
+        ident = "d" * 20
+        cases = [case(ident)]
+        misplaced = "Otter say other now"
+        asr = {key: {ident: asr_row(ident, misplaced, key)}
+               for key in ("whisper", "wav2vec2")}
+        first = response(ident, "primary", "otter")
+        pending = auditor.audit(cases, [ident], asr, [first])
+        detail = pending["cases"][0]
+        self.assertTrue(detail["asr"]["whisper"]["target_exactly_once"])
+        self.assertFalse(detail["asr_disagreement"])
+        self.assertFalse(detail["asr"]["whisper"]["normalized_script_exact"])
+        self.assertEqual(detail["flag_reasons"], ["asr_script_mismatch"])
+        self.assertEqual(pending["status"], "stop")
+        self.assertIn("missing_required_secondary", pending["failed_cases"][0]["problems"])
+        reviewed = auditor.audit(cases, [ident], asr,
+                                 [first, response(ident, "secondary", "otter")])
+        self.assertEqual(reviewed["status"], "go")
 
     def test_response_chain_external_hash_order_and_revisions(self):
         with tempfile.TemporaryDirectory() as temp:

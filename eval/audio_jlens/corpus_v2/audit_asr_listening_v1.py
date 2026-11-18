@@ -26,6 +26,7 @@ QUEUE = HERE / "LISTENING_QUEUE_PROSPECTIVE_V1.json"
 INPUTS = HERE / "ASR_INPUTS_PROSPECTIVE_V1.json"
 PINS = HERE / "ASR_MODEL_PINS_PROSPECTIVE_V1.json"
 PROTOCOL = HERE / "ASR_LISTENING_QA_PROTOCOL_PROSPECTIVE_V1.md"
+AMENDMENT = HERE / "ASR_MIDDLE_SLOT_FLAG_AMENDMENT_V1.md"
 RUNNER = HERE / "asr_screen_v2.py"
 SERVER = HERE / "listening_server_v1.py"
 HTML = HERE / "listening_v1.html"
@@ -39,6 +40,7 @@ EXPECTED = {
     "inputs": "74f38f6704d1995b8e7040b329f7c0c0ea68b3cae36e774b875b4c358ae76d33",
     "pins": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
     "protocol": "30285a6c897e742eff59f593b3d12a1bd92d62585cd72171837c3e18fabe662e",
+    "amendment": "9a6c12199e591ac623ee74938d13a4a6b11dbbbadce21e79cb75bd888176246d",
     "runner": "7df490c768d929e63845e00397ae1f0f77ba5b7f03722479fa8f5826527b4b78",
 }
 WORD = re.compile(r"[^\W_]+(?:['’][^\W_]+)*", re.UNICODE)
@@ -91,7 +93,8 @@ def word_errors(reference: list[str], hypothesis: list[str]) -> int:
 def frozen_cases() -> tuple[list[dict], list[str], dict]:
     for name, path in (("manifest", MANIFEST), ("binding", BINDING),
                        ("cases", CASES), ("queue", QUEUE), ("inputs", INPUTS),
-                       ("pins", PINS), ("protocol", PROTOCOL), ("runner", RUNNER)):
+                       ("pins", PINS), ("protocol", PROTOCOL),
+                       ("amendment", AMENDMENT), ("runner", RUNNER)):
         require(path.is_file() and sha(path) == EXPECTED[name],
                 f"frozen {name} SHA-256 changed")
     manifest, binding = json.loads(MANIFEST.read_text()), json.loads(BINDING.read_text())
@@ -176,7 +179,8 @@ def verify_freeze() -> str:
     require(receipt.get("status") == "independently_reviewed_asr_screen_frozen"
             and receipt.get("script_sha256") == EXPECTED["runner"]
             and all(receipt.get(f"{key}_sha256") == EXPECTED[key]
-                    for key in ("manifest", "binding", "cases", "inputs", "pins", "protocol"))
+                    for key in ("manifest", "binding", "cases", "inputs", "pins",
+                                "protocol", "amendment"))
             and receipt.get("auditor_sha256") == sha(Path(__file__))
             and receipt.get("queue_sha256") == EXPECTED["queue"]
             and receipt.get("server_sha256") == sha(SERVER)
@@ -420,8 +424,8 @@ def audit(cases: list[dict], order: list[str], asr: dict[str, dict[str, dict]],
         def answer(row: dict | None) -> list[str] | None:
             return tokens(row["middle_word"]) if row else None
         reasons = []
-        if any(not value["target_exactly_once"] for value in measured.values()):
-            reasons.append("asr_target_miss")
+        if any(not value["normalized_script_exact"] for value in measured.values()):
+            reasons.append("asr_script_mismatch")
         if disagreement:
             reasons.append("asr_disagreement")
         if first is None:
@@ -537,6 +541,7 @@ def main() -> None:
                                 "binding_sha256": EXPECTED["binding"],
                                 "cases_sha256": EXPECTED["cases"],
                                 "queue_sha256": EXPECTED["queue"],
+                                "amendment_sha256": EXPECTED["amendment"],
                                 "whisper_complete_sha256": args.whisper_complete_sha256,
                                 "wav2vec2_complete_sha256": args.wav2vec2_complete_sha256,
                                 "responses_sha256": args.responses_sha256,
@@ -547,6 +552,7 @@ def main() -> None:
                   "provenance": {"auditor_sha256": sha(Path(__file__)),
                                  "manifest_sha256": EXPECTED["manifest"],
                                  "binding_sha256": EXPECTED["binding"],
+                                 "amendment_sha256": EXPECTED["amendment"],
                                  "whisper_complete_sha256": args.whisper_complete_sha256,
                                  "wav2vec2_complete_sha256": args.wav2vec2_complete_sha256,
                                  "responses_sha256": args.responses_sha256},
