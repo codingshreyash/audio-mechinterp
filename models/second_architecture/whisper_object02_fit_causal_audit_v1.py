@@ -286,7 +286,9 @@ def checked_result(value: dict[str, Any], tokenizer: Any | None = None) -> dict[
         decoded = tokenizer.batch_decode([ids], skip_special_tokens=True)[0].strip()
         require(decoded == transcript, "saved transcript does not decode from token IDs")
     eos_seen = EOS_ID in ids
-    eos_terminated = ids[-1] == EOS_ID
+    # Generation must terminate at its sole EOS. An early or duplicate EOS is
+    # retained as censored evidence, never as a complete answer.
+    eos_terminated = ids.count(EOS_ID) == 1 and ids[-1] == EOS_ID
     require(value.get("eos_seen") is eos_seen
             and value.get("eos_terminated") is eos_terminated
             and value.get("censored") is (not eos_terminated),

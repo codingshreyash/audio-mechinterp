@@ -252,6 +252,25 @@ class WhisperSavedAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "EOS termination"):
             audit.checked_result(result)
 
+    def test_duplicate_eos_at_end_is_censored(self) -> None:
+        result = fake_result("plate")
+        result["token_ids"] = [50257, 100, 50256, 50256]
+        result["step_scores"] = [
+            {"token_id": token, "selected_score": 1.0,
+             "top2_ids": [token, 200], "top2_scores": [1.0, 0.0],
+             "generation_processed_plate_minus_cup_first_token_score": None,
+             "alias_margin_status": "multi_token_alias"}
+            for token in (100, 50256, 50256)
+        ]
+        result["eos_seen"] = True
+        result["eos_terminated"] = False
+        result["censored"] = True
+        self.assertTrue(audit.checked_result(result)["censored"])
+        result["eos_terminated"] = True
+        result["censored"] = False
+        with self.assertRaisesRegex(ValueError, "EOS termination"):
+            audit.checked_result(result)
+
     def test_reported_wer_corruption_rejected(self) -> None:
         rows = copy.deepcopy(self.rows)
         row = next(row for row in rows if row.get("condition") == "word")
