@@ -13,6 +13,7 @@ import json
 import math
 import re
 import subprocess
+import sys
 import wave
 from collections import Counter
 from pathlib import Path
@@ -309,7 +310,7 @@ def trace_vectors(a: np.ndarray, b: np.ndarray, stage: str) -> tuple[np.ndarray,
     axis = stage_time_axis(stage)
     if stage == "input_values":
         diff = np.asarray(a[0], dtype=np.float64) - np.asarray(b[0], dtype=np.float64)
-        return np.abs(diff).astype(np.float32), np.abs(diff).astype(np.float32)
+        return np.sqrt(diff * diff).astype(np.float32), np.abs(diff).astype(np.float32)
     if axis == 2:
         diff = np.asarray(a[0], dtype=np.float64) - np.asarray(b[0], dtype=np.float64)
         return np.sqrt(np.sum(diff * diff, axis=0)).astype(np.float32), np.max(np.abs(diff), axis=0).astype(np.float32)
@@ -431,6 +432,14 @@ def audit_preflight(record: dict[str, Any], expected_path: Path,
     for module in modules:
         require(source_hashes[module.__name__] == sha(Path(inspect.getfile(module))),
                 f"installed source changed: {module.__name__}")
+    import soundfile
+    import torch
+    import transformers
+    require(receipt.get("torch_version") == torch.__version__
+            and receipt.get("transformers_version") == transformers.__version__
+            and receipt.get("soundfile_version") == soundfile.__version__
+            and receipt.get("python_version") == sys.version.split()[0],
+            "installed runtime versions differ")
     expected_case_rows = [{"key": case_id, "pair_id": case["pair_id"],
                            "engine": case["engine"], "word": case["word"],
                            "frames": case["frames"], "slot_samples": list(case["slot"]),
@@ -490,15 +499,23 @@ def audit(output: Path, expected_preflight: Path,
             processor = Wav2Vec2Processor.from_pretrained(
                 "facebook/wav2vec2-base-960h", revision=MODEL_REVISION,
                 local_files_only=True)
-            decoded = processor.batch_decode([ids])[0]
-            tokens = normalized_words(decoded)
-            alternative = next(word for word in PAIRS[cases[case_id]["pair_id"]]
-                               if word != cases[case_id]["word"])
-            eligible = tokens.count(cases[case_id]["word"]) == 1 and alternative not in tokens
-            require(provisional.get("transcript") == decoded
-                    and provisional.get("normalized_words") == tokens
-                    and provisional.get("eligible") is eligible,
-                    "failure provisional CTC output differs")
+            counts = provisional.get("hook_counts")
+            require(isinstance(counts, dict) and set(counts) == set(STAGES)
+                    and all(type(value) is int and value == 1 for value in counts.values()),
+                    "failure provisional hook coverage differs")
+            reported = {"transcript", "normalized_words", "eligible"} & set(provisional)
+            require(not reported or reported == {"transcript", "normalized_words", "eligible"},
+                    "failure provisional CTC fields partial")
+            if reported:
+                decoded = processor.batch_decode([ids])[0]
+                tokens = normalized_words(decoded)
+                alternative = next(word for word in PAIRS[cases[case_id]["pair_id"]]
+                                   if word != cases[case_id]["word"])
+                eligible = tokens.count(cases[case_id]["word"]) == 1 and alternative not in tokens
+                require(provisional.get("transcript") == decoded
+                        and provisional.get("normalized_words") == tokens
+                        and provisional.get("eligible") is eligible,
+                        "failure provisional CTC output differs")
         raise ValueError("failed attempt retained but cannot pass scientific audit")
     require(all(row.get("type") != "failure" for row in rows),
             "failure row within purported success")

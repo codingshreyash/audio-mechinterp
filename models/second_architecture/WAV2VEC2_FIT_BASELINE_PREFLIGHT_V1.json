@@ -148,8 +148,8 @@
   },
   "python_version": "3.12.13",
   "run_schema": "wav2vec2_fit_baseline_run_v1",
-  "runner_sha256": "c94b7093166722ada1ae645a895e56dc5aa82697ffaf7fba431795b3136dd052",
-  "runner_source_git_commit": "6a09f84eaec0e49ece0366130caef5351e2d3460",
+  "runner_sha256": "4fa1bdeeb91096da168b9276b7c25509d87bb2f34318443f8a91a2e8a3337116",
+  "runner_source_git_commit": "3fe010f6e91469acee5428833b0a77b093793a67",
   "schema": "wav2vec2_fit_baseline_preflight_v1",
   "snapshot_files_sha256": {
     "config.json": "d3ec255c063d9f95057b553b19c20135b259875834a4fe9deb218a6be25b4cf3",
