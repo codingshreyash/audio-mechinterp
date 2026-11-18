@@ -1,0 +1,22 @@
+# Independent static review: old-FIT Voxtral backward pilot
+
+**18 November 2026.** Reviewed `voxtral_v1_fit_backward_feasibility.py`, its protocol and tests at commit `b76c7ec` against the pinned local v1 FIT masks/selection/pilot, local Voxtral snapshot, and installed Transformers 5.20.2 source. No model weights were loaded or run, and no development result or v2 corpus was opened.
+
+## CPU checks
+
+- `.venv/bin/python -m unittest -v test_voxtral_v1_fit_backward_feasibility.py`: **4/4 pass**. The tests cover exact zero BF16 edit, rowwise rounding, a synthetic shared-graph two-source VJP, and finite four-coordinate error handling.
+- `.venv/bin/python voxtral_v1_fit_backward_feasibility.py --validate-only`: **pass**. The fixed case is `animal_08|piper|fit_chosen`, recipient `beaver`, donor `monkey`, `word_0`; frozen rows are encoder31 **96–107** and projector **24–26**. The snapshot revision is `3060fe34b35ba5d44202ce9ff3c097642914f8f3`. This mode verifies pinned source/corpus hashes and the processor path without loading the model.
+
+## Source assessment
+
+The intended VJP is a shared-graph computation. In the clean grad-enabled prompt forward, the encoder31 hook replaces its output with a BF16 differentiable leaf, the projector consumes that leaf, and one `torch.autograd.grad(target, (encoder_leaf, projector_output))` per coordinate asks for both derivatives from the same graph. No detached projector state is substituted into this clean path. The target is the prompt-final vector at LM block 29. The frozen source shapes and one-hit checks fail closed at runtime. The installed `LlamaDecoderLayer.forward` returns a tensor, so the LM29 hook's tensor assumption is supported by this source; the local file SHA-256 is `affc6a4ab36b562a6b4c90b84c4e7939c5417a69ad7bd37e858be5583f189830`.
+
+The no-grad and grad prompt baselines, zero edit, and α=.025 edit are kept distinct. A zero BF16 edit is required to be exactly zero; `z_zero−z_clean` and `z_no_grad−z_clean` are saved, not silently subtracted away. The script computes intended uniform, realized-mean uniform, and realized-rowwise contractions separately and stores the selected gradients/edits as sidecar data. Natural and passive generation suffix IDs must exactly match the saved FIT answer. `pad_token_id=int(model.generation_config.pad_token_id)` mirrors the pinned first-record runner. The only selected WAVs are pinned under `eval/audio_jlens/corpus_v1/rendered/clips`; no code path in this pilot references `corpus_v2` or the active development run.
+
+## Pre-run corrections required
+
+1. **Attempt cap and failure receipt.** `main()` calls `preflight()` before `run()` starts the 15-minute timer or creates its exclusive output directory. A preflight exception therefore leaves no error receipt, and preflight time is excluded from the stated attempt cap. MPS availability/recommended-memory checks also occur before the `run()` exception handler. Either start and record the attempt before preflight, with a receipt on all failure paths, or explicitly narrow the protocol's cap/receipt claim to the model phase. In-flight model calls can still overshoot the wall guard, as the protocol already notes.
+2. **Gradient precision is mislabeled.** The encoder and projector source tensors are BF16. PyTorch returns gradients in the input tensor's dtype, so `autograd.grad(..., (BF16_encoder, BF16_projector))` returns **BF16 VJPs**; `g.detach().float()` converts those already-quantized values for storage and FP32 contraction. A CPU PyTorch check confirmed this dtype behavior. Describe the result as BF16 VJPs with FP32 contractions and an explicit numerical limitation, or construct and validate FP32 source leaves before claiming FP32 gradients.
+3. **LM hook source hash is missing.** The inherited `validate_transformers_source()` pins Voxtral modeling, Voxtral processing, and Whisper feature extraction, but not `modeling_llama.py`, which implements the LM29 layer being hooked. Pin the installed Llama source hash above before treating the hook source as fully frozen. Runtime shape/type checks reduce the behavioral risk but do not close this provenance gap.
+
+These are implementation/provenance corrections, not a negative result about backward connectivity. A live pilot must still pass its saved-answer parity, one-hit/shape/dtype checks, connected nonzero gradients at both sites, zero-edit check, and 30-GiB/15-minute resource gates. This FIT engineering diagnostic cannot establish v2 transfer or a security finding.
