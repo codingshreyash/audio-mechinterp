@@ -57,6 +57,30 @@ class ASRScreenContractTests(unittest.TestCase):
                     screen.run("whisper", output, {}, [], {})
                 self.assertFalse(output.exists())
 
+    def test_missing_amendment_pin_rejects_source_preflight_and_run(self):
+        with tempfile.TemporaryDirectory() as temp:
+            freeze = Path(temp) / "freeze.json"
+            receipt = {"status": "independently_reviewed_asr_screen_frozen",
+                       "script_sha256": screen.sha(Path(screen.__file__))}
+            receipt.update({f"{key}_sha256": screen.EXPECTED[key] for key in
+                            ("manifest", "binding", "cases", "inputs", "pins", "protocol")})
+            freeze.write_text(json.dumps(receipt))
+            with mock.patch.object(screen, "FREEZE", freeze):
+                with self.assertRaisesRegex(ValueError, "does not bind exact sources"):
+                    screen.check_freeze()
+                output = Path(temp) / "asr_output"
+                with self.assertRaisesRegex(ValueError, "does not bind exact sources"):
+                    screen.run("whisper", output, {}, [], {})
+                self.assertFalse(output.exists())
+                receipt["amendment_sha256"] = screen.EXPECTED["amendment"]
+                freeze.write_text(json.dumps(receipt))
+                self.assertEqual(screen.check_freeze(), receipt)
+            with mock.patch.object(screen, "AMENDMENT", Path(temp) / "absent.md"):
+                with self.assertRaisesRegex(ValueError, "frozen amendment SHA changed"):
+                    screen.check_sources()
+                with self.assertRaisesRegex(ValueError, "amendment SHA changed"):
+                    screen.check_freeze()
+
     def test_raw_rows_are_complete_ordered_and_reference_free(self):
         expected = fake_inputs()
         for model in ("whisper", "wav2vec2"):

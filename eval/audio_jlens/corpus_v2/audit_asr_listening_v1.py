@@ -41,7 +41,7 @@ EXPECTED = {
     "pins": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
     "protocol": "30285a6c897e742eff59f593b3d12a1bd92d62585cd72171837c3e18fabe662e",
     "amendment": "9a6c12199e591ac623ee74938d13a4a6b11dbbbadce21e79cb75bd888176246d",
-    "runner": "7df490c768d929e63845e00397ae1f0f77ba5b7f03722479fa8f5826527b4b78",
+    "runner": "6cc4e6eaa3cf93c3cdf1617589fb1d2ad5eb23890f376aafc5124029474ddcb5",
 }
 WORD = re.compile(r"[^\W_]+(?:['’][^\W_]+)*", re.UNICODE)
 OPAQUE = re.compile(r"[0-9a-f]{20}\Z")

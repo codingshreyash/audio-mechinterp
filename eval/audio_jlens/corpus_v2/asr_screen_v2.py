@@ -27,6 +27,7 @@ BINDING = HERE / "rendered_v2/TECHNICAL_BINDING.json"
 INPUTS = HERE / "ASR_INPUTS_PROSPECTIVE_V1.json"
 PINS = HERE / "ASR_MODEL_PINS_PROSPECTIVE_V1.json"
 PROTOCOL = HERE / "ASR_LISTENING_QA_PROTOCOL_PROSPECTIVE_V1.md"
+AMENDMENT = HERE / "ASR_MIDDLE_SLOT_FLAG_AMENDMENT_V1.md"
 FREEZE = HERE / "ASR_SCREEN_FREEZE_V1.json"
 EXPECTED = {
     "manifest": "15395c7d132eb3f1c1a6b2b7d555146faa83be4ee2b77fba4f481cf70f26761d",
@@ -35,6 +36,7 @@ EXPECTED = {
     "inputs": "74f38f6704d1995b8e7040b329f7c0c0ea68b3cae36e774b875b4c358ae76d33",
     "pins": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
     "protocol": "30285a6c897e742eff59f593b3d12a1bd92d62585cd72171837c3e18fabe662e",
+    "amendment": "9a6c12199e591ac623ee74938d13a4a6b11dbbbadce21e79cb75bd888176246d",
 }
 CLIP_ROOT = (HERE / "rendered_v2/clips").resolve()
 N_CLIPS = 480
@@ -65,7 +67,8 @@ def exclusive_json(path: Path, body: dict) -> None:
 
 def check_sources() -> tuple[dict, dict]:
     for key, path in (("manifest", MANIFEST), ("binding", BINDING),
-                      ("inputs", INPUTS), ("pins", PINS), ("protocol", PROTOCOL)):
+                      ("inputs", INPUTS), ("pins", PINS), ("protocol", PROTOCOL),
+                      ("amendment", AMENDMENT)):
         require(path.is_file() and sha(path) == EXPECTED[key], f"frozen {key} SHA changed")
     manifest = json.loads(MANIFEST.read_text())
     binding = json.loads(BINDING.read_text())
@@ -163,12 +166,15 @@ def check_model_pins(pins: dict) -> dict[str, Path]:
 
 
 def check_freeze() -> dict:
+    require(AMENDMENT.is_file() and sha(AMENDMENT) == EXPECTED["amendment"],
+            "frozen ASR middle-slot amendment SHA changed")
     require(FREEZE.is_file(), "ASR screen freeze receipt absent; independent review required")
     receipt = json.loads(FREEZE.read_text())
     require(receipt.get("status") == "independently_reviewed_asr_screen_frozen"
             and receipt.get("script_sha256") == sha(Path(__file__))
             and all(receipt.get(f"{key}_sha256") == EXPECTED[key]
-                    for key in ("manifest", "binding", "cases", "inputs", "pins", "protocol")),
+                    for key in ("manifest", "binding", "cases", "inputs", "pins",
+                                "protocol", "amendment")),
             "ASR screen freeze receipt does not bind exact sources")
     return receipt
 

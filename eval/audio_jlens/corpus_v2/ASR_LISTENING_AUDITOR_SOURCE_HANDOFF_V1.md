@@ -6,7 +6,7 @@ The outcome mode requires both ASR output directories, the SHA-256 of each exter
 
 The listener collector now records `server_version: BlindListening/1` in `run_meta.json` and the HTTP `User-Agent` in each hash-chained response row. The auditor rejects a missing/changed server version and a missing, placeholder, or malformed browser user-agent. A user-agent identifies the reported browser version; it does not prove a human heard the clip. The human review and reviewer independence still require operational verification.
 
-The separately versioned [middle-slot amendment](ASR_MIDDLE_SLOT_FLAG_AMENDMENT_V1.md) is pinned by SHA-256. The auditor now requires a second listener whenever **either** ASR normalized full-script transcript differs from the normalized reference. Merely finding the target word somewhere in an ASR transcript cannot clear the flag: `Otter say other now` contains `otter` once, but does not match `Say otter now`. Whole-token occurrence remains a descriptive metric. A synthetic regression covers this case with both ASRs making the same error, so ASR disagreement cannot accidentally supply the flag. The amendment adds human review without changing the frozen corpus or original protocol hash.
+The separately versioned [middle-slot amendment](ASR_MIDDLE_SLOT_FLAG_AMENDMENT_V1.md) is pinned by SHA-256 in **both** the ASR runner and auditor. The runner rejects a changed amendment at source preflight and a freeze receipt missing `amendment_sha256` before either `--run` mode can load a model. The auditor requires a second listener whenever **either** ASR normalized full-script transcript differs from the normalized reference. Merely finding the target word somewhere in an ASR transcript cannot clear the flag: `Otter say other now` contains `otter` once, but does not match `Say otter now`. Whole-token occurrence remains a descriptive metric. A synthetic regression covers this case with both ASRs making the same error, so ASR disagreement cannot accidentally supply the flag. The amendment adds human review without changing the frozen corpus or original protocol hash.
 
 ## Conservative decisions requiring protocol clarification before a `go`
 
@@ -20,11 +20,11 @@ Source SHA-256 values for the pending freeze receipt:
 
 | Source | SHA-256 |
 | --- | --- |
-| ASR runner | `7df490c768d929e63845e00397ae1f0f77ba5b7f03722479fa8f5826527b4b78` |
-| Outcome auditor | `53344372bd8b06400768dac114e915fe6e8473298e8b63e48b5d1c56e60e0732` |
+| ASR runner | `6cc4e6eaa3cf93c3cdf1617589fb1d2ad5eb23890f376aafc5124029474ddcb5` |
+| Outcome auditor | `2b39238dcad768a428b184a185b07217f592db4fcb5ebb5276fa5a0958857573` |
 | Middle-slot amendment | `9a6c12199e591ac623ee74938d13a4a6b11dbbbadce21e79cb75bd888176246d` |
 | Listening server | `05c9629d40f36103b61a6ad05a0a97e8db007d0af957be88484559546cfb38a7` |
 | Listening HTML | `3c912bf01cac53f1c6b019e441a54a98294addbd2dcd814f4c7e27e675347cc3` |
 | Listening JavaScript | `9053555674e5a6eac6f0160fc5a85900dd38e9ba4a3dd8a8abf4a0d479575962` |
 
-Verification: `pytest -q test_audit_asr_listening_v1.py test_listening_server_v1.py test_asr_screen_v2.py` passed **17 tests and 2 subtests**. `audit_asr_listening_v1.py --validate-only` returned 480 cases and 480 queue entries. Neither command performed ASR inference.
+Verification: `pytest -q test_audit_asr_listening_v1.py test_listening_server_v1.py test_asr_screen_v2.py` passed **18 tests and 2 subtests**. Both the auditor and runner `--validate-only` modes passed on all 480 frozen WAVs. Neither command performed ASR inference.
