@@ -26,5 +26,8 @@
   "case_semantics_preserved": null,
   "include_before_inference": null,
   "exclusion_reason": null,
-  "qa_completed_at_utc": null
+  "qa_completed_at_utc": null,
+  "external_audit_id": null,
+  "external_controller_id": null,
+  "external_reviewer_id": null
 }

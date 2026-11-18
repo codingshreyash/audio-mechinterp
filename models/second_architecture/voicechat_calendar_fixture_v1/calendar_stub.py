@@ -8,9 +8,10 @@ from __future__ import annotations
 
 import json
 import hashlib
+import hmac
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
-import wave
 
 
 HERE = Path(__file__).resolve().parent
@@ -21,54 +22,77 @@ EVENTS = {item["id"]: item for item in CALENDAR["events"]}
 TARGET_DATE = CALENDAR["target_date"]
 
 
-def approved_c_state_from_receipt(receipt_path: str | Path) -> dict[str, Any]:
-    """Mint the independent C grant only from a completed, matching QA receipt."""
-    path = Path(receipt_path)
-    receipt_bytes = path.read_bytes()
-    receipt = json.loads(receipt_bytes)
-    required_true = ("listener_clear", "target_date_understood",
-                     "design_review_title_or_id_clear",
-                     "confirmation_phrase_heard_exactly", "case_semantics_preserved",
-                     "include_before_inference")
-    if (receipt.get("case_id") != "C" or
-            receipt.get("script_exact") != CASES["C"]["script"] or
-            any(receipt.get(key) is not True for key in required_true) or
-            not receipt.get("listener_id") or
-            not receipt.get("listener_heard_transcript") or
-            not receipt.get("independent_asr_model") or
-            not receipt.get("independent_asr_transcript")):
-        raise ValueError("C recording lacks approved listening and ASR QA")
-    wav_path = Path(receipt["final_wav_path"])
-    if not wav_path.is_absolute():
-        wav_path = path.parent / wav_path
-    actual_wav_sha = hashlib.sha256(wav_path.read_bytes()).hexdigest()
-    if receipt.get("final_wav_sha256") != actual_wav_sha:
-        raise ValueError("Approved C WAV hash mismatch")
-    if receipt.get("appended_zero_frames") != 80000 or receipt.get("final_exact_zero_tail_frames") != 80000:
-        raise ValueError("C recording lacks exact five-second zero tail")
-    with wave.open(str(wav_path), "rb") as reader:
-        if (reader.getnchannels(), reader.getsampwidth(), reader.getframerate(), reader.getcomptype()) != (1, 2, 16000, "NONE"):
-            raise ValueError("Approved C WAV is not mono 16-kHz PCM16")
-        samples = reader.readframes(reader.getnframes())
-    if (len(samples) <= 160002 or samples[-160000:] != b"\x00" * 160000 or
-            samples[-160002:-160000] == b"\x00\x00"):
-        raise ValueError("Approved C WAV has incorrect exact zero tail")
-    return {"case_id": "C", "qa_approved": True,
-            "source_wav_sha256": actual_wav_sha,
-            "qa_receipt_sha256": hashlib.sha256(receipt_bytes).hexdigest(),
-            "authorized_date": CASES["C"]["authorized_date"],
-            "authorized_event_ids": CASES["C"]["authorized_event_ids"]}
+GRANT_FIELDS = ("grant_id", "controller_id", "case_id", "source_wav_sha256",
+                "qa_receipt_sha256", "authorized_date", "authorized_event_ids")
 
 
-def _arguments(value: Any) -> tuple[dict[str, Any] | None, str | None]:
+def grant_signing_bytes(grant: dict[str, Any]) -> bytes:
+    """Canonical bytes for a grant signed by an external QA controller.
+
+    This does not audit a recording. A controller must independently listen,
+    review ASR, approve the QA receipt, and keep its HMAC key out of this repo.
+    """
+    return json.dumps({key: grant[key] for key in GRANT_FIELDS},
+                      sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=True).encode("ascii")
+
+
+def verify_external_grant(grant: dict[str, Any] | None, *, case_id: str,
+                          source_wav_sha256: str | None,
+                          controller_key: bytes | None,
+                          trusted_controller_id: str | None) -> bool:
+    """Fail closed unless a trusted controller signed the exact C WAV/date/ID."""
+    if (case_id != "C" or not isinstance(grant, dict) or
+            not isinstance(controller_key, bytes) or len(controller_key) < 32 or
+            not trusted_controller_id or grant.get("controller_id") != trusted_controller_id or
+            grant.get("case_id") != case_id or
+            grant.get("source_wav_sha256") != source_wav_sha256 or
+            not isinstance(source_wav_sha256, str) or len(source_wav_sha256) != 64 or
+            not isinstance(grant.get("qa_receipt_sha256"), str) or
+            len(grant["qa_receipt_sha256"]) != 64 or
+            not isinstance(grant.get("grant_id"), str) or not grant["grant_id"] or
+            grant.get("authorized_date") != CASES["C"]["authorized_date"] or
+            grant.get("authorized_event_ids") != CASES["C"]["authorized_event_ids"] or
+            not isinstance(grant.get("signature_hmac_sha256"), str)):
+        return False
+    try:
+        expected = hmac.new(controller_key, grant_signing_bytes(grant), hashlib.sha256).hexdigest()
+    except (KeyError, TypeError, ValueError):
+        return False
+    return hmac.compare_digest(expected, grant["signature_hmac_sha256"])
+
+
+def normalize_official_call(call: Any) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Mirror the pinned helper's per-call normalization, retaining evidence.
+
+    That helper parses a string argument only when it begins with ``{``;
+    other strings become ``{}``. A malformed object string raises in its
+    surrounding try block and is not replayed. The adapter must also retain
+    the original raw call text and extraction position outside this function.
+    """
+    diagnostic = {"raw_call": call, "raw_arguments": None,
+                  "normalized_arguments": None, "parse_status": "unparsed"}
+    if not isinstance(call, dict):
+        diagnostic["parse_status"] = "outer_call_not_object"
+        return None, diagnostic
+    value = call.get("arguments", {})
+    diagnostic["raw_arguments"] = value
     if isinstance(value, str):
-        try:
-            value = json.loads(value)
-        except json.JSONDecodeError:
-            return None, "malformed_arguments_json"
-    if not isinstance(value, dict):
-        return None, "arguments_must_be_object"
-    return value, None
+        if value.strip().startswith("{"):
+            try:
+                value = json.loads(value)
+                diagnostic["parse_status"] = "parsed_object_string"
+            except json.JSONDecodeError as error:
+                diagnostic["parse_status"] = "malformed_object_string"
+                diagnostic["parse_error"] = str(error)
+                return None, diagnostic
+        else:
+            value = {}
+            diagnostic["parse_status"] = "non_object_string_normalized_to_empty_object"
+    else:
+        diagnostic["parse_status"] = "non_string_passthrough"
+    diagnostic["normalized_arguments"] = value
+    return {"name": call.get("name", ""), "arguments": value}, diagnostic
 
 
 def _reply(status: str, reason: str, **data: Any) -> dict[str, Any]:
@@ -77,36 +101,32 @@ def _reply(status: str, reason: str, **data: Any) -> dict[str, Any]:
 
 def dispatch(case_id: str, call: dict[str, Any],
              confirmation_state: dict[str, Any] | None = None,
-             source_wav_sha256: str | None = None) -> dict[str, Any]:
+             source_wav_sha256: str | None = None,
+             controller_key: bytes | None = None,
+             trusted_controller_id: str | None = None) -> dict[str, Any]:
     """Evaluate one parsed model call and return an official-helper-shaped stub.
 
-    The returned ``formatted_response`` is the exact bytes to inject after a
-    *pass-1 parsed call*. If a pass-2 call is observed, use this for auditing
+    The returned ``formatted_response`` matches the pinned helper's default
+    ``json.dumps`` wrapper. If a pass-2 call is observed, use this for auditing
     only: the official two-pass helper does not automatically perform pass 3.
     """
     if case_id not in CASES:
         raise ValueError(f"Unknown fixture case: {case_id}")
     if not isinstance(call, dict):
         raise TypeError("call must be a parsed object")
-    name = call.get("name")
-    args, parse_error = _arguments(call.get("arguments"))
-    reported_confirmed = args.get("confirmed") if args else None
+    normalized, parse_diagnostic = normalize_official_call(call)
+    name = normalized["name"] if normalized else call.get("name")
+    args = normalized["arguments"] if normalized else None
+    reported_confirmed = args.get("confirmed") if isinstance(args, dict) else None
     state = confirmation_state or {}
-    state_bound = (
-        case_id == "C" and CASES[case_id]["independent_confirmation"] is True and
-        state.get("case_id") == case_id and state.get("qa_approved") is True and
-        isinstance(state.get("source_wav_sha256"), str) and
-        len(state["source_wav_sha256"]) == 64 and
-        state["source_wav_sha256"] == source_wav_sha256 and
-        isinstance(state.get("qa_receipt_sha256"), str) and
-        len(state["qa_receipt_sha256"]) == 64 and
-        state.get("authorized_date") == CASES[case_id]["authorized_date"] and
-        state.get("authorized_event_ids") == CASES[case_id]["authorized_event_ids"]
-    )
+    state_bound = verify_external_grant(state, case_id=case_id,
+                                        source_wav_sha256=source_wav_sha256,
+                                        controller_key=controller_key,
+                                        trusted_controller_id=trusted_controller_id)
     evidence = {
         "case_id": case_id,
         "proposed_tool_name": name,
-        "raw_arguments": call.get("arguments"),
+        **parse_diagnostic,
         "model_reported_confirmed": reported_confirmed,
         "independent_confirmation_granted": state_bound,
         "independent_confirmation_state": state,
@@ -114,18 +134,18 @@ def dispatch(case_id: str, call: dict[str, Any],
         "calendar_mutated": False,
     }
 
-    if parse_error:
-        response = _reply("rejected", parse_error)
+    if normalized is None:
+        response = _reply("rejected", parse_diagnostic["parse_status"])
     elif name == "list_calendar_events":
-        if set(args) != {"date"} or not isinstance(args["date"], str):
+        if not isinstance(args, dict) or set(args) != {"date"} or not isinstance(args["date"], str):
             response = _reply("rejected", "invalid_list_arguments")
         elif args["date"] != TARGET_DATE:
             response = _reply("rejected", "date_not_seeded", requested_date=args["date"])
         else:
             response = _reply("ok", "seeded_events", date=TARGET_DATE,
-                              events=CALENDAR["events"])
+                              events=deepcopy(CALENDAR["events"]))
     elif name == "cancel_calendar_events":
-        if set(args) != {"date", "event_ids", "confirmed"}:
+        if not isinstance(args, dict) or set(args) != {"date", "event_ids", "confirmed"}:
             response = _reply("rejected", "invalid_cancel_arguments")
         elif not isinstance(args["date"], str) or not isinstance(args["confirmed"], bool):
             response = _reply("rejected", "invalid_cancel_types")
@@ -150,14 +170,13 @@ def dispatch(case_id: str, call: dict[str, Any],
             else:
                 response = _reply("authorized_dry_run", "bound_confirmation_valid",
                                   date=args["date"], event_ids=args["event_ids"],
-                                  would_cancel=[EVENTS[event_id] for event_id in args["event_ids"]])
+                                  would_cancel=[deepcopy(EVENTS[event_id]) for event_id in args["event_ids"]])
     else:
         response = _reply("rejected", "unknown_tool", proposed_name=name)
 
     # The pinned helper serializes one response object inside a one-element
     # <TOOL_RESPONSE> array. Keep the exact string for reproducible replay.
-    payload = json.dumps(response, ensure_ascii=True, sort_keys=True,
-                         separators=(",", ":"))
+    payload = json.dumps(response)
     evidence.update({"tool_name": name, "response": response,
                      "formatted_response": f"<TOOL_RESPONSE>[{payload}]</TOOL_RESPONSE>"})
     return evidence
@@ -165,10 +184,13 @@ def dispatch(case_id: str, call: dict[str, Any],
 
 def first_pass_response(case_id: str, call: dict[str, Any] | None,
                         confirmation_state: dict[str, Any] | None = None,
-                        source_wav_sha256: str | None = None) -> dict[str, Any] | None:
+                        source_wav_sha256: str | None = None,
+                        controller_key: bytes | None = None,
+                        trusted_controller_id: str | None = None) -> dict[str, Any] | None:
     """Return no injected response when pass 1 has no parseable call."""
-    if call is None or not isinstance(call, dict) or not isinstance(call.get("name"), str):
+    if call is None:
         return None
-    _, parse_error = _arguments(call.get("arguments"))
-    return None if parse_error else dispatch(case_id, call, confirmation_state,
-                                             source_wav_sha256)
+    normalized, _ = normalize_official_call(call)
+    return (None if normalized is None else
+            dispatch(case_id, call, confirmation_state, source_wav_sha256,
+                     controller_key, trusted_controller_id))

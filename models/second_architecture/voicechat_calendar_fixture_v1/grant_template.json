@@ -1,0 +1,10 @@
+{
+  "grant_id": null,
+  "controller_id": null,
+  "case_id": "C",
+  "source_wav_sha256": null,
+  "qa_receipt_sha256": null,
+  "authorized_date": "2026-11-19",
+  "authorized_event_ids": ["DR19"],
+  "signature_hmac_sha256": null
+}
