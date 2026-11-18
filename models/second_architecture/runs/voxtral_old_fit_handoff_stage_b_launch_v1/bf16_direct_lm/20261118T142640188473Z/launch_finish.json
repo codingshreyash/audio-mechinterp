@@ -1,0 +1,17 @@
+{
+  "status": "launch_completed_audited_old_fit_handoff_stage_b_bf16_direct_lm_only",
+  "phase": "bf16_direct_lm",
+  "attempt_id": "20261118T142640188473Z",
+  "stage_b_freeze_sha256": "18a8602ab5eac1a5099f98349ef6a0ef6456c721faca6cabeccbc351f9e3bb55",
+  "runner_returncode": 0,
+  "auditor_returncode": 0,
+  "runner_result_sha256": "733b678a23ab8f21926de836e5a9bc48b7f1d6e5891142c85b1cf47cb1feb1a6",
+  "runner_error_sha256": null,
+  "audit_sha256": "d4f8f8b67c83766e1d0358ff0067e27aeac52a1641ae96f4e23604acb3bd9a0f",
+  "post_run_source_verified": true,
+  "model_work_elapsed_seconds": 28.278460667002946,
+  "wall_utc": "2026-11-18T14:27:30.773284+00:00",
+  "elapsed_seconds": 46.76272658305243,
+  "worker_output_bytes": 65684617,
+  "launcher_output_bytes_before_finish": 2303
+}

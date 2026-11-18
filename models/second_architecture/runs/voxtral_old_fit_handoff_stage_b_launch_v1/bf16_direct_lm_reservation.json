@@ -1,0 +1,6 @@
+{
+  "status": "phase_reserved_no_retry",
+  "phase": "bf16_direct_lm",
+  "attempt_id": "20261118T142640188473Z",
+  "stage_b_freeze_sha256": "18a8602ab5eac1a5099f98349ef6a0ef6456c721faca6cabeccbc351f9e3bb55"
+}
