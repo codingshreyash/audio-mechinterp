@@ -1,0 +1,9 @@
+{
+  "status": "audited_failed_attempt_receipt_only",
+  "arm": "bf16",
+  "error_status": "invalid_old_fit_arm",
+  "progress_sha256": "9ba64f9ca55cd94737a8b6e0a60514c4527e9c3326d1b6aa56f21814f44d0b23",
+  "auditor_sha256": "c619576f3daf188940c4fee67ecf798a2bc12ea3876b317673a12f964e916c5e",
+  "runner_sha256": "ae9d2620ad4e06d01ea01c920f1f8f4aee8c21764598bac343e383869c2940d2",
+  "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82"
+}

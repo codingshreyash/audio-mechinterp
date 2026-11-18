@@ -1,0 +1,8 @@
+{
+  "status": "invalid_old_fit_arm",
+  "arm": "bf16",
+  "error_type": "ValueError",
+  "error": "Full-pipeline parameter dtype/device changed",
+  "elapsed_seconds": 7.570438584079966,
+  "progress_sha256": "9ba64f9ca55cd94737a8b6e0a60514c4527e9c3326d1b6aa56f21814f44d0b23"
+}

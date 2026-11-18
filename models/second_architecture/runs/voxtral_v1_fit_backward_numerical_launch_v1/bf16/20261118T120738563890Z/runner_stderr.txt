@@ -1,0 +1,10 @@
+W1118 07:07:44.837000 16697 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/762 [00:00<?, ?it/s]Loading weights:   9%|▉         | 68/762 [00:00<00:01, 412.70it/s]Loading weights: 100%|██████████| 762/762 [00:00<00:00, 3127.78it/s]
+Traceback (most recent call last):
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_v1_fit_backward_numerical_followup_v1.py", line 552, in <module>
+    main()
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_v1_fit_backward_numerical_followup_v1.py", line 548, in main
+    run(args.arm, args.output_dir or RUNS / args.arm / stamp)
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_v1_fit_backward_numerical_followup_v1.py", line 391, in run
+    raise ValueError("Full-pipeline parameter dtype/device changed")
+ValueError: Full-pipeline parameter dtype/device changed

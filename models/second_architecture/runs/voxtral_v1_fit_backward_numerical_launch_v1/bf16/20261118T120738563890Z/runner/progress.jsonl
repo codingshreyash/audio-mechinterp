@@ -1,0 +1,4 @@
+{"arm": "bf16", "elapsed_seconds": 0.0004896670579910278, "phase": "attempt_started", "protocol_sha256": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82", "script_sha256": "ae9d2620ad4e06d01ea01c920f1f8f4aee8c21764598bac343e383869c2940d2", "wall_utc": "2026-11-18T12:07:38.811591+00:00"}
+{"elapsed_seconds": 6.767943084007129, "phase": "preflight_validated"}
+{"elapsed_seconds": 6.772764750057831, "fraction_limit": 0.8012819990316539, "phase": "mps_ready", "recommended_bytes": 40200896512}
+{"current_bytes": 0, "driver_bytes": 458752, "elapsed_seconds": 6.775012334110215, "peak_driver_bytes": 458752, "phase": "before_model_load"}

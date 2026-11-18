@@ -1,0 +1,15 @@
+{
+  "status": "launch_failed",
+  "arm": "bf16",
+  "freeze_receipt_sha256": "a487b199b28d80b70c58c4732c8d2d53e64c423226e15d76bf5c91c624bc5df8",
+  "runner_returncode": 1,
+  "auditor_returncode": 0,
+  "auditor_status": "audited_failed_attempt_receipt_only",
+  "post_run_source_verified": true,
+  "runner_result_sha256": null,
+  "runner_error_sha256": "88492801aa84cceb3b8dc74b18b1bbf0888c00ae698777f6ce1d4349dfe77ca0",
+  "audit_sha256": "49dbc551a94f07213bb888621fe69debe1f6e538c8e432b15e588e32c4a6b668",
+  "failure_reason": "runner_failed_or_audited_failure_only",
+  "elapsed_seconds": 8.935372459003702,
+  "wall_utc": "2026-11-18T12:07:47.707734+00:00"
+}
