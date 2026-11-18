@@ -1,0 +1,11 @@
+{
+  "status": "independently_reviewed_voicechat_asr_qa_frozen",
+  "runner_sha256": "29da8e97fa40a7f54965215c48a325a21262abf33423eddd26fa4ea2c5c1b3b1",
+  "protocol_sha256": "575d94a642ec061eb1c81766bd516ddbd0a1a54501a7d018d7bdb6665d77f2d5",
+  "manifest_sha256": "bfafef903eaff14a444c015d0c38886e3bedde928ef8c5ca9100aac00370ca7c",
+  "scripts_sha256": "c3416890395c89c03bdbf2bad9e62e0215bf46d6d9a749f8cb043af1cbe2f99d",
+  "pins_sha256": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
+  "v2_asr_source_sha256": "6cc4e6eaa3cf93c3cdf1617589fb1d2ad5eb23890f376aafc5124029474ddcb5",
+  "independent_source_review_sha256": "301f399a278a712c4ce012dd488714da292c2d2e49e33060fb8f51dc6a5912ca",
+  "scope": "12 raw ASR outcomes per model and descriptive comparison only; human QA required before VoiceChat inference"
+}
