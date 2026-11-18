@@ -1,0 +1,31 @@
+{
+  "status": "first_record_complete",
+  "meta_sha256": "b1f70d29c8a8f2b8397da3b4e5f94aea3e64c2d7af084c6174a3693bd6748ba0",
+  "progress_sha256": "02dd6d7ab85d2595c6db6e375c23c40531332a355b166276eae745c5dd0423ca",
+  "progress_records": 108,
+  "capture_records": 8,
+  "generation_records": 100,
+  "teacher_forced_forward_records": 200,
+  "invalid_condition_records": 0,
+  "resource_projection": {
+    "first_record_variable_seconds": 83.42075845808722,
+    "one_time_fixed_setup_seconds": 7.802638249238953,
+    "projected_eight_record_seconds": 675.1687059139367,
+    "time_cap_seconds": 2700,
+    "peak_mps_driver_bytes": 10667950080,
+    "memory_cap_bytes": 32212254720,
+    "passes": true,
+    "preflight_seconds": 6.927576916059479,
+    "model_load_seconds": 0.8750613331794739,
+    "first_record_planned_generations": 100,
+    "first_record_planned_teacher_forced_forwards": 200,
+    "first_record_planned_captures": 8,
+    "first_record_actual_generations": 100,
+    "first_record_actual_teacher_forced_forwards": 200,
+    "first_record_actual_captures": 8,
+    "first_record_invalid_conditions": 0,
+    "full_workload_observed": true,
+    "projection_status": "full_first_record_workload_measured"
+  },
+  "interpretation": "FIT first-record feasibility only; no 16-direction causal threshold tested"
+}

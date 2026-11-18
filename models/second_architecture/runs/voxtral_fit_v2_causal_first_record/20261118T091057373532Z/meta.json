@@ -1,0 +1,111 @@
+{
+  "status": "first_record_fit_only",
+  "script_sha256": "64d799bbb40b58b128b049877d18bde7774c2dc16717af97e692aa4531e907b5",
+  "design_sha256": "cd2cbd762af3568f85d43c2dec47824666a95d689a3dc89d9cbdf6471ef54ab0",
+  "masks_sha256": "a634fc0ab8454b7a82802c56a5365dc90e79f446e4d280cee6321adfead4108e",
+  "selection_sha256": "f897d360dbcec9c09f1813f9c070294753fbabc25c6213ba6bdac34b1d79b56b",
+  "index_sha256": "bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971",
+  "pilot_sha256": "6cc84dc1a4ced9ce17380eab3836079c462c9974f31337f146416730b5536ccf",
+  "v2_gate_sha256": "79622d883e954a5076afac2e97b3809833e7fff5ea89b4ae5ccbd137b819429f",
+  "snapshot": {
+    "model_id": "mistralai/Voxtral-Mini-3B-2507",
+    "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+    "config": {
+      "size_bytes": 1361,
+      "sha256": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"
+    },
+    "snapshot_tree": {
+      "size_bytes": 2013,
+      "sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"
+    },
+    "weight_index": {
+      "size_bytes": 68088,
+      "sha256": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"
+    },
+    "weight_shards": {
+      "model-00001-of-00002.safetensors": {
+        "size_bytes": 4977385976,
+        "sha256": "1facdc4c5a0e84f2881a59c4756441b7030a1f1036b2124c117540408d0e5fe9"
+      },
+      "model-00002-of-00002.safetensors": {
+        "size_bytes": 4379088336,
+        "sha256": "0a103ba715bc0d656e94bf79d637d4f8f0f4fe6d76fb1d4db7ee46c6b940f631"
+      }
+    },
+    "processor_config": {
+      "size_bytes": 357,
+      "sha256": "86d67d926e17d3a9bb0bae334c9fc46bc163181992357a0357c0aec2c7e131d1"
+    },
+    "tokenizer_asset": {
+      "size_bytes": 14894206,
+      "sha256": "4aaf3836c2a5332f029ce85a7a62255c966f47b6797ef81dedd0ade9c862e4a8"
+    },
+    "generation_config": {
+      "size_bytes": 108,
+      "sha256": "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"
+    }
+  },
+  "installed_sources": {
+    "modeling_voxtral": "2d3ec9d78c469b77c42a8d5ba258185fb1c58f4c2c7bf6007ec724436dfc7056",
+    "processing_voxtral": "239e84657d1a0287ab27a540c946a787a69b4b0bf45727d6b24bee21ccec0296",
+    "feature_extraction_whisper": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb"
+  },
+  "versions": {
+    "python": "3.12.13",
+    "platform": "macOS-26.7.1-arm64-arm-64bit",
+    "torch": "2.15.0",
+    "transformers": "5.20.2"
+  },
+  "record": {
+    "pair_id": "animal_08",
+    "engine": "piper",
+    "phrasing_id": "fit_chosen",
+    "words": [
+      "beaver",
+      "monkey"
+    ]
+  },
+  "prompt": "Answer the question in the audio with exactly one word. No explanation or punctuation.",
+  "generation": {
+    "do_sample": false,
+    "max_new_tokens": 32,
+    "eos": 2
+  },
+  "planned": {
+    "generations": 100,
+    "captures": 8,
+    "teacher_forced_forwards": 200
+  },
+  "feature_hashes": {
+    "beaver": {
+      "native": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+      "blank": "7da07702ab5cbbbe8b0772deb4d94e1a2da30c52ce6cb157728adb8f2ccdac9c"
+    },
+    "monkey": {
+      "native": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625",
+      "blank": "7da07702ab5cbbbe8b0772deb4d94e1a2da30c52ce6cb157728adb8f2ccdac9c"
+    }
+  },
+  "feature_matrix_hashes": {
+    "native_beaver": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+    "native_monkey": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625",
+    "word_beaver_outside_monkey": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+    "beaver_with_monkey_padding": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+    "word_monkey_outside_beaver": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625",
+    "monkey_with_beaver_padding": "83ce3a5d452b68240740e8ccfd3a9c2b8a1f78570a117dd2fd4dcac1e3076625"
+  },
+  "independent_frontend_check": {
+    "raw_log_mel_maximum": {
+      "beaver": 1.839543342590332,
+      "monkey": 1.839543342590332
+    },
+    "independent_reproduction_error": {
+      "beaver": 0.0,
+      "monkey": 0.0
+    },
+    "shared_maximum": 1.839543342590332,
+    "shared_max_off_word_max_abs_error": 0.0
+  },
+  "model_weights_loaded_during_preflight": false,
+  "model_load_requested": true
+}
