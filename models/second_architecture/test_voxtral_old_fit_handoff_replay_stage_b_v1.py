@@ -44,6 +44,10 @@ def fake_details() -> dict:
     lm_input = torch.zeros(target.LM_INPUT_SHAPE, dtype=torch.bfloat16)
     logits = torch.zeros((target.LOGIT_WIDTH,), dtype=torch.bfloat16)
     positions = list(range(375))
+    hook_events = {
+        name: {"calls": 1, "shape": list(shape), "dtype": "torch.bfloat16"}
+        for name, shape in target.NATIVE_HOOK_SHAPES.items()
+    }
     observations = {}
     for site in target.SOURCE_REPLAY_STAGES:
         records = []
@@ -56,10 +60,12 @@ def fake_details() -> dict:
                 else:
                     edited_source[24, 0] = torch.tensor(alpha, dtype=torch.bfloat16)
                 def trace(source):
-                    return {"saved": {"source_full_post": {site: source},
+                    return {"saved": {"source_full_pre": sources,
+                                      "source_full_post": {**sources, site: source},
                                       "lm_input_full": lm_input,
                                       "first_answer_logits": logits,
-                                      "audio_placeholder_positions": positions}}
+                                      "audio_placeholder_positions": positions,
+                                      "hook_events": hook_events}}
                 records.append({"cycle": cycle, "alpha": alpha,
                                 "zero": trace(sources[site]), "edited": trace(edited_source)})
         observations[site] = records
@@ -126,6 +132,14 @@ class StageBReplayTests(unittest.TestCase):
         bad = fake_details()
         bad["observations"]["encoder31"][0]["alpha"] = 0.2
         with self.assertRaisesRegex(ValueError, "signed-alpha"):
+            target.cycle_zero_pairs(bad)
+        bad = fake_details()
+        del bad["observations"]["encoder31"][0]["edited"]["saved"]["source_full_pre"]
+        with self.assertRaisesRegex(ValueError, "source_full_pre"):
+            target.cycle_zero_pairs(bad)
+        bad = fake_details()
+        bad["observations"]["projector"][0]["zero"]["saved"]["hook_events"]["lm_input"]["calls"] = 2
+        with self.assertRaisesRegex(ValueError, "hook event"):
             target.cycle_zero_pairs(bad)
 
     def test_native_attempt_requires_external_audit_and_exact_sidecars(self):

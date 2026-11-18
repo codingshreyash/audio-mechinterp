@@ -23,8 +23,8 @@ HERE = Path(__file__).resolve().parent
 PROTOCOL = HERE / "VOXTRAL_OLD_FIT_NUMERICAL_HANDOFF_PROSPECTIVE_V1.md"
 # Update only through a new review/freeze if the committed protocol changes.
 PROTOCOL_SHA256 = "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b"
-NATIVE_SOURCE_SHA256 = "99c398948260525a9aa7074abb11d2e2390d4feee1d74662a5e4971f2517de11"
-NATIVE_TEST_SHA256 = "8771997481b787e02cd077a9be50abd1f6463e3f61980db7cee84a3b31713aeb"
+NATIVE_SOURCE_SHA256 = "dc63b8c10ef605e1cc8538e3d37d8d2531e50ca7a46140ee1ee551054e3de978"
+NATIVE_TEST_SHA256 = "e2e3c1b51f72d54c573665c96d984ea73857af6560d2a38ef0d51be28b8a0a77"
 NATIVE_TEST = HERE / "test_voxtral_old_fit_handoff_native_stage_a_v1.py"
 SOURCE_REPLAY_STAGES = {
     "encoder31": (("projector_word", 4), ("lm_input_word", 4),
@@ -48,6 +48,12 @@ ROWS = {"encoder31": list(range(96, 108)), "projector": [24, 25, 26]}
 SOURCE_SHAPES = {"encoder31": (1, 1500, 1280), "projector": (375, 3072)}
 LM_INPUT_SHAPE = (1, 396, 3072)
 LOGIT_WIDTH = 131072
+NATIVE_HOOK_SHAPES = {
+    "encoder31": SOURCE_SHAPES["encoder31"],
+    "projector": SOURCE_SHAPES["projector"],
+    "lm_input": LM_INPUT_SHAPE,
+    **{f"lm{layer}": LM_INPUT_SHAPE for layer in native.LM_LAYERS},
+}
 
 
 def sha_file(path: Path) -> str:
@@ -166,6 +172,25 @@ def _native_saved(record: dict[str, Any], field: str) -> dict[str, Any]:
     return value.get("saved", value)
 
 
+def _check_native_cycle_zero_trace(trace: dict[str, Any], dtype: torch.dtype) -> None:
+    """Require the full archived source boundary and its native hook evidence."""
+    for boundary in ("source_full_pre", "source_full_post"):
+        states = trace.get(boundary)
+        if not isinstance(states, dict) or set(states) != set(SOURCE_SHAPES):
+            raise ValueError(f"Stage-A {boundary} schema differs")
+        for site, shape in SOURCE_SHAPES.items():
+            _check_tensor(states[site], shape, dtype, f"{boundary} {site}")
+    events = trace.get("hook_events")
+    if not isinstance(events, dict) or not set(NATIVE_HOOK_SHAPES).issubset(events):
+        raise ValueError("Stage-A hook event schema differs")
+    for name, shape in NATIVE_HOOK_SHAPES.items():
+        event = events[name]
+        if (not isinstance(event, dict) or type(event.get("calls")) is not int or
+                event["calls"] != 1 or event.get("shape") != list(shape) or
+                event.get("dtype") != str(dtype)):
+            raise ValueError(f"Stage-A {name} hook event differs")
+
+
 def cycle_zero_pairs(details: dict[str, Any], *, dtype: torch.dtype = torch.bfloat16
                      ) -> tuple[dict[str, Any], ...]:
     """Require every frozen cycle-0 BF16 clean/edit source and LM input pair.
@@ -187,6 +212,8 @@ def cycle_zero_pairs(details: dict[str, Any], *, dtype: torch.dtype = torch.bflo
             raise ValueError("Stage-A cycle-0 signed-alpha order changed")
         for row in first_cycle:
             zero, edited = _native_saved(row, "zero"), _native_saved(row, "edited")
+            _check_native_cycle_zero_trace(zero, dtype)
+            _check_native_cycle_zero_trace(edited, dtype)
             zp = _check_tensor(zero["source_full_post"][site], SOURCE_SHAPES[site],
                                dtype, "zero full source")
             ep = _check_tensor(edited["source_full_post"][site], SOURCE_SHAPES[site],
