@@ -1,0 +1,10 @@
+{
+  "status": "complete_raw_asr_no_reference_comparison",
+  "model_key": "wav2vec2",
+  "planned_clips": 12,
+  "raw_rows": 12,
+  "raw_sha256": "551f31f482b589ab271878b5275abd557eb9e13da0ec05551ad7eb8f10edd70d",
+  "meta_sha256": "adb6d1c70697cdaf5ab04dfd41bf33040c2acf8fe5cb09dd9a8667bdff13096b",
+  "elapsed_seconds": 3.8001416251063347,
+  "no_voicechat_inference": true
+}
