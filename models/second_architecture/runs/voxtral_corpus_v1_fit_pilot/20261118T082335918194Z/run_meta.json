@@ -1,0 +1,78 @@
+{
+  "status": "frozen_fit_pilot_v1",
+  "created_utc": "2026-11-18T08:23:35.915987+00:00",
+  "runner_sha256": "1d4d65a528d558e5bdda3b733eaab6e7e849ab9456d6842d5ee178d3efdfb8d8",
+  "index_sha256": "bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971",
+  "source_manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "protocol_sha256": "b0a23a528b6643cd185c75e84c65c7bfaa7d83ff4a52d6c67c9b3d70311ce70c",
+  "requirements_freeze_sha256": "0c451c471cd920a2793b74f1c727df662392bb401b2c4043117bccd1763d2aff",
+  "snapshot": {
+    "model_id": "mistralai/Voxtral-Mini-3B-2507",
+    "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+    "config": {
+      "size_bytes": 1361,
+      "sha256": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"
+    },
+    "snapshot_tree": {
+      "size_bytes": 2013,
+      "sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"
+    },
+    "weight_index": {
+      "size_bytes": 68088,
+      "sha256": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"
+    },
+    "weight_shards": {
+      "model-00001-of-00002.safetensors": {
+        "size_bytes": 4977385976,
+        "sha256": "1facdc4c5a0e84f2881a59c4756441b7030a1f1036b2124c117540408d0e5fe9"
+      },
+      "model-00002-of-00002.safetensors": {
+        "size_bytes": 4379088336,
+        "sha256": "0a103ba715bc0d656e94bf79d637d4f8f0f4fe6d76fb1d4db7ee46c6b940f631"
+      }
+    },
+    "processor_config": {
+      "size_bytes": 357,
+      "sha256": "86d67d926e17d3a9bb0bae334c9fc46bc163181992357a0357c0aec2c7e131d1"
+    },
+    "tokenizer_asset": {
+      "size_bytes": 14894206,
+      "sha256": "4aaf3836c2a5332f029ce85a7a62255c966f47b6797ef81dedd0ade9c862e4a8"
+    },
+    "generation_config": {
+      "size_bytes": 108,
+      "sha256": "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"
+    }
+  },
+  "versions": {
+    "python": "3.12.13",
+    "platform": "macOS-26.7.1-arm64-arm-64bit",
+    "torch": "2.15.0",
+    "transformers": "5.20.2"
+  },
+  "installed_transformers_source_sha256": {
+    "modeling_voxtral": "2d3ec9d78c469b77c42a8d5ba258185fb1c58f4c2c7bf6007ec724436dfc7056",
+    "processing_voxtral": "239e84657d1a0287ab27a540c946a787a69b4b0bf45727d6b24bee21ccec0296",
+    "feature_extraction_whisper": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb"
+  },
+  "prompt": "Answer the question in the audio with exactly one word. No explanation or punctuation.",
+  "pilot_pair_ids": [
+    "animal_06",
+    "color_03",
+    "nature_00",
+    "object_02"
+  ],
+  "generation": {
+    "dtype": "bfloat16",
+    "do_sample": false,
+    "max_new_tokens": 32,
+    "eos_token_id": 2,
+    "use_cache": true,
+    "attn_implementation": "sdpa"
+  },
+  "secondary_score": "canonical initial-capital answer token sequence plus EOS; other minus expected",
+  "memory_limit_bytes": 32212254720,
+  "planned_clips": 32,
+  "mps_recommended_max_bytes": 40200896512,
+  "mps_fraction_limit": 0.8012819990316539
+}
