@@ -38,6 +38,7 @@ ZERO_REPEATS = 3
 ZERO_DRIFT_LIMIT = 1e-4
 DEFAULT_LENS = HERE / "fit_rank16_transport_v1.lens.pt"
 DEFAULT_STAGE1 = HERE / "fit_rank16_transport_v1.stage1.pt"
+FIT_REPORT = HERE / "fit_rank16_transport_v1.report.json"
 
 
 def prefix_score(logits: torch.Tensor, donor_ids: list[int],
@@ -181,6 +182,7 @@ def calibration_metadata(lens_path: Path, stage1_path: Path, cases: list,
         "scoring_v2_sha256": SCORING_SHA,
         "lens_sha256": sha(lens_path),
         "stage1_sha256": sha(stage1_path),
+        "fit_report_sha256": sha(FIT_REPORT),
         "fit_metadata": fit_metadata(spec, cases),
         "alpha": ALPHA, "zero_repeats": ZERO_REPEATS,
         "zero_drift_limit": ZERO_DRIFT_LIMIT,
@@ -227,6 +229,11 @@ def main() -> None:
     lens_path, stage1_path = args.lens.resolve(), args.stage1.resolve()
     lens = torch.load(lens_path, map_location="cpu", weights_only=True)
     stage1 = torch.load(stage1_path, map_location="cpu", weights_only=True)
+    fit_report = json.loads(FIT_REPORT.read_text())
+    if (sha(lens_path) != fit_report["lens_sha256"]
+            or sha(stage1_path) != fit_report["stage1_sha256"]
+            or lens["metadata"] != fit_report["metadata"]):
+        raise ValueError("FIT report does not authenticate lens/stage1")
     if lens["status"] != "fit_only_corpus_transport_no_efficacy_evaluation" or lens["metadata"] != fit_metadata(spec, cases):
         raise ValueError("FIT lens provenance changed")
     if sha(stage1_path) != lens["stage1_sha256"] or stage1["metadata"] != lens["metadata"]:
@@ -282,8 +289,7 @@ def main() -> None:
     group = {"system_prompt": spec["system_prompt"], "groups": groups}
     by_key = {(case["pair_id"], case["template"], case["engine"], case["word"]): i
               for i, case in enumerate(cases)}
-    limit = 1 if args.smoke else len(cases)
-    for i in range(len(records), limit):
+    def run_case(i: int) -> None:
         case = cases[i]
         donor_index = by_key[(case["pair_id"], case["template"],
                               case["engine"], case["foil_word"])]
@@ -327,6 +333,10 @@ def main() -> None:
                 raise ValueError("Clean source-bin mean changed from FIT map capture")
             delta = (stage1["source_bin_means"][site][donor_index]
                      - stage1["source_bin_means"][site][i]).float()
+            effective_edit_norm = ALPHA * sum(
+                len(group_rows) * float(delta[b].square().sum())
+                for b, group_rows in enumerate(rows)
+            ) ** 0.5
             zero_scores = []
             for j in range(ZERO_REPEATS):
                 h0, raw_logits, calls = patched_forward(
@@ -365,6 +375,7 @@ def main() -> None:
                 "source_rows": rows,
                 "source_shape": list(clean[site].shape),
                 "source_mean_vs_stage1_max_abs": source_mean_max_abs,
+                "effective_source_edit_frobenius_norm": effective_edit_norm,
                 "hook_calls": calls,
             }
             record_mps_memory(memory, f"fit_{i}_{site}_alpha_{ALPHA}")
@@ -400,6 +411,29 @@ def main() -> None:
         atomic_torch_save(checkpoint, {"metadata": metadata, "records": records})
         if (i + 1) % 8 == 0:
             print(f"calibrated {i+1}/48 FIT contexts", flush=True)
+    limit = 1 if args.smoke else len(cases)
+    for i in range(len(records), limit):
+        try:
+            run_case(i)
+        except Exception as error:
+            index = 0
+            while prefix.with_suffix(f".failure.{index:04d}.json").exists():
+                index += 1
+            failure = prefix.with_suffix(f".failure.{index:04d}.json")
+            atomic_json_save(failure, {
+                "status": "fit_calibration_case_failed",
+                "metadata": metadata,
+                "case_id": cases[i]["case_id"],
+                "case_index": i,
+                "exception_type": type(error).__name__,
+                "exception_message": str(error),
+                "completed_contexts": len(records),
+                "checkpoint_sha256": sha(checkpoint) if checkpoint.exists() else None,
+                "memory_sha256": sha(memory),
+            })
+            raise
+    if args.smoke:
+        return
     summary = finish_summary(records)
     atomic_torch_save(raw, {"metadata": metadata, "records": records,
                             "summary": summary})

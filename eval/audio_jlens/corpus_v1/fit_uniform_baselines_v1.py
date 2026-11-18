@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import resource
 import sys
 from pathlib import Path
 
@@ -113,12 +114,20 @@ def main() -> None:
                         default=HERE / "fit_uniform_baselines_v1")
     args = parser.parse_args()
     calibration_path, lens_path = args.calibration.resolve(), args.lens.resolve()
+    if not str(calibration_path).endswith(".raw.pt"):
+        raise ValueError("Calibration input must be a .raw.pt artifact")
+    calibration_report_path = Path(str(calibration_path)[:-len(".raw.pt")] + ".report.json")
+    calibration_report = json.loads(calibration_report_path.read_text())
+    if calibration_report["raw_sha256"] != sha(calibration_path):
+        raise ValueError("FIT calibration report does not authenticate raw targets")
     raw = torch.load(calibration_path, map_location="cpu", weights_only=True)
     lens = torch.load(lens_path, map_location="cpu", weights_only=True)
     if (raw["metadata"]["protocol_sha256"] != sha(PROTOCOL)
             or raw["metadata"]["lens_sha256"] != sha(lens_path)
             or raw["summary"]["completed_fit_contexts"] != 48
-            or lens["metadata"] != raw["metadata"]["fit_metadata"]):
+            or lens["metadata"] != raw["metadata"]["fit_metadata"]
+            or calibration_report["metadata"] != raw["metadata"]
+            or calibration_report["summary"] != raw["summary"]):
         raise ValueError("FIT calibration/lens/protocol provenance mismatch")
     records = raw["records"]
     pair_ids = [record["pair_id"] for record in records]
@@ -127,12 +136,13 @@ def main() -> None:
     report = prefix.with_suffix(".json")
     if output.exists() or report.exists():
         raise FileExistsError("FIT comparator output exists")
-    models, tables = {}, {}
+    models, tables, training_arrays = {}, {}, {}
     for site in SITES:
         y = projected_target(records, site, lens["basis"])
-        models[site], tables[site] = {}, {}
+        models[site], tables[site], training_arrays[site] = {}, {}, {}
         for feature in FEATURES:
             x = feature_matrix(records, site, feature)
+            training_arrays[site][feature] = {"x": x, "y": y}
             models[site][feature], tables[site][feature] = pair_cv(x, y, pair_ids)
         models[site]["zero"] = {"description": "zero terminal delta"}
     artifact = {
@@ -140,11 +150,13 @@ def main() -> None:
         "metadata": {"script_sha256": sha(Path(__file__)),
                      "protocol_sha256": sha(PROTOCOL),
                      "calibration_sha256": sha(calibration_path),
+                     "calibration_report_sha256": sha(calibration_report_path),
                      "lens_sha256": sha(lens_path),
                      "gamma_grid": list(GAMMAS),
                      "alpha_trained": raw["metadata"]["alpha"],
                      "n_fit": 48, "n_fit_pairs": 12},
         "models": models, "cv_tables": tables,
+        "fit_training_arrays": training_arrays,
         "numerical_floor_v2_by_site": raw["summary"]["numerical_floor_v2_by_site"],
     }
     atomic_torch_save(output, artifact)
@@ -156,6 +168,7 @@ def main() -> None:
         "fit_pair_cv_rmse": {s: {f: tables[s][f][str(models[s][f]["gamma"])]["pair_rmse"]
                                    for f in FEATURES} for s in SITES},
         "numerical_floor_v2_by_site": artifact["numerical_floor_v2_by_site"],
+        "cpu_peak_rss_bytes": int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss),
     })
     print(json.dumps({"status": artifact["status"],
                       "chosen_gamma": {s: {f: models[s][f]["gamma"]
