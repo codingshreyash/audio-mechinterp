@@ -28,8 +28,7 @@ INJECTION_KEYS = (
     "function_responses", "function_response_lengths", "function_response_steps",
 )
 REQUIRED_RESULT_KEYS = (
-    "tokens_text", "tokens_function_pred", "tokens_function",
-    "tokens_len", "text", "tokens_audio",
+    "tokens_text", "tokens_len", "text",
 )
 
 
@@ -178,12 +177,18 @@ def _compare_discrete(left: dict[str, Any], right: dict[str, Any], label: str) -
         _require_same(left.get(key), right.get(key), f"{label}.{key}")
 
 
-def _require_result_evidence(result: dict[str, Any], phase: str, label: str) -> None:
+def _require_result_evidence(result: dict[str, Any], phase: str, label: str, *,
+                             replay: bool) -> None:
     for key in REQUIRED_RESULT_KEYS:
         if key not in result:
             raise ValueError(f"VoiceChat parity missing {label}.{phase}.{key}")
-        if key != "tokens_audio" and not _has_content(result[key]):
+        if not _has_content(result[key]):
             raise ValueError(f"VoiceChat parity missing {label}.{phase}.{key} value")
+    # Mirror the pinned helper's .get(key, fallback) semantics. A present
+    # tokens_function_pred=None suppresses the fallback and yields no call.
+    selected_function = result.get("tokens_function_pred", result.get("tokens_function"))
+    if phase == "pass1" and replay and not _has_content(selected_function):
+        raise ValueError(f"VoiceChat parity missing {label}.pass1 replay function tokens")
     if phase == "pass2" and ("audio_len" not in result or result["audio_len"] is None or
                              "audio" not in result or result["audio"] is None):
         raise ValueError(f"VoiceChat parity missing {label}.pass2 raw audio or length")
@@ -242,12 +247,14 @@ def compare_stock_adapter(
     for label, stock in (("stock_a", stock_a), ("stock_b", stock_b),
                          ("stock_no_tts_wrapper", stock_no_tts_wrapper)):
         for phase in ("pass1", "pass2"):
-            _require_result_evidence(stock[phase]["result"], phase, label)
+            _require_result_evidence(stock[phase]["result"], phase, label,
+                                     replay=replay is not None)
             _require_injection(stock[phase]["kwargs"],
                                replay=replay is not None and phase == "pass2",
                                label=f"{label}.{phase}")
     for phase, call in zip(("pass1", "pass2"), adapter_calls):
-        _require_result_evidence(adapter_trace[phase]["raw_result"], phase, "adapter")
+        _require_result_evidence(adapter_trace[phase]["raw_result"], phase,
+                                 "adapter", replay=replay is not None)
         _require_injection(call, replay=replay is not None and phase == "pass2",
                            label=f"adapter.{phase}")
     if not all(_has_content(codes) and all(_has_content(code) for code in codes)
