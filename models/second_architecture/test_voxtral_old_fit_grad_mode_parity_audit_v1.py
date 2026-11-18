@@ -18,13 +18,17 @@ def compact_fixture():
         "encoder31": torch.arange(8, dtype=torch.float32).reshape(1, 4, 2).to(torch.bfloat16),
         "projector": torch.arange(12, dtype=torch.float32).reshape(3, 4).to(torch.bfloat16),
     }
+    ids = torch.tensor([[1, 24, 24, 24, 2]], dtype=torch.int64)
+    batch = {"input_ids": ids,
+             "attention_mask": torch.ones_like(ids),
+             "input_features": torch.zeros((1, 2, 3), dtype=torch.float32)}
     spec = audit.ShapeSpec(
         source={"encoder31": (1, 4, 2), "projector": (3, 4)},
         projector=(3, 4), lm_input=(1, 5, 4), lm_width=4, logits=7,
         input_features=(1, 2, 3), audio_count=3, audio_token_id=24,
         source_sha256={site: audit.tensor_sha(tensor) for site, tensor in sources.items()},
+        batch_sha256={name: audit.tensor_sha(tensor) for name, tensor in batch.items()},
     )
-    ids = torch.tensor([[1, 24, 24, 24, 2]], dtype=torch.int64)
     positions = [1, 2, 3]
     base_lm = torch.zeros(spec.lm_input, dtype=torch.float32)
     calls = []
@@ -75,9 +79,7 @@ def compact_fixture():
             "lm_terminal": terminal, "first_answer_logits": logits,
         })
     payload = {"schema": audit.SCHEMA, "sources_bf16": sources,
-               "batch": {"input_ids": ids,
-                         "attention_mask": torch.ones_like(ids),
-                         "input_features": torch.zeros(spec.input_features)},
+               "batch": batch,
                "audio_token_id": 24, "calls": calls}
     return payload, spec
 
@@ -179,7 +181,26 @@ class SavedTensorAuditTests(unittest.TestCase):
             self.audit(payload)
         payload = copy.deepcopy(self.payload)
         payload["batch"]["input_ids"][0, 1] = 1
-        with self.assertRaisesRegex(ValueError, "Audio placeholders"):
+        with self.assertRaisesRegex(ValueError, "Frozen batch tensor hash differs: input_ids"):
+            self.audit(payload)
+
+    def test_rejects_each_fabricated_batch_field(self):
+        mutations = (
+            ("attention_mask", lambda b: b["attention_mask"][0, 0].fill_(0)),
+            ("input_ids", lambda b: b["input_ids"][0, 0].fill_(999)),
+            ("input_features", lambda b: b["input_features"][0, 0, 0].fill_(12.5)),
+        )
+        for field, mutate in mutations:
+            with self.subTest(field=field):
+                payload = copy.deepcopy(self.payload)
+                mutate(payload["batch"])
+                with self.assertRaisesRegex(ValueError, f"Frozen batch tensor hash differs: {field}"):
+                    self.audit(payload)
+
+    def test_rejects_unfrozen_position_ids_even_if_shape_valid(self):
+        payload = copy.deepcopy(self.payload)
+        payload["batch"]["position_ids"] = torch.full((1, 5), 99, dtype=torch.int64)
+        with self.assertRaisesRegex(ValueError, "Frozen batch field set invalid"):
             self.audit(payload)
 
     def test_content_addressed_bundle_and_tamper(self):
@@ -228,10 +249,36 @@ class SavedTensorAuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "new file"):
                 audit.audit_run(attempt, out, spec=self.spec)
             out.unlink()
+            original_sidecar_cap = audit.MAX_SIDECAR_BYTES
+            try:
+                audit.MAX_SIDECAR_BYTES = sidecar.stat().st_size - 1
+                with self.assertRaisesRegex(ValueError, "Details sidecar exceeds frozen byte cap"):
+                    audit.audit_run(attempt, out, spec=self.spec)
+                self.assertFalse(out.exists())
+            finally:
+                audit.MAX_SIDECAR_BYTES = original_sidecar_cap
             sidecar.write_bytes(sidecar.read_bytes() + b"x")
             with self.assertRaisesRegex(ValueError, "sidecar bytes differ"):
                 audit.audit_run(attempt, out, spec=self.spec)
             self.assertFalse(out.exists())
+
+    def test_size_caps_reject_before_deserialization(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            attempt = Path(temporary)
+            attempt.mkdir(exist_ok=True)
+            blob_dir = attempt / "blobs"
+            blob_dir.mkdir()
+            sidecar = blob_dir / ("a" * 64 + ".pt")
+            sidecar.write_bytes(b"invalid torch payload")
+            # A tiny monkeypatched cap proves the order of checks without
+            # allocating a gigabyte or invoking torch.load on bad bytes.
+            original_cap = audit.MAX_WORKER_BYTES
+            try:
+                audit.MAX_WORKER_BYTES = 8
+                with self.assertRaisesRegex(ValueError, "Worker attempt directory exceeds"):
+                    audit.audit_run(attempt, attempt / "audit.json", spec=self.spec)
+            finally:
+                audit.MAX_WORKER_BYTES = original_cap
 
 
 if __name__ == "__main__":

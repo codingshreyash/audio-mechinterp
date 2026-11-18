@@ -46,6 +46,7 @@ class ShapeSpec:
     audio_count: int
     audio_token_id: int
     source_sha256: dict[str, str]
+    batch_sha256: dict[str, str]
 
 
 REAL = ShapeSpec(
@@ -53,7 +54,17 @@ REAL = ShapeSpec(
     projector=(375, 3072), lm_input=(1, 396, 3072), lm_width=3072,
     logits=131072, input_features=(1, 128, 3000), audio_count=375,
     audio_token_id=24, source_sha256=SOURCE_SHA256,
+    # Independently reconstructed from native.preflight_cpu()["batches"]["beaver"]
+    # on the pinned old-FIT inputs. The exact field set has no position_ids.
+    batch_sha256={
+        "input_ids": "915a4530875920b9c988724ca9e7ed8e63550bdfec3302ddb66e84e67b4b314a",
+        "attention_mask": "9ecc0f254cc29a01ab79e006021d96ef320b7438202692dcee10c770fbd65282",
+        "input_features": "4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61",
+    },
 )
+MAX_ATTEMPT_BYTES = 1024**3
+MAX_WORKER_BYTES = MAX_ATTEMPT_BYTES - 24 * 1024**2
+MAX_SIDECAR_BYTES = MAX_WORKER_BYTES - 1_048_576
 
 
 def need(ok: bool, message: str) -> None:
@@ -257,9 +268,8 @@ def audit_payload(payload: Any, *, spec: ShapeSpec = REAL) -> dict[str, Any]:
     need(payload["audio_token_id"] == spec.audio_token_id,
          "Audio token ID differs")
     batch = payload["batch"]
-    need(isinstance(batch, dict) and {"input_ids", "attention_mask", "input_features"}
-         <= set(batch) <= {"input_ids", "attention_mask", "input_features", "position_ids"},
-         "Exact batch field set invalid")
+    need(isinstance(batch, dict) and set(batch) == set(spec.batch_sha256),
+         "Frozen batch field set invalid")
     prompt_len = spec.lm_input[1]
     ids = integer_tensor(batch["input_ids"], (1, prompt_len), "input_ids")
     mask = integer_tensor(batch["attention_mask"], (1, prompt_len), "attention_mask")
@@ -268,6 +278,9 @@ def audit_payload(payload: Any, *, spec: ShapeSpec = REAL) -> dict[str, Any]:
                  "input_features")
     if "position_ids" in batch:
         integer_tensor(batch["position_ids"], (1, prompt_len), "position_ids")
+    for name, expected_sha in spec.batch_sha256.items():
+        need(tensor_sha(batch[name]) == expected_sha,
+             f"Frozen batch tensor hash differs: {name}")
     audio_positions = torch.nonzero(ids[0] == spec.audio_token_id).flatten().tolist()
     need(len(audio_positions) == spec.audio_count and
          len(set(audio_positions)) == spec.audio_count,
@@ -375,6 +388,15 @@ def audit_run(run_dir: Path, output: Path, *, spec: ShapeSpec = REAL) -> dict[st
     """Read a completed immutable attempt and write one exclusive audit receipt."""
     need(output.parent.resolve() == run_dir.resolve() and not output.exists(),
          "Audit output must be a new file directly in the attempt directory")
+    need(run_dir.is_dir() and not run_dir.is_symlink(), "Attempt directory invalid")
+    # These are actual disk bytes, not result.json's self-reported byte count.
+    attempt_bytes = 0
+    for path in run_dir.rglob("*"):
+        need(not path.is_symlink(), "Attempt contains a symlink")
+        if path.is_file():
+            attempt_bytes += path.stat().st_size
+            need(attempt_bytes < MAX_WORKER_BYTES,
+                 "Worker attempt directory exceeds frozen output cap")
     result = json_object(run_dir / "result.json")
     meta = json_object(run_dir / "meta.json")
     need(result.get("status") == STATUS and result.get("scope") == SCOPE and
@@ -414,7 +436,10 @@ def audit_run(run_dir: Path, output: Path, *, spec: ShapeSpec = REAL) -> dict[st
          details_rel == f"blobs/{details_sha}.pt", "Details content-addressed path invalid")
     details = run_dir / details_rel
     need(not (run_dir / "blobs").is_symlink() and details.is_file() and
-         not details.is_symlink() and
+         not details.is_symlink(), "Details sidecar path invalid")
+    need(details.stat().st_size < MAX_SIDECAR_BYTES,
+         "Details sidecar exceeds frozen byte cap")
+    need(
          details.stat().st_size == result.get("details_bytes") and
          sha(details) == details_sha, "Details sidecar bytes differ")
     payload = torch.load(details, map_location="cpu", weights_only=True, mmap=True)
@@ -422,6 +447,10 @@ def audit_run(run_dir: Path, output: Path, *, spec: ShapeSpec = REAL) -> dict[st
     report.update({"result_sha256": sha(run_dir / "result.json"),
                    "meta_sha256": sha(run_dir / "meta.json"),
                    "details_sha256": details_sha,
+                   "actual_attempt_bytes_before_audit": attempt_bytes,
+                   "max_attempt_bytes": MAX_ATTEMPT_BYTES,
+                   "max_worker_bytes": MAX_WORKER_BYTES,
+                   "max_sidecar_bytes": MAX_SIDECAR_BYTES,
                    "protocol_sha256": result["protocol_sha256"],
                    "runner_sha256": result["runner_sha256"],
                    "failed_stage_b_fp32_manifest_sha256":
