@@ -33,6 +33,9 @@ FIT_RUN = HERE / "runs/voxtral_fit_v2_causal_full/20261118T0928Z/result.json"
 FIT_RUN_SHA = "e29a686e30505a69a3e4b26bddde606a02db753a3a5410c38432cdd14ac3baaf"
 FIT_RUNNER = HERE / "voxtral_fit_v2_causal_full.py"
 FIT_RUNNER_SHA = "4e0a17f80d70ca1498f2487d8cca81b20e36381bfeb35945807b2587b89373cd"
+FIRST_HELPER_SHA = "64d799bbb40b58b128b049877d18bde7774c2dc16717af97e692aa4531e907b5"
+PREPROCESS_HELPER = HERE / "voxtral_preprocessing_decomposition.py"
+PREPROCESS_HELPER_SHA = "026445da1ac2c4c2f4b8f45ab2f8d7a1f4679924774714951b16d5cd29de0788"
 MAX_SECONDS = 120 * 60
 CONTROL_NAMES = ("pre", "post", "padding", "random")
 
@@ -42,8 +45,10 @@ def validate_population() -> tuple[list[dict], dict]:
     dev_masks.verify_sources()
     first.verify_frozen()
     if (base.sha(MASKS) != MASKS_SHA or base.sha(FIT_RUN) != FIT_RUN_SHA or
-            base.sha(FIT_RUNNER) != FIT_RUNNER_SHA):
-        raise ValueError("Frozen development masks or audited FIT source/result changed")
+            base.sha(FIT_RUNNER) != FIT_RUNNER_SHA or
+            base.sha(Path(first.__file__)) != FIRST_HELPER_SHA or
+            base.sha(PREPROCESS_HELPER) != PREPROCESS_HELPER_SHA):
+        raise ValueError("Frozen development masks or behavior-critical source/result changed")
     masks = json.loads(MASKS.read_text())
     index = json.loads(dev_masks.INDEX.read_text())
     rows = {(r["pair_id"], r["engine"], r["phrasing_id"]): r for r in index["rows"]}
@@ -241,6 +246,11 @@ def run_record(model, processor, job: dict, log: Path,
         started = time.monotonic()
         result = first.answer_and_scores(model, processor, batch, recipient, opposite,
                                          canonical, site, rows, edited)
+        suffix_ids = result["generated_token_ids"]
+        nonterminal_ids = suffix_ids[:-1] if result["terminal_eos"] else suffix_ids
+        special_ids = set(processor.tokenizer.all_special_ids)
+        result["nonterminal_special_token_ids"] = [token for token in nonterminal_ids
+                                                   if token in special_ids]
         result.update({"type": "generation", "kind": kind, "site": site,
                        "pair_id": record["pair_id"], "engine": record["engine"],
                        "phrasing_id": record["phrasing_id"],
@@ -286,6 +296,8 @@ def run_record(model, processor, job: dict, log: Path,
                     edited, info = prepare_dev_edit(bstate, donor, rows, smap["whole_word_rows"],
                                                     name, case_id, site, arm)
                     if not info["valid"]:
+                        if name == "self":
+                            raise ValueError(f"Required self-parity patch invalid: {case_id}/{site}/{arm}")
                         base.append_line(log, {"type": "invalid_condition", "kind": f"patch:{arm}:{name}",
                                                "site": site, "pair_id": record["pair_id"],
                                                "engine": record["engine"],
@@ -350,6 +362,22 @@ def summarize(records: list[dict], case_ids: list[str]) -> dict:
         blank_classes[blank["classification"]] += 1
     n_clean = sum(clean_correct.values())
     n_eligible = sum(restore_eligible.values())
+    for key in case_ids:
+        d = directions[key]
+        w = key.rsplit("|", 1)[-1]
+        clean_ids = d[("none", f"feature:native_{w}")].get("generated_token_ids")
+        blank_ids = d[("none", "blank_baseline")].get("generated_token_ids")
+        if not isinstance(clean_ids, list) or not isinstance(blank_ids, list):
+            raise ValueError(f"Natural generation suffix IDs missing: {key}")
+        for site in first.SITES:
+            for kind, expected in (("clean", clean_ids), ("blank", blank_ids)):
+                row = d[(site, f"passive:{kind}")]
+                if row["type"] != "generation" or row.get("generated_token_ids") != expected:
+                    raise ValueError(f"Passive exact-suffix parity failed: {key}/{site}/{kind}")
+            for arm, expected in (("restore", blank_ids), ("loss", clean_ids)):
+                row = d[(site, f"patch:{arm}:self")]
+                if row["type"] != "generation" or row.get("generated_token_ids") != expected:
+                    raise ValueError(f"Self exact-suffix parity failed: {key}/{site}/{arm}")
     results = {"planned_directions": 96, "clean_correct": n_clean,
                "restoration_eligible": n_eligible, "blank_classes": dict(blank_classes),
                "task_validity_gate": n_clean >= 80 and n_eligible >= 72, "sites": {}}
@@ -552,6 +580,8 @@ def _execute(args, output: Path, stamp: str, started: float, budget_start: float
                 "protocol_sha256": dev_masks.PIN["protocol"], "mask_builder_sha256": base.sha(Path(dev_masks.__file__)),
                 "masks_sha256": MASKS_SHA, "index_sha256": dev_masks.PIN["index"],
                 "fit_runner_sha256": FIT_RUNNER_SHA, "fit_run_sha256": FIT_RUN_SHA,
+                "first_record_helper_sha256": FIRST_HELPER_SHA,
+                "preprocessing_helper_sha256": PREPROCESS_HELPER_SHA,
                 "fit_design_sha256": first.EXPECTED["design"],
                 "fit_masks_sha256": first.EXPECTED["masks"],
                 "fit_selection_sha256": first.EXPECTED["selection"],

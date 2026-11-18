@@ -25,6 +25,8 @@ def generation(case, site, kind, label, contrast):
     return {"type": "generation", "pair_id": pair, "engine": engine,
             "phrasing_id": template, "recipient": word, "opposite": other,
             "site": site, "kind": kind, "classification": label,
+            "generated_token_ids": {"recipient": [11, 2], "opposite": [12, 2],
+                                    "other": [13, 2], "malformed": [14]}[label],
             "canonical_scores": {word: contrast, other: 0.0},
             "recipient_minus_opposite": contrast}
 
@@ -97,6 +99,19 @@ class DevRunnerContractTests(unittest.TestCase):
         rows = synthetic_rows(cases)
         rows[0]["recipient_minus_opposite"] = 10.0
         with self.assertRaisesRegex(ValueError, "candidate score"):
+            dev.summarize(rows, cases)
+
+    def test_missing_self_and_passive_parity_fail_closed(self):
+        cases = planned_cases()
+        rows = synthetic_rows(cases)
+        self_row = next(r for r in rows if r["kind"] == "patch:restore:self")
+        self_row["type"] = "invalid_condition"
+        with self.assertRaisesRegex(ValueError, "Self exact-suffix parity"):
+            dev.summarize(rows, cases)
+        self_row["type"] = "generation"
+        passive = next(r for r in rows if r["kind"] == "passive:clean")
+        passive["generated_token_ids"] = [99, 2]
+        with self.assertRaisesRegex(ValueError, "Passive exact-suffix parity"):
             dev.summarize(rows, cases)
 
     def test_resume_requires_terminal_elapsed_receipt(self):
