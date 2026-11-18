@@ -1,0 +1,22 @@
+# Independent saved-result review: old-FIT grad-context × leaf-flag factorial
+
+18 November 2026. **Decision: GO for the one-case saved-result and provenance claims below only.** This review does not attest that the recorded model forwards actually executed, identify an MPS kernel, establish an audio-specific mechanism, or show a security issue.
+
+## Bound evidence
+
+- The completed attempt is `20261118T154253722766Z`. Its committed [attempt manifest](VOXTRAL_OLD_FIT_GRAD_LEAF_FACTORIAL_ATTEMPT_MANIFEST_V1.json) has SHA-256 `db171d28680dd7fedc588e49c926eb39d35663dcadaad9225956fd0c8731867f` and was first added in commit `95a3d8a5834add81d312e754b87e585083fcb08f`.
+- All 13 raw receipts were first committed together in `2390875fa08087a2029d953c7ae05eeda7341fc6`, before the manifest. I independently matched every listed byte count and SHA-256 to its local file and current Git blob; the total is 854,641 bytes. The attempt directories contain exactly those receipts plus the one local tensor sidecar and the launcher reservation. No second attempt directory exists.
+- The uncommitted local tensor sidecar is `runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/blobs/0bc13e5831d3c4c325ad903bcbbdadf9f40d2e38eb67346ac68847bb1840dea2.pt`, 509,990,581 bytes, SHA-256 `0bc13e5831d3c4c325ad903bcbbdadf9f40d2e38eb67346ac68847bb1840dea2`. The manifest's freeze and freeze-review hashes match their committed files. Start, worker claim and finish timestamps are ordered.
+- `result.json` SHA-256 is `9d044a4204fdfe8f5f4a03a0e3ec7f471c8f0375615db0c84e4500fb6ad106d5`; `audit.json` SHA-256 is `4739b0bd6a92603ee5946b519240b8f908afbdc929e6c538fb4c48511aeba4e8`. I loaded the sidecar with `weights_only=True`, reran the reviewed CPU `audit_payload`, reconstructed the audit receipt, and obtained byte-identical output and the same audit SHA. The saved call count is 16 complete-model plus 16 fixed-input direct-LM forwards, with zero VJPs and generations. The launcher records worker and auditor exit code 0, 52.005679375026375 seconds of parent model-process time, and a peak of 28,793,470,976 MPS driver bytes under the frozen limits.
+
+## Narrow numerical result
+
+For each of the encoder-31 and projector source sites, the four conditions were `N0` (no-grad, leaf flag false), `N1` (no-grad, leaf flag true), `G0` (grad-enabled, leaf flag false) and `G1` (grad-enabled, leaf flag true). The captured runtime factor flags match those conditions. All within-condition repeats are bitwise identical at every saved boundary.
+
+At both sites, `N0`, `N1` and `G0` are bitwise identical at every saved boundary in both complete-model and direct-LM replays. Relative to them, `G1` has bitwise-identical returned source, projector output, full LM input and LM0 pre-block input. Its **first saved difference** is the post-LM0 state. The `G1` versus `N0` LM0 terminal-vector L2 difference is `7.959488659088843e-06` at encoder-31 and `8.316295658839467e-06` at projector, above the preregistered observed repeat floor of `1e-6`. The first-answer full-logit-vector L2 differences are `0.003981220305349982` and `0.005411336402181364`, respectively. The argmax first-answer token remains ID `5934` in all site-condition groups.
+
+Direct replay uses a bitwise-fixed `N0` LM input for each site. I independently compared the sidecar tensors: for every site and condition, full-model and direct-LM post-LM0 states and first-answer logits are bitwise equal. The fixed-input replay therefore reproduces the recorded numerical contrast downstream of the audio projector; it does not show that the audio pathway caused that contrast. The observed association is with **both** grad-enabled context and a leaf requiring gradients. The saved states do not identify the particular operation or backend implementation responsible.
+
+## Limits
+
+This is one archived old-FIT audio request, one pinned Voxtral FP32 checkpoint, one Mac MPS/SDPA setup, and two repeats per condition. The `1e-6` resolution floor is an observed control threshold, not a statistical noise estimate. The saved-data audit verifies the tensor arithmetic and receipt consistency; it cannot independently prove model execution. No complete answer generation, attack-controlled waveform, safety decision, tool action, other audio case, or alternative backend was tested here. The earlier failed V1 parity attempt remains closed without a numerical result.
