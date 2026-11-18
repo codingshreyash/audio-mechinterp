@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Frozen corpus_v1 independent ASR audit v1",
+  "type": "object",
+  "required": ["schema_version", "evidence", "created_utc", "corpus_manifest", "corpus_manifest_sha256", "audit_script_sha256", "asr_model_id", "asr_model_revision", "asr_model_safetensors_sha256", "device", "torch_threads", "torch_version", "transformers_version", "generation", "normalization", "records", "summary"],
+  "properties": {
+    "schema_version": {"const": "corpus_v1_asr_audit_v1"},
+    "evidence": {"type": "string"},
+    "created_utc": {"type": "string", "format": "date-time"},
+    "corpus_manifest": {"type": "string"},
+    "corpus_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "audit_script_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "asr_model_id": {"const": "openai/whisper-tiny.en"},
+    "asr_model_revision": {"const": "87c7102498dcde7456f24cfd30239ca606ed9063"},
+    "asr_model_safetensors_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "device": {"const": "cpu"},
+    "torch_threads": {"const": 4},
+    "torch_version": {"type": "string"},
+    "transformers_version": {"type": "string"},
+    "generation": {"type": "object"},
+    "normalization": {"type": "string"},
+    "records": {"type": "array", "minItems": 384, "maxItems": 384, "items": {"$ref": "#/$defs/record"}},
+    "summary": {"type": "object", "required": ["overall", "fit_pool", "development", "locked_test"]}
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "required": ["pair_id", "split", "map_fit", "engine", "voice", "phrasing_id", "word", "other_word", "reference", "audio_path", "audio_sha256", "pcm_int16_sha256", "frames", "transcript", "reference_words", "transcript_words", "raw_exact", "normalized_exact", "word_errors", "reference_word_count", "wer", "target_word_count", "other_word_count", "target_word_exactly_once"],
+      "properties": {
+        "pair_id": {"type": "string"},
+        "split": {"enum": ["fit_pool", "development", "locked_test"]},
+        "map_fit": {"type": "boolean"},
+        "engine": {"enum": ["piper", "kokoro"]},
+        "voice": {"type": "string"},
+        "phrasing_id": {"type": "string"},
+        "word": {"type": "string"},
+        "other_word": {"type": "string"},
+        "reference": {"type": "string"},
+        "audio_path": {"type": "string"},
+        "audio_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "pcm_int16_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "frames": {"type": "integer", "minimum": 1},
+        "transcript": {"type": "string"},
+        "reference_words": {"type": "array", "items": {"type": "string"}},
+        "transcript_words": {"type": "array", "items": {"type": "string"}},
+        "raw_exact": {"type": "boolean"},
+        "normalized_exact": {"type": "boolean"},
+        "word_errors": {"type": "integer", "minimum": 0},
+        "reference_word_count": {"type": "integer", "minimum": 1},
+        "wer": {"type": "number", "minimum": 0},
+        "target_word_count": {"type": "integer", "minimum": 0},
+        "other_word_count": {"type": "integer", "minimum": 0},
+        "target_word_exactly_once": {"type": "boolean"}
+      }
+    }
+  }
+}

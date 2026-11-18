@@ -1,0 +1,9 @@
+# corpus_v1 independent ASR audit, v1
+
+**Frozen before ASR inference.** Audit all 384 WAV clips from `rendered/manifest.json` SHA-256 `adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f`. The script refuses a changed manifest, missing/duplicate clip, or mismatched WAV/PCM SHA-256, and refuses to overwrite an output. No clip is replaced, filtered, or used to select a test subset.
+
+Use cached `openai/whisper-tiny.en` revision `87c7102498dcde7456f24cfd30239ca606ed9063`, previously pinned by [the earlier ASR audit](../../tts/ASR_AUDIT.md). Run CPU only with four PyTorch threads, greedy one-beam generation, processor attention mask, and 128 new-token cap. The model receives only the WAV; the script compares its output with the frozen `spoken_script` afterward. Record local model-weight SHA-256, dependency versions, generation settings, every raw transcript, full frozen reference, and split/voice/word metadata.
+
+The primary screen is **normalized full-transcript exact match**: Unicode casefolding, punctuation stripping, retaining alphanumeric words and internal apostrophes. Also report literal raw exact match, WER, whether the intended word appears **exactly once**, and whether the paired alternative appears. Aggregate by overall, split, and split × engine. Preserve all mismatches and full raw outputs in `asr_audit.json`; do not re-render or remove difficult clips. ASR disagreement is a listening candidate, not proof that the speech is unintelligible, and ASR agreement is not proof of human perception. No Qwen or Voxtral candidate inference is part of this audit.
+
+The JSON output must conform to [asr_audit.schema.json](asr_audit.schema.json). Run `--preflight` first to validate all hashes without loading ASR. Commit script/protocol/schema before running inference. Resource bound: CPU only, four threads, batch size one, one pass over exactly 384 clips, no model download, no cloud GPU, no MPS allocation.
