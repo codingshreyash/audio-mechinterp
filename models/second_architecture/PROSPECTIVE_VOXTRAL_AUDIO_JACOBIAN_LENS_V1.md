@@ -59,4 +59,4 @@ Preserve a separate **complete-answer causal endpoint**: at each site/direction,
 3. **FIT passes, development fails:** publish all 96 development directions and the negative transfer result; locked test stays sealed.
 4. **Development passes:** freeze an independently reviewed locked-test runner and auditor, then run once. Passing supports the specified *Voxtral audio-to-LM task readout and small-edit transport*, bounded by the corpus and rank. It does not explain generated speech, tool calls, accents, noise, or an attacker-reachable security violation.
 
-This document is a design. It does not change the frozen Voxtral development patch protocol, its failed FIT restoration time gate, or the Qwen v1 negative result.
+This document is a design. Its semantic readout is restricted to the two frozen candidate words for each prompt; even a passing result is not an open-vocabulary transcript decoder. It does not change the frozen Voxtral development patch protocol, its failed FIT restoration time gate, or the Qwen v1 negative result.
