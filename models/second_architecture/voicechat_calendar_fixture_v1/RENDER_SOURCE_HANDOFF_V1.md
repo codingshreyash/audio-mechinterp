@@ -1,0 +1,7 @@
+# VoiceChat synthetic audio render source candidate
+
+18 November 2026. The [renderer](render_synthetic_v1.py) was written before rendering these six scripts. It has not produced audio, ASR output, a listening decision, or a VoiceChat response. An independent source review is required before its first render.
+
+The fixed matrix is six exact scripts × macOS Samantha and Piper Amy, 12 WAVs. The source pins the scripts, audio recipe, exact Piper model/config and executable, and the reviewed five-second padding helper by SHA-256. It records each raw source, resampled PCM16 WAV, and final padded WAV with hashes, source sample rate, gain, and the exact renderer source hash. Each TTS command receives one script; the engines do not see a target tool call. Apple `say` uses the installed Samantha voice, whose system voice assets are not pinned byte-for-byte; the platform version is logged. Piper uses the locally cached `en_US-amy-medium` checkpoint. Both voices are converted to mono 16 kHz PCM16 and a target RMS of −20 dBFS, capped at 0.95 peak. The padding helper removes only exact terminal zero samples before appending 80,000 zero frames. This source does not select or discard a clip based on ASR/model outcomes.
+
+`checked_inputs()` and bytecode compilation pass locally. The first render should use a new output directory and preserve all 12 raw, converted, and final files, even if later QA fails. These hashes are prerequisites for a separate ASR and human listening receipt. No VoiceChat fixture inference is authorized by a successful render.
