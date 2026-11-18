@@ -1,6 +1,6 @@
 # Voxtral FIT result explorer
 
-Open [voxtral_fit_v2.html](voxtral_fit_v2.html) in a browser. It is a single offline, read-only page with the 800 saved generations embedded. Choose a lexical pair, synthetic voice, recipient word, internal site, and restoration or loss arm to inspect the complete output, strict classification, candidate contrast, edit rows, norms, token IDs, and provenance. The population panel uses the audited frozen gates. This is a data browser, not a hidden-state projection.
+Open [voxtral_fit_v2.html](voxtral_fit_v2.html) in a browser. It is a single offline, read-only page with the 800 saved generations embedded. Choose a lexical pair, synthetic voice, recipient word, internal site, and restoration or loss arm to hear the original pinned WAV and inspect the complete output, strict classification, candidate contrast, edit rows, norms, token IDs, and provenance. Audio playback reads the local corpus path; copy the repository together with the page to keep playback available. The population panel uses the audited frozen gates. This is a data browser, not a hidden-state projection.
 
 Rebuild from the committed run:
 

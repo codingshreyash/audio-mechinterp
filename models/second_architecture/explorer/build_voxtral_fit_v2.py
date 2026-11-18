@@ -14,6 +14,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 MODEL_DIR = HERE.parent
+ROOT = MODEL_DIR.parents[1]
 RUN = MODEL_DIR / "runs/voxtral_fit_v2_causal_full/20261118T0928Z"
 MASKS = MODEL_DIR / "VOXTRAL_FIT_V2_CAUSAL_MASKS.json"
 RUNNER = MODEL_DIR / "voxtral_fit_v2_causal_full.py"
@@ -111,11 +112,19 @@ def load_verified() -> dict:
     mask_rows = {}
     for record in masks["records"]:
         key = f"{record['pair_id']}|{record['engine']}"
+        clips = {}
+        for clip in record["clips"]:
+            wav = ROOT / clip["wav_path"]
+            require(wav.is_file() and sha(wav) == clip["wav_sha256"],
+                    f"Pinned input WAV changed: {clip['word']}")
+            clips[clip["word"]] = {
+                "wav_path": clip["wav_path"], "wav_sha256": clip["wav_sha256"]}
         mask_rows[key] = {
             "word_slot_samples": [record["word_slot_start_sample"],
                                   record["word_slot_end_sample_exclusive"]],
             "word_mel_frames_direct_overlap": record["word_mel_frames_direct_overlap"],
             "site_maps": record["site_maps"],
+            "source_clips": clips,
         }
     return {
         "title": "Voxtral v2 FIT causal assay",

@@ -82,6 +82,10 @@
         <label>Patch arm<select id="arm"><option value="restore">Restore clean state into blank run</option><option value="loss">Replace clean state with blank state</option></select></label>
       </div>
       <p class="small" id="case-context" style="margin-top:14px"></p>
+      <div class="row" style="margin:8px 0 14px">
+        <audio id="source-audio" controls preload="none" aria-label="Selected original spoken input"></audio>
+        <span class="small" id="audio-source-meta"></span>
+      </div>
       <div class="table-wrap"><table><thead><tr><th>Condition</th><th>Complete generated suffix</th><th>Class</th><th>Candidate contrast C</th><th>Signed movement</th><th>Edited rows / norm</th><th>Raw evidence</th></tr></thead><tbody id="evidence"></tbody></table></div>
       <p class="small" style="margin-top:12px"><span class="mono">C = LL(recipient + EOS) − LL(opposite + EOS)</span>. Movement is <span class="mono">Ccondition − Cblank</span> for restoration, and <span class="mono">Cclean − Ccondition</span> for loss. This score measures two teacher-forced candidates; the generated suffix and its class remain the behavioral endpoint.</p>
     </section>

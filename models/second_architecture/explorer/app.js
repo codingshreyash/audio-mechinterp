@@ -185,6 +185,13 @@ function renderMasks() {
   const record = data.masks[key];
   if (!record) throw new Error(`Frozen mask record absent for ${key}`);
   const map = record.site_maps[selectors.site.value];
+  const sourceClip = record.source_clips[selectors.recipient.value];
+  if (!sourceClip) throw new Error("Pinned spoken input absent for selected word");
+  const audio = document.getElementById("source-audio");
+  audio.src = new URL(`../../../${sourceClip.wav_path}`, document.baseURI).href;
+  audio.load();
+  document.getElementById("audio-source-meta").textContent =
+    `Original input WAV · SHA-256 ${sourceClip.wav_sha256}`;
   const host = document.getElementById("masks");
   host.replaceChildren();
   const named = [...Object.entries(map.bins), ["padding", map.padding_control_rows]];
