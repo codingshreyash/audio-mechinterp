@@ -1,0 +1,23 @@
+{
+  "status": "fixed_after_v1_word_local_flips_before_v2_control_results",
+  "purpose": "Test whether the v1 answer flips depend on the donor signal and its indexed placement, rather than arbitrary perturbation size",
+  "v1_patch_plan_sha256": "bb7bd6d02619e1a9a5ecac4c76ed496f3cb22e7d42a8d2d62447e6aa737e8293",
+  "v1_patch_results_sha256": "6cfcd39fb57914559ee34fc9e21e45124d28692b9e49081ba9a51fea13e5368d",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "layers": [0, 15, 31],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "controls": {
+    "random_word_rows": "Five Gaussian matrices with seeds 101..105, scaled to the word-row donor-minus-recipient Frobenius norm and inserted at the word rows",
+    "donor_delta_wrong_chunk": "The exact donor-minus-recipient word-row difference is added at equal-count rows in a different attention chunk",
+    "shuffled_word_rows": "The donor-minus-recipient word-row difference is permuted across word rows with seed 201 before insertion at the word rows"
+  },
+  "random_seeds": [101, 102, 103, 104, 105],
+  "shuffle_seed": 201,
+  "primary_endpoint": "complete answer equals donor color and normal EOS",
+  "secondary_endpoint": "first-token Blue-minus-Red logit margin",
+  "interpretation_limit": "The v2 controls were selected after seeing v1 flips, so they strengthen or weaken v1 interpretation but are not preregistered before the v1 observation."
+}

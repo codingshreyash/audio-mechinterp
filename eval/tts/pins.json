@@ -1,0 +1,53 @@
+{
+  "piper": {
+    "family": "Piper VITS",
+    "engine_package": "piper-tts==1.8.0",
+    "model_repo": "rhasspy/piper-voices",
+    "model_revision": "0ca208afc2a2ee102b1e961e72e0a7e4907be3d0",
+    "voice": "en_US-lessac-medium",
+    "model_file": "en/en_US/lessac/medium/en_US-lessac-medium.onnx",
+    "model_sha256": "5efe09e69902187827af646e1a6e9d269dee769f9877d17b16b1b46eeaaf019f",
+    "config_file": "en/en_US/lessac/medium/en_US-lessac-medium.onnx.json",
+    "config_sha256": "efe19c417bed055f2d69908248c6ba650fa135bc868b0e6abb3da181dab690a0",
+    "synthesis": {
+      "speaker_id": null,
+      "length_scale": 1.0,
+      "noise_scale": 0.0,
+      "noise_w_scale": 0.0,
+      "normalize_audio": false,
+      "volume": 1.0
+    }
+  },
+  "kokoro": {
+    "family": "Kokoro StyleTTS2 plus iSTFTNet",
+    "engine_package": "kokoro-onnx==0.6.1",
+    "model_repo": "speaches-ai/Kokoro-82M-v1.0-ONNX",
+    "model_revision": "dc196c76d64fed9203906231372bcb98135815df",
+    "voice": "af_sarah",
+    "model_file": "model.onnx",
+    "model_sha256": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
+    "voices_file": "voices.bin",
+    "voices_sha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+    "synthesis": {
+      "speed": 1.0,
+      "lang": "en-us",
+      "trim": false,
+      "sentence_pause": 0.25,
+      "clause_pause": 0.1,
+      "continuous": false
+    }
+  },
+  "preprocessing": {
+    "target_sample_rate": 16000,
+    "mono": true,
+    "resampler": "scipy.signal.resample_poly",
+    "resampler_window": ["kaiser", 8.6],
+    "resampler_padtype": "constant",
+    "resampler_cval": 0.0,
+    "raw_wav_piper_subtype": "PCM_16",
+    "raw_wav_kokoro_subtype": "FLOAT",
+    "processed_wav_subtype": "PCM_16",
+    "normalization": "none",
+    "silence_trim": "none"
+  }
+}

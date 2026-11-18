@@ -1,0 +1,2348 @@
+{
+  "purpose": "posthoc fit-only all-head scan; no selected-head, held-out, or security claim",
+  "plan_sha256": "d50a8b22928eb4ef1cef1d821439af6bbb1d0c2e61fde46a4b5db19a3eab2b3c",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "prior_result_sha256": "3d780aac04da2db3cfd3f30f563fc7eb2fb74614ea8213012be6086ac1d5ae06",
+  "num_heads": 16,
+  "head_dim": 128,
+  "results": [
+    {
+      "engine": "piper",
+      "recipient": "red",
+      "donor": "blue",
+      "recipient_wav_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_wav_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "terminal_position": 101,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "all_heads_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.5,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "all_heads_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "self_all_heads_terminal": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_01_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_01_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_02_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_02_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_03_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_03_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 0.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_04_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_04_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_05_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_05_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 1.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_06_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_06_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_07_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.3125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_07_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_08_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_08_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_09_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_09_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_10_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_10_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_11_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.3125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_11_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_12_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_12_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_13_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_13_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_14_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_14_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_15_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_15_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "recipient": "blue",
+      "donor": "red",
+      "recipient_wav_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "donor_wav_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "terminal_position": 101,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "all_heads_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "all_heads_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 0.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "self_all_heads_terminal": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.3125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_01_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_01_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_02_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.3125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_02_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_03_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 1.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_03_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_04_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_04_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_05_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.3125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_05_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_06_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_06_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_07_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_07_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_08_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.3125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_08_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_09_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_09_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_10_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_10_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_11_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_11_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_12_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_12_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_13_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_13_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_14_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_14_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_15_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 4.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_15_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "recipient": "red",
+      "donor": "blue",
+      "recipient_wav_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+      "donor_wav_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "terminal_position": 182,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "all_heads_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "all_heads_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "self_all_heads_terminal": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_01_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.5625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_01_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_02_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -6.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_02_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_03_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_03_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 0.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_04_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_04_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_05_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_05_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 0.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_06_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_06_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_07_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.1875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_07_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 1.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_08_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_08_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_09_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_09_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_10_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_10_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_11_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_11_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_12_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_12_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_13_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_13_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_14_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_14_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_15_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.8125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_15_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.8125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "recipient": "blue",
+      "donor": "red",
+      "recipient_wav_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+      "donor_wav_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "terminal_position": 182,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "all_heads_donor_terminal_only": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "all_heads_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 1.125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "self_all_heads_terminal": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_00_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_01_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.5,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_01_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.5625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_02_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_02_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_03_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 1.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_03_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.25,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_04_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.8125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_04_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_05_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.4375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_05_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_06_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.8125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_06_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_07_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_07_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_08_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.9375,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_08_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -5.0,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_09_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_09_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_10_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_10_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_11_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.8125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_11_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_12_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.8125,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_12_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_13_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.75,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_13_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.625,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_14_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_14_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        },
+        "head_15_donor_terminal_only": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.5,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 0,
+            "layer30_decode_unmodified": 0
+          }
+        },
+        "head_15_clean_restore_after_layer30_word_patch": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -4.6875,
+          "hook_calls": {
+            "head_prefill": 1,
+            "head_decode_unmodified": 2,
+            "layer30_prefill": 1,
+            "layer30_decode_unmodified": 2
+          }
+        }
+      }
+    }
+  ]
+}

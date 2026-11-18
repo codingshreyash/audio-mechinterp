@@ -1,0 +1,443 @@
+{
+  "model": {
+    "model_id": "openai/whisper-tiny.en",
+    "model_fingerprint": "5a77767bfe9c962d",
+    "encoder_layers": 4,
+    "decoder_layers": 4,
+    "encoder_dim": 384,
+    "decoder_dim": 384,
+    "vocab_size": 51864,
+    "model_revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+    "weights_fingerprint": "hf-commit:87c7102498dcde7456f24cfd30239ca606ed9063",
+    "model_config_fingerprint": "a3d3a1205eaef828",
+    "feature_extractor_fingerprint": "1d2221aba86a8fff",
+    "tokenizer_fingerprint": "290cd13e6eb0aa9c",
+    "decoder_prefix_ids": [
+      50257,
+      50362
+    ],
+    "generation_config_fingerprint": "04b10e0904f16621",
+    "generation_policy": {
+      "alignment_heads": [
+        [
+          1,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "begin_suppress_tokens": [
+        220,
+        50256
+      ],
+      "forced_decoder_ids": [
+        [
+          1,
+          50362
+        ]
+      ],
+      "is_multilingual": false,
+      "suppress_tokens": [
+        1,
+        2,
+        7,
+        8,
+        9,
+        10,
+        14,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        90,
+        91,
+        92,
+        93,
+        357,
+        366,
+        438,
+        532,
+        685,
+        705,
+        796,
+        930,
+        1058,
+        1220,
+        1267,
+        1279,
+        1303,
+        1343,
+        1377,
+        1391,
+        1635,
+        1782,
+        1875,
+        2162,
+        2361,
+        2488,
+        3467,
+        4008,
+        4211,
+        4600,
+        4808,
+        5299,
+        5855,
+        6329,
+        7203,
+        9609,
+        9959,
+        10563,
+        10786,
+        11420,
+        11709,
+        11907,
+        13163,
+        13697,
+        13700,
+        14808,
+        15306,
+        16410,
+        16791,
+        17992,
+        19203,
+        19510,
+        20724,
+        22305,
+        22935,
+        27007,
+        30109,
+        30420,
+        33409,
+        34949,
+        40283,
+        40493,
+        40549,
+        47282,
+        49146,
+        50257,
+        50357,
+        50358,
+        50359,
+        50360,
+        50361
+      ]
+    }
+  },
+  "estimator": {
+    "encoder": {
+      "target_decoder_layer": 3,
+      "target_reduction": "sum",
+      "estimator_name": "encoder-dtw-aligned-token",
+      "examples_fingerprint": "e2d5ecc7bdc083db015591f4473fecb2506701d9572ecdae35ded75a50b597b7",
+      "preprocessing_version": 1,
+      "encoder_centering": {
+        "source_reduction": "masked-position-mean",
+        "target_reduction": "sum",
+        "corpus_reduction": "example-mean"
+      },
+      "corpus_fingerprint": "2cc7fd8c5aa6fb73b0bd",
+      "manifest_name": "manifest.jsonl",
+      "requested_examples": 10,
+      "audio_preprocessing_version": "mono-polyphase-16khz-v1",
+      "fit_example_fingerprints": [
+        "590be6811dffca4cabb7",
+        "b1f975da5e26eca9bb1b",
+        "203e1c92c4768ffcfcbb",
+        "f542e4d86d44323641f7",
+        "b52bf9a23dd20abd5ba4",
+        "5daf8e742cce8f085f7f",
+        "2dae7bf311dd62872fbe",
+        "39664b2bd5a2d94f3043",
+        "7661148547aecd5d41ad",
+        "6c04b1f0a314ac1e0a20"
+      ],
+      "alignment_window_padding_seconds": 0.1
+    },
+    "decoder": {
+      "target_decoder_layer": 3,
+      "target_reduction": "sum",
+      "estimator_name": "decoder-causal-all-targets",
+      "examples_fingerprint": "5205a4d45807df68a440ab040356512c5258ba72a6591237b79a78c8d2a49b24",
+      "preprocessing_version": 1,
+      "encoder_centering": null,
+      "corpus_fingerprint": "2cc7fd8c5aa6fb73b0bd",
+      "manifest_name": "manifest.jsonl",
+      "requested_examples": 10,
+      "audio_preprocessing_version": "mono-polyphase-16khz-v1",
+      "fit_example_fingerprints": [
+        "590be6811dffca4cabb7",
+        "b1f975da5e26eca9bb1b",
+        "203e1c92c4768ffcfcbb",
+        "f542e4d86d44323641f7",
+        "b52bf9a23dd20abd5ba4",
+        "5daf8e742cce8f085f7f",
+        "2dae7bf311dd62872fbe",
+        "39664b2bd5a2d94f3043",
+        "7661148547aecd5d41ad",
+        "6c04b1f0a314ac1e0a20"
+      ]
+    }
+  },
+  "n_examples": 6,
+  "evaluation_target": "model_generated_tokens",
+  "asr": {
+    "word_errors": 5,
+    "reference_words": 47,
+    "word_error_rate": 0.10638297872340426,
+    "character_errors": 11,
+    "reference_characters": 287,
+    "character_error_rate": 0.03832752613240418
+  },
+  "examples": [
+    {
+      "audio": "010_samantha.aiff",
+      "reference": "The old radio played a familiar jazz melody.",
+      "generated": " The old radio plate of familiar jasmeldi."
+    },
+    {
+      "audio": "011_moira.aiff",
+      "reference": "Someone left a striped umbrella near the front door.",
+      "generated": " Someone left is striped, umbrella near the front door."
+    },
+    {
+      "audio": "012_samantha.aiff",
+      "reference": "Soft footsteps echoed through the empty hallway.",
+      "generated": " Soft footsteps echoed through the empty hallway."
+    },
+    {
+      "audio": "013_moira.aiff",
+      "reference": "The baker carefully measured sugar, flour, and salt.",
+      "generated": " The baker carefully measured sugar, flour and salt."
+    },
+    {
+      "audio": "014_samantha.aiff",
+      "reference": "Clouds gathered slowly above the distant mountains.",
+      "generated": " clouds gathered slowly above the distant mountains."
+    },
+    {
+      "audio": "015_moira.aiff",
+      "reference": "Her final answer surprised everyone in the room.",
+      "generated": " Her final answer surprised everyone in the room."
+    }
+  ],
+  "metrics": {
+    "actual_output_generated_token_self_check": {
+      "n": 50,
+      "median_rank": 1.0,
+      "mean_reciprocal_rank": 1.0,
+      "top_1_rate": 1.0,
+      "top_10_rate": 1.0,
+      "top_100_rate": 1.0
+    },
+    "decoder_direct_L0": {
+      "n": 50,
+      "median_rank": 7678.0,
+      "mean_reciprocal_rank": 0.00927865901109135,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.04,
+      "top_100_rate": 0.1
+    },
+    "decoder_direct_L1": {
+      "n": 50,
+      "median_rank": 7520.0,
+      "mean_reciprocal_rank": 0.02093397009131356,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.08,
+      "top_100_rate": 0.16
+    },
+    "decoder_direct_L2": {
+      "n": 50,
+      "median_rank": 9.0,
+      "mean_reciprocal_rank": 0.36014422803558177,
+      "top_1_rate": 0.3,
+      "top_10_rate": 0.52,
+      "top_100_rate": 0.72
+    },
+    "decoder_jlens_L0": {
+      "n": 50,
+      "median_rank": 1050.5,
+      "mean_reciprocal_rank": 0.08153173917828256,
+      "top_1_rate": 0.04,
+      "top_10_rate": 0.14,
+      "top_100_rate": 0.3
+    },
+    "decoder_jlens_L1": {
+      "n": 50,
+      "median_rank": 1115.0,
+      "mean_reciprocal_rank": 0.07694311052095404,
+      "top_1_rate": 0.04,
+      "top_10_rate": 0.18,
+      "top_100_rate": 0.3
+    },
+    "decoder_jlens_L2": {
+      "n": 50,
+      "median_rank": 7.5,
+      "mean_reciprocal_rank": 0.347530984204421,
+      "top_1_rate": 0.24,
+      "top_10_rate": 0.54,
+      "top_100_rate": 0.82
+    },
+    "encoder_affine_aligned_L0": {
+      "n": 50,
+      "median_rank": 3744.0,
+      "mean_reciprocal_rank": 0.015270512972208978,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_aligned_L1": {
+      "n": 50,
+      "median_rank": 3766.0,
+      "mean_reciprocal_rank": 0.015277912682030638,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_aligned_L2": {
+      "n": 50,
+      "median_rank": 4137.5,
+      "mean_reciprocal_rank": 0.01537042698720174,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_aligned_L3": {
+      "n": 50,
+      "median_rank": 3905.5,
+      "mean_reciprocal_rank": 0.015458327541183146,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_remote_L0": {
+      "n": 50,
+      "median_rank": 3876.0,
+      "mean_reciprocal_rank": 0.015384324600333375,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_remote_L1": {
+      "n": 50,
+      "median_rank": 4027.0,
+      "mean_reciprocal_rank": 0.015248237010124045,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_remote_L2": {
+      "n": 50,
+      "median_rank": 3928.0,
+      "mean_reciprocal_rank": 0.01527353639086311,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_affine_remote_L3": {
+      "n": 50,
+      "median_rank": 4092.5,
+      "mean_reciprocal_rank": 0.015302041445077736,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.16
+    },
+    "encoder_delta_aligned_L0": {
+      "n": 50,
+      "median_rank": 27449.0,
+      "mean_reciprocal_rank": 0.00020379644322258392,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.0
+    },
+    "encoder_delta_aligned_L1": {
+      "n": 50,
+      "median_rank": 24049.5,
+      "mean_reciprocal_rank": 0.00022255240976825155,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.0
+    },
+    "encoder_delta_aligned_L2": {
+      "n": 50,
+      "median_rank": 26525.0,
+      "mean_reciprocal_rank": 0.0001404962273926257,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.0
+    },
+    "encoder_delta_aligned_L3": {
+      "n": 50,
+      "median_rank": 27850.0,
+      "mean_reciprocal_rank": 0.0006076767028810967,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.02
+    },
+    "encoder_delta_remote_L0": {
+      "n": 50,
+      "median_rank": 27638.0,
+      "mean_reciprocal_rank": 0.0021184453045263395,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.02,
+      "top_100_rate": 0.02
+    },
+    "encoder_delta_remote_L1": {
+      "n": 50,
+      "median_rank": 36844.0,
+      "mean_reciprocal_rank": 7.836269480687423e-05,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.0
+    },
+    "encoder_delta_remote_L2": {
+      "n": 50,
+      "median_rank": 25992.5,
+      "mean_reciprocal_rank": 0.00016427566868431405,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.0
+    },
+    "encoder_delta_remote_L3": {
+      "n": 50,
+      "median_rank": 32496.5,
+      "mean_reciprocal_rank": 0.00010508397302643599,
+      "top_1_rate": 0.0,
+      "top_10_rate": 0.0,
+      "top_100_rate": 0.0
+    }
+  }
+}

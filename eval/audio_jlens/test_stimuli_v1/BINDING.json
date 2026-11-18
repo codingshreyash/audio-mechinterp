@@ -1,0 +1,10 @@
+{
+  "split_path": "eval/audio_jlens/SPLIT_V1.json",
+  "split_sha256": "2b48246361a629fbb0fa80c79a3d061b6977c8cb8af71cdc2275b1e4b0b4d45a",
+  "manifest_path": "eval/audio_jlens/test_stimuli_v1/manifest.json",
+  "manifest_sha256": "88bb12c02bc000ffee7dee8329ac3aeddd57d5b44898786f8e6c88d63454f845",
+  "rendered_pairs": 8,
+  "rendered_clips": 16,
+  "all_pairs_exact_outside_word_pcm": true,
+  "status": "frozen_before_jacobian_candidate_run"
+}

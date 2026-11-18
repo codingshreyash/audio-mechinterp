@@ -1,0 +1,31 @@
+# Downloaded model and lens artifacts
+*.safetensors
+*.pt
+*.bin
+*.gguf
+*.ckpt
+*.onnx
+hf_cache/
+**/hf_cache/
+**/.hf-cache/
+**/.hf_cache/
+artifacts/
+**/artifacts/
+outputs/
+**/outputs/
+
+# Local environments and generated files
+.venv/
+**/.venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+*.pyc
+*.log
+
+# Cloned upstream repositories are pinned in reproduction manifests
+reproductions/anthropic_jlens/jacobian-lens/
+reproductions/audio_prior/audiolens/
+reproductions/audio_prior/audio-jacobian-lens/
+reproductions/audio_prior/audiosae_demo/

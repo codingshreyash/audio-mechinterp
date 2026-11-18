@@ -1,0 +1,20 @@
+{
+  "status": "fixed_fit_only_pilot_before_corpus_average_readout",
+  "purpose": "Reproduce the corpus-average terminal Jacobian calculation on eight frozen fit items; no held-out claim",
+  "render_manifest": "../tts/outputs/semantic_fit_smoke_12/render_manifest.json",
+  "render_manifest_sha256": "aabfe2060d2f295b80faca77fcaddbaa088913f60e2adb59bf01f384983c20e0",
+  "system_prompt": "Continue the user's text naturally. Do not explain your continuation.",
+  "source_layers": [0, 17],
+  "target_layer": 35,
+  "selection_reason": "First four nonflagged association fit items and first four multihop fit items; omit association:code-h pending human listening after both ASRs differed on content words. One of two TTS families per item, balanced four/four.",
+  "items": [
+    {"id": "association:interview", "engine": "piper"},
+    {"id": "association:prohibition", "engine": "kokoro"},
+    {"id": "association:lonely", "engine": "piper"},
+    {"id": "association:light-h", "engine": "kokoro"},
+    {"id": "multihop:pred-valentines-prevmonth", "engine": "piper"},
+    {"id": "multihop:dual-photosynthesis-opposite", "engine": "kokoro"},
+    {"id": "multihop:planet-3-moons", "engine": "piper"},
+    {"id": "multihop:greatwall-ocean", "engine": "kokoro"}
+  ]
+}

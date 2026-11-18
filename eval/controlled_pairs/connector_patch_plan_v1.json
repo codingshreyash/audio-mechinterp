@@ -1,0 +1,17 @@
+{
+  "status": "fixed_before_connector_patch_results",
+  "purpose": "Trace the same fit-only spoken color contrast through Omni's audio-to-language connector",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "hook": "thinker.model.audio_tower.proj output after adjacent-encoder-row pooling, before masked_scatter into language embeddings",
+  "row_rule": "projected row nominal center lies in fixed waveform word slot; separate whole changed attention chunk and equal-count different-chunk controls",
+  "conditions": ["word_local_donor_swap", "changed_chunk_donor_swap", "wrong_chunk_donor_swap", "self_word_swap", "five_equal_norm_random_word_edits"],
+  "random_seeds": [101, 102, 103, 104, 105],
+  "primary_endpoint": "complete answer equals donor color with normal EOS",
+  "secondary_endpoint": "first-token Blue(10331)-Red(6033) logit margin",
+  "limitations": "Connector rows inherit full self-attention chunk context; nominal center is not an independent word boundary. One color contrast is fit-only."
+}

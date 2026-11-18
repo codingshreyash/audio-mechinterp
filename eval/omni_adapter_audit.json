@@ -1,0 +1,24 @@
+{
+  "evidence": "independent one-prompt loaded-model interface audit; not a lens fit",
+  "audio_sha256": "ba226916abdd36bef212a0b478d49eb63028fb541d84a7934f50e4871fe6d21d",
+  "audio_placeholder_count": 137,
+  "total_input_positions": 158,
+  "valid_audio_feature_frames": 550,
+  "hook_calls": {
+    "audio.encoder.0": 1,
+    "audio.to_language": 1,
+    "text.residual.17": 1
+  },
+  "baseline_hook_max_abs_logit_delta": 0.0,
+  "audio_zero_full_logit_max_abs_delta": 24.0,
+  "selected_token_id": 39814,
+  "selected_token_text": "Sure",
+  "selected_token_audio_zero_abs_delta": 4.125,
+  "all_forward_hooks_removed": true,
+  "gradient_norms": {
+    "input_features": 35.486717224121094,
+    "audio.encoder.0": 10.100273132324219,
+    "audio.to_language": 0.8389560580253601,
+    "text.residual.17": 0.8876487612724304
+  }
+}

@@ -1,0 +1,5 @@
+.venv/
+.hf_cache/
+smoke_output/
+outputs/
+__pycache__/

@@ -1,0 +1,88 @@
+{
+  "status": "fixed_before_render_and_before_any_candidate_model_answers",
+  "purpose": "small held-out lexical and prompt transfer check for the Qwen2.5-Omni-3B audio information-flow pilot",
+  "seed": 20261118,
+  "selection": "literal prespecified list; no random draw, model response, or ASR result used to choose items",
+  "model": {
+    "checkpoint": "Qwen/Qwen2.5-Omni-3B",
+    "revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+    "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+    "thinker_only": true
+  },
+  "render": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "subtype": "PCM_16",
+    "gap_samples": 1920,
+    "word_slot_padding": "right-pad each word to the longer processed word fragment in its pair/engine; do not trim or normalize",
+    "outside_slot_requirement": "within every engine/pair/phrasing, integer PCM samples before and after the word slot must be exactly equal",
+    "tts_render_source": "../tts/render.py",
+    "tts_render_source_sha256": "c3f4f9f71d9c7db8db3af414dbde72ebe7e0a9bc1a0c354ed0d86b8dbe3d9783",
+    "tts_requirements": "../tts/requirements.freeze.txt",
+    "tts_requirements_sha256": "ecc9a43ff8f81046984c13777ecba689a84aff657d3a45feda773e1909d9e62b",
+    "tts_base_pins": "../tts/pins.json",
+    "tts_base_pins_sha256": "a934a5c1a8391d463a0a305e0932a39630049963838832e30a3e5b18f5f73612",
+    "voices": {
+      "piper": {
+        "family": "Piper VITS",
+        "package": "piper-tts==1.8.0",
+        "model_repo": "rhasspy/piper-voices",
+        "model_revision": "0ca208afc2a2ee102b1e961e72e0a7e4907be3d0",
+        "voice": "en_US-amy-medium",
+        "model_file": "en/en_US/amy/medium/en_US-amy-medium.onnx",
+        "model_sha256": "cf9ccdec59f05adee47173f6fb4d89e8b0c5f30c178748d2572fe4efd1d2724c",
+        "config_file": "en/en_US/amy/medium/en_US-amy-medium.onnx.json",
+        "config_sha256": "27490c2197e3e7b566b051fc0b1dae21200e72b44c209731419effdbbe0789e5",
+        "synthesis": {
+          "speaker_id": null,
+          "length_scale": 1.0,
+          "noise_scale": 0.0,
+          "noise_w_scale": 0.0,
+          "normalize_audio": false,
+          "volume": 1.0
+        }
+      },
+      "kokoro": {
+        "family": "Kokoro StyleTTS2 plus iSTFTNet",
+        "package": "kokoro-onnx==0.6.1",
+        "model_repo": "speaches-ai/Kokoro-82M-v1.0-ONNX",
+        "model_revision": "dc196c76d64fed9203906231372bcb98135815df",
+        "voice": "af_bella",
+        "model_file": "model.onnx",
+        "model_sha256": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
+        "voices_file": "voices.bin",
+        "voices_sha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+        "synthesis": {
+          "speed": 1.0,
+          "lang": "en-us",
+          "trim": false,
+          "sentence_pause": 0.25,
+          "clause_pause": 0.1,
+          "continuous": false
+        }
+      }
+    }
+  },
+  "system_prompt": "Answer the spoken question with the one word the speaker gave. Do not add anything else.",
+  "word_pairs": [
+    {"pair_id": "animal", "words": ["cat", "dog"]},
+    {"pair_id": "weekday", "words": ["Monday", "Friday"]}
+  ],
+  "phrasings": [
+    {"id": "chosen", "prefix": "The word I chose is", "suffix": "Tell me the word I chose."},
+    {"id": "remember", "prefix": "Please remember this word:", "suffix": "What was that word?"}
+  ],
+  "expected": {"matched_pairs": 8, "wav_clips": 16, "patch_directions_per_layer": 16},
+  "evaluation": {
+    "status": "frozen_before_model_run",
+    "primary_site": "Thinker decoder block post-output at word-slot audio-placeholder positions on prefill only",
+    "layers": [29, 30, 31, 32, 35],
+    "primary_contrast": "paired donor-answer flip rate at post-block layer 30 minus layer 31, across all 16 directional cases; report every case",
+    "primary_endpoint": "entire generated answer after stripping leading/trailing whitespace and one terminal punctuation mark equals donor word case-insensitively, with normal EOS; otherwise failure",
+    "generation": {"do_sample": false, "max_new_tokens": 16, "eos_token": "tokenizer.eos_token_id"},
+    "clean_gate": "record all clean complete answers; report both intention-to-test denominator 16 and subset where both clean members answer their own words with EOS; never silently drop failures",
+    "secondary": ["donor-oriented first-token logit margin when candidate answer surfaces are single token", "full answer including malformed and no-EOS rates", "layer-by-layer edit norm and hook count"],
+    "controls": ["self-patch at same site/layers", "equal-width wrong-time rows with donor-minus-recipient norm recorded", "equal-norm random direction at word rows with seeds 0, 1, 2", "terminal-position donor patch at layers 31 and 35 as positive routing control", "verify cached vs uncached prefill activation equality"],
+    "interpretation_limit": "A repeat of the 30-to-31 answer cliff is a small lexical/wording/voice transfer check, not a general circuit, exact first-use layer, or security finding. Post-block audio rows mix context; late logit shifts can remain even without full answer flips."
+  }
+}

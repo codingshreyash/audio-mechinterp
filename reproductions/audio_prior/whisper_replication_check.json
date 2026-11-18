@@ -1,0 +1,43 @@
+{
+  "reference": "audio-jacobian-lens/docs/experiments/WHISPER_TINY_PILOT.md",
+  "evidence": "independent local rerun of upstream's published pilot; mixed exact and directional replication",
+  "corpus_fingerprint_reported": "46640e2cbca442f599ef",
+  "corpus_fingerprint_local": "2cc7fd8c5aa6fb73b0bd",
+  "checks": {
+    "six_held_out_clips": true,
+    "fifty_generated_positions": true,
+    "published_wer_counts_exact": true,
+    "published_cer_counts_exact": true,
+    "published_direct_l0_median_exact": true,
+    "published_decoder_l0_top10_exact": true,
+    "decoder_l0_jlens_improves_direct_median_rank": true,
+    "negative_aligned_encoder_delta_top10": true,
+    "negative_aligned_encoder_delta_top100_at_most_2pct": true,
+    "aligned_and_remote_affine_mrr_near_equal": true
+  },
+  "observed": {
+    "asr": {
+      "word_errors": 5,
+      "reference_words": 47,
+      "word_error_rate": 0.10638297872340426,
+      "character_errors": 11,
+      "reference_characters": 287,
+      "character_error_rate": 0.03832752613240418
+    },
+    "decoder_direct_l0_median_rank": 7678.0,
+    "decoder_jlens_l0_median_rank": 1050.5,
+    "decoder_jlens_l0_top10_rate": 0.14,
+    "encoder_delta_aligned_top10_rates": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "encoder_delta_aligned_top100_rates": [
+      0.0,
+      0.0,
+      0.0,
+      0.02
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "status": "fixed_after_heldout_results_before_block32_sublayer_run",
+  "purpose": "Posthoc diagnostic of whether the shifted layer-31/32 word-patch sufficiency boundary is carried by block-32 terminal self-attention",
+  "stimulus_manifest_sha256": "ae7cfd2e08a09e44847bd7a2e0d5775b8017a6f5e072f3f5d3dc007b9f759a01",
+  "heldout_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "heldout_results_sha256": "1346d01ed5fbc23227d8fbba7078205afa25de3ef0e9f1a864ab4d678766c0a2",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with the one word the speaker gave. Do not add anything else.",
+  "pairs": "all eight frozen matched pairs, both reciprocal directions, including any failure",
+  "upstream_patch": "post-block layer-31 donor residual at nominal word-slot audio-placeholder positions",
+  "sublayer_sites": ["block32.self_attn first output at terminal prompt position", "block32.mlp output at terminal prompt position"],
+  "conditions": ["clean", "upstream31_word_donor", "postblock32_terminal_donor", "donor_attention32_terminal_only", "donor_mlp32_terminal_only", "upstream31_plus_restore_clean_attention32_terminal", "upstream31_plus_restore_clean_mlp32_terminal", "self_attention32_terminal", "self_mlp32_terminal", "three_equal_norm_random_attention32_terminal_edits"],
+  "random_seeds": [0, 1, 2],
+  "primary_endpoint": "entire answer equals donor word after whitespace and one final punctuation removal, with normal EOS",
+  "secondary_endpoint": "first-token donor-minus-recipient logit margin where both Titlecase words are single tokens",
+  "interpretation_limit": "The test is posthoc on already-inspected held-out inputs, so any positive result is mechanistic follow-up, not a new held-out confirmation. Whole sublayer-output swaps do not identify a unique head or prove exclusive normal information flow."
+}

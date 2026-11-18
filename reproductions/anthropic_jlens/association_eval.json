@@ -1,0 +1,1536 @@
+{
+  "dataset": "/Users/shrranjan/audio-mechinterp/reproductions/anthropic_jlens/jacobian-lens/data/evaluations/lens-eval-association.json",
+  "count": 102,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "items": [
+    {
+      "name": "grief",
+      "targets": {
+        "grief": {
+          "ids": [
+            37284
+          ],
+          "jacobian_min_rank": 51,
+          "raw_min_rank": 1300,
+          "final_rank": 19365
+        }
+      }
+    },
+    {
+      "name": "pregnant",
+      "targets": {
+        "pregnant": {
+          "ids": [
+            20280
+          ],
+          "jacobian_min_rank": 294,
+          "raw_min_rank": 3326,
+          "final_rank": 15891
+        }
+      }
+    },
+    {
+      "name": "lie",
+      "targets": {
+        "lie": {
+          "ids": [
+            10246,
+            11567,
+            21491,
+            76491
+          ],
+          "jacobian_min_rank": 3599,
+          "raw_min_rank": 615,
+          "final_rank": 2867
+        }
+      }
+    },
+    {
+      "name": "poverty",
+      "targets": {
+        "poverty": {
+          "ids": [
+            19005,
+            69174
+          ],
+          "jacobian_min_rank": 2717,
+          "raw_min_rank": 2575,
+          "final_rank": 41979
+        }
+      }
+    },
+    {
+      "name": "proposal",
+      "targets": {
+        "proposal": {
+          "ids": [
+            13734,
+            65890,
+            73874,
+            98637
+          ],
+          "jacobian_min_rank": 9853,
+          "raw_min_rank": 15653,
+          "final_rank": 20541
+        }
+      }
+    },
+    {
+      "name": "fired",
+      "targets": {
+        "fired": {
+          "ids": [
+            13895,
+            74830
+          ],
+          "jacobian_min_rank": 1135,
+          "raw_min_rank": 9786,
+          "final_rank": 15969
+        }
+      }
+    },
+    {
+      "name": "divorce",
+      "targets": {
+        "divorce": {
+          "ids": [
+            24532
+          ],
+          "jacobian_min_rank": 14410,
+          "raw_min_rank": 11535,
+          "final_rank": 48380
+        }
+      }
+    },
+    {
+      "name": "relief",
+      "targets": {
+        "relief": {
+          "ids": [
+            15957,
+            52395
+          ],
+          "jacobian_min_rank": 1643,
+          "raw_min_rank": 132,
+          "final_rank": 3579
+        }
+      }
+    },
+    {
+      "name": "pennsylvania",
+      "targets": {
+        "Pennsylvania": {
+          "ids": [
+            19771
+          ],
+          "jacobian_min_rank": 405,
+          "raw_min_rank": 3200,
+          "final_rank": 9205
+        }
+      }
+    },
+    {
+      "name": "prohibition",
+      "targets": {
+        "prohibition": {
+          "ids": [
+            49867
+          ],
+          "jacobian_min_rank": 18004,
+          "raw_min_rank": 23961,
+          "final_rank": 34162
+        }
+      }
+    },
+    {
+      "name": "nasa",
+      "targets": {
+        "NASA": {
+          "ids": [
+            21431,
+            60966
+          ],
+          "jacobian_min_rank": 703,
+          "raw_min_rank": 487,
+          "final_rank": 754
+        }
+      }
+    },
+    {
+      "name": "einstein",
+      "targets": {
+        "Einstein": {
+          "ids": [
+            54052
+          ],
+          "jacobian_min_rank": 4333,
+          "raw_min_rank": 6358,
+          "final_rank": 2147
+        }
+      }
+    },
+    {
+      "name": "darwin",
+      "targets": {
+        "Darwin": {
+          "ids": [
+            44380,
+            98765
+          ],
+          "jacobian_min_rank": 11456,
+          "raw_min_rank": 3514,
+          "final_rank": 7799
+        }
+      }
+    },
+    {
+      "name": "beatles",
+      "targets": {
+        "Beatles": {
+          "ids": [
+            54857
+          ],
+          "jacobian_min_rank": 1402,
+          "raw_min_rank": 27292,
+          "final_rank": 17221
+        }
+      }
+    },
+    {
+      "name": "lincoln",
+      "targets": {
+        "Lincoln": {
+          "ids": [
+            24379
+          ],
+          "jacobian_min_rank": 1585,
+          "raw_min_rank": 2200,
+          "final_rank": 1077
+        }
+      }
+    },
+    {
+      "name": "obama",
+      "targets": {
+        "Obama": {
+          "ids": [
+            7105,
+            44337
+          ],
+          "jacobian_min_rank": 13663,
+          "raw_min_rank": 13525,
+          "final_rank": 12091
+        }
+      }
+    },
+    {
+      "name": "olympics",
+      "targets": {
+        "Olympics": {
+          "ids": [
+            31963
+          ],
+          "jacobian_min_rank": 8711,
+          "raw_min_rank": 8106,
+          "final_rank": 9468
+        }
+      }
+    },
+    {
+      "name": "churchill",
+      "targets": {
+        "Churchill": {
+          "ids": [
+            57174
+          ],
+          "jacobian_min_rank": 659,
+          "raw_min_rank": 9380,
+          "final_rank": 2347
+        }
+      }
+    },
+    {
+      "name": "newton",
+      "targets": {
+        "Newton": {
+          "ids": [
+            20668,
+            76377
+          ],
+          "jacobian_min_rank": 2508,
+          "raw_min_rank": 1986,
+          "final_rank": 1932
+        }
+      }
+    },
+    {
+      "name": "mozart",
+      "targets": {
+        "Mozart": {
+          "ids": [
+            94669
+          ],
+          "jacobian_min_rank": 2035,
+          "raw_min_rank": 2889,
+          "final_rank": 3587
+        }
+      }
+    },
+    {
+      "name": "berlin",
+      "targets": {
+        "Berlin": {
+          "ids": [
+            19846,
+            44581,
+            94409
+          ],
+          "jacobian_min_rank": 6731,
+          "raw_min_rank": 7971,
+          "final_rank": 10502
+        }
+      }
+    },
+    {
+      "name": "armstrong",
+      "targets": {
+        "Armstrong": {
+          "ids": [
+            44866
+          ],
+          "jacobian_min_rank": 3469,
+          "raw_min_rank": 7238,
+          "final_rank": 3089
+        }
+      }
+    },
+    {
+      "name": "wright",
+      "targets": {
+        "Wright": {
+          "ids": [
+            26741,
+            52752
+          ],
+          "jacobian_min_rank": 4704,
+          "raw_min_rank": 3596,
+          "final_rank": 3027
+        }
+      }
+    },
+    {
+      "name": "gandhi",
+      "targets": {
+        "Gandhi": {
+          "ids": [
+            47894
+          ],
+          "jacobian_min_rank": 14550,
+          "raw_min_rank": 2394,
+          "final_rank": 13844
+        }
+      }
+    },
+    {
+      "name": "edison",
+      "targets": {
+        "Edison": {
+          "ids": [
+            73776
+          ],
+          "jacobian_min_rank": 1199,
+          "raw_min_rank": 2099,
+          "final_rank": 1261
+        }
+      }
+    },
+    {
+      "name": "cia",
+      "targets": {
+        "CIA": {
+          "ids": [
+            21474,
+            24119
+          ],
+          "jacobian_min_rank": 894,
+          "raw_min_rank": 4148,
+          "final_rank": 6205
+        }
+      }
+    },
+    {
+      "name": "vatican",
+      "targets": {
+        "Vatican": {
+          "ids": [
+            46547
+          ],
+          "jacobian_min_rank": 15995,
+          "raw_min_rank": 4385,
+          "final_rank": 14386
+        }
+      }
+    },
+    {
+      "name": "hollywood",
+      "targets": {
+        "Hollywood": {
+          "ids": [
+            17236
+          ],
+          "jacobian_min_rank": 2745,
+          "raw_min_rank": 2359,
+          "final_rank": 2586
+        }
+      }
+    },
+    {
+      "name": "pentagon",
+      "targets": {
+        "Pentagon": {
+          "ids": [
+            34536
+          ],
+          "jacobian_min_rank": 17947,
+          "raw_min_rank": 18719,
+          "final_rank": 37032
+        }
+      }
+    },
+    {
+      "name": "unesco",
+      "targets": {
+        "UNESCO": {
+          "ids": [
+            80776
+          ],
+          "jacobian_min_rank": 1301,
+          "raw_min_rank": 2712,
+          "final_rank": 5193
+        }
+      }
+    },
+    {
+      "name": "anger",
+      "targets": {
+        "anger": {
+          "ids": [
+            4003,
+            19234
+          ],
+          "jacobian_min_rank": 2061,
+          "raw_min_rank": 225,
+          "final_rank": 17901
+        }
+      }
+    },
+    {
+      "name": "frustrated",
+      "targets": {
+        "frustrated": {
+          "ids": [
+            32530
+          ],
+          "jacobian_min_rank": 622,
+          "raw_min_rank": 1628,
+          "final_rank": 11171
+        }
+      }
+    },
+    {
+      "name": "lonely",
+      "targets": {
+        "lonely": {
+          "ids": [
+            39566,
+            85723
+          ],
+          "jacobian_min_rank": 425,
+          "raw_min_rank": 5416,
+          "final_rank": 7716
+        }
+      }
+    },
+    {
+      "name": "shame",
+      "targets": {
+        "shame": {
+          "ids": [
+            20973,
+            87535
+          ],
+          "jacobian_min_rank": 465,
+          "raw_min_rank": 1191,
+          "final_rank": 7273
+        }
+      }
+    },
+    {
+      "name": "noir",
+      "targets": {
+        "noir": {
+          "ids": [
+            55562,
+            72714
+          ],
+          "jacobian_min_rank": 1243,
+          "raw_min_rank": 10607,
+          "final_rank": 7702
+        }
+      }
+    },
+    {
+      "name": "horror",
+      "targets": {
+        "horror": {
+          "ids": [
+            21452,
+            51712
+          ],
+          "jacobian_min_rank": 93,
+          "raw_min_rank": 877,
+          "final_rank": 1315
+        }
+      }
+    },
+    {
+      "name": "fairy",
+      "targets": {
+        "fairy": {
+          "ids": [
+            44486,
+            55076
+          ],
+          "jacobian_min_rank": 2406,
+          "raw_min_rank": 7822,
+          "final_rank": 1808
+        }
+      }
+    },
+    {
+      "name": "siblings",
+      "targets": {
+        "siblings": {
+          "ids": [
+            36683,
+            51920
+          ],
+          "jacobian_min_rank": 10236,
+          "raw_min_rank": 15530,
+          "final_rank": 50384
+        }
+      }
+    },
+    {
+      "name": "rivals",
+      "targets": {
+        "rivals": {
+          "ids": [
+            34838
+          ],
+          "jacobian_min_rank": 5170,
+          "raw_min_rank": 4134,
+          "final_rank": 30490
+        }
+      }
+    },
+    {
+      "name": "mother",
+      "targets": {
+        "mother": {
+          "ids": [
+            6554,
+            21043,
+            26412,
+            58878
+          ],
+          "jacobian_min_rank": 135,
+          "raw_min_rank": 216,
+          "final_rank": 231
+        }
+      }
+    },
+    {
+      "name": "boss",
+      "targets": {
+        "boss": {
+          "ids": [
+            13392,
+            31569,
+            33314,
+            56975
+          ],
+          "jacobian_min_rank": 6846,
+          "raw_min_rank": 3585,
+          "final_rank": 4169
+        }
+      }
+    },
+    {
+      "name": "neighbors",
+      "targets": {
+        "neighbors": {
+          "ids": [
+            18709,
+            58086,
+            79488
+          ],
+          "jacobian_min_rank": 5985,
+          "raw_min_rank": 6385,
+          "final_rank": 47970
+        }
+      }
+    },
+    {
+      "name": "teacher",
+      "targets": {
+        "teacher": {
+          "ids": [
+            11079,
+            23360,
+            29069,
+            45065
+          ],
+          "jacobian_min_rank": 449,
+          "raw_min_rank": 1907,
+          "final_rank": 2267
+        }
+      }
+    },
+    {
+      "name": "underwater",
+      "targets": {
+        "underwater": {
+          "ids": [
+            45374
+          ],
+          "jacobian_min_rank": 167,
+          "raw_min_rank": 262,
+          "final_rank": 3558
+        }
+      }
+    },
+    {
+      "name": "desert",
+      "targets": {
+        "desert": {
+          "ids": [
+            23603,
+            42186
+          ],
+          "jacobian_min_rank": 121,
+          "raw_min_rank": 385,
+          "final_rank": 338
+        }
+      }
+    },
+    {
+      "name": "chess",
+      "targets": {
+        "chess": {
+          "ids": [
+            32719,
+            47387,
+            88242
+          ],
+          "jacobian_min_rank": 2393,
+          "raw_min_rank": 2830,
+          "final_rank": 2579
+        }
+      }
+    },
+    {
+      "name": "poker",
+      "targets": {
+        "poker": {
+          "ids": [
+            20814,
+            37568
+          ],
+          "jacobian_min_rank": 136,
+          "raw_min_rank": 216,
+          "final_rank": 233
+        }
+      }
+    },
+    {
+      "name": "interview",
+      "targets": {
+        "interview": {
+          "ids": [
+            7128,
+            31467,
+            61334
+          ],
+          "jacobian_min_rank": 537,
+          "raw_min_rank": 947,
+          "final_rank": 1950
+        }
+      }
+    },
+    {
+      "name": "dawn",
+      "targets": {
+        "dawn": {
+          "ids": [
+            34507,
+            38393
+          ],
+          "jacobian_min_rank": 129,
+          "raw_min_rank": 207,
+          "final_rank": 159
+        }
+      }
+    },
+    {
+      "name": "winter",
+      "targets": {
+        "winter": {
+          "ids": [
+            12406,
+            20101,
+            66188,
+            82928
+          ],
+          "jacobian_min_rank": 154,
+          "raw_min_rank": 223,
+          "final_rank": 384
+        }
+      }
+    },
+    {
+      "name": "death-h",
+      "targets": {
+        "death": {
+          "ids": [
+            4545,
+            15911,
+            39258,
+            61907
+          ],
+          "jacobian_min_rank": 302,
+          "raw_min_rank": 572,
+          "final_rank": 1686
+        }
+      }
+    },
+    {
+      "name": "war-h",
+      "targets": {
+        "war": {
+          "ids": [
+            4116,
+            5004,
+            11455,
+            28684
+          ],
+          "jacobian_min_rank": 599,
+          "raw_min_rank": 77,
+          "final_rank": 1095
+        }
+      }
+    },
+    {
+      "name": "love-h",
+      "targets": {
+        "love": {
+          "ids": [
+            2948,
+            10689,
+            28251,
+            30053
+          ],
+          "jacobian_min_rank": 79,
+          "raw_min_rank": 435,
+          "final_rank": 377
+        }
+      }
+    },
+    {
+      "name": "home-h",
+      "targets": {
+        "home": {
+          "ids": [
+            2114,
+            5117,
+            5379,
+            7623
+          ],
+          "jacobian_min_rank": 392,
+          "raw_min_rank": 465,
+          "final_rank": 568
+        }
+      }
+    },
+    {
+      "name": "school-h",
+      "targets": {
+        "school": {
+          "ids": [
+            2906,
+            6022,
+            21850,
+            32749
+          ],
+          "jacobian_min_rank": 10,
+          "raw_min_rank": 186,
+          "final_rank": 435
+        }
+      }
+    },
+    {
+      "name": "church-h",
+      "targets": {
+        "church": {
+          "ids": [
+            8817,
+            9257,
+            64194,
+            83810
+          ],
+          "jacobian_min_rank": 1610,
+          "raw_min_rank": 1762,
+          "final_rank": 4437
+        }
+      }
+    },
+    {
+      "name": "office-h",
+      "targets": {
+        "office": {
+          "ids": [
+            5163,
+            8246,
+            23914,
+            26516
+          ],
+          "jacobian_min_rank": 198,
+          "raw_min_rank": 116,
+          "final_rank": 244
+        }
+      }
+    },
+    {
+      "name": "court-h",
+      "targets": {
+        "court": {
+          "ids": [
+            5473,
+            7154,
+            62758,
+            75774
+          ],
+          "jacobian_min_rank": 2454,
+          "raw_min_rank": 1988,
+          "final_rank": 2033
+        }
+      }
+    },
+    {
+      "name": "park-h",
+      "targets": {
+        "park": {
+          "ids": [
+            5540,
+            6118,
+            28736,
+            63606
+          ],
+          "jacobian_min_rank": 749,
+          "raw_min_rank": 446,
+          "final_rank": 987
+        }
+      }
+    },
+    {
+      "name": "city-h",
+      "targets": {
+        "city": {
+          "ids": [
+            3283,
+            4311,
+            8926,
+            12730
+          ],
+          "jacobian_min_rank": 24,
+          "raw_min_rank": 74,
+          "final_rank": 1401
+        }
+      }
+    },
+    {
+      "name": "town-h",
+      "targets": {
+        "town": {
+          "ids": [
+            6290,
+            13971,
+            27831,
+            68494
+          ],
+          "jacobian_min_rank": 1282,
+          "raw_min_rank": 1091,
+          "final_rank": 1566
+        }
+      }
+    },
+    {
+      "name": "field-h",
+      "targets": {
+        "field": {
+          "ids": [
+            1877,
+            2070,
+            2566,
+            8601
+          ],
+          "jacobian_min_rank": 1366,
+          "raw_min_rank": 1656,
+          "final_rank": 1483
+        }
+      }
+    },
+    {
+      "name": "store-h",
+      "targets": {
+        "store": {
+          "ids": [
+            3553,
+            4314,
+            6093,
+            9129
+          ],
+          "jacobian_min_rank": 3991,
+          "raw_min_rank": 3967,
+          "final_rank": 8609
+        }
+      }
+    },
+    {
+      "name": "art-h",
+      "targets": {
+        "art": {
+          "ids": [
+            471,
+            1947,
+            5166,
+            9286
+          ],
+          "jacobian_min_rank": 783,
+          "raw_min_rank": 463,
+          "final_rank": 1055
+        }
+      }
+    },
+    {
+      "name": "music-h",
+      "targets": {
+        "music": {
+          "ids": [
+            4627,
+            10717,
+            24128,
+            31161
+          ],
+          "jacobian_min_rank": 430,
+          "raw_min_rank": 444,
+          "final_rank": 456
+        }
+      }
+    },
+    {
+      "name": "math-h",
+      "targets": {
+        "math": {
+          "ids": [
+            4149,
+            6888,
+            8815,
+            10374
+          ],
+          "jacobian_min_rank": 104,
+          "raw_min_rank": 51,
+          "final_rank": 77
+        }
+      }
+    },
+    {
+      "name": "science-h",
+      "targets": {
+        "science": {
+          "ids": [
+            8038,
+            9965,
+            35400,
+            39557
+          ],
+          "jacobian_min_rank": 334,
+          "raw_min_rank": 236,
+          "final_rank": 480
+        }
+      }
+    },
+    {
+      "name": "history-h",
+      "targets": {
+        "history": {
+          "ids": [
+            3840,
+            11099,
+            13424,
+            18844
+          ],
+          "jacobian_min_rank": 43,
+          "raw_min_rank": 52,
+          "final_rank": 487
+        }
+      }
+    },
+    {
+      "name": "law-h",
+      "targets": {
+        "law": {
+          "ids": [
+            2329,
+            7506,
+            19915,
+            38066
+          ],
+          "jacobian_min_rank": 935,
+          "raw_min_rank": 627,
+          "final_rank": 580
+        }
+      }
+    },
+    {
+      "name": "film-h",
+      "targets": {
+        "film": {
+          "ids": [
+            4531,
+            16631,
+            30155,
+            51487
+          ],
+          "jacobian_min_rank": 699,
+          "raw_min_rank": 1544,
+          "final_rank": 1204
+        }
+      }
+    },
+    {
+      "name": "code-h",
+      "targets": {
+        "code": {
+          "ids": [
+            1851,
+            2038,
+            2078,
+            6119
+          ],
+          "jacobian_min_rank": 1105,
+          "raw_min_rank": 865,
+          "final_rank": 1111
+        }
+      }
+    },
+    {
+      "name": "news-h",
+      "targets": {
+        "news": {
+          "ids": [
+            3669,
+            5398,
+            9984,
+            14373
+          ],
+          "jacobian_min_rank": 307,
+          "raw_min_rank": 295,
+          "final_rank": 684
+        }
+      }
+    },
+    {
+      "name": "night-h",
+      "targets": {
+        "night": {
+          "ids": [
+            3729,
+            9287,
+            12826,
+            50437
+          ],
+          "jacobian_min_rank": 10,
+          "raw_min_rank": 55,
+          "final_rank": 291
+        }
+      }
+    },
+    {
+      "name": "past-h",
+      "targets": {
+        "past": {
+          "ids": [
+            3267,
+            23640,
+            50113,
+            52420
+          ],
+          "jacobian_min_rank": 235,
+          "raw_min_rank": 214,
+          "final_rank": 2563
+        }
+      }
+    },
+    {
+      "name": "future-h",
+      "targets": {
+        "future": {
+          "ids": [
+            3853,
+            12498,
+            21055,
+            24206
+          ],
+          "jacobian_min_rank": 1477,
+          "raw_min_rank": 470,
+          "final_rank": 1312
+        }
+      }
+    },
+    {
+      "name": "race-h",
+      "targets": {
+        "race": {
+          "ids": [
+            6957,
+            23659,
+            41183,
+            55991
+          ],
+          "jacobian_min_rank": 537,
+          "raw_min_rank": 771,
+          "final_rank": 1521
+        }
+      }
+    },
+    {
+      "name": "game-h",
+      "targets": {
+        "game": {
+          "ids": [
+            1809,
+            4050,
+            4868,
+            5804
+          ],
+          "jacobian_min_rank": 420,
+          "raw_min_rank": 157,
+          "final_rank": 501
+        }
+      }
+    },
+    {
+      "name": "test-h",
+      "targets": {
+        "test": {
+          "ids": [
+            1273,
+            1944,
+            2271,
+            3393
+          ],
+          "jacobian_min_rank": 1948,
+          "raw_min_rank": 830,
+          "final_rank": 1974
+        }
+      }
+    },
+    {
+      "name": "search-h",
+      "targets": {
+        "search": {
+          "ids": [
+            1836,
+            2711,
+            5890,
+            7542
+          ],
+          "jacobian_min_rank": 291,
+          "raw_min_rank": 116,
+          "final_rank": 714
+        }
+      }
+    },
+    {
+      "name": "free-h",
+      "targets": {
+        "free": {
+          "ids": [
+            1910,
+            3574,
+            10593,
+            10940
+          ],
+          "jacobian_min_rank": 311,
+          "raw_min_rank": 326,
+          "final_rank": 273
+        }
+      }
+    },
+    {
+      "name": "found-h",
+      "targets": {
+        "found": {
+          "ids": [
+            1730,
+            6650,
+            12315,
+            15105
+          ],
+          "jacobian_min_rank": 2895,
+          "raw_min_rank": 7745,
+          "final_rank": 3125
+        }
+      }
+    },
+    {
+      "name": "king-h",
+      "targets": {
+        "king": {
+          "ids": [
+            6210,
+            10566,
+            11477,
+            33555
+          ],
+          "jacobian_min_rank": 657,
+          "raw_min_rank": 590,
+          "final_rank": 388
+        }
+      }
+    },
+    {
+      "name": "father-h",
+      "targets": {
+        "father": {
+          "ids": [
+            6981,
+            20322,
+            23017,
+            61316
+          ],
+          "jacobian_min_rank": 2361,
+          "raw_min_rank": 883,
+          "final_rank": 2144
+        }
+      }
+    },
+    {
+      "name": "child-h",
+      "targets": {
+        "child": {
+          "ids": [
+            1682,
+            3048,
+            3652,
+            9391
+          ],
+          "jacobian_min_rank": 856,
+          "raw_min_rank": 489,
+          "final_rank": 3409
+        }
+      }
+    },
+    {
+      "name": "water-h",
+      "targets": {
+        "water": {
+          "ids": [
+            3015,
+            9959,
+            12987,
+            28253
+          ],
+          "jacobian_min_rank": 407,
+          "raw_min_rank": 168,
+          "final_rank": 382
+        }
+      }
+    },
+    {
+      "name": "space-h",
+      "targets": {
+        "space": {
+          "ids": [
+            3550,
+            8746,
+            9914,
+            11487
+          ],
+          "jacobian_min_rank": 86,
+          "raw_min_rank": 80,
+          "final_rank": 940
+        }
+      }
+    },
+    {
+      "name": "air-h",
+      "targets": {
+        "air": {
+          "ids": [
+            1310,
+            3720,
+            6553,
+            25693
+          ],
+          "jacobian_min_rank": 81,
+          "raw_min_rank": 96,
+          "final_rank": 108
+        }
+      }
+    },
+    {
+      "name": "light-h",
+      "targets": {
+        "light": {
+          "ids": [
+            3100,
+            4145,
+            8658,
+            13911
+          ],
+          "jacobian_min_rank": 106,
+          "raw_min_rank": 150,
+          "final_rank": 105
+        }
+      }
+    },
+    {
+      "name": "france-h",
+      "targets": {
+        "France": {
+          "ids": [
+            9625,
+            47587,
+            49000
+          ],
+          "jacobian_min_rank": 8161,
+          "raw_min_rank": 1348,
+          "final_rank": 4729
+        }
+      }
+    },
+    {
+      "name": "china-h",
+      "targets": {
+        "China": {
+          "ids": [
+            5616,
+            22282,
+            32525,
+            80136
+          ],
+          "jacobian_min_rank": 1953,
+          "raw_min_rank": 568,
+          "final_rank": 1017
+        }
+      }
+    },
+    {
+      "name": "london-h",
+      "targets": {
+        "London": {
+          "ids": [
+            7148,
+            39572,
+            62046
+          ],
+          "jacobian_min_rank": 1032,
+          "raw_min_rank": 586,
+          "final_rank": 502
+        }
+      }
+    },
+    {
+      "name": "book-h",
+      "targets": {
+        "book": {
+          "ids": [
+            2190,
+            2311,
+            5893,
+            7134
+          ],
+          "jacobian_min_rank": 224,
+          "raw_min_rank": 174,
+          "final_rank": 294
+        }
+      }
+    },
+    {
+      "name": "time-h",
+      "targets": {
+        "time": {
+          "ids": [
+            882,
+            1462,
+            1678,
+            4120
+          ],
+          "jacobian_min_rank": 114,
+          "raw_min_rank": 26,
+          "final_rank": 101
+        }
+      }
+    },
+    {
+      "name": "fr-ecole",
+      "targets": {
+        "\u00e9cole": {
+          "ids": [
+            134670
+          ],
+          "jacobian_min_rank": 1486,
+          "raw_min_rank": 2927,
+          "final_rank": 24923
+        }
+      }
+    },
+    {
+      "name": "fr-cafe",
+      "targets": {
+        "caf\u00e9": {
+          "ids": [
+            51950,
+            65671
+          ],
+          "jacobian_min_rank": 3473,
+          "raw_min_rank": 1013,
+          "final_rank": 5010
+        }
+      }
+    },
+    {
+      "name": "de-konig",
+      "targets": {
+        "K\u00f6nig": {
+          "ids": [
+            141775
+          ],
+          "jacobian_min_rank": 131,
+          "raw_min_rank": 1059,
+          "final_rank": 1022
+        }
+      }
+    },
+    {
+      "name": "es-dia",
+      "targets": {
+        "d\u00eda": {
+          "ids": [
+            34863,
+            135505
+          ],
+          "jacobian_min_rank": 311,
+          "raw_min_rank": 590,
+          "final_rank": 4610
+        }
+      }
+    },
+    {
+      "name": "pt-agua",
+      "targets": {
+        "\u00e1gua": {
+          "ids": [
+            132461
+          ],
+          "jacobian_min_rank": 572,
+          "raw_min_rank": 996,
+          "final_rank": 5101
+        }
+      }
+    },
+    {
+      "name": "es-musica",
+      "targets": {
+        "m\u00fasica": {
+          "ids": [
+            70345
+          ],
+          "jacobian_min_rank": 420,
+          "raw_min_rank": 955,
+          "final_rank": 7183
+        }
+      }
+    }
+  ],
+  "dropped": [
+    {
+      "name": "fr-eglise",
+      "targets": {
+        "\u00e9glise": []
+      }
+    },
+    {
+      "name": "fr-pere",
+      "targets": {
+        "p\u00e8re": []
+      }
+    },
+    {
+      "name": "es-rio",
+      "targets": {
+        "r\u00edo": []
+      }
+    }
+  ],
+  "pass@1": {
+    "jacobian": 0.0,
+    "raw": 0.0
+  },
+  "pass@5": {
+    "jacobian": 0.0,
+    "raw": 0.0
+  },
+  "pass@10": {
+    "jacobian": 0.020202020202020204,
+    "raw": 0.0
+  },
+  "pass@50": {
+    "jacobian": 0.04040404040404041,
+    "raw": 0.010101010101010102
+  },
+  "pass@100": {
+    "jacobian": 0.09090909090909091,
+    "raw": 0.08080808080808081
+  }
+}

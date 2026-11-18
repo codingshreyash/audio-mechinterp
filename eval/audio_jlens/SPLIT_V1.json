@@ -1,0 +1,36 @@
+{
+  "status": "stimulus_selection_frozen_before_audio_jacobian_candidate_or_test_results",
+  "version": 1,
+  "seed": 20261118,
+  "selection_method": "literal list; no model, ASR, or Jacobian result used to choose pairs",
+  "fit_positive_control": {
+    "pair": ["red", "blue"],
+    "manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+    "manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+    "purpose": "known complete-answer flip; algorithm and numerical calibration only"
+  },
+  "development": {
+    "pairs": [["cat", "dog"], ["Monday", "Friday"]],
+    "manifest": "../heldout_flow/stimuli_v1/manifest.json",
+    "manifest_sha256": "ae7cfd2e08a09e44847bd7a2e0d5775b8017a6f5e072f3f5d3dc007b9f759a01",
+    "purpose": "implementation and decision-rule tuning after the separate heldout_flow assay is scored; never counted as audio_jlens test"
+  },
+  "new_locked_test": {
+    "status": "text_and_voice_selection_frozen; WAV bytes to be generated and hashed before candidate evaluation",
+    "pairs": [
+      {"pair_id": "direction", "words": ["north", "south"]},
+      {"pair_id": "number", "words": ["seven", "eight"]}
+    ],
+    "phrasings": [
+      {"id": "codeword", "prefix": "The code word is", "suffix": "Say the code word."},
+      {"id": "term", "prefix": "I picked the term", "suffix": "Repeat my term."}
+    ],
+    "voices_and_rendering": "use eval/heldout_flow/plan_v1.json pinned Piper Amy and Kokoro Bella voices, package versions, 16-kHz PCM_16, 120-ms gaps, right-padded word slot, and byte-identical outside-slot PCM; do not change voices based on model behavior",
+    "source_plan": "../heldout_flow/plan_v1.json",
+    "source_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+    "expected_matched_pairs": 8,
+    "expected_clips": 16,
+    "wav_manifest_sha256": null,
+    "interpretation": "lexical and phrasing holdout; voices are new relative to fit but reused in development, so this is not an across-project speaker holdout"
+  }
+}

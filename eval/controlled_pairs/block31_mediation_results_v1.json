@@ -1,0 +1,1090 @@
+{
+  "purpose": "posthoc fit-only sublayer causal diagnostic; no held-out/security claim",
+  "plan_sha256": "16970ccc7fd7eed539fd6b4be4e876a53fb1a4f98bc82a586f44144476f531ad",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "results": [
+    {
+      "engine": "piper",
+      "recipient": "red",
+      "donor": "blue",
+      "recipient_wav_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_wav_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "terminal_position": 101,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 3.0,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -0.5,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -2.6875,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_attention_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -0.875,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_mlp_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 1.25,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.4375,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.4375,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_101": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.766271591186523,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.3125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_102": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.766366958618164,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.375,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_103": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.764373779296875,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.25,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_104": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.763961791992188,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.3125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_105": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.767860412597656,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.0,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "recipient": "blue",
+      "donor": "red",
+      "recipient_wav_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "donor_wav_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "terminal_position": 101,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -3.6875,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -0.25,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 1.75,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_attention_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 0.125,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_mlp_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -2.25,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.3125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.3125,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_101": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.766481399536133,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.9375,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_102": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.765567779541016,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.875,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_103": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.769018173217773,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_104": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.763473510742188,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_105": {
+          "requested_delta_norm": 22.765928268432617,
+          "effective_bf16_delta_norm": 22.765478134155273,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 4.625,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "recipient": "red",
+      "donor": "blue",
+      "recipient_wav_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+      "donor_wav_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "terminal_position": 182,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 2.9375,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -0.375,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -3.0625,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_attention_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -1.625,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_mlp_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 0.875,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.6875,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.6875,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_101": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.11507034301758,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.625,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_102": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.112945556640625,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.5,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_103": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.11197280883789,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.4375,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_104": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.11166000366211,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -6.75,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_105": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.117000579833984,
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -5.0625,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "recipient": "blue",
+      "donor": "red",
+      "recipient_wav_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+      "donor_wav_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "terminal_position": 182,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "conditions": {
+        "layer30_word_patch": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -4.625,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -0.875,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 2.125,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_attention_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 1.125,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "layer30_word_patch_plus_restore_clean_mlp_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": -2.3125,
+            "hook_calls": {
+              "layer30_word": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 5.75,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp31_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 5.75,
+            "hook_calls": {
+              "mlp31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_101": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.115394592285156,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 6.875,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_102": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.11219024658203,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 6.4375,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_103": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.11238098144531,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 5.625,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_104": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.1163330078125,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 5.8125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention_terminal_seed_105": {
+          "requested_delta_norm": 33.112762451171875,
+          "effective_bf16_delta_norm": 33.11208724975586,
+          "outcome": {
+            "new_token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "first_reply_blue_minus_red_logit": 6.3125,
+            "hook_calls": {
+              "attention31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

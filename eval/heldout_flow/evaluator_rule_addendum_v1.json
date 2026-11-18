@@ -1,0 +1,13 @@
+{
+  "status": "fixed_after_stimulus_render_before_any_candidate_model_answer_or_patch_result",
+  "purpose": "Resolve deterministic row mapping and same-width wrong-time selection for word slots that cross an encoder chunk boundary",
+  "plan_v1_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "stimulus_manifest_sha256": "ae7cfd2e08a09e44847bd7a2e0d5775b8017a6f5e072f3f5d3dc007b9f759a01",
+  "word_positions": "all projected audio rows whose nominal center time is in [word_slot_start_seconds, word_slot_end_seconds); allow the set to span encoder chunks",
+  "wrong_time_positions": "same number of consecutive projected rows, starting at the first projected row with nominal center at or after word_slot_end_seconds + 0.20 seconds; if not enough rows remain, use the first same-length run ending at or before word_slot_start_seconds - 0.20 seconds; if neither exists, mark wrong-time control ineligible with reason rather than altering selection",
+  "wrong_time_intervention": "direct donor state swap at these positions; record its norm and do not treat it as norm matched",
+  "cached_vs_uncached_prefill_check": "capture each chosen decoder layer's post-block state on full prompt with use_cache false and true, compare max and mean absolute differences; retain self-patch outcome as behavioral compatibility check",
+  "primary_endpoint_unchanged": "complete donor word with normal EOS, exact case-insensitive word match after whitespace trim and removal of at most one final period/exclamation/question mark",
+  "secondary_token_rule": "tokenize each answer word with its first character uppercased and the remaining characters unchanged, without special tokens; compute first-token donor-minus-recipient logit only if both surfaces are each exactly one token, otherwise record null",
+  "interpretation_limit": "This addendum handles the Piper chosen-phrasing slot that crosses 2.0 s; it does not change the frozen words, voices, audio bytes, layers, directions, endpoints, or controls."
+}

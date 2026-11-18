@@ -1,0 +1,974 @@
+{
+  "purpose": "posthoc fit-only prompt crossover; no held-out/security claim",
+  "plan_sha256": "5ab8a24686aa633e0228bf26c27cf36c81950785248c8f78cdc5f27b19b63749",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "heldout_results_sha256": "1346d01ed5fbc23227d8fbba7078205afa25de3ef0e9f1a864ab4d678766c0a2",
+  "results": [
+    {
+      "engine": "piper",
+      "layer": 30,
+      "recipient": "red",
+      "donor": "blue",
+      "word_positions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "terminal_position": 110,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.75,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.375,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -7.1875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -6.75,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 30,
+      "recipient": "blue",
+      "donor": "red",
+      "word_positions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "terminal_position": 110,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.875,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -7.3125,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.75,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 31,
+      "recipient": "red",
+      "donor": "blue",
+      "word_positions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "terminal_position": 110,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.75,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.125,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.5,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -6.75,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 31,
+      "recipient": "blue",
+      "donor": "red",
+      "word_positions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "terminal_position": 110,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.875,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 0.5,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 32,
+      "recipient": "red",
+      "donor": "blue",
+      "word_positions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "terminal_position": 110,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.75,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.75,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.0625,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -6.75,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 32,
+      "recipient": "blue",
+      "donor": "red",
+      "word_positions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68
+      ],
+      "terminal_position": 110,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.875,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 3.0,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.0,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 30,
+      "recipient": "red",
+      "donor": "blue",
+      "word_positions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 191,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -7.5,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 5.6875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -6.0625,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -7.5,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 30,
+      "recipient": "blue",
+      "donor": "red",
+      "word_positions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 191,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.1875,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -6.125,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.0,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.1875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 31,
+      "recipient": "red",
+      "donor": "blue",
+      "word_positions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 191,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -7.5,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -1.25,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.125,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -7.5,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 31,
+      "recipient": "blue",
+      "donor": "red",
+      "word_positions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 191,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.1875,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 0.625,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -0.375,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.1875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 32,
+      "recipient": "red",
+      "donor": "blue",
+      "word_positions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 191,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -7.5,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -3.875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 1.875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -7.5,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 32,
+      "recipient": "blue",
+      "donor": "red",
+      "word_positions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 191,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.1875,
+        "hook_calls": 0
+      },
+      "outcomes": {
+        "word_donor": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 2.8125,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "terminal_donor": {
+          "new_token_ids": [
+            6033,
+            151645
+          ],
+          "answer": "Red",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": -2.5,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        },
+        "self_word": {
+          "new_token_ids": [
+            10331,
+            151645
+          ],
+          "answer": "Blue",
+          "stopped_on_eos": true,
+          "first_reply_blue_minus_red_logit": 6.1875,
+          "prefill_hook_calls": 1,
+          "decode_hook_calls_unmodified": 2
+        }
+      }
+    }
+  ]
+}

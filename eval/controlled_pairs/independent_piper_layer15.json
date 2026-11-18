@@ -1,0 +1,161 @@
+{
+  "purpose": "independent fit-only Piper layer-15 replay",
+  "manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "audio_sha256": {
+    "red": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+    "blue": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa"
+  },
+  "layer": 15,
+  "encoder_shape": [
+    156,
+    1280
+  ],
+  "word_rows": [
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83
+  ],
+  "wrong_rows": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126
+  ],
+  "results": [
+    {
+      "recipient": "red",
+      "donor": "blue",
+      "clean": {
+        "ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "eos": true,
+        "blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "word_local": {
+        "ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "eos": true,
+        "blue_minus_red_logit": 4.375,
+        "hook_calls": 1
+      },
+      "self_patch": {
+        "ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "eos": true,
+        "blue_minus_red_logit": -4.4375,
+        "hook_calls": 1
+      },
+      "wrong_chunk": {
+        "ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "eos": true,
+        "blue_minus_red_logit": -4.5,
+        "hook_calls": 1
+      }
+    },
+    {
+      "recipient": "blue",
+      "donor": "red",
+      "clean": {
+        "ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "eos": true,
+        "blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "word_local": {
+        "ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "eos": true,
+        "blue_minus_red_logit": -4.4375,
+        "hook_calls": 1
+      },
+      "self_patch": {
+        "ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "eos": true,
+        "blue_minus_red_logit": 4.3125,
+        "hook_calls": 1
+      },
+      "wrong_chunk": {
+        "ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "eos": true,
+        "blue_minus_red_logit": 4.0625,
+        "hook_calls": 1
+      }
+    }
+  ]
+}

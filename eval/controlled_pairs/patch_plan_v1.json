@@ -1,0 +1,21 @@
+{
+  "status": "fixed_before_fit_only_activation_patch_results",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "module": "thinker.model.audio_tower.layers[layer] post-block output",
+  "layers": [0, 15, 31],
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "patch_windows": {
+    "word_local": "encoder rows whose nominal center lies in fixed spliced word-slot interval",
+    "changed_chunk": "all encoder rows in the 200-mel-frame self-attention chunk containing the word-slot center",
+    "wrong_chunk": "same number of rows as word_local, taken from the earliest different self-attention chunk"
+  },
+  "controls": ["unedited", "self_patch", "wrong_chunk"],
+  "generation": {"do_sample": false, "max_new_tokens": 16, "eos_token": "tokenizer.eos_token_id"},
+  "primary_endpoint": "complete decoded answer exactly equals the donor color, with normal EOS",
+  "secondary_endpoint": "first-reply-token logit margin Blue(10331)-Red(6033)",
+  "interpretation_limit": "Post-attention encoder rows can mix information across their entire chunk. A word-local row swap is an intervention on indexed states, not proof that those rows encode only the word."
+}

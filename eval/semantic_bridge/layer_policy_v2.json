@@ -1,0 +1,27 @@
+{
+  "amends_v1_sha256": "522998fd4dd6d88cec1e84f50887e7e4d60002aac714497accdb1d1f09eb3869",
+  "boundary": "This tests audio-conditioned terminal text residuals. It does not localize an acoustic encoder frame or evaluate the Talker speech output.",
+  "comparison": "Same checkpoint, chat template, neutral system prompt, and source layers in both modalities. Only user content differs: source text versus rendered source speech.",
+  "generation_route": "Qwen2.5-Omni-3B Thinker only; same system text and assistant-generation chat template in typed and audio modalities",
+  "informing_fit_only_pilot_sha256": "10865746c44d383110313df5eee396d670edde1634852efea1bfc9b3943080f4",
+  "methods": [
+    "jacobian_lens",
+    "raw_logit_lens"
+  ],
+  "modalities": [
+    "typed",
+    "audio"
+  ],
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "position": "last position of the complete chat input including assistant generation prefix; this is the first assistant next-token prediction site",
+  "schema_version": 2,
+  "source_layers": [
+    0,
+    17
+  ],
+  "source_module": "Thinker text decoder post-block residual",
+  "status": "amended_after_two_fit_only_full_answer_pilots_not_preregistered_before_them",
+  "system_prompt": "Continue the user's text naturally. Do not explain your continuation.",
+  "target_module": "Thinker final text decoder residual before final norm and lm_head"
+}

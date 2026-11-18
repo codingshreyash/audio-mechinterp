@@ -1,0 +1,104 @@
+{
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_source_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "transformers_version": "5.24.0.dev0",
+  "torch_version": "2.15.0",
+  "python_version": "3.12.13",
+  "device": "mps",
+  "dtype": "bfloat16",
+  "purpose": "loaded model interface and single backward reachability, not a lens fit",
+  "load_seconds": 3.1831132920924574,
+  "memory_after_load": {
+    "allocated_bytes": 7734272,
+    "driver_bytes": 9450307584
+  },
+  "parameter_count": 4703464448,
+  "parameter_devices": {
+    "mps:0": 1442
+  },
+  "audio_sha256": "ba226916abdd36bef212a0b478d49eb63028fb541d84a7934f50e4871fe6d21d",
+  "batch_shapes": {
+    "input_ids": [
+      1,
+      158
+    ],
+    "attention_mask": [
+      1,
+      158
+    ],
+    "input_features": [
+      1,
+      128,
+      30000
+    ],
+    "feature_attention_mask": [
+      1,
+      30000
+    ]
+  },
+  "forward_seconds": 0.24697791691869497,
+  "logits_shape": [
+    1,
+    158,
+    151936
+  ],
+  "max_abs_logit_delta": 0.0,
+  "hook_shapes": {
+    "audio.encoder.0": [
+      [
+        275,
+        1280
+      ]
+    ],
+    "audio.encoder.31": [
+      [
+        275,
+        1280
+      ]
+    ],
+    "audio.to_language": [
+      [
+        137,
+        2048
+      ]
+    ],
+    "text.residual.0": [
+      [
+        1,
+        158,
+        2048
+      ]
+    ],
+    "text.residual.17": [
+      [
+        1,
+        158,
+        2048
+      ]
+    ],
+    "text.residual.35": [
+      [
+        1,
+        158,
+        2048
+      ]
+    ]
+  },
+  "memory_after_forward": {
+    "allocated_bytes": 112059392,
+    "driver_bytes": 10533748736
+  },
+  "gradient_forward_seconds": 0.12427991698496044,
+  "backward_probe_seconds": 0.15411541610956192,
+  "selected_token_id": 39814,
+  "gradient_norms": {
+    "audio.encoder.0": 10.100273132324219,
+    "audio.to_language": 0.8389560580253601,
+    "text.residual.17": 0.8876487612724304
+  },
+  "memory_after_backward": {
+    "allocated_bytes": 90660608,
+    "driver_bytes": 12012371968
+  }
+}

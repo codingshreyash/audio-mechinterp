@@ -1,0 +1,8143 @@
+{
+  "purpose": "fit-only 36-layer audio-placeholder donor-patch influence curve",
+  "plan_sha256": "f519dc130b05afb8485504820f83267f9571448f0564d333ce19378f45971648",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "results": [
+    {
+      "engine": "piper",
+      "layer": 0,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 126.36121368408203,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.75,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 0,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 126.36121368408203,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 1,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 128.7741241455078,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.75,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 1,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 128.7741241455078,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 2,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 129.7434844970703,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.8125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 2,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 129.7434844970703,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 3,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 132.2183837890625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 3,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 132.2183837890625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 4,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 138.77667236328125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 4,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 138.77667236328125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 5,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 142.27122497558594,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 5,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 142.27122497558594,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 6,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 143.86587524414062,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 6,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 143.86587524414062,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 7,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 145.83737182617188,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 7,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 145.83737182617188,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 8,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 148.69891357421875,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 8,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 148.69891357421875,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 9,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 156.43975830078125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 9,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 156.43975830078125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 10,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 156.9976043701172,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 10,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 156.9976043701172,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 11,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 170.2766571044922,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 11,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 170.2766571044922,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 12,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 168.17398071289062,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 12,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 168.17398071289062,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 13,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 178.45375061035156,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 13,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 178.45375061035156,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 14,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 177.53390502929688,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 14,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 177.53390502929688,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 15,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 180.40966796875,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 15,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 180.40966796875,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 16,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 182.00621032714844,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 16,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 182.00621032714844,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 17,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 186.9479522705078,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 17,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 186.9479522705078,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 18,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 190.80377197265625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 18,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 190.80377197265625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 19,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 194.23318481445312,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 19,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 194.23318481445312,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 20,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 200.6063995361328,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 20,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 200.6063995361328,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 21,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 207.81661987304688,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 21,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 207.81661987304688,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 22,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 206.8692626953125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.0625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 22,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 206.8692626953125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 23,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 212.19357299804688,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 23,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 212.19357299804688,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 24,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 220.29876708984375,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 24,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 220.29876708984375,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 25,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 229.2944793701172,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 25,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 229.2944793701172,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 26,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 248.4311981201172,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 26,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 248.4311981201172,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 27,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 261.375244140625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 27,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 261.375244140625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 28,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 280.1673278808594,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 28,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 280.1673278808594,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -3.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 29,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 301.88580322265625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 29,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 301.88580322265625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -3.75,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 30,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 352.5893249511719,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 30,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 352.5893249511719,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -3.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 31,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 424.487548828125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -1.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 31,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 424.487548828125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 0.875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 32,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 502.29473876953125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -2.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 32,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 502.29473876953125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 2.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 33,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 570.0601806640625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 33,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 570.0601806640625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 34,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 660.6012573242188,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 34,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 660.6012573242188,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 35,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 839.0750122070312,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "piper",
+      "layer": 35,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "donor_minus_recipient_norm": 839.0750122070312,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 0,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 198.8755645751953,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 0,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 198.8755645751953,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 1,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 202.25538635253906,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 1,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 202.25538635253906,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 2,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 203.12088012695312,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 2,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 203.12088012695312,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 3,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 204.53973388671875,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 3,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 204.53973388671875,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 4,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 212.4845733642578,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 4,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 212.4845733642578,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 5,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 217.64463806152344,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 5,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 217.64463806152344,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 6,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 219.84927368164062,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 6,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 219.84927368164062,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 7,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 221.08229064941406,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 7,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 221.08229064941406,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 8,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 226.6858673095703,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 8,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 226.6858673095703,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 9,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 229.44796752929688,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 9,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 229.44796752929688,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 10,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 232.93280029296875,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.8125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 10,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 232.93280029296875,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 11,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 253.62864685058594,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.8125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 11,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 253.62864685058594,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 12,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 243.72271728515625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 12,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 243.72271728515625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 13,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 260.3653259277344,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 13,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 260.3653259277344,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.9375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 14,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 258.0084533691406,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 14,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 258.0084533691406,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 15,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 262.2998962402344,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 15,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 262.2998962402344,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 16,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 268.2856750488281,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 16,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 268.2856750488281,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.25,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 17,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 279.98052978515625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 17,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 279.98052978515625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 18,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 282.48760986328125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 18,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 282.48760986328125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 19,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 290.1513977050781,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.0,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 19,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 290.1513977050781,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 20,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 300.4600830078125,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 20,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 300.4600830078125,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 21,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 309.3143310546875,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 21,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 309.3143310546875,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 22,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 316.5843200683594,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 22,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 316.5843200683594,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 23,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 328.9723815917969,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.4375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 23,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 328.9723815917969,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 24,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 341.9332275390625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.5,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 24,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 341.9332275390625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 25,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 360.1025695800781,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 25,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 360.1025695800781,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -6.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 26,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 387.9151306152344,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 26,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 387.9151306152344,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 27,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 403.61419677734375,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 27,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 403.61419677734375,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 28,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 429.6552734375,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.3125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 28,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 429.6552734375,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 29,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 456.0077819824219,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.1875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 29,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 456.0077819824219,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 30,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 519.2808227539062,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 2.9375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 30,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 519.2808227539062,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 31,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 651.3834838867188,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -2.75,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 31,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 651.3834838867188,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 2.375,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 32,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 784.6019897460938,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -3.5625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 32,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 784.6019897460938,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 3.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 33,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 889.40869140625,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.625,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 33,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 889.40869140625,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 34,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 1047.012451171875,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.8125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 34,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 1047.012451171875,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.8125,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 35,
+      "recipient": "red",
+      "donor": "blue",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 1434.9964599609375,
+      "clean": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    },
+    {
+      "engine": "kokoro",
+      "layer": 35,
+      "recipient": "blue",
+      "donor": "red",
+      "word_audio_positions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113
+      ],
+      "donor_minus_recipient_norm": 1434.9964599609375,
+      "clean": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "patched": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "prefill_hook_calls": 1,
+        "decode_hook_calls_unmodified": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "category": "multihop",
+      "id": "multihop:super-populous-capital",
+      "reason": "outdated_premise_india_overtook_china_2023",
+      "split": "fit"
+    },
+    {
+      "category": "multihop",
+      "id": "multihop:nhop-clock-element",
+      "reason": "no_scorable_bridge_label",
+      "split": "dev"
+    },
+    {
+      "category": "multihop",
+      "id": "multihop:nhop-chess-element",
+      "reason": "no_scorable_bridge_label",
+      "split": "dev"
+    }
+  ],
+  "labels": [
+    {
+      "id": "multihop:nhop-clock-element",
+      "label": "12",
+      "reason": "no_single_semantic_token_surface"
+    },
+    {
+      "id": "multihop:nhop-chess-element",
+      "label": "16",
+      "reason": "no_single_semantic_token_surface"
+    }
+  ]
+}

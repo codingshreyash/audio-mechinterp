@@ -1,0 +1,30 @@
+{
+  "evidence": "pretrained-model inference smoke; not paper metric reproduction",
+  "audio_path": "audio-jacobian-lens/artifacts/tts_corpus/audio/000_samantha.aiff",
+  "audio_sha256": "01b5b70fb725ff51b88e193efc594de6429045b01a674d6fa03ce340553f8b02",
+  "source_sample_rate": 22050,
+  "backbone_sample_rate": 16000,
+  "backbone_repo": "facebook/hubert-base-ls960",
+  "backbone_revision": "dba3bb02fda4248b6e082697eee756de8fe8aa8a",
+  "sae_repo": "Egorgij21/Audio-SAE-hubert-base",
+  "sae_revision": "52e90df0a81bc23005e418a01cab475ca40141e7",
+  "sae_checkpoint_sha256": "d745298d155f7fab7f6998bb58aaa003cfa6eac500c05b4438a2764724b0be26",
+  "layer": 3,
+  "activation_shape": [
+    1,
+    130,
+    768
+  ],
+  "feature_shape": [
+    1,
+    130,
+    6144
+  ],
+  "metrics": {
+    "l0": 48.661537170410156,
+    "l2": 2.802363157272339,
+    "normalized_l2": 0.3819704055786133,
+    "frac_var_explained": 0.8529998064041138
+  },
+  "torch_version": "2.15.0"
+}

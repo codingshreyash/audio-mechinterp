@@ -1,0 +1,21 @@
+{
+  "status": "fixed_after_encoder_patch_and_global_mel_floor_observation_before_feature_splice_results",
+  "purpose": "Test whether mel frames near the waveform word slot suffice for the complete color answer despite clip-wide preprocessing differences",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_base_blue_donor", "blue_base_red_donor"],
+  "frame_selection": "valid log-mel frame centers from floor(slot_start_seconds*100)-5 through ceil(slot_end_seconds*100)+5 inclusive, clipped to valid frames; 100 frames per second from 160-sample hop at 16 kHz",
+  "margin_frames": 5,
+  "conditions": {
+    "word_only": "base input_features with donor values only in selected word-adjacent mel frames",
+    "outside_only": "donor input_features with base values restored in selected word-adjacent mel frames",
+    "clean_base": "unedited base features",
+    "clean_donor": "unedited donor features"
+  },
+  "primary_endpoint": "complete one-word answer and normal EOS",
+  "secondary_endpoint": "first-token Blue-minus-Red logit margin",
+  "limitation": "Feature-space splicing creates a hybrid log-mel tensor, not a physically replayable waveform; it is a causal model-input control."
+}

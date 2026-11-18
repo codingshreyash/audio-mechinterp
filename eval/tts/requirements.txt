@@ -1,0 +1,5 @@
+piper-tts==1.8.0
+kokoro-onnx==0.6.1
+huggingface-hub==2.4.0
+soundfile==0.14.0
+scipy==1.18.1

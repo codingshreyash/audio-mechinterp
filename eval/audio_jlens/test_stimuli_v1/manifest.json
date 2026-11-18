@@ -1,0 +1,905 @@
+{
+  "status": "locked_stimuli_only_no_qwen_or_asr_inference",
+  "split_sha256": "2b48246361a629fbb0fa80c79a3d061b6977c8cb8af71cdc2275b1e4b0b4d45a",
+  "source_tts_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "source_render_helper_sha256": "bbbd7931dd93121d32b32a9c7898d0a14a3e884f7a421a01d4ecdfd3bd3d063c",
+  "renderer_sha256": "6a67c8108b8680efb7719c982cdd8f689ef55fb6e47e60cb1add0b59ee32f24d",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "seed_identifier": 20261118,
+  "tts_versions": {
+    "piper": "1.8.0",
+    "kokoro": "0.6.1"
+  },
+  "selection": {
+    "status": "text_and_voice_selection_frozen; WAV bytes to be generated and hashed before candidate evaluation",
+    "pairs": [
+      {
+        "pair_id": "direction",
+        "words": [
+          "north",
+          "south"
+        ]
+      },
+      {
+        "pair_id": "number",
+        "words": [
+          "seven",
+          "eight"
+        ]
+      }
+    ],
+    "phrasings": [
+      {
+        "id": "codeword",
+        "prefix": "The code word is",
+        "suffix": "Say the code word."
+      },
+      {
+        "id": "term",
+        "prefix": "I picked the term",
+        "suffix": "Repeat my term."
+      }
+    ],
+    "voices_and_rendering": "use eval/heldout_flow/plan_v1.json pinned Piper Amy and Kokoro Bella voices, package versions, 16-kHz PCM_16, 120-ms gaps, right-padded word slot, and byte-identical outside-slot PCM; do not change voices based on model behavior",
+    "source_plan": "../heldout_flow/plan_v1.json",
+    "source_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+    "expected_matched_pairs": 8,
+    "expected_clips": 16,
+    "wav_manifest_sha256": null,
+    "interpretation": "lexical and phrasing holdout; voices are new relative to fit but reused in development, so this is not an across-project speaker holdout"
+  },
+  "system_prompt": "Answer the spoken question with the one word the speaker gave. Do not add anything else.",
+  "fragments": [
+    {
+      "fragment_id": "prefix_codeword",
+      "text": "The code word is",
+      "text_sha256": "5103bf2b75b4be20af1df5793207cc7f7af731e0b23a42151e258847dda65dda",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/prefix_codeword.wav",
+        "file_sha256": "605bbea0e4029d38aa937909d9f644f4529bf8a82a47a55daebfc032f09a5145",
+        "pcm_float32_sha256": "65a7dbe6104cfd55384fc92790bdb583ed410aea8227ee06ab43317255295156",
+        "sample_rate": 22050,
+        "frames": 36352,
+        "duration_seconds": 1.6486167800453515,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.577728271484375,
+        "rms": 0.08046682200903942
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/prefix_codeword.wav",
+        "file_sha256": "189307f5535e82c469f50ceb008279ffdbf5bde80c80f4119d56eb5c1dea6f7f",
+        "pcm_float32_sha256": "fa4a7c4e4d4ebcc78a582f908fff129615e9593bfd79df36b7b9dda199f8372b",
+        "sample_rate": 16000,
+        "frames": 26378,
+        "duration_seconds": 1.648625,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.573944091796875,
+        "rms": 0.08024496019061199,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_codeword",
+      "text": "Say the code word.",
+      "text_sha256": "68f3124ace3e3a057f7aae3acbd1999848e9882f60a95af8259e8b04907a4e55",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/suffix_codeword.wav",
+        "file_sha256": "94f0ba10054d6d169efe0a836d17feeb2a336b63db116fae349124861f456e16",
+        "pcm_float32_sha256": "084ad9648f65e0c21b8abdda97ab1d1b88930a2722f4901e8937af494def0027",
+        "sample_rate": 22050,
+        "frames": 41216,
+        "duration_seconds": 1.8692063492063493,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.528564453125,
+        "rms": 0.07990045232550624
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/suffix_codeword.wav",
+        "file_sha256": "b20c585a0de3447db2fdadfd00eba9152a4f42e6b0dfe94ff2396d644e788197",
+        "pcm_float32_sha256": "7abef2d050fdb1c267d54b33204470e0a55c6d8dc6f369af4870cca27ce3c921",
+        "sample_rate": 16000,
+        "frames": 29908,
+        "duration_seconds": 1.86925,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.529205322265625,
+        "rms": 0.07954319259352993,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "prefix_term",
+      "text": "I picked the term",
+      "text_sha256": "bbf53e51ecb968ad74b4e1338f21f3779d61ecf16cf9332939bd488bbfdc57f5",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/prefix_term.wav",
+        "file_sha256": "9cbbcfae300c101fc5844c2c62eaaa692a136b406995162bbbb89cb3aa1749bc",
+        "pcm_float32_sha256": "9431eaa13da8644d495a1d25fc26eec89a722cb1d0d77feebc5e4fab07c78193",
+        "sample_rate": 22050,
+        "frames": 35328,
+        "duration_seconds": 1.6021768707482993,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.614532470703125,
+        "rms": 0.06736546340748885
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/prefix_term.wav",
+        "file_sha256": "4cfeb2e93a4fd5046ace905286fc46c9f30a0ebfffbd7a7d573447fdee6a9eb2",
+        "pcm_float32_sha256": "74959e1c8f13fe3edec77d7053679b7a869f351f0a98cae108a49f2be3d4b108",
+        "sample_rate": 16000,
+        "frames": 25635,
+        "duration_seconds": 1.6021875,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.605255126953125,
+        "rms": 0.067296379506774,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_term",
+      "text": "Repeat my term.",
+      "text_sha256": "a176dc38be89cde43f0a9a6ae2036a74e8bbdac384cd75260a232d45f8370eb0",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/suffix_term.wav",
+        "file_sha256": "c997d03515a47d160302a79c283a9a1a9cf74397e71e4b670faa5f3e7c8c5456",
+        "pcm_float32_sha256": "b20091c73b8a0dc2f446cf75c2201fb16bb8c0b9db028a6aa0bb6a58be3f5749",
+        "sample_rate": 22050,
+        "frames": 38144,
+        "duration_seconds": 1.7298866213151927,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.443115234375,
+        "rms": 0.07482430266175057
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/suffix_term.wav",
+        "file_sha256": "40a50c20895890a128fee0ef49b77fd9ceb8c22d51f249a7604aba3bfeb5377b",
+        "pcm_float32_sha256": "11d0f3ca21fe0dc2baab175523decd06de77833d224f37530cd1807bd312a48a",
+        "sample_rate": 16000,
+        "frames": 27679,
+        "duration_seconds": 1.7299375,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.44781494140625,
+        "rms": 0.07478555585075657,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_direction_north",
+      "text": "north",
+      "text_sha256": "dc365e79d41cfae1c3c0d969319ae62165b81b1815a86c32bbc6c64cbdf2311b",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/word_direction_north.wav",
+        "file_sha256": "7160df12150b29216395ad19e09e8da9646e01c49b82993251f7ccea1de9c95f",
+        "pcm_float32_sha256": "190fe577326b55b994adfd17353cf1c96148a06db9cad5f3792e999e1568d73d",
+        "sample_rate": 22050,
+        "frames": 23552,
+        "duration_seconds": 1.0681179138321995,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.5386962890625,
+        "rms": 0.08010026801160987
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/word_direction_north.wav",
+        "file_sha256": "ab71c536c3f4bd728b84e038c7740a2bc7d3157302f9f76e54e6f58a988899e5",
+        "pcm_float32_sha256": "b3416a95f1619c6a4be0cd1b2e7028dac0eb50144bd2d1ebed16f1bb7bc2ab12",
+        "sample_rate": 16000,
+        "frames": 17090,
+        "duration_seconds": 1.068125,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.536468505859375,
+        "rms": 0.08008470929182043,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_direction_south",
+      "text": "south",
+      "text_sha256": "2daa8d4a05dfc643abb44c5d5966430ca30c976e437e0f786de55ffc864b9a98",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/word_direction_south.wav",
+        "file_sha256": "e08ce2741fc47fab138d4439170de25db2ed99787c4e4a9bef824dec6e05e9f5",
+        "pcm_float32_sha256": "282e075d2df71365262336ab25e303e9595611ff77b9960a74347f068c26d9f3",
+        "sample_rate": 22050,
+        "frames": 23808,
+        "duration_seconds": 1.0797278911564625,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.543731689453125,
+        "rms": 0.060583370378982135
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/word_direction_south.wav",
+        "file_sha256": "c48cb371590a1db5ef159f66e8390f936104b1925e92828ed7551175c1490412",
+        "pcm_float32_sha256": "b347e974552928dc473cb458c6a517af9c730b8bf070930c0a81f2b4dd04012e",
+        "sample_rate": 16000,
+        "frames": 17276,
+        "duration_seconds": 1.07975,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.5396728515625,
+        "rms": 0.05985534706490015,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_number_seven",
+      "text": "seven",
+      "text_sha256": "3ba8d02b16fd2a01c1a8ba1a1f036d7ce386ed953696fa57331c2ac48a80b255",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/word_number_seven.wav",
+        "file_sha256": "9e887c606938cb22d8feb9f0eecefa0294bf1ac0c88ae61403a8f87627bb2927",
+        "pcm_float32_sha256": "791c01e244785a23cd8eda870aa9edacce6f4eed36d8736d2375c38530051163",
+        "sample_rate": 22050,
+        "frames": 22784,
+        "duration_seconds": 1.0332879818594105,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.67315673828125,
+        "rms": 0.09315012757900001
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/word_number_seven.wav",
+        "file_sha256": "acc20ecf1cb3b9ef5995692ac54c0de90ba0197df34966c52b3a4e738c077ea2",
+        "pcm_float32_sha256": "e8859c1e799240c00088868446d5ded32654ef0ebc693c37b6c31503ad58c3ec",
+        "sample_rate": 16000,
+        "frames": 16533,
+        "duration_seconds": 1.0333125,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.67608642578125,
+        "rms": 0.09271804514031551,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_number_eight",
+      "text": "eight",
+      "text_sha256": "c195d2d8756234367242ba7616c5c60369bc25ced2dcb5b92808d31b58ef217a",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/piper/word_number_eight.wav",
+        "file_sha256": "9fed5cf2966ec7e1865d067998769899d7d85b0bf8975e81450577ce4fcbd56a",
+        "pcm_float32_sha256": "073e13296d4e24a6ca143f2f253ef6506b10feeecd706c6c437caf285e72a065",
+        "sample_rate": 22050,
+        "frames": 16896,
+        "duration_seconds": 0.7662585034013606,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.47369384765625,
+        "rms": 0.05681194753872909
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/piper/word_number_eight.wav",
+        "file_sha256": "64af09ef3ea4bd3131a3152b97dd1395cf4c8c7411b37942d782f1b75de7e840",
+        "pcm_float32_sha256": "9bbd094f035c776588b0108411b5bbc47da19d9a5b6a8f33d76d07fc8defcb45",
+        "sample_rate": 16000,
+        "frames": 12261,
+        "duration_seconds": 0.7663125,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.45001220703125,
+        "rms": 0.056775732545858375,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "prefix_codeword",
+      "text": "The code word is",
+      "text_sha256": "5103bf2b75b4be20af1df5793207cc7f7af731e0b23a42151e258847dda65dda",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/prefix_codeword.wav",
+        "file_sha256": "6803a6fa403b40de86cace765a0470b228afe24ff585ac31731d0184e6b66043",
+        "pcm_float32_sha256": "78696321f8a051fca433058bbe72b2e809e62a70570332513ebd1af01c85f595",
+        "sample_rate": 24000,
+        "frames": 43200,
+        "duration_seconds": 1.8,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.57480388879776,
+        "rms": 0.05358124463720735
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/prefix_codeword.wav",
+        "file_sha256": "8f800137d68a429e8fa6594f10557dd89bfbfc3a93d3c3dbd38028411e0333ae",
+        "pcm_float32_sha256": "68737b6d272655adada9b179fb7bda384593dad73c09aeb947493a11b37a0690",
+        "sample_rate": 16000,
+        "frames": 28800,
+        "duration_seconds": 1.8,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.524017333984375,
+        "rms": 0.05229090898905234,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_codeword",
+      "text": "Say the code word.",
+      "text_sha256": "68f3124ace3e3a057f7aae3acbd1999848e9882f60a95af8259e8b04907a4e55",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/suffix_codeword.wav",
+        "file_sha256": "09d57f74d517ea8aa80606f749aacc6d48c5a14372a6ea48c76cd8d95932dd6f",
+        "pcm_float32_sha256": "9fab2ec878b08333cea56d05f21aa0807de8d5252514b83fab1ab6c2fe779d62",
+        "sample_rate": 24000,
+        "frames": 44400,
+        "duration_seconds": 1.85,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.4563007056713104,
+        "rms": 0.06197898583615391
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/suffix_codeword.wav",
+        "file_sha256": "b87098ab43c7eedd9e54a8098bdaffe23dace6dad75ac3ad493990fd4b593e2a",
+        "pcm_float32_sha256": "a8d102c1a97ef3c3dba890196287ff64cedd11205af5f0de0a95f298d1c403e4",
+        "sample_rate": 16000,
+        "frames": 29600,
+        "duration_seconds": 1.85,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.45050048828125,
+        "rms": 0.06011486109923554,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "prefix_term",
+      "text": "I picked the term",
+      "text_sha256": "bbf53e51ecb968ad74b4e1338f21f3779d61ecf16cf9332939bd488bbfdc57f5",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/prefix_term.wav",
+        "file_sha256": "6fd098e8f6fd54703ae7254f450c3cc9a0783b239a63c92ba6109295809babd7",
+        "pcm_float32_sha256": "2547ea39518602a870776a0d45fa3be4e6900d310791fd1fe6f88b0047e89138",
+        "sample_rate": 24000,
+        "frames": 43200,
+        "duration_seconds": 1.8,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.6683701276779175,
+        "rms": 0.06144100967583494
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/prefix_term.wav",
+        "file_sha256": "c3d978e4e0bff8f65a11d2efee032b652cf71cc54caaefeaaffc9210716a3a9c",
+        "pcm_float32_sha256": "a094efaf42aa6abace6b7ab98480f4918588da570d61f4a28bf3bf852ef46516",
+        "sample_rate": 16000,
+        "frames": 28800,
+        "duration_seconds": 1.8,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.611480712890625,
+        "rms": 0.06089628279243871,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_term",
+      "text": "Repeat my term.",
+      "text_sha256": "a176dc38be89cde43f0a9a6ae2036a74e8bbdac384cd75260a232d45f8370eb0",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/suffix_term.wav",
+        "file_sha256": "fb4f3ebd0448453026c1ba5ae2b3d50ffa5620ae3205cdc910e9e2c7e2dd306f",
+        "pcm_float32_sha256": "5903902ef3ac643b5114338bc03b11a56675dcdafab642d333c3410e7c43a65d",
+        "sample_rate": 24000,
+        "frames": 45000,
+        "duration_seconds": 1.875,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.6648976802825928,
+        "rms": 0.06685635191753295
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/suffix_term.wav",
+        "file_sha256": "b30aec7fed6203b945201320aca91ae2d69639f43df56d3c7e310954eb2af303",
+        "pcm_float32_sha256": "384a640a0f707c2b9b512bfe8c5ee75d2b80f0e11017682e3f579ca6826ec87c",
+        "sample_rate": 16000,
+        "frames": 30000,
+        "duration_seconds": 1.875,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.655975341796875,
+        "rms": 0.06640540556370753,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_direction_north",
+      "text": "north",
+      "text_sha256": "dc365e79d41cfae1c3c0d969319ae62165b81b1815a86c32bbc6c64cbdf2311b",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/word_direction_north.wav",
+        "file_sha256": "26b90a1e0c483a0f5180fcf9688f59b167e4519d4d11e4a269d60f15a6039bba",
+        "pcm_float32_sha256": "c76be82c5c3ed9c315a1f972cae151ad9ba109d4fd33f791ec0bfe0ebf4aadad",
+        "sample_rate": 24000,
+        "frames": 33000,
+        "duration_seconds": 1.375,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.4308827519416809,
+        "rms": 0.06544762205944038
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/word_direction_north.wav",
+        "file_sha256": "b588c10327986f8ee89fa8b3b21a054cac76b7e18e800d6f90e39e38213450db",
+        "pcm_float32_sha256": "c2115b180258c69ed214e77c2a16eb1617743f4c265c23ac005c140182fe646d",
+        "sample_rate": 16000,
+        "frames": 22000,
+        "duration_seconds": 1.375,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.39239501953125,
+        "rms": 0.06501522926758967,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_direction_south",
+      "text": "south",
+      "text_sha256": "2daa8d4a05dfc643abb44c5d5966430ca30c976e437e0f786de55ffc864b9a98",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/word_direction_south.wav",
+        "file_sha256": "ec0d54b5cb34100b5fb2191bcf457652ac6b260aae9c33c255859ee141e2b0ef",
+        "pcm_float32_sha256": "996a0f5fe9778cc577172d8397259582e97361dadd711fc3fd1f5a21f48990dd",
+        "sample_rate": 24000,
+        "frames": 31200,
+        "duration_seconds": 1.3,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.3511826694011688,
+        "rms": 0.0479040607489931
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/word_direction_south.wav",
+        "file_sha256": "f051aea03ac5ae27740af6627aef58eb3ea56827e6a7befe40e73d5158e6ec71",
+        "pcm_float32_sha256": "903a6a38ee46eb9bbadc3473e49510caa5b9e490e69614c3ab1eb6e7b115216b",
+        "sample_rate": 16000,
+        "frames": 20800,
+        "duration_seconds": 1.3,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.345672607421875,
+        "rms": 0.04636629553574203,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_number_seven",
+      "text": "seven",
+      "text_sha256": "3ba8d02b16fd2a01c1a8ba1a1f036d7ce386ed953696fa57331c2ac48a80b255",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/word_number_seven.wav",
+        "file_sha256": "2fdf255539cbb6a26b7009435e8f2129c052bb836f4970c5c14fb9ac0237efa3",
+        "pcm_float32_sha256": "b2991e272b79bab37cc40b9dc8487aca436ebc0197e0202da9431d16329c9cc1",
+        "sample_rate": 24000,
+        "frames": 33600,
+        "duration_seconds": 1.4,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.3824898600578308,
+        "rms": 0.0476750489899188
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/word_number_seven.wav",
+        "file_sha256": "6ecd55ff23d183c10db27a2caa7b8acd0e16f1162431cd00a0828e14475e89cb",
+        "pcm_float32_sha256": "ff6b0f48d0c9552680446a9cb7c0d53c73fc69cd7bf3f5dbd97f98d81cb5abb9",
+        "sample_rate": 16000,
+        "frames": 22400,
+        "duration_seconds": 1.4,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.360748291015625,
+        "rms": 0.04549839867886597,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_number_eight",
+      "text": "eight",
+      "text_sha256": "c195d2d8756234367242ba7616c5c60369bc25ced2dcb5b92808d31b58ef217a",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/audio_jlens/test_stimuli_v1/raw/kokoro/word_number_eight.wav",
+        "file_sha256": "0a8a347e270cae00c3c0f8f4595e2bcb2bc84fd8c3adbce03786114ee676f120",
+        "pcm_float32_sha256": "084ebb039ccae594fae364441036554e8f2cd885601fcf100455ad8e203ef258",
+        "sample_rate": 24000,
+        "frames": 29400,
+        "duration_seconds": 1.225,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.3518768846988678,
+        "rms": 0.050456214026134205
+      },
+      "processed": {
+        "path": "eval/audio_jlens/test_stimuli_v1/processed/kokoro/word_number_eight.wav",
+        "file_sha256": "5ff6c93bcdc641bf700e1c894da70ee99bc4ea055163453337dc37a3fe4cde16",
+        "pcm_float32_sha256": "7b3e30ccbee57b60f7cc3d9d6c79ca9b2dc485fdf24da93d0af6b1788b5e6ac4",
+        "sample_rate": 16000,
+        "frames": 19600,
+        "duration_seconds": 1.225,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.34613037109375,
+        "rms": 0.04985095870471677,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "direction",
+      "phrasing_id": "codeword",
+      "words": [
+        "north",
+        "south"
+      ],
+      "word_slot_start_sample": 28298,
+      "word_slot_end_sample_exclusive": 45574,
+      "word_slot_start_seconds": 1.768625,
+      "word_slot_end_seconds": 2.848375,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "north": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_direction_codeword_north.wav",
+          "file_sha256": "baf8bd388173db0a6cb53614b2259d1c7b23bfed814a14d5af17fd68efa33695",
+          "pcm_int16_sha256": "fc976a7d8756eb093c994a73fa346cb850ff1be43751f2ebcc889290ab7cc465",
+          "frames": 77402,
+          "duration_seconds": 4.837625,
+          "word_fragment_frames": 17090,
+          "peak_int16": 18807,
+          "spoken_script": "The code word is north. Say the code word."
+        },
+        "south": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_direction_codeword_south.wav",
+          "file_sha256": "ff3398fa16ef97d59756a6a43000d616d88c6527e3b82e7b60a890fd020ddd94",
+          "pcm_int16_sha256": "8e1dfed8f895f2d4d8bf590486ba9406393dc4fe46e8a60df5dcd4e3b5db3c0c",
+          "frames": 77402,
+          "duration_seconds": 4.837625,
+          "word_fragment_frames": 17276,
+          "peak_int16": 18807,
+          "spoken_script": "The code word is south. Say the code word."
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "direction",
+      "phrasing_id": "term",
+      "words": [
+        "north",
+        "south"
+      ],
+      "word_slot_start_sample": 27555,
+      "word_slot_end_sample_exclusive": 44831,
+      "word_slot_start_seconds": 1.7221875,
+      "word_slot_end_seconds": 2.8019375,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "north": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_direction_term_north.wav",
+          "file_sha256": "ac6942bea1b292e4caf1d41fd0c6d984db2dc81c60d02cf504d8bec85ab42308",
+          "pcm_int16_sha256": "fec11593b47e2d500922dfb36bc6302276395fff6e5612deb0d6e9529a689c7c",
+          "frames": 74430,
+          "duration_seconds": 4.651875,
+          "word_fragment_frames": 17090,
+          "peak_int16": 19833,
+          "spoken_script": "I picked the term north. Repeat my term."
+        },
+        "south": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_direction_term_south.wav",
+          "file_sha256": "acf52cc0ff057b08594b4658a1bbfcdd5b1b4d2939e4108a9718910bb392454a",
+          "pcm_int16_sha256": "0ecd49dbce428f6d10cf4a1a0f9614b3a70f18c50c80080d5eb224208ebc05a5",
+          "frames": 74430,
+          "duration_seconds": 4.651875,
+          "word_fragment_frames": 17276,
+          "peak_int16": 19833,
+          "spoken_script": "I picked the term south. Repeat my term."
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "number",
+      "phrasing_id": "codeword",
+      "words": [
+        "seven",
+        "eight"
+      ],
+      "word_slot_start_sample": 28298,
+      "word_slot_end_sample_exclusive": 44831,
+      "word_slot_start_seconds": 1.768625,
+      "word_slot_end_seconds": 2.8019375,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "seven": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_number_codeword_seven.wav",
+          "file_sha256": "85e46fe783e9d9a9c55aa1c783f9783e968f792704d12f441c57732eca04dfb2",
+          "pcm_int16_sha256": "50c194f158436215e1afb8029ebd3fb41d4f06553ea017d3189282d7f52d6322",
+          "frames": 76659,
+          "duration_seconds": 4.7911875,
+          "word_fragment_frames": 16533,
+          "peak_int16": 22154,
+          "spoken_script": "The code word is seven. Say the code word."
+        },
+        "eight": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_number_codeword_eight.wav",
+          "file_sha256": "6453ae76f6c114dafd4809d396a490f3146e1fd8a5b348dc94b92b837803fc16",
+          "pcm_int16_sha256": "23824c549c456b70d929e399557cc56cf8a00e43b4a0b21a6983d045f80e3e0a",
+          "frames": 76659,
+          "duration_seconds": 4.7911875,
+          "word_fragment_frames": 12261,
+          "peak_int16": 18807,
+          "spoken_script": "The code word is eight. Say the code word."
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "number",
+      "phrasing_id": "term",
+      "words": [
+        "seven",
+        "eight"
+      ],
+      "word_slot_start_sample": 27555,
+      "word_slot_end_sample_exclusive": 44088,
+      "word_slot_start_seconds": 1.7221875,
+      "word_slot_end_seconds": 2.7555,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "seven": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_number_term_seven.wav",
+          "file_sha256": "85ce0dd6e7081d665b665289b2c310954a1abc314d539e0bd29bd162b941fba4",
+          "pcm_int16_sha256": "9e28f787d2e7d309e8048fad1ba08e72a0575643379fdc2372233b69f14bc896",
+          "frames": 73687,
+          "duration_seconds": 4.6054375,
+          "word_fragment_frames": 16533,
+          "peak_int16": 22154,
+          "spoken_script": "I picked the term seven. Repeat my term."
+        },
+        "eight": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/piper_number_term_eight.wav",
+          "file_sha256": "4f49d42a4bdf6bc3b2c2f596ce147a103bc285dca6a17537c068ad776a2cbf0a",
+          "pcm_int16_sha256": "0bd0ff64faad5cb93e91b65ff4d7f0282d00a861838a8b6695363c82d482b2e4",
+          "frames": 73687,
+          "duration_seconds": 4.6054375,
+          "word_fragment_frames": 12261,
+          "peak_int16": 19833,
+          "spoken_script": "I picked the term eight. Repeat my term."
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "direction",
+      "phrasing_id": "codeword",
+      "words": [
+        "north",
+        "south"
+      ],
+      "word_slot_start_sample": 30720,
+      "word_slot_end_sample_exclusive": 52720,
+      "word_slot_start_seconds": 1.92,
+      "word_slot_end_seconds": 3.295,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "north": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_direction_codeword_north.wav",
+          "file_sha256": "f85daa7b472cd012cabf04ff007f781dfe61feadce074910c8f9ad13708e1149",
+          "pcm_int16_sha256": "7caeec6f2d2059d086c7afaa090f7eaddde0ac956bb279a8db2163cc2e383b09",
+          "frames": 84240,
+          "duration_seconds": 5.265,
+          "word_fragment_frames": 22000,
+          "peak_int16": 17171,
+          "spoken_script": "The code word is north. Say the code word."
+        },
+        "south": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_direction_codeword_south.wav",
+          "file_sha256": "be1cf74d36fb58e32f71df0e2d494841a795e17ef0216acf2e8df4e31e9b03c6",
+          "pcm_int16_sha256": "8166ff32fd23420abe1b099520a5e855a0a939d1cb405d2e94e7e8a40ad9405d",
+          "frames": 84240,
+          "duration_seconds": 5.265,
+          "word_fragment_frames": 20800,
+          "peak_int16": 17171,
+          "spoken_script": "The code word is south. Say the code word."
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "direction",
+      "phrasing_id": "term",
+      "words": [
+        "north",
+        "south"
+      ],
+      "word_slot_start_sample": 30720,
+      "word_slot_end_sample_exclusive": 52720,
+      "word_slot_start_seconds": 1.92,
+      "word_slot_end_seconds": 3.295,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "north": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_direction_term_north.wav",
+          "file_sha256": "6294ac68fdab7008609488cce9647b140ccb5194b3cd387e509d90b805fc5a6b",
+          "pcm_int16_sha256": "b39f58649a22868c2da98cae4d4dcbacf985b602b32826d2be39d1e83515215a",
+          "frames": 84640,
+          "duration_seconds": 5.29,
+          "word_fragment_frames": 22000,
+          "peak_int16": 21495,
+          "spoken_script": "I picked the term north. Repeat my term."
+        },
+        "south": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_direction_term_south.wav",
+          "file_sha256": "7366924750cbb2c2ada563b7e7375312c0369bba96a411f0d76fb9c732c0e4ec",
+          "pcm_int16_sha256": "ef4a212d23fab4d4b4cf119a38f8400af06ef1dd31e32d458a32896435102fe3",
+          "frames": 84640,
+          "duration_seconds": 5.29,
+          "word_fragment_frames": 20800,
+          "peak_int16": 21495,
+          "spoken_script": "I picked the term south. Repeat my term."
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "number",
+      "phrasing_id": "codeword",
+      "words": [
+        "seven",
+        "eight"
+      ],
+      "word_slot_start_sample": 30720,
+      "word_slot_end_sample_exclusive": 53120,
+      "word_slot_start_seconds": 1.92,
+      "word_slot_end_seconds": 3.32,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "seven": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_number_codeword_seven.wav",
+          "file_sha256": "d655bc3cd06a65d13979d9050ec70ec08af35ee62ae92095abf02b3c4344fdc7",
+          "pcm_int16_sha256": "19d3bc3354555dfeb25964907547044e0b767f7cbb53a8e7f1e47b592e34faaa",
+          "frames": 84640,
+          "duration_seconds": 5.29,
+          "word_fragment_frames": 22400,
+          "peak_int16": 17171,
+          "spoken_script": "The code word is seven. Say the code word."
+        },
+        "eight": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_number_codeword_eight.wav",
+          "file_sha256": "e152d42f1ecd472440dcf90566e2645cfe3889399138e6ce8b7086de1911639e",
+          "pcm_int16_sha256": "e0db4f7b0766744cac2f46889f6dd79765df72c6084867407f7875a10ebcdd83",
+          "frames": 84640,
+          "duration_seconds": 5.29,
+          "word_fragment_frames": 19600,
+          "peak_int16": 17171,
+          "spoken_script": "The code word is eight. Say the code word."
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "number",
+      "phrasing_id": "term",
+      "words": [
+        "seven",
+        "eight"
+      ],
+      "word_slot_start_sample": 30720,
+      "word_slot_end_sample_exclusive": 53120,
+      "word_slot_start_seconds": 1.92,
+      "word_slot_end_seconds": 3.32,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "seven": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_number_term_seven.wav",
+          "file_sha256": "bfa18ea5a1202e5fae4339a2c05f5635e3d7fbb63acb9e96f396fa37abe87c5c",
+          "pcm_int16_sha256": "5cd758e82857c8e25a851a5b9241e8e891c6f5ec3a8b328777fac7043522e856",
+          "frames": 85040,
+          "duration_seconds": 5.315,
+          "word_fragment_frames": 22400,
+          "peak_int16": 21495,
+          "spoken_script": "I picked the term seven. Repeat my term."
+        },
+        "eight": {
+          "path": "eval/audio_jlens/test_stimuli_v1/clips/kokoro_number_term_eight.wav",
+          "file_sha256": "5b0cebc553a434ee380622f1e337b4e81afafd9d2d086024ad78de90daa2bc32",
+          "pcm_int16_sha256": "9e83c3ecd8bd4759fe90c6a9c47c34bed77ec8219068f64fdd64ea97174fcadc",
+          "frames": 85040,
+          "duration_seconds": 5.315,
+          "word_fragment_frames": 19600,
+          "peak_int16": 21495,
+          "spoken_script": "I picked the term eight. Repeat my term."
+        }
+      }
+    }
+  ]
+}

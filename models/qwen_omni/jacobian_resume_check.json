@@ -1,0 +1,139 @@
+{
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "audio_sha256": "ba226916abdd36bef212a0b478d49eb63028fb541d84a7934f50e4871fe6d21d",
+  "system_prompt": "Answer the spoken request briefly.",
+  "source_layers": [
+    0,
+    17
+  ],
+  "target_layer": 35,
+  "coordinates": [
+    0,
+    128,
+    256,
+    384,
+    512,
+    640,
+    768,
+    896,
+    1024,
+    1152,
+    1280,
+    1408,
+    1536,
+    1664,
+    1792,
+    1920
+  ],
+  "dim_batch": 8,
+  "source_positions": "input_ids == processor.audio_token_id",
+  "target_positions": "all non-padding prompt positions",
+  "target_quantity": "post-final-block residual, not logits",
+  "target_reduction": "sum over current-and-future positions (causal model)",
+  "source_reduction": "mean over audio placeholder positions",
+  "status": "complete",
+  "python_version": "3.12.13",
+  "torch_version": "2.15.0",
+  "transformers_version": "5.24.0.dev0",
+  "device": "mps",
+  "dtype": "bfloat16",
+  "model_load_seconds": 2.737140958197415,
+  "memory_after_load_bytes": {
+    "allocated": 7734272,
+    "driver": 9450307584,
+    "recommended_max": 40200896512
+  },
+  "driver_limit_bytes": 32212254720,
+  "prompt_positions": 158,
+  "audio_positions": 137,
+  "completed_coordinates": 16,
+  "batch_records": [
+    {
+      "coordinates": [
+        0,
+        128,
+        256,
+        384,
+        512,
+        640,
+        768,
+        896
+      ],
+      "forward_seconds": 1.9425062499940395,
+      "backward_seconds": 0.6607674160040915,
+      "driver_memory_bytes": {
+        "allocated": 4300719616,
+        "driver": 20845477888,
+        "recommended_max": 40200896512
+      },
+      "row_norms": {
+        "text.residual.0": [
+          1.1251055002212524,
+          0.941180944442749,
+          1.5771158933639526,
+          1.0790512561798096,
+          1.1342955827713013,
+          1.0649722814559937,
+          1.059503197669983,
+          1.1911505460739136
+        ],
+        "text.residual.17": [
+          1.0038394927978516,
+          1.0666959285736084,
+          1.5327386856079102,
+          0.942331075668335,
+          1.079476237297058,
+          1.0744738578796387,
+          0.9534293413162231,
+          1.2567477226257324
+        ]
+      }
+    },
+    {
+      "coordinates": [
+        1024,
+        1152,
+        1280,
+        1408,
+        1536,
+        1664,
+        1792,
+        1920
+      ],
+      "forward_seconds": 0.8576527500990778,
+      "backward_seconds": 0.4488599579781294,
+      "driver_memory_bytes": {
+        "allocated": 4304520704,
+        "driver": 21046804480,
+        "recommended_max": 40200896512
+      },
+      "row_norms": {
+        "text.residual.0": [
+          1.1249017715454102,
+          0.9091041684150696,
+          1.251364827156067,
+          0.9771767854690552,
+          0.9390302300453186,
+          1.1961332559585571,
+          1.0359128713607788,
+          0.8561556935310364
+        ],
+        "text.residual.17": [
+          0.9823939800262451,
+          0.9684375524520874,
+          1.4634363651275635,
+          0.9485200643539429,
+          0.9585041999816895,
+          1.0376815795898438,
+          0.8312665224075317,
+          0.8824341297149658
+        ]
+      }
+    }
+  ],
+  "measured_16_coordinate_seconds": 3.9097863740753382,
+  "naive_full_2048_coordinate_seconds": 500.4526558816433,
+  "estimate_note": "Linear extrapolation of two selected-layer batches from one audio prompt; not a measured full-rank fit or corpus runtime."
+}

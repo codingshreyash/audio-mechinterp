@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_readout_evaluation",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "methods": ["jacobian_lens", "raw_logit_lens"],
+  "source_layers": [0, 17],
+  "source_module": "Thinker text decoder post-block residual",
+  "target_module": "Thinker final text decoder residual before final norm and lm_head",
+  "position": "last position of the complete chat input including assistant generation prefix; this is the first assistant next-token prediction site",
+  "modalities": ["typed", "audio"],
+  "comparison": "Same checkpoint, chat template, neutral system prompt, and source layers in both modalities. Only user content differs: source text versus rendered source speech.",
+  "boundary": "This tests audio-conditioned terminal text residuals. It does not localize an acoustic encoder frame or evaluate the Talker speech output."
+}

@@ -1,0 +1,20 @@
+{
+  "status": "fixed_after_block31_attention_mediation_before_head_scan_results",
+  "purpose": "Exploratory fit-only scan of each block-31 attention head's terminal contribution to the layer-30 word-audio patch effect",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "block31_mediation_results_sha256": "3d780aac04da2db3cfd3f30f563fc7eb2fb74614ea8213012be6086ac1d5ae06",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "layer": 31,
+  "attention_head_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  "capture_and_patch_site": "self_attn.o_proj input at terminal prompt token, contiguous head_dim=128 slices in 16-head concatenation; full-prompt prefill only",
+  "upstream_patch": "post-block layer30 donor state at nominal word-slot audio placeholder positions",
+  "conditions": ["clean", "layer30_word_patch", "all_heads_donor_terminal_only", "all_heads_clean_restore_after_layer30_word_patch", "self_all_heads_terminal", "each_head_donor_terminal_only", "each_head_clean_restore_after_layer30_word_patch"],
+  "primary_endpoint": "complete donor-color answer with normal EOS",
+  "secondary_endpoint": "first-reply-token Blue(10331)-Red(6033) logit margin",
+  "analysis": "Report all 16 heads and both directions separately, no best-head-only claim; any selected head must be tested on unseen word pairs and voices",
+  "interpretation_limit": "A head output slice is an activation intervention, not evidence of its attention pattern or a uniquely necessary natural circuit. This is a posthoc fit-only scan of one lexical pair."
+}

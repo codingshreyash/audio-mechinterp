@@ -1,0 +1,140 @@
+{
+  "amends_v1_sha256": "938b78588413c407bc9f008c2b621fe2ea2601f80d545e080d1fab665c952879",
+  "gate": "Before any dev/test Omni bridge claim, require at least 5/6 fit-smoke items to pass in each category and each of typed, Piper, Kokoro routes, and at least 5/6 association source-label four-choice judgments to pass. If a category fails, report its readouts only as exploratory and version a new task prompt before locked evaluation. The existing two-item pilot is insufficient to pass this gate.",
+  "generation": {
+    "do_sample": false,
+    "max_new_tokens": 80,
+    "repetitions": 1,
+    "stop": "model_eos_or_token_limit"
+  },
+  "informing_fit_only_pilot_sha256": "10865746c44d383110313df5eee396d670edde1634852efea1bfc9b3943080f4",
+  "items": [
+    {
+      "audio_script": "The question hung there and he realized the pause had already gone on too long; across the table, a pen hovered over a page he couldn't read.",
+      "category": "association",
+      "expected_bridge_labels": [
+        "interview"
+      ],
+      "expected_next_text": null,
+      "id": "association:interview",
+      "typed_prompt": "The question hung there and he realized the pause had already gone on too long; across the table, a pen hovered over a page he couldn't read."
+    },
+    {
+      "audio_script": "She tapped her cigarette holder against the bar while the gramophone crackled, and somewhere behind the bookcase the real party was just getting loud.",
+      "category": "association",
+      "expected_bridge_labels": [
+        "prohibition"
+      ],
+      "expected_next_text": null,
+      "id": "association:prohibition",
+      "typed_prompt": "She tapped her cigarette holder against the bar while the gramophone crackled, and somewhere behind the bookcase the real party was just getting loud."
+    },
+    {
+      "audio_script": "The test went green on the forty-third run, and she immediately distrusted it — green after forty-two reds meant she'd fixed the wrong thing.",
+      "category": "association",
+      "expected_bridge_labels": [
+        "code"
+      ],
+      "expected_next_text": null,
+      "id": "association:code-h",
+      "typed_prompt": "The test went green on the forty-third run, and she immediately distrusted it — green after forty-two reds meant she'd fixed the wrong thing."
+    },
+    {
+      "audio_script": "He cooked for two out of habit and scraped the second plate into the bin before sitting down.",
+      "category": "association",
+      "expected_bridge_labels": [
+        "lonely"
+      ],
+      "expected_next_text": null,
+      "id": "association:lonely",
+      "typed_prompt": "He cooked for two out of habit and scraped the second plate into the bin before sitting down."
+    },
+    {
+      "audio_script": "He'd been in the tunnel long enough to forget what color looked like, and when the far end finally brightened, his eyes watered before he could tell if it was real.",
+      "category": "association",
+      "expected_bridge_labels": [
+        "light"
+      ],
+      "expected_next_text": null,
+      "id": "association:light-h",
+      "typed_prompt": "He'd been in the tunnel long enough to forget what color looked like, and when the far end finally brightened, his eyes watered before he could tell if it was real."
+    },
+    {
+      "audio_script": "The horizon shook in the heat and his shadow had shrunk to a puddle at his feet; the last of the water was three swallows, maybe four.",
+      "category": "association",
+      "expected_bridge_labels": [
+        "desert"
+      ],
+      "expected_next_text": null,
+      "id": "association:desert",
+      "typed_prompt": "The horizon shook in the heat and his shadow had shrunk to a puddle at his feet; the last of the water was three swallows, maybe four."
+    },
+    {
+      "audio_script": "Fact: The month immediately before the one containing Valentine's Day is \"",
+      "category": "multihop",
+      "expected_bridge_labels": [
+        "February"
+      ],
+      "expected_next_text": "January",
+      "id": "multihop:pred-valentines-prevmonth",
+      "typed_prompt": "Fact: The month immediately before the one containing Valentine's Day is \""
+    },
+    {
+      "audio_script": "Fact: The opposite of the time of day when plants photosynthesize is \"",
+      "category": "multihop",
+      "expected_bridge_labels": [
+        "day"
+      ],
+      "expected_next_text": "night",
+      "id": "multihop:dual-photosynthesis-opposite",
+      "typed_prompt": "Fact: The opposite of the time of day when plants photosynthesize is \""
+    },
+    {
+      "audio_script": "Fact: The number of natural moons orbiting the planet third from the Sun is",
+      "category": "multihop",
+      "expected_bridge_labels": [
+        "Earth"
+      ],
+      "expected_next_text": "1",
+      "id": "multihop:planet-3-moons",
+      "typed_prompt": "Fact: The number of natural moons orbiting the planet third from the Sun is "
+    },
+    {
+      "audio_script": "Fact: The ocean east of the country that built the Great Wall is the",
+      "category": "multihop",
+      "expected_bridge_labels": [
+        "China"
+      ],
+      "expected_next_text": "Pacific",
+      "id": "multihop:greatwall-ocean",
+      "typed_prompt": "Fact: The ocean east of the country that built the Great Wall is the "
+    },
+    {
+      "audio_script": "Fact: The number of strings on the instrument that fiddlers play is",
+      "category": "multihop",
+      "expected_bridge_labels": [
+        "violin"
+      ],
+      "expected_next_text": "4",
+      "id": "multihop:violin-strings",
+      "typed_prompt": "Fact: The number of strings on the instrument that fiddlers play is "
+    },
+    {
+      "audio_script": "Fact: The atomic number of the gas that plants release during photosynthesis is",
+      "category": "multihop",
+      "expected_bridge_labels": [
+        "oxygen"
+      ],
+      "expected_next_text": "8",
+      "id": "multihop:chem-photosynthesis-Z",
+      "typed_prompt": "Fact: The atomic number of the gas that plants release during photosynthesis is "
+    }
+  ],
+  "judging": "Retain full decoded output for all 12 fit-only smoke items in typed, Piper, and Kokoro routes. For association, three blind reviewers judge whether each output is a coherent continuation of the source vignette; they do not require the hidden bridge word to appear. Separately, reviewers make a four-choice judgment that the source vignette evokes its bridge label over distractors. For multihop, reviewers judge whether the complete output answers with the source target or a semantically equivalent answer. Majority 2/3 passes an item.",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "route": "Qwen2.5-Omni-3B Thinker text output, separately for typed-chat and audio-chat user content",
+  "schema_version": 2,
+  "source_smoke_sha256": "12f4f6ab4d80542e075422ed17a5c3edbc2b7fb52d13852e96374be76fdb4c96",
+  "status": "amended_after_two_fit_only_full_answer_pilots_not_preregistered_before_them",
+  "system_prompt": "Continue the user's text naturally. Do not explain your continuation."
+}

@@ -1,0 +1,866 @@
+{
+  "status": "stimuli_only_no_model_answers",
+  "plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "renderer_sha256": "bbbd7931dd93121d32b32a9c7898d0a14a3e884f7a421a01d4ecdfd3bd3d063c",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "seed": 20261118,
+  "random_draws": 0,
+  "tts_versions": {
+    "piper": "1.8.0",
+    "kokoro": "0.6.1"
+  },
+  "system_prompt": "Answer the spoken question with the one word the speaker gave. Do not add anything else.",
+  "fragments": [
+    {
+      "fragment_id": "prefix_chosen",
+      "text": "The word I chose is",
+      "text_sha256": "721acdb7369f5e95c97c3de6ec3d8bedded76efcda1a3283b94aac593117a04c",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/prefix_chosen.wav",
+        "file_sha256": "0fec1b4ff0048bf2e9524268b12ad3e456e6d57d747172d380b7486958a7bebe",
+        "pcm_float32_sha256": "555990ccd00a31c7705f32d8de18ea71d30c8cfb194862159009dd4544511c67",
+        "sample_rate": 22050,
+        "frames": 39424,
+        "duration_seconds": 1.787936507936508,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.4310302734375,
+        "rms": 0.07582501646052177
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/prefix_chosen.wav",
+        "file_sha256": "a88fef612911b4985be987578b270d6c748983568949753f96784e6d0e08e7a0",
+        "pcm_float32_sha256": "a60069e92af9cb7ea034dc648d6c4cadd8a1f4dd08ddbe67aa459c833f77f0eb",
+        "sample_rate": 16000,
+        "frames": 28607,
+        "duration_seconds": 1.7879375,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.433929443359375,
+        "rms": 0.07539894194532107,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_chosen",
+      "text": "Tell me the word I chose.",
+      "text_sha256": "ab1afa86c216f6879574c4aa08da755514c1aee0aaeda7bdbafc082855fea905",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/suffix_chosen.wav",
+        "file_sha256": "6b66b0b4de3d4fa89fca25e93394cdd93205de2a581d64f8c81dc78ad499e731",
+        "pcm_float32_sha256": "39e0cbe30214b42034e1a0f88ab09b33de227a7488696d9e24636f0585229845",
+        "sample_rate": 22050,
+        "frames": 46336,
+        "duration_seconds": 2.10140589569161,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.58734130859375,
+        "rms": 0.07918636004493572
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/suffix_chosen.wav",
+        "file_sha256": "b5eedb814353f480fd6ae742c577a313c6f4bf8d6eff40fdfe66cee70ce44995",
+        "pcm_float32_sha256": "d2c9d8645ac410862c60ab34deb21296072cd0a57aa8ba406d12659d1c14fd2e",
+        "sample_rate": 16000,
+        "frames": 33623,
+        "duration_seconds": 2.1014375,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.583892822265625,
+        "rms": 0.07906211101998276,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "prefix_remember",
+      "text": "Please remember this word:",
+      "text_sha256": "be03fd8dadc650e388c9b2f53b7ad5695f0c39c89073598ec900340cf13684ea",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/prefix_remember.wav",
+        "file_sha256": "5cb4ae6547701c119df843cf4fa5c7d71e13e682fc80bf080db526d7d315b59b",
+        "pcm_float32_sha256": "39dd7cbfc707b7cc902eac475054d16ab7605ea765934105fde511310c0ebf3e",
+        "sample_rate": 22050,
+        "frames": 48128,
+        "duration_seconds": 2.182675736961451,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.576934814453125,
+        "rms": 0.09861398926409787
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/prefix_remember.wav",
+        "file_sha256": "8612a668433296ac7704746cedb4480b8a1ea73c976ff8e16c41ec9159b89d5a",
+        "pcm_float32_sha256": "2e3d6cd8d96886a406e7962f4293b5c6257e674edcc8600c7b97bec9ef9b431f",
+        "sample_rate": 16000,
+        "frames": 34923,
+        "duration_seconds": 2.1826875,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.57623291015625,
+        "rms": 0.09826884571123701,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_remember",
+      "text": "What was that word?",
+      "text_sha256": "303aead5f883ea94d3b934ccf305efab35d50fb7c8ff5a6ec7c68933055d7e72",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/suffix_remember.wav",
+        "file_sha256": "b7672c3e4f855d207361378a03378b60e2ce834a7b6db7286beb78c2fe1ae611",
+        "pcm_float32_sha256": "7231dea5338588e11e1b8b35f5ad664f21d06014bffd76484f23487b26b8860e",
+        "sample_rate": 22050,
+        "frames": 38656,
+        "duration_seconds": 1.7531065759637188,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.792694091796875,
+        "rms": 0.10214240479046567
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/suffix_remember.wav",
+        "file_sha256": "9b524b7f6da1e586d156de8f1bb0570b23581f23be1725f4f3283d3f78a56aa4",
+        "pcm_float32_sha256": "2c3ed3929907a664cb5991cb13dc88bdd1b4243f05821823a05e00220b750dde",
+        "sample_rate": 16000,
+        "frames": 28050,
+        "duration_seconds": 1.753125,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.7918701171875,
+        "rms": 0.10202349139588468,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_animal_cat",
+      "text": "cat",
+      "text_sha256": "77af778b51abd4a3c51c5ddd97204a9c3ae614ebccb75a606c3b6865aed6744e",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/word_animal_cat.wav",
+        "file_sha256": "e1b4ddebd80bab5915ac0c9e0cf9d1248dbf043b374ab273212ed7560bbeab8c",
+        "pcm_float32_sha256": "d8afc949e2fb950042a999fc09581fc80290496843f84b0695cacea88c966067",
+        "sample_rate": 22050,
+        "frames": 18432,
+        "duration_seconds": 0.8359183673469388,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.524444580078125,
+        "rms": 0.05565666419044013
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/word_animal_cat.wav",
+        "file_sha256": "faadd263debcf18e7dfaf5fd6736a2378d300c9455c28e02c34529bb488644f3",
+        "pcm_float32_sha256": "1fb1120b16c8be397c40f92c173ef6b965c42288e352f6def2949e0a84209d6c",
+        "sample_rate": 16000,
+        "frames": 13375,
+        "duration_seconds": 0.8359375,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.5260009765625,
+        "rms": 0.05564910610245041,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_animal_dog",
+      "text": "dog",
+      "text_sha256": "cd6357efdd966de8c0cb2f876cc89ec74ce35f0968e11743987084bd42fb8944",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/word_animal_dog.wav",
+        "file_sha256": "8875830b747f0ba6f3934bd023833669a80fdfb10d25682b36fe5c22c3985a1d",
+        "pcm_float32_sha256": "d3221be4810b12d9539bffda6771c04e2f7c707a98a77b076cdce05fb1b05b5e",
+        "sample_rate": 22050,
+        "frames": 21248,
+        "duration_seconds": 0.9636281179138322,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.603424072265625,
+        "rms": 0.08749035527221341
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/word_animal_dog.wav",
+        "file_sha256": "810ff1dd931d6ed2381c94a1dce5631c3b2593b6c26429408db2b6134ad2353c",
+        "pcm_float32_sha256": "145cf60d1b5b3d23191fa911995e30b11bbaf9e8804e08068e86240bfb1cd8bb",
+        "sample_rate": 16000,
+        "frames": 15419,
+        "duration_seconds": 0.9636875,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.602142333984375,
+        "rms": 0.08747297663717953,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_weekday_Monday",
+      "text": "Monday",
+      "text_sha256": "6a00dfc1dc867e8454c2c8856e1512d9bf02a76710e3411c0972aec886c76c61",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/word_weekday_Monday.wav",
+        "file_sha256": "b1363a511ef53a7265fb5d51ef29054b03446ce5e8b5079122e1d51d44b5fd75",
+        "pcm_float32_sha256": "b7055d6f6c86c1e07302a937cdd9a2ee80b528b0fa1e4bf9384ca32adb014371",
+        "sample_rate": 22050,
+        "frames": 23296,
+        "duration_seconds": 1.0565079365079366,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.54473876953125,
+        "rms": 0.07706201065969662
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/word_weekday_Monday.wav",
+        "file_sha256": "07770cfa140f568e45a2f02a1a08a5d57e81a541951331b946612042f6557ce9",
+        "pcm_float32_sha256": "02f612210d123cbcab8750736ec56723b9a7ff389125f6781450ef3d0a2c5769",
+        "sample_rate": 16000,
+        "frames": 16905,
+        "duration_seconds": 1.0565625,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.54547119140625,
+        "rms": 0.07704169423946233,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_weekday_Friday",
+      "text": "Friday",
+      "text_sha256": "e21f3f372a46d4be7b49f6809fc91baefeadae004af06485518e124a142c0271",
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/piper/word_weekday_Friday.wav",
+        "file_sha256": "e032e4e74c7c84381e47c412a67ce14741c4d953febceedde362f1e6628c4f9d",
+        "pcm_float32_sha256": "18323994a6f3e2bab482c3e164db0727671b3a3aa71f376a5e76a1fcc4d229b6",
+        "sample_rate": 22050,
+        "frames": 20480,
+        "duration_seconds": 0.9287981859410431,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.55340576171875,
+        "rms": 0.06936038300710314
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/piper/word_weekday_Friday.wav",
+        "file_sha256": "fa734b36f9d5a0edbbe9fa8cb222fe12c302356397edda87d7605e23f94c024d",
+        "pcm_float32_sha256": "2565d7f963aa5ae505b4c06d5527f987da97a0c612a28857337ab2642642e02d",
+        "sample_rate": 16000,
+        "frames": 14861,
+        "duration_seconds": 0.9288125,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.544586181640625,
+        "rms": 0.06935145172559587,
+        "resample_up": 320,
+        "resample_down": 441,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "prefix_chosen",
+      "text": "The word I chose is",
+      "text_sha256": "721acdb7369f5e95c97c3de6ec3d8bedded76efcda1a3283b94aac593117a04c",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/prefix_chosen.wav",
+        "file_sha256": "f7cb430d337c047e34cfe2973c8cda2e6db63597963dd8acae62f5d2d013f83e",
+        "pcm_float32_sha256": "f03a174f5eea95f73c6f78a802fb68f1e7408956f0298a1a5eb31e6952d27e50",
+        "sample_rate": 24000,
+        "frames": 48000,
+        "duration_seconds": 2.0,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.5133482813835144,
+        "rms": 0.06205988346125758
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/prefix_chosen.wav",
+        "file_sha256": "3934308aee5228f645efd8c318ba7194ba81b886515d43d85d7c32b9cac6985d",
+        "pcm_float32_sha256": "f95073590a14fe0a441a1f0be4186538b084cd9725a8a5bf8a06e0bb55b6f530",
+        "sample_rate": 16000,
+        "frames": 32000,
+        "duration_seconds": 2.0,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.5009765625,
+        "rms": 0.06120751755011983,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_chosen",
+      "text": "Tell me the word I chose.",
+      "text_sha256": "ab1afa86c216f6879574c4aa08da755514c1aee0aaeda7bdbafc082855fea905",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/suffix_chosen.wav",
+        "file_sha256": "ed438b1218762544bc05d03205c0c808261202ff1e4703a02ecc233c5f5b2dc2",
+        "pcm_float32_sha256": "adb14d00d1372e965fb55068968e4b1ce76feb10a99b71fbc0c28d1f0ed03210",
+        "sample_rate": 24000,
+        "frames": 51600,
+        "duration_seconds": 2.15,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.43392619490623474,
+        "rms": 0.06917826706371809
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/suffix_chosen.wav",
+        "file_sha256": "d27582c6d2a1e50421eca29a00f0b9a95ba012b7129be952bc49f9b1b60566f2",
+        "pcm_float32_sha256": "0a7cd975214d8380e2c2d981bacf19d1a4619731a01895caa346d562ae72282d",
+        "sample_rate": 16000,
+        "frames": 34400,
+        "duration_seconds": 2.15,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.4161376953125,
+        "rms": 0.06815290210168037,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "prefix_remember",
+      "text": "Please remember this word:",
+      "text_sha256": "be03fd8dadc650e388c9b2f53b7ad5695f0c39c89073598ec900340cf13684ea",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/prefix_remember.wav",
+        "file_sha256": "4327d76e7d2d0ec76acc3b0f7bf4e4b51e66b84e1a247de44d1173de8771d115",
+        "pcm_float32_sha256": "960476c427a7d795c0c4457b5e939a16847f33b07be9223850e34fad1c649c1d",
+        "sample_rate": 24000,
+        "frames": 52800,
+        "duration_seconds": 2.2,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.45341944694519043,
+        "rms": 0.06238672693884435
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/prefix_remember.wav",
+        "file_sha256": "48d5f1c6ca75ac94adb8a80c9520acc827b85cdf6354f6dcd097ce794ecda98e",
+        "pcm_float32_sha256": "d2101030c5374ad6186710c393dd2dee5723003bbcce150a10831108cfeb34c1",
+        "sample_rate": 16000,
+        "frames": 35200,
+        "duration_seconds": 2.2,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.450225830078125,
+        "rms": 0.06102878652214965,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "suffix_remember",
+      "text": "What was that word?",
+      "text_sha256": "303aead5f883ea94d3b934ccf305efab35d50fb7c8ff5a6ec7c68933055d7e72",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/suffix_remember.wav",
+        "file_sha256": "6ac89d24cfc556939ee070d9f1aa4bc0abba74829f267057a5c14cd66a29b280",
+        "pcm_float32_sha256": "4172a8320e690a0b16228931cd9eb7d19139d0c43fba4d07dcd3142e092f2f83",
+        "sample_rate": 24000,
+        "frames": 43800,
+        "duration_seconds": 1.825,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.5661841034889221,
+        "rms": 0.06660955356821892
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/suffix_remember.wav",
+        "file_sha256": "5b331748c9305312e20741ca2c60784f38e73fe62caf38a0b93cbbd2219651d7",
+        "pcm_float32_sha256": "283bec80c95a40ac01fb0ddc05462345e1b52900b203b08ed06d4c1498cafd93",
+        "sample_rate": 16000,
+        "frames": 29200,
+        "duration_seconds": 1.825,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.541229248046875,
+        "rms": 0.06466021158823294,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_animal_cat",
+      "text": "cat",
+      "text_sha256": "77af778b51abd4a3c51c5ddd97204a9c3ae614ebccb75a606c3b6865aed6744e",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/word_animal_cat.wav",
+        "file_sha256": "3b14e2d08da961bf5f9459690d39721e0591e34fb80dbe1714a60181a5cbed44",
+        "pcm_float32_sha256": "a985972201a9b0ace819bdd38d67694e09ad3db41358ed9c907829739cfdc1b7",
+        "sample_rate": 24000,
+        "frames": 28800,
+        "duration_seconds": 1.2,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.2778816819190979,
+        "rms": 0.044373641482569726
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/word_animal_cat.wav",
+        "file_sha256": "54f690b4bb738f745d5f9fcc60b0185b19e585ebef2e208d5aeb415b4994361c",
+        "pcm_float32_sha256": "5bd53d12ac8bb0ef310e16608c6698fb6614a4814f859b009a24d089dd7e633a",
+        "sample_rate": 16000,
+        "frames": 19200,
+        "duration_seconds": 1.2,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.264495849609375,
+        "rms": 0.04412231997796705,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_animal_dog",
+      "text": "dog",
+      "text_sha256": "cd6357efdd966de8c0cb2f876cc89ec74ce35f0968e11743987084bd42fb8944",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/word_animal_dog.wav",
+        "file_sha256": "17dba6bdbcc73057f0176e9dcda25082baf6087cc8ea8d7f53a818c2eb552e36",
+        "pcm_float32_sha256": "f7182e1dd3cd6cce5c5d87696042480a800b15bb3bee11d12b5aea7d0a81195a",
+        "sample_rate": 24000,
+        "frames": 31800,
+        "duration_seconds": 1.325,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.42884087562561035,
+        "rms": 0.050010063550032
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/word_animal_dog.wav",
+        "file_sha256": "d097dc9bd18862058ea17437a710dab7639be518a4c0adacca668f17bd7ceb2b",
+        "pcm_float32_sha256": "126592d172dac9d29954d63fec4144acff85e855f458b8ed9a4049f4f629474e",
+        "sample_rate": 16000,
+        "frames": 21200,
+        "duration_seconds": 1.325,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.425445556640625,
+        "rms": 0.049698023087739046,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_weekday_Monday",
+      "text": "Monday",
+      "text_sha256": "6a00dfc1dc867e8454c2c8856e1512d9bf02a76710e3411c0972aec886c76c61",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/word_weekday_Monday.wav",
+        "file_sha256": "0f0a5a5320c74acf52301c0756d8cfd25bd01fda4d7fc394712b245b17dbb5e8",
+        "pcm_float32_sha256": "87ca4dc8d01094219858a65fb977af932c4d21b5cfe431dac75c7e627c79a9d6",
+        "sample_rate": 24000,
+        "frames": 35400,
+        "duration_seconds": 1.475,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.39683982729911804,
+        "rms": 0.06003898307413635
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/word_weekday_Monday.wav",
+        "file_sha256": "1ff4dd1d02f92f5b5dcb6a14470f9ef6064cadf16a4be360dc690f73655ed756",
+        "pcm_float32_sha256": "a1bb7d315cbab56caf431f2e2bd2332b2fc2b98930cf133fe985487c033e2407",
+        "sample_rate": 16000,
+        "frames": 23600,
+        "duration_seconds": 1.475,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.3929443359375,
+        "rms": 0.05981767537309143,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    },
+    {
+      "fragment_id": "word_weekday_Friday",
+      "text": "Friday",
+      "text_sha256": "e21f3f372a46d4be7b49f6809fc91baefeadae004af06485518e124a142c0271",
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "raw": {
+        "path": "eval/heldout_flow/stimuli_v1/raw/kokoro/word_weekday_Friday.wav",
+        "file_sha256": "eb2e0596dcc1679e3d3f3397fda140d4fe9bcef55a1fb171576090d7a708e848",
+        "pcm_float32_sha256": "336d1454a96ce89dd731062694ad6a9536a06a8c3e5a34819a47e8ce9b3ccc78",
+        "sample_rate": 24000,
+        "frames": 36000,
+        "duration_seconds": 1.5,
+        "channels": 1,
+        "subtype": "FLOAT",
+        "peak": 0.4437867999076843,
+        "rms": 0.05148738134072918
+      },
+      "processed": {
+        "path": "eval/heldout_flow/stimuli_v1/processed/kokoro/word_weekday_Friday.wav",
+        "file_sha256": "045482b20825a172dc2753980782972e334b4ecbc5831f55443f7103fd33bd94",
+        "pcm_float32_sha256": "c06992382d3a2193a0b62e580647b848c73f873c98d881a7568a68655544e559",
+        "sample_rate": 16000,
+        "frames": 24000,
+        "duration_seconds": 1.5,
+        "channels": 1,
+        "subtype": "PCM_16",
+        "peak": 0.437530517578125,
+        "rms": 0.050628858573567644,
+        "resample_up": 2,
+        "resample_down": 3,
+        "pre_quantization_clip_count": 0
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "animal",
+      "phrasing_id": "chosen",
+      "words": [
+        "cat",
+        "dog"
+      ],
+      "word_slot_start_sample": 30527,
+      "word_slot_end_sample_exclusive": 45946,
+      "word_slot_start_seconds": 1.9079375,
+      "word_slot_end_seconds": 2.871625,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "cat": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_animal_chosen_cat.wav",
+          "file_sha256": "061a27f49c331bca56bf1cc939e3f581e573e3cbc928261b2505968b61be3036",
+          "pcm_int16_sha256": "c21b5d602ac7e508e1c7ec99ac3e7218b22ff1567bef5c6b99cbfbbcf8277e6a",
+          "frames": 81489,
+          "duration_seconds": 5.0930625,
+          "word_fragment_frames": 13375,
+          "peak_int16": 19133,
+          "spoken_script": "The word I chose is cat. Tell me the word I chose."
+        },
+        "dog": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_animal_chosen_dog.wav",
+          "file_sha256": "e4dd299b6148c6cc09d9ffe72934b178de085e4d6fddebabd1d2ebaa7b402ad2",
+          "pcm_int16_sha256": "7442bb46e8e26dbd5f09ebc207c3fbcef8e23def58b91b160cc411287bcfeb29",
+          "frames": 81489,
+          "duration_seconds": 5.0930625,
+          "word_fragment_frames": 15419,
+          "peak_int16": 19731,
+          "spoken_script": "The word I chose is dog. Tell me the word I chose."
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "animal",
+      "phrasing_id": "remember",
+      "words": [
+        "cat",
+        "dog"
+      ],
+      "word_slot_start_sample": 36843,
+      "word_slot_end_sample_exclusive": 52262,
+      "word_slot_start_seconds": 2.3026875,
+      "word_slot_end_seconds": 3.266375,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "cat": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_animal_remember_cat.wav",
+          "file_sha256": "aae2ccdf91d526b85cb10ce50cfdc7852a1ff413b7de68a5c90575f506a428fb",
+          "pcm_int16_sha256": "77d8f3dbfe85bd8c3b2c3e105ccb2bc7d1bc4b309a9d4f9c5970ffb87b86d9ff",
+          "frames": 82232,
+          "duration_seconds": 5.1395,
+          "word_fragment_frames": 13375,
+          "peak_int16": 25948,
+          "spoken_script": "Please remember this word: cat. What was that word?"
+        },
+        "dog": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_animal_remember_dog.wav",
+          "file_sha256": "d239587e9513edf3a013a893e8e81f5983139fc738a968f152821bc611a48b6f",
+          "pcm_int16_sha256": "470c231d97351aecb5652b84cf74ccea3c85f4d3bad86e5d080bb94340b0e127",
+          "frames": 82232,
+          "duration_seconds": 5.1395,
+          "word_fragment_frames": 15419,
+          "peak_int16": 25948,
+          "spoken_script": "Please remember this word: dog. What was that word?"
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "weekday",
+      "phrasing_id": "chosen",
+      "words": [
+        "Monday",
+        "Friday"
+      ],
+      "word_slot_start_sample": 30527,
+      "word_slot_end_sample_exclusive": 47432,
+      "word_slot_start_seconds": 1.9079375,
+      "word_slot_end_seconds": 2.9645,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "Monday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_weekday_chosen_monday.wav",
+          "file_sha256": "04c3898e88e0cb0c5930ced6c1f9d163489b125c893c5a9df257c238e9596f39",
+          "pcm_int16_sha256": "900230e3b9d836a3e182321f0923b7e3519566e5f6630fb3ea4c201c19b89181",
+          "frames": 82975,
+          "duration_seconds": 5.1859375,
+          "word_fragment_frames": 16905,
+          "peak_int16": 19133,
+          "spoken_script": "The word I chose is Monday. Tell me the word I chose."
+        },
+        "Friday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_weekday_chosen_friday.wav",
+          "file_sha256": "70c51712b27985cdbcba48845c93894b3a534ab123a10570ec08a74b55cd44f7",
+          "pcm_int16_sha256": "abfd04092c56fda97c8c12279acc4e0f66e0c705b1f818204975742a4e08366e",
+          "frames": 82975,
+          "duration_seconds": 5.1859375,
+          "word_fragment_frames": 14861,
+          "peak_int16": 19133,
+          "spoken_script": "The word I chose is Friday. Tell me the word I chose."
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "pair_id": "weekday",
+      "phrasing_id": "remember",
+      "words": [
+        "Monday",
+        "Friday"
+      ],
+      "word_slot_start_sample": 36843,
+      "word_slot_end_sample_exclusive": 53748,
+      "word_slot_start_seconds": 2.3026875,
+      "word_slot_end_seconds": 3.35925,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "Monday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_weekday_remember_monday.wav",
+          "file_sha256": "8851845eae96c657d525f5f7b1660c976433c9e14bd447a12abc4c8d361a7142",
+          "pcm_int16_sha256": "a8452cd4f9fb4ce372f190e214977cf83c0b1bd0696bd642348348387e329206",
+          "frames": 83718,
+          "duration_seconds": 5.232375,
+          "word_fragment_frames": 16905,
+          "peak_int16": 25948,
+          "spoken_script": "Please remember this word: Monday. What was that word?"
+        },
+        "Friday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/piper_weekday_remember_friday.wav",
+          "file_sha256": "fade44fae69d5dfd25b812e03413cceab8d325bc746ebf8ef87948ff4fee390c",
+          "pcm_int16_sha256": "3c96bc91ab540a635d649053ec61c59ee1a8087c7015fd2546388fcb175a7305",
+          "frames": 83718,
+          "duration_seconds": 5.232375,
+          "word_fragment_frames": 14861,
+          "peak_int16": 25948,
+          "spoken_script": "Please remember this word: Friday. What was that word?"
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "animal",
+      "phrasing_id": "chosen",
+      "words": [
+        "cat",
+        "dog"
+      ],
+      "word_slot_start_sample": 33920,
+      "word_slot_end_sample_exclusive": 55120,
+      "word_slot_start_seconds": 2.12,
+      "word_slot_end_seconds": 3.445,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "cat": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_animal_chosen_cat.wav",
+          "file_sha256": "dca6d8f4394b5e849ea2ea340895d2ba1b1ca8869a41652048a1eb50b4ed034a",
+          "pcm_int16_sha256": "8320250d8f453b5a2a25b450a2abd354725c28c71d48cd24b80a625ec6e1ee0e",
+          "frames": 91440,
+          "duration_seconds": 5.715,
+          "word_fragment_frames": 19200,
+          "peak_int16": 16416,
+          "spoken_script": "The word I chose is cat. Tell me the word I chose."
+        },
+        "dog": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_animal_chosen_dog.wav",
+          "file_sha256": "abf879792d2f282f47e59c256cab8dfde79ada0354d738962f9b4b453539bbf9",
+          "pcm_int16_sha256": "d474fad9ac6f088be1662f3e76ea8f51ec67f5583446087659aa429d6c9f7137",
+          "frames": 91440,
+          "duration_seconds": 5.715,
+          "word_fragment_frames": 21200,
+          "peak_int16": 16416,
+          "spoken_script": "The word I chose is dog. Tell me the word I chose."
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "animal",
+      "phrasing_id": "remember",
+      "words": [
+        "cat",
+        "dog"
+      ],
+      "word_slot_start_sample": 37120,
+      "word_slot_end_sample_exclusive": 58320,
+      "word_slot_start_seconds": 2.32,
+      "word_slot_end_seconds": 3.645,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "cat": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_animal_remember_cat.wav",
+          "file_sha256": "84d4147d5940aaf9aaa03139744211eff0e45c6bbec0d961cfcf610cf73bcc79",
+          "pcm_int16_sha256": "5bfecabdf9646e79b159eb52afdda9a46607759f2e5f3cf353b2329d383a225a",
+          "frames": 89440,
+          "duration_seconds": 5.59,
+          "word_fragment_frames": 19200,
+          "peak_int16": 17735,
+          "spoken_script": "Please remember this word: cat. What was that word?"
+        },
+        "dog": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_animal_remember_dog.wav",
+          "file_sha256": "2eda50d05c1fb43296682e64c8c630feb17fd33191707d87b79edfc229687dd0",
+          "pcm_int16_sha256": "302d6578584af0f84bf4e5890b2ac1ed1388f64150ed42d536a4bb5dd5b84d63",
+          "frames": 89440,
+          "duration_seconds": 5.59,
+          "word_fragment_frames": 21200,
+          "peak_int16": 17735,
+          "spoken_script": "Please remember this word: dog. What was that word?"
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "weekday",
+      "phrasing_id": "chosen",
+      "words": [
+        "Monday",
+        "Friday"
+      ],
+      "word_slot_start_sample": 33920,
+      "word_slot_end_sample_exclusive": 57920,
+      "word_slot_start_seconds": 2.12,
+      "word_slot_end_seconds": 3.62,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "Monday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_weekday_chosen_monday.wav",
+          "file_sha256": "65c8b819489c9f9ef631470189b8910b50b35d1af0e5c013ae016acf18e70d66",
+          "pcm_int16_sha256": "4fea8aa4da5970d088a906c64eeed855e44b549bcf374d27ab9f5912f3db61b5",
+          "frames": 94240,
+          "duration_seconds": 5.89,
+          "word_fragment_frames": 23600,
+          "peak_int16": 16416,
+          "spoken_script": "The word I chose is Monday. Tell me the word I chose."
+        },
+        "Friday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_weekday_chosen_friday.wav",
+          "file_sha256": "f49793ded98f27084bcc0430dc656ce6c9005d196ac49279a6e4b6be6d2f9aad",
+          "pcm_int16_sha256": "ff8567a6932656fbd9446a82d333261ad527fe9da6bea7a8c163aebaf7afcdcf",
+          "frames": 94240,
+          "duration_seconds": 5.89,
+          "word_fragment_frames": 24000,
+          "peak_int16": 16416,
+          "spoken_script": "The word I chose is Friday. Tell me the word I chose."
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "voice": "af_bella",
+      "pair_id": "weekday",
+      "phrasing_id": "remember",
+      "words": [
+        "Monday",
+        "Friday"
+      ],
+      "word_slot_start_sample": 37120,
+      "word_slot_end_sample_exclusive": 61120,
+      "word_slot_start_seconds": 2.32,
+      "word_slot_end_seconds": 3.82,
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "Monday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_weekday_remember_monday.wav",
+          "file_sha256": "937dd03f18313cd01275c3dda6718f2d03bf04a0e7aafa42a48e932907e025c4",
+          "pcm_int16_sha256": "be869d5de0208c0ff664f72f058873f372899ed09967ef6c591646128c2f718b",
+          "frames": 92240,
+          "duration_seconds": 5.765,
+          "word_fragment_frames": 23600,
+          "peak_int16": 17735,
+          "spoken_script": "Please remember this word: Monday. What was that word?"
+        },
+        "Friday": {
+          "path": "eval/heldout_flow/stimuli_v1/clips/kokoro_weekday_remember_friday.wav",
+          "file_sha256": "731e5d75b5a0c4215eff62b315cc6efb3b1ada3e1e042e415faa32006a2ad609",
+          "pcm_int16_sha256": "7cf7b9c62543bcf0dbe637a110cf87325cfc527f2346dec50f4beb40fdd77ac5",
+          "frames": 92240,
+          "duration_seconds": 5.765,
+          "word_fragment_frames": 24000,
+          "peak_int16": 17735,
+          "spoken_script": "Please remember this word: Friday. What was that word?"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "purpose": "fit-only input-feature splice, not a replayable waveform",
+  "plan_sha256": "8ba8db2627f37cae5b59e87e403428f000ef141d2a3bda95a1b26038a9ae6e0e",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "results": [
+    {
+      "engine": "piper",
+      "base": "red",
+      "donor": "blue",
+      "base_audio_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_audio_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "valid_mel_frames": 311,
+      "word_adjacent_mel_start": 108,
+      "word_adjacent_mel_end_exclusive": 173,
+      "changed_frames_outside_interval_bf16": 218,
+      "max_abs_difference_outside_interval_bf16": 0.06640625,
+      "clean_base": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "clean_donor": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "word_only": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.0625,
+        "hook_calls": 0
+      },
+      "outside_only": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.25,
+        "hook_calls": 0
+      }
+    },
+    {
+      "engine": "piper",
+      "base": "blue",
+      "donor": "red",
+      "base_audio_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "donor_audio_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "valid_mel_frames": 311,
+      "word_adjacent_mel_start": 108,
+      "word_adjacent_mel_end_exclusive": 173,
+      "changed_frames_outside_interval_bf16": 218,
+      "max_abs_difference_outside_interval_bf16": 0.06640625,
+      "clean_base": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.3125,
+        "hook_calls": 0
+      },
+      "clean_donor": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.4375,
+        "hook_calls": 0
+      },
+      "word_only": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -4.25,
+        "hook_calls": 0
+      },
+      "outside_only": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 4.0625,
+        "hook_calls": 0
+      }
+    },
+    {
+      "engine": "kokoro",
+      "base": "red",
+      "donor": "blue",
+      "base_audio_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+      "donor_audio_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+      "valid_mel_frames": 637,
+      "word_adjacent_mel_start": 219,
+      "word_adjacent_mel_end_exclusive": 388,
+      "changed_frames_outside_interval_bf16": 348,
+      "max_abs_difference_outside_interval_bf16": 0.0390625,
+      "clean_base": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "clean_donor": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "word_only": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0625,
+        "hook_calls": 0
+      },
+      "outside_only": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.3125,
+        "hook_calls": 0
+      }
+    },
+    {
+      "engine": "kokoro",
+      "base": "blue",
+      "donor": "red",
+      "base_audio_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+      "donor_audio_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+      "valid_mel_frames": 637,
+      "word_adjacent_mel_start": 219,
+      "word_adjacent_mel_end_exclusive": 388,
+      "changed_frames_outside_interval_bf16": 348,
+      "max_abs_difference_outside_interval_bf16": 0.0390625,
+      "clean_base": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 5.75,
+        "hook_calls": 0
+      },
+      "clean_donor": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.6875,
+        "hook_calls": 0
+      },
+      "word_only": {
+        "new_token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": -5.3125,
+        "hook_calls": 0
+      },
+      "outside_only": {
+        "new_token_ids": [
+          10331,
+          151645
+        ],
+        "answer": "Blue",
+        "stopped_on_eos": true,
+        "first_reply_blue_minus_red_logit": 6.0625,
+        "hook_calls": 0
+      }
+    }
+  ]
+}

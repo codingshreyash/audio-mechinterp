@@ -1,0 +1,18 @@
+{
+  "status": "fixed_before_thinker_residual_patch_results",
+  "purpose": "Trace the fit-only red/blue audio contrast into the Omni Thinker residual stream",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "layers": [0, 17, 35],
+  "hook": "post-block Thinker language_model.layers[layer] residual; patch the full-prompt prefill call only, leave one-token decode calls unchanged",
+  "audio_position_rule": "projected connector rows whose nominal center lies in fixed waveform word slot, mapped through row_map audio_placeholder_token_position",
+  "conditions": ["word_audio_placeholder_donor_swap", "all_audio_placeholders_donor_swap", "wrong_chunk_audio_placeholders_donor_swap", "self_word_patch", "five_equal_norm_random_word_patches", "terminal_position_donor_swap"],
+  "random_seeds": [101, 102, 103, 104, 105],
+  "primary_endpoint": "complete answer equals donor color with normal EOS",
+  "secondary_endpoint": "first-reply-token Blue(10331)-Red(6033) logit margin",
+  "interpretation_limit": "Residual states at audio placeholders already mix prior context; a terminal-position swap is a broad positive control, not a word-local mechanism. A final-block audio-position swap should not affect its already-computed terminal state."
+}

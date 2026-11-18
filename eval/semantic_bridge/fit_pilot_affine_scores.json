@@ -1,0 +1,5080 @@
+{
+  "purpose": "fit-only exploratory readout plumbing check; no held-out claim",
+  "render_manifest_sha256": "aabfe2060d2f295b80faca77fcaddbaa088913f60e2adb59bf01f384983c20e0",
+  "lens_checkpoint_sha256": "caa1f346247ee0c0c5cb39a09bcd5a51acf564e287e2dd0d4b7c9c02f7c2ba78",
+  "anchor_audio_sha256": "c1317b32eab0c56e86d29f3ead175e72fc57410cd92f0dae338022d1b34ef99e",
+  "semantic_ids_uint32le_sha256": "03910c8e7e6c66aca614867f024bcb7d72041b2c21c659b34ed35e0340cc2718",
+  "scorable_manifest_sha256": "926e53ed66a9f5162e1981a786cd2e51231a273a5ce4b1713c3dea7fd10ac1a8",
+  "system_prompt": "Continue the user's text naturally. Do not explain your continuation.",
+  "source_layers": [
+    0,
+    17
+  ],
+  "target_layer": 35,
+  "records": [
+    {
+      "item_id": "association:interview",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 57,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 94461,
+                      "semantic_rank": 86895
+                    },
+                    "17": {
+                      "full_vocab_rank": 125337,
+                      "semantic_rank": 115835
+                    }
+                  },
+                  "full_min_rank": 94461,
+                  "semantic_min_rank": 86895
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 95965,
+                      "semantic_rank": 89402
+                    },
+                    "17": {
+                      "full_vocab_rank": 98922,
+                      "semantic_rank": 91856
+                    }
+                  },
+                  "full_min_rank": 95965,
+                  "semantic_min_rank": 89402
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 5954,
+                      "semantic_rank": 5389
+                    },
+                    "17": {
+                      "full_vocab_rank": 6300,
+                      "semantic_rank": 5710
+                    }
+                  },
+                  "full_min_rank": 5954,
+                  "semantic_min_rank": 5389
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    },
+                    "17": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    }
+                  },
+                  "full_min_rank": 5730,
+                  "semantic_min_rank": 5175
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 204,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 61373,
+                      "semantic_rank": 56542
+                    },
+                    "17": {
+                      "full_vocab_rank": 119446,
+                      "semantic_rank": 110234
+                    }
+                  },
+                  "full_min_rank": 61373,
+                  "semantic_min_rank": 56542
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 97177,
+                      "semantic_rank": 90087
+                    },
+                    "17": {
+                      "full_vocab_rank": 92107,
+                      "semantic_rank": 85358
+                    }
+                  },
+                  "full_min_rank": 92107,
+                  "semantic_min_rank": 85358
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    },
+                    "17": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    }
+                  },
+                  "full_min_rank": 5730,
+                  "semantic_min_rank": 5175
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    },
+                    "17": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    }
+                  },
+                  "full_min_rank": 5730,
+                  "semantic_min_rank": 5175
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 260,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 68120,
+                      "semantic_rank": 62738
+                    },
+                    "17": {
+                      "full_vocab_rank": 118926,
+                      "semantic_rank": 109814
+                    }
+                  },
+                  "full_min_rank": 68120,
+                  "semantic_min_rank": 62738
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 93478,
+                      "semantic_rank": 86602
+                    },
+                    "17": {
+                      "full_vocab_rank": 87553,
+                      "semantic_rank": 80985
+                    }
+                  },
+                  "full_min_rank": 87553,
+                  "semantic_min_rank": 80985
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 5682,
+                      "semantic_rank": 5130
+                    },
+                    "17": {
+                      "full_vocab_rank": 5661,
+                      "semantic_rank": 5096
+                    }
+                  },
+                  "full_min_rank": 5661,
+                  "semantic_min_rank": 5096
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:interview",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "interview": {
+                  "candidate_ids": [
+                    7128,
+                    31467,
+                    61334
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    },
+                    "17": {
+                      "full_vocab_rank": 5730,
+                      "semantic_rank": 5175
+                    }
+                  },
+                  "full_min_rank": 5730,
+                  "semantic_min_rank": 5175
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "association:prohibition",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 55,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 126538,
+                      "semantic_rank": 117227
+                    },
+                    "17": {
+                      "full_vocab_rank": 92313,
+                      "semantic_rank": 84623
+                    }
+                  },
+                  "full_min_rank": 92313,
+                  "semantic_min_rank": 84623
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 53434,
+                      "semantic_rank": 49493
+                    },
+                    "17": {
+                      "full_vocab_rank": 45866,
+                      "semantic_rank": 42321
+                    }
+                  },
+                  "full_min_rank": 45866,
+                  "semantic_min_rank": 42321
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 123684,
+                      "semantic_rank": 115339
+                    },
+                    "17": {
+                      "full_vocab_rank": 121189,
+                      "semantic_rank": 113085
+                    }
+                  },
+                  "full_min_rank": 121189,
+                  "semantic_min_rank": 113085
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 122907,
+                      "semantic_rank": 114581
+                    },
+                    "17": {
+                      "full_vocab_rank": 122907,
+                      "semantic_rank": 114581
+                    }
+                  },
+                  "full_min_rank": 122907,
+                  "semantic_min_rank": 114581
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 200,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 135501,
+                      "semantic_rank": 125888
+                    },
+                    "17": {
+                      "full_vocab_rank": 94341,
+                      "semantic_rank": 86349
+                    }
+                  },
+                  "full_min_rank": 94341,
+                  "semantic_min_rank": 86349
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 42533,
+                      "semantic_rank": 39067
+                    },
+                    "17": {
+                      "full_vocab_rank": 45681,
+                      "semantic_rank": 42102
+                    }
+                  },
+                  "full_min_rank": 42533,
+                  "semantic_min_rank": 39067
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 122925,
+                      "semantic_rank": 114591
+                    },
+                    "17": {
+                      "full_vocab_rank": 121543,
+                      "semantic_rank": 113352
+                    }
+                  },
+                  "full_min_rank": 121543,
+                  "semantic_min_rank": 113352
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 122907,
+                      "semantic_rank": 114581
+                    },
+                    "17": {
+                      "full_vocab_rank": 122907,
+                      "semantic_rank": 114581
+                    }
+                  },
+                  "full_min_rank": 122907,
+                  "semantic_min_rank": 114581
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 253,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 137848,
+                      "semantic_rank": 128132
+                    },
+                    "17": {
+                      "full_vocab_rank": 103407,
+                      "semantic_rank": 94985
+                    }
+                  },
+                  "full_min_rank": 103407,
+                  "semantic_min_rank": 94985
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 40986,
+                      "semantic_rank": 37725
+                    },
+                    "17": {
+                      "full_vocab_rank": 46572,
+                      "semantic_rank": 42796
+                    }
+                  },
+                  "full_min_rank": 40986,
+                  "semantic_min_rank": 37725
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 122830,
+                      "semantic_rank": 114518
+                    },
+                    "17": {
+                      "full_vocab_rank": 121373,
+                      "semantic_rank": 113146
+                    }
+                  },
+                  "full_min_rank": 121373,
+                  "semantic_min_rank": 113146
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:prohibition",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "prohibition": {
+                  "candidate_ids": [
+                    49867
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 122907,
+                      "semantic_rank": 114581
+                    },
+                    "17": {
+                      "full_vocab_rank": 122907,
+                      "semantic_rank": 114581
+                    }
+                  },
+                  "full_min_rank": 122907,
+                  "semantic_min_rank": 114581
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "association:code-h",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 57,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 86869,
+                      "semantic_rank": 79830
+                    },
+                    "17": {
+                      "full_vocab_rank": 147301,
+                      "semantic_rank": 137076
+                    }
+                  },
+                  "full_min_rank": 86869,
+                  "semantic_min_rank": 79830
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 25540,
+                      "semantic_rank": 23398
+                    },
+                    "17": {
+                      "full_vocab_rank": 61132,
+                      "semantic_rank": 56576
+                    }
+                  },
+                  "full_min_rank": 25540,
+                  "semantic_min_rank": 23398
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 19328,
+                      "semantic_rank": 17882
+                    },
+                    "17": {
+                      "full_vocab_rank": 18458,
+                      "semantic_rank": 17068
+                    }
+                  },
+                  "full_min_rank": 18458,
+                  "semantic_min_rank": 17068
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 19318,
+                      "semantic_rank": 17831
+                    },
+                    "17": {
+                      "full_vocab_rank": 19318,
+                      "semantic_rank": 17831
+                    }
+                  },
+                  "full_min_rank": 19318,
+                  "semantic_min_rank": 17831
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 200,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 53768,
+                      "semantic_rank": 49531
+                    },
+                    "17": {
+                      "full_vocab_rank": 147280,
+                      "semantic_rank": 137065
+                    }
+                  },
+                  "full_min_rank": 53768,
+                  "semantic_min_rank": 49531
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26079,
+                      "semantic_rank": 23753
+                    },
+                    "17": {
+                      "full_vocab_rank": 67409,
+                      "semantic_rank": 62350
+                    }
+                  },
+                  "full_min_rank": 26079,
+                  "semantic_min_rank": 23753
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 19688,
+                      "semantic_rank": 18177
+                    },
+                    "17": {
+                      "full_vocab_rank": 19874,
+                      "semantic_rank": 18372
+                    }
+                  },
+                  "full_min_rank": 19688,
+                  "semantic_min_rank": 18177
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 19318,
+                      "semantic_rank": 17831
+                    },
+                    "17": {
+                      "full_vocab_rank": 19318,
+                      "semantic_rank": 17831
+                    }
+                  },
+                  "full_min_rank": 19318,
+                  "semantic_min_rank": 17831
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 253,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 70410,
+                      "semantic_rank": 64738
+                    },
+                    "17": {
+                      "full_vocab_rank": 147043,
+                      "semantic_rank": 136839
+                    }
+                  },
+                  "full_min_rank": 70410,
+                  "semantic_min_rank": 64738
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 25446,
+                      "semantic_rank": 23242
+                    },
+                    "17": {
+                      "full_vocab_rank": 70751,
+                      "semantic_rank": 65331
+                    }
+                  },
+                  "full_min_rank": 25446,
+                  "semantic_min_rank": 23242
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 19353,
+                      "semantic_rank": 17875
+                    },
+                    "17": {
+                      "full_vocab_rank": 20634,
+                      "semantic_rank": 19061
+                    }
+                  },
+                  "full_min_rank": 19353,
+                  "semantic_min_rank": 17875
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:code-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "code": {
+                  "candidate_ids": [
+                    1851,
+                    2038,
+                    2078,
+                    6119
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 19318,
+                      "semantic_rank": 17831
+                    },
+                    "17": {
+                      "full_vocab_rank": 19318,
+                      "semantic_rank": 17831
+                    }
+                  },
+                  "full_min_rank": 19318,
+                  "semantic_min_rank": 17831
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "association:lonely",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 45,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 113510,
+                      "semantic_rank": 104812
+                    },
+                    "17": {
+                      "full_vocab_rank": 145299,
+                      "semantic_rank": 135117
+                    }
+                  },
+                  "full_min_rank": 113510,
+                  "semantic_min_rank": 104812
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 49730,
+                      "semantic_rank": 46088
+                    },
+                    "17": {
+                      "full_vocab_rank": 43645,
+                      "semantic_rank": 40258
+                    }
+                  },
+                  "full_min_rank": 43645,
+                  "semantic_min_rank": 40258
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26335,
+                      "semantic_rank": 24490
+                    },
+                    "17": {
+                      "full_vocab_rank": 25504,
+                      "semantic_rank": 23685
+                    }
+                  },
+                  "full_min_rank": 25504,
+                  "semantic_min_rank": 23685
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26520,
+                      "semantic_rank": 24618
+                    },
+                    "17": {
+                      "full_vocab_rank": 26520,
+                      "semantic_rank": 24618
+                    }
+                  },
+                  "full_min_rank": 26520,
+                  "semantic_min_rank": 24618
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 132,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 87107,
+                      "semantic_rank": 80487
+                    },
+                    "17": {
+                      "full_vocab_rank": 146797,
+                      "semantic_rank": 136585
+                    }
+                  },
+                  "full_min_rank": 87107,
+                  "semantic_min_rank": 80487
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 52846,
+                      "semantic_rank": 48696
+                    },
+                    "17": {
+                      "full_vocab_rank": 45256,
+                      "semantic_rank": 41638
+                    }
+                  },
+                  "full_min_rank": 45256,
+                  "semantic_min_rank": 41638
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26438,
+                      "semantic_rank": 24542
+                    },
+                    "17": {
+                      "full_vocab_rank": 25417,
+                      "semantic_rank": 23562
+                    }
+                  },
+                  "full_min_rank": 25417,
+                  "semantic_min_rank": 23562
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26520,
+                      "semantic_rank": 24618
+                    },
+                    "17": {
+                      "full_vocab_rank": 26520,
+                      "semantic_rank": 24618
+                    }
+                  },
+                  "full_min_rank": 26520,
+                  "semantic_min_rank": 24618
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 170,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 95593,
+                      "semantic_rank": 88164
+                    },
+                    "17": {
+                      "full_vocab_rank": 145829,
+                      "semantic_rank": 135640
+                    }
+                  },
+                  "full_min_rank": 95593,
+                  "semantic_min_rank": 88164
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 57927,
+                      "semantic_rank": 53430
+                    },
+                    "17": {
+                      "full_vocab_rank": 57061,
+                      "semantic_rank": 52576
+                    }
+                  },
+                  "full_min_rank": 57061,
+                  "semantic_min_rank": 52576
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26729,
+                      "semantic_rank": 24816
+                    },
+                    "17": {
+                      "full_vocab_rank": 28242,
+                      "semantic_rank": 26241
+                    }
+                  },
+                  "full_min_rank": 26729,
+                  "semantic_min_rank": 24816
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:lonely",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "lonely": {
+                  "candidate_ids": [
+                    39566,
+                    85723
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26520,
+                      "semantic_rank": 24618
+                    },
+                    "17": {
+                      "full_vocab_rank": 26520,
+                      "semantic_rank": 24618
+                    }
+                  },
+                  "full_min_rank": 26520,
+                  "semantic_min_rank": 24618
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "association:light-h",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 63,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 78767,
+                      "semantic_rank": 72170
+                    },
+                    "17": {
+                      "full_vocab_rank": 129237,
+                      "semantic_rank": 119577
+                    }
+                  },
+                  "full_min_rank": 78767,
+                  "semantic_min_rank": 72170
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 25204,
+                      "semantic_rank": 23095
+                    },
+                    "17": {
+                      "full_vocab_rank": 5578,
+                      "semantic_rank": 5058
+                    }
+                  },
+                  "full_min_rank": 5578,
+                  "semantic_min_rank": 5058
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 799,
+                      "semantic_rank": 727
+                    },
+                    "17": {
+                      "full_vocab_rank": 743,
+                      "semantic_rank": 677
+                    }
+                  },
+                  "full_min_rank": 743,
+                  "semantic_min_rank": 677
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 716
+                    },
+                    "17": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 716
+                    }
+                  },
+                  "full_min_rank": 791,
+                  "semantic_min_rank": 716
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 220,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 40974,
+                      "semantic_rank": 37719
+                    },
+                    "17": {
+                      "full_vocab_rank": 116296,
+                      "semantic_rank": 107233
+                    }
+                  },
+                  "full_min_rank": 40974,
+                  "semantic_min_rank": 37719
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 22986,
+                      "semantic_rank": 20970
+                    },
+                    "17": {
+                      "full_vocab_rank": 4771,
+                      "semantic_rank": 4292
+                    }
+                  },
+                  "full_min_rank": 4771,
+                  "semantic_min_rank": 4292
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 814,
+                      "semantic_rank": 737
+                    },
+                    "17": {
+                      "full_vocab_rank": 798,
+                      "semantic_rank": 723
+                    }
+                  },
+                  "full_min_rank": 798,
+                  "semantic_min_rank": 723
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 716
+                    },
+                    "17": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 716
+                    }
+                  },
+                  "full_min_rank": 791,
+                  "semantic_min_rank": 716
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 264,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 34013,
+                      "semantic_rank": 31425
+                    },
+                    "17": {
+                      "full_vocab_rank": 112531,
+                      "semantic_rank": 103676
+                    }
+                  },
+                  "full_min_rank": 34013,
+                  "semantic_min_rank": 31425
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 18203,
+                      "semantic_rank": 16507
+                    },
+                    "17": {
+                      "full_vocab_rank": 4104,
+                      "semantic_rank": 3643
+                    }
+                  },
+                  "full_min_rank": 4104,
+                  "semantic_min_rank": 3643
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 788,
+                      "semantic_rank": 714
+                    },
+                    "17": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 713
+                    }
+                  },
+                  "full_min_rank": 788,
+                  "semantic_min_rank": 713
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:light-h",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "light": {
+                  "candidate_ids": [
+                    3100,
+                    4145,
+                    8658,
+                    13911
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 716
+                    },
+                    "17": {
+                      "full_vocab_rank": 791,
+                      "semantic_rank": 716
+                    }
+                  },
+                  "full_min_rank": 791,
+                  "semantic_min_rank": 716
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "association:desert",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 59,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 62502,
+                      "semantic_rank": 57092
+                    },
+                    "17": {
+                      "full_vocab_rank": 84699,
+                      "semantic_rank": 77588
+                    }
+                  },
+                  "full_min_rank": 62502,
+                  "semantic_min_rank": 57092
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 70565,
+                      "semantic_rank": 65565
+                    },
+                    "17": {
+                      "full_vocab_rank": 60196,
+                      "semantic_rank": 55691
+                    }
+                  },
+                  "full_min_rank": 60196,
+                  "semantic_min_rank": 55691
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 67586,
+                      "semantic_rank": 63497
+                    },
+                    "17": {
+                      "full_vocab_rank": 69640,
+                      "semantic_rank": 65467
+                    }
+                  },
+                  "full_min_rank": 67586,
+                  "semantic_min_rank": 63497
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 66657,
+                      "semantic_rank": 62587
+                    },
+                    "17": {
+                      "full_vocab_rank": 66657,
+                      "semantic_rank": 62587
+                    }
+                  },
+                  "full_min_rank": 66657,
+                  "semantic_min_rank": 62587
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 197,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 91921,
+                      "semantic_rank": 84730
+                    },
+                    "17": {
+                      "full_vocab_rank": 88314,
+                      "semantic_rank": 80890
+                    }
+                  },
+                  "full_min_rank": 88314,
+                  "semantic_min_rank": 80890
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 60489,
+                      "semantic_rank": 55777
+                    },
+                    "17": {
+                      "full_vocab_rank": 51128,
+                      "semantic_rank": 47145
+                    }
+                  },
+                  "full_min_rank": 51128,
+                  "semantic_min_rank": 47145
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 66544,
+                      "semantic_rank": 62480
+                    },
+                    "17": {
+                      "full_vocab_rank": 65869,
+                      "semantic_rank": 61832
+                    }
+                  },
+                  "full_min_rank": 65869,
+                  "semantic_min_rank": 61832
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 66657,
+                      "semantic_rank": 62587
+                    },
+                    "17": {
+                      "full_vocab_rank": 66657,
+                      "semantic_rank": 62587
+                    }
+                  },
+                  "full_min_rank": 66657,
+                  "semantic_min_rank": 62587
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 241,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 94183,
+                      "semantic_rank": 86816
+                    },
+                    "17": {
+                      "full_vocab_rank": 99795,
+                      "semantic_rank": 91582
+                    }
+                  },
+                  "full_min_rank": 94183,
+                  "semantic_min_rank": 86816
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 59754,
+                      "semantic_rank": 55139
+                    },
+                    "17": {
+                      "full_vocab_rank": 54158,
+                      "semantic_rank": 49763
+                    }
+                  },
+                  "full_min_rank": 54158,
+                  "semantic_min_rank": 49763
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 66789,
+                      "semantic_rank": 62708
+                    },
+                    "17": {
+                      "full_vocab_rank": 64645,
+                      "semantic_rank": 60631
+                    }
+                  },
+                  "full_min_rank": 64645,
+                  "semantic_min_rank": 60631
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "association:desert",
+              "category": "association",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "desert": {
+                  "candidate_ids": [
+                    23603,
+                    42186
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 66657,
+                      "semantic_rank": 62587
+                    },
+                    "17": {
+                      "full_vocab_rank": 66657,
+                      "semantic_rank": 62587
+                    }
+                  },
+                  "full_min_rank": 66657,
+                  "semantic_min_rank": 62587
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "multihop:pred-valentines-prevmonth",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 40,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 59525,
+                      "semantic_rank": 54588
+                    },
+                    "17": {
+                      "full_vocab_rank": 87386,
+                      "semantic_rank": 80612
+                    }
+                  },
+                  "full_min_rank": 59525,
+                  "semantic_min_rank": 54588
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 58232,
+                      "semantic_rank": 54079
+                    },
+                    "17": {
+                      "full_vocab_rank": 53124,
+                      "semantic_rank": 49018
+                    }
+                  },
+                  "full_min_rank": 53124,
+                  "semantic_min_rank": 49018
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 8740,
+                      "semantic_rank": 7979
+                    },
+                    "17": {
+                      "full_vocab_rank": 9272,
+                      "semantic_rank": 8444
+                    }
+                  },
+                  "full_min_rank": 8740,
+                  "semantic_min_rank": 7979
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 8642,
+                      "semantic_rank": 7857
+                    },
+                    "17": {
+                      "full_vocab_rank": 8642,
+                      "semantic_rank": 7857
+                    }
+                  },
+                  "full_min_rank": 8642,
+                  "semantic_min_rank": 7857
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 125,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 56994,
+                      "semantic_rank": 52538
+                    },
+                    "17": {
+                      "full_vocab_rank": 97378,
+                      "semantic_rank": 89487
+                    }
+                  },
+                  "full_min_rank": 56994,
+                  "semantic_min_rank": 52538
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 54609,
+                      "semantic_rank": 50347
+                    },
+                    "17": {
+                      "full_vocab_rank": 43583,
+                      "semantic_rank": 40025
+                    }
+                  },
+                  "full_min_rank": 43583,
+                  "semantic_min_rank": 40025
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 8578,
+                      "semantic_rank": 7814
+                    },
+                    "17": {
+                      "full_vocab_rank": 8847,
+                      "semantic_rank": 8060
+                    }
+                  },
+                  "full_min_rank": 8578,
+                  "semantic_min_rank": 7814
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 8642,
+                      "semantic_rank": 7857
+                    },
+                    "17": {
+                      "full_vocab_rank": 8642,
+                      "semantic_rank": 7857
+                    }
+                  },
+                  "full_min_rank": 8642,
+                  "semantic_min_rank": 7857
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 159,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 55302,
+                      "semantic_rank": 50909
+                    },
+                    "17": {
+                      "full_vocab_rank": 100676,
+                      "semantic_rank": 92550
+                    }
+                  },
+                  "full_min_rank": 55302,
+                  "semantic_min_rank": 50909
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 50963,
+                      "semantic_rank": 46934
+                    },
+                    "17": {
+                      "full_vocab_rank": 40265,
+                      "semantic_rank": 36899
+                    }
+                  },
+                  "full_min_rank": 40265,
+                  "semantic_min_rank": 36899
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 8593,
+                      "semantic_rank": 7816
+                    },
+                    "17": {
+                      "full_vocab_rank": 8613,
+                      "semantic_rank": 7832
+                    }
+                  },
+                  "full_min_rank": 8593,
+                  "semantic_min_rank": 7816
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:pred-valentines-prevmonth",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "February": {
+                  "candidate_ids": [
+                    7400,
+                    32777
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 8642,
+                      "semantic_rank": 7857
+                    },
+                    "17": {
+                      "full_vocab_rank": 8642,
+                      "semantic_rank": 7857
+                    }
+                  },
+                  "full_min_rank": 8642,
+                  "semantic_min_rank": 7857
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "multihop:dual-photosynthesis-opposite",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 42,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 78898,
+                      "semantic_rank": 72412
+                    },
+                    "17": {
+                      "full_vocab_rank": 54799,
+                      "semantic_rank": 50610
+                    }
+                  },
+                  "full_min_rank": 54799,
+                  "semantic_min_rank": 50610
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 302,
+                      "semantic_rank": 275
+                    },
+                    "17": {
+                      "full_vocab_rank": 119,
+                      "semantic_rank": 105
+                    }
+                  },
+                  "full_min_rank": 119,
+                  "semantic_min_rank": 105
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1123,
+                      "semantic_rank": 1013
+                    },
+                    "17": {
+                      "full_vocab_rank": 1234,
+                      "semantic_rank": 1106
+                    }
+                  },
+                  "full_min_rank": 1123,
+                  "semantic_min_rank": 1013
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1134,
+                      "semantic_rank": 1018
+                    },
+                    "17": {
+                      "full_vocab_rank": 1134,
+                      "semantic_rank": 1018
+                    }
+                  },
+                  "full_min_rank": 1134,
+                  "semantic_min_rank": 1018
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 124,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 64815,
+                      "semantic_rank": 59845
+                    },
+                    "17": {
+                      "full_vocab_rank": 59842,
+                      "semantic_rank": 54753
+                    }
+                  },
+                  "full_min_rank": 59842,
+                  "semantic_min_rank": 54753
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 389,
+                      "semantic_rank": 343
+                    },
+                    "17": {
+                      "full_vocab_rank": 177,
+                      "semantic_rank": 151
+                    }
+                  },
+                  "full_min_rank": 177,
+                  "semantic_min_rank": 151
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1133,
+                      "semantic_rank": 1016
+                    },
+                    "17": {
+                      "full_vocab_rank": 1141,
+                      "semantic_rank": 1024
+                    }
+                  },
+                  "full_min_rank": 1133,
+                  "semantic_min_rank": 1016
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1134,
+                      "semantic_rank": 1018
+                    },
+                    "17": {
+                      "full_vocab_rank": 1134,
+                      "semantic_rank": 1018
+                    }
+                  },
+                  "full_min_rank": 1134,
+                  "semantic_min_rank": 1018
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 152,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 57997,
+                      "semantic_rank": 53512
+                    },
+                    "17": {
+                      "full_vocab_rank": 65624,
+                      "semantic_rank": 59919
+                    }
+                  },
+                  "full_min_rank": 57997,
+                  "semantic_min_rank": 53512
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 309,
+                      "semantic_rank": 276
+                    },
+                    "17": {
+                      "full_vocab_rank": 152,
+                      "semantic_rank": 130
+                    }
+                  },
+                  "full_min_rank": 152,
+                  "semantic_min_rank": 130
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1120,
+                      "semantic_rank": 1005
+                    },
+                    "17": {
+                      "full_vocab_rank": 1121,
+                      "semantic_rank": 1005
+                    }
+                  },
+                  "full_min_rank": 1120,
+                  "semantic_min_rank": 1005
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:dual-photosynthesis-opposite",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "day": {
+                  "candidate_ids": [
+                    1292,
+                    1899,
+                    6059,
+                    10159
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1134,
+                      "semantic_rank": 1018
+                    },
+                    "17": {
+                      "full_vocab_rank": 1134,
+                      "semantic_rank": 1018
+                    }
+                  },
+                  "full_min_rank": 1134,
+                  "semantic_min_rank": 1018
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "multihop:planet-3-moons",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 43,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 65526,
+                      "semantic_rank": 60007
+                    },
+                    "17": {
+                      "full_vocab_rank": 75942,
+                      "semantic_rank": 69845
+                    }
+                  },
+                  "full_min_rank": 65526,
+                  "semantic_min_rank": 60007
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 12826,
+                      "semantic_rank": 11686
+                    },
+                    "17": {
+                      "full_vocab_rank": 29356,
+                      "semantic_rank": 26917
+                    }
+                  },
+                  "full_min_rank": 12826,
+                  "semantic_min_rank": 11686
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 36291,
+                      "semantic_rank": 33904
+                    },
+                    "17": {
+                      "full_vocab_rank": 42162,
+                      "semantic_rank": 39376
+                    }
+                  },
+                  "full_min_rank": 36291,
+                  "semantic_min_rank": 33904
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 36072,
+                      "semantic_rank": 33640
+                    },
+                    "17": {
+                      "full_vocab_rank": 36072,
+                      "semantic_rank": 33640
+                    }
+                  },
+                  "full_min_rank": 36072,
+                  "semantic_min_rank": 33640
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 131,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 26370,
+                      "semantic_rank": 24468
+                    },
+                    "17": {
+                      "full_vocab_rank": 58710,
+                      "semantic_rank": 53647
+                    }
+                  },
+                  "full_min_rank": 26370,
+                  "semantic_min_rank": 24468
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 15433,
+                      "semantic_rank": 14013
+                    },
+                    "17": {
+                      "full_vocab_rank": 20780,
+                      "semantic_rank": 19033
+                    }
+                  },
+                  "full_min_rank": 15433,
+                  "semantic_min_rank": 14013
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 35776,
+                      "semantic_rank": 33372
+                    },
+                    "17": {
+                      "full_vocab_rank": 34853,
+                      "semantic_rank": 32523
+                    }
+                  },
+                  "full_min_rank": 34853,
+                  "semantic_min_rank": 32523
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 36072,
+                      "semantic_rank": 33640
+                    },
+                    "17": {
+                      "full_vocab_rank": 36072,
+                      "semantic_rank": 33640
+                    }
+                  },
+                  "full_min_rank": 36072,
+                  "semantic_min_rank": 33640
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 163,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 35484,
+                      "semantic_rank": 32871
+                    },
+                    "17": {
+                      "full_vocab_rank": 73620,
+                      "semantic_rank": 67285
+                    }
+                  },
+                  "full_min_rank": 35484,
+                  "semantic_min_rank": 32871
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 15226,
+                      "semantic_rank": 13829
+                    },
+                    "17": {
+                      "full_vocab_rank": 19281,
+                      "semantic_rank": 17620
+                    }
+                  },
+                  "full_min_rank": 15226,
+                  "semantic_min_rank": 13829
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 35479,
+                      "semantic_rank": 33088
+                    },
+                    "17": {
+                      "full_vocab_rank": 35092,
+                      "semantic_rank": 32759
+                    }
+                  },
+                  "full_min_rank": 35092,
+                  "semantic_min_rank": 32759
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:planet-3-moons",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "Earth": {
+                  "candidate_ids": [
+                    9237,
+                    9393,
+                    27541,
+                    43824
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 36072,
+                      "semantic_rank": 33640
+                    },
+                    "17": {
+                      "full_vocab_rank": 36072,
+                      "semantic_rank": 33640
+                    }
+                  },
+                  "full_min_rank": 36072,
+                  "semantic_min_rank": 33640
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "multihop:greatwall-ocean",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 42,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 23559,
+                      "semantic_rank": 21460
+                    },
+                    "17": {
+                      "full_vocab_rank": 23391,
+                      "semantic_rank": 21776
+                    }
+                  },
+                  "full_min_rank": 23391,
+                  "semantic_min_rank": 21460
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 29170,
+                      "semantic_rank": 26786
+                    },
+                    "17": {
+                      "full_vocab_rank": 41417,
+                      "semantic_rank": 38201
+                    }
+                  },
+                  "full_min_rank": 29170,
+                  "semantic_min_rank": 26786
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1095,
+                      "semantic_rank": 985
+                    },
+                    "17": {
+                      "full_vocab_rank": 1511,
+                      "semantic_rank": 1346
+                    }
+                  },
+                  "full_min_rank": 1095,
+                  "semantic_min_rank": 985
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1106,
+                      "semantic_rank": 992
+                    },
+                    "17": {
+                      "full_vocab_rank": 1106,
+                      "semantic_rank": 992
+                    }
+                  },
+                  "full_min_rank": 1106,
+                  "semantic_min_rank": 992
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 113,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 49566,
+                      "semantic_rank": 45747
+                    },
+                    "17": {
+                      "full_vocab_rank": 66383,
+                      "semantic_rank": 60856
+                    }
+                  },
+                  "full_min_rank": 49566,
+                  "semantic_min_rank": 45747
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 29080,
+                      "semantic_rank": 26683
+                    },
+                    "17": {
+                      "full_vocab_rank": 35068,
+                      "semantic_rank": 32166
+                    }
+                  },
+                  "full_min_rank": 29080,
+                  "semantic_min_rank": 26683
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1096,
+                      "semantic_rank": 984
+                    },
+                    "17": {
+                      "full_vocab_rank": 1207,
+                      "semantic_rank": 1082
+                    }
+                  },
+                  "full_min_rank": 1096,
+                  "semantic_min_rank": 984
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1106,
+                      "semantic_rank": 992
+                    },
+                    "17": {
+                      "full_vocab_rank": 1106,
+                      "semantic_rank": 992
+                    }
+                  },
+                  "full_min_rank": 1106,
+                  "semantic_min_rank": 992
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 155,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 48695,
+                      "semantic_rank": 44930
+                    },
+                    "17": {
+                      "full_vocab_rank": 63547,
+                      "semantic_rank": 58049
+                    }
+                  },
+                  "full_min_rank": 48695,
+                  "semantic_min_rank": 44930
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 31118,
+                      "semantic_rank": 28459
+                    },
+                    "17": {
+                      "full_vocab_rank": 31025,
+                      "semantic_rank": 28476
+                    }
+                  },
+                  "full_min_rank": 31025,
+                  "semantic_min_rank": 28459
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1101,
+                      "semantic_rank": 988
+                    },
+                    "17": {
+                      "full_vocab_rank": 1092,
+                      "semantic_rank": 978
+                    }
+                  },
+                  "full_min_rank": 1092,
+                  "semantic_min_rank": 978
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:greatwall-ocean",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "China": {
+                  "candidate_ids": [
+                    5616,
+                    22282,
+                    32525,
+                    80136
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 1106,
+                      "semantic_rank": 992
+                    },
+                    "17": {
+                      "full_vocab_rank": 1106,
+                      "semantic_rank": 992
+                    }
+                  },
+                  "full_min_rank": 1106,
+                  "semantic_min_rank": 992
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "multihop:violin-strings",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 42,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 146635,
+                      "semantic_rank": 136525
+                    },
+                    "17": {
+                      "full_vocab_rank": 130085,
+                      "semantic_rank": 120503
+                    }
+                  },
+                  "full_min_rank": 130085,
+                  "semantic_min_rank": 120503
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 54372,
+                      "semantic_rank": 50474
+                    },
+                    "17": {
+                      "full_vocab_rank": 62115,
+                      "semantic_rank": 57358
+                    }
+                  },
+                  "full_min_rank": 54372,
+                  "semantic_min_rank": 50474
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 50972,
+                      "semantic_rank": 47799
+                    },
+                    "17": {
+                      "full_vocab_rank": 50585,
+                      "semantic_rank": 47408
+                    }
+                  },
+                  "full_min_rank": 50585,
+                  "semantic_min_rank": 47408
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 52445,
+                      "semantic_rank": 49143
+                    },
+                    "17": {
+                      "full_vocab_rank": 52445,
+                      "semantic_rank": 49143
+                    }
+                  },
+                  "full_min_rank": 52445,
+                  "semantic_min_rank": 49143
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 117,
+          "final_logit_reconstruction_max_abs": 0.03125,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 147769,
+                      "semantic_rank": 137615
+                    },
+                    "17": {
+                      "full_vocab_rank": 121050,
+                      "semantic_rank": 111845
+                    }
+                  },
+                  "full_min_rank": 121050,
+                  "semantic_min_rank": 111845
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 65386,
+                      "semantic_rank": 60386
+                    },
+                    "17": {
+                      "full_vocab_rank": 62153,
+                      "semantic_rank": 57314
+                    }
+                  },
+                  "full_min_rank": 62153,
+                  "semantic_min_rank": 57314
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 51871,
+                      "semantic_rank": 48603
+                    },
+                    "17": {
+                      "full_vocab_rank": 51399,
+                      "semantic_rank": 48138
+                    }
+                  },
+                  "full_min_rank": 51399,
+                  "semantic_min_rank": 48138
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 52445,
+                      "semantic_rank": 49143
+                    },
+                    "17": {
+                      "full_vocab_rank": 52445,
+                      "semantic_rank": 49143
+                    }
+                  },
+                  "full_min_rank": 52445,
+                  "semantic_min_rank": 49143
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 145,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 146437,
+                      "semantic_rank": 136335
+                    },
+                    "17": {
+                      "full_vocab_rank": 125998,
+                      "semantic_rank": 116506
+                    }
+                  },
+                  "full_min_rank": 125998,
+                  "semantic_min_rank": 116506
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 62439,
+                      "semantic_rank": 57598
+                    },
+                    "17": {
+                      "full_vocab_rank": 56561,
+                      "semantic_rank": 51997
+                    }
+                  },
+                  "full_min_rank": 56561,
+                  "semantic_min_rank": 51997
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 51772,
+                      "semantic_rank": 48495
+                    },
+                    "17": {
+                      "full_vocab_rank": 49502,
+                      "semantic_rank": 46318
+                    }
+                  },
+                  "full_min_rank": 49502,
+                  "semantic_min_rank": 46318
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:violin-strings",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "violin": {
+                  "candidate_ids": [
+                    62037
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 52445,
+                      "semantic_rank": 49143
+                    },
+                    "17": {
+                      "full_vocab_rank": 52445,
+                      "semantic_rank": 49143
+                    }
+                  },
+                  "full_min_rank": 52445,
+                  "semantic_min_rank": 49143
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "item_id": "multihop:chem-photosynthesis-Z",
+      "modalities": [
+        {
+          "modality": "typed",
+          "engine": null,
+          "prompt_tokens": 42,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "raw_logit",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 58472,
+                      "semantic_rank": 53512
+                    },
+                    "17": {
+                      "full_vocab_rank": 55735,
+                      "semantic_rank": 51316
+                    }
+                  },
+                  "full_min_rank": 55735,
+                  "semantic_min_rank": 51316
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "audio_fitted_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 95073,
+                      "semantic_rank": 88684
+                    },
+                    "17": {
+                      "full_vocab_rank": 102206,
+                      "semantic_rank": 94956
+                    }
+                  },
+                  "full_min_rank": 95073,
+                  "semantic_min_rank": 88684
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "local_affine_jacobian",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 2409,
+                      "semantic_rank": 2160
+                    },
+                    "17": {
+                      "full_vocab_rank": 2737,
+                      "semantic_rank": 2453
+                    }
+                  },
+                  "full_min_rank": 2409,
+                  "semantic_min_rank": 2160
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "typed",
+              "method": "anchor_constant",
+              "audio_source": null,
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 2440,
+                      "semantic_rank": 2179
+                    },
+                    "17": {
+                      "full_vocab_rank": 2440,
+                      "semantic_rank": 2179
+                    }
+                  },
+                  "full_min_rank": 2440,
+                  "semantic_min_rank": 2179
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "piper",
+          "prompt_tokens": 140,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 22590,
+                      "semantic_rank": 21057
+                    },
+                    "17": {
+                      "full_vocab_rank": 60597,
+                      "semantic_rank": 55460
+                    }
+                  },
+                  "full_min_rank": 22590,
+                  "semantic_min_rank": 21057
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 82234,
+                      "semantic_rank": 76147
+                    },
+                    "17": {
+                      "full_vocab_rank": 105969,
+                      "semantic_rank": 98335
+                    }
+                  },
+                  "full_min_rank": 82234,
+                  "semantic_min_rank": 76147
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 2415,
+                      "semantic_rank": 2158
+                    },
+                    "17": {
+                      "full_vocab_rank": 2530,
+                      "semantic_rank": 2269
+                    }
+                  },
+                  "full_min_rank": 2415,
+                  "semantic_min_rank": 2158
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "piper",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 2440,
+                      "semantic_rank": 2179
+                    },
+                    "17": {
+                      "full_vocab_rank": 2440,
+                      "semantic_rank": 2179
+                    }
+                  },
+                  "full_min_rank": 2440,
+                  "semantic_min_rank": 2179
+                }
+              }
+            }
+          }
+        },
+        {
+          "modality": "audio",
+          "engine": "kokoro",
+          "prompt_tokens": 172,
+          "final_logit_reconstruction_max_abs": 0.015625,
+          "scores": {
+            "raw_logit": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "raw_logit",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 27389,
+                      "semantic_rank": 25326
+                    },
+                    "17": {
+                      "full_vocab_rank": 53538,
+                      "semantic_rank": 48919
+                    }
+                  },
+                  "full_min_rank": 27389,
+                  "semantic_min_rank": 25326
+                }
+              }
+            },
+            "audio_fitted_jacobian": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "audio_fitted_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 83592,
+                      "semantic_rank": 77387
+                    },
+                    "17": {
+                      "full_vocab_rank": 98268,
+                      "semantic_rank": 91135
+                    }
+                  },
+                  "full_min_rank": 83592,
+                  "semantic_min_rank": 77387
+                }
+              }
+            },
+            "local_affine_jacobian": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "local_affine_jacobian",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 2379,
+                      "semantic_rank": 2127
+                    },
+                    "17": {
+                      "full_vocab_rank": 2287,
+                      "semantic_rank": 2048
+                    }
+                  },
+                  "full_min_rank": 2287,
+                  "semantic_min_rank": 2048
+                }
+              }
+            },
+            "anchor_constant": {
+              "item_id": "multihop:chem-photosynthesis-Z",
+              "category": "multihop",
+              "split": "fit",
+              "modality": "audio",
+              "method": "anchor_constant",
+              "audio_source": "kokoro",
+              "layers": [
+                0,
+                17
+              ],
+              "labels": {
+                "oxygen": {
+                  "candidate_ids": [
+                    23552,
+                    86569
+                  ],
+                  "per_layer": {
+                    "0": {
+                      "full_vocab_rank": 2440,
+                      "semantic_rank": 2179
+                    },
+                    "17": {
+                      "full_vocab_rank": 2440,
+                      "semantic_rank": 2179
+                    }
+                  },
+                  "full_min_rank": 2440,
+                  "semantic_min_rank": 2179
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3092 @@
+{
+  "source": "released probe-swap",
+  "subset_selection": "four clean-top1 items from readout probe",
+  "band": [
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "scales": [
+    0.5,
+    1.0,
+    2.0,
+    4.0
+  ],
+  "null": "pencil",
+  "items": [
+    {
+      "name": "animal-nose-elephant",
+      "prompt": "Fact: The long flexible body part that the largest land animal uses to pick things up is called a",
+      "intermediate": "elephant",
+      "answer": "trunk",
+      "swap_to": "snake",
+      "swap_answer": "tongue",
+      "clean_top": " trunk",
+      "clean_answer_rank": 1,
+      "clean_swap_answer_rank": 8,
+      "clean_continuation": " trunk.  Inference: The largest",
+      "trials": [
+        {
+          "variant": "main",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " sn",
+          "answer_rank": 4,
+          "swap_answer_rank": 5,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.7247384786605835,
+              "median_clean_coordinate": 4.092784404754639
+            },
+            {
+              "layer": 13,
+              "cosine": 0.7206632494926453,
+              "median_clean_coordinate": 5.070349216461182
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7572180032730103,
+              "median_clean_coordinate": 5.957120418548584
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6926378011703491,
+              "median_clean_coordinate": 6.416015625
+            },
+            {
+              "layer": 16,
+              "cosine": 0.6349066495895386,
+              "median_clean_coordinate": 8.243608474731445
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " sn",
+          "answer_rank": 6,
+          "swap_answer_rank": 3,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.7247384786605835,
+              "median_clean_coordinate": 4.092784404754639
+            },
+            {
+              "layer": 13,
+              "cosine": 0.7206632494926453,
+              "median_clean_coordinate": 5.070349216461182
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7572180032730103,
+              "median_clean_coordinate": 5.957120418548584
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6926378011703491,
+              "median_clean_coordinate": 6.416015625
+            },
+            {
+              "layer": 16,
+              "cosine": 0.6349066495895386,
+              "median_clean_coordinate": 8.243608474731445
+            }
+          ],
+          "continuation": " snout.  Inference: The"
+        },
+        {
+          "variant": "main",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " tail",
+          "answer_rank": 7,
+          "swap_answer_rank": 3,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.7247384786605835,
+              "median_clean_coordinate": 4.092784404754639
+            },
+            {
+              "layer": 13,
+              "cosine": 0.7206632494926453,
+              "median_clean_coordinate": 5.070349216461182
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7572180032730103,
+              "median_clean_coordinate": 5.957120418548584
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6926378011703491,
+              "median_clean_coordinate": 6.416015625
+            },
+            {
+              "layer": 16,
+              "cosine": 0.6349066495895386,
+              "median_clean_coordinate": 8.243608474731445
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " tail",
+          "answer_rank": 8,
+          "swap_answer_rank": 4,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.7247384786605835,
+              "median_clean_coordinate": 4.092784404754639
+            },
+            {
+              "layer": 13,
+              "cosine": 0.7206632494926453,
+              "median_clean_coordinate": 5.070349216461182
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7572180032730103,
+              "median_clean_coordinate": 5.957120418548584
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6926378011703491,
+              "median_clean_coordinate": 6.416015625
+            },
+            {
+              "layer": 16,
+              "cosine": 0.6349066495895386,
+              "median_clean_coordinate": 8.243608474731445
+            }
+          ],
+          "continuation": " tail.  Conclusion: The largest land"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " trunk",
+          "target_surface": " tongue",
+          "next_token": " sn",
+          "answer_rank": 6,
+          "swap_answer_rank": 2,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.32600799202919006,
+              "median_clean_coordinate": 3.630009651184082
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3247775733470917,
+              "median_clean_coordinate": 3.6548213958740234
+            },
+            {
+              "layer": 14,
+              "cosine": 0.35492271184921265,
+              "median_clean_coordinate": 4.584118366241455
+            },
+            {
+              "layer": 15,
+              "cosine": 0.28049442172050476,
+              "median_clean_coordinate": 3.7972733974456787
+            },
+            {
+              "layer": 16,
+              "cosine": 0.26514747738838196,
+              "median_clean_coordinate": 6.062833786010742
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " trunk",
+          "target_surface": " tongue",
+          "next_token": " sn",
+          "answer_rank": 6,
+          "swap_answer_rank": 2,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.32600799202919006,
+              "median_clean_coordinate": 3.630009651184082
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3247775733470917,
+              "median_clean_coordinate": 3.6548213958740234
+            },
+            {
+              "layer": 14,
+              "cosine": 0.35492271184921265,
+              "median_clean_coordinate": 4.584118366241455
+            },
+            {
+              "layer": 15,
+              "cosine": 0.28049442172050476,
+              "median_clean_coordinate": 3.7972733974456787
+            },
+            {
+              "layer": 16,
+              "cosine": 0.26514747738838196,
+              "median_clean_coordinate": 6.062833786010742
+            }
+          ],
+          "continuation": " snout.  What is the correct"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " trunk",
+          "target_surface": " tongue",
+          "next_token": " tongue",
+          "answer_rank": 11,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.32600799202919006,
+              "median_clean_coordinate": 3.630009651184082
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3247775733470917,
+              "median_clean_coordinate": 3.6548213958740234
+            },
+            {
+              "layer": 14,
+              "cosine": 0.35492271184921265,
+              "median_clean_coordinate": 4.584118366241455
+            },
+            {
+              "layer": 15,
+              "cosine": 0.28049442172050476,
+              "median_clean_coordinate": 3.7972733974456787
+            },
+            {
+              "layer": 16,
+              "cosine": 0.26514747738838196,
+              "median_clean_coordinate": 6.062833786010742
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " trunk",
+          "target_surface": " tongue",
+          "next_token": " tongue",
+          "answer_rank": 20,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.32600799202919006,
+              "median_clean_coordinate": 3.630009651184082
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3247775733470917,
+              "median_clean_coordinate": 3.6548213958740234
+            },
+            {
+              "layer": 14,
+              "cosine": 0.35492271184921265,
+              "median_clean_coordinate": 4.584118366241455
+            },
+            {
+              "layer": 15,
+              "cosine": 0.28049442172050476,
+              "median_clean_coordinate": 3.7972733974456787
+            },
+            {
+              "layer": 16,
+              "cosine": 0.26514747738838196,
+              "median_clean_coordinate": 6.062833786010742
+            }
+          ],
+          "continuation": " tongue.  What is the average length"
+        },
+        {
+          "variant": "random_null",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " pencil",
+          "next_token": " tongue",
+          "answer_rank": 25,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6420515179634094,
+              "median_clean_coordinate": 7.230048179626465
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6353587508201599,
+              "median_clean_coordinate": 7.074950218200684
+            },
+            {
+              "layer": 14,
+              "cosine": 0.6763582229614258,
+              "median_clean_coordinate": 8.964231491088867
+            },
+            {
+              "layer": 15,
+              "cosine": 0.605302095413208,
+              "median_clean_coordinate": 7.446861267089844
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5239779949188232,
+              "median_clean_coordinate": 10.165497779846191
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " pencil",
+          "next_token": " tongue",
+          "answer_rank": 69,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6420515179634094,
+              "median_clean_coordinate": 7.230048179626465
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6353587508201599,
+              "median_clean_coordinate": 7.074950218200684
+            },
+            {
+              "layer": 14,
+              "cosine": 0.6763582229614258,
+              "median_clean_coordinate": 8.964231491088867
+            },
+            {
+              "layer": 15,
+              "cosine": 0.605302095413208,
+              "median_clean_coordinate": 7.446861267089844
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5239779949188232,
+              "median_clean_coordinate": 10.165497779846191
+            }
+          ],
+          "continuation": " tongue.  Conclusion: The largest land"
+        },
+        {
+          "variant": "random_null",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " pencil",
+          "next_token": " \"",
+          "answer_rank": 314,
+          "swap_answer_rank": 2,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6420515179634094,
+              "median_clean_coordinate": 7.230048179626465
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6353587508201599,
+              "median_clean_coordinate": 7.074950218200684
+            },
+            {
+              "layer": 14,
+              "cosine": 0.6763582229614258,
+              "median_clean_coordinate": 8.964231491088867
+            },
+            {
+              "layer": 15,
+              "cosine": 0.605302095413208,
+              "median_clean_coordinate": 7.446861267089844
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5239779949188232,
+              "median_clean_coordinate": 10.165497779846191
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " pencil",
+          "next_token": " pencil",
+          "answer_rank": 1072,
+          "swap_answer_rank": 22,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6420515179634094,
+              "median_clean_coordinate": 7.230048179626465
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6353587508201599,
+              "median_clean_coordinate": 7.074950218200684
+            },
+            {
+              "layer": 14,
+              "cosine": 0.6763582229614258,
+              "median_clean_coordinate": 8.964231491088867
+            },
+            {
+              "layer": 15,
+              "cosine": 0.605302095413208,
+              "median_clean_coordinate": 7.446861267089844
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5239779949188232,
+              "median_clean_coordinate": 10.165497779846191
+            }
+          ],
+          "continuation": " pencil.  Inference: The largest"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " elephant",
+          "next_token": " trunk",
+          "answer_rank": 1,
+          "swap_answer_rank": 8,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " elephant",
+          "next_token": " trunk",
+          "answer_rank": 1,
+          "swap_answer_rank": 8,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ],
+          "continuation": " trunk.  Inference: The largest"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " elephant",
+          "next_token": " trunk",
+          "answer_rank": 1,
+          "swap_answer_rank": 8,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " elephant",
+          "target_surface": " elephant",
+          "next_token": " trunk",
+          "answer_rank": 1,
+          "swap_answer_rank": 8,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ],
+          "continuation": " trunk.  Inference: The largest"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 0.5,
+          "band": [
+            0
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " trunk",
+          "answer_rank": 1,
+          "swap_answer_rank": 7,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.6139922738075256,
+              "median_clean_coordinate": 0.30186060070991516
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 1.0,
+          "band": [
+            0
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " trunk",
+          "answer_rank": 1,
+          "swap_answer_rank": 7,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.6139922738075256,
+              "median_clean_coordinate": 0.30186060070991516
+            }
+          ],
+          "continuation": " trunk.  Conclusion: The largest land"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 2.0,
+          "band": [
+            0
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " sn",
+          "answer_rank": 2,
+          "swap_answer_rank": 8,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.6139922738075256,
+              "median_clean_coordinate": 0.30186060070991516
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 4.0,
+          "band": [
+            0
+          ],
+          "source_surface": " elephant",
+          "target_surface": " snake",
+          "next_token": " sn",
+          "answer_rank": 3,
+          "swap_answer_rank": 9,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.6139922738075256,
+              "median_clean_coordinate": 0.30186060070991516
+            }
+          ],
+          "continuation": " snout.\n\nWhat is the relationship between"
+        }
+      ]
+    },
+    {
+      "name": "colosseum-currency",
+      "prompt": "Fact: The currency used in the country where the Colosseum stands is the ",
+      "intermediate": "Italy",
+      "answer": "Euro",
+      "swap_to": "Mexico",
+      "swap_answer": "peso",
+      "clean_top": " euro",
+      "clean_answer_rank": 1,
+      "clean_swap_answer_rank": 884,
+      "clean_continuation": " euro.  Inference: The Col",
+      "trials": [
+        {
+          "variant": "main",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " United",
+          "answer_rank": 20,
+          "swap_answer_rank": 9,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.3792778551578522,
+              "median_clean_coordinate": 4.291650295257568
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3780352473258972,
+              "median_clean_coordinate": 5.981335639953613
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4073491096496582,
+              "median_clean_coordinate": 4.9691996574401855
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3652704954147339,
+              "median_clean_coordinate": 5.322892665863037
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4211040437221527,
+              "median_clean_coordinate": 8.840582847595215
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " peso",
+          "answer_rank": 35,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.3792778551578522,
+              "median_clean_coordinate": 4.291650295257568
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3780352473258972,
+              "median_clean_coordinate": 5.981335639953613
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4073491096496582,
+              "median_clean_coordinate": 4.9691996574401855
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3652704954147339,
+              "median_clean_coordinate": 5.322892665863037
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4211040437221527,
+              "median_clean_coordinate": 8.840582847595215
+            }
+          ],
+          "continuation": " peso.  In the country where the"
+        },
+        {
+          "variant": "main",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " peso",
+          "answer_rank": 101,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.3792778551578522,
+              "median_clean_coordinate": 4.291650295257568
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3780352473258972,
+              "median_clean_coordinate": 5.981335639953613
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4073491096496582,
+              "median_clean_coordinate": 4.9691996574401855
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3652704954147339,
+              "median_clean_coordinate": 5.322892665863037
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4211040437221527,
+              "median_clean_coordinate": 8.840582847595215
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " Mexican",
+          "answer_rank": 44,
+          "swap_answer_rank": 2,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.3792778551578522,
+              "median_clean_coordinate": 4.291650295257568
+            },
+            {
+              "layer": 13,
+              "cosine": 0.3780352473258972,
+              "median_clean_coordinate": 5.981335639953613
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4073491096496582,
+              "median_clean_coordinate": 4.9691996574401855
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3652704954147339,
+              "median_clean_coordinate": 5.322892665863037
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4211040437221527,
+              "median_clean_coordinate": 8.840582847595215
+            }
+          ],
+          "continuation": " Mexican peso.  In the country where"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Euro",
+          "target_surface": " peso",
+          "next_token": " Italian",
+          "answer_rank": 2,
+          "swap_answer_rank": 841,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.12308349460363388,
+              "median_clean_coordinate": 2.863506555557251
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13483372330665588,
+              "median_clean_coordinate": 3.964813470840454
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14169788360595703,
+              "median_clean_coordinate": 4.754972457885742
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1175607442855835,
+              "median_clean_coordinate": 4.801894187927246
+            },
+            {
+              "layer": 16,
+              "cosine": 0.12309698760509491,
+              "median_clean_coordinate": 7.030739784240723
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Euro",
+          "target_surface": " peso",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 345,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.12308349460363388,
+              "median_clean_coordinate": 2.863506555557251
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13483372330665588,
+              "median_clean_coordinate": 3.964813470840454
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14169788360595703,
+              "median_clean_coordinate": 4.754972457885742
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1175607442855835,
+              "median_clean_coordinate": 4.801894187927246
+            },
+            {
+              "layer": 16,
+              "cosine": 0.12309698760509491,
+              "median_clean_coordinate": 7.030739784240723
+            }
+          ],
+          "continuation": " euro.  Inference: The Col"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Euro",
+          "target_surface": " peso",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 32,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.12308349460363388,
+              "median_clean_coordinate": 2.863506555557251
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13483372330665588,
+              "median_clean_coordinate": 3.964813470840454
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14169788360595703,
+              "median_clean_coordinate": 4.754972457885742
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1175607442855835,
+              "median_clean_coordinate": 4.801894187927246
+            },
+            {
+              "layer": 16,
+              "cosine": 0.12309698760509491,
+              "median_clean_coordinate": 7.030739784240723
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Euro",
+          "target_surface": " peso",
+          "next_token": " peso",
+          "answer_rank": 2,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.12308349460363388,
+              "median_clean_coordinate": 2.863506555557251
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13483372330665588,
+              "median_clean_coordinate": 3.964813470840454
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14169788360595703,
+              "median_clean_coordinate": 4.754972457885742
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1175607442855835,
+              "median_clean_coordinate": 4.801894187927246
+            },
+            {
+              "layer": 16,
+              "cosine": 0.12309698760509491,
+              "median_clean_coordinate": 7.030739784240723
+            }
+          ],
+          "continuation": " peso.  The currency used in the"
+        },
+        {
+          "variant": "random_null",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " pencil",
+          "next_token": " United",
+          "answer_rank": 42,
+          "swap_answer_rank": 88,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.13269996643066406,
+              "median_clean_coordinate": 4.449009895324707
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13218319416046143,
+              "median_clean_coordinate": 4.258137226104736
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14567355811595917,
+              "median_clean_coordinate": 4.3343071937561035
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1143602579832077,
+              "median_clean_coordinate": 5.207715034484863
+            },
+            {
+              "layer": 16,
+              "cosine": 0.09836867451667786,
+              "median_clean_coordinate": 7.423842906951904
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " pencil",
+          "next_token": "1",
+          "answer_rank": 59,
+          "swap_answer_rank": 88,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.13269996643066406,
+              "median_clean_coordinate": 4.449009895324707
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13218319416046143,
+              "median_clean_coordinate": 4.258137226104736
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14567355811595917,
+              "median_clean_coordinate": 4.3343071937561035
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1143602579832077,
+              "median_clean_coordinate": 5.207715034484863
+            },
+            {
+              "layer": 16,
+              "cosine": 0.09836867451667786,
+              "median_clean_coordinate": 7.423842906951904
+            }
+          ],
+          "continuation": "10000000"
+        },
+        {
+          "variant": "random_null",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " pencil",
+          "next_token": "2",
+          "answer_rank": 82,
+          "swap_answer_rank": 79,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.13269996643066406,
+              "median_clean_coordinate": 4.449009895324707
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13218319416046143,
+              "median_clean_coordinate": 4.258137226104736
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14567355811595917,
+              "median_clean_coordinate": 4.3343071937561035
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1143602579832077,
+              "median_clean_coordinate": 5.207715034484863
+            },
+            {
+              "layer": 16,
+              "cosine": 0.09836867451667786,
+              "median_clean_coordinate": 7.423842906951904
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " pencil",
+          "next_token": "1",
+          "answer_rank": 95,
+          "swap_answer_rank": 80,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.13269996643066406,
+              "median_clean_coordinate": 4.449009895324707
+            },
+            {
+              "layer": 13,
+              "cosine": 0.13218319416046143,
+              "median_clean_coordinate": 4.258137226104736
+            },
+            {
+              "layer": 14,
+              "cosine": 0.14567355811595917,
+              "median_clean_coordinate": 4.3343071937561035
+            },
+            {
+              "layer": 15,
+              "cosine": 0.1143602579832077,
+              "median_clean_coordinate": 5.207715034484863
+            },
+            {
+              "layer": 16,
+              "cosine": 0.09836867451667786,
+              "median_clean_coordinate": 7.423842906951904
+            }
+          ],
+          "continuation": "10000000"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Italy",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 884,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999997019767761
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Italy",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 884,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999997019767761
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ],
+          "continuation": " euro.  Inference: The Col"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Italy",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 884,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999997019767761
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Italy",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 884,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999997019767761
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ],
+          "continuation": " euro.  Inference: The Col"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 0.5,
+          "band": [
+            0
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 816,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.21304139494895935,
+              "median_clean_coordinate": 0.39044082164764404
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 1.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 718,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.21304139494895935,
+              "median_clean_coordinate": 0.39044082164764404
+            }
+          ],
+          "continuation": " euro.  In the country where the"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 2.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 505,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.21304139494895935,
+              "median_clean_coordinate": 0.39044082164764404
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 4.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Italy",
+          "target_surface": " Mexico",
+          "next_token": " Euro",
+          "answer_rank": 1,
+          "swap_answer_rank": 178,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.21304139494895935,
+              "median_clean_coordinate": 0.39044082164764404
+            }
+          ],
+          "continuation": " Euro.  What is the best way"
+        }
+      ]
+    },
+    {
+      "name": "person-firstname-darwin",
+      "prompt": "Fact: The first name of the naturalist who proposed evolution by natural selection was",
+      "intermediate": "Darwin",
+      "answer": "Charles",
+      "swap_to": "Einstein",
+      "swap_answer": "Albert",
+      "clean_top": " Charles",
+      "clean_answer_rank": 1,
+      "clean_swap_answer_rank": 74,
+      "clean_continuation": " Charles.\n\nFact: The first name of",
+      "trials": [
+        {
+          "variant": "main",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 41,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.4728231430053711,
+              "median_clean_coordinate": 5.453999996185303
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4718014597892761,
+              "median_clean_coordinate": 6.418349266052246
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5015798807144165,
+              "median_clean_coordinate": 5.7683424949646
+            },
+            {
+              "layer": 15,
+              "cosine": 0.43949201703071594,
+              "median_clean_coordinate": 7.1593217849731445
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4172397553920746,
+              "median_clean_coordinate": 9.649085998535156
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 29,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.4728231430053711,
+              "median_clean_coordinate": 5.453999996185303
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4718014597892761,
+              "median_clean_coordinate": 6.418349266052246
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5015798807144165,
+              "median_clean_coordinate": 5.7683424949646
+            },
+            {
+              "layer": 15,
+              "cosine": 0.43949201703071594,
+              "median_clean_coordinate": 7.1593217849731445
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4172397553920746,
+              "median_clean_coordinate": 9.649085998535156
+            }
+          ],
+          "continuation": " Charles.\n\nFact: The first name of"
+        },
+        {
+          "variant": "main",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Alfred",
+          "answer_rank": 5,
+          "swap_answer_rank": 2,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.4728231430053711,
+              "median_clean_coordinate": 5.453999996185303
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4718014597892761,
+              "median_clean_coordinate": 6.418349266052246
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5015798807144165,
+              "median_clean_coordinate": 5.7683424949646
+            },
+            {
+              "layer": 15,
+              "cosine": 0.43949201703071594,
+              "median_clean_coordinate": 7.1593217849731445
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4172397553920746,
+              "median_clean_coordinate": 9.649085998535156
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Albert",
+          "answer_rank": 125,
+          "swap_answer_rank": 1,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.4728231430053711,
+              "median_clean_coordinate": 5.453999996185303
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4718014597892761,
+              "median_clean_coordinate": 6.418349266052246
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5015798807144165,
+              "median_clean_coordinate": 5.7683424949646
+            },
+            {
+              "layer": 15,
+              "cosine": 0.43949201703071594,
+              "median_clean_coordinate": 7.1593217849731445
+            },
+            {
+              "layer": 16,
+              "cosine": 0.4172397553920746,
+              "median_clean_coordinate": 9.649085998535156
+            }
+          ],
+          "continuation": " Albert.  The second name of the"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Charles",
+          "target_surface": " Albert",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 51,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.928471565246582,
+              "median_clean_coordinate": 9.634456634521484
+            },
+            {
+              "layer": 13,
+              "cosine": 0.923495352268219,
+              "median_clean_coordinate": 8.6979398727417
+            },
+            {
+              "layer": 14,
+              "cosine": 0.9343346357345581,
+              "median_clean_coordinate": 8.689199447631836
+            },
+            {
+              "layer": 15,
+              "cosine": 0.9033373594284058,
+              "median_clean_coordinate": 6.598755359649658
+            },
+            {
+              "layer": 16,
+              "cosine": 0.8727320432662964,
+              "median_clean_coordinate": 7.782947063446045
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Charles",
+          "target_surface": " Albert",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 51,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.928471565246582,
+              "median_clean_coordinate": 9.634456634521484
+            },
+            {
+              "layer": 13,
+              "cosine": 0.923495352268219,
+              "median_clean_coordinate": 8.6979398727417
+            },
+            {
+              "layer": 14,
+              "cosine": 0.9343346357345581,
+              "median_clean_coordinate": 8.689199447631836
+            },
+            {
+              "layer": 15,
+              "cosine": 0.9033373594284058,
+              "median_clean_coordinate": 6.598755359649658
+            },
+            {
+              "layer": 16,
+              "cosine": 0.8727320432662964,
+              "median_clean_coordinate": 7.782947063446045
+            }
+          ],
+          "continuation": " Charles.\n\nFact: The first name of"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Charles",
+          "target_surface": " Albert",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 36,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.928471565246582,
+              "median_clean_coordinate": 9.634456634521484
+            },
+            {
+              "layer": 13,
+              "cosine": 0.923495352268219,
+              "median_clean_coordinate": 8.6979398727417
+            },
+            {
+              "layer": 14,
+              "cosine": 0.9343346357345581,
+              "median_clean_coordinate": 8.689199447631836
+            },
+            {
+              "layer": 15,
+              "cosine": 0.9033373594284058,
+              "median_clean_coordinate": 6.598755359649658
+            },
+            {
+              "layer": 16,
+              "cosine": 0.8727320432662964,
+              "median_clean_coordinate": 7.782947063446045
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Charles",
+          "target_surface": " Albert",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 17,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.928471565246582,
+              "median_clean_coordinate": 9.634456634521484
+            },
+            {
+              "layer": 13,
+              "cosine": 0.923495352268219,
+              "median_clean_coordinate": 8.6979398727417
+            },
+            {
+              "layer": 14,
+              "cosine": 0.9343346357345581,
+              "median_clean_coordinate": 8.689199447631836
+            },
+            {
+              "layer": 15,
+              "cosine": 0.9033373594284058,
+              "median_clean_coordinate": 6.598755359649658
+            },
+            {
+              "layer": 16,
+              "cosine": 0.8727320432662964,
+              "median_clean_coordinate": 7.782947063446045
+            }
+          ],
+          "continuation": " Charles.  The second name of the"
+        },
+        {
+          "variant": "random_null",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " pencil",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 21,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.415703684091568,
+              "median_clean_coordinate": 6.598103046417236
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4220544695854187,
+              "median_clean_coordinate": 5.208655834197998
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4596547484397888,
+              "median_clean_coordinate": 7.879721641540527
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3704846501350403,
+              "median_clean_coordinate": 9.94211483001709
+            },
+            {
+              "layer": 16,
+              "cosine": 0.31371790170669556,
+              "median_clean_coordinate": 11.210094451904297
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " pencil",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 13,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.415703684091568,
+              "median_clean_coordinate": 6.598103046417236
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4220544695854187,
+              "median_clean_coordinate": 5.208655834197998
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4596547484397888,
+              "median_clean_coordinate": 7.879721641540527
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3704846501350403,
+              "median_clean_coordinate": 9.94211483001709
+            },
+            {
+              "layer": 16,
+              "cosine": 0.31371790170669556,
+              "median_clean_coordinate": 11.210094451904297
+            }
+          ],
+          "continuation": " Charles.  Inference: The natural"
+        },
+        {
+          "variant": "random_null",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " pencil",
+          "next_token": " \"",
+          "answer_rank": 3,
+          "swap_answer_rank": 6,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.415703684091568,
+              "median_clean_coordinate": 6.598103046417236
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4220544695854187,
+              "median_clean_coordinate": 5.208655834197998
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4596547484397888,
+              "median_clean_coordinate": 7.879721641540527
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3704846501350403,
+              "median_clean_coordinate": 9.94211483001709
+            },
+            {
+              "layer": 16,
+              "cosine": 0.31371790170669556,
+              "median_clean_coordinate": 11.210094451904297
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " pencil",
+          "next_token": " \"",
+          "answer_rank": 14,
+          "swap_answer_rank": 10,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.415703684091568,
+              "median_clean_coordinate": 6.598103046417236
+            },
+            {
+              "layer": 13,
+              "cosine": 0.4220544695854187,
+              "median_clean_coordinate": 5.208655834197998
+            },
+            {
+              "layer": 14,
+              "cosine": 0.4596547484397888,
+              "median_clean_coordinate": 7.879721641540527
+            },
+            {
+              "layer": 15,
+              "cosine": 0.3704846501350403,
+              "median_clean_coordinate": 9.94211483001709
+            },
+            {
+              "layer": 16,
+              "cosine": 0.31371790170669556,
+              "median_clean_coordinate": 11.210094451904297
+            }
+          ],
+          "continuation": " \"John\". The second name of the"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Darwin",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 74,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999999403953552
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Darwin",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 74,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999999403953552
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ],
+          "continuation": " Charles.\n\nFact: The first name of"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Darwin",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 74,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999999403953552
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Darwin",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 74,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 0.9999998211860657
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 1.0
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 0.9999999403953552
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 1.0
+            }
+          ],
+          "continuation": " Charles.\n\nFact: The first name of"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 0.5,
+          "band": [
+            0
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 75,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.3955034017562866,
+              "median_clean_coordinate": 0.4804125428199768
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 1.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 74,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.3955034017562866,
+              "median_clean_coordinate": 0.4804125428199768
+            }
+          ],
+          "continuation": " Charles.\n\nFact: The first name of"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 2.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 75,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.3955034017562866,
+              "median_clean_coordinate": 0.4804125428199768
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 4.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Darwin",
+          "target_surface": " Einstein",
+          "next_token": " Charles",
+          "answer_rank": 1,
+          "swap_answer_rank": 74,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.3955034017562866,
+              "median_clean_coordinate": 0.4804125428199768
+            }
+          ],
+          "continuation": " Charles.  Question: Who was the"
+        }
+      ]
+    },
+    {
+      "name": "person-firstname-newton",
+      "prompt": "Fact: The first name of the scientist on whose head an apple is said to have fallen was",
+      "intermediate": "Newton",
+      "answer": "Isaac",
+      "swap_to": "Shakespeare",
+      "swap_answer": "William",
+      "clean_top": " Isaac",
+      "clean_answer_rank": 1,
+      "clean_swap_answer_rank": 14,
+      "clean_continuation": " Isaac.\n\nWhat is the logical conclusion?\n\n",
+      "trials": [
+        {
+          "variant": "main",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Newton",
+          "answer_rank": 2,
+          "swap_answer_rank": 20,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.23644915223121643,
+              "median_clean_coordinate": 4.660201549530029
+            },
+            {
+              "layer": 13,
+              "cosine": 0.22118964791297913,
+              "median_clean_coordinate": 5.1850481033325195
+            },
+            {
+              "layer": 14,
+              "cosine": 0.26359638571739197,
+              "median_clean_coordinate": 6.121689319610596
+            },
+            {
+              "layer": 15,
+              "cosine": 0.2340238094329834,
+              "median_clean_coordinate": 6.885069847106934
+            },
+            {
+              "layer": 16,
+              "cosine": 0.23141822218894958,
+              "median_clean_coordinate": 8.887672424316406
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 16,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.23644915223121643,
+              "median_clean_coordinate": 4.660201549530029
+            },
+            {
+              "layer": 13,
+              "cosine": 0.22118964791297913,
+              "median_clean_coordinate": 5.1850481033325195
+            },
+            {
+              "layer": 14,
+              "cosine": 0.26359638571739197,
+              "median_clean_coordinate": 6.121689319610596
+            },
+            {
+              "layer": 15,
+              "cosine": 0.2340238094329834,
+              "median_clean_coordinate": 6.885069847106934
+            },
+            {
+              "layer": 16,
+              "cosine": 0.23141822218894958,
+              "median_clean_coordinate": 8.887672424316406
+            }
+          ],
+          "continuation": " Isaac.\n\nWhat is the logical conclusion?\n\n"
+        },
+        {
+          "variant": "main",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 9,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.23644915223121643,
+              "median_clean_coordinate": 4.660201549530029
+            },
+            {
+              "layer": 13,
+              "cosine": 0.22118964791297913,
+              "median_clean_coordinate": 5.1850481033325195
+            },
+            {
+              "layer": 14,
+              "cosine": 0.26359638571739197,
+              "median_clean_coordinate": 6.121689319610596
+            },
+            {
+              "layer": 15,
+              "cosine": 0.2340238094329834,
+              "median_clean_coordinate": 6.885069847106934
+            },
+            {
+              "layer": 16,
+              "cosine": 0.23141822218894958,
+              "median_clean_coordinate": 8.887672424316406
+            }
+          ]
+        },
+        {
+          "variant": "main",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Newton",
+          "answer_rank": 2,
+          "swap_answer_rank": 5,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.23644915223121643,
+              "median_clean_coordinate": 4.660201549530029
+            },
+            {
+              "layer": 13,
+              "cosine": 0.22118964791297913,
+              "median_clean_coordinate": 5.1850481033325195
+            },
+            {
+              "layer": 14,
+              "cosine": 0.26359638571739197,
+              "median_clean_coordinate": 6.121689319610596
+            },
+            {
+              "layer": 15,
+              "cosine": 0.2340238094329834,
+              "median_clean_coordinate": 6.885069847106934
+            },
+            {
+              "layer": 16,
+              "cosine": 0.23141822218894958,
+              "median_clean_coordinate": 8.887672424316406
+            }
+          ],
+          "continuation": " Newton.\n\nWhat is the correct answer to"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Isaac",
+          "target_surface": " William",
+          "next_token": " Newton",
+          "answer_rank": 2,
+          "swap_answer_rank": 25,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.5186312198638916,
+              "median_clean_coordinate": 4.146058559417725
+            },
+            {
+              "layer": 13,
+              "cosine": 0.5008649826049805,
+              "median_clean_coordinate": 4.825529098510742
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5174664258956909,
+              "median_clean_coordinate": 6.2949748039245605
+            },
+            {
+              "layer": 15,
+              "cosine": 0.4714275300502777,
+              "median_clean_coordinate": 6.851307392120361
+            },
+            {
+              "layer": 16,
+              "cosine": 0.45890307426452637,
+              "median_clean_coordinate": 9.663224220275879
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Isaac",
+          "target_surface": " William",
+          "next_token": " Newton",
+          "answer_rank": 2,
+          "swap_answer_rank": 16,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.5186312198638916,
+              "median_clean_coordinate": 4.146058559417725
+            },
+            {
+              "layer": 13,
+              "cosine": 0.5008649826049805,
+              "median_clean_coordinate": 4.825529098510742
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5174664258956909,
+              "median_clean_coordinate": 6.2949748039245605
+            },
+            {
+              "layer": 15,
+              "cosine": 0.4714275300502777,
+              "median_clean_coordinate": 6.851307392120361
+            },
+            {
+              "layer": 16,
+              "cosine": 0.45890307426452637,
+              "median_clean_coordinate": 9.663224220275879
+            }
+          ],
+          "continuation": " Newton.\n\nWhat is the logical conclusion?\n\n"
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Isaac",
+          "target_surface": " William",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 9,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.5186312198638916,
+              "median_clean_coordinate": 4.146058559417725
+            },
+            {
+              "layer": 13,
+              "cosine": 0.5008649826049805,
+              "median_clean_coordinate": 4.825529098510742
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5174664258956909,
+              "median_clean_coordinate": 6.2949748039245605
+            },
+            {
+              "layer": 15,
+              "cosine": 0.4714275300502777,
+              "median_clean_coordinate": 6.851307392120361
+            },
+            {
+              "layer": 16,
+              "cosine": 0.45890307426452637,
+              "median_clean_coordinate": 9.663224220275879
+            }
+          ]
+        },
+        {
+          "variant": "answer_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Isaac",
+          "target_surface": " William",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 4,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.5186312198638916,
+              "median_clean_coordinate": 4.146058559417725
+            },
+            {
+              "layer": 13,
+              "cosine": 0.5008649826049805,
+              "median_clean_coordinate": 4.825529098510742
+            },
+            {
+              "layer": 14,
+              "cosine": 0.5174664258956909,
+              "median_clean_coordinate": 6.2949748039245605
+            },
+            {
+              "layer": 15,
+              "cosine": 0.4714275300502777,
+              "median_clean_coordinate": 6.851307392120361
+            },
+            {
+              "layer": 16,
+              "cosine": 0.45890307426452637,
+              "median_clean_coordinate": 9.663224220275879
+            }
+          ],
+          "continuation": " Isaac Newton.  The second name is"
+        },
+        {
+          "variant": "random_null",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " pencil",
+          "next_token": " Newton",
+          "answer_rank": 2,
+          "swap_answer_rank": 18,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6768440008163452,
+              "median_clean_coordinate": 7.832324504852295
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6719005107879639,
+              "median_clean_coordinate": 7.649281024932861
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7155438661575317,
+              "median_clean_coordinate": 9.413772583007812
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6304561495780945,
+              "median_clean_coordinate": 9.044971466064453
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5510425567626953,
+              "median_clean_coordinate": 10.051528930664062
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " pencil",
+          "next_token": " John",
+          "answer_rank": 2,
+          "swap_answer_rank": 11,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6768440008163452,
+              "median_clean_coordinate": 7.832324504852295
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6719005107879639,
+              "median_clean_coordinate": 7.649281024932861
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7155438661575317,
+              "median_clean_coordinate": 9.413772583007812
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6304561495780945,
+              "median_clean_coordinate": 9.044971466064453
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5510425567626953,
+              "median_clean_coordinate": 10.051528930664062
+            }
+          ],
+          "continuation": " John.\n\nWhat is the country of origin"
+        },
+        {
+          "variant": "random_null",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " pencil",
+          "next_token": " \"",
+          "answer_rank": 17,
+          "swap_answer_rank": 12,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6768440008163452,
+              "median_clean_coordinate": 7.832324504852295
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6719005107879639,
+              "median_clean_coordinate": 7.649281024932861
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7155438661575317,
+              "median_clean_coordinate": 9.413772583007812
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6304561495780945,
+              "median_clean_coordinate": 9.044971466064453
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5510425567626953,
+              "median_clean_coordinate": 10.051528930664062
+            }
+          ]
+        },
+        {
+          "variant": "random_null",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " pencil",
+          "next_token": " named",
+          "answer_rank": 248,
+          "swap_answer_rank": 33,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "cosine": 0.6768440008163452,
+              "median_clean_coordinate": 7.832324504852295
+            },
+            {
+              "layer": 13,
+              "cosine": 0.6719005107879639,
+              "median_clean_coordinate": 7.649281024932861
+            },
+            {
+              "layer": 14,
+              "cosine": 0.7155438661575317,
+              "median_clean_coordinate": 9.413772583007812
+            },
+            {
+              "layer": 15,
+              "cosine": 0.6304561495780945,
+              "median_clean_coordinate": 9.044971466064453
+            },
+            {
+              "layer": 16,
+              "cosine": 0.5510425567626953,
+              "median_clean_coordinate": 10.051528930664062
+            }
+          ],
+          "continuation": " named after the first name of the scientist"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 0.5,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Newton",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 14,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 0.9999998807907104
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 1.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Newton",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 14,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 0.9999998807907104
+            }
+          ],
+          "continuation": " Isaac.\n\nWhat is the logical conclusion?\n\n"
+        },
+        {
+          "variant": "self_swap",
+          "scale": 2.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Newton",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 14,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 0.9999998807907104
+            }
+          ]
+        },
+        {
+          "variant": "self_swap",
+          "scale": 4.0,
+          "band": [
+            12,
+            13,
+            14,
+            15,
+            16
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Newton",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 14,
+          "diagnostics": [
+            {
+              "layer": 12,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 13,
+              "skipped_near_parallel": 1.0000001192092896
+            },
+            {
+              "layer": 14,
+              "skipped_near_parallel": 0.9999997615814209
+            },
+            {
+              "layer": 15,
+              "skipped_near_parallel": 1.000000238418579
+            },
+            {
+              "layer": 16,
+              "skipped_near_parallel": 0.9999998807907104
+            }
+          ],
+          "continuation": " Isaac.\n\nWhat is the logical conclusion?\n\n"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 0.5,
+          "band": [
+            0
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 17,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.1920374035835266,
+              "median_clean_coordinate": 0.41636577248573303
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 1.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 19,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.1920374035835266,
+              "median_clean_coordinate": 0.41636577248573303
+            }
+          ],
+          "continuation": " Isaac.\n\nAnother fact: The apple is"
+        },
+        {
+          "variant": "early_layer",
+          "scale": 2.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 22,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.1920374035835266,
+              "median_clean_coordinate": 0.41636577248573303
+            }
+          ]
+        },
+        {
+          "variant": "early_layer",
+          "scale": 4.0,
+          "band": [
+            0
+          ],
+          "source_surface": " Newton",
+          "target_surface": " Shakespeare",
+          "next_token": " Isaac",
+          "answer_rank": 1,
+          "swap_answer_rank": 19,
+          "diagnostics": [
+            {
+              "layer": 0,
+              "cosine": 0.1920374035835266,
+              "median_clean_coordinate": 0.41636577248573303
+            }
+          ],
+          "continuation": " Isaac.  The second name is not"
+        }
+      ]
+    }
+  ]
+}

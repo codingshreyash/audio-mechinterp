@@ -1,0 +1,10 @@
+{
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "config_snapshot_sha256": "20790f362c37a1718a3e764f597ae33dfc20177399762018dffaabf8321d4dd1",
+  "model_class": "Qwen2_5OmniThinkerForConditionalGeneration",
+  "processor_class": "Qwen2_5OmniProcessor",
+  "source_file": "src/transformers/models/qwen2_5_omni/modeling_qwen2_5_omni.py",
+  "processor_file": "src/transformers/models/qwen2_5_omni/processing_qwen2_5_omni.py"
+}

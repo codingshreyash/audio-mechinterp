@@ -1,0 +1,18 @@
+{
+  "status": "fixed_after_handoff_probe_before_block31_sublayer_results",
+  "purpose": "Test whether block-31 terminal self-attention output mediates the fit-only word-audio-placeholder donor patch effect",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "handoff_results_sha256": "abd1742e936065f0801894bbbb2a989ac845989fbe6f6e0adace39c572179358",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "upstream_patch": "post-block layer-30 donor state at projected word-slot audio placeholder positions",
+  "sublayer_hooks": ["layer31.self_attn first output at terminal position", "layer31.mlp output at terminal position"],
+  "conditions": ["clean", "layer30_word_patch", "donor_attention_terminal_only", "donor_mlp_terminal_only", "layer30_word_patch_plus_restore_clean_attention_terminal", "layer30_word_patch_plus_restore_clean_mlp_terminal", "self_attention_terminal", "self_mlp_terminal", "five_equal_norm_random_attention_terminal_edits"],
+  "random_seeds": [101, 102, 103, 104, 105],
+  "primary_endpoint": "complete donor-color answer with normal EOS",
+  "secondary_endpoint": "first-reply-token Blue(10331)-Red(6033) logit margin",
+  "interpretation_limit": "A donor sublayer output is a broad activation patch, not an identified attention head. This is a posthoc fit-only mediation test; even a successful restore does not uniquely prove natural information flow."
+}

@@ -1,0 +1,17 @@
+{
+  "status": "fixed_after_layers_0_17_35_pilot_before_full_layer_sweep_results",
+  "purpose": "Map the fit-only causal effect of the same word-audio-placeholder donor swap at every Thinker layer",
+  "input_manifest": "../tts/outputs/controlled_pair_v1/controlled_pair_manifest.json",
+  "input_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": ["piper", "kokoro"],
+  "directions": ["red_to_blue", "blue_to_red"],
+  "layers": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+  "patch": "post-block output at projected word-slot audio placeholder positions, prefill call only; donor from same engine other color",
+  "generation": {"do_sample": false, "max_new_tokens": 16, "eos_token": "tokenizer.eos_token_id"},
+  "primary_endpoint": "complete decoded answer equals donor color with normal EOS for each layer/engine/direction",
+  "secondary_endpoint": "donor-oriented first-token Blue(10331)-Red(6033) logit margin",
+  "controls": "The prior fixed three-layer pilot contains self, wrong-chunk, equal-norm random and terminal-position controls. This full sweep is an exploratory fit-only influence curve and will not select a best layer for locked test.",
+  "interpretation_limit": "This maps sufficiency of a donor patch, not the exact natural step at which the model first forms a decision; post-block states and attention mix context."
+}

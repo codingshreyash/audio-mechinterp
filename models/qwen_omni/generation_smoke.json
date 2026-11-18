@@ -1,0 +1,25 @@
+{
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "audio_sha256": "ba226916abdd36bef212a0b478d49eb63028fb541d84a7934f50e4871fe6d21d",
+  "system_prompt": "Answer the spoken request briefly.",
+  "prompt_tokens": 158,
+  "max_new_tokens": 80,
+  "eos_token_id": 151645,
+  "stopped_on_eos": true,
+  "new_token_ids": [
+    39814,
+    11,
+    358,
+    3278,
+    1896,
+    2453,
+    315,
+    429,
+    13,
+    151645
+  ],
+  "decoded_special": "Sure, I'll take care of that.<|im_end|>",
+  "decoded_plain": "Sure, I'll take care of that."
+}

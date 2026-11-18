@@ -1,0 +1,4428 @@
+{
+  "purpose": "posthoc held-out-input block32 diagnostic; no confirmatory or security claim",
+  "plan_sha256": "f85fbe64e9989181aefcc6e6e5336f0ed7826d1371d6da43f2424edb0a1d8a78",
+  "stimulus_manifest_sha256": "ae7cfd2e08a09e44847bd7a2e0d5775b8017a6f5e072f3f5d3dc007b9f759a01",
+  "heldout_results_sha256": "1346d01ed5fbc23227d8fbba7078205afa25de3ef0e9f1a864ab4d678766c0a2",
+  "results": [
+    {
+      "engine": "piper",
+      "pair_id": "animal",
+      "phrasing_id": "chosen",
+      "recipient": "cat",
+      "donor": "dog",
+      "word_positions": [
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98
+      ],
+      "terminal_position": 159,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.75,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.875,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.1875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 35.63496017456055,
+          "effective_bf16_delta_norm": 35.630279541015625,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.1875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 35.63496017456055,
+          "effective_bf16_delta_norm": 35.63705062866211,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.75,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 35.63496017456055,
+          "effective_bf16_delta_norm": 35.63377380371094,
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "animal",
+      "phrasing_id": "chosen",
+      "recipient": "dog",
+      "donor": "cat",
+      "word_positions": [
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98
+      ],
+      "terminal_position": 159,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.375,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -4.75,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.0625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.25,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.9375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 35.63496017456055,
+          "effective_bf16_delta_norm": 35.62899398803711,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -7.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 35.63496017456055,
+          "effective_bf16_delta_norm": 35.636375427246094,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 35.63496017456055,
+          "effective_bf16_delta_norm": 35.63301086425781,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "animal",
+      "phrasing_id": "remember",
+      "recipient": "cat",
+      "donor": "dog",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108
+      ],
+      "terminal_position": 160,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.5625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.625,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.5625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.75,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 1.9375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 44.778953552246094,
+          "effective_bf16_delta_norm": 44.77763366699219,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 44.778953552246094,
+          "effective_bf16_delta_norm": 44.776432037353516,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.4375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 44.778953552246094,
+          "effective_bf16_delta_norm": 44.78114700317383,
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "animal",
+      "phrasing_id": "remember",
+      "recipient": "dog",
+      "donor": "cat",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108
+      ],
+      "terminal_position": 160,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.3125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 0.875,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -4.0625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -7.3125,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.25,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 44.778953552246094,
+          "effective_bf16_delta_norm": 44.77700424194336,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -7.0,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 44.778953552246094,
+          "effective_bf16_delta_norm": 44.778465270996094,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.5,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 44.778953552246094,
+          "effective_bf16_delta_norm": 44.7757682800293,
+          "outcome": {
+            "new_token_ids": [
+              18457,
+              151645
+            ],
+            "answer": "dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "weekday",
+      "phrasing_id": "chosen",
+      "recipient": "Monday",
+      "donor": "Friday",
+      "word_positions": [
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100
+      ],
+      "terminal_position": 162,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.9375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 5.25,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.3125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.8125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 53.360328674316406,
+          "effective_bf16_delta_norm": 53.361331939697266,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 53.360328674316406,
+          "effective_bf16_delta_norm": 53.36783218383789,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.1875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 53.360328674316406,
+          "effective_bf16_delta_norm": 53.35677719116211,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "weekday",
+      "phrasing_id": "chosen",
+      "recipient": "Friday",
+      "donor": "Monday",
+      "word_positions": [
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100
+      ],
+      "terminal_position": 162,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.0,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 4.25,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.5,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.9375,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -6.0,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.25,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 53.360328674316406,
+          "effective_bf16_delta_norm": 53.363990783691406,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.8125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 53.360328674316406,
+          "effective_bf16_delta_norm": 53.36206817626953,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.75,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 53.360328674316406,
+          "effective_bf16_delta_norm": 53.354522705078125,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.75,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "weekday",
+      "phrasing_id": "remember",
+      "recipient": "Monday",
+      "donor": "Friday",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110
+      ],
+      "terminal_position": 163,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.5625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 5.1875,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -4.75,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.4375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 53.511375427246094,
+          "effective_bf16_delta_norm": 53.51844024658203,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 53.511375427246094,
+          "effective_bf16_delta_norm": 53.517940521240234,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.3125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 53.511375427246094,
+          "effective_bf16_delta_norm": 53.51365661621094,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.3125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "pair_id": "weekday",
+      "phrasing_id": "remember",
+      "recipient": "Friday",
+      "donor": "Monday",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110
+      ],
+      "terminal_position": 163,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.8125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.5625,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -2.125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -6.0625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 1.9375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -10.3125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -10.3125,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 53.511375427246094,
+          "effective_bf16_delta_norm": 53.501564025878906,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.4375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 53.511375427246094,
+          "effective_bf16_delta_norm": 53.51260757446289,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -10.5625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 53.511375427246094,
+          "effective_bf16_delta_norm": 53.51662826538086,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.5,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "animal",
+      "phrasing_id": "chosen",
+      "recipient": "cat",
+      "donor": "dog",
+      "word_positions": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "terminal_position": 175,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.5,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.875,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -4.5625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.4375,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.25,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 39.08821487426758,
+          "effective_bf16_delta_norm": 39.08504867553711,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.6875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 39.08821487426758,
+          "effective_bf16_delta_norm": 39.09151077270508,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.4375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 39.08821487426758,
+          "effective_bf16_delta_norm": 39.0869026184082,
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "animal",
+      "phrasing_id": "chosen",
+      "recipient": "dog",
+      "donor": "cat",
+      "word_positions": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112
+      ],
+      "terminal_position": 175,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.8125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.125,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -4.0,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -7.5,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 0.0,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.6875,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.375,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 39.08821487426758,
+          "effective_bf16_delta_norm": 39.08599853515625,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -7.0625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 39.08821487426758,
+          "effective_bf16_delta_norm": 39.08408737182617,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 39.08821487426758,
+          "effective_bf16_delta_norm": 39.08530044555664,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "animal",
+      "phrasing_id": "remember",
+      "recipient": "cat",
+      "donor": "dog",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117
+      ],
+      "terminal_position": 172,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.375,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.1875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.75,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.25,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.9375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.9375,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 39.629364013671875,
+          "effective_bf16_delta_norm": 39.62784957885742,
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.9375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 39.629364013671875,
+          "effective_bf16_delta_norm": 39.629451751708984,
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 39.629364013671875,
+          "effective_bf16_delta_norm": 39.630470275878906,
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "animal",
+      "phrasing_id": "remember",
+      "recipient": "dog",
+      "donor": "cat",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117
+      ],
+      "terminal_position": 172,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.875,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 0.5,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -3.75,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -7.125,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              26801,
+              151645
+            ],
+            "answer": "Cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 0.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              4616,
+              151645
+            ],
+            "answer": "cat",
+            "normalized_answer": "cat",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.6875,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.0,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.0,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 39.629364013671875,
+          "effective_bf16_delta_norm": 39.63060760498047,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -6.5625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 39.629364013671875,
+          "effective_bf16_delta_norm": 39.63052749633789,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.8125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 39.629364013671875,
+          "effective_bf16_delta_norm": 39.632503509521484,
+          "outcome": {
+            "new_token_ids": [
+              48940,
+              151645
+            ],
+            "answer": "Dog",
+            "normalized_answer": "dog",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "weekday",
+      "phrasing_id": "chosen",
+      "recipient": "Monday",
+      "donor": "Friday",
+      "word_positions": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117
+      ],
+      "terminal_position": 179,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 5.0625,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -0.875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.0625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.4375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.8125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.8125,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 54.13779830932617,
+          "effective_bf16_delta_norm": 54.13981246948242,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.1875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 54.13779830932617,
+          "effective_bf16_delta_norm": 54.125892639160156,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.3125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 54.13779830932617,
+          "effective_bf16_delta_norm": 54.13754653930664,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "weekday",
+      "phrasing_id": "chosen",
+      "recipient": "Friday",
+      "donor": "Monday",
+      "word_positions": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117
+      ],
+      "terminal_position": 179,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.8125,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 4.0,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.0,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.5625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.9375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.8125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.8125,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 54.13779830932617,
+          "effective_bf16_delta_norm": 54.133460998535156,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 54.13779830932617,
+          "effective_bf16_delta_norm": 54.13302993774414,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -10.0,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 54.13779830932617,
+          "effective_bf16_delta_norm": 54.13529586791992,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.8125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "weekday",
+      "phrasing_id": "remember",
+      "recipient": "Monday",
+      "donor": "Friday",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 176,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 4.75,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.0,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.5625,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -4.5625,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.25,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 51.125999450683594,
+          "effective_bf16_delta_norm": 51.12311935424805,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.8125,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 51.125999450683594,
+          "effective_bf16_delta_norm": 51.12055206298828,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 51.125999450683594,
+          "effective_bf16_delta_norm": 51.12892532348633,
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.875,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "pair_id": "weekday",
+      "phrasing_id": "remember",
+      "recipient": "Friday",
+      "donor": "Monday",
+      "word_positions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "terminal_position": 176,
+      "conditions": {
+        "upstream31_word_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.1875,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "postblock32_terminal_donor": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 3.6875,
+            "hook_calls": {
+              "postblock32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_attention32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -1.4375,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "donor_mlp32_terminal_only": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.6875,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -5.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "upstream31_plus_restore_clean_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              35239,
+              151645
+            ],
+            "answer": "Monday",
+            "normalized_answer": "monday",
+            "stopped_on_eos": true,
+            "recipient_match": false,
+            "donor_match": true,
+            "first_token_donor_minus_recipient_logit": 2.375,
+            "hook_calls": {
+              "upstream31": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              },
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_attention32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "self_mlp32_terminal": {
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.25,
+            "hook_calls": {
+              "mlp32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_0": {
+          "requested_delta_norm": 51.125999450683594,
+          "effective_bf16_delta_norm": 51.12300491333008,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_1": {
+          "requested_delta_norm": 51.125999450683594,
+          "effective_bf16_delta_norm": 51.119659423828125,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -9.625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        },
+        "random_attention32_seed_2": {
+          "requested_delta_norm": 51.125999450683594,
+          "effective_bf16_delta_norm": 51.12870407104492,
+          "outcome": {
+            "new_token_ids": [
+              34620,
+              151645
+            ],
+            "answer": "Friday",
+            "normalized_answer": "friday",
+            "stopped_on_eos": true,
+            "recipient_match": true,
+            "donor_match": false,
+            "first_token_donor_minus_recipient_logit": -8.625,
+            "hook_calls": {
+              "attention32": {
+                "prefill": 1,
+                "decode_unmodified": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
