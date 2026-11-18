@@ -1,0 +1,5208 @@
+{
+  "status": "fit_only_v2_comparison_complete",
+  "script_sha256": "821f05da667a5a8e24cc21e9cb2c33b3c9260abcafb31108a72323352338fa04",
+  "v2_scoring_sha256": "e7ea18cd0d5e2638bec64b8733049a5a2754ecd674080d93766db8409b46dd9b",
+  "v1_score_result_sha256": "34128f325b1e08818be0369fb91754cedda6331ac42c07439326cb1b09608c45",
+  "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "system_prompt": "Repeat only the single word explicitly introduced before the final question in the spoken request.",
+  "progress_sha256": "ac116b9bfa401e54fe60bee216e183d8b444fca7385503c0ca09672c2a37e8a5",
+  "memory_sha256": "752f740d0b4bf1aea1ba4f601b1cee02b5c2ab429913c1c62e825f3f38c9c500",
+  "rows": [
+    {
+      "case_id": "animal_06/fit_chosen/kokoro/deer",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "engine": "kokoro",
+      "word": "deer",
+      "foil_word": "moose",
+      "audio_sha256": "1132c0b7c3ecdfdcd150afb8285c988c341ec988f5284b8663a6d09d17662f6c",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "foil_alias_token_ids": [
+          68128
+        ],
+        "expected_log_mass": -2.441814422607422,
+        "foil_log_mass": -17.081146240234375,
+        "expected_mass": 0.08700285106897354,
+        "foil_mass": 3.81726650289238e-08,
+        "correct_minus_foil_log_odds": 14.639331817626953,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 30665,
+        "top_vocab_log_probability": -0.5673866271972656
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          1912,
+          38049,
+          63091,
+          96262
+        ],
+        "foil_alias_token_ids": [
+          44,
+          4544,
+          6355,
+          68128
+        ],
+        "expected_log_mass": -1.3880062103271484,
+        "foil_log_mass": -9.142073631286621,
+        "expected_mass": 0.24957239627838135,
+        "foil_mass": 0.00010706509056035429,
+        "correct_minus_foil_log_odds": 7.754067420959473,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 30665,
+        "top_vocab_log_probability": -0.5673866271972656
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            96262,
+            151645
+          ],
+          [
+            1912,
+            261,
+            151645
+          ],
+          [
+            38049,
+            151645
+          ],
+          [
+            63091,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            6355,
+            960,
+            151645
+          ],
+          [
+            44,
+            13752,
+            151645
+          ],
+          [
+            4544,
+            960,
+            151645
+          ],
+          [
+            68128,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -2.534954786300659,
+          -1.9029016494750977,
+          -5.139181137084961,
+          -7.57379674911499
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.790201187133789,
+          -12.116863250732422,
+          -19.61918067932129,
+          -17.154651641845703
+        ],
+        "expected_class_log_probability": -1.4491200794343277,
+        "foil_class_log_probability": -11.939001924218978,
+        "correct_minus_foil_log_odds": 10.48988184478465,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6673425000626594
+    },
+    {
+      "case_id": "animal_06/fit_chosen/kokoro/moose",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "engine": "kokoro",
+      "word": "moose",
+      "foil_word": "deer",
+      "audio_sha256": "7e5d8590ea5e6e59494cb3c52aa07decae79d055f207a7407255b8ccaa434575",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          68128
+        ],
+        "foil_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "expected_log_mass": -6.720572471618652,
+        "foil_log_mass": -11.005033493041992,
+        "expected_mass": 0.0012058477150276303,
+        "foil_mass": 1.6617845176369883e-05,
+        "correct_minus_foil_log_odds": 4.28446102142334,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 44,
+        "top_vocab_log_probability": -0.7144451141357422
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          44,
+          4544,
+          6355,
+          68128
+        ],
+        "foil_alias_token_ids": [
+          1912,
+          38049,
+          63091,
+          96262
+        ],
+        "expected_log_mass": -0.5790119171142578,
+        "foil_log_mass": -10.627299308776855,
+        "expected_mass": 0.560451865196228,
+        "foil_mass": 2.4245020540547557e-05,
+        "correct_minus_foil_log_odds": 10.048287391662598,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 44,
+        "top_vocab_log_probability": -0.7144451141357422
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            6355,
+            960,
+            151645
+          ],
+          [
+            44,
+            13752,
+            151645
+          ],
+          [
+            4544,
+            960,
+            151645
+          ],
+          [
+            68128,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            96262,
+            151645
+          ],
+          [
+            1912,
+            261,
+            151645
+          ],
+          [
+            38049,
+            151645
+          ],
+          [
+            63091,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -2.6743290424346924,
+          -0.7488027811050415,
+          -8.188194274902344,
+          -6.7449469566345215
+        ],
+        "foil_sequence_log_probabilities": [
+          -11.151622772216797,
+          -12.242484092712402,
+          -13.246146202087402,
+          -15.011754989624023
+        ],
+        "expected_class_log_probability": -0.6100195964995874,
+        "foil_class_log_probability": -10.759498828592571,
+        "correct_minus_foil_log_odds": 10.149479232092984,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6100303751882166
+    },
+    {
+      "case_id": "animal_06/fit_chosen/piper/deer",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "engine": "piper",
+      "word": "deer",
+      "foil_word": "moose",
+      "audio_sha256": "1eca95bd014c2bd84b2beae20aa7ab2aa9c65ad77b21699a4d79e6c36e22567c",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "foil_alias_token_ids": [
+          68128
+        ],
+        "expected_log_mass": -3.7241764068603516,
+        "foil_log_mass": -17.846670150756836,
+        "expected_mass": 0.024132968857884407,
+        "foil_mass": 1.7753730929825906e-08,
+        "correct_minus_foil_log_odds": 14.122493743896484,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 30665,
+        "top_vocab_log_probability": -0.28872108459472656
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          1912,
+          38049,
+          63091,
+          96262
+        ],
+        "foil_alias_token_ids": [
+          44,
+          4544,
+          6355,
+          68128
+        ],
+        "expected_log_mass": -2.7151260375976562,
+        "foil_log_mass": -9.968066215515137,
+        "expected_mass": 0.06619661301374435,
+        "foil_mass": 4.687311957241036e-05,
+        "correct_minus_foil_log_odds": 7.2529401779174805,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 30665,
+        "top_vocab_log_probability": -0.28872108459472656
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            96262,
+            151645
+          ],
+          [
+            1912,
+            261,
+            151645
+          ],
+          [
+            38049,
+            151645
+          ],
+          [
+            63091,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            6355,
+            960,
+            151645
+          ],
+          [
+            44,
+            13752,
+            151645
+          ],
+          [
+            4544,
+            960,
+            151645
+          ],
+          [
+            68128,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -3.8560702800750732,
+          -3.348799705505371,
+          -6.052423000335693,
+          -8.593912124633789
+        ],
+        "foil_sequence_log_probabilities": [
+          -16.144899368286133,
+          -14.500862121582031,
+          -22.613492965698242,
+          -17.913923263549805
+        ],
+        "expected_class_log_probability": -2.833361235884756,
+        "foil_class_log_probability": -14.296747749076756,
+        "correct_minus_foil_log_odds": 11.463386513191999,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5902349590323865
+    },
+    {
+      "case_id": "animal_06/fit_chosen/piper/moose",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "engine": "piper",
+      "word": "moose",
+      "foil_word": "deer",
+      "audio_sha256": "55b493e0f07fdd471c5354283b4faa4c5f972c9595fe85558a2f566942e893ad",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          68128
+        ],
+        "foil_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "expected_log_mass": -5.994953155517578,
+        "foil_log_mass": -10.827430725097656,
+        "expected_mass": 0.00249129394069314,
+        "foil_mass": 1.9847535440931097e-05,
+        "correct_minus_foil_log_odds": 4.832477569580078,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 44,
+        "top_vocab_log_probability": -0.7839088439941406
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          44,
+          4544,
+          6355,
+          68128
+        ],
+        "foil_alias_token_ids": [
+          1912,
+          38049,
+          63091,
+          96262
+        ],
+        "expected_log_mass": -0.5142345428466797,
+        "foil_log_mass": -10.369526863098145,
+        "expected_mass": 0.5979581475257874,
+        "foil_mass": 3.137412932119332e-05,
+        "correct_minus_foil_log_odds": 9.855292320251465,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 44,
+        "top_vocab_log_probability": -0.7839088439941406
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            6355,
+            960,
+            151645
+          ],
+          [
+            44,
+            13752,
+            151645
+          ],
+          [
+            4544,
+            960,
+            151645
+          ],
+          [
+            68128,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            96262,
+            151645
+          ],
+          [
+            1912,
+            261,
+            151645
+          ],
+          [
+            38049,
+            151645
+          ],
+          [
+            63091,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.9907994270324707,
+          -0.836978554725647,
+          -7.218714237213135,
+          -6.046053409576416
+        ],
+        "foil_sequence_log_probabilities": [
+          -10.943011283874512,
+          -12.38120174407959,
+          -13.420164108276367,
+          -15.089497566223145
+        ],
+        "expected_class_log_probability": -0.5573880096225325,
+        "foil_class_log_probability": -10.652464234645501,
+        "correct_minus_foil_log_odds": 10.095076225022968,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.583805541973561
+    },
+    {
+      "case_id": "animal_08/fit_chosen/kokoro/beaver",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "engine": "kokoro",
+      "word": "beaver",
+      "foil_word": "monkey",
+      "audio_sha256": "b334e7ecb1d1397f1f92c1e1f505a9b2a0b05a8feb1db757d655ea93bad85319",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          91434
+        ],
+        "foil_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "expected_log_mass": -3.6562318801879883,
+        "foil_log_mass": -12.147930145263672,
+        "expected_mass": 0.025829659774899483,
+        "foil_mass": 5.299330041452777e-06,
+        "correct_minus_foil_log_odds": 8.491698265075684,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 3430,
+        "top_vocab_log_probability": -0.3340740203857422
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          387,
+          1371,
+          3430,
+          91434
+        ],
+        "foil_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "expected_log_mass": -0.04763603210449219,
+        "foil_log_mass": -12.147930145263672,
+        "expected_mass": 0.9534807801246643,
+        "foil_mass": 5.299330041452777e-06,
+        "correct_minus_foil_log_odds": 12.10029411315918,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 3430,
+        "top_vocab_log_probability": -0.3340740203857422
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            1371,
+            7255,
+            151645
+          ],
+          [
+            3430,
+            7255,
+            151645
+          ],
+          [
+            387,
+            7255,
+            151645
+          ],
+          [
+            91434,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            96016,
+            151645
+          ],
+          [
+            96838,
+            151645
+          ],
+          [
+            38703,
+            151645
+          ],
+          [
+            57837,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.5621881484985352,
+          -0.3554145395755768,
+          -7.981925010681152,
+          -3.6738064289093018
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.460969924926758,
+          -12.490232467651367,
+          -19.01692771911621,
+          -19.45647621154785
+        ],
+        "expected_class_log_probability": -0.06583977762252619,
+        "foil_class_log_probability": -12.167272100718696,
+        "correct_minus_foil_log_odds": 12.10143232309617,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6794647090137005
+    },
+    {
+      "case_id": "animal_08/fit_chosen/kokoro/monkey",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "engine": "kokoro",
+      "word": "monkey",
+      "foil_word": "beaver",
+      "audio_sha256": "b2784dd16113845f8dafd17d49ff4a74cdcf4a8b0275b9b83e31fd496d9c6d29",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "foil_alias_token_ids": [
+          91434
+        ],
+        "expected_log_mass": -0.030897140502929688,
+        "foil_log_mass": -18.891407012939453,
+        "expected_mass": 0.9695752859115601,
+        "foil_mass": 6.245485462130773e-09,
+        "correct_minus_foil_log_odds": 18.860509872436523,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 96838,
+        "top_vocab_log_probability": -0.5712490081787109
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "foil_alias_token_ids": [
+          387,
+          1371,
+          3430,
+          91434
+        ],
+        "expected_log_mass": -0.030897140502929688,
+        "foil_log_mass": -12.45801830291748,
+        "expected_mass": 0.9695752859115601,
+        "foil_mass": 3.886435024469392e-06,
+        "correct_minus_foil_log_odds": 12.42712116241455,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 96838,
+        "top_vocab_log_probability": -0.5712490081787109
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            96016,
+            151645
+          ],
+          [
+            96838,
+            151645
+          ],
+          [
+            38703,
+            151645
+          ],
+          [
+            57837,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            1371,
+            7255,
+            151645
+          ],
+          [
+            3430,
+            7255,
+            151645
+          ],
+          [
+            387,
+            7255,
+            151645
+          ],
+          [
+            91434,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.9201701283454895,
+          -0.599168062210083,
+          -6.690902233123779,
+          -7.276318073272705
+        ],
+        "foil_sequence_log_probabilities": [
+          -17.06597328186035,
+          -15.637543678283691,
+          -23.56836700439453,
+          -18.93158531188965
+        ],
+        "expected_class_log_probability": -0.05165805564779191,
+        "foil_class_log_probability": -15.392914129480154,
+        "correct_minus_foil_log_odds": 15.341256073832362,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.669527916936204
+    },
+    {
+      "case_id": "animal_08/fit_chosen/piper/beaver",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "engine": "piper",
+      "word": "beaver",
+      "foil_word": "monkey",
+      "audio_sha256": "267b68d794afcd3cabcac9f98eabd310207b08bf3c1527ae6dc43c87d57b304a",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          91434
+        ],
+        "foil_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "expected_log_mass": -4.045962333679199,
+        "foil_log_mass": -12.210987091064453,
+        "expected_mass": 0.017492862418293953,
+        "foil_mass": 4.975488081981894e-06,
+        "correct_minus_foil_log_odds": 8.165024757385254,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 3430,
+        "top_vocab_log_probability": -0.365081787109375
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          387,
+          1371,
+          3430,
+          91434
+        ],
+        "foil_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "expected_log_mass": -0.04579734802246094,
+        "foil_log_mass": -12.210987091064453,
+        "expected_mass": 0.9552355408668518,
+        "foil_mass": 4.975488081981894e-06,
+        "correct_minus_foil_log_odds": 12.165189743041992,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 3430,
+        "top_vocab_log_probability": -0.365081787109375
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            1371,
+            7255,
+            151645
+          ],
+          [
+            3430,
+            7255,
+            151645
+          ],
+          [
+            387,
+            7255,
+            151645
+          ],
+          [
+            91434,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            96016,
+            151645
+          ],
+          [
+            96838,
+            151645
+          ],
+          [
+            38703,
+            151645
+          ],
+          [
+            57837,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.4229934215545654,
+          -0.3938063681125641,
+          -7.97844934463501,
+          -4.070216655731201
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.187995910644531,
+          -12.724830627441406,
+          -18.991851806640625,
+          -19.750438690185547
+        ],
+        "expected_class_log_probability": -0.0694651419112301,
+        "foil_class_log_probability": -12.234978223947254,
+        "correct_minus_foil_log_odds": 12.165513082036023,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.602250084048137
+    },
+    {
+      "case_id": "animal_08/fit_chosen/piper/monkey",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "engine": "piper",
+      "word": "monkey",
+      "foil_word": "beaver",
+      "audio_sha256": "83b85c468f21dfb3f5aa90d451b31063a4f33e1e01245294f33d342be6340001",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "foil_alias_token_ids": [
+          91434
+        ],
+        "expected_log_mass": -0.03182220458984375,
+        "foil_log_mass": -19.06390953063965,
+        "expected_mass": 0.9686787724494934,
+        "foil_mass": 5.255926804892397e-09,
+        "correct_minus_foil_log_odds": 19.032087326049805,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 96016,
+        "top_vocab_log_probability": -0.5547370910644531
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "foil_alias_token_ids": [
+          387,
+          1371,
+          3430,
+          91434
+        ],
+        "expected_log_mass": -0.03182220458984375,
+        "foil_log_mass": -12.499603271484375,
+        "expected_mass": 0.9686787724494934,
+        "foil_mass": 3.7281320146576036e-06,
+        "correct_minus_foil_log_odds": 12.467781066894531,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 96016,
+        "top_vocab_log_probability": -0.5547370910644531
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            96016,
+            151645
+          ],
+          [
+            96838,
+            151645
+          ],
+          [
+            38703,
+            151645
+          ],
+          [
+            57837,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            1371,
+            7255,
+            151645
+          ],
+          [
+            3430,
+            7255,
+            151645
+          ],
+          [
+            387,
+            7255,
+            151645
+          ],
+          [
+            91434,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.5664753317832947,
+          -0.9654008150100708,
+          -6.680904388427734,
+          -7.437038898468018
+        ],
+        "foil_sequence_log_probabilities": [
+          -17.8084716796875,
+          -16.50224494934082,
+          -25.635250091552734,
+          -19.111007690429688
+        ],
+        "expected_class_log_probability": -0.051086535420478474,
+        "foil_class_log_probability": -16.20616793434488,
+        "correct_minus_foil_log_odds": 16.155081398924402,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5974090001545846
+    },
+    {
+      "case_id": "animal_09/fit_chosen/kokoro/cow",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "engine": "kokoro",
+      "word": "cow",
+      "foil_word": "turtle",
+      "audio_sha256": "b142051d592e49034edf0cb561e36c5e761e091d30c408781e22a442ba06bbc7",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "foil_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "expected_log_mass": -0.0537872314453125,
+        "foil_log_mass": -14.099796295166016,
+        "expected_mass": 0.9476337432861328,
+        "foil_mass": 7.525516139139654e-07,
+        "correct_minus_foil_log_odds": 14.046009063720703,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 89915,
+        "top_vocab_log_probability": -0.6058712005615234
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "foil_alias_token_ids": [
+          51,
+          36089,
+          66806,
+          81109
+        ],
+        "expected_log_mass": -0.0537872314453125,
+        "foil_log_mass": -10.397063255310059,
+        "expected_mass": 0.9476337432861328,
+        "foil_mass": 3.0521987355314195e-05,
+        "correct_minus_foil_log_odds": 10.343276023864746,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 89915,
+        "top_vocab_log_probability": -0.6058712005615234
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            18921,
+            151645
+          ],
+          [
+            89915,
+            151645
+          ],
+          [
+            19362,
+            151645
+          ],
+          [
+            21851,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            81109,
+            151645
+          ],
+          [
+            51,
+            21744,
+            151645
+          ],
+          [
+            36089,
+            151645
+          ],
+          [
+            66806,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.9244000911712646,
+          -0.644416332244873,
+          -7.055190086364746,
+          -8.190255165100098
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.11117935180664,
+          -14.665373802185059,
+          -20.07012367248535,
+          -20.74597930908203
+        ],
+        "expected_class_log_probability": -0.08025769448630116,
+        "foil_class_log_probability": -13.654747801903138,
+        "correct_minus_foil_log_odds": 13.574490107416837,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.616048166062683
+    },
+    {
+      "case_id": "animal_09/fit_chosen/kokoro/turtle",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "engine": "kokoro",
+      "word": "turtle",
+      "foil_word": "cow",
+      "audio_sha256": "c721503737d5c2b298f7be30dc32ccaf36f2bab690b6d104c22c7bd6da39b626",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "foil_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "expected_log_mass": -1.3305740356445312,
+        "foil_log_mass": -13.746892929077148,
+        "expected_mass": 0.26432549953460693,
+        "foil_mass": 1.0710266451496864e-06,
+        "correct_minus_foil_log_odds": 12.416318893432617,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 51,
+        "top_vocab_log_probability": -0.37758445739746094
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          51,
+          36089,
+          66806,
+          81109
+        ],
+        "foil_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "expected_log_mass": -0.05146026611328125,
+        "foil_log_mass": -13.746892929077148,
+        "expected_mass": 0.9498413801193237,
+        "foil_mass": 1.0710266451496864e-06,
+        "correct_minus_foil_log_odds": 13.695432662963867,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 51,
+        "top_vocab_log_probability": -0.37758445739746094
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            81109,
+            151645
+          ],
+          [
+            51,
+            21744,
+            151645
+          ],
+          [
+            36089,
+            151645
+          ],
+          [
+            66806,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            18921,
+            151645
+          ],
+          [
+            89915,
+            151645
+          ],
+          [
+            19362,
+            151645
+          ],
+          [
+            21851,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.3413913249969482,
+          -0.46932974457740784,
+          -8.603885650634766,
+          -9.27928638458252
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.414385795593262,
+          -14.764881134033203,
+          -21.07048225402832,
+          -22.25278091430664
+        ],
+        "expected_class_log_probability": -0.11970777055621556,
+        "foil_class_log_probability": -13.88022287205934,
+        "correct_minus_foil_log_odds": 13.760515101503124,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.60440337494947
+    },
+    {
+      "case_id": "animal_09/fit_chosen/piper/cow",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "engine": "piper",
+      "word": "cow",
+      "foil_word": "turtle",
+      "audio_sha256": "f642bbf87634458d05ed67af25a550dfcc53179f5d8c8a15f48eb8286ed4d834",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "foil_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "expected_log_mass": -0.053546905517578125,
+        "foil_log_mass": -14.93726634979248,
+        "expected_mass": 0.9478614926338196,
+        "foil_mass": 3.257074183693476e-07,
+        "correct_minus_foil_log_odds": 14.883719444274902,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 18921,
+        "top_vocab_log_probability": -0.7435932159423828
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "foil_alias_token_ids": [
+          51,
+          36089,
+          66806,
+          81109
+        ],
+        "expected_log_mass": -0.053546905517578125,
+        "foil_log_mass": -11.15466594696045,
+        "expected_mass": 0.9478614926338196,
+        "foil_mass": 1.4308368918136694e-05,
+        "correct_minus_foil_log_odds": 11.101119041442871,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 18921,
+        "top_vocab_log_probability": -0.7435932159423828
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            18921,
+            151645
+          ],
+          [
+            89915,
+            151645
+          ],
+          [
+            19362,
+            151645
+          ],
+          [
+            21851,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            81109,
+            151645
+          ],
+          [
+            51,
+            21744,
+            151645
+          ],
+          [
+            36089,
+            151645
+          ],
+          [
+            66806,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.7560372352600098,
+          -0.8016963005065918,
+          -6.985308647155762,
+          -8.546717643737793
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.949722290039062,
+          -15.600532531738281,
+          -20.798675537109375,
+          -21.37574005126953
+        ],
+        "expected_class_log_probability": -0.08424031641667484,
+        "foil_class_log_probability": -14.526990601084373,
+        "correct_minus_foil_log_odds": 14.442750284667698,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.551140750059858
+    },
+    {
+      "case_id": "animal_09/fit_chosen/piper/turtle",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "engine": "piper",
+      "word": "turtle",
+      "foil_word": "cow",
+      "audio_sha256": "cacf3a4ca0466869aa687e85af6e60c762f4d0ce3856ceb035818ba898c5f76d",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "foil_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "expected_log_mass": -1.3345088958740234,
+        "foil_log_mass": -13.813207626342773,
+        "expected_mass": 0.2632874548435211,
+        "foil_mass": 1.002305566544237e-06,
+        "correct_minus_foil_log_odds": 12.47869873046875,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 51,
+        "top_vocab_log_probability": -0.3749561309814453
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          51,
+          36089,
+          66806,
+          81109
+        ],
+        "foil_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "expected_log_mass": -0.050655364990234375,
+        "foil_log_mass": -13.813207626342773,
+        "expected_mass": 0.9506062269210815,
+        "foil_mass": 1.002305566544237e-06,
+        "correct_minus_foil_log_odds": 13.762552261352539,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 51,
+        "top_vocab_log_probability": -0.3749561309814453
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            81109,
+            151645
+          ],
+          [
+            51,
+            21744,
+            151645
+          ],
+          [
+            36089,
+            151645
+          ],
+          [
+            66806,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            18921,
+            151645
+          ],
+          [
+            89915,
+            151645
+          ],
+          [
+            19362,
+            151645
+          ],
+          [
+            21851,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.3439804315567017,
+          -0.464115709066391,
+          -8.537117958068848,
+          -9.327062606811523
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.481826782226562,
+          -14.8447904586792,
+          -20.99248504638672,
+          -22.365924835205078
+        ],
+        "expected_class_log_probability": -0.11677954966286708,
+        "foil_class_log_probability": -13.952684407139344,
+        "correct_minus_foil_log_odds": 13.835904857476477,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5336005419958383
+    },
+    {
+      "case_id": "color_03/fit_chosen/kokoro/black",
+      "pair_id": "color_03",
+      "category": "color",
+      "engine": "kokoro",
+      "word": "black",
+      "foil_word": "white",
+      "audio_sha256": "e1377ad16b19cf8d77a6a03f95eb4d2a2e8f650a7be9acfe9d733fce9f03ba25",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "foil_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "expected_log_mass": -0.053836822509765625,
+        "foil_log_mass": -7.432318687438965,
+        "expected_mass": 0.9475866556167603,
+        "foil_mass": 0.0005918137030676007,
+        "correct_minus_foil_log_odds": 7.378481864929199,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14417,
+        "top_vocab_log_probability": -0.5141258239746094
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "foil_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "expected_log_mass": -0.053836822509765625,
+        "foil_log_mass": -7.432318687438965,
+        "expected_mass": 0.9475866556167603,
+        "foil_mass": 0.0005918137030676007,
+        "correct_minus_foil_log_odds": 7.378481864929199,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14417,
+        "top_vocab_log_probability": -0.5141258239746094
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            11453,
+            151645
+          ],
+          [
+            14417,
+            151645
+          ],
+          [
+            3691,
+            151645
+          ],
+          [
+            5235,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            5782,
+            151645
+          ],
+          [
+            14075,
+            151645
+          ],
+          [
+            4158,
+            151645
+          ],
+          [
+            5807,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.061002492904663,
+          -0.5477240085601807,
+          -9.154875755310059,
+          -8.727029800415039
+        ],
+        "foil_sequence_log_probabilities": [
+          -8.342345237731934,
+          -8.001805305480957,
+          -16.424434661865234,
+          -15.519258499145508
+        ],
+        "expected_class_log_probability": -0.0783497789233285,
+        "foil_class_log_probability": -7.46405572454028,
+        "correct_minus_foil_log_odds": 7.385705945616952,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.603789459215477
+    },
+    {
+      "case_id": "color_03/fit_chosen/kokoro/white",
+      "pair_id": "color_03",
+      "category": "color",
+      "engine": "kokoro",
+      "word": "white",
+      "foil_word": "black",
+      "audio_sha256": "ca7f37eb1d670531046a0515252be172296f5f3b20012be548514390a310a925",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "foil_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "expected_log_mass": -0.03761863708496094,
+        "foil_log_mass": -8.059577941894531,
+        "expected_mass": 0.963080108165741,
+        "foil_mass": 0.000316060206387192,
+        "correct_minus_foil_log_odds": 8.02195930480957,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14075,
+        "top_vocab_log_probability": -0.5338191986083984
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "foil_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "expected_log_mass": -0.03761863708496094,
+        "foil_log_mass": -8.059577941894531,
+        "expected_mass": 0.963080108165741,
+        "foil_mass": 0.000316060206387192,
+        "correct_minus_foil_log_odds": 8.02195930480957,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14075,
+        "top_vocab_log_probability": -0.5338191986083984
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            5782,
+            151645
+          ],
+          [
+            14075,
+            151645
+          ],
+          [
+            4158,
+            151645
+          ],
+          [
+            5807,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            11453,
+            151645
+          ],
+          [
+            14417,
+            151645
+          ],
+          [
+            3691,
+            151645
+          ],
+          [
+            5235,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.9911226630210876,
+          -0.5754490494728088,
+          -8.739079475402832,
+          -7.734935283660889
+        ],
+        "foil_sequence_log_probabilities": [
+          -9.05606460571289,
+          -8.615323066711426,
+          -16.845666885375977,
+          -16.821807861328125
+        ],
+        "expected_class_log_probability": -0.068054567337414,
+        "foil_class_log_probability": -8.118130952552377,
+        "correct_minus_foil_log_odds": 8.050076385214963,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6004809997975826
+    },
+    {
+      "case_id": "color_03/fit_chosen/piper/black",
+      "pair_id": "color_03",
+      "category": "color",
+      "engine": "piper",
+      "word": "black",
+      "foil_word": "white",
+      "audio_sha256": "363e9cf4786f195488139e2f0932b7484f7f07860d2c00eb1db556587c230e9f",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "foil_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "expected_log_mass": -0.062046051025390625,
+        "foil_log_mass": -7.704795837402344,
+        "expected_mass": 0.9398396015167236,
+        "foil_mass": 0.0004506607074290514,
+        "correct_minus_foil_log_odds": 7.642749786376953,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14417,
+        "top_vocab_log_probability": -0.5507240295410156
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "foil_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "expected_log_mass": -0.062046051025390625,
+        "foil_log_mass": -7.704795837402344,
+        "expected_mass": 0.9398396015167236,
+        "foil_mass": 0.0004506607074290514,
+        "correct_minus_foil_log_odds": 7.642749786376953,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14417,
+        "top_vocab_log_probability": -0.5507240295410156
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            11453,
+            151645
+          ],
+          [
+            14417,
+            151645
+          ],
+          [
+            3691,
+            151645
+          ],
+          [
+            5235,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            5782,
+            151645
+          ],
+          [
+            14075,
+            151645
+          ],
+          [
+            4158,
+            151645
+          ],
+          [
+            5807,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.0273107290267944,
+          -0.6063131093978882,
+          -8.877266883850098,
+          -8.65985107421875
+        ],
+        "foil_sequence_log_probabilities": [
+          -8.617412567138672,
+          -8.295146942138672,
+          -16.45763397216797,
+          -15.7073974609375
+        ],
+        "expected_class_log_probability": -0.10132520401957756,
+        "foil_class_log_probability": -7.749691117510408,
+        "correct_minus_foil_log_odds": 7.648365913490831,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.415742041077465
+    },
+    {
+      "case_id": "color_03/fit_chosen/piper/white",
+      "pair_id": "color_03",
+      "category": "color",
+      "engine": "piper",
+      "word": "white",
+      "foil_word": "black",
+      "audio_sha256": "9f7e6e9d45c33e5f1eb1690aba2a1b725495669abd723099ac00f43ac3e0e15c",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "foil_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "expected_log_mass": -0.04505348205566406,
+        "foil_log_mass": -8.464072227478027,
+        "expected_mass": 0.9559463262557983,
+        "foil_mass": 0.00021091144299134612,
+        "correct_minus_foil_log_odds": 8.419018745422363,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14075,
+        "top_vocab_log_probability": -0.7083148956298828
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "foil_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "expected_log_mass": -0.04505348205566406,
+        "foil_log_mass": -8.464072227478027,
+        "expected_mass": 0.9559463262557983,
+        "foil_mass": 0.00021091144299134612,
+        "correct_minus_foil_log_odds": 8.419018745422363,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14075,
+        "top_vocab_log_probability": -0.7083148956298828
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            5782,
+            151645
+          ],
+          [
+            14075,
+            151645
+          ],
+          [
+            4158,
+            151645
+          ],
+          [
+            5807,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            11453,
+            151645
+          ],
+          [
+            14417,
+            151645
+          ],
+          [
+            3691,
+            151645
+          ],
+          [
+            5235,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.7865606546401978,
+          -0.7667215466499329,
+          -8.519552230834961,
+          -7.734579563140869
+        ],
+        "foil_sequence_log_probabilities": [
+          -9.358155250549316,
+          -9.126564979553223,
+          -17.034130096435547,
+          -17.189329147338867
+        ],
+        "expected_class_log_probability": -0.08275256474888093,
+        "foil_class_log_probability": -8.542142808751883,
+        "correct_minus_foil_log_odds": 8.459390244003002,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.4379652910865843
+    },
+    {
+      "case_id": "color_05/fit_chosen/kokoro/silver",
+      "pair_id": "color_05",
+      "category": "color",
+      "engine": "kokoro",
+      "word": "silver",
+      "foil_word": "teal",
+      "audio_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "foil_alias_token_ids": [
+          94607
+        ],
+        "expected_log_mass": -0.029140472412109375,
+        "foil_log_mass": -17.943723678588867,
+        "expected_mass": 0.971280038356781,
+        "foil_mass": 1.6111643574845402e-08,
+        "correct_minus_foil_log_odds": 17.914583206176758,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81914,
+        "top_vocab_log_probability": -0.5139789581298828
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "foil_alias_token_ids": [
+          665,
+          2655,
+          6639,
+          94607
+        ],
+        "expected_log_mass": -0.029140472412109375,
+        "foil_log_mass": -12.339483261108398,
+        "expected_mass": 0.971280038356781,
+        "foil_mass": 4.375528533273609e-06,
+        "correct_minus_foil_log_odds": 12.310342788696289,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81914,
+        "top_vocab_log_probability": -0.5139789581298828
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            81914,
+            151645
+          ],
+          [
+            52343,
+            151645
+          ],
+          [
+            14961,
+            151645
+          ],
+          [
+            14997,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            665,
+            278,
+            151645
+          ],
+          [
+            6639,
+            278,
+            151645
+          ],
+          [
+            94607,
+            151645
+          ],
+          [
+            2655,
+            278,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.5236645340919495,
+          -1.01929771900177,
+          -5.7997870445251465,
+          -7.058033466339111
+        ],
+        "foil_sequence_log_probabilities": [
+          -15.882719993591309,
+          -15.923431396484375,
+          -18.074050903320312,
+          -19.861295700073242
+        ],
+        "expected_class_log_probability": -0.043865339190089,
+        "foil_class_log_probability": -15.145275420275444,
+        "correct_minus_foil_log_odds": 15.101410081085355,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6214086248073727
+    },
+    {
+      "case_id": "color_05/fit_chosen/kokoro/teal",
+      "pair_id": "color_05",
+      "category": "color",
+      "engine": "kokoro",
+      "word": "teal",
+      "foil_word": "silver",
+      "audio_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          94607
+        ],
+        "foil_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "expected_log_mass": -5.219509124755859,
+        "foil_log_mass": -12.657892227172852,
+        "expected_mass": 0.0054099843837320805,
+        "foil_mass": 3.182345153618371e-06,
+        "correct_minus_foil_log_odds": 7.438383102416992,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6639,
+        "top_vocab_log_probability": -0.31817626953125
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          665,
+          2655,
+          6639,
+          94607
+        ],
+        "foil_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "expected_log_mass": -0.03006744384765625,
+        "foil_log_mass": -12.657892227172852,
+        "expected_mass": 0.9703800678253174,
+        "foil_mass": 3.182345153618371e-06,
+        "correct_minus_foil_log_odds": 12.627824783325195,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6639,
+        "top_vocab_log_probability": -0.31817626953125
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            665,
+            278,
+            151645
+          ],
+          [
+            6639,
+            278,
+            151645
+          ],
+          [
+            94607,
+            151645
+          ],
+          [
+            2655,
+            278,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            81914,
+            151645
+          ],
+          [
+            52343,
+            151645
+          ],
+          [
+            14961,
+            151645
+          ],
+          [
+            14997,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.4597519636154175,
+          -0.3778995871543884,
+          -5.270721912384033,
+          -6.616018295288086
+        ],
+        "foil_sequence_log_probabilities": [
+          -12.930522918701172,
+          -14.32617473602295,
+          -19.21550178527832,
+          -20.77471351623535
+        ],
+        "expected_class_log_probability": -0.07896545655364062,
+        "foil_class_log_probability": -12.70743723603274,
+        "correct_minus_foil_log_odds": 12.6284717794791,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.621684791985899
+    },
+    {
+      "case_id": "color_05/fit_chosen/piper/silver",
+      "pair_id": "color_05",
+      "category": "color",
+      "engine": "piper",
+      "word": "silver",
+      "foil_word": "teal",
+      "audio_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "foil_alias_token_ids": [
+          94607
+        ],
+        "expected_log_mass": -0.029821395874023438,
+        "foil_log_mass": -17.90814971923828,
+        "expected_mass": 0.9706188440322876,
+        "foil_mass": 1.6695114624099006e-08,
+        "correct_minus_foil_log_odds": 17.878328323364258,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81914,
+        "top_vocab_log_probability": -0.4111785888671875
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "foil_alias_token_ids": [
+          665,
+          2655,
+          6639,
+          94607
+        ],
+        "expected_log_mass": -0.029821395874023438,
+        "foil_log_mass": -12.315559387207031,
+        "expected_mass": 0.9706188440322876,
+        "foil_mass": 4.481470568862278e-06,
+        "correct_minus_foil_log_odds": 12.285737991333008,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81914,
+        "top_vocab_log_probability": -0.4111785888671875
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            81914,
+            151645
+          ],
+          [
+            52343,
+            151645
+          ],
+          [
+            14961,
+            151645
+          ],
+          [
+            14997,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            665,
+            278,
+            151645
+          ],
+          [
+            6639,
+            278,
+            151645
+          ],
+          [
+            94607,
+            151645
+          ],
+          [
+            2655,
+            278,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.4187379479408264,
+          -1.2119824886322021,
+          -5.670496940612793,
+          -6.990687847137451
+        ],
+        "foil_sequence_log_probabilities": [
+          -16.051359176635742,
+          -16.969411849975586,
+          -17.990493774414062,
+          -20.6070556640625
+        ],
+        "expected_class_log_probability": -0.04097843546300994,
+        "foil_class_log_probability": -15.61076415435634,
+        "correct_minus_foil_log_odds": 15.56978571889333,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6003777091391385
+    },
+    {
+      "case_id": "color_05/fit_chosen/piper/teal",
+      "pair_id": "color_05",
+      "category": "color",
+      "engine": "piper",
+      "word": "teal",
+      "foil_word": "silver",
+      "audio_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          94607
+        ],
+        "foil_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "expected_log_mass": -5.636447906494141,
+        "foil_log_mass": -13.310968399047852,
+        "expected_mass": 0.003565510967746377,
+        "foil_mass": 1.656227141211275e-06,
+        "correct_minus_foil_log_odds": 7.674520492553711,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6639,
+        "top_vocab_log_probability": -0.4587383270263672
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          665,
+          2655,
+          6639,
+          94607
+        ],
+        "foil_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "expected_log_mass": -0.0311737060546875,
+        "foil_log_mass": -13.310968399047852,
+        "expected_mass": 0.9693071842193604,
+        "foil_mass": 1.656227141211275e-06,
+        "correct_minus_foil_log_odds": 13.279794692993164,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6639,
+        "top_vocab_log_probability": -0.4587383270263672
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            665,
+            278,
+            151645
+          ],
+          [
+            6639,
+            278,
+            151645
+          ],
+          [
+            94607,
+            151645
+          ],
+          [
+            2655,
+            278,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            81914,
+            151645
+          ],
+          [
+            52343,
+            151645
+          ],
+          [
+            14961,
+            151645
+          ],
+          [
+            14997,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.1146715879440308,
+          -0.5134329199790955,
+          -5.665971755981445,
+          -6.694156169891357
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.504997253417969,
+          -15.497382164001465,
+          -20.162649154663086,
+          -21.632741928100586
+        ],
+        "expected_class_log_probability": -0.07132356099177789,
+        "foil_class_log_probability": -13.37576955932654,
+        "correct_minus_foil_log_odds": 13.304445998334764,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5999145831447095
+    },
+    {
+      "case_id": "color_06/fit_chosen/kokoro/cyan",
+      "pair_id": "color_06",
+      "category": "color",
+      "engine": "kokoro",
+      "word": "cyan",
+      "foil_word": "violet",
+      "audio_sha256": "027790f94231f2de54ad4079029c4c46966373944c95a1d636d48dde4f8da2d9",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "foil_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "expected_log_mass": -0.21660232543945312,
+        "foil_log_mass": -15.952653884887695,
+        "expected_mass": 0.8052501082420349,
+        "foil_mass": 1.179914264071158e-07,
+        "correct_minus_foil_log_odds": 15.736051559448242,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 69746,
+        "top_vocab_log_probability": -0.22277450561523438
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          34,
+          57888,
+          69746,
+          92143
+        ],
+        "foil_alias_token_ids": [
+          53,
+          85,
+          73474,
+          79736
+        ],
+        "expected_log_mass": -0.038848876953125,
+        "foil_log_mass": -11.716544151306152,
+        "expected_mass": 0.9618960618972778,
+        "foil_mass": 8.157734555425122e-06,
+        "correct_minus_foil_log_odds": 11.677695274353027,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 69746,
+        "top_vocab_log_probability": -0.22277450561523438
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            69746,
+            151645
+          ],
+          [
+            34,
+            8339,
+            151645
+          ],
+          [
+            57888,
+            151645
+          ],
+          [
+            92143,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            85,
+            30912,
+            151645
+          ],
+          [
+            53,
+            30912,
+            151645
+          ],
+          [
+            79736,
+            151645
+          ],
+          [
+            73474,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.24695204198360443,
+          -2.0350358486175537,
+          -6.277887344360352,
+          -5.940247058868408
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.22044563293457,
+          -13.23490047454834,
+          -16.44317626953125,
+          -17.091264724731445
+        ],
+        "expected_class_log_probability": -0.08734303595920018,
+        "foil_class_log_probability": -12.504394499999082,
+        "correct_minus_foil_log_odds": 12.417051464039881,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6773257500026375
+    },
+    {
+      "case_id": "color_06/fit_chosen/kokoro/violet",
+      "pair_id": "color_06",
+      "category": "color",
+      "engine": "kokoro",
+      "word": "violet",
+      "foil_word": "cyan",
+      "audio_sha256": "3c368a84409667eeaa9a5647a91a8a7a70d0e013152cc7f7e285f5acd6ccb383",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "foil_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "expected_log_mass": -4.457680702209473,
+        "foil_log_mass": -10.898179054260254,
+        "expected_mass": 0.011589210480451584,
+        "foil_mass": 1.8491877199267037e-05,
+        "correct_minus_foil_log_odds": 6.440498352050781,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 53,
+        "top_vocab_log_probability": -0.6233177185058594
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          53,
+          85,
+          73474,
+          79736
+        ],
+        "foil_alias_token_ids": [
+          34,
+          57888,
+          69746,
+          92143
+        ],
+        "expected_log_mass": -0.03145790100097656,
+        "foil_log_mass": -9.503868103027344,
+        "expected_mass": 0.9690317511558533,
+        "foil_mass": 7.45628567528911e-05,
+        "correct_minus_foil_log_odds": 9.472410202026367,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 53,
+        "top_vocab_log_probability": -0.6233177185058594
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            85,
+            30912,
+            151645
+          ],
+          [
+            53,
+            30912,
+            151645
+          ],
+          [
+            79736,
+            151645
+          ],
+          [
+            73474,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            69746,
+            151645
+          ],
+          [
+            34,
+            8339,
+            151645
+          ],
+          [
+            57888,
+            151645
+          ],
+          [
+            92143,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.8763614892959595,
+          -0.7494599223136902,
+          -4.964346408843994,
+          -5.459480285644531
+        ],
+        "foil_sequence_log_probabilities": [
+          -10.948796272277832,
+          -13.108877182006836,
+          -17.114599227905273,
+          -17.36200523376465
+        ],
+        "expected_class_log_probability": -0.10518845396843046,
+        "foil_class_log_probability": -10.836311178328712,
+        "correct_minus_foil_log_odds": 10.731122724360281,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6731484159827232
+    },
+    {
+      "case_id": "color_06/fit_chosen/piper/cyan",
+      "pair_id": "color_06",
+      "category": "color",
+      "engine": "piper",
+      "word": "cyan",
+      "foil_word": "violet",
+      "audio_sha256": "8c27cf3dc2b33747746f5c8f803e0eeee257d20aa08f27e97f9d84372c0f9ea8",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "foil_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "expected_log_mass": -8.613959312438965,
+        "foil_log_mass": -19.509593963623047,
+        "expected_mass": 0.00018155365251004696,
+        "foil_mass": 3.3658209552811513e-09,
+        "correct_minus_foil_log_odds": 10.895634651184082,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 91246,
+        "top_vocab_log_probability": -0.9558544158935547
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          34,
+          57888,
+          69746,
+          92143
+        ],
+        "foil_alias_token_ids": [
+          53,
+          85,
+          73474,
+          79736
+        ],
+        "expected_log_mass": -7.748570442199707,
+        "foil_log_mass": -10.497384071350098,
+        "expected_mass": 0.00043135875603184104,
+        "foil_mass": 2.7608577511273324e-05,
+        "correct_minus_foil_log_odds": 2.7488136291503906,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 91246,
+        "top_vocab_log_probability": -0.9558544158935547
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            69746,
+            151645
+          ],
+          [
+            34,
+            8339,
+            151645
+          ],
+          [
+            57888,
+            151645
+          ],
+          [
+            92143,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            85,
+            30912,
+            151645
+          ],
+          [
+            53,
+            30912,
+            151645
+          ],
+          [
+            79736,
+            151645
+          ],
+          [
+            73474,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -8.635271072387695,
+          -11.321149826049805,
+          -14.149802207946777,
+          -14.452584266662598
+        ],
+        "foil_sequence_log_probabilities": [
+          -19.215116500854492,
+          -18.36817169189453,
+          -20.17722511291504,
+          -20.367523193359375
+        ],
+        "expected_class_log_probability": -8.562797236172859,
+        "foil_class_log_probability": -17.82123308598323,
+        "correct_minus_foil_log_odds": 9.258435849810372,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6007802500389516
+    },
+    {
+      "case_id": "color_06/fit_chosen/piper/violet",
+      "pair_id": "color_06",
+      "category": "color",
+      "engine": "piper",
+      "word": "violet",
+      "foil_word": "cyan",
+      "audio_sha256": "e85e25ca8acb7a39bfcebe876dd1b161dedac034c420540286300899241ecf7e",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "foil_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "expected_log_mass": -4.9550371170043945,
+        "foil_log_mass": -10.639008522033691,
+        "expected_mass": 0.007047818973660469,
+        "foil_mass": 2.3962786144693382e-05,
+        "correct_minus_foil_log_odds": 5.683971405029297,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 53,
+        "top_vocab_log_probability": -0.6985321044921875
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          53,
+          85,
+          73474,
+          79736
+        ],
+        "foil_alias_token_ids": [
+          34,
+          57888,
+          69746,
+          92143
+        ],
+        "expected_log_mass": -0.028072357177734375,
+        "foil_log_mass": -9.403950691223145,
+        "expected_mass": 0.9723179936408997,
+        "foil_mass": 8.239789167419076e-05,
+        "correct_minus_foil_log_odds": 9.37587833404541,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 53,
+        "top_vocab_log_probability": -0.6985321044921875
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            85,
+            30912,
+            151645
+          ],
+          [
+            53,
+            30912,
+            151645
+          ],
+          [
+            79736,
+            151645
+          ],
+          [
+            73474,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            69746,
+            151645
+          ],
+          [
+            34,
+            8339,
+            151645
+          ],
+          [
+            57888,
+            151645
+          ],
+          [
+            92143,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.7712749242782593,
+          -0.8145989179611206,
+          -5.42539644241333,
+          -6.084767818450928
+        ],
+        "foil_sequence_log_probabilities": [
+          -10.706631660461426,
+          -12.833417892456055,
+          -17.362022399902344,
+          -17.823774337768555
+        ],
+        "expected_class_log_probability": -0.09220230073961044,
+        "foil_class_log_probability": -10.592126908243763,
+        "correct_minus_foil_log_odds": 10.499924607504152,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5975626669824123
+    },
+    {
+      "case_id": "nature_00/fit_chosen/kokoro/lake",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "engine": "kokoro",
+      "word": "lake",
+      "foil_word": "river",
+      "audio_sha256": "a23af150cb8d32b3c614ecf06472904e1aba24449a9c431b3035ef60baa8921b",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "foil_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "expected_log_mass": -0.0206298828125,
+        "foil_log_mass": -11.484587669372559,
+        "expected_mass": 0.9795814156532288,
+        "foil_mass": 1.0287431905453559e-05,
+        "correct_minus_foil_log_odds": 11.463957786560059,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81289,
+        "top_vocab_log_probability": -0.5983695983886719
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "foil_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "expected_log_mass": -0.0206298828125,
+        "foil_log_mass": -11.484587669372559,
+        "expected_mass": 0.9795814156532288,
+        "foil_mass": 1.0287431905453559e-05,
+        "correct_minus_foil_log_odds": 11.463957786560059,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81289,
+        "top_vocab_log_probability": -0.5983695983886719
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            62110,
+            151645
+          ],
+          [
+            81289,
+            151645
+          ],
+          [
+            21800,
+            151645
+          ],
+          [
+            11678,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            5469,
+            151645
+          ],
+          [
+            85699,
+            151645
+          ],
+          [
+            14796,
+            151645
+          ],
+          [
+            10948,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.8781323432922363,
+          -0.6306414008140564,
+          -5.109347820281982,
+          -5.987589359283447
+        ],
+        "foil_sequence_log_probabilities": [
+          -12.633225440979004,
+          -11.947044372558594,
+          -15.245118141174316,
+          -17.940757751464844
+        ],
+        "expected_class_log_probability": -0.04462260254892603,
+        "foil_class_log_probability": -11.51335216951436,
+        "correct_minus_foil_log_odds": 11.468729566965433,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.630382041912526
+    },
+    {
+      "case_id": "nature_00/fit_chosen/kokoro/river",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "engine": "kokoro",
+      "word": "river",
+      "foil_word": "lake",
+      "audio_sha256": "ce6e0b72bbd3118c55035cbe9a06badd6e3c9d006db2254b8dd940180781c514",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "foil_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "expected_log_mass": -0.029474258422851562,
+        "foil_log_mass": -10.571340560913086,
+        "expected_mass": 0.9709558486938477,
+        "foil_mass": 2.5640420062700287e-05,
+        "correct_minus_foil_log_odds": 10.541866302490234,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 85699,
+        "top_vocab_log_probability": -0.5059623718261719
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "foil_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "expected_log_mass": -0.029474258422851562,
+        "foil_log_mass": -10.571340560913086,
+        "expected_mass": 0.9709558486938477,
+        "foil_mass": 2.5640420062700287e-05,
+        "correct_minus_foil_log_odds": 10.541866302490234,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 85699,
+        "top_vocab_log_probability": -0.5059623718261719
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            5469,
+            151645
+          ],
+          [
+            85699,
+            151645
+          ],
+          [
+            14796,
+            151645
+          ],
+          [
+            10948,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            62110,
+            151645
+          ],
+          [
+            81289,
+            151645
+          ],
+          [
+            21800,
+            151645
+          ],
+          [
+            11678,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.0439406633377075,
+          -0.5247589349746704,
+          -4.507299423217773,
+          -6.4523701667785645
+        ],
+        "foil_sequence_log_probabilities": [
+          -11.16033935546875,
+          -11.407214164733887,
+          -16.99305534362793,
+          -17.806303024291992
+        ],
+        "expected_class_log_probability": -0.04461297884127047,
+        "foil_class_log_probability": -10.580658870929032,
+        "correct_minus_foil_log_odds": 10.536045892087762,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6074888750445098
+    },
+    {
+      "case_id": "nature_00/fit_chosen/piper/lake",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "engine": "piper",
+      "word": "lake",
+      "foil_word": "river",
+      "audio_sha256": "d6fc4fd906e12cacc7c14052587509f495ad27c14678f1c0b88b4cb8cc414ba7",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "foil_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "expected_log_mass": -0.025096893310546875,
+        "foil_log_mass": -11.668861389160156,
+        "expected_mass": 0.9752154350280762,
+        "foil_mass": 8.556140528526157e-06,
+        "correct_minus_foil_log_odds": 11.64376449584961,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 62110,
+        "top_vocab_log_probability": -0.6402053833007812
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "foil_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "expected_log_mass": -0.025096893310546875,
+        "foil_log_mass": -11.668861389160156,
+        "expected_mass": 0.9752154350280762,
+        "foil_mass": 8.556140528526157e-06,
+        "correct_minus_foil_log_odds": 11.64376449584961,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 62110,
+        "top_vocab_log_probability": -0.6402053833007812
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            62110,
+            151645
+          ],
+          [
+            81289,
+            151645
+          ],
+          [
+            21800,
+            151645
+          ],
+          [
+            11678,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            5469,
+            151645
+          ],
+          [
+            85699,
+            151645
+          ],
+          [
+            14796,
+            151645
+          ],
+          [
+            10948,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.652877926826477,
+          -0.8667930960655212,
+          -4.599083423614502,
+          -5.690886497497559
+        ],
+        "foil_sequence_log_probabilities": [
+          -12.491415023803711,
+          -12.36971664428711,
+          -15.072423934936523,
+          -17.982484817504883
+        ],
+        "expected_class_log_probability": -0.046797707522532206,
+        "foil_class_log_probability": -11.698768984525685,
+        "correct_minus_foil_log_odds": 11.651971277003152,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5939802080392838
+    },
+    {
+      "case_id": "nature_00/fit_chosen/piper/river",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "engine": "piper",
+      "word": "river",
+      "foil_word": "lake",
+      "audio_sha256": "420cfd8dcda7b7904a139b095f101a1d9bb880d3c55d85ca6626dfe0deb39329",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "foil_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "expected_log_mass": -0.014398574829101562,
+        "foil_log_mass": -10.445115089416504,
+        "expected_mass": 0.9857045412063599,
+        "foil_mass": 2.9090029784129e-05,
+        "correct_minus_foil_log_odds": 10.430716514587402,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 85699,
+        "top_vocab_log_probability": -0.44769859313964844
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "foil_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "expected_log_mass": -0.014398574829101562,
+        "foil_log_mass": -10.445115089416504,
+        "expected_mass": 0.9857045412063599,
+        "foil_mass": 2.9090029784129e-05,
+        "correct_minus_foil_log_odds": 10.430716514587402,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 85699,
+        "top_vocab_log_probability": -0.44769859313964844
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            5469,
+            151645
+          ],
+          [
+            85699,
+            151645
+          ],
+          [
+            14796,
+            151645
+          ],
+          [
+            10948,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            62110,
+            151645
+          ],
+          [
+            81289,
+            151645
+          ],
+          [
+            21800,
+            151645
+          ],
+          [
+            11678,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.1333882808685303,
+          -0.4622795581817627,
+          -3.9442296028137207,
+          -6.201912879943848
+        ],
+        "foil_sequence_log_probabilities": [
+          -10.945223808288574,
+          -11.412338256835938,
+          -16.094669342041016,
+          -17.445690155029297
+        ],
+        "expected_class_log_probability": -0.02718775997817885,
+        "foil_class_log_probability": -10.454123225271228,
+        "correct_minus_foil_log_odds": 10.426935465293049,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5972069159615785
+    },
+    {
+      "case_id": "nature_09/fit_chosen/kokoro/garden",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "engine": "kokoro",
+      "word": "garden",
+      "foil_word": "waterfall",
+      "audio_sha256": "e2beb015842d6912ef32d8b2979b0f56443a7fc61655d5e011606ffd07bd3823",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "foil_alias_token_ids": [
+          69051
+        ],
+        "expected_log_mass": -5.807577133178711,
+        "foil_log_mass": -17.339454650878906,
+        "expected_mass": 0.003004701342433691,
+        "foil_mass": 2.948292276983011e-08,
+        "correct_minus_foil_log_odds": 11.531877517700195,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.4946403503417969
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          38,
+          70,
+          13551,
+          19021
+        ],
+        "foil_alias_token_ids": [
+          9959,
+          12987,
+          28253,
+          69051
+        ],
+        "expected_log_mass": -0.018474578857421875,
+        "foil_log_mass": -11.929351806640625,
+        "expected_mass": 0.9816949963569641,
+        "foil_mass": 6.59399074720568e-06,
+        "correct_minus_foil_log_odds": 11.910877227783203,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.4946403503417969
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            70,
+            8341,
+            151645
+          ],
+          [
+            38,
+            8341,
+            151645
+          ],
+          [
+            13551,
+            151645
+          ],
+          [
+            19021,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            12987,
+            13464,
+            151645
+          ],
+          [
+            28253,
+            13464,
+            151645
+          ],
+          [
+            69051,
+            151645
+          ],
+          [
+            9959,
+            13464,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.0094451904296875,
+          -0.574726402759552,
+          -6.281513214111328,
+          -6.870913982391357
+        ],
+        "foil_sequence_log_probabilities": [
+          -19.54632568359375,
+          -18.235902786254883,
+          -17.45785903930664,
+          -23.670560836791992
+        ],
+        "expected_class_log_probability": -0.0723685106809916,
+        "foil_class_log_probability": -16.997158297362443,
+        "correct_minus_foil_log_odds": 16.92478978668145,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6829126249067485
+    },
+    {
+      "case_id": "nature_09/fit_chosen/kokoro/waterfall",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "engine": "kokoro",
+      "word": "waterfall",
+      "foil_word": "garden",
+      "audio_sha256": "63893f7571eba35d5eac9c9ebdbcfeba1ae88f14057a8b33ba1f852d3cc64514",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          69051
+        ],
+        "foil_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "expected_log_mass": -2.5292606353759766,
+        "foil_log_mass": -16.853485107421875,
+        "expected_mass": 0.07971794158220291,
+        "foil_mass": 4.793187713403313e-08,
+        "correct_minus_foil_log_odds": 14.324224472045898,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 28253,
+        "top_vocab_log_probability": -0.6496295928955078
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          9959,
+          12987,
+          28253,
+          69051
+        ],
+        "foil_alias_token_ids": [
+          38,
+          70,
+          13551,
+          19021
+        ],
+        "expected_log_mass": -0.044452667236328125,
+        "foil_log_mass": -9.872273445129395,
+        "expected_mass": 0.9565208554267883,
+        "foil_mass": 5.1585320761660114e-05,
+        "correct_minus_foil_log_odds": 9.827820777893066,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 28253,
+        "top_vocab_log_probability": -0.6496295928955078
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            12987,
+            13464,
+            151645
+          ],
+          [
+            28253,
+            13464,
+            151645
+          ],
+          [
+            69051,
+            151645
+          ],
+          [
+            9959,
+            13464,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            70,
+            8341,
+            151645
+          ],
+          [
+            38,
+            8341,
+            151645
+          ],
+          [
+            13551,
+            151645
+          ],
+          [
+            19021,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.052200198173523,
+          -0.6770009398460388,
+          -2.562263250350952,
+          -6.617872714996338
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.142508506774902,
+          -13.610321998596191,
+          -17.54009437561035,
+          -17.868221282958984
+        ],
+        "expected_class_log_probability": -0.06638175508592337,
+        "foil_class_log_probability": -13.12720501949423,
+        "correct_minus_foil_log_odds": 13.060823264408306,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6779192499816418
+    },
+    {
+      "case_id": "nature_09/fit_chosen/piper/garden",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "engine": "piper",
+      "word": "garden",
+      "foil_word": "waterfall",
+      "audio_sha256": "e64137502eac21d71e9c39f6b9a571399518e5ac9a96ec03e34456ee8273b7a7",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "foil_alias_token_ids": [
+          69051
+        ],
+        "expected_log_mass": -5.7241973876953125,
+        "foil_log_mass": -17.483999252319336,
+        "expected_mass": 0.0032659736461937428,
+        "foil_mass": 2.5515001667031356e-08,
+        "correct_minus_foil_log_odds": 11.759801864624023,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.6219673156738281
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          38,
+          70,
+          13551,
+          19021
+        ],
+        "foil_alias_token_ids": [
+          9959,
+          12987,
+          28253,
+          69051
+        ],
+        "expected_log_mass": -0.016498565673828125,
+        "foil_log_mass": -12.057668685913086,
+        "expected_mass": 0.9836367964744568,
+        "foil_mass": 5.7999072851089295e-06,
+        "correct_minus_foil_log_odds": 12.041170120239258,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.6219673156738281
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            70,
+            8341,
+            151645
+          ],
+          [
+            38,
+            8341,
+            151645
+          ],
+          [
+            13551,
+            151645
+          ],
+          [
+            19021,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            12987,
+            13464,
+            151645
+          ],
+          [
+            28253,
+            13464,
+            151645
+          ],
+          [
+            69051,
+            151645
+          ],
+          [
+            9959,
+            13464,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.8223442435264587,
+          -0.7065586447715759,
+          -6.158862590789795,
+          -6.847382068634033
+        ],
+        "foil_sequence_log_probabilities": [
+          -18.394248962402344,
+          -18.191932678222656,
+          -17.586219787597656,
+          -23.75499725341797
+        ],
+        "expected_class_log_probability": -0.06622921982839014,
+        "foil_class_log_probability": -16.89632050754888,
+        "correct_minus_foil_log_odds": 16.83009128772049,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.614479999989271
+    },
+    {
+      "case_id": "nature_09/fit_chosen/piper/waterfall",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "engine": "piper",
+      "word": "waterfall",
+      "foil_word": "garden",
+      "audio_sha256": "05b367cfc538c4c6a7dfd5e9d113b37be42eee1be497dd9c48f7548131adeaef",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          69051
+        ],
+        "foil_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "expected_log_mass": -2.2965145111083984,
+        "foil_log_mass": -17.014785766601562,
+        "expected_mass": 0.10060890763998032,
+        "foil_mass": 4.079175752735864e-08,
+        "correct_minus_foil_log_odds": 14.718271255493164,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 12987,
+        "top_vocab_log_probability": -0.6642494201660156
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          9959,
+          12987,
+          28253,
+          69051
+        ],
+        "foil_alias_token_ids": [
+          38,
+          70,
+          13551,
+          19021
+        ],
+        "expected_log_mass": -0.04609870910644531,
+        "foil_log_mass": -9.95300006866455,
+        "expected_mass": 0.9549477100372314,
+        "foil_mass": 4.7584664571331814e-05,
+        "correct_minus_foil_log_odds": 9.906901359558105,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 12987,
+        "top_vocab_log_probability": -0.6642494201660156
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            12987,
+            13464,
+            151645
+          ],
+          [
+            28253,
+            13464,
+            151645
+          ],
+          [
+            69051,
+            151645
+          ],
+          [
+            9959,
+            13464,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            70,
+            8341,
+            151645
+          ],
+          [
+            38,
+            8341,
+            151645
+          ],
+          [
+            13551,
+            151645
+          ],
+          [
+            19021,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.6766966581344604,
+          -1.117387056350708,
+          -2.3242504596710205,
+          -6.58341121673584
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.611898422241211,
+          -13.852542877197266,
+          -17.780601501464844,
+          -17.967737197875977
+        ],
+        "expected_class_log_probability": -0.06756535223866122,
+        "foil_class_log_probability": -13.444432918001649,
+        "correct_minus_foil_log_odds": 13.376867565762987,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.605444374959916
+    },
+    {
+      "case_id": "nature_10/fit_chosen/kokoro/grove",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "engine": "kokoro",
+      "word": "grove",
+      "foil_word": "pond",
+      "audio_sha256": "cec9ad7fefa593651b54205702e631f6f318cfc847d338685a4bb5548dfdcd6e",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          40134
+        ],
+        "foil_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "expected_log_mass": -4.012101173400879,
+        "foil_log_mass": -13.307235717773438,
+        "expected_mass": 0.018095333129167557,
+        "foil_mass": 1.6624209138171864e-06,
+        "correct_minus_foil_log_odds": 9.295134544372559,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.5993366241455078
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          38,
+          10487,
+          40134,
+          41411
+        ],
+        "foil_alias_token_ids": [
+          47,
+          3511,
+          35570,
+          70865
+        ],
+        "expected_log_mass": -0.22264480590820312,
+        "foil_log_mass": -8.309099197387695,
+        "expected_mass": 0.800399124622345,
+        "foil_mass": 0.0002462657866999507,
+        "correct_minus_foil_log_odds": 8.086454391479492,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.5993366241455078
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            41411,
+            586,
+            151645
+          ],
+          [
+            38,
+            50415,
+            151645
+          ],
+          [
+            10487,
+            586,
+            151645
+          ],
+          [
+            40134,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            3511,
+            151645
+          ],
+          [
+            47,
+            2111,
+            151645
+          ],
+          [
+            35570,
+            151645
+          ],
+          [
+            70865,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.5066545009613037,
+          -0.6281386613845825,
+          -4.800689697265625,
+          -4.051838397979736
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.403732299804688,
+          -12.331316947937012,
+          -16.95296859741211,
+          -17.400056838989258
+        ],
+        "expected_class_log_probability": -0.24737377739725486,
+        "foil_class_log_probability": -12.025077207619796,
+        "correct_minus_foil_log_odds": 11.777703430222541,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6181468749418855
+    },
+    {
+      "case_id": "nature_10/fit_chosen/kokoro/pond",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "engine": "kokoro",
+      "word": "pond",
+      "foil_word": "grove",
+      "audio_sha256": "02aac5da78c0eaff8fca4fdf117a9b7f65635e0d15d8356c585ecb07ae87ea4f",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "foil_alias_token_ids": [
+          40134
+        ],
+        "expected_log_mass": -0.9465179443359375,
+        "foil_log_mass": -17.78692626953125,
+        "expected_mass": 0.388090044260025,
+        "foil_mass": 1.8846733951249917e-08,
+        "correct_minus_foil_log_odds": 16.840408325195312,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.5223236083984375
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          47,
+          3511,
+          35570,
+          70865
+        ],
+        "foil_alias_token_ids": [
+          38,
+          10487,
+          40134,
+          41411
+        ],
+        "expected_log_mass": -0.018947601318359375,
+        "foil_log_mass": -10.351232528686523,
+        "expected_mass": 0.9812307953834534,
+        "foil_mass": 3.1953382858773693e-05,
+        "correct_minus_foil_log_odds": 10.332284927368164,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.5223236083984375
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            3511,
+            151645
+          ],
+          [
+            47,
+            2111,
+            151645
+          ],
+          [
+            35570,
+            151645
+          ],
+          [
+            70865,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            41411,
+            586,
+            151645
+          ],
+          [
+            38,
+            50415,
+            151645
+          ],
+          [
+            10487,
+            586,
+            151645
+          ],
+          [
+            40134,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.0682486295700073,
+          -0.5828518867492676,
+          -4.459526538848877,
+          -3.6699767112731934
+        ],
+        "foil_sequence_log_probabilities": [
+          -15.965877532958984,
+          -14.517979621887207,
+          -20.617815017700195,
+          -17.81706428527832
+        ],
+        "expected_class_log_probability": -0.06298393758950227,
+        "foil_class_log_probability": -14.275642197451337,
+        "correct_minus_foil_log_odds": 14.212658259861835,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6115238750353456
+    },
+    {
+      "case_id": "nature_10/fit_chosen/piper/grove",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "engine": "piper",
+      "word": "grove",
+      "foil_word": "pond",
+      "audio_sha256": "60bbf3747a7ac1651585e45a85b38b76eaeeaedc56b64f4aeb4b25b11c878316",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          40134
+        ],
+        "foil_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "expected_log_mass": -6.729373931884766,
+        "foil_log_mass": -15.271620750427246,
+        "expected_mass": 0.0011952811619266868,
+        "foil_mass": 2.3314139241392695e-07,
+        "correct_minus_foil_log_odds": 8.54224681854248,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 73089,
+        "top_vocab_log_probability": -0.7943668365478516
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          38,
+          10487,
+          40134,
+          41411
+        ],
+        "foil_alias_token_ids": [
+          47,
+          3511,
+          35570,
+          70865
+        ],
+        "expected_log_mass": -0.8161258697509766,
+        "foil_log_mass": -9.893959999084473,
+        "expected_mass": 0.44214126467704773,
+        "foil_mass": 5.047865488450043e-05,
+        "correct_minus_foil_log_odds": 9.077834129333496,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 73089,
+        "top_vocab_log_probability": -0.7943668365478516
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            41411,
+            586,
+            151645
+          ],
+          [
+            38,
+            50415,
+            151645
+          ],
+          [
+            10487,
+            586,
+            151645
+          ],
+          [
+            40134,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            3511,
+            151645
+          ],
+          [
+            47,
+            2111,
+            151645
+          ],
+          [
+            35570,
+            151645
+          ],
+          [
+            70865,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -3.537717580795288,
+          -2.1830475330352783,
+          -6.019124507904053,
+          -6.766929626464844
+        ],
+        "foil_sequence_log_probabilities": [
+          -15.854175567626953,
+          -15.177857398986816,
+          -17.188261032104492,
+          -18.375036239624023
+        ],
+        "expected_class_log_probability": -1.9285404643509625,
+        "foil_class_log_probability": -14.657102627721304,
+        "correct_minus_foil_log_odds": 12.728562163370341,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.607075999956578
+    },
+    {
+      "case_id": "nature_10/fit_chosen/piper/pond",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "engine": "piper",
+      "word": "pond",
+      "foil_word": "grove",
+      "audio_sha256": "67da55301f55994ed53128677e51324914178c0a2f52031d4ebb2ebf545775dc",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "foil_alias_token_ids": [
+          40134
+        ],
+        "expected_log_mass": -0.8412456512451172,
+        "foil_log_mass": -17.94125747680664,
+        "expected_mass": 0.43117308616638184,
+        "foil_mass": 1.615142686262061e-08,
+        "correct_minus_foil_log_odds": 17.100011825561523,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.60003662109375
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          47,
+          3511,
+          35570,
+          70865
+        ],
+        "foil_alias_token_ids": [
+          38,
+          10487,
+          40134,
+          41411
+        ],
+        "expected_log_mass": -0.020238876342773438,
+        "foil_log_mass": -10.482186317443848,
+        "expected_mass": 0.979964554309845,
+        "foil_mass": 2.80313706753077e-05,
+        "correct_minus_foil_log_odds": 10.461947441101074,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.60003662109375
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            3511,
+            151645
+          ],
+          [
+            47,
+            2111,
+            151645
+          ],
+          [
+            35570,
+            151645
+          ],
+          [
+            70865,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            41411,
+            586,
+            151645
+          ],
+          [
+            38,
+            50415,
+            151645
+          ],
+          [
+            10487,
+            586,
+            151645
+          ],
+          [
+            40134,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.9837788343429565,
+          -0.6582232117652893,
+          -4.101602554321289,
+          -3.3921852111816406
+        ],
+        "foil_sequence_log_probabilities": [
+          -16.737789154052734,
+          -15.454121589660645,
+          -21.9897518157959,
+          -17.96986198425293
+        ],
+        "expected_class_log_probability": -0.059912164424850034,
+        "foil_class_log_probability": -15.14717135130667,
+        "correct_minus_foil_log_odds": 15.08725918688182,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.600962750148028
+    },
+    {
+      "case_id": "object_02/fit_chosen/kokoro/cup",
+      "pair_id": "object_02",
+      "category": "object",
+      "engine": "kokoro",
+      "word": "cup",
+      "foil_word": "plate",
+      "audio_sha256": "c94cac1885730ce36238a9e8a7b736bc469daa96e711c956fabadd206222766a",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "foil_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "expected_log_mass": -1.7593727111816406,
+        "foil_log_mass": -13.323909759521484,
+        "expected_mass": 0.1721528321504593,
+        "foil_mass": 1.634931322769262e-06,
+        "correct_minus_foil_log_odds": 11.564537048339844,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 34,
+        "top_vocab_log_probability": -0.268524169921875
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          34,
+          10525,
+          10861,
+          36665
+        ],
+        "foil_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "expected_log_mass": -0.06543540954589844,
+        "foil_log_mass": -13.323909759521484,
+        "expected_mass": 0.9366595149040222,
+        "foil_mass": 1.634931322769262e-06,
+        "correct_minus_foil_log_odds": 13.258474349975586,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 34,
+        "top_vocab_log_probability": -0.268524169921875
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            36665,
+            151645
+          ],
+          [
+            34,
+            454,
+            151645
+          ],
+          [
+            10525,
+            151645
+          ],
+          [
+            10861,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            1750,
+            151645
+          ],
+          [
+            64709,
+            151645
+          ],
+          [
+            11968,
+            151645
+          ],
+          [
+            30303,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.7969673871994019,
+          -0.4110989570617676,
+          -8.3917875289917,
+          -6.191995620727539
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.778847694396973,
+          -14.387657165527344,
+          -20.305477142333984,
+          -19.20623016357422
+        ],
+        "expected_class_log_probability": -0.1851318306831317,
+        "foil_class_log_probability": -13.340685255029292,
+        "correct_minus_foil_log_odds": 13.155553424346161,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.607502083061263
+    },
+    {
+      "case_id": "object_02/fit_chosen/kokoro/plate",
+      "pair_id": "object_02",
+      "category": "object",
+      "engine": "kokoro",
+      "word": "plate",
+      "foil_word": "cup",
+      "audio_sha256": "2fbb5182032f95dc70bb57545f9c94aa245ed73371edb2281f51eceb56fd24db",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "foil_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "expected_log_mass": -0.037982940673828125,
+        "foil_log_mass": -14.946159362792969,
+        "expected_mass": 0.9627293348312378,
+        "foil_mass": 3.228237517305388e-07,
+        "correct_minus_foil_log_odds": 14.90817642211914,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 64709,
+        "top_vocab_log_probability": -0.6063385009765625
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "foil_alias_token_ids": [
+          34,
+          10525,
+          10861,
+          36665
+        ],
+        "expected_log_mass": -0.037982940673828125,
+        "foil_log_mass": -10.609435081481934,
+        "expected_mass": 0.9627293348312378,
+        "foil_mass": 2.4682030925760046e-05,
+        "correct_minus_foil_log_odds": 10.571452140808105,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 64709,
+        "top_vocab_log_probability": -0.6063385009765625
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            1750,
+            151645
+          ],
+          [
+            64709,
+            151645
+          ],
+          [
+            11968,
+            151645
+          ],
+          [
+            30303,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            36665,
+            151645
+          ],
+          [
+            34,
+            454,
+            151645
+          ],
+          [
+            10525,
+            151645
+          ],
+          [
+            10861,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.9066177010536194,
+          -0.651601254940033,
+          -7.376920223236084,
+          -5.389307022094727
+        ],
+        "foil_sequence_log_probabilities": [
+          -15.09209156036377,
+          -13.067656517028809,
+          -20.562517166137695,
+          -19.6380615234375
+        ],
+        "expected_class_log_probability": -0.07225981236048096,
+        "foil_class_log_probability": -12.941882737877814,
+        "correct_minus_foil_log_odds": 12.869622925517334,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6093619999010116
+    },
+    {
+      "case_id": "object_02/fit_chosen/piper/cup",
+      "pair_id": "object_02",
+      "category": "object",
+      "engine": "piper",
+      "word": "cup",
+      "foil_word": "plate",
+      "audio_sha256": "12537b7770110e07b9e4f7764051df268096ed60cd993ae98ba4fa37e6c0cd0d",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "foil_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "expected_log_mass": -1.9678974151611328,
+        "foil_log_mass": -13.644201278686523,
+        "expected_mass": 0.1397503912448883,
+        "foil_mass": 1.1868578440044075e-06,
+        "correct_minus_foil_log_odds": 11.67630386352539,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 34,
+        "top_vocab_log_probability": -0.22607040405273438
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          34,
+          10525,
+          10861,
+          36665
+        ],
+        "foil_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "expected_log_mass": -0.06463241577148438,
+        "foil_log_mass": -13.644201278686523,
+        "expected_mass": 0.9374119639396667,
+        "foil_mass": 1.1868578440044075e-06,
+        "correct_minus_foil_log_odds": 13.579568862915039,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 34,
+        "top_vocab_log_probability": -0.22607040405273438
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            36665,
+            151645
+          ],
+          [
+            34,
+            454,
+            151645
+          ],
+          [
+            10525,
+            151645
+          ],
+          [
+            10861,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            1750,
+            151645
+          ],
+          [
+            64709,
+            151645
+          ],
+          [
+            11968,
+            151645
+          ],
+          [
+            30303,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -2.0018386840820312,
+          -0.40443742275238037,
+          -8.008621215820312,
+          -6.351975917816162
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.174504280090332,
+          -14.590191841125488,
+          -19.982955932617188,
+          -18.614608764648438
+        ],
+        "expected_class_log_probability": -0.21751604358641294,
+        "foil_class_log_probability": -13.658880271013782,
+        "correct_minus_foil_log_odds": 13.44136422742737,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.431171042146161
+    },
+    {
+      "case_id": "object_02/fit_chosen/piper/plate",
+      "pair_id": "object_02",
+      "category": "object",
+      "engine": "piper",
+      "word": "plate",
+      "foil_word": "cup",
+      "audio_sha256": "42d0d964d124001db5d0eebc214f4dc8efeeee38f81850b22ae12d4bf0155a92",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "foil_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "expected_log_mass": -0.11891555786132812,
+        "foil_log_mass": -14.673858642578125,
+        "expected_mass": 0.8878827095031738,
+        "foil_mass": 4.2386170662211953e-07,
+        "correct_minus_foil_log_odds": 14.554943084716797,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 1750,
+        "top_vocab_log_probability": -0.7920608520507812
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "foil_alias_token_ids": [
+          34,
+          10525,
+          10861,
+          36665
+        ],
+        "expected_log_mass": -0.11891555786132812,
+        "foil_log_mass": -10.046764373779297,
+        "expected_mass": 0.8878827095031738,
+        "foil_mass": 4.3325708247721195e-05,
+        "correct_minus_foil_log_odds": 9.927848815917969,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 1750,
+        "top_vocab_log_probability": -0.7920608520507812
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            1750,
+            151645
+          ],
+          [
+            64709,
+            151645
+          ],
+          [
+            11968,
+            151645
+          ],
+          [
+            30303,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            36665,
+            151645
+          ],
+          [
+            34,
+            454,
+            151645
+          ],
+          [
+            10525,
+            151645
+          ],
+          [
+            10861,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.8052288293838501,
+          -0.8857836723327637,
+          -6.776130676269531,
+          -5.148335933685303
+        ],
+        "foil_sequence_log_probabilities": [
+          -14.821561813354492,
+          -13.518353462219238,
+          -20.166912078857422,
+          -19.705324172973633
+        ],
+        "expected_class_log_probability": -0.1434937183892363,
+        "foil_class_log_probability": -13.275398851627697,
+        "correct_minus_foil_log_odds": 13.131905133238462,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.422611291985959
+    },
+    {
+      "case_id": "object_05/fit_chosen/kokoro/book",
+      "pair_id": "object_05",
+      "category": "object",
+      "engine": "kokoro",
+      "word": "book",
+      "foil_word": "phone",
+      "audio_sha256": "34c71fadb25453acefab4015fa6e21cb08f65a9b4775319c5362588b48b4a3c8",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "foil_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "expected_log_mass": -0.07466506958007812,
+        "foil_log_mass": -12.258158683776855,
+        "expected_mass": 0.9280542731285095,
+        "foil_mass": 4.74623584523215e-06,
+        "correct_minus_foil_log_odds": 12.183493614196777,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 7134,
+        "top_vocab_log_probability": -0.4435462951660156
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "foil_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "expected_log_mass": -0.07466506958007812,
+        "foil_log_mass": -12.258158683776855,
+        "expected_mass": 0.9280542731285095,
+        "foil_mass": 4.74623584523215e-06,
+        "correct_minus_foil_log_odds": 12.183493614196777,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 7134,
+        "top_vocab_log_probability": -0.4435462951660156
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            2190,
+            151645
+          ],
+          [
+            7134,
+            151645
+          ],
+          [
+            2311,
+            151645
+          ],
+          [
+            5893,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            4844,
+            151645
+          ],
+          [
+            6939,
+            151645
+          ],
+          [
+            4540,
+            151645
+          ],
+          [
+            14307,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.2727570533752441,
+          -0.4806640148162842,
+          -7.827035427093506,
+          -7.103177547454834
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.249069213867188,
+          -12.77488899230957,
+          -22.27372169494629,
+          -20.56912612915039
+        ],
+        "expected_class_log_probability": -0.10574685636565606,
+        "foil_class_log_probability": -12.29068533996555,
+        "correct_minus_foil_log_odds": 12.184938483599895,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.610695749986917
+    },
+    {
+      "case_id": "object_05/fit_chosen/kokoro/phone",
+      "pair_id": "object_05",
+      "category": "object",
+      "engine": "kokoro",
+      "word": "phone",
+      "foil_word": "book",
+      "audio_sha256": "b0e18ead56814cf52de617ff5de953b6f4b36a1b05d380f733025d341a5b1164",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "foil_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "expected_log_mass": -0.03452110290527344,
+        "foil_log_mass": -11.37492847442627,
+        "expected_mass": 0.966067910194397,
+        "foil_mass": 1.1479721251816954e-05,
+        "correct_minus_foil_log_odds": 11.340407371520996,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 4844,
+        "top_vocab_log_probability": -0.5912113189697266
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "foil_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "expected_log_mass": -0.03452110290527344,
+        "foil_log_mass": -11.37492847442627,
+        "expected_mass": 0.966067910194397,
+        "foil_mass": 1.1479721251816954e-05,
+        "correct_minus_foil_log_odds": 11.340407371520996,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 4844,
+        "top_vocab_log_probability": -0.5912113189697266
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            4844,
+            151645
+          ],
+          [
+            6939,
+            151645
+          ],
+          [
+            4540,
+            151645
+          ],
+          [
+            14307,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            2190,
+            151645
+          ],
+          [
+            7134,
+            151645
+          ],
+          [
+            2311,
+            151645
+          ],
+          [
+            5893,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.60849928855896,
+          -0.9375066757202148,
+          -10.383720397949219,
+          -8.903809547424316
+        ],
+        "foil_sequence_log_probabilities": [
+          -12.213363647460938,
+          -11.978923797607422,
+          -19.50986099243164,
+          -18.769033432006836
+        ],
+        "expected_class_log_probability": -0.0662074235586928,
+        "foil_class_log_probability": -11.39521493957729,
+        "correct_minus_foil_log_odds": 11.329007516018597,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6088126660324633
+    },
+    {
+      "case_id": "object_05/fit_chosen/piper/book",
+      "pair_id": "object_05",
+      "category": "object",
+      "engine": "piper",
+      "word": "book",
+      "foil_word": "phone",
+      "audio_sha256": "dc0c32935a9b4ca7d32687487fab349f31769745d2d1e1695d3f8552d216eb37",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "foil_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "expected_log_mass": -0.10385513305664062,
+        "foil_log_mass": -12.245280265808105,
+        "expected_mass": 0.9013558626174927,
+        "foil_mass": 4.807755431102123e-06,
+        "correct_minus_foil_log_odds": 12.141425132751465,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 7134,
+        "top_vocab_log_probability": -0.6377372741699219
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "foil_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "expected_log_mass": -0.10385513305664062,
+        "foil_log_mass": -12.245280265808105,
+        "expected_mass": 0.9013558626174927,
+        "foil_mass": 4.807755431102123e-06,
+        "correct_minus_foil_log_odds": 12.141425132751465,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 7134,
+        "top_vocab_log_probability": -0.6377372741699219
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            2190,
+            151645
+          ],
+          [
+            7134,
+            151645
+          ],
+          [
+            2311,
+            151645
+          ],
+          [
+            5893,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            4844,
+            151645
+          ],
+          [
+            6939,
+            151645
+          ],
+          [
+            4540,
+            151645
+          ],
+          [
+            14307,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.007344126701355,
+          -0.6728918552398682,
+          -7.414173126220703,
+          -7.111340045928955
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.020719528198242,
+          -12.942837715148926,
+          -21.681442260742188,
+          -20.595256805419922
+        ],
+        "expected_class_log_probability": -0.13143420523584204,
+        "foil_class_log_probability": -12.287543543491477,
+        "correct_minus_foil_log_odds": 12.156109338255636,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.5920617911033332
+    },
+    {
+      "case_id": "object_05/fit_chosen/piper/phone",
+      "pair_id": "object_05",
+      "category": "object",
+      "engine": "piper",
+      "word": "phone",
+      "foil_word": "book",
+      "audio_sha256": "5149cff88931330d05a439ec92d04ecde485275d92684d1486172d8141578696",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "foil_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "expected_log_mass": -0.06226539611816406,
+        "foil_log_mass": -12.054912567138672,
+        "expected_mass": 0.9396334886550903,
+        "foil_mass": 5.815914391860133e-06,
+        "correct_minus_foil_log_odds": 11.992647171020508,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 4844,
+        "top_vocab_log_probability": -0.4447669982910156
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "foil_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "expected_log_mass": -0.06226539611816406,
+        "foil_log_mass": -12.054912567138672,
+        "expected_mass": 0.9396334886550903,
+        "foil_mass": 5.815914391860133e-06,
+        "correct_minus_foil_log_odds": 11.992647171020508,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 4844,
+        "top_vocab_log_probability": -0.4447669982910156
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            4844,
+            151645
+          ],
+          [
+            6939,
+            151645
+          ],
+          [
+            4540,
+            151645
+          ],
+          [
+            14307,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            2190,
+            151645
+          ],
+          [
+            7134,
+            151645
+          ],
+          [
+            2311,
+            151645
+          ],
+          [
+            5893,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.4622383713722229,
+          -1.264532208442688,
+          -9.845211029052734,
+          -9.163800239562988
+        ],
+        "foil_sequence_log_probabilities": [
+          -12.76339340209961,
+          -12.792997360229492,
+          -19.80317497253418,
+          -19.44949722290039
+        ],
+        "expected_class_log_probability": -0.09167536468848331,
+        "foil_class_log_probability": -12.083861286852432,
+        "correct_minus_foil_log_odds": 11.99218592216395,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6022933749482036
+    },
+    {
+      "case_id": "object_09/fit_chosen/kokoro/carpet",
+      "pair_id": "object_09",
+      "category": "object",
+      "engine": "kokoro",
+      "word": "carpet",
+      "foil_word": "pillow",
+      "audio_sha256": "534d9c66d2f9684c2929c8e61f84f63914360688f1a370bc6dd1403ce7e3a085",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "foil_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "expected_log_mass": -4.59932804107666,
+        "foil_log_mass": -16.46282386779785,
+        "expected_mass": 0.01005859300494194,
+        "foil_mass": 7.084128839096593e-08,
+        "correct_minus_foil_log_odds": 11.863495826721191,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6918,
+        "top_vocab_log_probability": -0.49462127685546875
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          6918,
+          8852,
+          27854,
+          71208
+        ],
+        "foil_alias_token_ids": [
+          47,
+          42325,
+          49846,
+          80735
+        ],
+        "expected_log_mass": -0.0289154052734375,
+        "foil_log_mass": -9.702227592468262,
+        "expected_mass": 0.9714986085891724,
+        "foil_mass": 6.114713323768228e-05,
+        "correct_minus_foil_log_odds": 9.673312187194824,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6918,
+        "top_vocab_log_probability": -0.49462127685546875
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            6918,
+            6862,
+            151645
+          ],
+          [
+            8852,
+            6862,
+            151645
+          ],
+          [
+            27854,
+            151645
+          ],
+          [
+            71208,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            49846,
+            363,
+            151645
+          ],
+          [
+            47,
+            95923,
+            151645
+          ],
+          [
+            42325,
+            151645
+          ],
+          [
+            80735,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.5024401545524597,
+          -1.089552402496338,
+          -4.784527778625488,
+          -6.600130081176758
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.880058288574219,
+          -11.901740074157715,
+          -16.8326416015625,
+          -19.589040756225586
+        ],
+        "expected_class_log_probability": -0.05009641802042214,
+        "foil_class_log_probability": -11.765479697457085,
+        "correct_minus_foil_log_odds": 11.715383279436663,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6159075829200447
+    },
+    {
+      "case_id": "object_09/fit_chosen/kokoro/pillow",
+      "pair_id": "object_09",
+      "category": "object",
+      "engine": "kokoro",
+      "word": "pillow",
+      "foil_word": "carpet",
+      "audio_sha256": "167e92fb027673986e876a5d9a315fa9e184b21d3a4e20ad87459275b23f1eea",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "foil_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "expected_log_mass": -4.768764495849609,
+        "foil_log_mass": -15.720131874084473,
+        "expected_mass": 0.00849086418747902,
+        "foil_mass": 1.48879010453129e-07,
+        "correct_minus_foil_log_odds": 10.951367378234863,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 49846,
+        "top_vocab_log_probability": -0.7416439056396484
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          47,
+          42325,
+          49846,
+          80735
+        ],
+        "foil_alias_token_ids": [
+          6918,
+          8852,
+          27854,
+          71208
+        ],
+        "expected_log_mass": -0.06345748901367188,
+        "foil_log_mass": -12.465476036071777,
+        "expected_mass": 0.938513994216919,
+        "foil_mass": 3.857558567688102e-06,
+        "correct_minus_foil_log_odds": 12.402018547058105,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 49846,
+        "top_vocab_log_probability": -0.7416439056396484
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            49846,
+            363,
+            151645
+          ],
+          [
+            47,
+            95923,
+            151645
+          ],
+          [
+            42325,
+            151645
+          ],
+          [
+            80735,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            6918,
+            6862,
+            151645
+          ],
+          [
+            8852,
+            6862,
+            151645
+          ],
+          [
+            27854,
+            151645
+          ],
+          [
+            71208,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.7518236637115479,
+          -0.8226399421691895,
+          -4.8595476150512695,
+          -7.564228057861328
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.829558372497559,
+          -13.75914478302002,
+          -16.096412658691406,
+          -17.382171630859375
+        ],
+        "expected_class_log_probability": -0.08441579319040604,
+        "foil_class_log_probability": -13.038722385956456,
+        "correct_minus_foil_log_odds": 12.95430659276605,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6117287080269307
+    },
+    {
+      "case_id": "object_09/fit_chosen/piper/carpet",
+      "pair_id": "object_09",
+      "category": "object",
+      "engine": "piper",
+      "word": "carpet",
+      "foil_word": "pillow",
+      "audio_sha256": "79d8a4db980cbcd2036b9de00b0bc40e1e391c7c67a9431e230e1e52f76bd529",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "foil_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "expected_log_mass": -4.71237850189209,
+        "foil_log_mass": -16.23822021484375,
+        "expected_mass": 0.008983384817838669,
+        "foil_mass": 8.868099854453249e-08,
+        "correct_minus_foil_log_odds": 11.52584171295166,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6918,
+        "top_vocab_log_probability": -0.3313465118408203
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          6918,
+          8852,
+          27854,
+          71208
+        ],
+        "foil_alias_token_ids": [
+          47,
+          42325,
+          49846,
+          80735
+        ],
+        "expected_log_mass": -0.03624534606933594,
+        "foil_log_mass": -9.4767484664917,
+        "expected_mass": 0.9644036293029785,
+        "foil_mass": 7.661264680791646e-05,
+        "correct_minus_foil_log_odds": 9.440503120422363,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6918,
+        "top_vocab_log_probability": -0.3313465118408203
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            6918,
+            6862,
+            151645
+          ],
+          [
+            8852,
+            6862,
+            151645
+          ],
+          [
+            27854,
+            151645
+          ],
+          [
+            71208,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            49846,
+            363,
+            151645
+          ],
+          [
+            47,
+            95923,
+            151645
+          ],
+          [
+            42325,
+            151645
+          ],
+          [
+            80735,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -0.33827412128448486,
+          -1.4895576238632202,
+          -4.865131855010986,
+          -6.950366497039795
+        ],
+        "foil_sequence_log_probabilities": [
+          -13.341435432434082,
+          -11.642990112304688,
+          -16.67402458190918,
+          -19.49200439453125
+        ],
+        "expected_class_log_probability": -0.05430700467574462,
+        "foil_class_log_probability": -11.469129292188457,
+        "correct_minus_foil_log_odds": 11.414822287512713,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6007455829530954
+    },
+    {
+      "case_id": "object_09/fit_chosen/piper/pillow",
+      "pair_id": "object_09",
+      "category": "object",
+      "engine": "piper",
+      "word": "pillow",
+      "foil_word": "carpet",
+      "audio_sha256": "afce5ba6fa33733e9372e08919d8e2855ee77cee9fed0587b7291c63f97061f1",
+      "v1_first_step": {
+        "expected_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "foil_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "expected_log_mass": -4.95130729675293,
+        "foil_log_mass": -14.8690767288208,
+        "expected_mass": 0.0070741549134254456,
+        "foil_mass": 3.486920547857153e-07,
+        "correct_minus_foil_log_odds": 9.917769432067871,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.8697357177734375
+      },
+      "v2_first_step": {
+        "expected_alias_token_ids": [
+          47,
+          42325,
+          49846,
+          80735
+        ],
+        "foil_alias_token_ids": [
+          6918,
+          8852,
+          27854,
+          71208
+        ],
+        "expected_log_mass": -0.3166007995605469,
+        "foil_log_mass": -10.86909008026123,
+        "expected_mass": 0.7286215424537659,
+        "foil_mass": 1.9037686797673814e-05,
+        "correct_minus_foil_log_odds": 10.552489280700684,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.8697357177734375
+      },
+      "v2_complete_sequence": {
+        "expected_sequences": [
+          [
+            49846,
+            363,
+            151645
+          ],
+          [
+            47,
+            95923,
+            151645
+          ],
+          [
+            42325,
+            151645
+          ],
+          [
+            80735,
+            151645
+          ]
+        ],
+        "foil_sequences": [
+          [
+            6918,
+            6862,
+            151645
+          ],
+          [
+            8852,
+            6862,
+            151645
+          ],
+          [
+            27854,
+            151645
+          ],
+          [
+            71208,
+            151645
+          ]
+        ],
+        "expected_sequence_log_probabilities": [
+          -1.2088291645050049,
+          -0.9442503452301025,
+          -5.057656764984131,
+          -7.835941791534424
+        ],
+        "foil_sequence_log_probabilities": [
+          -12.267319679260254,
+          -11.965691566467285,
+          -15.309188842773438,
+          -16.77330780029297
+        ],
+        "expected_class_log_probability": -0.36488945446061416,
+        "foil_class_log_probability": -11.387341725769192,
+        "correct_minus_foil_log_odds": 11.022452271308577,
+        "correct_class_gt_foil": true
+      },
+      "case_seconds": 2.6082204999402165
+    }
+  ],
+  "summary": {
+    "planned": 48,
+    "completed": 48,
+    "v1_expected_gt_foil": 48,
+    "v2_prefix_expected_gt_foil": 48,
+    "v2_complete_expected_gt_foil": 48,
+    "max_abs_v1_rerun_log_odds_difference": 0.0
+  }
+}
