@@ -1,0 +1,33 @@
+{
+  "status": "launch_started",
+  "phase": "fp32_replay",
+  "attempt_id": "20261118T143734566440Z",
+  "wall_utc": "2026-11-18T14:37:40.654594+00:00",
+  "stage_b_freeze_sha256": "bc2025eb6beab51965a468544bec53b598919b4a4aea7d4f00d8dbe7ca3c462c",
+  "worker_output": "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_old_fit_handoff_stage_b_v1/fp32_replay/20261118T143734566440Z",
+  "worker_command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_b_worker_v1.py",
+    "--phase",
+    "fp32_replay",
+    "--attempt-id",
+    "20261118T143734566440Z",
+    "--freeze-sha256",
+    "bc2025eb6beab51965a468544bec53b598919b4a4aea7d4f00d8dbe7ca3c462c"
+  ],
+  "driver_sha256": "f685a920a61bb1885ce86df44e41899adca886f42b90f5a6577ae7e6cffaf71e",
+  "auditor_sha256": "45cbf7f1b1767d8a736ab5569a06a152b8c2705c010fbfb9cc45f7d039575cf0",
+  "prior_model_work_seconds": 246.84183400077745,
+  "process_cap_seconds": 1800,
+  "process_timeout_seconds": 1800,
+  "process_grace_seconds": 120,
+  "worker_output_cap_bytes": 1073741824,
+  "max_mps_driver_bytes": 32212254720,
+  "max_capture_bytes_per_stream": 8388608,
+  "total_output_cap_bytes": 5368709120,
+  "total_model_work_cap_seconds": 4500,
+  "stage_a_manifest_sha256": {
+    "bf16": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+    "fp32": "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f"
+  }
+}

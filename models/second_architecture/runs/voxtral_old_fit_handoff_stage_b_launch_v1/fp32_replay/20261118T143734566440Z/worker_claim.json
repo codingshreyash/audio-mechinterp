@@ -1,0 +1,8 @@
+{
+  "status": "worker_claimed_no_retry",
+  "phase": "fp32_replay",
+  "attempt_id": "20261118T143734566440Z",
+  "stage_b_freeze_sha256": "bc2025eb6beab51965a468544bec53b598919b4a4aea7d4f00d8dbe7ca3c462c",
+  "wall_utc": "2026-11-18T14:37:47.138513+00:00",
+  "pid": 29461
+}

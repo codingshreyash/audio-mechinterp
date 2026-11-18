@@ -1,0 +1,5 @@
+{"elapsed_seconds": 25.66200758307241, "mps_driver_bytes": 458752, "phase": "preflight_complete_before_model_load"}
+{"elapsed_seconds": 31.451768541010097, "mps_driver_bytes": 28793470976, "phase": "model_loaded"}
+{"elapsed_seconds": 32.42385270819068, "mps_driver_bytes": 28793470976, "phase": "after_source_encoder31_clean_graph"}
+{"elapsed_seconds": 33.275853250175714, "mps_driver_bytes": 28793470976, "phase": "after_source_encoder31_clean_repeat"}
+{"elapsed_seconds": 34.13461170811206, "mps_driver_bytes": 28793470976, "phase": "after_source_encoder31_self"}

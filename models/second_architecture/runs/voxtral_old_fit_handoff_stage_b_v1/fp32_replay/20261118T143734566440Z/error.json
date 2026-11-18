@@ -1,0 +1,9 @@
+{
+  "status": "invalid_stage_b_replay_attempt",
+  "phase": "fp32_replay",
+  "error_type": "ValueError",
+  "error": "Direct LM replay mismatch at lm0",
+  "elapsed_seconds": 34.139111791038886,
+  "prior_model_work_seconds": 246.84183400077745,
+  "progress_sha256": "6e3c52dd72ff0be7c79a6da596956d286b9dfedcb056ac6d283f543e96c4c5ef"
+}

@@ -1,0 +1,6 @@
+{
+  "status": "phase_reserved_no_retry",
+  "phase": "fp32_replay",
+  "attempt_id": "20261118T143734566440Z",
+  "stage_b_freeze_sha256": "bc2025eb6beab51965a468544bec53b598919b4a4aea7d4f00d8dbe7ca3c462c"
+}

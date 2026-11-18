@@ -1,0 +1,18 @@
+W1118 09:38:02.786000 29461 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/762 [00:00<?, ?it/s]Loading weights:  36%|███▌      | 276/762 [00:00<00:00, 2742.67it/s]Loading weights:  72%|███████▏  | 551/762 [00:00<00:00, 1259.52it/s]Loading weights:  94%|█████████▍| 718/762 [00:01<00:00, 420.19it/s] Loading weights: 100%|██████████| 762/762 [00:01<00:00, 494.63it/s]
+Traceback (most recent call last):
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_b_worker_v1.py", line 37, in <module>
+    main()
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_b_worker_v1.py", line 31, in main
+    result = driver.run_phase(args.phase, output, model_factory=None, device="mps")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_b_runner_v1.py", line 684, in run_phase
+    source, used = fp32_source_replays(model, batch, pairs, details["probes"],
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_b_runner_v1.py", line 399, in fp32_source_replays
+    _same_replay(first, second)
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_b_runner_v1.py", line 369, in _same_replay
+    replay.assert_direct_parity(left["saved"], right["saved"])
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_replay_stage_b_v1.py", line 355, in assert_direct_parity
+    raise ValueError(f"Direct LM replay mismatch at {layer}")
+ValueError: Direct LM replay mismatch at lm0

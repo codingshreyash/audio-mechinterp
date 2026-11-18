@@ -1,0 +1,19 @@
+{
+  "status": "launch_failed",
+  "phase": "fp32_replay",
+  "attempt_id": "20261118T143734566440Z",
+  "stage_b_freeze_sha256": "bc2025eb6beab51965a468544bec53b598919b4a4aea7d4f00d8dbe7ca3c462c",
+  "runner_returncode": 1,
+  "auditor_returncode": null,
+  "runner_result_sha256": null,
+  "runner_error_sha256": null,
+  "audit_sha256": null,
+  "post_run_source_verified": false,
+  "model_work_elapsed_seconds": 41.18471045792103,
+  "failure_reason": "Stage-B worker failed or exceeded model-work cap",
+  "exception_type": "ValueError",
+  "wall_utc": "2026-11-18T14:38:21.839953+00:00",
+  "elapsed_seconds": 41.18489666702226,
+  "worker_output_bytes": 159601,
+  "launcher_output_bytes_before_finish": 3796
+}
