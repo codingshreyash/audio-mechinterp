@@ -27,7 +27,7 @@ REPO = HERE.parents[1]
 RUNS = HERE / "runs/voxtral_old_fit_grad_mode_parity_launch_v1"
 FREEZE = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_EXTERNAL_FREEZE_V1.json"
 FREEZE_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_EXTERNAL_FREEZE_INDEPENDENT_REVIEW_V1.md"
-SOURCE_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_INDEPENDENT_SOURCE_REVIEW_V2.md"
+SOURCE_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_INDEPENDENT_SOURCE_REVIEW_V3.md"
 AUDITOR_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V2.md"
 AUDITOR = HERE / "voxtral_old_fit_grad_mode_parity_audit_v1.py"
 AUDITOR_TESTS = HERE / "test_voxtral_old_fit_grad_mode_parity_audit_v1.py"
@@ -38,7 +38,9 @@ FAILED_REVIEW_SHA = "67a556f3d05698f577e149d27fd48072c29099d732175695dae26d7ff34
 FAILED_ID = "20261118T143734566440Z"
 FAILED_SECONDS = 41.18471045792103
 SOURCE_GO = "Decision: GO for graph/no-grad diagnostic source only; live model HOLD until external freeze."
-AUDITOR_GO = "Decision: GO for graph/no-grad CPU auditor source only; live model HOLD until external freeze."
+AUDITOR_GO = ("**GO for the CPU saved-data auditor source at the exact hashes below.** "
+              "This clears the V1 HOLD in the separate immutable V1 review; "
+              "it does not authorize a model run")
 FREEZE_GO = "Decision: GO for graph/no-grad external freeze provenance; one diagnostic attempt may run under the pinned gate."
 STATUS = "frozen_old_fit_graph_no_grad_diagnostic_v1"
 MAX_CAPTURE_BYTES = 8 * 1024**2
