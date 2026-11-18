@@ -20,9 +20,9 @@ PROTOCOL = HERE / "VOXTRAL_V1_FIT_BACKWARD_NUMERICAL_FOLLOWUP_PROTOCOL_V1.md"
 AMENDMENT = HERE / "VOXTRAL_V1_FIT_BACKWARD_NUMERICAL_FOLLOWUP_AMENDMENT_V2.md"
 OLD = HERE / "runs/voxtral_v1_fit_backward_feasibility/20261118T1122Z"
 PINS = {
-    "runner": "fdc71540fbdea0221347a68acecbf31e534abe2457ab138ed6371bc0d4c7b2ab",
+    "runner": "93d2c607f4c218b9e027ffb4c221347663efb0729cc6e419b9c940dffda89b48",
     "protocol": "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82",
-    "amendment": "a1bf5cc16fb6126264135c5ec92b18f5bc376400ca20f23ae94f212877009339",
+    "amendment": "8c1515c7f967392213189aefea8d84df814e86c4a4ce96ad6bcc62e068e33ffa",
     "old_meta": "f151ced4e4e830d041e1f8e109eb3b37a05e57ba8b2e38a4ff06914334603558",
     "old_result": "d4ccfd213cf3a5ebebd3a7c0ecebab691dc15632f61076669d7535bd58154ebe",
     "old_details": "1bc49aa650b96c7ac6cb2f545da98e198edfa18998ebae8dc263c70ad5ad7b3c",
@@ -395,7 +395,8 @@ def audit_completed(run_dir: Path, arm: str, ctx: dict, entries: list[dict]) -> 
          "result resource bounds")
     raw = torch.load(run_dir / "details.pt", map_location="cpu", weights_only=True)
     need(isinstance(raw, dict) and set(raw) == {"directions", "selected_gradients_fp32",
-         "clean_terminal_fp32", "donor_terminal_fp32", "no_grad_terminals_fp32", "observations"},
+         "clean_terminal_fp32", "clean_selected_source_rows", "donor_terminal_fp32",
+         "no_grad_terminals_fp32", "observations"},
          "details fields")
     tensor(raw["clean_terminal_fp32"], (3072,), torch.float32, "clean terminal")
     tensor(raw["donor_terminal_fp32"], (3072,), torch.float32, "donor terminal")
@@ -403,10 +404,16 @@ def audit_completed(run_dir: Path, arm: str, ctx: dict, entries: list[dict]) -> 
     need(tensor_sha(raw["clean_terminal_fp32"]) == result["clean_terminal_sha256"],
          "clean terminal hash")
     need(set(raw["directions"]) == set(SITES) and
+         set(raw["clean_selected_source_rows"]) == set(SITES) and
          set(raw["selected_gradients_fp32"]) == set(SITES) and
          set(raw["observations"]) == set(SITES), "sidecar site set")
     recomputed = {}
     for site in SITES:
+        clean_rows = tensor(raw["clean_selected_source_rows"][site],
+                            (len(ROWS[site]), WIDTH[site]), dtype,
+                            site + " clean shared-graph selected source rows")
+        need(tensor_sha(clean_rows) == result["clean_selected_source_row_hashes"][site],
+             site + " clean selected source rows hash")
         direction = tensor(raw["directions"][site], (WIDTH[site],), torch.float32, site + " direction")
         need(torch.equal(direction, ctx["directions"][site]), site + " frozen direction")
         gradient = tensor(raw["selected_gradients_fp32"][site],
@@ -436,6 +443,8 @@ def audit_completed(run_dir: Path, arm: str, ctx: dict, entries: list[dict]) -> 
                 source = tensor(row[phase + "_source_rows"],
                                 (len(ROWS[site]), WIDTH[site]), dtype,
                                 f"{site} {i} {phase} source")
+                need(torch.equal(source, clean_rows),
+                     f"{site} {i} {phase} source differs from clean shared graph")
                 need(tensor_sha(source) == row[phase + "_source_sha"],
                      f"{site} {i} {phase} source hash")
                 events(row[phase + "_hook_events"], dtype, f"{site} {i} {phase}")

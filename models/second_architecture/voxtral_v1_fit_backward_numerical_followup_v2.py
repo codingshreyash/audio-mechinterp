@@ -26,7 +26,7 @@ OLD_RESULT = HERE / "runs/voxtral_v1_fit_backward_feasibility/20261118T1122Z/res
 OLD_DETAILS = OLD_RESULT.with_name("details.pt")
 RUNS = HERE / "runs/voxtral_v1_fit_backward_numerical_followup_v2"
 PROTOCOL_SHA = "5778a4b84e535f7182a3daa2b973637a1c9127118ce2434ce82ba80fee467a82"
-AMENDMENT_SHA = "a1bf5cc16fb6126264135c5ec92b18f5bc376400ca20f23ae94f212877009339"
+AMENDMENT_SHA = "8c1515c7f967392213189aefea8d84df814e86c4a4ce96ad6bcc62e068e33ffa"
 MODELING_UTILS_SHA = "553412f58334f65abba617f3b344828698dbf63615e109159fd03dafd3422d38"
 POSITION_NAME = "model.audio_tower.embed_positions.weight"
 POSITION_SHAPE = [1500, 1280]
@@ -470,6 +470,9 @@ def run(arm: str, output: Path) -> None:
             clean_terminal = clean["terminal_fp32_cpu"]
             clean_source_hashes = {s: first.tensor_sha((clean[s][0] if s == "encoder31" else clean[s]).detach().cpu())
                                    for s in SITES}
+            clean_selected_source_rows = {
+                s: (clean[s][0] if s == "encoder31" else clean[s]).detach().cpu()[prepared["rows"][s]].clone()
+                for s in SITES}
             clean_events = clean["events"]
             receipt("clean_shared_graph")
             gradient_rows = {s: [] for s in SITES}
@@ -537,6 +540,7 @@ def run(arm: str, output: Path) -> None:
             analysis = {s: analyze_site(observations[s], gradient_rows[s]) for s in SITES}
             details = {"directions": prepared["directions"], "selected_gradients_fp32": gradient_rows,
                        "clean_terminal_fp32": clean_terminal,
+                       "clean_selected_source_rows": clean_selected_source_rows,
                        "donor_terminal_fp32": donor_terminal,
                        "no_grad_terminals_fp32": torch.stack(no_grad_terminals),
                        "observations": observations}
@@ -555,6 +559,8 @@ def run(arm: str, output: Path) -> None:
                       "natural_suffix_ids": natural["suffix_ids"], "passive_suffix_ids": passive["suffix_ids"],
                       "passive_hook_shapes": passive["passive_hook_shapes"],
                       "clean_hook_events": clean_events, "clean_terminal_sha256": first.tensor_sha(clean_terminal),
+                      "clean_selected_source_row_hashes": {
+                          s: first.tensor_sha(clean_selected_source_rows[s]) for s in SITES},
                       "clean_source_hashes": clean_source_hashes, "donor_source_hashes": donor_sources,
                       "raw_vjp_dtypes": raw_vjp_dtypes, "selected_gradient_storage_dtype": "torch.float32",
                       "gradient_hashes": {s: first.tensor_sha(gradient_rows[s]) for s in SITES},
