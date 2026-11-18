@@ -1,0 +1,6 @@
+{"current_allocated_bytes": 18916505600, "driver_allocated_bytes": 19873333248, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_model_load", "unix_time": 1794991169.313654}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19989774336, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_clean_generation", "unix_time": 1794991170.087748}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19989774336, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_encoder31_alpha_0.0", "unix_time": 1794991170.478168}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19989774336, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_encoder31_alpha_0.025", "unix_time": 1794991170.868394}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19989774336, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_connector_alpha_0.0", "unix_time": 1794991171.258917}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19989774336, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_connector_alpha_0.025", "unix_time": 1794991171.6466482}

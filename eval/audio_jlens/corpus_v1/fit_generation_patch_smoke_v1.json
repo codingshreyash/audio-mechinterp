@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "status": "fit_only_stage_a_generation_helper_smoke",
+    "script_sha256": "853167a8b7b0309d65503ce677395fcdfcd675ee91a4070d99a66ee921ee8589",
+    "stage_a_script_sha256": "6f314b7a2322ff33ab0fdccb190a805702f26e59197f30460fcd36b8faac8745",
+    "fit_report_sha256": "bd5b281dc8eb0e6b2653f496fe0e4901df9cab035b975415dde0c00a686b498e",
+    "stage1_sha256": "8276aca0e24fcaa1397693e0353f9c7ee59190036f3516c0c13ebcbc6208b641",
+    "lens_sha256": "fef84a20f437c37ca665e4026bb3645ccd558e549c7ffe2adff20e6a867ba12c",
+    "scoring_v2_sha256": "e7ea18cd0d5e2638bec64b8733049a5a2754ecd674080d93766db8409b46dd9b",
+    "case_id": "animal_06/fit_chosen/kokoro/deer",
+    "donor_case_id": "animal_06/fit_chosen/kokoro/moose",
+    "alphas": [
+      0.0,
+      0.025
+    ],
+    "sites": [
+      "encoder31",
+      "connector"
+    ]
+  },
+  "clean": {
+    "token_ids": [
+      30665,
+      151645
+    ],
+    "decoded_raw": "Dear",
+    "decoded_with_special_tokens": "Dear<|im_end|>",
+    "classification": {
+      "decoded_trimmed": "Dear",
+      "stopped_on_eos": true,
+      "strict_exact_word": false,
+      "semantic_one_word": false,
+      "strict_word_plus_eos": false,
+      "semantic_word_plus_eos": false,
+      "first_token_in_expected_aliases": false,
+      "first_token_id": 30665,
+      "expected_alias_token_ids": [
+        38049,
+        63091,
+        96262
+      ],
+      "valid_token_structure": true,
+      "early_eos": false,
+      "nonterminal_special_token_ids": []
+    },
+    "semantic_word_plus_eos": false,
+    "prefix_class": "unclassified",
+    "prefix_class_complete_answer_match": false,
+    "audio_source_hook_calls": 0
+  },
+  "sites": {
+    "encoder31": {
+      "source_shape": [
+        281,
+        1280
+      ],
+      "row_counts": [
+        17,
+        16,
+        17,
+        16,
+        17,
+        16
+      ],
+      "outcomes": [
+        {
+          "alpha": 0.0,
+          "token_ids": [
+            30665,
+            151645
+          ],
+          "decoded_raw": "Dear",
+          "decoded_with_special_tokens": "Dear<|im_end|>",
+          "classification": {
+            "decoded_trimmed": "Dear",
+            "stopped_on_eos": true,
+            "strict_exact_word": false,
+            "semantic_one_word": false,
+            "strict_word_plus_eos": false,
+            "semantic_word_plus_eos": false,
+            "first_token_in_expected_aliases": false,
+            "first_token_id": 30665,
+            "expected_alias_token_ids": [
+              38049,
+              63091,
+              96262
+            ],
+            "valid_token_structure": true,
+            "early_eos": false,
+            "nonterminal_special_token_ids": []
+          },
+          "semantic_word_plus_eos": false,
+          "prefix_class": "unclassified",
+          "prefix_class_complete_answer_match": false,
+          "audio_source_hook_calls": 1
+        },
+        {
+          "alpha": 0.025,
+          "token_ids": [
+            30665,
+            151645
+          ],
+          "decoded_raw": "Dear",
+          "decoded_with_special_tokens": "Dear<|im_end|>",
+          "classification": {
+            "decoded_trimmed": "Dear",
+            "stopped_on_eos": true,
+            "strict_exact_word": false,
+            "semantic_one_word": false,
+            "strict_word_plus_eos": false,
+            "semantic_word_plus_eos": false,
+            "first_token_in_expected_aliases": false,
+            "first_token_id": 30665,
+            "expected_alias_token_ids": [
+              38049,
+              63091,
+              96262
+            ],
+            "valid_token_structure": true,
+            "early_eos": false,
+            "nonterminal_special_token_ids": []
+          },
+          "semantic_word_plus_eos": false,
+          "prefix_class": "unclassified",
+          "prefix_class_complete_answer_match": false,
+          "audio_source_hook_calls": 1
+        }
+      ]
+    },
+    "connector": {
+      "source_shape": [
+        140,
+        2048
+      ],
+      "row_counts": [
+        8,
+        9,
+        8,
+        8,
+        8,
+        9
+      ],
+      "outcomes": [
+        {
+          "alpha": 0.0,
+          "token_ids": [
+            30665,
+            151645
+          ],
+          "decoded_raw": "Dear",
+          "decoded_with_special_tokens": "Dear<|im_end|>",
+          "classification": {
+            "decoded_trimmed": "Dear",
+            "stopped_on_eos": true,
+            "strict_exact_word": false,
+            "semantic_one_word": false,
+            "strict_word_plus_eos": false,
+            "semantic_word_plus_eos": false,
+            "first_token_in_expected_aliases": false,
+            "first_token_id": 30665,
+            "expected_alias_token_ids": [
+              38049,
+              63091,
+              96262
+            ],
+            "valid_token_structure": true,
+            "early_eos": false,
+            "nonterminal_special_token_ids": []
+          },
+          "semantic_word_plus_eos": false,
+          "prefix_class": "unclassified",
+          "prefix_class_complete_answer_match": false,
+          "audio_source_hook_calls": 1
+        },
+        {
+          "alpha": 0.025,
+          "token_ids": [
+            30665,
+            151645
+          ],
+          "decoded_raw": "Dear",
+          "decoded_with_special_tokens": "Dear<|im_end|>",
+          "classification": {
+            "decoded_trimmed": "Dear",
+            "stopped_on_eos": true,
+            "strict_exact_word": false,
+            "semantic_one_word": false,
+            "strict_word_plus_eos": false,
+            "semantic_word_plus_eos": false,
+            "first_token_in_expected_aliases": false,
+            "first_token_id": 30665,
+            "expected_alias_token_ids": [
+              38049,
+              63091,
+              96262
+            ],
+            "valid_token_structure": true,
+            "early_eos": false,
+            "nonterminal_special_token_ids": []
+          },
+          "semantic_word_plus_eos": false,
+          "prefix_class": "unclassified",
+          "prefix_class_complete_answer_match": false,
+          "audio_source_hook_calls": 1
+        }
+      ]
+    }
+  },
+  "memory_sha256": "4cb3820a9e3da7619fa221d574d28cee6578d276c64fe5be01a50fef9cc7a3c8"
+}
