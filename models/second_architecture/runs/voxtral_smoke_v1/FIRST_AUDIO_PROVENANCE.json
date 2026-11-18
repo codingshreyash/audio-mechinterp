@@ -1,0 +1,7 @@
+{
+  "result_path": "models/second_architecture/runs/voxtral_smoke_v1/piper_red_20261118T062040986265Z.json",
+  "result_sha256": "47020c2c767337f45618b3c8327d750d0797935eee7069dbbc30ab7e89ff959e",
+  "executed_source_snapshot": "models/second_architecture/source_snapshots/voxtral_smoke_first_audio.py",
+  "executed_source_sha256": "0d0cdd8e561b0e25499ced699bd1905924173eaa3f46026ca9584c09d6909614",
+  "note": "Source snapshot captured before typed-control extension; result file itself did not record source SHA."
+}

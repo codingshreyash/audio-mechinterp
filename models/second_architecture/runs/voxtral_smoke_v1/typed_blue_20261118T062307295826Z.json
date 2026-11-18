@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "created_utc": "2026-11-18T06:23:07.271652+00:00",
+  "python": "3.12.13",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "transformers_release_tag_commit": "18329f1065382e54db698e242cf98bd3f3e5a766",
+  "transformers_source_verification": "release tag association; installed PyPI wheel checked by version only",
+  "script_sha256": "334789f2afcbb9f65694605845a4478f5c970ac37894d811bfc7c9c680d9332f",
+  "dependency_versions": {
+    "torch": "2.15.0",
+    "transformers": "5.20.2",
+    "mistral-common": "1.13.1",
+    "accelerate": "1.16.0",
+    "soundfile": "0.14.0",
+    "librosa": "0.11.0",
+    "huggingface-hub": "2.4.0"
+  },
+  "requirements_freeze_sha256": "0c451c471cd920a2793b74f1c727df662392bb401b2c4043117bccd1763d2aff",
+  "snapshot": {
+    "model_id": "mistralai/Voxtral-Mini-3B-2507",
+    "revision": "3060fe34b35ba5d44202ce9ff3c097642914f8f3",
+    "snapshot": "/Users/shrranjan/audio-mechinterp/models/second_architecture/hf_cache/voxtral",
+    "tree_sha256": "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a",
+    "config_sha256": "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e",
+    "index_sha256": "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930",
+    "shard_sizes_bytes": {
+      "model-00001-of-00002.safetensors": 4977385976,
+      "model-00002-of-00002.safetensors": 4379088336
+    }
+  },
+  "stimulus": {
+    "input_modality": "typed",
+    "engine": null,
+    "word": "blue",
+    "manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+    "text": "I said the color blue. Which color did I say? Answer with one color word.",
+    "text_sha256": "63af616d08ca1d5d672de1b4935cc88002a707bbd475249ae70bf072f3003c10",
+    "wav": null,
+    "wav_sha256": null,
+    "sample_rate": null,
+    "frames": null,
+    "duration_seconds": null,
+    "word_slot_start_sample": null,
+    "word_slot_end_sample_exclusive": null
+  },
+  "processor": {
+    "processor_class": "VoxtralProcessor",
+    "user_message": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "I said the color blue. Which color did I say? Answer with one color word."
+          }
+        ]
+      }
+    ],
+    "input_ids": [
+      1,
+      3,
+      1073,
+      2639,
+      1278,
+      4558,
+      10991,
+      1046,
+      27923,
+      4558,
+      2697,
+      1362,
+      4150,
+      1063,
+      3450,
+      1454,
+      1925,
+      4558,
+      3541,
+      1046,
+      4
+    ],
+    "input_ids_shape": [
+      1,
+      21
+    ],
+    "input_features_shape": null,
+    "audio_token_id": 24,
+    "audio_placeholder_count": 0
+  },
+  "result": {
+    "model_class": "VoxtralForConditionalGeneration",
+    "generation": {
+      "do_sample": false,
+      "max_new_tokens": 32,
+      "eos_token_id": 2,
+      "pad_token_id": 11,
+      "use_cache": true,
+      "attn_implementation": "sdpa"
+    },
+    "generated_token_ids": [
+      1438,
+      24851,
+      1438,
+      2
+    ],
+    "generated_token_count": 4,
+    "full_answer": "**Blue**",
+    "stopped_on_eos": true,
+    "stop_reason": "eos",
+    "exact_one_color_word": false,
+    "load_seconds": 0.9432907090522349,
+    "generation_seconds": 0.2773756659589708,
+    "mps_recommended_max_bytes": 40200896512,
+    "mps_fraction_limit": 0.8012819990316539,
+    "mps_current_observed_max_bytes": 3599872,
+    "mps_driver_observed_max_bytes": 9376022528,
+    "process_max_rss_bytes_darwin": 10128687104
+  }
+}
