@@ -1,0 +1,5 @@
+{"current_allocated_bytes": 7734272, "driver_allocated_bytes": 9450307584, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_model_load", "unix_time": 1794982632.435953}
+{"current_allocated_bytes": 24403712, "driver_allocated_bytes": 10762338304, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "piper/red_to_blue/connector/donor_vjp", "unix_time": 1794982632.905324}
+{"current_allocated_bytes": 25042688, "driver_allocated_bytes": 10762338304, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "piper/red_to_blue/connector/recipient_vjp", "unix_time": 1794982633.040139}
+{"current_allocated_bytes": 25362176, "driver_allocated_bytes": 10762338304, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "piper/red_to_blue/connector/cached_prefill", "unix_time": 1794982633.0872052}
+{"current_allocated_bytes": 26959872, "driver_allocated_bytes": 10762371072, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "piper/red_to_blue/connector/alpha=0.0", "unix_time": 1794982633.56227}

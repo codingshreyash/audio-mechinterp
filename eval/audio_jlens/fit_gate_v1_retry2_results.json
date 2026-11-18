@@ -1,0 +1,576 @@
+{
+  "status": "fit_only_complete",
+  "purpose": "scalar audio-state Jacobian prediction versus causal patch",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "split_sha256": "2b48246361a629fbb0fa80c79a3d061b6977c8cb8af71cdc2275b1e4b0b4d45a",
+  "plan_sha256": "18670b7a8b49ef1eef693c6daf784eb30ba18d89886fa6eebbbcea0469589863",
+  "script_sha256": "a8ae204583a372b872d56123d51e6e0270687345eff2e0ff68a6c90884f45493",
+  "fit_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "candidate_surfaces": {
+    "red": "Red",
+    "blue": "Blue"
+  },
+  "candidate_token_ids": {
+    "red": [
+      6033,
+      151645
+    ],
+    "blue": [
+      10331,
+      151645
+    ]
+  },
+  "alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.25,
+    1.0
+  ],
+  "memory_log_path": "eval/audio_jlens/fit_gate_v1_retry2_results.memory.jsonl",
+  "max_mps_driver_bytes": 32212254720,
+  "device": "mps",
+  "dtype": "bfloat16",
+  "torch_version": "2.15.0",
+  "engines": [
+    "piper"
+  ],
+  "directions": [
+    "red_to_blue"
+  ],
+  "sites": [
+    "connector",
+    "encoder15"
+  ],
+  "results": [
+    {
+      "engine": "piper",
+      "recipient": "red",
+      "donor": "blue",
+      "site": "connector",
+      "site_width": 2048,
+      "site_rows_total": 78,
+      "word_rows": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "word_row_attention_chunk_ids": [
+        0
+      ],
+      "source_audio_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_audio_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "candidate_token_ids": {
+        "recipient": [
+          6033,
+          151645
+        ],
+        "donor": [
+          10331,
+          151645
+        ]
+      },
+      "donor_minus_source_word_delta_norm": 105.81281280517578,
+      "outside_word_rows_delta_norm": 96.5744857788086,
+      "cache_prefill_max_abs_difference": 0.0,
+      "gradient_word_norm": 1.0348522663116455,
+      "baseline_score": -4.342623949050903,
+      "vjp_baseline_score": -4.3505465388298035,
+      "grad_vs_no_grad_baseline_difference": -0.007922589778900146,
+      "clean_generated": {
+        "token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "patch_hook_calls": 0
+      },
+      "conditions": [
+        {
+          "alpha": 0.0,
+          "effective_bf16_delta_norm": 0.0,
+          "predicted_delta_score": 0.0,
+          "measured_delta_score": 0.0,
+          "score_prediction_error": 0.0,
+          "per_row_predicted_contributions": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "patched_donor_answer_logprob": -4.897078514099121,
+          "patched_recipient_answer_logprob": -0.5544545650482178,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 0.05,
+          "effective_bf16_delta_norm": 5.295755386352539,
+          "predicted_delta_score": 0.16758336126804352,
+          "measured_delta_score": 0.24187278747558594,
+          "score_prediction_error": 0.07428942620754242,
+          "per_row_predicted_contributions": [
+            0.0027055498212575912,
+            0.0005000033415853977,
+            0.05230933427810669,
+            0.043559059500694275,
+            0.010426098480820656,
+            -0.004569558426737785,
+            0.026869874447584152,
+            -0.004383680410683155,
+            0.023656561970710754,
+            -0.0001224545412696898,
+            0.0014747870154678822,
+            0.001490886090323329,
+            0.013666898012161255
+          ],
+          "patched_donor_answer_logprob": -4.693174362182617,
+          "patched_recipient_answer_logprob": -0.5924232006072998,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 0.1,
+          "effective_bf16_delta_norm": 10.582356452941895,
+          "predicted_delta_score": 0.3300430178642273,
+          "measured_delta_score": 0.5550658106803894,
+          "score_prediction_error": 0.2250227928161621,
+          "per_row_predicted_contributions": [
+            0.005678822286427021,
+            0.001592803280800581,
+            0.10305307805538177,
+            0.08565863966941833,
+            0.020625662058591843,
+            -0.009487047791481018,
+            0.05233590304851532,
+            -0.008681110106408596,
+            0.047551125288009644,
+            -0.00015734974294900894,
+            0.0026824779342859983,
+            0.002158934948965907,
+            0.027031073346734047
+          ],
+          "patched_donor_answer_logprob": -4.39449405670166,
+          "patched_recipient_answer_logprob": -0.6069359183311462,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 0.25,
+          "effective_bf16_delta_norm": 26.453508377075195,
+          "predicted_delta_score": 0.8254501223564148,
+          "measured_delta_score": 0.7875254154205322,
+          "score_prediction_error": -0.03792470693588257,
+          "per_row_predicted_contributions": [
+            0.013917600736021996,
+            0.0034808944910764694,
+            0.25735610723495483,
+            0.21411940455436707,
+            0.05182996392250061,
+            -0.023649096488952637,
+            0.13235168159008026,
+            -0.022458989173173904,
+            0.1183747947216034,
+            -0.00046061613829806447,
+            0.007074838038533926,
+            0.005707674194127321,
+            0.06780590116977692
+          ],
+          "patched_donor_answer_logprob": -4.125349998474121,
+          "patched_recipient_answer_logprob": -0.57025146484375,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 1.0,
+          "effective_bf16_delta_norm": 105.81281280517578,
+          "predicted_delta_score": 3.3045859336853027,
+          "measured_delta_score": 8.940814852714539,
+          "score_prediction_error": 5.636228919029236,
+          "per_row_predicted_contributions": [
+            0.05565975606441498,
+            0.01471414789557457,
+            1.0292249917984009,
+            0.857229471206665,
+            0.20752856135368347,
+            -0.09477709233760834,
+            0.5291280746459961,
+            -0.08821280300617218,
+            0.47317200899124146,
+            -0.001602270407602191,
+            0.028012529015541077,
+            0.022362802177667618,
+            0.2721458673477173
+          ],
+          "patched_donor_answer_logprob": -0.43344199657440186,
+          "patched_recipient_answer_logprob": -5.031632900238037,
+          "generated": {
+            "token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        }
+      ]
+    },
+    {
+      "engine": "piper",
+      "recipient": "red",
+      "donor": "blue",
+      "site": "encoder15",
+      "site_width": 1280,
+      "site_rows_total": 156,
+      "word_rows": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "word_row_attention_chunk_ids": [
+        0
+      ],
+      "source_audio_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_audio_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "candidate_token_ids": {
+        "recipient": [
+          6033,
+          151645
+        ],
+        "donor": [
+          10331,
+          151645
+        ]
+      },
+      "donor_minus_source_word_delta_norm": 29.449522018432617,
+      "outside_word_rows_delta_norm": 9.750542640686035,
+      "cache_prefill_max_abs_difference": 0.0,
+      "gradient_word_norm": 2.2557590007781982,
+      "baseline_score": -4.342623949050903,
+      "vjp_baseline_score": -4.322629868984222,
+      "grad_vs_no_grad_baseline_difference": 0.019994080066680908,
+      "clean_generated": {
+        "token_ids": [
+          6033,
+          151645
+        ],
+        "answer": "Red",
+        "stopped_on_eos": true,
+        "patch_hook_calls": 0
+      },
+      "conditions": [
+        {
+          "alpha": 0.0,
+          "effective_bf16_delta_norm": 0.0,
+          "predicted_delta_score": 0.0,
+          "measured_delta_score": 0.0,
+          "score_prediction_error": 0.0,
+          "per_row_predicted_contributions": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "patched_donor_answer_logprob": -4.897078514099121,
+          "patched_recipient_answer_logprob": -0.5544545650482178,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 0.05,
+          "effective_bf16_delta_norm": 1.4853968620300293,
+          "predicted_delta_score": 0.028949538245797157,
+          "measured_delta_score": 0.18086528778076172,
+          "score_prediction_error": 0.15191574953496456,
+          "per_row_predicted_contributions": [
+            0.00035544042475521564,
+            -0.0006692673196084797,
+            0.0011571168433874846,
+            0.002353908261284232,
+            0.0022141789086163044,
+            0.0010528393322601914,
+            -0.003754749894142151,
+            -0.0017176733817905188,
+            0.003136544255539775,
+            -0.016360674053430557,
+            -0.01548244059085846,
+            -0.00650068698450923,
+            -0.0035931796301156282,
+            -0.0026455624029040337,
+            -0.009866775944828987,
+            -0.002928514499217272,
+            -0.0009358287788927555,
+            0.006100929342210293,
+            0.006757431663572788,
+            0.009309119544923306,
+            0.008687607944011688,
+            0.0003835101379081607,
+            0.006204592064023018,
+            0.02647414058446884,
+            0.012767217122018337,
+            0.005663690157234669,
+            0.0007866248488426208
+          ],
+          "patched_donor_answer_logprob": -4.757608413696289,
+          "patched_recipient_answer_logprob": -0.5958497524261475,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 0.1,
+          "effective_bf16_delta_norm": 2.951709032058716,
+          "predicted_delta_score": 0.07191483676433563,
+          "measured_delta_score": 0.24066025018692017,
+          "score_prediction_error": 0.16874541342258453,
+          "per_row_predicted_contributions": [
+            0.0007660025730729103,
+            -0.0014910834142938256,
+            0.002147346269339323,
+            0.005671444348990917,
+            0.004320804961025715,
+            0.0034163184463977814,
+            -0.0072309235110878944,
+            -0.0007154338527470827,
+            0.006140708923339844,
+            -0.030498813837766647,
+            -0.029245149344205856,
+            -0.01242905668914318,
+            -0.00810939259827137,
+            -0.004625278525054455,
+            -0.01966170221567154,
+            -0.005695263855159283,
+            -0.000923246843740344,
+            0.011921249330043793,
+            0.012755412608385086,
+            0.018459133803844452,
+            0.01728702150285244,
+            0.0019501917995512486,
+            0.013072283007204533,
+            0.05319371819496155,
+            0.02793111838400364,
+            0.011623868718743324,
+            0.0018835539231076837
+          ],
+          "patched_donor_answer_logprob": -4.697201251983643,
+          "patched_recipient_answer_logprob": -0.5952375531196594,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 0.25,
+          "effective_bf16_delta_norm": 7.364616394042969,
+          "predicted_delta_score": 0.16865091025829315,
+          "measured_delta_score": 0.29637932777404785,
+          "score_prediction_error": 0.1277284175157547,
+          "per_row_predicted_contributions": [
+            0.0020242261234670877,
+            -0.003343758871778846,
+            0.005651912186294794,
+            0.012975020334124565,
+            0.01147952675819397,
+            0.006755308248102665,
+            -0.017713366076350212,
+            -0.002381008118391037,
+            0.016291189938783646,
+            -0.07663983851671219,
+            -0.07395406067371368,
+            -0.031731314957141876,
+            -0.02017385885119438,
+            -0.011732799932360649,
+            -0.04928681254386902,
+            -0.01420935895293951,
+            -0.004142984747886658,
+            0.030308615416288376,
+            0.03335511311888695,
+            0.04628802835941315,
+            0.04313855245709419,
+            0.003970959223806858,
+            0.03206821158528328,
+            0.13050377368927002,
+            0.06894725561141968,
+            0.02678326517343521,
+            0.003419125685468316
+          ],
+          "patched_donor_answer_logprob": -4.661828517913818,
+          "patched_recipient_answer_logprob": -0.6155838966369629,
+          "generated": {
+            "token_ids": [
+              6033,
+              151645
+            ],
+            "answer": "Red",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        },
+        {
+          "alpha": 1.0,
+          "effective_bf16_delta_norm": 29.449522018432617,
+          "predicted_delta_score": 0.6738301515579224,
+          "measured_delta_score": 8.694118052721024,
+          "score_prediction_error": 8.020287901163101,
+          "per_row_predicted_contributions": [
+            0.008142387494444847,
+            -0.013773314654827118,
+            0.022104306146502495,
+            0.052934423089027405,
+            0.045776765793561935,
+            0.026835307478904724,
+            -0.07430361956357956,
+            -0.013580407947301865,
+            0.06520532071590424,
+            -0.31071704626083374,
+            -0.2957347631454468,
+            -0.12568867206573486,
+            -0.07992315292358398,
+            -0.04504929482936859,
+            -0.19496306777000427,
+            -0.05656614154577255,
+            -0.017386097460985184,
+            0.12485042214393616,
+            0.13180193305015564,
+            0.18402403593063354,
+            0.17262618243694305,
+            0.015641506761312485,
+            0.12881526350975037,
+            0.5176278948783875,
+            0.2789797782897949,
+            0.11177748441696167,
+            0.014372684992849827
+          ],
+          "patched_donor_answer_logprob": -0.4656669795513153,
+          "patched_recipient_answer_logprob": -4.8171610832214355,
+          "generated": {
+            "token_ids": [
+              10331,
+              151645
+            ],
+            "answer": "Blue",
+            "stopped_on_eos": true,
+            "patch_hook_calls": 1
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "status": "fit_only_complete",
+  "purpose": "same-path grad versus no-grad directional finite differences",
+  "engine": "piper",
+  "recipient": "red",
+  "donor": "blue",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "fit_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "split_sha256": "2b48246361a629fbb0fa80c79a3d061b6977c8cb8af71cdc2275b1e4b0b4d45a",
+  "fit_gate_script_sha256": "18c64823da594e389f49bdc8ab21b67bd4f4d61e59acae95e3ef96fd41ee8df1",
+  "diagnostic_script_sha256": "cfa1933ade82d1523573e2095cad39ce8bb2a51b95228ded7cc08d1991897d96",
+  "system_prompt": "Answer the spoken question with one color word.",
+  "answer_token_ids": {
+    "red": [
+      6033,
+      151645
+    ],
+    "blue": [
+      10331,
+      151645
+    ]
+  },
+  "alpha_grid": [
+    0.0,
+    0.01,
+    0.025,
+    0.05,
+    0.1
+  ],
+  "original_gate_alpha_grid": [
+    0.0,
+    0.05,
+    0.1,
+    0.25,
+    1.0
+  ],
+  "zero_repeats": 3,
+  "memory_log_path": "/Users/shrranjan/audio-mechinterp/eval/audio_jlens/fit_fd_diagnostic_v1_results.memory.jsonl",
+  "device": "mps",
+  "dtype": "bfloat16",
+  "results": [
+    {
+      "site": "connector",
+      "rows": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41
+      ],
+      "source_shape": [
+        78,
+        2048
+      ],
+      "source_audio_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_audio_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "full_donor_minus_source_norm": 105.81281280517578,
+      "contrast_gradient_norm": 1.0348522663116455,
+      "vjp_path_scores": {
+        "blue": -4.932562828063965,
+        "red": -0.5820162892341614
+      },
+      "vjp_path_contrast": -4.3505465388298035,
+      "zero_scores_repeated": {
+        "grad": [
+          {
+            "blue": -4.932562828063965,
+            "red": -0.5820162892341614
+          },
+          {
+            "blue": -4.932562828063965,
+            "red": -0.5820162892341614
+          },
+          {
+            "blue": -4.932562828063965,
+            "red": -0.5820162892341614
+          }
+        ],
+        "no_grad": [
+          {
+            "blue": -4.897078514099121,
+            "red": -0.5544545650482178
+          },
+          {
+            "blue": -4.897078514099121,
+            "red": -0.5544545650482178
+          },
+          {
+            "blue": -4.897078514099121,
+            "red": -0.5544545650482178
+          }
+        ]
+      },
+      "zero_contrast_means": {
+        "grad": -4.3505465388298035,
+        "no_grad": -4.342623949050903
+      },
+      "zero_contrast_max_abs_deviation": {
+        "grad": 0.0,
+        "no_grad": 0.0
+      },
+      "vjp_minus_grad_patch_zero_contrast": 0.0,
+      "grad_minus_no_grad_zero_contrast": -0.007922589778900146,
+      "conditions": [
+        {
+          "alpha": 0.0,
+          "effective_bf16_delta_norm": 0.0,
+          "effective_nonzero_elements": 0,
+          "predicted_delta_score": 0.0,
+          "scores": {
+            "grad": {
+              "blue": -4.932562828063965,
+              "red": -0.5820162892341614
+            },
+            "no_grad": {
+              "blue": -4.897078514099121,
+              "red": -0.5544545650482178
+            }
+          },
+          "contrasts": {
+            "grad": -4.3505465388298035,
+            "no_grad": -4.342623949050903
+          },
+          "finite_differences": {
+            "grad": 0.0,
+            "no_grad": 0.0
+          }
+        },
+        {
+          "alpha": 0.01,
+          "effective_bf16_delta_norm": 1.0751478672027588,
+          "effective_nonzero_elements": 21794,
+          "predicted_delta_score": 0.034289177507162094,
+          "scores": {
+            "grad": {
+              "blue": -4.891630172729492,
+              "red": -0.5492228269577026
+            },
+            "no_grad": {
+              "blue": -4.817884922027588,
+              "red": -0.5936123132705688
+            }
+          },
+          "contrasts": {
+            "grad": -4.3424073457717896,
+            "no_grad": -4.224272608757019
+          },
+          "finite_differences": {
+            "grad": 0.008139193058013916,
+            "no_grad": 0.11835134029388428
+          }
+        },
+        {
+          "alpha": 0.025,
+          "effective_bf16_delta_norm": 2.6521222591400146,
+          "effective_nonzero_elements": 24632,
+          "predicted_delta_score": 0.0813075378537178,
+          "scores": {
+            "grad": {
+              "blue": -4.776551723480225,
+              "red": -0.5931743383407593
+            },
+            "no_grad": {
+              "blue": -4.758719444274902,
+              "red": -0.5965625047683716
+            }
+          },
+          "contrasts": {
+            "grad": -4.183377385139465,
+            "no_grad": -4.162156939506531
+          },
+          "finite_differences": {
+            "grad": 0.16716915369033813,
+            "no_grad": 0.18046700954437256
+          }
+        },
+        {
+          "alpha": 0.05,
+          "effective_bf16_delta_norm": 5.295755386352539,
+          "effective_nonzero_elements": 25667,
+          "predicted_delta_score": 0.16758336126804352,
+          "scores": {
+            "grad": {
+              "blue": -4.6938371658325195,
+              "red": -0.5931426286697388
+            },
+            "no_grad": {
+              "blue": -4.693174362182617,
+              "red": -0.5924232006072998
+            }
+          },
+          "contrasts": {
+            "grad": -4.100694537162781,
+            "no_grad": -4.100751161575317
+          },
+          "finite_differences": {
+            "grad": 0.2498520016670227,
+            "no_grad": 0.24187278747558594
+          }
+        },
+        {
+          "alpha": 0.1,
+          "effective_bf16_delta_norm": 10.582356452941895,
+          "effective_nonzero_elements": 26163,
+          "predicted_delta_score": 0.3300430178642273,
+          "scores": {
+            "grad": {
+              "blue": -4.574636936187744,
+              "red": -0.5779621601104736
+            },
+            "no_grad": {
+              "blue": -4.39449405670166,
+              "red": -0.6069359183311462
+            }
+          },
+          "contrasts": {
+            "grad": -3.9966747760772705,
+            "no_grad": -3.787558138370514
+          },
+          "finite_differences": {
+            "grad": 0.35387176275253296,
+            "no_grad": 0.5550658106803894
+          }
+        }
+      ]
+    },
+    {
+      "site": "encoder15",
+      "rows": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83
+      ],
+      "source_shape": [
+        156,
+        1280
+      ],
+      "source_audio_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+      "donor_audio_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+      "full_donor_minus_source_norm": 29.449522018432617,
+      "contrast_gradient_norm": 2.2557590007781982,
+      "vjp_path_scores": {
+        "blue": -4.856873035430908,
+        "red": -0.5342431664466858
+      },
+      "vjp_path_contrast": -4.322629868984222,
+      "zero_scores_repeated": {
+        "grad": [
+          {
+            "blue": -4.856873035430908,
+            "red": -0.5342431664466858
+          },
+          {
+            "blue": -4.856873035430908,
+            "red": -0.5342431664466858
+          },
+          {
+            "blue": -4.856873035430908,
+            "red": -0.5342431664466858
+          }
+        ],
+        "no_grad": [
+          {
+            "blue": -4.897078514099121,
+            "red": -0.5544545650482178
+          },
+          {
+            "blue": -4.897078514099121,
+            "red": -0.5544545650482178
+          },
+          {
+            "blue": -4.897078514099121,
+            "red": -0.5544545650482178
+          }
+        ]
+      },
+      "zero_contrast_means": {
+        "grad": -4.322629868984222,
+        "no_grad": -4.342623949050903
+      },
+      "zero_contrast_max_abs_deviation": {
+        "grad": 0.0,
+        "no_grad": 0.0
+      },
+      "vjp_minus_grad_patch_zero_contrast": 0.0,
+      "grad_minus_no_grad_zero_contrast": 0.019994080066680908,
+      "conditions": [
+        {
+          "alpha": 0.0,
+          "effective_bf16_delta_norm": 0.0,
+          "effective_nonzero_elements": 0,
+          "predicted_delta_score": 0.0,
+          "scores": {
+            "grad": {
+              "blue": -4.856873035430908,
+              "red": -0.5342431664466858
+            },
+            "no_grad": {
+              "blue": -4.897078514099121,
+              "red": -0.5544545650482178
+            }
+          },
+          "contrasts": {
+            "grad": -4.322629868984222,
+            "no_grad": -4.342623949050903
+          },
+          "finite_differences": {
+            "grad": 0.0,
+            "no_grad": 0.0
+          }
+        },
+        {
+          "alpha": 0.01,
+          "effective_bf16_delta_norm": 0.3190980553627014,
+          "effective_nonzero_elements": 6822,
+          "predicted_delta_score": 0.0025145248509943485,
+          "scores": {
+            "grad": {
+              "blue": -4.932577610015869,
+              "red": -0.5474995970726013
+            },
+            "no_grad": {
+              "blue": -4.934013843536377,
+              "red": -0.5851244926452637
+            }
+          },
+          "contrasts": {
+            "grad": -4.385078012943268,
+            "no_grad": -4.348889350891113
+          },
+          "finite_differences": {
+            "grad": -0.06244814395904541,
+            "no_grad": -0.006265401840209961
+          }
+        },
+        {
+          "alpha": 0.025,
+          "effective_bf16_delta_norm": 0.764814019203186,
+          "effective_nonzero_elements": 18580,
+          "predicted_delta_score": 0.013766365125775337,
+          "scores": {
+            "grad": {
+              "blue": -4.8728156089782715,
+              "red": -0.5835117101669312
+            },
+            "no_grad": {
+              "blue": -4.781027793884277,
+              "red": -0.5978100299835205
+            }
+          },
+          "contrasts": {
+            "grad": -4.28930389881134,
+            "no_grad": -4.183217763900757
+          },
+          "finite_differences": {
+            "grad": 0.03332597017288208,
+            "no_grad": 0.15940618515014648
+          }
+        },
+        {
+          "alpha": 0.05,
+          "effective_bf16_delta_norm": 1.4853968620300293,
+          "effective_nonzero_elements": 25658,
+          "predicted_delta_score": 0.028949538245797157,
+          "scores": {
+            "grad": {
+              "blue": -4.7399210929870605,
+              "red": -0.5425618290901184
+            },
+            "no_grad": {
+              "blue": -4.757608413696289,
+              "red": -0.5958497524261475
+            }
+          },
+          "contrasts": {
+            "grad": -4.197359263896942,
+            "no_grad": -4.161758661270142
+          },
+          "finite_differences": {
+            "grad": 0.12527060508728027,
+            "no_grad": 0.18086528778076172
+          }
+        },
+        {
+          "alpha": 0.1,
+          "effective_bf16_delta_norm": 2.951709032058716,
+          "effective_nonzero_elements": 30034,
+          "predicted_delta_score": 0.07191483676433563,
+          "scores": {
+            "grad": {
+              "blue": -4.713900089263916,
+              "red": -0.5898400545120239
+            },
+            "no_grad": {
+              "blue": -4.697201251983643,
+              "red": -0.5952375531196594
+            }
+          },
+          "contrasts": {
+            "grad": -4.124060034751892,
+            "no_grad": -4.101963698863983
+          },
+          "finite_differences": {
+            "grad": 0.19856983423233032,
+            "no_grad": 0.24066025018692017
+          }
+        }
+      ]
+    }
+  ]
+}
