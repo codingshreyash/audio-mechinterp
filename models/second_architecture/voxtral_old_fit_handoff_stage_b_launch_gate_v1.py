@@ -351,6 +351,7 @@ def _prior_bf16_b(stage_a: dict, freeze_sha: str) -> dict:
     gate_attempt = RUNS / "bf16_direct_lm" / attempt_id
     reservation = RUNS / "bf16_direct_lm_reservation.json"
     for path in (reservation, gate_attempt / "launch_start.json",
+                 gate_attempt / "worker_claim.json",
                  gate_attempt / "launch_finish.json", attempt / "audit.json",
                  attempt / "result.json"):
         committed_same(REPO, path)
@@ -359,10 +360,16 @@ def _prior_bf16_b(stage_a: dict, freeze_sha: str) -> dict:
         raise ValueError("Stage-B BF16 attempt tree differs")
     start, finish = (read_json(gate_attempt / name) for name in
                      ("launch_start.json", "launch_finish.json"))
+    claim = read_json(gate_attempt / "worker_claim.json")
     reserved = read_json(reservation)
     value = read_json(BF16_B_MANIFEST)
     if (reserved != {"status": "phase_reserved_no_retry", "phase": "bf16_direct_lm",
                      "attempt_id": attempt_id, "stage_b_freeze_sha256": freeze_sha} or
+            {k: claim.get(k) for k in ("status", "phase", "attempt_id", "stage_b_freeze_sha256")} !=
+            {"status": "worker_claimed_no_retry", "phase": "bf16_direct_lm",
+             "attempt_id": attempt_id, "stage_b_freeze_sha256": freeze_sha} or
+            utc(start.get("wall_utc")) >= utc(claim.get("wall_utc")) or
+            utc(claim.get("wall_utc")) >= utc(finish.get("wall_utc")) or
             value.get("stage_b_freeze_sha256") != freeze_sha or
             value.get("launch_start_sha256") != sha(gate_attempt / "launch_start.json") or
             value.get("launch_finish_sha256") != sha(gate_attempt / "launch_finish.json") or
@@ -511,8 +518,6 @@ def _bounded(command: list[str], *, capture_dir: Path, worker_output: Path | Non
         while True:
             code = proc.poll()
             elapsed = time.monotonic() - began
-            if code is not None:
-                break
             if elapsed > timeout:
                 reason = "child_process_timeout"
             elif max(stdout.tell(), (capture_dir / output_name).stat().st_size) > MAX_CAPTURE_BYTES or \
@@ -523,13 +528,15 @@ def _bounded(command: list[str], *, capture_dir: Path, worker_output: Path | Non
             elif worker_output is not None and (_bytes(worker_output) + _bytes(capture_dir) >
                                                 driver.MAX_B_BYTES - FINAL_RECEIPT_RESERVE_BYTES):
                 reason = "combined_phase_output_byte_cap"
-            if reason:
+            if reason and code is None:
                 os.killpg(proc.pid, signal.SIGTERM)
                 try:
                     code = proc.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     os.killpg(proc.pid, signal.SIGKILL)
                     code = proc.wait(timeout=5)
+                break
+            if reason or code is not None:
                 break
             time.sleep(.1)
     return code, time.monotonic() - began, reason
@@ -583,6 +590,12 @@ def launch(phase: str, attempt_id: str) -> dict:
         if (reason or code != 0 or elapsed >= driver.CAP_SECONDS[phase] or
                 prior_seconds + elapsed >= driver.MAX_TOTAL_SECONDS):
             raise ValueError(reason or "Stage-B worker failed or exceeded model-work cap")
+        claim_path = gate_attempt / "worker_claim.json"
+        claim = read_json(claim_path)
+        if ({k: claim.get(k) for k in ("status", "phase", "attempt_id", "stage_b_freeze_sha256")} !=
+                {"status": "worker_claimed_no_retry", "phase": phase,
+                 "attempt_id": attempt_id, "stage_b_freeze_sha256": frozen_sha}):
+            raise ValueError("Stage-B worker one-shot claim absent or invalid")
         result_path, error_path = worker_output / "result.json", worker_output / "error.json"
         finish["runner_result_sha256"] = sha(result_path) if result_path.is_file() else None
         finish["runner_error_sha256"] = sha(error_path) if error_path.is_file() else None

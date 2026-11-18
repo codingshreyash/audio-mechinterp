@@ -33,7 +33,9 @@ including four local-only tensor sidecars, and keeps the BF16 failure status.
 The BF16 phase is one reserved attempt. Before the child process, create an
 exclusive `bf16_direct_lm_reservation.json`, then a UTC `launch_start.json`
 under `runs/voxtral_old_fit_handoff_stage_b_launch_v1/bf16_direct_lm/<id>/`.
-The worker writes only to
+The worker writes an exclusive `worker_claim.json` before model construction;
+a crash or manual child reinvocation cannot reuse that same reservation. The
+worker writes its model products only to
 `runs/voxtral_old_fit_handoff_stage_b_v1/bf16_direct_lm/<id>/` and never
 inherits a previous model allocator. Its required work is 24 direct-LM
 forwards and zero VJPs. The parent enforces a 600-second model-work ceiling,

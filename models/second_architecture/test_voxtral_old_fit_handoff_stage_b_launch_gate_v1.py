@@ -235,6 +235,29 @@ class GateTest(unittest.TestCase):
             self.assertLess(elapsed, 2.0)
             self.assertNotEqual(code, 0)
 
+    def test_fast_exiting_child_cannot_bypass_stream_cap(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            capture = Path(tmp) / "launch"
+            capture.mkdir()
+            code, _, reason = gate._bounded(
+                [sys.executable, "-c", "import sys; sys.stdout.buffer.write(b'x' * 9437184)"],
+                capture_dir=capture, worker_output=None, timeout=5,
+                output_name="stdout.txt", error_name="stderr.txt")
+            self.assertEqual(code, 0)
+            self.assertEqual(reason, "capture_byte_cap")
+            self.assertGreater((capture / "stdout.txt").stat().st_size, gate.MAX_CAPTURE_BYTES)
+
+    def test_fast_exiting_child_cannot_bypass_timeout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            capture = Path(tmp) / "launch"
+            capture.mkdir()
+            code, _, reason = gate._bounded(
+                [sys.executable, "-c", "import time; time.sleep(.04)"],
+                capture_dir=capture, worker_output=None, timeout=.01,
+                output_name="stdout.txt", error_name="stderr.txt")
+            self.assertEqual(code, 0)
+            self.assertEqual(reason, "child_process_timeout")
+
 
 if __name__ == "__main__":
     unittest.main()
