@@ -1,0 +1,22 @@
+{
+  "status": "audited_completed_old_fit_handoff_stage_a_native_only",
+  "arm": "fp32",
+  "protocol_sha256": "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b",
+  "runner_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+  "native_source_sha256": "dc63b8c10ef605e1cc8538e3d37d8d2531e50ca7a46140ee1ee551054e3de978",
+  "result_sha256": "f4b87e1ee4fad0b3b03e06447dc15286897daa607a2eb50d5096a089fa22eb9b",
+  "details_sha256": "40e297ab4236b08edcb1d36b4f817fae4884e12be8258da8b49c2c7085d39716",
+  "probes_sha256": "dad65cd52beff26ed4f6dfcc5b541a9a0d504a207f23c2783f8ce71113f6b53e",
+  "auditor_sha256": "8d5f8b23bd32add8464bd976d42cd0225fbc5ee86510adc441b714de5a8fd275",
+  "audited_native_pairs": 36,
+  "audited_patch_forwards": 72,
+  "audited_vjps": 44,
+  "audited_lm0_control_cells": 24,
+  "observed_progress": {
+    "progress_lines": 214,
+    "patch_receipts": 72,
+    "lm0_zero_receipts": 24,
+    "lm0_edited_receipts": 24
+  },
+  "scope": "saved_tensor_and_receipt_arithmetic_only_no_model_execution_attestation"
+}

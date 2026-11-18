@@ -1,0 +1,27 @@
+{
+  "status": "launch_started",
+  "arm": "fp32",
+  "wall_utc": "2026-11-18T13:44:41.646634+00:00",
+  "continuation_freeze_sha256": "31e41dcee185432e7236f5ff4226e1062c8066a034a66d75f89916a4a4ef1dcf",
+  "posthoc_receipt_sha256": "df4e16989a67a4cc3e4584aa74c99f3b0a2601e82d8226adc7beb2d41bd38ba7",
+  "original_launch_status": "launch_failed",
+  "runner_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+  "auditor_sha256": "8d5f8b23bd32add8464bd976d42cd0225fbc5ee86510adc441b714de5a8fd275",
+  "runner_command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_handoff_stage_a_runner_v1.py",
+    "--run",
+    "--arm",
+    "fp32",
+    "--output-dir",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/20261118T134440087432Z/runner"
+  ],
+  "runner_cap_seconds": 1200,
+  "process_timeout_seconds": 1320,
+  "runner_mps_driver_cap_bytes": 32212254720,
+  "arm_output_cap_bytes": 1610612736,
+  "max_capture_bytes_per_stream": 8388608,
+  "prior_model_work_seconds": 63.245136791840196,
+  "cumulative_model_work_cap_seconds": 4500,
+  "audit_scope": "posthoc_one_old_fit_case_native_stage_only_no_security_claim"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "launch_completed_audited_old_fit_handoff_stage_a_native_only",
+  "arm": "fp32",
+  "continuation_freeze_sha256": "31e41dcee185432e7236f5ff4226e1062c8066a034a66d75f89916a4a4ef1dcf",
+  "original_launch_status": "launch_failed",
+  "runner_returncode": 0,
+  "auditor_returncode": 0,
+  "auditor_status": "audited_completed_old_fit_handoff_stage_a_native_only",
+  "runner_result_sha256": "f4b87e1ee4fad0b3b03e06447dc15286897daa607a2eb50d5096a089fa22eb9b",
+  "runner_error_sha256": null,
+  "audit_sha256": "122a89b7d4bd659ced83dcd5677767f556381cabed63297ae01edd7348dd41d8",
+  "post_run_source_verified": true,
+  "model_work_elapsed_seconds": 155.3182365419343,
+  "elapsed_seconds": 161.21771649993025,
+  "wall_utc": "2026-11-18T13:47:22.863178+00:00",
+  "entire_attempt_bytes_before_finish": 1414419084
+}
