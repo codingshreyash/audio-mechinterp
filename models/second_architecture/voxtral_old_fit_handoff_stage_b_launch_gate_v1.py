@@ -247,7 +247,9 @@ def verify_freeze() -> tuple[dict, dict]:
     ancestor(REPO, review_commit, freeze_add)
     committed_same(REPO, FREEZE_REVIEW)
     freeze_review_add = first_add(REPO, FREEZE_REVIEW)
-    if freeze_add == freeze_review_add or FREEZE_REVIEW_GO not in FREEZE_REVIEW.read_text():
+    if (freeze_add == freeze_review_add or
+            FREEZE_REVIEW_GO not in FREEZE_REVIEW.read_text() or
+            sha(FREEZE) not in FREEZE_REVIEW.read_text()):
         raise ValueError("BF16 external freeze independent review absent")
     ancestor(REPO, freeze_add, freeze_review_add)
     if driver.LIVE_STAGE_B_SOURCE_PINS is not None:
@@ -286,7 +288,9 @@ def verify_fp32_freeze(stage_a: dict, bf16_prior: dict) -> dict:
         raise ValueError("FP32 freeze predates independent BF16 B review")
     committed_same(REPO, FP32_FREEZE_REVIEW)
     review_add = first_add(REPO, FP32_FREEZE_REVIEW)
-    if review_add == freeze_add or FP32_FREEZE_REVIEW_GO not in FP32_FREEZE_REVIEW.read_text():
+    if (review_add == freeze_add or
+            FP32_FREEZE_REVIEW_GO not in FP32_FREEZE_REVIEW.read_text() or
+            sha(FP32_FREEZE) not in FP32_FREEZE_REVIEW.read_text()):
         raise ValueError("FP32 external freeze independent review absent")
     ancestor(REPO, freeze_add, review_add)
     return receipt
@@ -338,7 +342,8 @@ def _prior_bf16_b(stage_a: dict, freeze_sha: str) -> dict:
     """FP32 admission requires a later committed, independently reviewed BF16 B."""
     committed_same(REPO, BF16_B_MANIFEST)
     committed_same(REPO, BF16_B_REVIEW)
-    if BF16_B_REVIEW_GO not in BF16_B_REVIEW.read_text():
+    if (BF16_B_REVIEW_GO not in BF16_B_REVIEW.read_text() or
+            sha(BF16_B_MANIFEST) not in BF16_B_REVIEW.read_text()):
         raise ValueError("Stage-B BF16 result review lacks GO")
     manifest_add = first_add(REPO, BF16_B_MANIFEST)
     review_add = first_add(REPO, BF16_B_REVIEW)

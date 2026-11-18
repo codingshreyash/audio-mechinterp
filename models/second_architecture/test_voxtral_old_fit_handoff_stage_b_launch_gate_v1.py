@@ -97,7 +97,7 @@ class GitFixture(unittest.TestCase):
             freeze.write_text(json.dumps(receipt, sort_keys=True) + "\n")
             self.commit(repo, "external BF16 freeze")
             freeze_review = repo / "freeze_review.md"
-            freeze_review.write_text(gate.FREEZE_REVIEW_GO + "\n")
+            freeze_review.write_text(gate.FREEZE_REVIEW_GO + "\n" + gate.sha(freeze) + "\n")
             self.commit(repo, "independent freeze review")
             pins = {
                 "AUDITOR_SHA": gate.sha(bound["auditor_sha256"]),

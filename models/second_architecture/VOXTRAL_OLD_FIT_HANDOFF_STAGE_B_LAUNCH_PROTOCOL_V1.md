@@ -27,7 +27,8 @@ the single permitted phase, and the 4,500-second and 5-GiB aggregate caps.
 An independent reviewer then writes
 `VOXTRAL_OLD_FIT_HANDOFF_STAGE_B_EXTERNAL_FREEZE_INDEPENDENT_REVIEW_V1.md`.
 The gate rejects missing, dirty, symlinked, edited-after-first-add, unreviewed,
-or stale freeze/evidence bytes. It verifies all 24 Stage A attempt files,
+or stale freeze/evidence bytes. Each freeze review must name that freeze's
+exact SHA-256. It verifies all 24 Stage A attempt files,
 including four local-only tensor sidecars, and keeps the BF16 failure status.
 
 The BF16 phase is one reserved attempt. Before the child process, create an
@@ -61,7 +62,8 @@ local and is required for an independent re-audit. The BF16 manifest has the
 driver's fixed schema, including the launch start/finish, reservation, freeze,
 result and audit hashes. An independent result reviewer must check those
 bytes, all tensor arithmetic and the original Stage A failure, then commit a
-separate GO/HOLD review. Saved files cannot independently attest that a model
+separate GO/HOLD review naming the exact BF16 manifest SHA-256. Saved files
+cannot independently attest that a model
 forward or backward actually occurred.
 
 ## FP32 continuation
