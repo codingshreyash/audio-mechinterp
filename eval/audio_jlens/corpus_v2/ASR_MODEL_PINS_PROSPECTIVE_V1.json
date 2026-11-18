@@ -1,0 +1,55 @@
+{
+  "status": "prospective_local_cpu_asr_pins_no_v2_inference",
+  "runtime": {
+    "python": "3.12",
+    "torch": "2.15.0",
+    "transformers": "5.12.1",
+    "huggingface_hub": "1.33.0",
+    "numpy": "2.5.5",
+    "soundfile": "0.14.0"
+  },
+  "transformers_sources_sha256": {
+    "models/whisper/modeling_whisper.py": "a9065b02eae60ad0b47ec2e72379971d974238ee412842dd0f8ad58766f48e5d",
+    "models/whisper/processing_whisper.py": "940603025729c0ed1f0ddfb33be37320286476c20ed5482abd806e639a0230d6",
+    "models/whisper/feature_extraction_whisper.py": "34a6d8aad9f7f274819622929e4ff74be2a136fcd61f80ec968f9e05c45c7f3a",
+    "models/whisper/tokenization_whisper.py": "c89b322886fa13312b2ec948338a4001b66b6a33614575e96d1a692df211aaf2",
+    "models/wav2vec2/modeling_wav2vec2.py": "c404982e3a063a5f68ee85809356c8a5ed29ad24c8441eea1d56346a57b5da0c",
+    "models/wav2vec2/processing_wav2vec2.py": "95adaf4e8398ca3d72570eba32925dcd964ed3b0027ef9abff1fd2454a96d559",
+    "models/wav2vec2/feature_extraction_wav2vec2.py": "e5e9a0baf70716fee503f4f66a7a61312a132be989b2d7e2649e057ccbefa2cc",
+    "models/wav2vec2/tokenization_wav2vec2.py": "b4f8f80838e462bc5d77b3998aa500879bdcce951779223c94ce126f7ffa68f2",
+    "generation/utils.py": "1eaf0aebe61f9616968f298bc33c78f6bfc83cb43f563db4d7ce572824131c7b"
+  },
+  "models": {
+    "whisper": {
+      "repo_id": "openai/whisper-tiny.en",
+      "revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+      "architecture": "WhisperForConditionalGeneration",
+      "files_sha256": {
+        "added_tokens.json": "560be47bea388757f8d4cc185c5d82067426cbb6361e38016dd90ddc01ab203a",
+        "config.json": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+        "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+        "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+        "model.safetensors": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+        "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+        "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+        "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+        "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+        "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d",
+        "vocab.json": "3ba3c3109ff33976c4bd966589c11ee14fcaa1f4c9e5e154c2ed7f99d80709e7"
+      }
+    },
+    "wav2vec2": {
+      "repo_id": "facebook/wav2vec2-base-960h",
+      "revision": "22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
+      "architecture": "Wav2Vec2ForCTC",
+      "files_sha256": {
+        "config.json": "d3ec255c063d9f95057b553b19c20135b259875834a4fe9deb218a6be25b4cf3",
+        "model.safetensors": "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a",
+        "preprocessor_config.json": "b225d617c025463b9e157e06afea8b90dc7078fc70b013c533328423e0486b4a",
+        "special_tokens_map.json": "bb7068de1150661a10b55f9e4b12a0e77af8bf91f5e45e1b58afaf1d0e17f675",
+        "tokenizer_config.json": "dc790594f5bc351a4311c6624f40acd95850d4aaf2a5cb3c656c9b610720b608",
+        "vocab.json": "19727f8944fe6459fc3f240ae2c198395b740f6a029bd23e06656266b83bcf64"
+      }
+    }
+  }
+}
