@@ -1,0 +1,9 @@
+# Independent Stage-A CPU auditor rereview: GO
+
+18 November 2026. I rereviewed auditor fix `0bd048c` against my HOLD `296d270`, the final Stage-A runner `5b9c95c`, and prospective protocol `87721f4`. **GO for the separately frozen, bounded Stage-A launch gate's auditor-source condition.** This review does not itself launch a model or certify a model result.
+
+The auditor now requires the complete **214-phase** progress sequence, with 214 unique names, in the runner's exact order. Each native pair has adjacent `before_zero, after_zero, before_edited, after_edited` receipts; each LM0 control has adjacent zero/edit receipts. Fixed preflight, parity, generation, donor, clean-graph, VJP, self-control and final-save phases occupy their planned positions. The former tamper—72 `before_*` patch receipts followed by 72 `after_*` receipts—now fails with a chronology error; swapping LM0 control cells also fails. The auditor still requires patch counts 1–72, monotone in-cap elapsed time, and observed MPS driver readings below the cap.
+
+Verification: `models/second_architecture/.venv/bin/python -m unittest -v test_voxtral_old_fit_handoff_stage_a_audit_v1` passes all **seven** CPU tests, including the new chronology tamper regression. I independently inspected the expected phase construction against the runner's receipt calls, confirmed its length and uniqueness, and checked the fix diff for unintended changes. The prior review's hash, tensor-shape, ULP, VJP contraction, odd/even, LM0 amplitude, and sidecar checks remain unchanged.
+
+The audit checks saved-data arithmetic and receipt consistency. It cannot independently attest that the model executed those forwards or that saved VJPs are genuine; first-cycle full-source equality is independently checked, while later-cycle full-source equality remains a runner assertion. No audio mechanism or security claim follows from this source rereview.
