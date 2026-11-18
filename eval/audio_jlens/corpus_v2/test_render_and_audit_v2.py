@@ -41,7 +41,7 @@ class CorpusV2PreparationTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "freeze receipt absent"):
                     renderer.freeze_receipt()
 
-    def test_pair_readback_detects_outside_slot_mutation(self):
+    def test_exact_fragment_reconstruction_detects_outside_and_word_slot_mutations(self):
         with tempfile.TemporaryDirectory(dir=auditor.ROOT, prefix="v2_audit_test_") as temp:
             output = Path(temp)
             (output / "clips").mkdir()
@@ -52,11 +52,16 @@ class CorpusV2PreparationTests(unittest.TestCase):
                        "template": template, "engine": "piper"}
             pieces = {"prefix_toy_template": 1600, "word_toy_01_otter": 800,
                       "word_toy_01_badger": 1000, "suffix_toy_template": 1200}
-            fragments = {("piper", key): {"voice": "en_US-amy-medium",
+            fragments = {("piper", key): {"fragment_id": key,
+                                          "voice": "en_US-amy-medium",
                                           "raw": {"file_sha256": "raw_" + key},
                                           "processed": {"file_sha256": "pcm_" + key,
                                                         "frames": frames}}
                          for key, frames in pieces.items()}
+            source_pcm = {"prefix_toy_template": np.full(1600, 120, dtype=np.int16),
+                          "word_toy_01_otter": np.full(800, 500, dtype=np.int16),
+                          "word_toy_01_badger": np.full(1000, 750, dtype=np.int16),
+                          "suffix_toy_template": np.full(1200, 240, dtype=np.int16)}
             start, end = 1600 + 1920, 1600 + 1920 + 1000
             expected_len = end + 1920 + 1200
             clips, outputs = {}, {}
@@ -89,16 +94,29 @@ class CorpusV2PreparationTests(unittest.TestCase):
                    "fragment_sha256": {key: {"raw": item["raw"]["file_sha256"],
                                              "processed": item["processed"]["file_sha256"]}
                                        for (_engine, key), item in fragments.items()}}
-            self.assertEqual(len(auditor.audit_pair(row, planned, fragments, output)[0]), 2)
-            clips["otter"][4] += 1
-            path = output / "clips/piper_toy_01_toy_template_otter.wav"
-            sf.write(path, clips["otter"], 16000, subtype="PCM_16", format="WAV")
-            # Even after a manifest hash refresh, the paired PCM invariant fails.
-            outputs["otter"]["file_sha256"] = auditor.sha(path)
-            outputs["otter"]["pcm_int16_sha256"] = hashlib.sha256(
-                clips["otter"].astype("<i2").tobytes()).hexdigest()
-            with self.assertRaisesRegex(ValueError, "outside/inside-slot"):
-                auditor.audit_pair(row, planned, fragments, output)
+            with mock.patch.object(auditor, "processed_pcm",
+                                   side_effect=lambda fragment, _output:
+                                   source_pcm[fragment["fragment_id"]]):
+                self.assertEqual(len(auditor.audit_pair(row, planned, fragments, output)[0]), 2)
+                clips["otter"][4] += 1
+                path = output / "clips/piper_toy_01_toy_template_otter.wav"
+                sf.write(path, clips["otter"], 16000, subtype="PCM_16", format="WAV")
+                # A refreshed manifest hash cannot hide an outside-slot edit.
+                outputs["otter"]["file_sha256"] = auditor.sha(path)
+                outputs["otter"]["pcm_int16_sha256"] = hashlib.sha256(
+                    clips["otter"].astype("<i2").tobytes()).hexdigest()
+                with self.assertRaisesRegex(ValueError, "exact processed-fragment assembly"):
+                    auditor.audit_pair(row, planned, fragments, output)
+                clips["otter"][4] -= 1
+                clips["otter"][start + 100] += 1
+                sf.write(path, clips["otter"], 16000, subtype="PCM_16", format="WAV")
+                # A word-slot mutation preserves paired outside-slot equality.
+                # Refreshed hashes still must not make it pass the auditor.
+                outputs["otter"]["file_sha256"] = auditor.sha(path)
+                outputs["otter"]["pcm_int16_sha256"] = hashlib.sha256(
+                    clips["otter"].astype("<i2").tobytes()).hexdigest()
+                with self.assertRaisesRegex(ValueError, "exact processed-fragment assembly"):
+                    auditor.audit_pair(row, planned, fragments, output)
 
 
 if __name__ == "__main__":

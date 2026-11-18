@@ -110,6 +110,16 @@ def audit_fragment(fragment: dict, output: Path, expected_text: str, voice: str)
             require(rate == 16000 and info.subtype == "PCM_16", "processed fragment format changed")
 
 
+def processed_pcm(fragment: dict, output: Path) -> np.ndarray:
+    """Read audited PCM16 bytes for an independent exact assembly check."""
+    rec = fragment["processed"]
+    path = local_path(rec["path"], output, "processed")
+    samples, rate = sf.read(path, dtype="int16", always_2d=True)
+    require(rate == 16000 and samples.shape == (rec["frames"], 1),
+            "processed fragment PCM geometry changed")
+    return samples[:, 0]
+
+
 def audit_pair(row: dict, planned: dict, fragments: dict, output: Path) -> tuple[set[str], float, int]:
     pair, template, engine = planned["pair"], planned["template"], planned["engine"]
     words = pair["words"]
@@ -143,6 +153,9 @@ def audit_pair(row: dict, planned: dict, fragments: dict, output: Path) -> tuple
             "word-slot splice geometry changed")
     expected_frames = end + 1920 + suffix_frames
     require(set(row["outputs"]) == set(words), "missing or added word output")
+    prefix_pcm = processed_pcm(fragments[(engine, f"prefix_{template['id']}")], output)
+    suffix_pcm = processed_pcm(fragments[(engine, f"suffix_{template['id']}")], output)
+    gap = np.zeros(1920, dtype=np.int16)
     wavs, pcm = set(), []
     for word, word_length in zip(words, word_frames, strict=True):
         item = row["outputs"][word]
@@ -157,6 +170,13 @@ def audit_pair(row: dict, planned: dict, fragments: dict, output: Path) -> tuple
                 and math.isclose(item["duration_seconds"], expected_frames / 16000,
                                  abs_tol=1e-8), "clip format/duration changed")
         samples = samples[:, 0]
+        word_pcm = processed_pcm(fragments[(engine, f"word_{pair['pair_id']}_{word}")], output)
+        require(len(word_pcm) == word_length, "processed word fragment length changed")
+        expected_pcm = np.concatenate((prefix_pcm, gap,
+                                       np.pad(word_pcm, (0, end - start - word_length)),
+                                       gap, suffix_pcm))
+        require(np.array_equal(samples, expected_pcm),
+                "clip PCM differs from exact processed-fragment assembly")
         require(hashlib.sha256(samples.astype("<i2").tobytes()).hexdigest() ==
                 item["pcm_int16_sha256"], "clip PCM hash changed")
         peak = int(np.max(np.abs(samples.astype(np.int32))))
