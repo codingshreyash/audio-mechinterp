@@ -201,6 +201,7 @@ def preflight() -> dict[str, Any]:
     import soundfile
     import torch
     import transformers
+    from safetensors import safe_open
     from transformers.models.wav2vec2 import (feature_extraction_wav2vec2,
                                              modeling_wav2vec2,
                                              processing_wav2vec2,
@@ -219,6 +220,13 @@ def preflight() -> dict[str, Any]:
                 "conv_kernel": [10, 3, 3, 3, 3, 2, 2]}
     if {key: config[key] for key in expected} != expected:
         raise ValueError("pinned Wav2Vec2 architecture changed")
+    if (config.get("apply_spec_augment") is not True
+            or config.get("mask_time_prob") != 0.05
+            or config.get("mask_feature_prob") != 0.0):
+        raise ValueError("pinned SpecAugment configuration changed")
+    with safe_open(weights, framework="pt", device="cpu") as tensor_file:
+        if "wav2vec2.masked_spec_embed" in tensor_file.keys():
+            raise ValueError("pinned checkpoint masking-key inventory changed")
     assets = {path.name: sha(path) for path in sorted(snapshot.iterdir()) if path.is_file()}
     if len(assets) != 6 or assets.get("model.safetensors") != WEIGHTS_SHA:
         raise ValueError("pinned Wav2Vec2 snapshot inventory changed")
@@ -234,6 +242,12 @@ def preflight() -> dict[str, Any]:
         "model_id": MODEL_ID,
         "model_revision": MODEL_REVISION,
         "checkpoint_sha256": WEIGHTS_SHA,
+        "masking_load_note": {
+            "expected_missing_key": "wav2vec2.masked_spec_embed",
+            "checkpoint_key_absent": True,
+            "inactive_condition": "eval mode; mask_time_indices=None; mask_feature_prob=0.0",
+            "loading_info_gate": "exactly this missing key; no unexpected/mismatched/error keys",
+        },
         "snapshot_files_sha256": assets,
         "source_hashes": hashes,
         "torch_version": torch.__version__,
@@ -456,8 +470,16 @@ def execute(expected_preflight: Path, output: Path) -> None:
         check_budget(start, output, before_forward=True)
         torch.set_num_threads(4)
         processor = Wav2Vec2Processor.from_pretrained(SNAPSHOT, local_files_only=True)
-        model = Wav2Vec2ForCTC.from_pretrained(SNAPSHOT, local_files_only=True).to(
-            "cpu", dtype=torch.float32).eval()
+        model, loading_info = Wav2Vec2ForCTC.from_pretrained(
+            SNAPSHOT, local_files_only=True, output_loading_info=True)
+        if (set(loading_info["missing_keys"]) != {"wav2vec2.masked_spec_embed"}
+                or loading_info["unexpected_keys"] or loading_info["mismatched_keys"]
+                or loading_info["error_msgs"]):
+            raise ValueError(f"unanticipated checkpoint load report: {loading_info}")
+        model = model.to("cpu", dtype=torch.float32).eval()
+        if (model.training or model.config.mask_feature_prob != 0.0
+                or not hasattr(model.wav2vec2, "masked_spec_embed")):
+            raise ValueError("masking parameter inactive-eval gate failed")
         if any(p.device.type != "cpu" or p.dtype != torch.float32 for p in model.parameters()):
             raise ValueError("model not entirely CPU float32")
         cases, stats = trusted_cases()
@@ -485,7 +507,8 @@ def execute(expected_preflight: Path, output: Path) -> None:
                 in_progress = {"case_key": case.key, "mode": mode,
                                "argmax_ids": ids, "hook_counts": counts}
                 transcript = processor.batch_decode([ids])[0]
-                target, other_word = case.word, next(w for w in PAIR_WORDS[case.pair_id] if w != target)
+                target = case.word
+                other_word = next(w for w in PAIR_WORDS[case.pair_id] if w != target)
                 tokens = normalized_words(transcript)
                 eligible = tokens.count(target) == 1 and tokens.count(other_word) == 0
                 in_progress.update({"transcript": transcript,
@@ -546,6 +569,10 @@ def execute(expected_preflight: Path, output: Path) -> None:
             "type": "complete", "schema": "wav2vec2_fit_baseline_run_v1",
             "elapsed_seconds": time.monotonic() - start,
             "rss_bytes": current_rss_bytes(), "output_bytes": output_bytes(output),
+            "load_info": {"missing_keys": sorted(loading_info["missing_keys"]),
+                          "unexpected_keys": sorted(loading_info["unexpected_keys"]),
+                          "mismatched_keys": sorted(loading_info["mismatched_keys"]),
+                          "error_msgs": loading_info["error_msgs"]},
         })
     except BaseException as exc:
         append_record(output / "records.jsonl", {

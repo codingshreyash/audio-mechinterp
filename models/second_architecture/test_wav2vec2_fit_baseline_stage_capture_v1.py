@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -126,3 +127,70 @@ def test_fake_forward_captures_each_stage_once_without_weights() -> None:
     assert arrays["first_conv_raw"].shape == (1, 512, model.t1)
     assert arrays["post_block11"].shape == (1, model.t7, 768)
     assert arrays["logits"].shape == (1, model.t7, 32)
+
+
+def test_fake_execute_persists_first_baseline_record(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Exercise the real row-writing path; the one-case fixture stops at Mode C."""
+    from transformers import Wav2Vec2ForCTC
+
+    class FakeCheckpoint(nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.wav2vec2 = nn.Module()
+            self.wav2vec2.register_parameter("masked_spec_embed", nn.Parameter(torch.zeros(1)))
+            self.config = SimpleNamespace(mask_feature_prob=0.0)
+
+    class FakeProcessor:
+        @staticmethod
+        def batch_decode(_ids: list[list[int]]) -> list[str]:
+            return ["SILVER"]
+
+    fake = FakeCheckpoint()
+    info = {"missing_keys": {"wav2vec2.masked_spec_embed"},
+            "unexpected_keys": set(), "mismatched_keys": set(), "error_msgs": []}
+    monkeypatch.setattr(Wav2Vec2ForCTC, "from_pretrained",
+                        lambda *args, **kwargs: (fake, info))
+    monkeypatch.setattr(Wav2Vec2Processor, "from_pretrained",
+                        lambda *args, **kwargs: FakeProcessor())
+    receipt = {"fixture": "one-case no-weight baseline record"}
+    monkeypatch.setattr(runner, "preflight", lambda: receipt)
+    expected = tmp_path / "preflight.json"
+    expected.write_text(json.dumps(receipt))
+    case = runner.Case("color_05", "piper", "silver", tmp_path / "unused.wav",
+                       "fake_wav", "fake_pcm", 800, (200, 300))
+    monkeypatch.setattr(runner, "trusted_cases",
+                        lambda: ([case], {(case.pair_id, case.engine):
+                                          {"mean": 0.0, "variance": 1.0}}))
+    monkeypatch.setattr(runner, "load_pcm", lambda _case: np.zeros(800, dtype=np.int16))
+    monkeypatch.setattr(runner, "normalized_input",
+                        lambda _pcm, **_kwargs: np.zeros(800, dtype=np.float32))
+
+    def fake_forward(_model: nn.Module, input_values: torch.Tensor,
+                     frames: int) -> tuple[dict[str, np.ndarray], dict[str, int]]:
+        t1, t7 = (frames - 10) // 5 + 1, (frames - 400) // 320 + 1
+        arrays = {"input_values": input_values.numpy().copy(),
+                  "first_conv_raw": np.zeros((1, 512, t1), dtype=np.float32),
+                  "first_conv_norm": np.zeros((1, 512, t1), dtype=np.float32),
+                  "final_feature_conv": np.zeros((1, 512, t7), dtype=np.float32),
+                  "feature_projection": np.zeros((1, t7, 768), dtype=np.float32),
+                  "encoder_pre_block0": np.zeros((1, t7, 768), dtype=np.float32),
+                  "post_block0": np.zeros((1, t7, 768), dtype=np.float32),
+                  "post_block5": np.zeros((1, t7, 768), dtype=np.float32),
+                  "post_block11": np.zeros((1, t7, 768), dtype=np.float32),
+                  "logits": np.zeros((1, t7, 32), dtype=np.float32)}
+        arrays["logits"][..., 1] = 1.0
+        return arrays, dict.fromkeys(runner.STAGES, 1)
+
+    monkeypatch.setattr(runner, "model_forward", fake_forward)
+    output = tmp_path / "run"
+    with pytest.raises(StopIteration):
+        runner.execute(expected, output)
+    rows = [json.loads(line) for line in (output / "records.jsonl").read_text().splitlines()]
+    assert [row["type"] for row in rows] == ["preflight", "baseline", "failure"]
+    baseline = rows[1]
+    assert baseline["case_key"] == case.key and baseline["mode"] == "S"
+    assert baseline["transcript"] == "SILVER" and baseline["eligible"] is True
+    assert baseline["hook_counts"] == dict.fromkeys(runner.STAGES, 1)
+    assert len(baseline["capture_sha256"]) == len(runner.STAGES)
