@@ -1,0 +1,42 @@
+{
+  "status": "started_raw_asr_only",
+  "model_key": "whisper",
+  "model_id": "openai/whisper-tiny.en",
+  "model_revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+  "model_files_sha256": {
+    "added_tokens.json": "560be47bea388757f8d4cc185c5d82067426cbb6361e38016dd90ddc01ab203a",
+    "config.json": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "model.safetensors": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+    "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d",
+    "vocab.json": "3ba3c3109ff33976c4bd966589c11ee14fcaa1f4c9e5e154c2ed7f99d80709e7"
+  },
+  "script_sha256": "6cc4e6eaa3cf93c3cdf1617589fb1d2ad5eb23890f376aafc5124029474ddcb5",
+  "pins_sha256": "1136baf167244172d3058262ae484497f8028f02112c6a582a4267fa87b2bc1b",
+  "freeze_sha256": "5f2e6af1794936723f3e8d61189fd4f8095046e84c8a8980f60154a18d326a7e",
+  "technical_binding_sha256": "858f8f68fce65ee60e328b1536b34608ced6b3e84d725f229460c6376e14af93",
+  "asr_inputs_sha256": "74f38f6704d1995b8e7040b329f7c0c0ea68b3cae36e774b875b4c358ae76d33",
+  "provenance_cases_sha256": "d9a08a61b76e8ab56ab3a9b2d72a4aedc5871555487c7a33b712097fe3206ed8",
+  "planned_clips": 480,
+  "device": "cpu",
+  "threads": 4,
+  "python": "3.12.13",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "generation": {
+    "whisper": {
+      "do_sample": false,
+      "num_beams": 1,
+      "max_new_tokens": 128,
+      "processor_attention_mask": true
+    },
+    "wav2vec2": {
+      "decoder": "frame_argmax_ctc_greedy"
+    }
+  },
+  "scope": "raw transcripts only, no reference comparison or Qwen output"
+}
