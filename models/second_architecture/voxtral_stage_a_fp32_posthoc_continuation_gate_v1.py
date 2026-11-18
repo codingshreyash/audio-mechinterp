@@ -87,8 +87,31 @@ def _hex(value: object, size: int) -> bool:
     return isinstance(value, str) and re.fullmatch(rf"[0-9a-f]{{{size}}}", value) is not None
 
 
+def require_regular_path(repo: Path, path: Path) -> None:
+    """Reject symlinks before the older Git helper resolves a bound path."""
+    try:
+        relative = path.absolute().relative_to(repo.absolute())
+    except ValueError as exc:
+        raise ValueError("Bound path outside repository") from exc
+    if not relative.parts or ".." in relative.parts:
+        raise ValueError("Bound path is not a regular repository path")
+    current = repo.absolute()
+    for component in relative.parts:
+        current = current / component
+        if current.is_symlink():
+            raise ValueError(f"Bound path contains a symlink: {path.name}")
+    if not path.is_file():
+        raise ValueError(f"Bound file absent: {path.name}")
+
+
+def committed_regular(repo: Path, ref: str, path: Path) -> None:
+    require_regular_path(repo, path)
+    old.committed_same(repo, ref, path)
+
+
 def require_first_add_bytes(repo: Path, path: Path) -> str:
     """Reject a receipt or review changed in any later committed revision."""
+    require_regular_path(repo, path)
     first_add = old.first_add_commit(repo, path)
     if path.read_bytes() != old.git_blob(repo, first_add, path):
         raise ValueError(f"Bound receipt/review changed after first-add: {path.name}")
@@ -97,15 +120,18 @@ def require_first_add_bytes(repo: Path, path: Path) -> str:
 
 def verify_preserved_bf16() -> dict:
     """Verify the original failure and every manifest byte; never reinterpret it."""
+    for path in (old.FREEZE, *old.FILES.values(), FAILED_MANIFEST):
+        require_regular_path(REPO, path)
     original = old.verify_freeze()
     if original["receipt_sha256"] != ORIGINAL_FREEZE_SHA:
         raise ValueError("Original freeze differs")
     for path, digest in ((FAILED_MANIFEST, FAILED_MANIFEST_SHA),
                          (ORIGINAL_ATTEMPT / "launch_finish.json", ORIGINAL_FINISH_SHA),
                          (ORIGINAL_ATTEMPT / "runner/result.json", ORIGINAL_RESULT_SHA)):
-        if path.is_symlink() or old.sha(path) != digest:
+        require_regular_path(REPO, path)
+        if old.sha(path) != digest:
             raise ValueError(f"Original evidence changed: {path.name}")
-    old.committed_same(REPO, "HEAD", FAILED_MANIFEST)
+    committed_regular(REPO, "HEAD", FAILED_MANIFEST)
     manifest = old.read_json(FAILED_MANIFEST)
     expected_root = "runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z/"
     if (manifest.get("schema") != "voxtral_stage_a_bf16_failed_attempt_manifest_v1" or
@@ -127,10 +153,11 @@ def verify_preserved_bf16() -> dict:
             raise ValueError("Original file record invalid")
         seen.add(relative)
         path = HERE / relative
-        if path.is_symlink() or not path.is_file() or path.stat().st_size != item["bytes"] or old.sha(path) != item["sha256"]:
+        require_regular_path(REPO, path)
+        if path.stat().st_size != item["bytes"] or old.sha(path) != item["sha256"]:
             raise ValueError(f"Original raw file changed: {relative}")
         if item["git_committed"]:
-            old.committed_same(REPO, "HEAD", path)
+            committed_regular(REPO, "HEAD", path)
         elif path.suffix != ".pt" or "/runner/blobs/" not in relative:
             raise ValueError("Unexpected uncommitted raw file")
     if sum(not row["git_committed"] for row in manifest["files"]) != 2:
@@ -166,7 +193,7 @@ def verify_posthoc_receipt(preserved: dict) -> dict:
     """Bind externally committed v2 saved-tensor audit to the preserved bytes."""
     for path in (AUDITOR, AUDITOR_REVIEW, AMENDMENT, POSTHOC_AUDIT, POSTHOC_RESULT_REVIEW,
                  POSTHOC_RECEIPT, POSTHOC_REVIEW):
-        old.committed_same(REPO, "HEAD", path)
+        committed_regular(REPO, "HEAD", path)
     if old.sha(AUDITOR) != V2_AUDITOR_SHA:
         raise ValueError("Reviewed v2 auditor differs")
     if old.sha_bytes(old.git_blob(REPO, V2_SOURCE_REVIEW_COMMIT, AUDITOR)) != V2_AUDITOR_SHA:
@@ -233,7 +260,7 @@ def verify_posthoc_receipt(preserved: dict) -> dict:
 
 def verify_continuation_freeze(preserved: dict, posthoc: dict) -> dict:
     """Require a separately reviewed, later committed freeze before model load."""
-    old.committed_same(REPO, "HEAD", FREEZE)
+    committed_regular(REPO, "HEAD", FREEZE)
     freeze = old.read_json(FREEZE)
     expected_keys = {"status", "permitted_arm", "audit_scope", "receipt_review_commit",
                      "launcher_review_commit", "reviewed_utc", *BOUND_FILES}
@@ -250,7 +277,7 @@ def verify_continuation_freeze(preserved: dict, posthoc: dict) -> dict:
     for key, path in BOUND_FILES.items():
         if not _hex(freeze[key], 64):
             raise ValueError(f"Malformed {key}")
-        old.committed_same(REPO, "HEAD", path)
+        committed_regular(REPO, "HEAD", path)
         if freeze[key] != old.sha(path) or (key in FIXED_PINS and freeze[key] != FIXED_PINS[key]):
             raise ValueError(f"Continuation freeze bound hash mismatch: {key}")
     if (freeze["posthoc_receipt_sha256"] != posthoc["receipt_sha256"] or

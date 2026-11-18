@@ -86,6 +86,8 @@ class ContinuationGateTest(unittest.TestCase):
                 **{key: gate.old.sha(path) for key, path in bound.items()},
             }
             freeze_path.write_text(json.dumps(freeze, sort_keys=True) + "\n")
+            freeze_copy = repo / "freeze_copy.json"
+            freeze_copy.write_bytes(freeze_path.read_bytes())
             commit("external freeze")
             posthoc = {"review_commit": receipt_review_commit,
                        "receipt_sha256": gate.old.sha(bound["posthoc_receipt_sha256"])}
@@ -98,6 +100,15 @@ class ContinuationGateTest(unittest.TestCase):
                   mock.patch.object(gate, "V2_SOURCE_REVIEW_COMMIT", source_commit)):
                 accepted = gate.verify_continuation_freeze({}, posthoc)
                 self.assertEqual(accepted["receipt"]["reviewed_utc"], freeze["reviewed_utc"])
+                freeze_path.unlink()
+                freeze_path.symlink_to(freeze_copy.name)
+                self.assertIn("T freeze.json", git("status", "--short"))
+                # The older helper resolves the symlink to the same-byte copy.
+                gate.old.committed_same(repo, "HEAD", freeze_path)
+                with self.assertRaisesRegex(ValueError, "contains a symlink"):
+                    gate.verify_continuation_freeze({}, posthoc)
+                freeze_path.unlink()
+                freeze_path.write_text(json.dumps(freeze, sort_keys=True) + "\n")
                 freeze["reviewed_utc"] = "2026-11-18T14:00:01+00:00"
                 freeze_path.write_text(json.dumps(freeze, sort_keys=True) + "\n")
                 commit("later freeze timestamp edit")
