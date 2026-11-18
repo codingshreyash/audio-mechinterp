@@ -1,0 +1,27 @@
+{
+  "schema": "voxtral_old_fit_grad_leaf_cuda_byte_pilot_receipt_v1",
+  "date_utc": "2026-11-18",
+  "method": "CPU-only distinct zero-valued maximum-shape tensors for every saved call and passive capture, serialized with torch.save to temporary files then deleted; no checkpoint or GPU loaded",
+  "pilot_source_sha256": "a515051406481a5bed7c09d8676678b5ecaa0b4d41e1f5c4ba20495240b3f5e9",
+  "runner_source_sha256": "2bfb6be63102577dff06ef5a96330560a61a4584695bcfaba63318b41bbd8c9c",
+  "result_schema_sha256": "c90f46adcf73a8466232be15ba37d9a1d18b0eca234f2b4648f480bff6b7ad4d",
+  "torch_version": "2.15.0",
+  "max_worker_bytes": 1048576000,
+  "measurements": [
+    {
+      "case_index": 0,
+      "case_id": "animal_08_kokoro_fit_chosen_beaver",
+      "sidecar_bytes": 522272324,
+      "sidecar_sha256": "83f0be383440b54dbe6cec453908154309055337b0a74b3bbdfb4a24e17bed94",
+      "within_worker_cap": true
+    },
+    {
+      "case_index": 1,
+      "case_id": "nature_09_piper_fit_chosen_waterfall",
+      "sidecar_bytes": 540705022,
+      "sidecar_sha256": "ab779f0c20b7714c278a1d9bd0c6a376499985ed332af6351d9e059e8a3220ca",
+      "within_worker_cap": true
+    }
+  ],
+  "interpretation": "Both sidecars fit beneath the 1,048,576,000-byte worker output cap with more than 500 MB headroom before JSON and logs. This checks serialized shape budget only; live CUDA memory and runtime remain unmeasured."
+}
