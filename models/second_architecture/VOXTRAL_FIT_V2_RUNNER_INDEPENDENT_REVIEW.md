@@ -1,0 +1,9 @@
+# Voxtral v2 FIT pilot runner: independent static review
+
+**Verdict:** No pre-run blocker found. This is a fit-informed, new 32-clip FIT pilot after the v1 Stage-2 stop. I ran the five CPU unit tests and `--validate-only`; I did not load model weights or run candidate inference.
+
+The v2 wrapper SHA-256 is `7ac333dadd4f645c4b173fd23a56fcee4bf45728abfaaabc91b87d3207d068a3`. It hard-binds the reviewed v1 runner (`1d4d65a…`), selection artifact (`f897d360…`), and frozen index (`bc739cf1…`), then verifies the actual source corpus manifest. It accepts exactly the four selected pairs, two voices, two templates, and two words, rejecting old pilot, non-FIT, duplicate, or changed clip records. The inherited preflight checks all **32 selected FIT WAV hashes**, 16 kHz mono frame counts, identical matched-pair prompt token IDs, processor features `[1,128,3000]`, and 375 audio placeholders. It validates the pinned checkpoint and processor files, dependency revisions, prompt, and canonical answer token IDs before MPS. Validation reported 32 clips, 16 pair records, and no model weights loaded.
+
+The `--run` path reuses the reviewed v1 BF16 greedy generation, strict complete-answer/EOS classifier, canonical secondary score, append-only output writer, and 30 GiB MPS memory guard. It preserves the original capability thresholds (**≥24/32** overall and **≥12/16** per voice). The separate `v2_gate.json` requires **16/16 exact first-template natural endpoints** and capability pass before any intervention. Its result SHA and runner/selection hashes are saved. A spelling alternative still fails the frozen exact-answer rule.
+
+The five CPU tests pass, including 32-case selection, tampered/non-FIT rejection, and independent two-gate behavior. The v2 selection and protocol are committed before this run. Any v2 success remains a FIT feasibility result from a rule adapted after v1 failures; it does not convert v1 into a pass or establish a held-out or security result.
