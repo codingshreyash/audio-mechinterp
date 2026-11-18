@@ -1,0 +1,9 @@
+# FIT-only uniform-calibration smoke c: independent saved-artifact review
+
+**Verdict:** No saved-artifact or integration-invariant blocker for the planned 48-context FIT calibration. This was a CPU-only audit of the saved smoke; I did not run Qwen or open development/test inputs.
+
+The smoke binds to the final protocol SHA-256 `f6bbc9b61fb846ee1ca586ab4863d79f43ecc43d1d5a66c9fb6c38653077564a` and runner SHA-256 `62af1fa55038863e80365901c6b9b146a680d98aa67e0060558cc5c06ca40ef4`. The recorded V2 policy, fitted lens, stage-1 checkpoint, FIT report, raw smoke, and memory-log hashes match the local bytes. Raw and JSON metadata agree. Its first FIT case and WAV hash match the frozen stage-1 record for `animal_06/fit_chosen/kokoro/deer`.
+
+At both encoder31 and connector, the saved six-bin donor-minus-recipient vectors exactly match the corresponding stage-1 source means. Recipient row sets and tensor shapes match. Each edited forward records one source and one target hook call. The three zero-edit scores stay within `1e-4` of baseline; the maximum departure is `1.38e-5`. The unedited terminal norm/head reconstruction differs from the full forward by at most `3.05e-5` over the vocabulary. The effective edit Frobenius norms agree with the saved deltas, bin row counts, and `α=.025`. Terminal changes and diagnostics are finite. The ten expected memory phases are present; peak MPS driver allocation is **18.586 GiB**, below the 30 GiB guard.
+
+**Numerical warning:** On this one FIT context, the fitted map predicts donor-oriented V2 score changes of `+0.03519` (encoder31) and `+0.04527` (connector), while the measured changes are `−0.01041` and `−0.00507`. These are wrong-sign predictions on one case, not a 48-case verdict. Preserve the frozen map and report the full calibration's sign and error rates. The smoke checks plumbing and resource bounds; it does not establish local linearity, held-out efficacy, full-answer behavior, or a security finding.

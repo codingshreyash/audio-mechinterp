@@ -1,0 +1,10 @@
+{"current_allocated_bytes": 18916505600, "driver_allocated_bytes": 19873333248, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "after_model_load", "unix_time": 1794990490.265602}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_clean", "unix_time": 1794990490.636092}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_encoder31_zero_0", "unix_time": 1794990490.9412951}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_encoder31_zero_1", "unix_time": 1794990491.238822}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_encoder31_zero_2", "unix_time": 1794990491.536059}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_encoder31_alpha_0.025", "unix_time": 1794990491.842647}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_connector_zero_0", "unix_time": 1794990492.1410298}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_connector_zero_1", "unix_time": 1794990492.43896}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_connector_zero_2", "unix_time": 1794990492.736623}
+{"current_allocated_bytes": 18936617472, "driver_allocated_bytes": 19956170752, "limit_driver_bytes": 32212254720, "over_limit": false, "phase": "fit_0_connector_alpha_0.025", "unix_time": 1794990493.043987}
