@@ -79,6 +79,7 @@ class PilotTests(unittest.TestCase):
                 "preprocessor_config.json": {"size": len(files["preprocessor_config.json"])},
                 "tekken.json": {"size": len(files["tekken.json"])},
                 "generation_config.json": {"size": len(files["generation_config.json"])},
+                "model.safetensors.index.json": {"size": len(files["model.safetensors.index.json"])},
             }}))
             index = {
                 "processor_config_sha256": hashlib.sha256(files["preprocessor_config.json"]).hexdigest(),
@@ -86,17 +87,24 @@ class PilotTests(unittest.TestCase):
             }
             config_sha = hashlib.sha256(files["config.json"]).hexdigest()
             generation_sha = hashlib.sha256(files["generation_config.json"]).hexdigest()
-            with patch.object(pilot, "SNAPSHOT", root), patch.object(pilot, "MODEL_CONFIG_SHA256", config_sha), patch.object(pilot, "GENERATION_CONFIG_SHA256", generation_sha):
+            tree_sha = pilot.sha(tree)
+            index_sha = hashlib.sha256(files["model.safetensors.index.json"]).hexdigest()
+            with patch.object(pilot, "SNAPSHOT", root), patch.object(pilot, "MODEL_CONFIG_SHA256", config_sha), patch.object(pilot, "GENERATION_CONFIG_SHA256", generation_sha), patch.object(pilot, "SNAPSHOT_TREE_SHA256", tree_sha), patch.object(pilot, "WEIGHT_INDEX_SHA256", index_sha):
                 good = pilot.validate_snapshot(index)
                 self.assertEqual(good["weight_shards"]["model-00001-of-00002.safetensors"]["sha256"],
                                  hashlib.sha256(files["model-00001-of-00002.safetensors"]).hexdigest())
                 for name in ("model-00001-of-00002.safetensors", "model-00002-of-00002.safetensors",
-                             "preprocessor_config.json", "tekken.json", "generation_config.json"):
+                             "preprocessor_config.json", "tekken.json", "generation_config.json",
+                             "model.safetensors.index.json"):
                     original = files[name]
                     (root / name).write_bytes(b"X" + original[1:])  # same size, different hash
                     with self.assertRaises(ValueError, msg=name):
                         pilot.validate_snapshot(index)
                     (root / name).write_bytes(original)
+                original_tree = tree.read_bytes()
+                tree.write_bytes(b"X" + original_tree[1:])
+                with self.assertRaises(ValueError, msg="snapshot tree"):
+                    pilot.validate_snapshot(index)
 
 
 if __name__ == "__main__":

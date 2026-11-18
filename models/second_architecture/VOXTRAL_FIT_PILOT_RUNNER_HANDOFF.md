@@ -1,6 +1,6 @@
 # Voxtral fit-pilot capability runner handoff
 
-**Ready for review; no model inference run.** [Runner](voxtral_fit_pilot_capability_v1.py) is bound to the frozen [CPU index](voxtral_corpus_v1_index.json) SHA-256 `bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971` and [protocol](VOXTRAL_CORPUS_V1_PROTOCOL.md). Current runner SHA-256: `2fd90081287111ed2f8507a8505347676338e4e3f5048b461f4a1daee225d497`. It selects exactly 32 `fit_pool` clips from the four fixed pilot pair IDs and never opens a development or locked-test WAV. No model weights are loaded without `--run`.
+**Ready for review; no model inference run.** [Runner](voxtral_fit_pilot_capability_v1.py) is bound to the frozen [CPU index](voxtral_corpus_v1_index.json) SHA-256 `bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971` and [protocol](VOXTRAL_CORPUS_V1_PROTOCOL.md). Current runner SHA-256: `1d4d65a528d558e5bdda3b733eaab6e7e849ab9456d6842d5ee178d3efdfb8d8`. It selects exactly 32 `fit_pool` clips from the four fixed pilot pair IDs and never opens a development or locked-test WAV. No model weights are loaded without `--run`.
 
 CPU validation command:
 
@@ -8,7 +8,7 @@ CPU validation command:
 models/second_architecture/.venv/bin/python models/second_architecture/voxtral_fit_pilot_capability_v1.py --validate-only
 ```
 
-This passed: 32 clips, 16 pair records, `[1,128,3000]` features, 375 audio placeholders per clip, matched prompt token IDs for both words of each pair, and pinned snapshot/source hashes. The **six** [CPU structural tests](test_voxtral_fit_pilot_capability_v1.py) passed, covering fit-only selection, rejection of a mislabeled development row, strict full-answer/EOS classification, canonical sequence IDs, source-manifest binding, and detection of same-size corruption in both weight shards and processor/tokenizer/generation assets. The preflight rehashes the actual source manifest, both ~9.4 GB weight shards against their pinned LFS SHA-256 values, processor config and tokenizer against the frozen index, and generation config against a pinned SHA-256. The computed hashes enter `run_meta.json`.
+This passed: 32 clips, 16 pair records, `[1,128,3000]` features, 375 audio placeholders per clip, matched prompt token IDs for both words of each pair, and pinned snapshot/source hashes. The **six** [CPU structural tests](test_voxtral_fit_pilot_capability_v1.py) passed, covering fit-only selection, rejection of a mislabeled development row, strict full-answer/EOS classification, canonical sequence IDs, source-manifest binding, and detection of same-size corruption in both weight shards, their revision tree, the safetensors index, and processor/tokenizer/generation assets. The preflight rehashes the actual source manifest, the **literal-pinned revision-tree SHA-256** before trusting its LFS hashes, both ~9.4 GB weight shards, the **literal-pinned safetensors index SHA-256**, processor config and tokenizer against the frozen index, and generation config against a pinned SHA-256. The computed hashes enter `run_meta.json`.
 
 After review and resource coordination, the explicit inference command is:
 

@@ -34,6 +34,8 @@ MODEL_ID = "mistralai/Voxtral-Mini-3B-2507"
 REVISION = "3060fe34b35ba5d44202ce9ff3c097642914f8f3"
 MODEL_CONFIG_SHA256 = "368124c9a9171b3a6c0cdb35cd7fedeff465eefecf315e2a621684bbed7dcd7e"
 GENERATION_CONFIG_SHA256 = "cebeed3d4a1680c9b311863385d32b91008480dfbf8cf7abc2142447b8f73b76"
+SNAPSHOT_TREE_SHA256 = "e8e4220e9f8a1ed5fd4eb7c640c7061d10516530476438cd7f57b555b7e1e88a"
+WEIGHT_INDEX_SHA256 = "7506794dd65e4324685f9634b3d83f20d36a723543650c1e6b72d81965289930"
 PROMPT = "Answer the question in the audio with exactly one word. No explanation or punctuation."
 PILOT_PAIR_IDS = ("animal_06", "color_03", "nature_00", "object_02")
 MAX_NEW_TOKENS = 32
@@ -118,6 +120,7 @@ def validate_snapshot(index: dict) -> dict:
     tree = SNAPSHOT / ".cache/huggingface/trees" / f"{REVISION}.json"
     if not tree.is_file():
         raise FileNotFoundError("Pinned snapshot revision tree missing")
+    tree_verified = verify_pinned_file(tree, SNAPSHOT_TREE_SHA256)
     required = (
         "config.json", "preprocessor_config.json", "generation_config.json", "tekken.json",
         "model.safetensors.index.json", "model-00001-of-00002.safetensors", "model-00002-of-00002.safetensors",
@@ -125,6 +128,10 @@ def validate_snapshot(index: dict) -> dict:
     if any(not (SNAPSHOT / name).is_file() for name in required):
         raise FileNotFoundError("Pinned local snapshot incomplete")
     tree_files = json.loads(tree.read_text())["files"]
+    weight_index = verify_pinned_file(
+        SNAPSHOT / "model.safetensors.index.json", WEIGHT_INDEX_SHA256,
+        int(tree_files["model.safetensors.index.json"]["size"]),
+    )
     weight_shards = {}
     for name in ("model-00001-of-00002.safetensors", "model-00002-of-00002.safetensors"):
         expected = tree_files[name]
@@ -147,7 +154,8 @@ def validate_snapshot(index: dict) -> dict:
     )
     return {
         "model_id": MODEL_ID, "revision": REVISION, "config": config_verified,
-        "snapshot_tree_sha256": sha(tree), "weight_shards": weight_shards,
+        "snapshot_tree": tree_verified, "weight_index": weight_index,
+        "weight_shards": weight_shards,
         "processor_config": processor_config, "tokenizer_asset": tokenizer_asset,
         "generation_config": generation_config,
     }
