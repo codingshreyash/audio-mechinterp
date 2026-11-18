@@ -76,7 +76,12 @@ def clean_forward(model, batch, modules) -> tuple[dict, torch.Tensor]:
     def hook_for(site):
         def hook(_module, _inputs, output):
             calls[site] += 1
-            value = _output_tensor(output)
+            if site == TARGET:
+                value = output[0] if isinstance(output, tuple) else output
+                if not isinstance(value, torch.Tensor) or value.ndim != 3 or value.shape[0] != 1:
+                    raise ValueError("Clean terminal target shape changed")
+            else:
+                value = _output_tensor(output)
             captured[site] = value.detach()
             return output
         return hook
