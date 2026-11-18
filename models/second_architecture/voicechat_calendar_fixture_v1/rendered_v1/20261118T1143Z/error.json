@@ -1,0 +1,9 @@
+{
+  "status": "incomplete_synthetic_render",
+  "type": "FileExistsError",
+  "error": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1143Z/A__piper_amy_en_us.wav",
+  "rendered": 6,
+  "active_case": "A",
+  "active_voice": "piper_amy_en_us",
+  "stderr": null
+}
