@@ -59,7 +59,7 @@ class SourcePlanTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.nemo = self.root / "Speech"
         for relative in (plan.SAMPLE_SCRIPT, plan.SAMPLE_WAV, plan.SAMPLE_RESPONSE,
-                         plan.TEMPLATE, plan.HELPER):
+                         plan.TEMPLATE, plan.HELPER, *plan.OTHER_PINNED_SOURCE):
             file = self.nemo / relative
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_bytes(relative.encode())
@@ -74,8 +74,23 @@ class SourcePlanTests(unittest.TestCase):
         self.render = self.root / "render.json"
         self.render.write_text(json.dumps({"rows": [{
             "case_id": plan.CASE_ID, "voice_id": plan.VOICE_ID,
+            "final_path": self.wav.name,
             "final_sha256": plan.sha256(self.wav),
         }]}))
+        (self.root / self.wav.name).write_bytes(self.wav.read_bytes())
+        checkpoint = self.root / "checkpoint"
+        checkpoint.mkdir()
+        (checkpoint / "config.json").write_bytes(b"fake-config")
+        (checkpoint / "model.safetensors").write_bytes(b"fake-weights")
+        nano_ref = (self.root / "nano" / "hub" /
+                    "models--nvidia--NVIDIA-Nemotron-Nano-9B-v2" / "refs" / "main")
+        nano_ref.parent.mkdir(parents=True)
+        nano_ref.write_bytes(b"fake-nano-ref")
+        nano_snapshot = nano_ref.parent.parent / "snapshots" / \
+            "6533e8de2c68e4536bf7c411d7a3ce5734111476"
+        nano_snapshot.mkdir(parents=True)
+        for name in plan.NANO_METADATA_FILES:
+            (nano_snapshot / name).write_bytes(name.encode())
         self.kwargs = {
             "nemo_dir": self.nemo, "checkpoint_dir": self.root / "checkpoint",
             "nano_home": self.root / "nano", "qa_manifest": self.manifest,
@@ -91,20 +106,46 @@ class SourcePlanTests(unittest.TestCase):
         self.addCleanup(self.render_patch.stop)
 
     def _fake_qa(self, *_args, **_kwargs):
-        return {"human_eligible": 12, "qa_manifest_sha256": "a" * 64,
-                "qa_ledger_sha256": "b" * 64}
+        return {"human_eligible": 12, "qa_manifest_sha256": plan.sha256(self.manifest),
+                "qa_ledger_sha256": plan.sha256(self.ledger)}
 
     def _fake_receipt(self, *_args, **_kwargs):
         raw = self.receipt.read_bytes()
         return {"voice_id": plan.VOICE_ID}, raw, hashlib.sha256(raw).hexdigest()
 
+    def _fake_phase(self, phase):
+        report = {
+            "status": f"local_{phase}_preflight_passed_no_model_or_network",
+            "nemo_commit": "fake-nemo", "voicechat_commit": "fake-voicechat",
+            "config_sha256": plan.sha256(self.root / "checkpoint" / "config.json"),
+            "weight_sha256": plan.sha256(self.root / "checkpoint" / "model.safetensors"),
+            "qa_manifest_sha256": plan.sha256(self.manifest),
+            "qa_ledger_sha256": plan.sha256(self.ledger),
+            "c_grant_sha256_by_voice": {"fake": "fake"},
+            "nano_repo_id": "fake-nano", "nano_revision": "fake-revision",
+            "nano_hf_home": str(self.root / "nano"), "gpu_policy": "h100",
+            "gpu": "fake-h100", "source_files_verified": 5,
+            "nano_files_verified": 6,
+        }
+        if phase == "ready":
+            report["nano_offline_resolver"] = {"status": "fake-offline-resolver"}
+        else:
+            report["nano_preload_environment"] = "offline_pinned_cache_no_bytecode"
+        instant = "2026-11-18T00:00:00+00:00" if phase == "ready" else \
+                  "2026-11-18T00:00:01+00:00"
+        return {"phase": phase, "started_utc": instant, "finished_utc": instant,
+                "reported": report, "stdout_sha256": "c" * 64}
+
+    def _fake_ready(self, **_kwargs):
+        return self._fake_phase("ready")
+
     def _fake_preload(self, **_kwargs):
-        return {"reported": {"status": "local_preload_preflight_passed_no_model_or_network"},
-                "stdout_sha256": "c" * 64}
+        return self._fake_phase("preload")
 
     def _build(self, **changes):
         kwargs = {**self.kwargs, "qa_checker": self._fake_qa,
-                  "preload": self._fake_preload, "source_gate": lambda: None,
+                  "ready": self._fake_ready, "preload": self._fake_preload,
+                  "source_gate": lambda: None,
                   **changes}
         with patch.object(plan, "read_bound_qa_receipt", self._fake_receipt):
             return plan.build_source_plan(**kwargs)
@@ -115,6 +156,8 @@ class SourcePlanTests(unittest.TestCase):
         self.assertTrue(result["synthetic_test_injection"])
         self.assertEqual(result["arm_order"], ["official_sample", *plan.ARMS])
         self.assertEqual(result["selected"]["wav_sha256"], plan.sha256(self.wav))
+        self.assertEqual(result["ready"]["phase"], "ready")
+        self.assertEqual(result["preload"]["phase"], "preload")
         self.assertEqual(result["response_rule"]["no_call_placeholder_sha256"],
                          plan.NO_CALL_SHA256)
         self.assertFalse(result["external_tool_execution"])
@@ -134,6 +177,42 @@ class SourcePlanTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "human QA absent"):
             self._build(qa_checker=fail_qa, preload=preload)
         self.assertEqual(calls, ["qa"])
+
+    def test_ready_must_precede_preload_and_bind_identity(self):
+        calls = []
+        def ready(**_kwargs):
+            calls.append("ready")
+            return self._fake_ready()
+        def preload(**_kwargs):
+            calls.append("preload")
+            return self._fake_preload()
+        self._build(ready=ready, preload=preload)
+        self.assertEqual(calls, ["ready", "preload"])
+        def wrong_identity(**_kwargs):
+            result = self._fake_preload()
+            result["reported"]["nemo_commit"] = "changed"
+            return result
+        with self.assertRaisesRegex(ValueError, "staged identity differs"):
+            self._build(preload=wrong_identity)
+
+    def test_changed_input_during_ready_prevents_preload(self):
+        calls = []
+        def changed_ready(**_kwargs):
+            self.receipt.write_bytes(b"mutated-after-qa")
+            return self._fake_ready()
+        def preload(**_kwargs):
+            calls.append("preload")
+            return self._fake_preload()
+        with self.assertRaisesRegex(ValueError, "changed during ready"):
+            self._build(ready=changed_ready, preload=preload)
+        self.assertEqual(calls, [])
+
+    def test_changed_checkpoint_after_preload_holds(self):
+        def changed_preload(**_kwargs):
+            (self.root / "checkpoint" / "config.json").write_bytes(b"mutated-config")
+            return self._fake_preload()
+        with self.assertRaisesRegex(ValueError, "changed during preload"):
+            self._build(preload=changed_preload)
 
     def test_wrong_selected_wav_precedes_preload(self):
         other = self.root / "other.wav"

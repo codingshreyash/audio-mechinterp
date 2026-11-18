@@ -13,7 +13,6 @@ class SourcePlanReviewHoldReproductions(unittest.TestCase):
         self.fixture.setUp()
         self.addCleanup(self.fixture.doCleanups)
 
-    @unittest.expectedFailure
     def test_rejects_selected_wav_changed_after_preload(self) -> None:
         def changed_preload(**_kwargs):
             self.fixture.wav.write_bytes(b"changed-after-initial-QA-check")
@@ -22,7 +21,6 @@ class SourcePlanReviewHoldReproductions(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.fixture._build(preload=changed_preload)
 
-    @unittest.expectedFailure
     def test_rejects_qa_manifest_changed_after_preload(self) -> None:
         def changed_preload(**_kwargs):
             self.fixture.manifest.write_bytes(b'{"changed_after_preflight":true}\n')
@@ -31,7 +29,6 @@ class SourcePlanReviewHoldReproductions(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.fixture._build(preload=changed_preload)
 
-    @unittest.expectedFailure
     def test_rejects_sample_wav_changed_after_preload(self) -> None:
         from . import live_parity_source_plan_v1 as plan
 
