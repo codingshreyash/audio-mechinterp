@@ -1,0 +1,13 @@
+# Old-FIT graph/inference parity CPU auditor: independent source rereview V2
+
+18 November 2026. **GO for the CPU saved-data auditor source at the exact hashes below.** This clears the V1 HOLD in the separate immutable V1 review; it does not authorize a model run or attest that any model forward occurred. The runner, launch gate, external freeze and eventual result each need their own review.
+
+- Corrected auditor commit: `770851b` (`voxtral_old_fit_grad_mode_parity_audit_v1.py`, SHA-256 `3b5294853f1692a9d18598e9ab352057fa206e8a43d20072d968b45a48174ecf`).
+- Corrected tests: `test_voxtral_old_fit_grad_mode_parity_audit_v1.py`, SHA-256 `2e93258833a3667caf8381c4c2df6419fe970a38f404beceb4c01f8882ed3bf9`.
+- Pinned project `.venv`: **14/14 CPU tests passed**. No model weights were loaded and no GPU work was run.
+
+I independently reconstructed `native.preflight_cpu()["batches"]["beaver"]` using the pinned old-FIT CPU preflight. It has exactly `input_ids` (int64 `[1,396]`, SHA-256 `915a4530875920b9c988724ca9e7ed8e63550bdfec3302ddb66e84e67b4b314a`), `attention_mask` (int64 `[1,396]`, SHA-256 `9ecc0f254cc29a01ab79e006021d96ef320b7438202692dcee10c770fbd65282`), and `input_features` (float32 `[1,128,3000]`, SHA-256 `4f23ae2441eca7587b7acf19d89f717292a4f1efb3067631c7abb7e27236ee61`). There are no `position_ids`. The corrected auditor pins this exact field set and all three full tensor hashes.
+
+I independently replayed the four V1 failing synthetic mutations. Zeroing an attention-mask entry, adding fabricated position IDs, changing a non-audio input ID, and changing an input-feature value each now raises `ValueError` before an audit report. A separate dummy-sidecar test with a reduced cap raised the actual attempt-size error with **zero calls to `torch.load`**. Source inspection confirms a second sidecar-size check before hashing/deserialization and an actual directory-byte count, with limits matching the runner's 1 GiB output envelope and 24 MiB worker headroom.
+
+The prior passing checks remain: exact eight full and sixteen direct call schedules, both full BF16 source hashes, tensor shape/dtype/finiteness, source and projector/LM handoffs, fixed direct-origin input hashes, content-addressed sidecar bytes, per-tensor hashes, four N/G and both within-mode pairs, signed-zero-sensitive bitwise comparison, float64 L2/max-absolute/changed-coordinate metrics, symmetric relative L2, observed repeat floor, first bitwise versus first resolved saved boundary, and separate audio/non-audio LM-input summaries. Two repeats give an observed floor only; graph mode also changes leaf `requires_grad`. This auditor checks saved data and cannot independently prove execution, a specific kernel cause, or a security effect.
