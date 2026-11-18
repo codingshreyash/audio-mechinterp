@@ -1,0 +1,8174 @@
+{
+  "schema_version": 2,
+  "status": "post_fit_capability_adaptation_before_any_dev_or_test_candidate_answers",
+  "source_spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+  "adaptation_informed_by_fit_capability_sha256": "d0e185bcc778f2fc681a243b59417858ca91f4bb04fa3f715adaea64d2a3dd23",
+  "v1_original_score_result_sha256": "34128f325b1e08818be0369fb91754cedda6331ac42c07439326cb1b09608c45",
+  "generator_sha256": "b6b7765fa415e0910f8eeeed9807565a3ea7c5c7fd88e757ff4d313c60dcb72f",
+  "model_id_for_tokenizer_only": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision_for_tokenizer_only": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "tokenizer_json_sha256": "8441917e39ae0244e06d704b95b3124795cec478e297f9afac39ba670d7e9d99",
+  "eos_token_id": 151645,
+  "surface_policy": "the tokenizer's deterministic encoding of each of the same four lower/title and optional leading-space strings listed in make_spec.py; deduplicate identical ID sequences; no claim to enumerate all possible segmentations",
+  "first_step_policy": "secondary next-token logsumexp over unique first token IDs of canonical variants; paired sets are disjoint but a prefix alone does not imply a complete word",
+  "complete_sequence_policy": "secondary logsumexp of teacher-forced log P of every unique canonical answer sequence plus EOS; no length normalization or answer-based variant selection",
+  "words": {
+    "bear": {
+      "variants": [
+        {
+          "surface": "bear",
+          "answer_token_ids": [
+            67660
+          ],
+          "answer_plus_eos_ids": [
+            67660,
+            151645
+          ],
+          "first_token_id": 67660
+        },
+        {
+          "surface": "Bear",
+          "answer_token_ids": [
+            88585
+          ],
+          "answer_plus_eos_ids": [
+            88585,
+            151645
+          ],
+          "first_token_id": 88585
+        },
+        {
+          "surface": " bear",
+          "answer_token_ids": [
+            11722
+          ],
+          "answer_plus_eos_ids": [
+            11722,
+            151645
+          ],
+          "first_token_id": 11722
+        },
+        {
+          "surface": " Bear",
+          "answer_token_ids": [
+            23985
+          ],
+          "answer_plus_eos_ids": [
+            23985,
+            151645
+          ],
+          "first_token_id": 23985
+        }
+      ],
+      "first_token_ids": [
+        11722,
+        23985,
+        67660,
+        88585
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          67660,
+          151645
+        ],
+        [
+          88585,
+          151645
+        ],
+        [
+          11722,
+          151645
+        ],
+        [
+          23985,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        11722,
+        23985,
+        67660,
+        88585
+      ]
+    },
+    "wolf": {
+      "variants": [
+        {
+          "surface": "wolf",
+          "answer_token_ids": [
+            76230
+          ],
+          "answer_plus_eos_ids": [
+            76230,
+            151645
+          ],
+          "first_token_id": 76230
+        },
+        {
+          "surface": "Wolf",
+          "answer_token_ids": [
+            95434
+          ],
+          "answer_plus_eos_ids": [
+            95434,
+            151645
+          ],
+          "first_token_id": 95434
+        },
+        {
+          "surface": " wolf",
+          "answer_token_ids": [
+            36542
+          ],
+          "answer_plus_eos_ids": [
+            36542,
+            151645
+          ],
+          "first_token_id": 36542
+        },
+        {
+          "surface": " Wolf",
+          "answer_token_ids": [
+            25230
+          ],
+          "answer_plus_eos_ids": [
+            25230,
+            151645
+          ],
+          "first_token_id": 25230
+        }
+      ],
+      "first_token_ids": [
+        25230,
+        36542,
+        76230,
+        95434
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          76230,
+          151645
+        ],
+        [
+          95434,
+          151645
+        ],
+        [
+          36542,
+          151645
+        ],
+        [
+          25230,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        25230,
+        36542,
+        76230,
+        95434
+      ]
+    },
+    "lion": {
+      "variants": [
+        {
+          "surface": "lion",
+          "answer_token_ids": [
+            78151
+          ],
+          "answer_plus_eos_ids": [
+            78151,
+            151645
+          ],
+          "first_token_id": 78151
+        },
+        {
+          "surface": "Lion",
+          "answer_token_ids": [
+            43,
+            290
+          ],
+          "answer_plus_eos_ids": [
+            43,
+            290,
+            151645
+          ],
+          "first_token_id": 43
+        },
+        {
+          "surface": " lion",
+          "answer_token_ids": [
+            39032
+          ],
+          "answer_plus_eos_ids": [
+            39032,
+            151645
+          ],
+          "first_token_id": 39032
+        },
+        {
+          "surface": " Lion",
+          "answer_token_ids": [
+            32099
+          ],
+          "answer_plus_eos_ids": [
+            32099,
+            151645
+          ],
+          "first_token_id": 32099
+        }
+      ],
+      "first_token_ids": [
+        43,
+        32099,
+        39032,
+        78151
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          78151,
+          151645
+        ],
+        [
+          43,
+          290,
+          151645
+        ],
+        [
+          39032,
+          151645
+        ],
+        [
+          32099,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        32099,
+        39032,
+        78151
+      ]
+    },
+    "tiger": {
+      "variants": [
+        {
+          "surface": "tiger",
+          "answer_token_ids": [
+            83,
+            7272
+          ],
+          "answer_plus_eos_ids": [
+            83,
+            7272,
+            151645
+          ],
+          "first_token_id": 83
+        },
+        {
+          "surface": "Tiger",
+          "answer_token_ids": [
+            51,
+            7272
+          ],
+          "answer_plus_eos_ids": [
+            51,
+            7272,
+            151645
+          ],
+          "first_token_id": 51
+        },
+        {
+          "surface": " tiger",
+          "answer_token_ids": [
+            51735
+          ],
+          "answer_plus_eos_ids": [
+            51735,
+            151645
+          ],
+          "first_token_id": 51735
+        },
+        {
+          "surface": " Tiger",
+          "answer_token_ids": [
+            35745
+          ],
+          "answer_plus_eos_ids": [
+            35745,
+            151645
+          ],
+          "first_token_id": 35745
+        }
+      ],
+      "first_token_ids": [
+        51,
+        83,
+        35745,
+        51735
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          83,
+          7272,
+          151645
+        ],
+        [
+          51,
+          7272,
+          151645
+        ],
+        [
+          51735,
+          151645
+        ],
+        [
+          35745,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        35745,
+        51735
+      ]
+    },
+    "horse": {
+      "variants": [
+        {
+          "surface": "horse",
+          "answer_token_ids": [
+            59675
+          ],
+          "answer_plus_eos_ids": [
+            59675,
+            151645
+          ],
+          "first_token_id": 59675
+        },
+        {
+          "surface": "Horse",
+          "answer_token_ids": [
+            39,
+            10836
+          ],
+          "answer_plus_eos_ids": [
+            39,
+            10836,
+            151645
+          ],
+          "first_token_id": 39
+        },
+        {
+          "surface": " horse",
+          "answer_token_ids": [
+            15223
+          ],
+          "answer_plus_eos_ids": [
+            15223,
+            151645
+          ],
+          "first_token_id": 15223
+        },
+        {
+          "surface": " Horse",
+          "answer_token_ids": [
+            33292
+          ],
+          "answer_plus_eos_ids": [
+            33292,
+            151645
+          ],
+          "first_token_id": 33292
+        }
+      ],
+      "first_token_ids": [
+        39,
+        15223,
+        33292,
+        59675
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          59675,
+          151645
+        ],
+        [
+          39,
+          10836,
+          151645
+        ],
+        [
+          15223,
+          151645
+        ],
+        [
+          33292,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        15223,
+        33292,
+        59675
+      ]
+    },
+    "sheep": {
+      "variants": [
+        {
+          "surface": "sheep",
+          "answer_token_ids": [
+            31058,
+            747
+          ],
+          "answer_plus_eos_ids": [
+            31058,
+            747,
+            151645
+          ],
+          "first_token_id": 31058
+        },
+        {
+          "surface": "Sheep",
+          "answer_token_ids": [
+            7941,
+            747
+          ],
+          "answer_plus_eos_ids": [
+            7941,
+            747,
+            151645
+          ],
+          "first_token_id": 7941
+        },
+        {
+          "surface": " sheep",
+          "answer_token_ids": [
+            31912
+          ],
+          "answer_plus_eos_ids": [
+            31912,
+            151645
+          ],
+          "first_token_id": 31912
+        },
+        {
+          "surface": " Sheep",
+          "answer_token_ids": [
+            82908
+          ],
+          "answer_plus_eos_ids": [
+            82908,
+            151645
+          ],
+          "first_token_id": 82908
+        }
+      ],
+      "first_token_ids": [
+        7941,
+        31058,
+        31912,
+        82908
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          31058,
+          747,
+          151645
+        ],
+        [
+          7941,
+          747,
+          151645
+        ],
+        [
+          31912,
+          151645
+        ],
+        [
+          82908,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        31912,
+        82908
+      ]
+    },
+    "goat": {
+      "variants": [
+        {
+          "surface": "goat",
+          "answer_token_ids": [
+            3346,
+            266
+          ],
+          "answer_plus_eos_ids": [
+            3346,
+            266,
+            151645
+          ],
+          "first_token_id": 3346
+        },
+        {
+          "surface": "Goat",
+          "answer_token_ids": [
+            10850,
+            266
+          ],
+          "answer_plus_eos_ids": [
+            10850,
+            266,
+            151645
+          ],
+          "first_token_id": 10850
+        },
+        {
+          "surface": " goat",
+          "answer_token_ids": [
+            53292
+          ],
+          "answer_plus_eos_ids": [
+            53292,
+            151645
+          ],
+          "first_token_id": 53292
+        },
+        {
+          "surface": " Goat",
+          "answer_token_ids": [
+            92772
+          ],
+          "answer_plus_eos_ids": [
+            92772,
+            151645
+          ],
+          "first_token_id": 92772
+        }
+      ],
+      "first_token_ids": [
+        3346,
+        10850,
+        53292,
+        92772
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          3346,
+          266,
+          151645
+        ],
+        [
+          10850,
+          266,
+          151645
+        ],
+        [
+          53292,
+          151645
+        ],
+        [
+          92772,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        53292,
+        92772
+      ]
+    },
+    "duck": {
+      "variants": [
+        {
+          "surface": "duck",
+          "answer_token_ids": [
+            72970
+          ],
+          "answer_plus_eos_ids": [
+            72970,
+            151645
+          ],
+          "first_token_id": 72970
+        },
+        {
+          "surface": "Duck",
+          "answer_token_ids": [
+            35,
+            1942
+          ],
+          "answer_plus_eos_ids": [
+            35,
+            1942,
+            151645
+          ],
+          "first_token_id": 35
+        },
+        {
+          "surface": " duck",
+          "answer_token_ids": [
+            35985
+          ],
+          "answer_plus_eos_ids": [
+            35985,
+            151645
+          ],
+          "first_token_id": 35985
+        },
+        {
+          "surface": " Duck",
+          "answer_token_ids": [
+            45770
+          ],
+          "answer_plus_eos_ids": [
+            45770,
+            151645
+          ],
+          "first_token_id": 45770
+        }
+      ],
+      "first_token_ids": [
+        35,
+        35985,
+        45770,
+        72970
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          72970,
+          151645
+        ],
+        [
+          35,
+          1942,
+          151645
+        ],
+        [
+          35985,
+          151645
+        ],
+        [
+          45770,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        35985,
+        45770,
+        72970
+      ]
+    },
+    "goose": {
+      "variants": [
+        {
+          "surface": "goose",
+          "answer_token_ids": [
+            3346,
+            960
+          ],
+          "answer_plus_eos_ids": [
+            3346,
+            960,
+            151645
+          ],
+          "first_token_id": 3346
+        },
+        {
+          "surface": "Goose",
+          "answer_token_ids": [
+            10850,
+            960
+          ],
+          "answer_plus_eos_ids": [
+            10850,
+            960,
+            151645
+          ],
+          "first_token_id": 10850
+        },
+        {
+          "surface": " goose",
+          "answer_token_ids": [
+            62137
+          ],
+          "answer_plus_eos_ids": [
+            62137,
+            151645
+          ],
+          "first_token_id": 62137
+        },
+        {
+          "surface": " Goose",
+          "answer_token_ids": [
+            81107
+          ],
+          "answer_plus_eos_ids": [
+            81107,
+            151645
+          ],
+          "first_token_id": 81107
+        }
+      ],
+      "first_token_ids": [
+        3346,
+        10850,
+        62137,
+        81107
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          3346,
+          960,
+          151645
+        ],
+        [
+          10850,
+          960,
+          151645
+        ],
+        [
+          62137,
+          151645
+        ],
+        [
+          81107,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        62137,
+        81107
+      ]
+    },
+    "mouse": {
+      "variants": [
+        {
+          "surface": "mouse",
+          "answer_token_ids": [
+            13237
+          ],
+          "answer_plus_eos_ids": [
+            13237,
+            151645
+          ],
+          "first_token_id": 13237
+        },
+        {
+          "surface": "Mouse",
+          "answer_token_ids": [
+            10493
+          ],
+          "answer_plus_eos_ids": [
+            10493,
+            151645
+          ],
+          "first_token_id": 10493
+        },
+        {
+          "surface": " mouse",
+          "answer_token_ids": [
+            8644
+          ],
+          "answer_plus_eos_ids": [
+            8644,
+            151645
+          ],
+          "first_token_id": 8644
+        },
+        {
+          "surface": " Mouse",
+          "answer_token_ids": [
+            17721
+          ],
+          "answer_plus_eos_ids": [
+            17721,
+            151645
+          ],
+          "first_token_id": 17721
+        }
+      ],
+      "first_token_ids": [
+        8644,
+        10493,
+        13237,
+        17721
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          13237,
+          151645
+        ],
+        [
+          10493,
+          151645
+        ],
+        [
+          8644,
+          151645
+        ],
+        [
+          17721,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        8644,
+        10493,
+        13237,
+        17721
+      ]
+    },
+    "rabbit": {
+      "variants": [
+        {
+          "surface": "rabbit",
+          "answer_token_ids": [
+            86345
+          ],
+          "answer_plus_eos_ids": [
+            86345,
+            151645
+          ],
+          "first_token_id": 86345
+        },
+        {
+          "surface": "Rabbit",
+          "answer_token_ids": [
+            49,
+            19949
+          ],
+          "answer_plus_eos_ids": [
+            49,
+            19949,
+            151645
+          ],
+          "first_token_id": 49
+        },
+        {
+          "surface": " rabbit",
+          "answer_token_ids": [
+            38724
+          ],
+          "answer_plus_eos_ids": [
+            38724,
+            151645
+          ],
+          "first_token_id": 38724
+        },
+        {
+          "surface": " Rabbit",
+          "answer_token_ids": [
+            48331
+          ],
+          "answer_plus_eos_ids": [
+            48331,
+            151645
+          ],
+          "first_token_id": 48331
+        }
+      ],
+      "first_token_ids": [
+        49,
+        38724,
+        48331,
+        86345
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          86345,
+          151645
+        ],
+        [
+          49,
+          19949,
+          151645
+        ],
+        [
+          38724,
+          151645
+        ],
+        [
+          48331,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        38724,
+        48331,
+        86345
+      ]
+    },
+    "fox": {
+      "variants": [
+        {
+          "surface": "fox",
+          "answer_token_ids": [
+            15011
+          ],
+          "answer_plus_eos_ids": [
+            15011,
+            151645
+          ],
+          "first_token_id": 15011
+        },
+        {
+          "surface": "Fox",
+          "answer_token_ids": [
+            47314
+          ],
+          "answer_plus_eos_ids": [
+            47314,
+            151645
+          ],
+          "first_token_id": 47314
+        },
+        {
+          "surface": " fox",
+          "answer_token_ids": [
+            38835
+          ],
+          "answer_plus_eos_ids": [
+            38835,
+            151645
+          ],
+          "first_token_id": 38835
+        },
+        {
+          "surface": " Fox",
+          "answer_token_ids": [
+            13282
+          ],
+          "answer_plus_eos_ids": [
+            13282,
+            151645
+          ],
+          "first_token_id": 13282
+        }
+      ],
+      "first_token_ids": [
+        13282,
+        15011,
+        38835,
+        47314
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          15011,
+          151645
+        ],
+        [
+          47314,
+          151645
+        ],
+        [
+          38835,
+          151645
+        ],
+        [
+          13282,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        13282,
+        15011,
+        38835,
+        47314
+      ]
+    },
+    "deer": {
+      "variants": [
+        {
+          "surface": "deer",
+          "answer_token_ids": [
+            96262
+          ],
+          "answer_plus_eos_ids": [
+            96262,
+            151645
+          ],
+          "first_token_id": 96262
+        },
+        {
+          "surface": "Deer",
+          "answer_token_ids": [
+            1912,
+            261
+          ],
+          "answer_plus_eos_ids": [
+            1912,
+            261,
+            151645
+          ],
+          "first_token_id": 1912
+        },
+        {
+          "surface": " deer",
+          "answer_token_ids": [
+            38049
+          ],
+          "answer_plus_eos_ids": [
+            38049,
+            151645
+          ],
+          "first_token_id": 38049
+        },
+        {
+          "surface": " Deer",
+          "answer_token_ids": [
+            63091
+          ],
+          "answer_plus_eos_ids": [
+            63091,
+            151645
+          ],
+          "first_token_id": 63091
+        }
+      ],
+      "first_token_ids": [
+        1912,
+        38049,
+        63091,
+        96262
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          96262,
+          151645
+        ],
+        [
+          1912,
+          261,
+          151645
+        ],
+        [
+          38049,
+          151645
+        ],
+        [
+          63091,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        38049,
+        63091,
+        96262
+      ]
+    },
+    "moose": {
+      "variants": [
+        {
+          "surface": "moose",
+          "answer_token_ids": [
+            6355,
+            960
+          ],
+          "answer_plus_eos_ids": [
+            6355,
+            960,
+            151645
+          ],
+          "first_token_id": 6355
+        },
+        {
+          "surface": "Moose",
+          "answer_token_ids": [
+            44,
+            13752
+          ],
+          "answer_plus_eos_ids": [
+            44,
+            13752,
+            151645
+          ],
+          "first_token_id": 44
+        },
+        {
+          "surface": " moose",
+          "answer_token_ids": [
+            4544,
+            960
+          ],
+          "answer_plus_eos_ids": [
+            4544,
+            960,
+            151645
+          ],
+          "first_token_id": 4544
+        },
+        {
+          "surface": " Moose",
+          "answer_token_ids": [
+            68128
+          ],
+          "answer_plus_eos_ids": [
+            68128,
+            151645
+          ],
+          "first_token_id": 68128
+        }
+      ],
+      "first_token_ids": [
+        44,
+        4544,
+        6355,
+        68128
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          6355,
+          960,
+          151645
+        ],
+        [
+          44,
+          13752,
+          151645
+        ],
+        [
+          4544,
+          960,
+          151645
+        ],
+        [
+          68128,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        68128
+      ]
+    },
+    "panda": {
+      "variants": [
+        {
+          "surface": "panda",
+          "answer_token_ids": [
+            79,
+            9817
+          ],
+          "answer_plus_eos_ids": [
+            79,
+            9817,
+            151645
+          ],
+          "first_token_id": 79
+        },
+        {
+          "surface": "Panda",
+          "answer_token_ids": [
+            47,
+            9817
+          ],
+          "answer_plus_eos_ids": [
+            47,
+            9817,
+            151645
+          ],
+          "first_token_id": 47
+        },
+        {
+          "surface": " panda",
+          "answer_token_ids": [
+            88222
+          ],
+          "answer_plus_eos_ids": [
+            88222,
+            151645
+          ],
+          "first_token_id": 88222
+        },
+        {
+          "surface": " Panda",
+          "answer_token_ids": [
+            72410
+          ],
+          "answer_plus_eos_ids": [
+            72410,
+            151645
+          ],
+          "first_token_id": 72410
+        }
+      ],
+      "first_token_ids": [
+        47,
+        79,
+        72410,
+        88222
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          79,
+          9817,
+          151645
+        ],
+        [
+          47,
+          9817,
+          151645
+        ],
+        [
+          88222,
+          151645
+        ],
+        [
+          72410,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        72410,
+        88222
+      ]
+    },
+    "camel": {
+      "variants": [
+        {
+          "surface": "camel",
+          "answer_token_ids": [
+            93321
+          ],
+          "answer_plus_eos_ids": [
+            93321,
+            151645
+          ],
+          "first_token_id": 93321
+        },
+        {
+          "surface": "Camel",
+          "answer_token_ids": [
+            25406,
+            301
+          ],
+          "answer_plus_eos_ids": [
+            25406,
+            301,
+            151645
+          ],
+          "first_token_id": 25406
+        },
+        {
+          "surface": " camel",
+          "answer_token_ids": [
+            49152
+          ],
+          "answer_plus_eos_ids": [
+            49152,
+            151645
+          ],
+          "first_token_id": 49152
+        },
+        {
+          "surface": " Camel",
+          "answer_token_ids": [
+            68154
+          ],
+          "answer_plus_eos_ids": [
+            68154,
+            151645
+          ],
+          "first_token_id": 68154
+        }
+      ],
+      "first_token_ids": [
+        25406,
+        49152,
+        68154,
+        93321
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          93321,
+          151645
+        ],
+        [
+          25406,
+          301,
+          151645
+        ],
+        [
+          49152,
+          151645
+        ],
+        [
+          68154,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        49152,
+        68154,
+        93321
+      ]
+    },
+    "beaver": {
+      "variants": [
+        {
+          "surface": "beaver",
+          "answer_token_ids": [
+            1371,
+            7255
+          ],
+          "answer_plus_eos_ids": [
+            1371,
+            7255,
+            151645
+          ],
+          "first_token_id": 1371
+        },
+        {
+          "surface": "Beaver",
+          "answer_token_ids": [
+            3430,
+            7255
+          ],
+          "answer_plus_eos_ids": [
+            3430,
+            7255,
+            151645
+          ],
+          "first_token_id": 3430
+        },
+        {
+          "surface": " beaver",
+          "answer_token_ids": [
+            387,
+            7255
+          ],
+          "answer_plus_eos_ids": [
+            387,
+            7255,
+            151645
+          ],
+          "first_token_id": 387
+        },
+        {
+          "surface": " Beaver",
+          "answer_token_ids": [
+            91434
+          ],
+          "answer_plus_eos_ids": [
+            91434,
+            151645
+          ],
+          "first_token_id": 91434
+        }
+      ],
+      "first_token_ids": [
+        387,
+        1371,
+        3430,
+        91434
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          1371,
+          7255,
+          151645
+        ],
+        [
+          3430,
+          7255,
+          151645
+        ],
+        [
+          387,
+          7255,
+          151645
+        ],
+        [
+          91434,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        91434
+      ]
+    },
+    "monkey": {
+      "variants": [
+        {
+          "surface": "monkey",
+          "answer_token_ids": [
+            96016
+          ],
+          "answer_plus_eos_ids": [
+            96016,
+            151645
+          ],
+          "first_token_id": 96016
+        },
+        {
+          "surface": "Monkey",
+          "answer_token_ids": [
+            96838
+          ],
+          "answer_plus_eos_ids": [
+            96838,
+            151645
+          ],
+          "first_token_id": 96838
+        },
+        {
+          "surface": " monkey",
+          "answer_token_ids": [
+            38703
+          ],
+          "answer_plus_eos_ids": [
+            38703,
+            151645
+          ],
+          "first_token_id": 38703
+        },
+        {
+          "surface": " Monkey",
+          "answer_token_ids": [
+            57837
+          ],
+          "answer_plus_eos_ids": [
+            57837,
+            151645
+          ],
+          "first_token_id": 57837
+        }
+      ],
+      "first_token_ids": [
+        38703,
+        57837,
+        96016,
+        96838
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          96016,
+          151645
+        ],
+        [
+          96838,
+          151645
+        ],
+        [
+          38703,
+          151645
+        ],
+        [
+          57837,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        38703,
+        57837,
+        96016,
+        96838
+      ]
+    },
+    "turtle": {
+      "variants": [
+        {
+          "surface": "turtle",
+          "answer_token_ids": [
+            81109
+          ],
+          "answer_plus_eos_ids": [
+            81109,
+            151645
+          ],
+          "first_token_id": 81109
+        },
+        {
+          "surface": "Turtle",
+          "answer_token_ids": [
+            51,
+            21744
+          ],
+          "answer_plus_eos_ids": [
+            51,
+            21744,
+            151645
+          ],
+          "first_token_id": 51
+        },
+        {
+          "surface": " turtle",
+          "answer_token_ids": [
+            36089
+          ],
+          "answer_plus_eos_ids": [
+            36089,
+            151645
+          ],
+          "first_token_id": 36089
+        },
+        {
+          "surface": " Turtle",
+          "answer_token_ids": [
+            66806
+          ],
+          "answer_plus_eos_ids": [
+            66806,
+            151645
+          ],
+          "first_token_id": 66806
+        }
+      ],
+      "first_token_ids": [
+        51,
+        36089,
+        66806,
+        81109
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          81109,
+          151645
+        ],
+        [
+          51,
+          21744,
+          151645
+        ],
+        [
+          36089,
+          151645
+        ],
+        [
+          66806,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        36089,
+        66806,
+        81109
+      ]
+    },
+    "cow": {
+      "variants": [
+        {
+          "surface": "cow",
+          "answer_token_ids": [
+            18921
+          ],
+          "answer_plus_eos_ids": [
+            18921,
+            151645
+          ],
+          "first_token_id": 18921
+        },
+        {
+          "surface": "Cow",
+          "answer_token_ids": [
+            89915
+          ],
+          "answer_plus_eos_ids": [
+            89915,
+            151645
+          ],
+          "first_token_id": 89915
+        },
+        {
+          "surface": " cow",
+          "answer_token_ids": [
+            19362
+          ],
+          "answer_plus_eos_ids": [
+            19362,
+            151645
+          ],
+          "first_token_id": 19362
+        },
+        {
+          "surface": " Cow",
+          "answer_token_ids": [
+            21851
+          ],
+          "answer_plus_eos_ids": [
+            21851,
+            151645
+          ],
+          "first_token_id": 21851
+        }
+      ],
+      "first_token_ids": [
+        18921,
+        19362,
+        21851,
+        89915
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          18921,
+          151645
+        ],
+        [
+          89915,
+          151645
+        ],
+        [
+          19362,
+          151645
+        ],
+        [
+          21851,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        18921,
+        19362,
+        21851,
+        89915
+      ]
+    },
+    "pig": {
+      "variants": [
+        {
+          "surface": "pig",
+          "answer_token_ids": [
+            89500
+          ],
+          "answer_plus_eos_ids": [
+            89500,
+            151645
+          ],
+          "first_token_id": 89500
+        },
+        {
+          "surface": "Pig",
+          "answer_token_ids": [
+            47,
+            343
+          ],
+          "answer_plus_eos_ids": [
+            47,
+            343,
+            151645
+          ],
+          "first_token_id": 47
+        },
+        {
+          "surface": " pig",
+          "answer_token_ids": [
+            23694
+          ],
+          "answer_plus_eos_ids": [
+            23694,
+            151645
+          ],
+          "first_token_id": 23694
+        },
+        {
+          "surface": " Pig",
+          "answer_token_ids": [
+            48554
+          ],
+          "answer_plus_eos_ids": [
+            48554,
+            151645
+          ],
+          "first_token_id": 48554
+        }
+      ],
+      "first_token_ids": [
+        47,
+        23694,
+        48554,
+        89500
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          89500,
+          151645
+        ],
+        [
+          47,
+          343,
+          151645
+        ],
+        [
+          23694,
+          151645
+        ],
+        [
+          48554,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        23694,
+        48554,
+        89500
+      ]
+    },
+    "chicken": {
+      "variants": [
+        {
+          "surface": "chicken",
+          "answer_token_ids": [
+            331,
+            9692
+          ],
+          "answer_plus_eos_ids": [
+            331,
+            9692,
+            151645
+          ],
+          "first_token_id": 331
+        },
+        {
+          "surface": "Chicken",
+          "answer_token_ids": [
+            83863
+          ],
+          "answer_plus_eos_ids": [
+            83863,
+            151645
+          ],
+          "first_token_id": 83863
+        },
+        {
+          "surface": " chicken",
+          "answer_token_ids": [
+            16158
+          ],
+          "answer_plus_eos_ids": [
+            16158,
+            151645
+          ],
+          "first_token_id": 16158
+        },
+        {
+          "surface": " Chicken",
+          "answer_token_ids": [
+            33519
+          ],
+          "answer_plus_eos_ids": [
+            33519,
+            151645
+          ],
+          "first_token_id": 33519
+        }
+      ],
+      "first_token_ids": [
+        331,
+        16158,
+        33519,
+        83863
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          331,
+          9692,
+          151645
+        ],
+        [
+          83863,
+          151645
+        ],
+        [
+          16158,
+          151645
+        ],
+        [
+          33519,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        16158,
+        33519,
+        83863
+      ]
+    },
+    "snake": {
+      "variants": [
+        {
+          "surface": "snake",
+          "answer_token_ids": [
+            72139
+          ],
+          "answer_plus_eos_ids": [
+            72139,
+            151645
+          ],
+          "first_token_id": 72139
+        },
+        {
+          "surface": "Snake",
+          "answer_token_ids": [
+            83420
+          ],
+          "answer_plus_eos_ids": [
+            83420,
+            151645
+          ],
+          "first_token_id": 83420
+        },
+        {
+          "surface": " snake",
+          "answer_token_ids": [
+            25265
+          ],
+          "answer_plus_eos_ids": [
+            25265,
+            151645
+          ],
+          "first_token_id": 25265
+        },
+        {
+          "surface": " Snake",
+          "answer_token_ids": [
+            39656
+          ],
+          "answer_plus_eos_ids": [
+            39656,
+            151645
+          ],
+          "first_token_id": 39656
+        }
+      ],
+      "first_token_ids": [
+        25265,
+        39656,
+        72139,
+        83420
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          72139,
+          151645
+        ],
+        [
+          83420,
+          151645
+        ],
+        [
+          25265,
+          151645
+        ],
+        [
+          39656,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        25265,
+        39656,
+        72139,
+        83420
+      ]
+    },
+    "frog": {
+      "variants": [
+        {
+          "surface": "frog",
+          "answer_token_ids": [
+            85982
+          ],
+          "answer_plus_eos_ids": [
+            85982,
+            151645
+          ],
+          "first_token_id": 85982
+        },
+        {
+          "surface": "Frog",
+          "answer_token_ids": [
+            37,
+            11918
+          ],
+          "answer_plus_eos_ids": [
+            37,
+            11918,
+            151645
+          ],
+          "first_token_id": 37
+        },
+        {
+          "surface": " frog",
+          "answer_token_ids": [
+            59881
+          ],
+          "answer_plus_eos_ids": [
+            59881,
+            151645
+          ],
+          "first_token_id": 59881
+        },
+        {
+          "surface": " Frog",
+          "answer_token_ids": [
+            71419
+          ],
+          "answer_plus_eos_ids": [
+            71419,
+            151645
+          ],
+          "first_token_id": 71419
+        }
+      ],
+      "first_token_ids": [
+        37,
+        59881,
+        71419,
+        85982
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          85982,
+          151645
+        ],
+        [
+          37,
+          11918,
+          151645
+        ],
+        [
+          59881,
+          151645
+        ],
+        [
+          71419,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        59881,
+        71419,
+        85982
+      ]
+    },
+    "green": {
+      "variants": [
+        {
+          "surface": "green",
+          "answer_token_ids": [
+            13250
+          ],
+          "answer_plus_eos_ids": [
+            13250,
+            151645
+          ],
+          "first_token_id": 13250
+        },
+        {
+          "surface": "Green",
+          "answer_token_ids": [
+            19576
+          ],
+          "answer_plus_eos_ids": [
+            19576,
+            151645
+          ],
+          "first_token_id": 19576
+        },
+        {
+          "surface": " green",
+          "answer_token_ids": [
+            6176
+          ],
+          "answer_plus_eos_ids": [
+            6176,
+            151645
+          ],
+          "first_token_id": 6176
+        },
+        {
+          "surface": " Green",
+          "answer_token_ids": [
+            7840
+          ],
+          "answer_plus_eos_ids": [
+            7840,
+            151645
+          ],
+          "first_token_id": 7840
+        }
+      ],
+      "first_token_ids": [
+        6176,
+        7840,
+        13250,
+        19576
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          13250,
+          151645
+        ],
+        [
+          19576,
+          151645
+        ],
+        [
+          6176,
+          151645
+        ],
+        [
+          7840,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        6176,
+        7840,
+        13250,
+        19576
+      ]
+    },
+    "yellow": {
+      "variants": [
+        {
+          "surface": "yellow",
+          "answer_token_ids": [
+            27869
+          ],
+          "answer_plus_eos_ids": [
+            27869,
+            151645
+          ],
+          "first_token_id": 27869
+        },
+        {
+          "surface": "Yellow",
+          "answer_token_ids": [
+            47699
+          ],
+          "answer_plus_eos_ids": [
+            47699,
+            151645
+          ],
+          "first_token_id": 47699
+        },
+        {
+          "surface": " yellow",
+          "answer_token_ids": [
+            13753
+          ],
+          "answer_plus_eos_ids": [
+            13753,
+            151645
+          ],
+          "first_token_id": 13753
+        },
+        {
+          "surface": " Yellow",
+          "answer_token_ids": [
+            25462
+          ],
+          "answer_plus_eos_ids": [
+            25462,
+            151645
+          ],
+          "first_token_id": 25462
+        }
+      ],
+      "first_token_ids": [
+        13753,
+        25462,
+        27869,
+        47699
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          27869,
+          151645
+        ],
+        [
+          47699,
+          151645
+        ],
+        [
+          13753,
+          151645
+        ],
+        [
+          25462,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        13753,
+        25462,
+        27869,
+        47699
+      ]
+    },
+    "orange": {
+      "variants": [
+        {
+          "surface": "orange",
+          "answer_token_ids": [
+            34164
+          ],
+          "answer_plus_eos_ids": [
+            34164,
+            151645
+          ],
+          "first_token_id": 34164
+        },
+        {
+          "surface": "Orange",
+          "answer_token_ids": [
+            41969
+          ],
+          "answer_plus_eos_ids": [
+            41969,
+            151645
+          ],
+          "first_token_id": 41969
+        },
+        {
+          "surface": " orange",
+          "answer_token_ids": [
+            18575
+          ],
+          "answer_plus_eos_ids": [
+            18575,
+            151645
+          ],
+          "first_token_id": 18575
+        },
+        {
+          "surface": " Orange",
+          "answer_token_ids": [
+            21958
+          ],
+          "answer_plus_eos_ids": [
+            21958,
+            151645
+          ],
+          "first_token_id": 21958
+        }
+      ],
+      "first_token_ids": [
+        18575,
+        21958,
+        34164,
+        41969
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          34164,
+          151645
+        ],
+        [
+          41969,
+          151645
+        ],
+        [
+          18575,
+          151645
+        ],
+        [
+          21958,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        18575,
+        21958,
+        34164,
+        41969
+      ]
+    },
+    "purple": {
+      "variants": [
+        {
+          "surface": "purple",
+          "answer_token_ids": [
+            56507
+          ],
+          "answer_plus_eos_ids": [
+            56507,
+            151645
+          ],
+          "first_token_id": 56507
+        },
+        {
+          "surface": "Purple",
+          "answer_token_ids": [
+            74513
+          ],
+          "answer_plus_eos_ids": [
+            74513,
+            151645
+          ],
+          "first_token_id": 74513
+        },
+        {
+          "surface": " purple",
+          "answer_token_ids": [
+            24932
+          ],
+          "answer_plus_eos_ids": [
+            24932,
+            151645
+          ],
+          "first_token_id": 24932
+        },
+        {
+          "surface": " Purple",
+          "answer_token_ids": [
+            40389
+          ],
+          "answer_plus_eos_ids": [
+            40389,
+            151645
+          ],
+          "first_token_id": 40389
+        }
+      ],
+      "first_token_ids": [
+        24932,
+        40389,
+        56507,
+        74513
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          56507,
+          151645
+        ],
+        [
+          74513,
+          151645
+        ],
+        [
+          24932,
+          151645
+        ],
+        [
+          40389,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        24932,
+        40389,
+        56507,
+        74513
+      ]
+    },
+    "pink": {
+      "variants": [
+        {
+          "surface": "pink",
+          "answer_token_ids": [
+            63249
+          ],
+          "answer_plus_eos_ids": [
+            63249,
+            151645
+          ],
+          "first_token_id": 63249
+        },
+        {
+          "surface": "Pink",
+          "answer_token_ids": [
+            71352
+          ],
+          "answer_plus_eos_ids": [
+            71352,
+            151645
+          ],
+          "first_token_id": 71352
+        },
+        {
+          "surface": " pink",
+          "answer_token_ids": [
+            18217
+          ],
+          "answer_plus_eos_ids": [
+            18217,
+            151645
+          ],
+          "first_token_id": 18217
+        },
+        {
+          "surface": " Pink",
+          "answer_token_ids": [
+            26119
+          ],
+          "answer_plus_eos_ids": [
+            26119,
+            151645
+          ],
+          "first_token_id": 26119
+        }
+      ],
+      "first_token_ids": [
+        18217,
+        26119,
+        63249,
+        71352
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          63249,
+          151645
+        ],
+        [
+          71352,
+          151645
+        ],
+        [
+          18217,
+          151645
+        ],
+        [
+          26119,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        18217,
+        26119,
+        63249,
+        71352
+      ]
+    },
+    "brown": {
+      "variants": [
+        {
+          "surface": "brown",
+          "answer_token_ids": [
+            64461
+          ],
+          "answer_plus_eos_ids": [
+            64461,
+            151645
+          ],
+          "first_token_id": 64461
+        },
+        {
+          "surface": "Brown",
+          "answer_token_ids": [
+            48388
+          ],
+          "answer_plus_eos_ids": [
+            48388,
+            151645
+          ],
+          "first_token_id": 48388
+        },
+        {
+          "surface": " brown",
+          "answer_token_ids": [
+            13876
+          ],
+          "answer_plus_eos_ids": [
+            13876,
+            151645
+          ],
+          "first_token_id": 13876
+        },
+        {
+          "surface": " Brown",
+          "answer_token_ids": [
+            10471
+          ],
+          "answer_plus_eos_ids": [
+            10471,
+            151645
+          ],
+          "first_token_id": 10471
+        }
+      ],
+      "first_token_ids": [
+        10471,
+        13876,
+        48388,
+        64461
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          64461,
+          151645
+        ],
+        [
+          48388,
+          151645
+        ],
+        [
+          13876,
+          151645
+        ],
+        [
+          10471,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        10471,
+        13876,
+        48388,
+        64461
+      ]
+    },
+    "black": {
+      "variants": [
+        {
+          "surface": "black",
+          "answer_token_ids": [
+            11453
+          ],
+          "answer_plus_eos_ids": [
+            11453,
+            151645
+          ],
+          "first_token_id": 11453
+        },
+        {
+          "surface": "Black",
+          "answer_token_ids": [
+            14417
+          ],
+          "answer_plus_eos_ids": [
+            14417,
+            151645
+          ],
+          "first_token_id": 14417
+        },
+        {
+          "surface": " black",
+          "answer_token_ids": [
+            3691
+          ],
+          "answer_plus_eos_ids": [
+            3691,
+            151645
+          ],
+          "first_token_id": 3691
+        },
+        {
+          "surface": " Black",
+          "answer_token_ids": [
+            5235
+          ],
+          "answer_plus_eos_ids": [
+            5235,
+            151645
+          ],
+          "first_token_id": 5235
+        }
+      ],
+      "first_token_ids": [
+        3691,
+        5235,
+        11453,
+        14417
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          11453,
+          151645
+        ],
+        [
+          14417,
+          151645
+        ],
+        [
+          3691,
+          151645
+        ],
+        [
+          5235,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        3691,
+        5235,
+        11453,
+        14417
+      ]
+    },
+    "white": {
+      "variants": [
+        {
+          "surface": "white",
+          "answer_token_ids": [
+            5782
+          ],
+          "answer_plus_eos_ids": [
+            5782,
+            151645
+          ],
+          "first_token_id": 5782
+        },
+        {
+          "surface": "White",
+          "answer_token_ids": [
+            14075
+          ],
+          "answer_plus_eos_ids": [
+            14075,
+            151645
+          ],
+          "first_token_id": 14075
+        },
+        {
+          "surface": " white",
+          "answer_token_ids": [
+            4158
+          ],
+          "answer_plus_eos_ids": [
+            4158,
+            151645
+          ],
+          "first_token_id": 4158
+        },
+        {
+          "surface": " White",
+          "answer_token_ids": [
+            5807
+          ],
+          "answer_plus_eos_ids": [
+            5807,
+            151645
+          ],
+          "first_token_id": 5807
+        }
+      ],
+      "first_token_ids": [
+        4158,
+        5782,
+        5807,
+        14075
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          5782,
+          151645
+        ],
+        [
+          14075,
+          151645
+        ],
+        [
+          4158,
+          151645
+        ],
+        [
+          5807,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        4158,
+        5782,
+        5807,
+        14075
+      ]
+    },
+    "gray": {
+      "variants": [
+        {
+          "surface": "gray",
+          "answer_token_ids": [
+            11650
+          ],
+          "answer_plus_eos_ids": [
+            11650,
+            151645
+          ],
+          "first_token_id": 11650
+        },
+        {
+          "surface": "Gray",
+          "answer_token_ids": [
+            28174
+          ],
+          "answer_plus_eos_ids": [
+            28174,
+            151645
+          ],
+          "first_token_id": 28174
+        },
+        {
+          "surface": " gray",
+          "answer_token_ids": [
+            17545
+          ],
+          "answer_plus_eos_ids": [
+            17545,
+            151645
+          ],
+          "first_token_id": 17545
+        },
+        {
+          "surface": " Gray",
+          "answer_token_ids": [
+            23366
+          ],
+          "answer_plus_eos_ids": [
+            23366,
+            151645
+          ],
+          "first_token_id": 23366
+        }
+      ],
+      "first_token_ids": [
+        11650,
+        17545,
+        23366,
+        28174
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          11650,
+          151645
+        ],
+        [
+          28174,
+          151645
+        ],
+        [
+          17545,
+          151645
+        ],
+        [
+          23366,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        11650,
+        17545,
+        23366,
+        28174
+      ]
+    },
+    "gold": {
+      "variants": [
+        {
+          "surface": "gold",
+          "answer_token_ids": [
+            34537
+          ],
+          "answer_plus_eos_ids": [
+            34537,
+            151645
+          ],
+          "first_token_id": 34537
+        },
+        {
+          "surface": "Gold",
+          "answer_token_ids": [
+            25434
+          ],
+          "answer_plus_eos_ids": [
+            25434,
+            151645
+          ],
+          "first_token_id": 25434
+        },
+        {
+          "surface": " gold",
+          "answer_token_ids": [
+            6623
+          ],
+          "answer_plus_eos_ids": [
+            6623,
+            151645
+          ],
+          "first_token_id": 6623
+        },
+        {
+          "surface": " Gold",
+          "answer_token_ids": [
+            7421
+          ],
+          "answer_plus_eos_ids": [
+            7421,
+            151645
+          ],
+          "first_token_id": 7421
+        }
+      ],
+      "first_token_ids": [
+        6623,
+        7421,
+        25434,
+        34537
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          34537,
+          151645
+        ],
+        [
+          25434,
+          151645
+        ],
+        [
+          6623,
+          151645
+        ],
+        [
+          7421,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        6623,
+        7421,
+        25434,
+        34537
+      ]
+    },
+    "silver": {
+      "variants": [
+        {
+          "surface": "silver",
+          "answer_token_ids": [
+            81914
+          ],
+          "answer_plus_eos_ids": [
+            81914,
+            151645
+          ],
+          "first_token_id": 81914
+        },
+        {
+          "surface": "Silver",
+          "answer_token_ids": [
+            52343
+          ],
+          "answer_plus_eos_ids": [
+            52343,
+            151645
+          ],
+          "first_token_id": 52343
+        },
+        {
+          "surface": " silver",
+          "answer_token_ids": [
+            14961
+          ],
+          "answer_plus_eos_ids": [
+            14961,
+            151645
+          ],
+          "first_token_id": 14961
+        },
+        {
+          "surface": " Silver",
+          "answer_token_ids": [
+            14997
+          ],
+          "answer_plus_eos_ids": [
+            14997,
+            151645
+          ],
+          "first_token_id": 14997
+        }
+      ],
+      "first_token_ids": [
+        14961,
+        14997,
+        52343,
+        81914
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          81914,
+          151645
+        ],
+        [
+          52343,
+          151645
+        ],
+        [
+          14961,
+          151645
+        ],
+        [
+          14997,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        14961,
+        14997,
+        52343,
+        81914
+      ]
+    },
+    "teal": {
+      "variants": [
+        {
+          "surface": "teal",
+          "answer_token_ids": [
+            665,
+            278
+          ],
+          "answer_plus_eos_ids": [
+            665,
+            278,
+            151645
+          ],
+          "first_token_id": 665
+        },
+        {
+          "surface": "Teal",
+          "answer_token_ids": [
+            6639,
+            278
+          ],
+          "answer_plus_eos_ids": [
+            6639,
+            278,
+            151645
+          ],
+          "first_token_id": 6639
+        },
+        {
+          "surface": " teal",
+          "answer_token_ids": [
+            94607
+          ],
+          "answer_plus_eos_ids": [
+            94607,
+            151645
+          ],
+          "first_token_id": 94607
+        },
+        {
+          "surface": " Teal",
+          "answer_token_ids": [
+            2655,
+            278
+          ],
+          "answer_plus_eos_ids": [
+            2655,
+            278,
+            151645
+          ],
+          "first_token_id": 2655
+        }
+      ],
+      "first_token_ids": [
+        665,
+        2655,
+        6639,
+        94607
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          665,
+          278,
+          151645
+        ],
+        [
+          6639,
+          278,
+          151645
+        ],
+        [
+          94607,
+          151645
+        ],
+        [
+          2655,
+          278,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        94607
+      ]
+    },
+    "cyan": {
+      "variants": [
+        {
+          "surface": "cyan",
+          "answer_token_ids": [
+            69746
+          ],
+          "answer_plus_eos_ids": [
+            69746,
+            151645
+          ],
+          "first_token_id": 69746
+        },
+        {
+          "surface": "Cyan",
+          "answer_token_ids": [
+            34,
+            8339
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            8339,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " cyan",
+          "answer_token_ids": [
+            57888
+          ],
+          "answer_plus_eos_ids": [
+            57888,
+            151645
+          ],
+          "first_token_id": 57888
+        },
+        {
+          "surface": " Cyan",
+          "answer_token_ids": [
+            92143
+          ],
+          "answer_plus_eos_ids": [
+            92143,
+            151645
+          ],
+          "first_token_id": 92143
+        }
+      ],
+      "first_token_ids": [
+        34,
+        57888,
+        69746,
+        92143
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          69746,
+          151645
+        ],
+        [
+          34,
+          8339,
+          151645
+        ],
+        [
+          57888,
+          151645
+        ],
+        [
+          92143,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        57888,
+        69746,
+        92143
+      ]
+    },
+    "violet": {
+      "variants": [
+        {
+          "surface": "violet",
+          "answer_token_ids": [
+            85,
+            30912
+          ],
+          "answer_plus_eos_ids": [
+            85,
+            30912,
+            151645
+          ],
+          "first_token_id": 85
+        },
+        {
+          "surface": "Violet",
+          "answer_token_ids": [
+            53,
+            30912
+          ],
+          "answer_plus_eos_ids": [
+            53,
+            30912,
+            151645
+          ],
+          "first_token_id": 53
+        },
+        {
+          "surface": " violet",
+          "answer_token_ids": [
+            79736
+          ],
+          "answer_plus_eos_ids": [
+            79736,
+            151645
+          ],
+          "first_token_id": 79736
+        },
+        {
+          "surface": " Violet",
+          "answer_token_ids": [
+            73474
+          ],
+          "answer_plus_eos_ids": [
+            73474,
+            151645
+          ],
+          "first_token_id": 73474
+        }
+      ],
+      "first_token_ids": [
+        53,
+        85,
+        73474,
+        79736
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          85,
+          30912,
+          151645
+        ],
+        [
+          53,
+          30912,
+          151645
+        ],
+        [
+          79736,
+          151645
+        ],
+        [
+          73474,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        73474,
+        79736
+      ]
+    },
+    "beige": {
+      "variants": [
+        {
+          "surface": "beige",
+          "answer_token_ids": [
+            1371,
+            7256
+          ],
+          "answer_plus_eos_ids": [
+            1371,
+            7256,
+            151645
+          ],
+          "first_token_id": 1371
+        },
+        {
+          "surface": "Beige",
+          "answer_token_ids": [
+            3430,
+            7256
+          ],
+          "answer_plus_eos_ids": [
+            3430,
+            7256,
+            151645
+          ],
+          "first_token_id": 3430
+        },
+        {
+          "surface": " beige",
+          "answer_token_ids": [
+            78265
+          ],
+          "answer_plus_eos_ids": [
+            78265,
+            151645
+          ],
+          "first_token_id": 78265
+        },
+        {
+          "surface": " Beige",
+          "answer_token_ids": [
+            2823,
+            7256
+          ],
+          "answer_plus_eos_ids": [
+            2823,
+            7256,
+            151645
+          ],
+          "first_token_id": 2823
+        }
+      ],
+      "first_token_ids": [
+        1371,
+        2823,
+        3430,
+        78265
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          1371,
+          7256,
+          151645
+        ],
+        [
+          3430,
+          7256,
+          151645
+        ],
+        [
+          78265,
+          151645
+        ],
+        [
+          2823,
+          7256,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        78265
+      ]
+    },
+    "coral": {
+      "variants": [
+        {
+          "surface": "coral",
+          "answer_token_ids": [
+            6005,
+            278
+          ],
+          "answer_plus_eos_ids": [
+            6005,
+            278,
+            151645
+          ],
+          "first_token_id": 6005
+        },
+        {
+          "surface": "Coral",
+          "answer_token_ids": [
+            34,
+            9819
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            9819,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " coral",
+          "answer_token_ids": [
+            52003
+          ],
+          "answer_plus_eos_ids": [
+            52003,
+            151645
+          ],
+          "first_token_id": 52003
+        },
+        {
+          "surface": " Coral",
+          "answer_token_ids": [
+            63816
+          ],
+          "answer_plus_eos_ids": [
+            63816,
+            151645
+          ],
+          "first_token_id": 63816
+        }
+      ],
+      "first_token_ids": [
+        34,
+        6005,
+        52003,
+        63816
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          6005,
+          278,
+          151645
+        ],
+        [
+          34,
+          9819,
+          151645
+        ],
+        [
+          52003,
+          151645
+        ],
+        [
+          63816,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        52003,
+        63816
+      ]
+    },
+    "olive": {
+      "variants": [
+        {
+          "surface": "olive",
+          "answer_token_ids": [
+            337,
+            533
+          ],
+          "answer_plus_eos_ids": [
+            337,
+            533,
+            151645
+          ],
+          "first_token_id": 337
+        },
+        {
+          "surface": "Olive",
+          "answer_token_ids": [
+            46,
+            24822
+          ],
+          "answer_plus_eos_ids": [
+            46,
+            24822,
+            151645
+          ],
+          "first_token_id": 46
+        },
+        {
+          "surface": " olive",
+          "answer_token_ids": [
+            32113
+          ],
+          "answer_plus_eos_ids": [
+            32113,
+            151645
+          ],
+          "first_token_id": 32113
+        },
+        {
+          "surface": " Olive",
+          "answer_token_ids": [
+            46714
+          ],
+          "answer_plus_eos_ids": [
+            46714,
+            151645
+          ],
+          "first_token_id": 46714
+        }
+      ],
+      "first_token_ids": [
+        46,
+        337,
+        32113,
+        46714
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          337,
+          533,
+          151645
+        ],
+        [
+          46,
+          24822,
+          151645
+        ],
+        [
+          32113,
+          151645
+        ],
+        [
+          46714,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        32113,
+        46714
+      ]
+    },
+    "navy": {
+      "variants": [
+        {
+          "surface": "navy",
+          "answer_token_ids": [
+            3722,
+            88
+          ],
+          "answer_plus_eos_ids": [
+            3722,
+            88,
+            151645
+          ],
+          "first_token_id": 3722
+        },
+        {
+          "surface": "Navy",
+          "answer_token_ids": [
+            45,
+            5663
+          ],
+          "answer_plus_eos_ids": [
+            45,
+            5663,
+            151645
+          ],
+          "first_token_id": 45
+        },
+        {
+          "surface": " navy",
+          "answer_token_ids": [
+            44774
+          ],
+          "answer_plus_eos_ids": [
+            44774,
+            151645
+          ],
+          "first_token_id": 44774
+        },
+        {
+          "surface": " Navy",
+          "answer_token_ids": [
+            19036
+          ],
+          "answer_plus_eos_ids": [
+            19036,
+            151645
+          ],
+          "first_token_id": 19036
+        }
+      ],
+      "first_token_ids": [
+        45,
+        3722,
+        19036,
+        44774
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          3722,
+          88,
+          151645
+        ],
+        [
+          45,
+          5663,
+          151645
+        ],
+        [
+          44774,
+          151645
+        ],
+        [
+          19036,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        19036,
+        44774
+      ]
+    },
+    "lavender": {
+      "variants": [
+        {
+          "surface": "lavender",
+          "answer_token_ids": [
+            78836,
+            1659
+          ],
+          "answer_plus_eos_ids": [
+            78836,
+            1659,
+            151645
+          ],
+          "first_token_id": 78836
+        },
+        {
+          "surface": "Lavender",
+          "answer_token_ids": [
+            43,
+            402,
+            1659
+          ],
+          "answer_plus_eos_ids": [
+            43,
+            402,
+            1659,
+            151645
+          ],
+          "first_token_id": 43
+        },
+        {
+          "surface": " lavender",
+          "answer_token_ids": [
+            80360
+          ],
+          "answer_plus_eos_ids": [
+            80360,
+            151645
+          ],
+          "first_token_id": 80360
+        },
+        {
+          "surface": " Lavender",
+          "answer_token_ids": [
+            42850,
+            1659
+          ],
+          "answer_plus_eos_ids": [
+            42850,
+            1659,
+            151645
+          ],
+          "first_token_id": 42850
+        }
+      ],
+      "first_token_ids": [
+        43,
+        42850,
+        78836,
+        80360
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          78836,
+          1659,
+          151645
+        ],
+        [
+          43,
+          402,
+          1659,
+          151645
+        ],
+        [
+          80360,
+          151645
+        ],
+        [
+          42850,
+          1659,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        80360
+      ]
+    },
+    "turquoise": {
+      "variants": [
+        {
+          "surface": "turquoise",
+          "answer_token_ids": [
+            65367,
+            58670
+          ],
+          "answer_plus_eos_ids": [
+            65367,
+            58670,
+            151645
+          ],
+          "first_token_id": 65367
+        },
+        {
+          "surface": "Turquoise",
+          "answer_token_ids": [
+            36962,
+            58670
+          ],
+          "answer_plus_eos_ids": [
+            36962,
+            58670,
+            151645
+          ],
+          "first_token_id": 36962
+        },
+        {
+          "surface": " turquoise",
+          "answer_token_ids": [
+            95947
+          ],
+          "answer_plus_eos_ids": [
+            95947,
+            151645
+          ],
+          "first_token_id": 95947
+        },
+        {
+          "surface": " Turquoise",
+          "answer_token_ids": [
+            8705,
+            58670
+          ],
+          "answer_plus_eos_ids": [
+            8705,
+            58670,
+            151645
+          ],
+          "first_token_id": 8705
+        }
+      ],
+      "first_token_ids": [
+        8705,
+        36962,
+        65367,
+        95947
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          65367,
+          58670,
+          151645
+        ],
+        [
+          36962,
+          58670,
+          151645
+        ],
+        [
+          95947,
+          151645
+        ],
+        [
+          8705,
+          58670,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        95947
+      ]
+    },
+    "crimson": {
+      "variants": [
+        {
+          "surface": "crimson",
+          "answer_token_ids": [
+            5082,
+            45445
+          ],
+          "answer_plus_eos_ids": [
+            5082,
+            45445,
+            151645
+          ],
+          "first_token_id": 5082
+        },
+        {
+          "surface": "Crimson",
+          "answer_token_ids": [
+            34,
+            6283,
+            930
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            6283,
+            930,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " crimson",
+          "answer_token_ids": [
+            96019
+          ],
+          "answer_plus_eos_ids": [
+            96019,
+            151645
+          ],
+          "first_token_id": 96019
+        },
+        {
+          "surface": " Crimson",
+          "answer_token_ids": [
+            66077
+          ],
+          "answer_plus_eos_ids": [
+            66077,
+            151645
+          ],
+          "first_token_id": 66077
+        }
+      ],
+      "first_token_ids": [
+        34,
+        5082,
+        66077,
+        96019
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          5082,
+          45445,
+          151645
+        ],
+        [
+          34,
+          6283,
+          930,
+          151645
+        ],
+        [
+          96019,
+          151645
+        ],
+        [
+          66077,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        66077,
+        96019
+      ]
+    },
+    "cream": {
+      "variants": [
+        {
+          "surface": "cream",
+          "answer_token_ids": [
+            46000
+          ],
+          "answer_plus_eos_ids": [
+            46000,
+            151645
+          ],
+          "first_token_id": 46000
+        },
+        {
+          "surface": "Cream",
+          "answer_token_ids": [
+            98781
+          ],
+          "answer_plus_eos_ids": [
+            98781,
+            151645
+          ],
+          "first_token_id": 98781
+        },
+        {
+          "surface": " cream",
+          "answer_token_ids": [
+            12644
+          ],
+          "answer_plus_eos_ids": [
+            12644,
+            151645
+          ],
+          "first_token_id": 12644
+        },
+        {
+          "surface": " Cream",
+          "answer_token_ids": [
+            29700
+          ],
+          "answer_plus_eos_ids": [
+            29700,
+            151645
+          ],
+          "first_token_id": 29700
+        }
+      ],
+      "first_token_ids": [
+        12644,
+        29700,
+        46000,
+        98781
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          46000,
+          151645
+        ],
+        [
+          98781,
+          151645
+        ],
+        [
+          12644,
+          151645
+        ],
+        [
+          29700,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        12644,
+        29700,
+        46000,
+        98781
+      ]
+    },
+    "tan": {
+      "variants": [
+        {
+          "surface": "tan",
+          "answer_token_ids": [
+            52591
+          ],
+          "answer_plus_eos_ids": [
+            52591,
+            151645
+          ],
+          "first_token_id": 52591
+        },
+        {
+          "surface": "Tan",
+          "answer_token_ids": [
+            76097
+          ],
+          "answer_plus_eos_ids": [
+            76097,
+            151645
+          ],
+          "first_token_id": 76097
+        },
+        {
+          "surface": " tan",
+          "answer_token_ids": [
+            14197
+          ],
+          "answer_plus_eos_ids": [
+            14197,
+            151645
+          ],
+          "first_token_id": 14197
+        },
+        {
+          "surface": " Tan",
+          "answer_token_ids": [
+            24548
+          ],
+          "answer_plus_eos_ids": [
+            24548,
+            151645
+          ],
+          "first_token_id": 24548
+        }
+      ],
+      "first_token_ids": [
+        14197,
+        24548,
+        52591,
+        76097
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          52591,
+          151645
+        ],
+        [
+          76097,
+          151645
+        ],
+        [
+          14197,
+          151645
+        ],
+        [
+          24548,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        14197,
+        24548,
+        52591,
+        76097
+      ]
+    },
+    "lime": {
+      "variants": [
+        {
+          "surface": "lime",
+          "answer_token_ids": [
+            38943
+          ],
+          "answer_plus_eos_ids": [
+            38943,
+            151645
+          ],
+          "first_token_id": 38943
+        },
+        {
+          "surface": "Lime",
+          "answer_token_ids": [
+            43,
+            545
+          ],
+          "answer_plus_eos_ids": [
+            43,
+            545,
+            151645
+          ],
+          "first_token_id": 43
+        },
+        {
+          "surface": " lime",
+          "answer_token_ids": [
+            41719
+          ],
+          "answer_plus_eos_ids": [
+            41719,
+            151645
+          ],
+          "first_token_id": 41719
+        },
+        {
+          "surface": " Lime",
+          "answer_token_ids": [
+            70496
+          ],
+          "answer_plus_eos_ids": [
+            70496,
+            151645
+          ],
+          "first_token_id": 70496
+        }
+      ],
+      "first_token_ids": [
+        43,
+        38943,
+        41719,
+        70496
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          38943,
+          151645
+        ],
+        [
+          43,
+          545,
+          151645
+        ],
+        [
+          41719,
+          151645
+        ],
+        [
+          70496,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        38943,
+        41719,
+        70496
+      ]
+    },
+    "chair": {
+      "variants": [
+        {
+          "surface": "chair",
+          "answer_token_ids": [
+            34196
+          ],
+          "answer_plus_eos_ids": [
+            34196,
+            151645
+          ],
+          "first_token_id": 34196
+        },
+        {
+          "surface": "Chair",
+          "answer_token_ids": [
+            84195
+          ],
+          "answer_plus_eos_ids": [
+            84195,
+            151645
+          ],
+          "first_token_id": 84195
+        },
+        {
+          "surface": " chair",
+          "answer_token_ids": [
+            10496
+          ],
+          "answer_plus_eos_ids": [
+            10496,
+            151645
+          ],
+          "first_token_id": 10496
+        },
+        {
+          "surface": " Chair",
+          "answer_token_ids": [
+            16090
+          ],
+          "answer_plus_eos_ids": [
+            16090,
+            151645
+          ],
+          "first_token_id": 16090
+        }
+      ],
+      "first_token_ids": [
+        10496,
+        16090,
+        34196,
+        84195
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          34196,
+          151645
+        ],
+        [
+          84195,
+          151645
+        ],
+        [
+          10496,
+          151645
+        ],
+        [
+          16090,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        10496,
+        16090,
+        34196,
+        84195
+      ]
+    },
+    "table": {
+      "variants": [
+        {
+          "surface": "table",
+          "answer_token_ids": [
+            2005
+          ],
+          "answer_plus_eos_ids": [
+            2005,
+            151645
+          ],
+          "first_token_id": 2005
+        },
+        {
+          "surface": "Table",
+          "answer_token_ids": [
+            2556
+          ],
+          "answer_plus_eos_ids": [
+            2556,
+            151645
+          ],
+          "first_token_id": 2556
+        },
+        {
+          "surface": " table",
+          "answer_token_ids": [
+            1965
+          ],
+          "answer_plus_eos_ids": [
+            1965,
+            151645
+          ],
+          "first_token_id": 1965
+        },
+        {
+          "surface": " Table",
+          "answer_token_ids": [
+            6633
+          ],
+          "answer_plus_eos_ids": [
+            6633,
+            151645
+          ],
+          "first_token_id": 6633
+        }
+      ],
+      "first_token_ids": [
+        1965,
+        2005,
+        2556,
+        6633
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          2005,
+          151645
+        ],
+        [
+          2556,
+          151645
+        ],
+        [
+          1965,
+          151645
+        ],
+        [
+          6633,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        1965,
+        2005,
+        2556,
+        6633
+      ]
+    },
+    "spoon": {
+      "variants": [
+        {
+          "surface": "spoon",
+          "answer_token_ids": [
+            2154,
+            9009
+          ],
+          "answer_plus_eos_ids": [
+            2154,
+            9009,
+            151645
+          ],
+          "first_token_id": 2154
+        },
+        {
+          "surface": "Spoon",
+          "answer_token_ids": [
+            50,
+            31976
+          ],
+          "answer_plus_eos_ids": [
+            50,
+            31976,
+            151645
+          ],
+          "first_token_id": 50
+        },
+        {
+          "surface": " spoon",
+          "answer_token_ids": [
+            45505
+          ],
+          "answer_plus_eos_ids": [
+            45505,
+            151645
+          ],
+          "first_token_id": 45505
+        },
+        {
+          "surface": " Spoon",
+          "answer_token_ids": [
+            93513
+          ],
+          "answer_plus_eos_ids": [
+            93513,
+            151645
+          ],
+          "first_token_id": 93513
+        }
+      ],
+      "first_token_ids": [
+        50,
+        2154,
+        45505,
+        93513
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          2154,
+          9009,
+          151645
+        ],
+        [
+          50,
+          31976,
+          151645
+        ],
+        [
+          45505,
+          151645
+        ],
+        [
+          93513,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        45505,
+        93513
+      ]
+    },
+    "fork": {
+      "variants": [
+        {
+          "surface": "fork",
+          "answer_token_ids": [
+            44738
+          ],
+          "answer_plus_eos_ids": [
+            44738,
+            151645
+          ],
+          "first_token_id": 44738
+        },
+        {
+          "surface": "Fork",
+          "answer_token_ids": [
+            37,
+            669
+          ],
+          "answer_plus_eos_ids": [
+            37,
+            669,
+            151645
+          ],
+          "first_token_id": 37
+        },
+        {
+          "surface": " fork",
+          "answer_token_ids": [
+            22435
+          ],
+          "answer_plus_eos_ids": [
+            22435,
+            151645
+          ],
+          "first_token_id": 22435
+        },
+        {
+          "surface": " Fork",
+          "answer_token_ids": [
+            47850
+          ],
+          "answer_plus_eos_ids": [
+            47850,
+            151645
+          ],
+          "first_token_id": 47850
+        }
+      ],
+      "first_token_ids": [
+        37,
+        22435,
+        44738,
+        47850
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          44738,
+          151645
+        ],
+        [
+          37,
+          669,
+          151645
+        ],
+        [
+          22435,
+          151645
+        ],
+        [
+          47850,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        22435,
+        44738,
+        47850
+      ]
+    },
+    "plate": {
+      "variants": [
+        {
+          "surface": "plate",
+          "answer_token_ids": [
+            1750
+          ],
+          "answer_plus_eos_ids": [
+            1750,
+            151645
+          ],
+          "first_token_id": 1750
+        },
+        {
+          "surface": "Plate",
+          "answer_token_ids": [
+            64709
+          ],
+          "answer_plus_eos_ids": [
+            64709,
+            151645
+          ],
+          "first_token_id": 64709
+        },
+        {
+          "surface": " plate",
+          "answer_token_ids": [
+            11968
+          ],
+          "answer_plus_eos_ids": [
+            11968,
+            151645
+          ],
+          "first_token_id": 11968
+        },
+        {
+          "surface": " Plate",
+          "answer_token_ids": [
+            30303
+          ],
+          "answer_plus_eos_ids": [
+            30303,
+            151645
+          ],
+          "first_token_id": 30303
+        }
+      ],
+      "first_token_ids": [
+        1750,
+        11968,
+        30303,
+        64709
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          1750,
+          151645
+        ],
+        [
+          64709,
+          151645
+        ],
+        [
+          11968,
+          151645
+        ],
+        [
+          30303,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        1750,
+        11968,
+        30303,
+        64709
+      ]
+    },
+    "cup": {
+      "variants": [
+        {
+          "surface": "cup",
+          "answer_token_ids": [
+            36665
+          ],
+          "answer_plus_eos_ids": [
+            36665,
+            151645
+          ],
+          "first_token_id": 36665
+        },
+        {
+          "surface": "Cup",
+          "answer_token_ids": [
+            34,
+            454
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            454,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " cup",
+          "answer_token_ids": [
+            10525
+          ],
+          "answer_plus_eos_ids": [
+            10525,
+            151645
+          ],
+          "first_token_id": 10525
+        },
+        {
+          "surface": " Cup",
+          "answer_token_ids": [
+            10861
+          ],
+          "answer_plus_eos_ids": [
+            10861,
+            151645
+          ],
+          "first_token_id": 10861
+        }
+      ],
+      "first_token_ids": [
+        34,
+        10525,
+        10861,
+        36665
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          36665,
+          151645
+        ],
+        [
+          34,
+          454,
+          151645
+        ],
+        [
+          10525,
+          151645
+        ],
+        [
+          10861,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        10525,
+        10861,
+        36665
+      ]
+    },
+    "bowl": {
+      "variants": [
+        {
+          "surface": "bowl",
+          "answer_token_ids": [
+            65,
+            9605
+          ],
+          "answer_plus_eos_ids": [
+            65,
+            9605,
+            151645
+          ],
+          "first_token_id": 65
+        },
+        {
+          "surface": "Bowl",
+          "answer_token_ids": [
+            33,
+            9605
+          ],
+          "answer_plus_eos_ids": [
+            33,
+            9605,
+            151645
+          ],
+          "first_token_id": 33
+        },
+        {
+          "surface": " bowl",
+          "answer_token_ids": [
+            19212
+          ],
+          "answer_plus_eos_ids": [
+            19212,
+            151645
+          ],
+          "first_token_id": 19212
+        },
+        {
+          "surface": " Bowl",
+          "answer_token_ids": [
+            20288
+          ],
+          "answer_plus_eos_ids": [
+            20288,
+            151645
+          ],
+          "first_token_id": 20288
+        }
+      ],
+      "first_token_ids": [
+        33,
+        65,
+        19212,
+        20288
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          65,
+          9605,
+          151645
+        ],
+        [
+          33,
+          9605,
+          151645
+        ],
+        [
+          19212,
+          151645
+        ],
+        [
+          20288,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        19212,
+        20288
+      ]
+    },
+    "knife": {
+      "variants": [
+        {
+          "surface": "knife",
+          "answer_token_ids": [
+            42720
+          ],
+          "answer_plus_eos_ids": [
+            42720,
+            151645
+          ],
+          "first_token_id": 42720
+        },
+        {
+          "surface": "Knife",
+          "answer_token_ids": [
+            56405
+          ],
+          "answer_plus_eos_ids": [
+            56405,
+            151645
+          ],
+          "first_token_id": 56405
+        },
+        {
+          "surface": " knife",
+          "answer_token_ids": [
+            21430
+          ],
+          "answer_plus_eos_ids": [
+            21430,
+            151645
+          ],
+          "first_token_id": 21430
+        },
+        {
+          "surface": " Knife",
+          "answer_token_ids": [
+            61202
+          ],
+          "answer_plus_eos_ids": [
+            61202,
+            151645
+          ],
+          "first_token_id": 61202
+        }
+      ],
+      "first_token_ids": [
+        21430,
+        42720,
+        56405,
+        61202
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          42720,
+          151645
+        ],
+        [
+          56405,
+          151645
+        ],
+        [
+          21430,
+          151645
+        ],
+        [
+          61202,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        21430,
+        42720,
+        56405,
+        61202
+      ]
+    },
+    "lamp": {
+      "variants": [
+        {
+          "surface": "lamp",
+          "answer_token_ids": [
+            94757
+          ],
+          "answer_plus_eos_ids": [
+            94757,
+            151645
+          ],
+          "first_token_id": 94757
+        },
+        {
+          "surface": "Lamp",
+          "answer_token_ids": [
+            43,
+            1121
+          ],
+          "answer_plus_eos_ids": [
+            43,
+            1121,
+            151645
+          ],
+          "first_token_id": 43
+        },
+        {
+          "surface": " lamp",
+          "answer_token_ids": [
+            27962
+          ],
+          "answer_plus_eos_ids": [
+            27962,
+            151645
+          ],
+          "first_token_id": 27962
+        },
+        {
+          "surface": " Lamp",
+          "answer_token_ids": [
+            41177
+          ],
+          "answer_plus_eos_ids": [
+            41177,
+            151645
+          ],
+          "first_token_id": 41177
+        }
+      ],
+      "first_token_ids": [
+        43,
+        27962,
+        41177,
+        94757
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          94757,
+          151645
+        ],
+        [
+          43,
+          1121,
+          151645
+        ],
+        [
+          27962,
+          151645
+        ],
+        [
+          41177,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        27962,
+        41177,
+        94757
+      ]
+    },
+    "clock": {
+      "variants": [
+        {
+          "surface": "clock",
+          "answer_token_ids": [
+            20666
+          ],
+          "answer_plus_eos_ids": [
+            20666,
+            151645
+          ],
+          "first_token_id": 20666
+        },
+        {
+          "surface": "Clock",
+          "answer_token_ids": [
+            26104
+          ],
+          "answer_plus_eos_ids": [
+            26104,
+            151645
+          ],
+          "first_token_id": 26104
+        },
+        {
+          "surface": " clock",
+          "answer_token_ids": [
+            8866
+          ],
+          "answer_plus_eos_ids": [
+            8866,
+            151645
+          ],
+          "first_token_id": 8866
+        },
+        {
+          "surface": " Clock",
+          "answer_token_ids": [
+            26142
+          ],
+          "answer_plus_eos_ids": [
+            26142,
+            151645
+          ],
+          "first_token_id": 26142
+        }
+      ],
+      "first_token_ids": [
+        8866,
+        20666,
+        26104,
+        26142
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          20666,
+          151645
+        ],
+        [
+          26104,
+          151645
+        ],
+        [
+          8866,
+          151645
+        ],
+        [
+          26142,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        8866,
+        20666,
+        26104,
+        26142
+      ]
+    },
+    "phone": {
+      "variants": [
+        {
+          "surface": "phone",
+          "answer_token_ids": [
+            4844
+          ],
+          "answer_plus_eos_ids": [
+            4844,
+            151645
+          ],
+          "first_token_id": 4844
+        },
+        {
+          "surface": "Phone",
+          "answer_token_ids": [
+            6939
+          ],
+          "answer_plus_eos_ids": [
+            6939,
+            151645
+          ],
+          "first_token_id": 6939
+        },
+        {
+          "surface": " phone",
+          "answer_token_ids": [
+            4540
+          ],
+          "answer_plus_eos_ids": [
+            4540,
+            151645
+          ],
+          "first_token_id": 4540
+        },
+        {
+          "surface": " Phone",
+          "answer_token_ids": [
+            14307
+          ],
+          "answer_plus_eos_ids": [
+            14307,
+            151645
+          ],
+          "first_token_id": 14307
+        }
+      ],
+      "first_token_ids": [
+        4540,
+        4844,
+        6939,
+        14307
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          4844,
+          151645
+        ],
+        [
+          6939,
+          151645
+        ],
+        [
+          4540,
+          151645
+        ],
+        [
+          14307,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        4540,
+        4844,
+        6939,
+        14307
+      ]
+    },
+    "book": {
+      "variants": [
+        {
+          "surface": "book",
+          "answer_token_ids": [
+            2190
+          ],
+          "answer_plus_eos_ids": [
+            2190,
+            151645
+          ],
+          "first_token_id": 2190
+        },
+        {
+          "surface": "Book",
+          "answer_token_ids": [
+            7134
+          ],
+          "answer_plus_eos_ids": [
+            7134,
+            151645
+          ],
+          "first_token_id": 7134
+        },
+        {
+          "surface": " book",
+          "answer_token_ids": [
+            2311
+          ],
+          "answer_plus_eos_ids": [
+            2311,
+            151645
+          ],
+          "first_token_id": 2311
+        },
+        {
+          "surface": " Book",
+          "answer_token_ids": [
+            5893
+          ],
+          "answer_plus_eos_ids": [
+            5893,
+            151645
+          ],
+          "first_token_id": 5893
+        }
+      ],
+      "first_token_ids": [
+        2190,
+        2311,
+        5893,
+        7134
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          2190,
+          151645
+        ],
+        [
+          7134,
+          151645
+        ],
+        [
+          2311,
+          151645
+        ],
+        [
+          5893,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        2190,
+        2311,
+        5893,
+        7134
+      ]
+    },
+    "pen": {
+      "variants": [
+        {
+          "surface": "pen",
+          "answer_token_ids": [
+            2752
+          ],
+          "answer_plus_eos_ids": [
+            2752,
+            151645
+          ],
+          "first_token_id": 2752
+        },
+        {
+          "surface": "Pen",
+          "answer_token_ids": [
+            28205
+          ],
+          "answer_plus_eos_ids": [
+            28205,
+            151645
+          ],
+          "first_token_id": 28205
+        },
+        {
+          "surface": " pen",
+          "answer_token_ids": [
+            5750
+          ],
+          "answer_plus_eos_ids": [
+            5750,
+            151645
+          ],
+          "first_token_id": 5750
+        },
+        {
+          "surface": " Pen",
+          "answer_token_ids": [
+            13294
+          ],
+          "answer_plus_eos_ids": [
+            13294,
+            151645
+          ],
+          "first_token_id": 13294
+        }
+      ],
+      "first_token_ids": [
+        2752,
+        5750,
+        13294,
+        28205
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          2752,
+          151645
+        ],
+        [
+          28205,
+          151645
+        ],
+        [
+          5750,
+          151645
+        ],
+        [
+          13294,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        2752,
+        5750,
+        13294,
+        28205
+      ]
+    },
+    "pencil": {
+      "variants": [
+        {
+          "surface": "pencil",
+          "answer_token_ids": [
+            79,
+            17005
+          ],
+          "answer_plus_eos_ids": [
+            79,
+            17005,
+            151645
+          ],
+          "first_token_id": 79
+        },
+        {
+          "surface": "Pencil",
+          "answer_token_ids": [
+            47,
+            17005
+          ],
+          "answer_plus_eos_ids": [
+            47,
+            17005,
+            151645
+          ],
+          "first_token_id": 47
+        },
+        {
+          "surface": " pencil",
+          "answer_token_ids": [
+            46118
+          ],
+          "answer_plus_eos_ids": [
+            46118,
+            151645
+          ],
+          "first_token_id": 46118
+        },
+        {
+          "surface": " Pencil",
+          "answer_token_ids": [
+            393,
+            17005
+          ],
+          "answer_plus_eos_ids": [
+            393,
+            17005,
+            151645
+          ],
+          "first_token_id": 393
+        }
+      ],
+      "first_token_ids": [
+        47,
+        79,
+        393,
+        46118
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          79,
+          17005,
+          151645
+        ],
+        [
+          47,
+          17005,
+          151645
+        ],
+        [
+          46118,
+          151645
+        ],
+        [
+          393,
+          17005,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        46118
+      ]
+    },
+    "window": {
+      "variants": [
+        {
+          "surface": "window",
+          "answer_token_ids": [
+            5507
+          ],
+          "answer_plus_eos_ids": [
+            5507,
+            151645
+          ],
+          "first_token_id": 5507
+        },
+        {
+          "surface": "Window",
+          "answer_token_ids": [
+            4267
+          ],
+          "answer_plus_eos_ids": [
+            4267,
+            151645
+          ],
+          "first_token_id": 4267
+        },
+        {
+          "surface": " window",
+          "answer_token_ids": [
+            3241
+          ],
+          "answer_plus_eos_ids": [
+            3241,
+            151645
+          ],
+          "first_token_id": 3241
+        },
+        {
+          "surface": " Window",
+          "answer_token_ids": [
+            13642
+          ],
+          "answer_plus_eos_ids": [
+            13642,
+            151645
+          ],
+          "first_token_id": 13642
+        }
+      ],
+      "first_token_ids": [
+        3241,
+        4267,
+        5507,
+        13642
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          5507,
+          151645
+        ],
+        [
+          4267,
+          151645
+        ],
+        [
+          3241,
+          151645
+        ],
+        [
+          13642,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        3241,
+        4267,
+        5507,
+        13642
+      ]
+    },
+    "door": {
+      "variants": [
+        {
+          "surface": "door",
+          "answer_token_ids": [
+            10787
+          ],
+          "answer_plus_eos_ids": [
+            10787,
+            151645
+          ],
+          "first_token_id": 10787
+        },
+        {
+          "surface": "Door",
+          "answer_token_ids": [
+            52260
+          ],
+          "answer_plus_eos_ids": [
+            52260,
+            151645
+          ],
+          "first_token_id": 52260
+        },
+        {
+          "surface": " door",
+          "answer_token_ids": [
+            6006
+          ],
+          "answer_plus_eos_ids": [
+            6006,
+            151645
+          ],
+          "first_token_id": 6006
+        },
+        {
+          "surface": " Door",
+          "answer_token_ids": [
+            24191
+          ],
+          "answer_plus_eos_ids": [
+            24191,
+            151645
+          ],
+          "first_token_id": 24191
+        }
+      ],
+      "first_token_ids": [
+        6006,
+        10787,
+        24191,
+        52260
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          10787,
+          151645
+        ],
+        [
+          52260,
+          151645
+        ],
+        [
+          6006,
+          151645
+        ],
+        [
+          24191,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        6006,
+        10787,
+        24191,
+        52260
+      ]
+    },
+    "mirror": {
+      "variants": [
+        {
+          "surface": "mirror",
+          "answer_token_ids": [
+            73225
+          ],
+          "answer_plus_eos_ids": [
+            73225,
+            151645
+          ],
+          "first_token_id": 73225
+        },
+        {
+          "surface": "Mirror",
+          "answer_token_ids": [
+            54216
+          ],
+          "answer_plus_eos_ids": [
+            54216,
+            151645
+          ],
+          "first_token_id": 54216
+        },
+        {
+          "surface": " mirror",
+          "answer_token_ids": [
+            17846
+          ],
+          "answer_plus_eos_ids": [
+            17846,
+            151645
+          ],
+          "first_token_id": 17846
+        },
+        {
+          "surface": " Mirror",
+          "answer_token_ids": [
+            33854
+          ],
+          "answer_plus_eos_ids": [
+            33854,
+            151645
+          ],
+          "first_token_id": 33854
+        }
+      ],
+      "first_token_ids": [
+        17846,
+        33854,
+        54216,
+        73225
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          73225,
+          151645
+        ],
+        [
+          54216,
+          151645
+        ],
+        [
+          17846,
+          151645
+        ],
+        [
+          33854,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        17846,
+        33854,
+        54216,
+        73225
+      ]
+    },
+    "blanket": {
+      "variants": [
+        {
+          "surface": "blanket",
+          "answer_token_ids": [
+            10189,
+            295
+          ],
+          "answer_plus_eos_ids": [
+            10189,
+            295,
+            151645
+          ],
+          "first_token_id": 10189
+        },
+        {
+          "surface": "Blanket",
+          "answer_token_ids": [
+            22770,
+            295
+          ],
+          "answer_plus_eos_ids": [
+            22770,
+            295,
+            151645
+          ],
+          "first_token_id": 22770
+        },
+        {
+          "surface": " blanket",
+          "answer_token_ids": [
+            38039
+          ],
+          "answer_plus_eos_ids": [
+            38039,
+            151645
+          ],
+          "first_token_id": 38039
+        },
+        {
+          "surface": " Blanket",
+          "answer_token_ids": [
+            42441,
+            295
+          ],
+          "answer_plus_eos_ids": [
+            42441,
+            295,
+            151645
+          ],
+          "first_token_id": 42441
+        }
+      ],
+      "first_token_ids": [
+        10189,
+        22770,
+        38039,
+        42441
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          10189,
+          295,
+          151645
+        ],
+        [
+          22770,
+          295,
+          151645
+        ],
+        [
+          38039,
+          151645
+        ],
+        [
+          42441,
+          295,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        38039
+      ]
+    },
+    "pillow": {
+      "variants": [
+        {
+          "surface": "pillow",
+          "answer_token_ids": [
+            49846,
+            363
+          ],
+          "answer_plus_eos_ids": [
+            49846,
+            363,
+            151645
+          ],
+          "first_token_id": 49846
+        },
+        {
+          "surface": "Pillow",
+          "answer_token_ids": [
+            47,
+            95923
+          ],
+          "answer_plus_eos_ids": [
+            47,
+            95923,
+            151645
+          ],
+          "first_token_id": 47
+        },
+        {
+          "surface": " pillow",
+          "answer_token_ids": [
+            42325
+          ],
+          "answer_plus_eos_ids": [
+            42325,
+            151645
+          ],
+          "first_token_id": 42325
+        },
+        {
+          "surface": " Pillow",
+          "answer_token_ids": [
+            80735
+          ],
+          "answer_plus_eos_ids": [
+            80735,
+            151645
+          ],
+          "first_token_id": 80735
+        }
+      ],
+      "first_token_ids": [
+        47,
+        42325,
+        49846,
+        80735
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          49846,
+          363,
+          151645
+        ],
+        [
+          47,
+          95923,
+          151645
+        ],
+        [
+          42325,
+          151645
+        ],
+        [
+          80735,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        42325,
+        80735
+      ]
+    },
+    "carpet": {
+      "variants": [
+        {
+          "surface": "carpet",
+          "answer_token_ids": [
+            6918,
+            6862
+          ],
+          "answer_plus_eos_ids": [
+            6918,
+            6862,
+            151645
+          ],
+          "first_token_id": 6918
+        },
+        {
+          "surface": "Carpet",
+          "answer_token_ids": [
+            8852,
+            6862
+          ],
+          "answer_plus_eos_ids": [
+            8852,
+            6862,
+            151645
+          ],
+          "first_token_id": 8852
+        },
+        {
+          "surface": " carpet",
+          "answer_token_ids": [
+            27854
+          ],
+          "answer_plus_eos_ids": [
+            27854,
+            151645
+          ],
+          "first_token_id": 27854
+        },
+        {
+          "surface": " Carpet",
+          "answer_token_ids": [
+            71208
+          ],
+          "answer_plus_eos_ids": [
+            71208,
+            151645
+          ],
+          "first_token_id": 71208
+        }
+      ],
+      "first_token_ids": [
+        6918,
+        8852,
+        27854,
+        71208
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          6918,
+          6862,
+          151645
+        ],
+        [
+          8852,
+          6862,
+          151645
+        ],
+        [
+          27854,
+          151645
+        ],
+        [
+          71208,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        27854,
+        71208
+      ]
+    },
+    "candle": {
+      "variants": [
+        {
+          "surface": "candle",
+          "answer_token_ids": [
+            66,
+            3316
+          ],
+          "answer_plus_eos_ids": [
+            66,
+            3316,
+            151645
+          ],
+          "first_token_id": 66
+        },
+        {
+          "surface": "Candle",
+          "answer_token_ids": [
+            34,
+            3316
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            3316,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " candle",
+          "answer_token_ids": [
+            37799
+          ],
+          "answer_plus_eos_ids": [
+            37799,
+            151645
+          ],
+          "first_token_id": 37799
+        },
+        {
+          "surface": " Candle",
+          "answer_token_ids": [
+            72897
+          ],
+          "answer_plus_eos_ids": [
+            72897,
+            151645
+          ],
+          "first_token_id": 72897
+        }
+      ],
+      "first_token_ids": [
+        34,
+        66,
+        37799,
+        72897
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          66,
+          3316,
+          151645
+        ],
+        [
+          34,
+          3316,
+          151645
+        ],
+        [
+          37799,
+          151645
+        ],
+        [
+          72897,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        37799,
+        72897
+      ]
+    },
+    "basket": {
+      "variants": [
+        {
+          "surface": "basket",
+          "answer_token_ids": [
+            59764
+          ],
+          "answer_plus_eos_ids": [
+            59764,
+            151645
+          ],
+          "first_token_id": 59764
+        },
+        {
+          "surface": "Basket",
+          "answer_token_ids": [
+            73649
+          ],
+          "answer_plus_eos_ids": [
+            73649,
+            151645
+          ],
+          "first_token_id": 73649
+        },
+        {
+          "surface": " basket",
+          "answer_token_ids": [
+            14024
+          ],
+          "answer_plus_eos_ids": [
+            14024,
+            151645
+          ],
+          "first_token_id": 14024
+        },
+        {
+          "surface": " Basket",
+          "answer_token_ids": [
+            33117
+          ],
+          "answer_plus_eos_ids": [
+            33117,
+            151645
+          ],
+          "first_token_id": 33117
+        }
+      ],
+      "first_token_ids": [
+        14024,
+        33117,
+        59764,
+        73649
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          59764,
+          151645
+        ],
+        [
+          73649,
+          151645
+        ],
+        [
+          14024,
+          151645
+        ],
+        [
+          33117,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        14024,
+        33117,
+        59764,
+        73649
+      ]
+    },
+    "hammer": {
+      "variants": [
+        {
+          "surface": "hammer",
+          "answer_token_ids": [
+            45334
+          ],
+          "answer_plus_eos_ids": [
+            45334,
+            151645
+          ],
+          "first_token_id": 45334
+        },
+        {
+          "surface": "Hammer",
+          "answer_token_ids": [
+            39941,
+            1174
+          ],
+          "answer_plus_eos_ids": [
+            39941,
+            1174,
+            151645
+          ],
+          "first_token_id": 39941
+        },
+        {
+          "surface": " hammer",
+          "answer_token_ids": [
+            23457
+          ],
+          "answer_plus_eos_ids": [
+            23457,
+            151645
+          ],
+          "first_token_id": 23457
+        },
+        {
+          "surface": " Hammer",
+          "answer_token_ids": [
+            36894
+          ],
+          "answer_plus_eos_ids": [
+            36894,
+            151645
+          ],
+          "first_token_id": 36894
+        }
+      ],
+      "first_token_ids": [
+        23457,
+        36894,
+        39941,
+        45334
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          45334,
+          151645
+        ],
+        [
+          39941,
+          1174,
+          151645
+        ],
+        [
+          23457,
+          151645
+        ],
+        [
+          36894,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        23457,
+        36894,
+        45334
+      ]
+    },
+    "ladder": {
+      "variants": [
+        {
+          "surface": "ladder",
+          "answer_token_ids": [
+            75,
+            20808
+          ],
+          "answer_plus_eos_ids": [
+            75,
+            20808,
+            151645
+          ],
+          "first_token_id": 75
+        },
+        {
+          "surface": "Ladder",
+          "answer_token_ids": [
+            43,
+            20808
+          ],
+          "answer_plus_eos_ids": [
+            43,
+            20808,
+            151645
+          ],
+          "first_token_id": 43
+        },
+        {
+          "surface": " ladder",
+          "answer_token_ids": [
+            35765
+          ],
+          "answer_plus_eos_ids": [
+            35765,
+            151645
+          ],
+          "first_token_id": 35765
+        },
+        {
+          "surface": " Ladder",
+          "answer_token_ids": [
+            444,
+            20808
+          ],
+          "answer_plus_eos_ids": [
+            444,
+            20808,
+            151645
+          ],
+          "first_token_id": 444
+        }
+      ],
+      "first_token_ids": [
+        43,
+        75,
+        444,
+        35765
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          75,
+          20808,
+          151645
+        ],
+        [
+          43,
+          20808,
+          151645
+        ],
+        [
+          35765,
+          151645
+        ],
+        [
+          444,
+          20808,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        35765
+      ]
+    },
+    "river": {
+      "variants": [
+        {
+          "surface": "river",
+          "answer_token_ids": [
+            5469
+          ],
+          "answer_plus_eos_ids": [
+            5469,
+            151645
+          ],
+          "first_token_id": 5469
+        },
+        {
+          "surface": "River",
+          "answer_token_ids": [
+            85699
+          ],
+          "answer_plus_eos_ids": [
+            85699,
+            151645
+          ],
+          "first_token_id": 85699
+        },
+        {
+          "surface": " river",
+          "answer_token_ids": [
+            14796
+          ],
+          "answer_plus_eos_ids": [
+            14796,
+            151645
+          ],
+          "first_token_id": 14796
+        },
+        {
+          "surface": " River",
+          "answer_token_ids": [
+            10948
+          ],
+          "answer_plus_eos_ids": [
+            10948,
+            151645
+          ],
+          "first_token_id": 10948
+        }
+      ],
+      "first_token_ids": [
+        5469,
+        10948,
+        14796,
+        85699
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          5469,
+          151645
+        ],
+        [
+          85699,
+          151645
+        ],
+        [
+          14796,
+          151645
+        ],
+        [
+          10948,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        5469,
+        10948,
+        14796,
+        85699
+      ]
+    },
+    "lake": {
+      "variants": [
+        {
+          "surface": "lake",
+          "answer_token_ids": [
+            62110
+          ],
+          "answer_plus_eos_ids": [
+            62110,
+            151645
+          ],
+          "first_token_id": 62110
+        },
+        {
+          "surface": "Lake",
+          "answer_token_ids": [
+            81289
+          ],
+          "answer_plus_eos_ids": [
+            81289,
+            151645
+          ],
+          "first_token_id": 81289
+        },
+        {
+          "surface": " lake",
+          "answer_token_ids": [
+            21800
+          ],
+          "answer_plus_eos_ids": [
+            21800,
+            151645
+          ],
+          "first_token_id": 21800
+        },
+        {
+          "surface": " Lake",
+          "answer_token_ids": [
+            11678
+          ],
+          "answer_plus_eos_ids": [
+            11678,
+            151645
+          ],
+          "first_token_id": 11678
+        }
+      ],
+      "first_token_ids": [
+        11678,
+        21800,
+        62110,
+        81289
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          62110,
+          151645
+        ],
+        [
+          81289,
+          151645
+        ],
+        [
+          21800,
+          151645
+        ],
+        [
+          11678,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        11678,
+        21800,
+        62110,
+        81289
+      ]
+    },
+    "ocean": {
+      "variants": [
+        {
+          "surface": "ocean",
+          "answer_token_ids": [
+            78,
+            11206
+          ],
+          "answer_plus_eos_ids": [
+            78,
+            11206,
+            151645
+          ],
+          "first_token_id": 78
+        },
+        {
+          "surface": "Ocean",
+          "answer_token_ids": [
+            96183
+          ],
+          "answer_plus_eos_ids": [
+            96183,
+            151645
+          ],
+          "first_token_id": 96183
+        },
+        {
+          "surface": " ocean",
+          "answer_token_ids": [
+            17951
+          ],
+          "answer_plus_eos_ids": [
+            17951,
+            151645
+          ],
+          "first_token_id": 17951
+        },
+        {
+          "surface": " Ocean",
+          "answer_token_ids": [
+            21575
+          ],
+          "answer_plus_eos_ids": [
+            21575,
+            151645
+          ],
+          "first_token_id": 21575
+        }
+      ],
+      "first_token_ids": [
+        78,
+        17951,
+        21575,
+        96183
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          78,
+          11206,
+          151645
+        ],
+        [
+          96183,
+          151645
+        ],
+        [
+          17951,
+          151645
+        ],
+        [
+          21575,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        17951,
+        21575,
+        96183
+      ]
+    },
+    "forest": {
+      "variants": [
+        {
+          "surface": "forest",
+          "answer_token_ids": [
+            50655
+          ],
+          "answer_plus_eos_ids": [
+            50655,
+            151645
+          ],
+          "first_token_id": 50655
+        },
+        {
+          "surface": "Forest",
+          "answer_token_ids": [
+            49578
+          ],
+          "answer_plus_eos_ids": [
+            49578,
+            151645
+          ],
+          "first_token_id": 49578
+        },
+        {
+          "surface": " forest",
+          "answer_token_ids": [
+            13638
+          ],
+          "answer_plus_eos_ids": [
+            13638,
+            151645
+          ],
+          "first_token_id": 13638
+        },
+        {
+          "surface": " Forest",
+          "answer_token_ids": [
+            19988
+          ],
+          "answer_plus_eos_ids": [
+            19988,
+            151645
+          ],
+          "first_token_id": 19988
+        }
+      ],
+      "first_token_ids": [
+        13638,
+        19988,
+        49578,
+        50655
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          50655,
+          151645
+        ],
+        [
+          49578,
+          151645
+        ],
+        [
+          13638,
+          151645
+        ],
+        [
+          19988,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        13638,
+        19988,
+        49578,
+        50655
+      ]
+    },
+    "desert": {
+      "variants": [
+        {
+          "surface": "desert",
+          "answer_token_ids": [
+            5799,
+            529
+          ],
+          "answer_plus_eos_ids": [
+            5799,
+            529,
+            151645
+          ],
+          "first_token_id": 5799
+        },
+        {
+          "surface": "Desert",
+          "answer_token_ids": [
+            4896,
+            529
+          ],
+          "answer_plus_eos_ids": [
+            4896,
+            529,
+            151645
+          ],
+          "first_token_id": 4896
+        },
+        {
+          "surface": " desert",
+          "answer_token_ids": [
+            23603
+          ],
+          "answer_plus_eos_ids": [
+            23603,
+            151645
+          ],
+          "first_token_id": 23603
+        },
+        {
+          "surface": " Desert",
+          "answer_token_ids": [
+            42186
+          ],
+          "answer_plus_eos_ids": [
+            42186,
+            151645
+          ],
+          "first_token_id": 42186
+        }
+      ],
+      "first_token_ids": [
+        4896,
+        5799,
+        23603,
+        42186
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          5799,
+          529,
+          151645
+        ],
+        [
+          4896,
+          529,
+          151645
+        ],
+        [
+          23603,
+          151645
+        ],
+        [
+          42186,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        23603,
+        42186
+      ]
+    },
+    "mountain": {
+      "variants": [
+        {
+          "surface": "mountain",
+          "answer_token_ids": [
+            16557,
+            466
+          ],
+          "answer_plus_eos_ids": [
+            16557,
+            466,
+            151645
+          ],
+          "first_token_id": 16557
+        },
+        {
+          "surface": "Mountain",
+          "answer_token_ids": [
+            91169
+          ],
+          "answer_plus_eos_ids": [
+            91169,
+            151645
+          ],
+          "first_token_id": 91169
+        },
+        {
+          "surface": " mountain",
+          "answer_token_ids": [
+            16301
+          ],
+          "answer_plus_eos_ids": [
+            16301,
+            151645
+          ],
+          "first_token_id": 16301
+        },
+        {
+          "surface": " Mountain",
+          "answer_token_ids": [
+            18634
+          ],
+          "answer_plus_eos_ids": [
+            18634,
+            151645
+          ],
+          "first_token_id": 18634
+        }
+      ],
+      "first_token_ids": [
+        16301,
+        16557,
+        18634,
+        91169
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          16557,
+          466,
+          151645
+        ],
+        [
+          91169,
+          151645
+        ],
+        [
+          16301,
+          151645
+        ],
+        [
+          18634,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        16301,
+        18634,
+        91169
+      ]
+    },
+    "valley": {
+      "variants": [
+        {
+          "surface": "valley",
+          "answer_token_ids": [
+            831,
+            3179
+          ],
+          "answer_plus_eos_ids": [
+            831,
+            3179,
+            151645
+          ],
+          "first_token_id": 831
+        },
+        {
+          "surface": "Valley",
+          "answer_token_ids": [
+            2208,
+            3179
+          ],
+          "answer_plus_eos_ids": [
+            2208,
+            3179,
+            151645
+          ],
+          "first_token_id": 2208
+        },
+        {
+          "surface": " valley",
+          "answer_token_ids": [
+            33581
+          ],
+          "answer_plus_eos_ids": [
+            33581,
+            151645
+          ],
+          "first_token_id": 33581
+        },
+        {
+          "surface": " Valley",
+          "answer_token_ids": [
+            13046
+          ],
+          "answer_plus_eos_ids": [
+            13046,
+            151645
+          ],
+          "first_token_id": 13046
+        }
+      ],
+      "first_token_ids": [
+        831,
+        2208,
+        13046,
+        33581
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          831,
+          3179,
+          151645
+        ],
+        [
+          2208,
+          3179,
+          151645
+        ],
+        [
+          33581,
+          151645
+        ],
+        [
+          13046,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        13046,
+        33581
+      ]
+    },
+    "island": {
+      "variants": [
+        {
+          "surface": "island",
+          "answer_token_ids": [
+            285,
+            1933
+          ],
+          "answer_plus_eos_ids": [
+            285,
+            1933,
+            151645
+          ],
+          "first_token_id": 285
+        },
+        {
+          "surface": "Island",
+          "answer_token_ids": [
+            3872,
+            1933
+          ],
+          "answer_plus_eos_ids": [
+            3872,
+            1933,
+            151645
+          ],
+          "first_token_id": 3872
+        },
+        {
+          "surface": " island",
+          "answer_token_ids": [
+            12922
+          ],
+          "answer_plus_eos_ids": [
+            12922,
+            151645
+          ],
+          "first_token_id": 12922
+        },
+        {
+          "surface": " Island",
+          "answer_token_ids": [
+            10720
+          ],
+          "answer_plus_eos_ids": [
+            10720,
+            151645
+          ],
+          "first_token_id": 10720
+        }
+      ],
+      "first_token_ids": [
+        285,
+        3872,
+        10720,
+        12922
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          285,
+          1933,
+          151645
+        ],
+        [
+          3872,
+          1933,
+          151645
+        ],
+        [
+          12922,
+          151645
+        ],
+        [
+          10720,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        10720,
+        12922
+      ]
+    },
+    "beach": {
+      "variants": [
+        {
+          "surface": "beach",
+          "answer_token_ids": [
+            1371,
+            610
+          ],
+          "answer_plus_eos_ids": [
+            1371,
+            610,
+            151645
+          ],
+          "first_token_id": 1371
+        },
+        {
+          "surface": "Beach",
+          "answer_token_ids": [
+            3430,
+            610
+          ],
+          "answer_plus_eos_ids": [
+            3430,
+            610,
+            151645
+          ],
+          "first_token_id": 3430
+        },
+        {
+          "surface": " beach",
+          "answer_token_ids": [
+            11321
+          ],
+          "answer_plus_eos_ids": [
+            11321,
+            151645
+          ],
+          "first_token_id": 11321
+        },
+        {
+          "surface": " Beach",
+          "answer_token_ids": [
+            12721
+          ],
+          "answer_plus_eos_ids": [
+            12721,
+            151645
+          ],
+          "first_token_id": 12721
+        }
+      ],
+      "first_token_ids": [
+        1371,
+        3430,
+        11321,
+        12721
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          1371,
+          610,
+          151645
+        ],
+        [
+          3430,
+          610,
+          151645
+        ],
+        [
+          11321,
+          151645
+        ],
+        [
+          12721,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        11321,
+        12721
+      ]
+    },
+    "canyon": {
+      "variants": [
+        {
+          "surface": "canyon",
+          "answer_token_ids": [
+            66,
+            3767,
+            263
+          ],
+          "answer_plus_eos_ids": [
+            66,
+            3767,
+            263,
+            151645
+          ],
+          "first_token_id": 66
+        },
+        {
+          "surface": "Canyon",
+          "answer_token_ids": [
+            34,
+            3767,
+            263
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            3767,
+            263,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " canyon",
+          "answer_token_ids": [
+            83200
+          ],
+          "answer_plus_eos_ids": [
+            83200,
+            151645
+          ],
+          "first_token_id": 83200
+        },
+        {
+          "surface": " Canyon",
+          "answer_token_ids": [
+            40460
+          ],
+          "answer_plus_eos_ids": [
+            40460,
+            151645
+          ],
+          "first_token_id": 40460
+        }
+      ],
+      "first_token_ids": [
+        34,
+        66,
+        40460,
+        83200
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          66,
+          3767,
+          263,
+          151645
+        ],
+        [
+          34,
+          3767,
+          263,
+          151645
+        ],
+        [
+          83200,
+          151645
+        ],
+        [
+          40460,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        40460,
+        83200
+      ]
+    },
+    "glacier": {
+      "variants": [
+        {
+          "surface": "glacier",
+          "answer_token_ids": [
+            6072,
+            53453
+          ],
+          "answer_plus_eos_ids": [
+            6072,
+            53453,
+            151645
+          ],
+          "first_token_id": 6072
+        },
+        {
+          "surface": "Glacier",
+          "answer_token_ids": [
+            31541,
+            53453
+          ],
+          "answer_plus_eos_ids": [
+            31541,
+            53453,
+            151645
+          ],
+          "first_token_id": 31541
+        },
+        {
+          "surface": " glacier",
+          "answer_token_ids": [
+            93767
+          ],
+          "answer_plus_eos_ids": [
+            93767,
+            151645
+          ],
+          "first_token_id": 93767
+        },
+        {
+          "surface": " Glacier",
+          "answer_token_ids": [
+            95386
+          ],
+          "answer_plus_eos_ids": [
+            95386,
+            151645
+          ],
+          "first_token_id": 95386
+        }
+      ],
+      "first_token_ids": [
+        6072,
+        31541,
+        93767,
+        95386
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          6072,
+          53453,
+          151645
+        ],
+        [
+          31541,
+          53453,
+          151645
+        ],
+        [
+          93767,
+          151645
+        ],
+        [
+          95386,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        93767,
+        95386
+      ]
+    },
+    "volcano": {
+      "variants": [
+        {
+          "surface": "volcano",
+          "answer_token_ids": [
+            12536,
+            68277
+          ],
+          "answer_plus_eos_ids": [
+            12536,
+            68277,
+            151645
+          ],
+          "first_token_id": 12536
+        },
+        {
+          "surface": "Volcano",
+          "answer_token_ids": [
+            36361,
+            68277
+          ],
+          "answer_plus_eos_ids": [
+            36361,
+            68277,
+            151645
+          ],
+          "first_token_id": 36361
+        },
+        {
+          "surface": " volcano",
+          "answer_token_ids": [
+            65206
+          ],
+          "answer_plus_eos_ids": [
+            65206,
+            151645
+          ],
+          "first_token_id": 65206
+        },
+        {
+          "surface": " Volcano",
+          "answer_token_ids": [
+            10882,
+            68277
+          ],
+          "answer_plus_eos_ids": [
+            10882,
+            68277,
+            151645
+          ],
+          "first_token_id": 10882
+        }
+      ],
+      "first_token_ids": [
+        10882,
+        12536,
+        36361,
+        65206
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          12536,
+          68277,
+          151645
+        ],
+        [
+          36361,
+          68277,
+          151645
+        ],
+        [
+          65206,
+          151645
+        ],
+        [
+          10882,
+          68277,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        65206
+      ]
+    },
+    "meadow": {
+      "variants": [
+        {
+          "surface": "meadow",
+          "answer_token_ids": [
+            2660,
+            5843
+          ],
+          "answer_plus_eos_ids": [
+            2660,
+            5843,
+            151645
+          ],
+          "first_token_id": 2660
+        },
+        {
+          "surface": "Meadow",
+          "answer_token_ids": [
+            44,
+            3149,
+            363
+          ],
+          "answer_plus_eos_ids": [
+            44,
+            3149,
+            363,
+            151645
+          ],
+          "first_token_id": 44
+        },
+        {
+          "surface": " meadow",
+          "answer_token_ids": [
+            752,
+            5843
+          ],
+          "answer_plus_eos_ids": [
+            752,
+            5843,
+            151645
+          ],
+          "first_token_id": 752
+        },
+        {
+          "surface": " Meadow",
+          "answer_token_ids": [
+            88742
+          ],
+          "answer_plus_eos_ids": [
+            88742,
+            151645
+          ],
+          "first_token_id": 88742
+        }
+      ],
+      "first_token_ids": [
+        44,
+        752,
+        2660,
+        88742
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          2660,
+          5843,
+          151645
+        ],
+        [
+          44,
+          3149,
+          363,
+          151645
+        ],
+        [
+          752,
+          5843,
+          151645
+        ],
+        [
+          88742,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        88742
+      ]
+    },
+    "swamp": {
+      "variants": [
+        {
+          "surface": "swamp",
+          "answer_token_ids": [
+            2280,
+            1121
+          ],
+          "answer_plus_eos_ids": [
+            2280,
+            1121,
+            151645
+          ],
+          "first_token_id": 2280
+        },
+        {
+          "surface": "Swamp",
+          "answer_token_ids": [
+            13218,
+            1121
+          ],
+          "answer_plus_eos_ids": [
+            13218,
+            1121,
+            151645
+          ],
+          "first_token_id": 13218
+        },
+        {
+          "surface": " swamp",
+          "answer_token_ids": [
+            66072
+          ],
+          "answer_plus_eos_ids": [
+            66072,
+            151645
+          ],
+          "first_token_id": 66072
+        },
+        {
+          "surface": " Swamp",
+          "answer_token_ids": [
+            82811
+          ],
+          "answer_plus_eos_ids": [
+            82811,
+            151645
+          ],
+          "first_token_id": 82811
+        }
+      ],
+      "first_token_ids": [
+        2280,
+        13218,
+        66072,
+        82811
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          2280,
+          1121,
+          151645
+        ],
+        [
+          13218,
+          1121,
+          151645
+        ],
+        [
+          66072,
+          151645
+        ],
+        [
+          82811,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        66072,
+        82811
+      ]
+    },
+    "marsh": {
+      "variants": [
+        {
+          "surface": "marsh",
+          "answer_token_ids": [
+            36239
+          ],
+          "answer_plus_eos_ids": [
+            36239,
+            151645
+          ],
+          "first_token_id": 36239
+        },
+        {
+          "surface": "Marsh",
+          "answer_token_ids": [
+            79712
+          ],
+          "answer_plus_eos_ids": [
+            79712,
+            151645
+          ],
+          "first_token_id": 79712
+        },
+        {
+          "surface": " marsh",
+          "answer_token_ids": [
+            31996
+          ],
+          "answer_plus_eos_ids": [
+            31996,
+            151645
+          ],
+          "first_token_id": 31996
+        },
+        {
+          "surface": " Marsh",
+          "answer_token_ids": [
+            39063
+          ],
+          "answer_plus_eos_ids": [
+            39063,
+            151645
+          ],
+          "first_token_id": 39063
+        }
+      ],
+      "first_token_ids": [
+        31996,
+        36239,
+        39063,
+        79712
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          36239,
+          151645
+        ],
+        [
+          79712,
+          151645
+        ],
+        [
+          31996,
+          151645
+        ],
+        [
+          39063,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        31996,
+        36239,
+        39063,
+        79712
+      ]
+    },
+    "cliff": {
+      "variants": [
+        {
+          "surface": "cliff",
+          "answer_token_ids": [
+            564,
+            3092
+          ],
+          "answer_plus_eos_ids": [
+            564,
+            3092,
+            151645
+          ],
+          "first_token_id": 564
+        },
+        {
+          "surface": "Cliff",
+          "answer_token_ids": [
+            5066,
+            3092
+          ],
+          "answer_plus_eos_ids": [
+            5066,
+            3092,
+            151645
+          ],
+          "first_token_id": 5066
+        },
+        {
+          "surface": " cliff",
+          "answer_token_ids": [
+            43006
+          ],
+          "answer_plus_eos_ids": [
+            43006,
+            151645
+          ],
+          "first_token_id": 43006
+        },
+        {
+          "surface": " Cliff",
+          "answer_token_ids": [
+            47852
+          ],
+          "answer_plus_eos_ids": [
+            47852,
+            151645
+          ],
+          "first_token_id": 47852
+        }
+      ],
+      "first_token_ids": [
+        564,
+        5066,
+        43006,
+        47852
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          564,
+          3092,
+          151645
+        ],
+        [
+          5066,
+          3092,
+          151645
+        ],
+        [
+          43006,
+          151645
+        ],
+        [
+          47852,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        43006,
+        47852
+      ]
+    },
+    "cave": {
+      "variants": [
+        {
+          "surface": "cave",
+          "answer_token_ids": [
+            66,
+            523
+          ],
+          "answer_plus_eos_ids": [
+            66,
+            523,
+            151645
+          ],
+          "first_token_id": 66
+        },
+        {
+          "surface": "Cave",
+          "answer_token_ids": [
+            34,
+            523
+          ],
+          "answer_plus_eos_ids": [
+            34,
+            523,
+            151645
+          ],
+          "first_token_id": 34
+        },
+        {
+          "surface": " cave",
+          "answer_token_ids": [
+            25385
+          ],
+          "answer_plus_eos_ids": [
+            25385,
+            151645
+          ],
+          "first_token_id": 25385
+        },
+        {
+          "surface": " Cave",
+          "answer_token_ids": [
+            49392
+          ],
+          "answer_plus_eos_ids": [
+            49392,
+            151645
+          ],
+          "first_token_id": 49392
+        }
+      ],
+      "first_token_ids": [
+        34,
+        66,
+        25385,
+        49392
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          66,
+          523,
+          151645
+        ],
+        [
+          34,
+          523,
+          151645
+        ],
+        [
+          25385,
+          151645
+        ],
+        [
+          49392,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        25385,
+        49392
+      ]
+    },
+    "stream": {
+      "variants": [
+        {
+          "surface": "stream",
+          "answer_token_ids": [
+            4027
+          ],
+          "answer_plus_eos_ids": [
+            4027,
+            151645
+          ],
+          "first_token_id": 4027
+        },
+        {
+          "surface": "Stream",
+          "answer_token_ids": [
+            3027
+          ],
+          "answer_plus_eos_ids": [
+            3027,
+            151645
+          ],
+          "first_token_id": 3027
+        },
+        {
+          "surface": " stream",
+          "answer_token_ids": [
+            4269
+          ],
+          "answer_plus_eos_ids": [
+            4269,
+            151645
+          ],
+          "first_token_id": 4269
+        },
+        {
+          "surface": " Stream",
+          "answer_token_ids": [
+            9203
+          ],
+          "answer_plus_eos_ids": [
+            9203,
+            151645
+          ],
+          "first_token_id": 9203
+        }
+      ],
+      "first_token_ids": [
+        3027,
+        4027,
+        4269,
+        9203
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          4027,
+          151645
+        ],
+        [
+          3027,
+          151645
+        ],
+        [
+          4269,
+          151645
+        ],
+        [
+          9203,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        3027,
+        4027,
+        4269,
+        9203
+      ]
+    },
+    "waterfall": {
+      "variants": [
+        {
+          "surface": "waterfall",
+          "answer_token_ids": [
+            12987,
+            13464
+          ],
+          "answer_plus_eos_ids": [
+            12987,
+            13464,
+            151645
+          ],
+          "first_token_id": 12987
+        },
+        {
+          "surface": "Waterfall",
+          "answer_token_ids": [
+            28253,
+            13464
+          ],
+          "answer_plus_eos_ids": [
+            28253,
+            13464,
+            151645
+          ],
+          "first_token_id": 28253
+        },
+        {
+          "surface": " waterfall",
+          "answer_token_ids": [
+            69051
+          ],
+          "answer_plus_eos_ids": [
+            69051,
+            151645
+          ],
+          "first_token_id": 69051
+        },
+        {
+          "surface": " Waterfall",
+          "answer_token_ids": [
+            9959,
+            13464
+          ],
+          "answer_plus_eos_ids": [
+            9959,
+            13464,
+            151645
+          ],
+          "first_token_id": 9959
+        }
+      ],
+      "first_token_ids": [
+        9959,
+        12987,
+        28253,
+        69051
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          12987,
+          13464,
+          151645
+        ],
+        [
+          28253,
+          13464,
+          151645
+        ],
+        [
+          69051,
+          151645
+        ],
+        [
+          9959,
+          13464,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        69051
+      ]
+    },
+    "garden": {
+      "variants": [
+        {
+          "surface": "garden",
+          "answer_token_ids": [
+            70,
+            8341
+          ],
+          "answer_plus_eos_ids": [
+            70,
+            8341,
+            151645
+          ],
+          "first_token_id": 70
+        },
+        {
+          "surface": "Garden",
+          "answer_token_ids": [
+            38,
+            8341
+          ],
+          "answer_plus_eos_ids": [
+            38,
+            8341,
+            151645
+          ],
+          "first_token_id": 38
+        },
+        {
+          "surface": " garden",
+          "answer_token_ids": [
+            13551
+          ],
+          "answer_plus_eos_ids": [
+            13551,
+            151645
+          ],
+          "first_token_id": 13551
+        },
+        {
+          "surface": " Garden",
+          "answer_token_ids": [
+            19021
+          ],
+          "answer_plus_eos_ids": [
+            19021,
+            151645
+          ],
+          "first_token_id": 19021
+        }
+      ],
+      "first_token_ids": [
+        38,
+        70,
+        13551,
+        19021
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          70,
+          8341,
+          151645
+        ],
+        [
+          38,
+          8341,
+          151645
+        ],
+        [
+          13551,
+          151645
+        ],
+        [
+          19021,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        13551,
+        19021
+      ]
+    },
+    "grove": {
+      "variants": [
+        {
+          "surface": "grove",
+          "answer_token_ids": [
+            41411,
+            586
+          ],
+          "answer_plus_eos_ids": [
+            41411,
+            586,
+            151645
+          ],
+          "first_token_id": 41411
+        },
+        {
+          "surface": "Grove",
+          "answer_token_ids": [
+            38,
+            50415
+          ],
+          "answer_plus_eos_ids": [
+            38,
+            50415,
+            151645
+          ],
+          "first_token_id": 38
+        },
+        {
+          "surface": " grove",
+          "answer_token_ids": [
+            10487,
+            586
+          ],
+          "answer_plus_eos_ids": [
+            10487,
+            586,
+            151645
+          ],
+          "first_token_id": 10487
+        },
+        {
+          "surface": " Grove",
+          "answer_token_ids": [
+            40134
+          ],
+          "answer_plus_eos_ids": [
+            40134,
+            151645
+          ],
+          "first_token_id": 40134
+        }
+      ],
+      "first_token_ids": [
+        38,
+        10487,
+        40134,
+        41411
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          41411,
+          586,
+          151645
+        ],
+        [
+          38,
+          50415,
+          151645
+        ],
+        [
+          10487,
+          586,
+          151645
+        ],
+        [
+          40134,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        40134
+      ]
+    },
+    "pond": {
+      "variants": [
+        {
+          "surface": "pond",
+          "answer_token_ids": [
+            3511
+          ],
+          "answer_plus_eos_ids": [
+            3511,
+            151645
+          ],
+          "first_token_id": 3511
+        },
+        {
+          "surface": "Pond",
+          "answer_token_ids": [
+            47,
+            2111
+          ],
+          "answer_plus_eos_ids": [
+            47,
+            2111,
+            151645
+          ],
+          "first_token_id": 47
+        },
+        {
+          "surface": " pond",
+          "answer_token_ids": [
+            35570
+          ],
+          "answer_plus_eos_ids": [
+            35570,
+            151645
+          ],
+          "first_token_id": 35570
+        },
+        {
+          "surface": " Pond",
+          "answer_token_ids": [
+            70865
+          ],
+          "answer_plus_eos_ids": [
+            70865,
+            151645
+          ],
+          "first_token_id": 70865
+        }
+      ],
+      "first_token_ids": [
+        47,
+        3511,
+        35570,
+        70865
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          3511,
+          151645
+        ],
+        [
+          47,
+          2111,
+          151645
+        ],
+        [
+          35570,
+          151645
+        ],
+        [
+          70865,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        3511,
+        35570,
+        70865
+      ]
+    },
+    "reef": {
+      "variants": [
+        {
+          "surface": "reef",
+          "answer_token_ids": [
+            765,
+            69
+          ],
+          "answer_plus_eos_ids": [
+            765,
+            69,
+            151645
+          ],
+          "first_token_id": 765
+        },
+        {
+          "surface": "Reef",
+          "answer_token_ids": [
+            693,
+            823
+          ],
+          "answer_plus_eos_ids": [
+            693,
+            823,
+            151645
+          ],
+          "first_token_id": 693
+        },
+        {
+          "surface": " reef",
+          "answer_token_ids": [
+            70045
+          ],
+          "answer_plus_eos_ids": [
+            70045,
+            151645
+          ],
+          "first_token_id": 70045
+        },
+        {
+          "surface": " Reef",
+          "answer_token_ids": [
+            75936
+          ],
+          "answer_plus_eos_ids": [
+            75936,
+            151645
+          ],
+          "first_token_id": 75936
+        }
+      ],
+      "first_token_ids": [
+        693,
+        765,
+        70045,
+        75936
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          765,
+          69,
+          151645
+        ],
+        [
+          693,
+          823,
+          151645
+        ],
+        [
+          70045,
+          151645
+        ],
+        [
+          75936,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        70045,
+        75936
+      ]
+    },
+    "rain": {
+      "variants": [
+        {
+          "surface": "rain",
+          "answer_token_ids": [
+            29093
+          ],
+          "answer_plus_eos_ids": [
+            29093,
+            151645
+          ],
+          "first_token_id": 29093
+        },
+        {
+          "surface": "Rain",
+          "answer_token_ids": [
+            59039
+          ],
+          "answer_plus_eos_ids": [
+            59039,
+            151645
+          ],
+          "first_token_id": 59039
+        },
+        {
+          "surface": " rain",
+          "answer_token_ids": [
+            11174
+          ],
+          "answer_plus_eos_ids": [
+            11174,
+            151645
+          ],
+          "first_token_id": 11174
+        },
+        {
+          "surface": " Rain",
+          "answer_token_ids": [
+            21911
+          ],
+          "answer_plus_eos_ids": [
+            21911,
+            151645
+          ],
+          "first_token_id": 21911
+        }
+      ],
+      "first_token_ids": [
+        11174,
+        21911,
+        29093,
+        59039
+      ],
+      "complete_answer_sequences_plus_eos": [
+        [
+          29093,
+          151645
+        ],
+        [
+          59039,
+          151645
+        ],
+        [
+          11174,
+          151645
+        ],
+        [
+          21911,
+          151645
+        ]
+      ],
+      "v1_single_token_ids": [
+        11174,
+        21911,
+        29093,
+        59039
+      ]
+    }
+  },
+  "pairs": [
+    {
+      "split": "fit_pool",
+      "pair_id": "animal_06",
+      "words": [
+        "deer",
+        "moose"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "animal_09",
+      "words": [
+        "turtle",
+        "cow"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "animal_08",
+      "words": [
+        "beaver",
+        "monkey"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "animal_11",
+      "words": [
+        "snake",
+        "frog"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "animal_03",
+      "words": [
+        "goat",
+        "duck"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "animal_01",
+      "words": [
+        "lion",
+        "tiger"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "color_06",
+      "words": [
+        "cyan",
+        "violet"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "color_05",
+      "words": [
+        "silver",
+        "teal"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "color_03",
+      "words": [
+        "black",
+        "white"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "color_10",
+      "words": [
+        "crimson",
+        "cream"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "color_02",
+      "words": [
+        "pink",
+        "brown"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "color_07",
+      "words": [
+        "beige",
+        "coral"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "object_09",
+      "words": [
+        "pillow",
+        "carpet"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "object_02",
+      "words": [
+        "plate",
+        "cup"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "object_05",
+      "words": [
+        "phone",
+        "book"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "object_07",
+      "words": [
+        "window",
+        "door"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "object_11",
+      "words": [
+        "hammer",
+        "ladder"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "object_01",
+      "words": [
+        "spoon",
+        "fork"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "nature_10",
+      "words": [
+        "grove",
+        "pond"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "nature_00",
+      "words": [
+        "river",
+        "lake"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "nature_09",
+      "words": [
+        "waterfall",
+        "garden"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "nature_08",
+      "words": [
+        "cave",
+        "stream"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "nature_03",
+      "words": [
+        "valley",
+        "island"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "fit_pool",
+      "pair_id": "nature_04",
+      "words": [
+        "beach",
+        "canyon"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "animal_05",
+      "words": [
+        "rabbit",
+        "fox"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "animal_00",
+      "words": [
+        "bear",
+        "wolf"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "animal_04",
+      "words": [
+        "goose",
+        "mouse"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "color_08",
+      "words": [
+        "olive",
+        "navy"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "color_09",
+      "words": [
+        "lavender",
+        "turquoise"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "color_04",
+      "words": [
+        "gray",
+        "gold"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "object_00",
+      "words": [
+        "chair",
+        "table"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "object_08",
+      "words": [
+        "mirror",
+        "blanket"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "object_04",
+      "words": [
+        "lamp",
+        "clock"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "nature_06",
+      "words": [
+        "meadow",
+        "swamp"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "nature_11",
+      "words": [
+        "reef",
+        "rain"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "development",
+      "pair_id": "nature_01",
+      "words": [
+        "ocean",
+        "forest"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "animal_07",
+      "words": [
+        "panda",
+        "camel"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "animal_10",
+      "words": [
+        "pig",
+        "chicken"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "animal_02",
+      "words": [
+        "horse",
+        "sheep"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "color_11",
+      "words": [
+        "tan",
+        "lime"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "color_01",
+      "words": [
+        "orange",
+        "purple"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "color_00",
+      "words": [
+        "green",
+        "yellow"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "object_10",
+      "words": [
+        "candle",
+        "basket"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "object_03",
+      "words": [
+        "bowl",
+        "knife"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "object_06",
+      "words": [
+        "pen",
+        "pencil"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "nature_05",
+      "words": [
+        "glacier",
+        "volcano"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "nature_02",
+      "words": [
+        "desert",
+        "mountain"
+      ],
+      "first_token_sets_disjoint": true
+    },
+    {
+      "split": "locked_test",
+      "pair_id": "nature_07",
+      "words": [
+        "marsh",
+        "cliff"
+      ],
+      "first_token_sets_disjoint": true
+    }
+  ]
+}
