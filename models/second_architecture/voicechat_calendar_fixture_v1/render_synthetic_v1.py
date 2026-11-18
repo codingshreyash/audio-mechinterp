@@ -96,6 +96,19 @@ def render_one(voice: str, script: str, source: Path) -> list[str]:
     return command
 
 
+def output_paths(output: Path, case_id: str, voice: str) -> tuple[Path, Path, Path]:
+    if voice not in VOICES or case_id not in {"A", "B", "C", "D", "A_literal", "B_literal"}:
+        raise ValueError("Unknown frozen case or voice")
+    stem = f"{case_id}__{voice}"
+    suffix = "aiff" if voice == VOICES[0] else "wav"
+    source = output / f"{stem}.source.{suffix}"
+    converted = output / f"{stem}.converted.wav"
+    final = output / f"{stem}.final.wav"
+    if len({source, converted, final}) != 3:
+        raise AssertionError("Render paths overlap")
+    return source, converted, final
+
+
 def convert_one(source: Path, converted: Path) -> dict:
     samples, source_rate = sf.read(source, dtype="float32", always_2d=True)
     if samples.shape[1] != 1 or samples.shape[0] < source_rate // 2:
@@ -145,10 +158,7 @@ def main() -> None:
         for voice in VOICES:
             for case in cases:
                 active_case, active_voice = case["id"], voice
-                stem = f"{case['id']}__{voice}"
-                source = output / f"{stem}.{'aiff' if voice == VOICES[0] else 'wav'}"
-                converted = output / f"{stem}.converted.wav"
-                final = output / f"{stem}.wav"
+                source, converted, final = output_paths(output, case["id"], voice)
                 command = render_one(voice, case["script"], source)
                 conversion = convert_one(source, converted)
                 padding = prepare(converted, final)
