@@ -8,15 +8,19 @@ Run --self-test locally. Run --phase source after staging code/config, and
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.metadata
 import json
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import unicodedata
 import wave
-from pathlib import Path
+from datetime import datetime, timedelta
+from pathlib import Path, PurePosixPath, PureWindowsPath
 
 
 NEMO_COMMIT = "097dfe9e2f55baf653b83035868bdc89849f1b47"
@@ -66,15 +70,88 @@ def check_file(path: Path, expected: str) -> None:
     require(sha256(path) == expected, f"SHA-256 mismatch: {path}")
 
 
+def resolve_fixture_path(base: Path, raw: str, label: str) -> Path:
+    """Accept only portable, normalized paths rooted inside the fixture tree."""
+    require(isinstance(raw, str) and raw and "\\" not in raw,
+            f"invalid relative fixture path: {label}")
+    relative = PurePosixPath(raw)
+    require(not relative.is_absolute() and not PureWindowsPath(raw).drive and
+            raw == relative.as_posix() and
+            all(segment not in (".", "..") for segment in raw.split("/")),
+            f"unnormalized or absolute fixture path: {label}")
+    local = (base / raw).resolve()
+    require(local.is_relative_to(base), f"fixture escapes manifest directory: {label}")
+    return local
+
+
+def normalized_transcript(value: str) -> str:
+    require(isinstance(value, str) and value.strip(), "missing transcript")
+    normalized = " ".join(re.findall(r"\w+", unicodedata.normalize("NFKC", value).casefold()))
+    require(bool(normalized), "transcript has no words")
+    return normalized
+
+
+def check_qa_receipt(base: Path, descriptor: dict, *, kind: str, wav_sha256: str,
+                     script_id: str, voice_id: str, transcript: str) -> tuple[Path, str]:
+    require(isinstance(descriptor, dict), f"missing {kind} receipt descriptor")
+    local = resolve_fixture_path(base, descriptor["path"], f"{kind} receipt")
+    check_file(local, descriptor["sha256"])
+    receipt = json.loads(local.read_text())
+    require(receipt.get("schema") == "voicechat_wav_qa_receipt_v1" and
+            receipt.get("kind") == kind and receipt.get("verdict") == "pass",
+            f"invalid {kind} receipt verdict/schema")
+    require(receipt.get("wav_sha256") == wav_sha256 and
+            receipt.get("script_id") == script_id and receipt.get("voice_id") == voice_id,
+            f"{kind} receipt not bound to WAV/case")
+    require(normalized_transcript(receipt.get("reference_transcript")) ==
+            normalized_transcript(transcript) and
+            normalized_transcript(receipt.get("observed_transcript")) ==
+            normalized_transcript(transcript),
+            f"{kind} receipt transcript mismatch")
+    require(isinstance(receipt.get("reviewed_utc"), str) and receipt["reviewed_utc"].strip(),
+            f"missing {kind} review time")
+    reviewed_at = datetime.fromisoformat(receipt["reviewed_utc"].replace("Z", "+00:00"))
+    require(reviewed_at.utcoffset() == timedelta(0), f"{kind} review time must be UTC")
+    if kind == "listening":
+        require(isinstance(receipt.get("reviewer_id"), str) and receipt["reviewer_id"].strip(),
+                "missing human listener identity")
+    else:
+        require(isinstance(receipt.get("model_id"), str) and receipt["model_id"].strip() and
+                "voicechat" not in receipt["model_id"].casefold() and
+                isinstance(receipt.get("model_revision"), str) and
+                receipt["model_revision"].strip() and
+                isinstance(receipt.get("settings"), dict),
+                "independent ASR model/revision/settings missing")
+    return local, descriptor["sha256"]
+
+
+def check_clean_worktree(source_root: Path) -> None:
+    """Reject modified, staged, untracked, and ignored files in the source checkout."""
+    status = subprocess.run(
+        ["git", "-C", str(source_root), "status", "--porcelain=v1", "--untracked-files=all",
+         "--ignored", "-z"],
+        check=True, capture_output=True,
+    ).stdout
+    require(not status, f"NeMo worktree is not clean (tracked, untracked, or ignored): "
+            f"{status[:160]!r}")
+
+
 def check_source(nemo_dir: Path, checkpoint_dir: Path) -> dict:
     require(nemo_dir.is_dir() and checkpoint_dir.is_dir(), "source/checkpoint directory missing")
+    source_root = nemo_dir.resolve()
+    git_root = Path(subprocess.run(
+        ["git", "-C", str(source_root), "rev-parse", "--show-toplevel"],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()).resolve()
+    require(git_root == source_root, "NeMo directory is not the Git worktree root")
     head = subprocess.run(
-        ["git", "-C", str(nemo_dir), "rev-parse", "HEAD"],
+        ["git", "-C", str(source_root), "rev-parse", "HEAD"],
         check=True, capture_output=True, text=True,
     ).stdout.strip()
     require(head == NEMO_COMMIT, f"NeMo HEAD drift: {head}")
+    check_clean_worktree(source_root)
     for relative, expected in SOURCE_SHA256.items():
-        check_file(nemo_dir / relative, expected)
+        check_file(source_root / relative, expected)
     config_path = checkpoint_dir / "config.json"
     check_file(config_path, CONFIG_SHA256)
     config = json.loads(config_path.read_text())
@@ -82,7 +159,8 @@ def check_source(nemo_dir: Path, checkpoint_dir: Path) -> dict:
     require(stt["use_function_head"] is True, "function head disabled")
     require(stt["duplex_function_channel_weight"] == 2.0, "function channel weight drift")
     require(stt["pretrained_llm"] == "nvidia/NVIDIA-Nemotron-Nano-9B-v2", "backbone drift")
-    return {"nemo_commit": head, "voicechat_commit": VOICECHAT_COMMIT,
+    return {"nemo_commit": head, "nemo_worktree": "clean_including_ignored",
+            "voicechat_commit": VOICECHAT_COMMIT,
             "source_files_verified": len(SOURCE_SHA256), "config_sha256": CONFIG_SHA256}
 
 
@@ -94,8 +172,7 @@ def check_fixtures(path: Path) -> dict:
     base = path.parent.resolve()
     for key in ("system_prompt", "tool_schema", "stub_calendar"):
         item = spec[key]
-        local = (base / item["path"]).resolve()
-        require(local.is_relative_to(base), f"fixture escapes manifest directory: {key}")
+        local = resolve_fixture_path(base, item["path"], key)
         check_file(local, item["sha256"])
     voices = spec["tts_voice_ids"]
     require(isinstance(voices, list) and len(voices) == 2 and
@@ -116,12 +193,19 @@ def check_fixtures(path: Path) -> dict:
     wavs = spec["wavs"]
     require(len(wavs) == len(expected), "WAV count differs from declared cases")
     seen = set()
+    wav_paths: set[Path] = set()
+    wav_hashes: set[str] = set()
+    qa_paths: set[Path] = set()
+    qa_hashes: set[str] = set()
     for item in wavs:
         key = (item["script_id"], item["voice_id"])
         require(key not in seen, f"duplicate WAV case: {key}")
         seen.add(key)
-        local = (base / item["path"]).resolve()
-        require(local.is_relative_to(base), "WAV escapes manifest directory")
+        local = resolve_fixture_path(base, item["path"], f"WAV {key}")
+        require(local not in wav_paths, f"WAV path reused: {local}")
+        require(item["sha256"] not in wav_hashes, f"WAV bytes reused: {key}")
+        wav_paths.add(local)
+        wav_hashes.add(item["sha256"])
         check_file(local, item["sha256"])
         with wave.open(str(local), "rb") as wav:
             require((wav.getnchannels(), wav.getframerate(), wav.getsampwidth(),
@@ -131,13 +215,21 @@ def check_fixtures(path: Path) -> dict:
             wav.setpos(wav.getnframes() - trailing)
             require(wav.readframes(trailing) == b"\x00" * (2 * trailing),
                     f"frozen trailing silence is not exact digital zero: {key}")
-        require(item.get("listened") is True and item.get("independent_asr_checked") is True,
-                f"WAV not listening/ASR checked: {key}")
         require(isinstance(item.get("transcript"), str) and item["transcript"].strip(),
                 f"missing frozen transcript: {key}")
+        for kind, field in (("listening", "listening_receipt"),
+                            ("independent_asr", "asr_receipt")):
+            qa_path, qa_hash = check_qa_receipt(
+                base, item.get(field), kind=kind, wav_sha256=item["sha256"],
+                script_id=key[0], voice_id=key[1], transcript=item["transcript"])
+            require(qa_path not in qa_paths and qa_hash not in qa_hashes,
+                    f"QA receipt reused: {key}, {kind}")
+            qa_paths.add(qa_path)
+            qa_hashes.add(qa_hash)
     require(seen == expected, f"WAV case matrix differs: missing={sorted(expected-seen)}, extra={sorted(seen-expected)}")
     return {"fixture_manifest_sha256": sha256(path), "wav_fixtures_verified": len(wavs),
             "tts_wavs": 12, "human_wavs": len(human_scripts),
+            "qa_receipts_verified": len(qa_paths),
             "trailing_silence_samples": trailing}
 
 
@@ -190,34 +282,119 @@ def self_test() -> dict:
             fixture[key] = {"path": item.name, "sha256": sha256(item)}
         def add_wav(script: str, voice: str) -> None:
             path = root / f"{script}_{voice}.wav"
+            sample_id = len(fixture["wavs"]) + 1
             with wave.open(str(path), "wb") as wav:
                 wav.setnchannels(1)
                 wav.setsampwidth(2)
                 wav.setframerate(16_000)
-                wav.writeframes(b"\x01\x00" + b"\x00\x00" * 16_000)
-            fixture["wavs"].append({"script_id": script, "voice_id": voice,
-                                    "path": path.name, "sha256": sha256(path),
-                                    "transcript": "Test speech", "listened": True,
-                                    "independent_asr_checked": True})
+                wav.writeframes(sample_id.to_bytes(2, "little") + b"\x00\x00" * 16_000)
+            item = {"script_id": script, "voice_id": voice,
+                    "path": path.name, "sha256": sha256(path), "transcript": "Test speech"}
+            for kind, field in (("listening", "listening_receipt"),
+                                ("independent_asr", "asr_receipt")):
+                receipt = {"schema": "voicechat_wav_qa_receipt_v1", "kind": kind,
+                           "verdict": "pass", "wav_sha256": item["sha256"],
+                           "script_id": script, "voice_id": voice,
+                           "reference_transcript": item["transcript"],
+                           "observed_transcript": item["transcript"],
+                           "reviewed_utc": "2026-11-18T00:00:00Z"}
+                if kind == "listening":
+                    receipt["reviewer_id"] = "synthetic-self-test-listener"
+                else:
+                    receipt.update(model_id="synthetic-independent-asr",
+                                   model_revision="self-test", settings={})
+                receipt_path = root / f"{script}_{voice}_{kind}.json"
+                receipt_path.write_text(json.dumps(receipt))
+                item[field] = {"path": receipt_path.name,
+                               "sha256": sha256(receipt_path)}
+            fixture["wavs"].append(item)
+
+        def expect_fixture_failure(mutated: dict, label: str) -> None:
+            manifest.write_text(json.dumps(mutated))
+            try:
+                check_fixtures(manifest)
+            except (ValueError, KeyError, TypeError):
+                pass
+            else:
+                raise AssertionError(f"{label} did not fail closed")
         for script in SCRIPT_IDS:
             for voice in fixture["tts_voice_ids"]:
                 add_wav(script, voice)
         manifest = root / "FROZEN_FIXTURE.json"
         manifest.write_text(json.dumps(fixture))
-        require(check_fixtures(manifest)["tts_wavs"] == 12, "12-case self-test failed")
+        require(check_fixtures(manifest)["qa_receipts_verified"] == 24,
+                "12-case receipt self-test failed")
         add_wav("A", "human_one")
         fixture["human_voice_id"] = "human_one"
         fixture["human_script_ids"] = ["A"]
         manifest.write_text(json.dumps(fixture))
-        require(check_fixtures(manifest)["human_wavs"] == 1, "human-extension self-test failed")
-        fixture["wavs"].pop(0)
-        manifest.write_text(json.dumps(fixture))
-        try:
-            check_fixtures(manifest)
-        except ValueError:
-            pass
-        else:
-            raise AssertionError("missing mandatory TTS case did not fail closed")
+        require(check_fixtures(manifest)["qa_receipts_verified"] == 26,
+                "human-extension receipt self-test failed")
+
+        missing = copy.deepcopy(fixture)
+        missing["wavs"].pop(0)
+        expect_fixture_failure(missing, "missing mandatory TTS case")
+        duplicate_path = copy.deepcopy(fixture)
+        duplicate_path["wavs"][1]["path"] = duplicate_path["wavs"][0]["path"]
+        duplicate_path["wavs"][1]["sha256"] = duplicate_path["wavs"][0]["sha256"]
+        expect_fixture_failure(duplicate_path, "reused WAV path")
+        duplicate_bytes = copy.deepcopy(fixture)
+        second_wav = root / duplicate_bytes["wavs"][1]["path"]
+        original_second_wav = second_wav.read_bytes()
+        second_wav.write_bytes((root / duplicate_bytes["wavs"][0]["path"]).read_bytes())
+        duplicate_bytes["wavs"][1]["sha256"] = sha256(second_wav)
+        expect_fixture_failure(duplicate_bytes, "reused WAV bytes")
+        second_wav.write_bytes(original_second_wav)
+        absolute = copy.deepcopy(fixture)
+        absolute["system_prompt"]["path"] = str((root / absolute["system_prompt"]["path"]).resolve())
+        expect_fixture_failure(absolute, "absolute prompt path")
+        absolute_wav = copy.deepcopy(fixture)
+        absolute_wav["wavs"][0]["path"] = str((root / absolute_wav["wavs"][0]["path"]).resolve())
+        expect_fixture_failure(absolute_wav, "absolute WAV path")
+        for bad_path in ("./system_prompt.txt", "nested/../system_prompt.txt",
+                         "nested//system_prompt.txt", "C:/system_prompt.txt"):
+            unnormalized = copy.deepcopy(fixture)
+            unnormalized["system_prompt"]["path"] = bad_path
+            expect_fixture_failure(unnormalized, f"unnormalized path {bad_path}")
+        no_qa = copy.deepcopy(fixture)
+        no_qa["wavs"][0].pop("listening_receipt")
+        no_qa["wavs"][0].update(listened=True, independent_asr_checked=True)
+        expect_fixture_failure(no_qa, "self-asserted QA flags")
+        tampered_qa = copy.deepcopy(fixture)
+        qa_path = root / tampered_qa["wavs"][0]["asr_receipt"]["path"]
+        qa_path.write_text(qa_path.read_text() + " ")
+        expect_fixture_failure(tampered_qa, "tampered ASR receipt")
+        wrong_binding = copy.deepcopy(fixture)
+        qa_data = json.loads(qa_path.read_text())
+        qa_data["wav_sha256"] = "0" * 64
+        qa_path.write_text(json.dumps(qa_data))
+        wrong_binding["wavs"][0]["asr_receipt"]["sha256"] = sha256(qa_path)
+        expect_fixture_failure(wrong_binding, "ASR receipt bound to wrong WAV")
+
+        source = root / "source"
+        source.mkdir()
+        subprocess.run(["git", "init", "-q", str(source)], check=True)
+        (source / ".gitignore").write_text("ignored.py\n")
+        tracked = source / "tracked.py"
+        tracked.write_text("x = 1\n")
+        subprocess.run(["git", "-C", str(source), "add", "."], check=True)
+        subprocess.run(["git", "-C", str(source), "-c", "user.name=Preflight",
+                        "-c", "user.email=preflight@example.invalid", "commit", "-qm", "base"],
+                       check=True)
+        check_clean_worktree(source)
+        for label, dirty_file in (("modified", tracked), ("untracked", source / "extra.py"),
+                                  ("ignored", source / "ignored.py")):
+            dirty_file.write_text("x = 2\n")
+            try:
+                check_clean_worktree(source)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError(f"{label} NeMo source did not fail closed")
+            if dirty_file == tracked:
+                tracked.write_text("x = 1\n")
+            else:
+                dirty_file.unlink()
     return {"status": "self_test_passed_no_model_or_network"}
 
 
