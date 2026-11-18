@@ -49,6 +49,7 @@ class FakeSTT(torch.nn.Module):
         self.lm_head = FakeHead(1)
         self.function_head = FakeHead(2)
         self.positions = []
+        self.force_one_position = False
 
     def forward(self, input_embeds):
         output = self.llm(input_embeds)
@@ -64,7 +65,9 @@ class FakeSTT(torch.nn.Module):
         return ans, state
 
     def _step_inference(self, t, state, ans, force_bos_positions=None):
-        ans = self(torch.ones((1, 1, 3)) * (t + 1))
+        # Pinned Nemotron uses no KV cache and recomputes the growing prefix.
+        prefix = 1 if self.force_one_position or state["use_cache"] else t + 1
+        ans = self(torch.ones((1, prefix, 3)) * (t + 1))
         state["gen_text"][:, t] = ans["text_logits"][:, -1].argmax(dim=-1)
         if state["gen_function"][0, t] == self.text_pad_id:
             state["gen_function"][:, t] = ans["function_logits"][:, -1].argmax(dim=-1)
@@ -98,8 +101,13 @@ class FakeModel:
 
 
 class FakeRunner:
-    def __init__(self):
+    def __init__(self, *, skip_stt_at=None, duplicate_stt_at=None,
+                 skip_tts_at=None, use_cache=False):
         self.calls = []
+        self.skip_stt_at = skip_stt_at
+        self.duplicate_stt_at = duplicate_stt_at
+        self.skip_tts_at = skip_tts_at
+        self.use_cache = use_cache
 
     def __call__(self, model, **kwargs):
         self.calls.append(kwargs)
@@ -111,16 +119,22 @@ class FakeRunner:
                  "gen_function": torch.zeros((1, 4), dtype=torch.long),
                  "is_prompt_position_mask": torch.tensor([[False, False, False, False]]),
                  "start_gen_pos": 0, "prompt_token_lens": torch.tensor([0]),
-                 "response_spans": []}
+                 "function_response_spans": [[(2, 3)]] if kwargs["decode_audio"] else [[]],
+                 "T": 4, "use_cache": self.use_cache}
         if "function_calls" in kwargs:
             state["gen_function"][0, 2] = 3  # Pass-2 injection, not a selected head token.
         ans, _ = model.stt_model._step_zero(state)
         for t in range(1, 4):
+            if t == self.skip_stt_at:
+                continue
             ans = model.stt_model._step_inference(t, state, ans, None)
-            model.tts_model.infer_codes_one_step(
-                current_subword_id=state["gen_text"][:, t:t + 1],
-                prev_subword_id=state["gen_text"][:, t - 1:t],
-            )
+            if t == self.duplicate_stt_at:
+                ans = model.stt_model._step_inference(t, state, ans, None)
+            if t != self.skip_tts_at:
+                model.tts_model.infer_codes_one_step(
+                    current_subword_id=state["gen_text"][:, t:t + 1],
+                    prev_subword_id=state["gen_text"][:, t - 1:t],
+                )
         return model.stt_model._post_inference(state, kwargs["prompt_token_lens"])
 
 
@@ -182,6 +196,10 @@ class RecorderTests(unittest.TestCase):
                                             traced[label]["raw_result"][channel]))
             frames = recorder.passes[label]["frames"]
             self.assertEqual([row["frame_index_untrimmed"] for row in frames], [0, 1, 2, 3])
+            self.assertEqual([row["observed_prefix_length"] for row in frames],
+                             [1, 2, 3, 4])
+            self.assertTrue(all(row["raw_lm_head_logits"].shape == (1, 1, 5)
+                                for row in frames))
             self.assertEqual(len(recorder.passes[label]["tts_steps"]), 3)
             self.assertEqual(frames[0]["raw_lm_head_logits"][0, 0, 0].item() + 2,
                              frames[0]["returned_text_logits"][0, 0, 0].item())
@@ -195,6 +213,35 @@ class RecorderTests(unittest.TestCase):
         saved = torch.load(paths["pass2"], weights_only=True)
         self.assertEqual(saved["parser"]["external_tool_execution"], False)
         self.assertEqual(saved["result_channels_unspliced"]["audio"].shape, (1, 3))
+        self.assertEqual(saved["untrimmed_selected"]["function_response_spans"], [[(2, 3)]])
+
+    def test_cache_mode_records_one_position_per_step(self):
+        model, runner = FakeModel(), FakeRunner(use_cache=True)
+        recorder = PassiveDualHeadRecorder(model, source_verifier=lambda _: None)
+        trace = self.run_adapter(model, recorder.wrap_runner(runner))
+        recorder.bind_adapter_trace(trace)
+        self.assertEqual([row["observed_prefix_length"]
+                          for row in recorder.passes["pass2"]["frames"]], [1, 1, 1, 1])
+
+    def test_skipped_or_duplicate_stt_and_missing_tts_fail_closed(self):
+        for runner, error in ((FakeRunner(skip_stt_at=2), "frame sequence"),
+                              (FakeRunner(duplicate_stt_at=1), "frame sequence"),
+                              (FakeRunner(skip_tts_at=3), "frame count")):
+            with self.subTest(error=error):
+                model = FakeModel()
+                recorder = PassiveDualHeadRecorder(model, source_verifier=lambda _: None)
+                with self.assertRaisesRegex(ValueError, error):
+                    self.run_adapter(model, recorder.wrap_runner(runner))
+                self.assertNotIn("_step_zero", vars(model.stt_model))
+                self.assertNotIn("infer_codes_one_step", vars(model.tts_model))
+
+    def test_no_cache_wrong_prefix_fails_at_first_bad_frame(self):
+        model = FakeModel()
+        model.stt_model.force_one_position = True
+        recorder = PassiveDualHeadRecorder(model, source_verifier=lambda _: None)
+        with self.assertRaisesRegex(ValueError, "prefix differs"):
+            self.run_adapter(model, recorder.wrap_runner(FakeRunner(use_cache=False)))
+        self.assertNotIn("_step_inference", vars(model.stt_model))
 
     def test_source_verifier_and_frame_cap_fail_before_or_during_model(self):
         model, runner = FakeModel(), FakeRunner()

@@ -15,15 +15,20 @@ and returns its original object. Hooks return `None` and copy outputs to CPU.
 The adapter still owns QA, parser selection, inert tool responses, and pass-2
 replay. The recorder never executes a tool.
 
-Per untrimmed frame and pass, it stores the shared LLM state, raw text-head and
-function-head logits, text logits after the model's inference boosts, the
-returned function logits, selected text/function IDs, and whether a function
-ID was model-selected, prompted, or pre-injected. The raw head copy occurs
-before the pinned forward's in-place text boost. It also saves the untrimmed
-token arrays before postprocessing, each TTS step's input text IDs and output
-code, both raw result channels (including unspliced audio), and the adapter's
-raw parser positions, selected first call, injected response, and dry-run
-decisions. The source-level data alone cannot prove that a generated function
+Per untrimmed frame and pass, it stores the **last timestep** of the shared
+LLM state, raw text-head and function-head logits, text logits after the
+model's inference boosts, and returned function logits. This is essential
+because pinned Nemotron recomputes an ever-growing prefix without a KV cache;
+the recorder checks and stores the observed prefix length at every frame.
+It also stores selected text/function IDs, whether a function ID was
+model-selected, prompted, or pre-injected, and the actual
+`function_response_spans` state before postprocessing. The raw head copy
+occurs before the pinned forward's in-place text boost. Each TTS step's input
+text IDs and output code, both raw result channels (including unspliced
+audio), and the adapter's raw parser positions, selected first call,
+injected response, and dry-run decisions are saved. The recorder requires
+contiguous frame ordinals, exactly `T` STT frames, and `T-1` ordered TTS code
+steps. The source-level data alone cannot prove that a generated function
 script caused a spoken statement; pass 1 has `decode_audio=False`, while
 pass-2 replay can change the trajectory.
 

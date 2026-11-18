@@ -40,14 +40,16 @@ def verify_pinned_model_sources(model: Any) -> None:
             raise RuntimeError(f"{label} source differs from pinned NeMo commit")
 
 
-def _tensor_copy(value: Any, label: str):
+def _last_step_copy(value: Any, label: str):
     import torch
 
-    if not isinstance(value, torch.Tensor) or value.ndim != 3 or value.shape[0] != 1:
+    if (not isinstance(value, torch.Tensor) or value.ndim != 3 or
+            value.shape[0] != 1 or value.shape[1] < 1):
         raise ValueError(f"{label} must be a batch-one rank-three tensor")
-    if not torch.isfinite(value).all():
+    last = value[:, -1:, :]
+    if not torch.isfinite(last).all():
         raise ValueError(f"{label} is not finite")
-    return value.detach().cpu().contiguous().clone()
+    return last.detach().cpu().contiguous().clone(), int(value.shape[1])
 
 
 def _copy(value: Any) -> Any:
@@ -144,7 +146,14 @@ class PassiveDualHeadRecorder:
         def put(name: str, value: Any, *, rank_three: bool = True) -> None:
             if current is None or name in current:
                 raise ValueError(f"Unexpected or duplicate {name} head call")
-            copied = _tensor_copy(value, name) if rank_three else _copy(value)
+            if rank_three:
+                copied, prefix_length = _last_step_copy(value, name)
+                if "observed_prefix_length" in current and \
+                        current["observed_prefix_length"] != prefix_length:
+                    raise ValueError("Dual-head prefix lengths differ within frame")
+                current["observed_prefix_length"] = prefix_length
+            else:
+                copied = _copy(value)
             self._charge(record, copied)
             current[name] = copied
 
@@ -170,15 +179,22 @@ class PassiveDualHeadRecorder:
             nonlocal current
             required = {"shared_hidden_state", "raw_lm_head_logits",
                         "raw_function_head_logits", "returned_text_logits",
-                        "returned_function_logits"}
+                        "returned_function_logits", "observed_prefix_length"}
             if current is None or set(current) != required:
                 raise ValueError("One dual-head frame was not captured completely")
             widths = {int(current[key].shape[-1]) for key in
                       ("raw_lm_head_logits", "raw_function_head_logits",
                        "returned_text_logits", "returned_function_logits")}
-            if len(widths) != 1 or any(current[key].shape[1] != 1 for key in current):
+            tensor_keys = required - {"observed_prefix_length"}
+            if len(widths) != 1 or any(current[key].shape[1] != 1 for key in tensor_keys):
                 raise ValueError("Dual-head frame dimensions changed")
+            if "use_cache" not in state or not isinstance(state["use_cache"], bool):
+                raise ValueError("Pinned cache-mode flag missing")
+            expected_prefix = 1 if state["use_cache"] else frame + 1
+            if current["observed_prefix_length"] != expected_prefix:
+                raise ValueError("Observed head prefix differs from cache mode and frame")
             current["frame_index_untrimmed"] = frame
+            current["use_cache"] = state["use_cache"]
             current["selected_text_token_id"] = _selected_id(state, "gen_text", frame)
             current["selected_function_token_id"] = _selected_id(state, "gen_function", frame)
             current["function_token_source"] = (
@@ -192,7 +208,8 @@ class PassiveDualHeadRecorder:
 
         def start(frame: int) -> None:
             nonlocal current
-            if current is not None or len(record["frames"]) >= self.max_frames_per_pass:
+            if (not isinstance(frame, int) or frame != len(record["frames"]) or
+                    current is not None or len(record["frames"]) >= self.max_frames_per_pass):
                 raise ValueError("Passive recorder frame sequence or cap changed")
             current = {}
 
@@ -219,16 +236,27 @@ class PassiveDualHeadRecorder:
         def post(state: dict[str, Any], *args: Any, **kwargs: Any):
             if "untrimmed_selected" in record:
                 raise ValueError("Post-inference called more than once")
+            total = state.get("T")
+            if (not isinstance(total, int) or total < 1 or
+                    len(record["frames"]) != total or
+                    len(record["tts_steps"]) != total - 1 or
+                    [row["frame_index_untrimmed"] for row in record["tts_steps"]] !=
+                    list(range(1, total))):
+                raise ValueError("STT/TTS frame count differs from pinned inference length")
             selected = {key: _copy(state.get(key)) for key in
                         ("gen_text", "gen_function", "prompt_token_lens",
-                         "is_prompt_position_mask", "response_spans")}
+                         "is_prompt_position_mask", "function_response_spans")}
             self._charge(record, selected)
             record["untrimmed_selected"] = selected
             return original_post(state, *args, **kwargs)
 
         def tts_step(*args: Any, **kwargs: Any):
+            expected_frame = len(record["tts_steps"]) + 1
+            if len(record["frames"]) != expected_frame + 1:
+                raise ValueError("TTS code step does not follow its STT frame")
             result = original_tts(*args, **kwargs)
-            entry = {"current_subword_id": _copy(kwargs.get("current_subword_id")),
+            entry = {"frame_index_untrimmed": expected_frame,
+                     "current_subword_id": _copy(kwargs.get("current_subword_id")),
                      "prev_subword_id": _copy(kwargs.get("prev_subword_id")),
                      "code": _copy(result[0] if isinstance(result, tuple) else result)}
             self._charge(record, entry)
