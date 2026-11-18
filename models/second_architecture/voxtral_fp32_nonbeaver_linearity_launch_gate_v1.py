@@ -283,7 +283,8 @@ def verify_freeze() -> tuple[dict, dict]:
     expected = {"status", "reviewed_utc", "source_review_commit",
                 "auditor_review_commit", "context_labels", "planned_counts_per_context",
                 "process_cap_seconds", "audit_cap_seconds", "max_mps_driver_bytes",
-                "max_output_bytes_per_context", "max_capture_bytes",
+                "max_output_bytes_per_context", "max_campaign_bytes",
+                "min_free_bytes_before_reservation", "max_capture_bytes",
                 "max_worker_bytes", "prior_model_work_seconds",
                 "max_total_model_work_seconds", *BOUND}
     if (set(freeze) != expected or freeze["status"] != STATUS or
@@ -298,6 +299,9 @@ def verify_freeze() -> tuple[dict, dict]:
             freeze["audit_cap_seconds"] != AUDIT_SECONDS or
             freeze["max_mps_driver_bytes"] != 30 * 1024**3 or
             freeze["max_output_bytes_per_context"] != MAX_OUTPUT_BYTES or
+            freeze["max_campaign_bytes"] != MAX_CAMPAIGN_BYTES or
+            freeze["min_free_bytes_before_reservation"] !=
+                MIN_FREE_BYTES_BEFORE_RESERVATION or
             freeze["max_capture_bytes"] != MAX_CAPTURE_BYTES or
             freeze["max_worker_bytes"] != runner.MAX_WORKER_BYTES or
             freeze["prior_model_work_seconds"] != prior_seconds or
@@ -324,15 +328,25 @@ def verify_freeze() -> tuple[dict, dict]:
                     "cpu_preflight_sha256": sha(CPU_PREFLIGHT)}
 
 
-def _reservation() -> dict:
+def _reservation(freeze: dict, upstream: dict) -> dict:
     reservation = _json(RUNS / "campaign_reservation.json")
     campaign = reservation.get("campaign_id")
-    if (reservation.get("status") != CAMPAIGN_STATUS or
+    recorded_prior = reservation.get("prior_model_work_seconds")
+    if (type(recorded_prior) not in (int, float) or
+            not math.isfinite(recorded_prior) or recorded_prior < 0):
+        raise ValueError("Campaign prior model-work seconds invalid")
+    if (set(reservation) != {"status", "campaign_id", "attempt_ids",
+                             "context_labels", "freeze_sha256", "wall_utc",
+                             "prior_model_work_seconds"} or
+            reservation.get("status") != CAMPAIGN_STATUS or
             not isinstance(campaign, str) or CAMPAIGN_ID.fullmatch(campaign) is None or
             reservation.get("context_labels") != list(runner.CONTEXT_LABELS) or
             reservation.get("attempt_ids") !=
             [f"{campaign}_{i:02d}" for i in range(4)] or
-            reservation.get("freeze_sha256") != sha(FREEZE)):
+            reservation.get("freeze_sha256") != sha(FREEZE) or
+            recorded_prior != upstream["prior_model_work_seconds"] or
+            old_gate.utc(reservation.get("wall_utc")) <=
+                old_gate.utc(freeze["reviewed_utc"])):
         raise ValueError("Four-entry campaign reservation differs")
     return reservation
 
@@ -365,19 +379,140 @@ def reserve_all(campaign_id: str) -> dict:
 
 
 def _check_prior_entries(index: int, reservation: dict) -> float:
+    """Validate every earlier complete attempt before spending the next slot."""
     used = 0.0
+    base = reservation["prior_model_work_seconds"]
+    freeze_sha = reservation["freeze_sha256"]
+    reserved_at = old_gate.utc(reservation["wall_utc"])
     for earlier in range(index):
         label = runner.CONTEXT_LABELS[earlier]
         attempt = reservation["attempt_ids"][earlier]
-        finish = _json(RUNS / label / attempt / "launch_finish.json")
-        if (finish.get("attempt_id") != attempt or
-                finish.get("context_index") != earlier or
+        capture = RUNS / label / attempt
+        output = runner.RUNS / label / attempt
+        start = _json(capture / "launch_start.json")
+        finish = _json(capture / "launch_finish.json")
+        cumulative = base + used
+        expected_command = [sys.executable, str(Path(runner.__file__).resolve()),
+                            "--run-context", str(earlier), "--attempt-id", attempt,
+                            "--freeze-sha256", freeze_sha]
+        if (start.get("status") != "context_launch_started" or
+                start.get("context_index") != earlier or
+                start.get("context_label") != label or
+                start.get("attempt_id") != attempt or
+                start.get("freeze_sha256") != freeze_sha or
+                start.get("worker_command") != expected_command or
+                start.get("worker_output") != str(output) or
+                start.get("prior_model_work_seconds") != base or
+                start.get("cumulative_prior_model_work_seconds") != cumulative or
+                start.get("process_cap_seconds") != runner.MODEL_SECONDS or
+                start.get("max_mps_driver_bytes") != runner.MAX_DRIVER_BYTES or
+                start.get("max_output_bytes") != MAX_OUTPUT_BYTES or
+                start.get("max_worker_bytes") != runner.MAX_WORKER_BYTES or
+                start.get("max_capture_bytes") != MAX_CAPTURE_BYTES or
+                start.get("planned_counts") != runner.COUNTS):
+            raise ValueError("Earlier fixed campaign start receipt differs")
+        start_at = old_gate.utc(start.get("wall_utc"))
+        finish_at = old_gate.utc(finish.get("wall_utc"))
+        if not reserved_at < start_at < finish_at:
+            raise ValueError("Earlier fixed campaign UTC order differs")
+        if (finish.get("context_index") != earlier or
+                finish.get("context_label") != label or
+                finish.get("attempt_id") != attempt or
+                finish.get("freeze_sha256") != freeze_sha or
+                finish.get("prior_model_work_seconds") != base or
+                finish.get("cumulative_prior_model_work_seconds") != cumulative or
                 finish.get("status") not in (FINISH_OK, FINISH_FAILED)):
-            raise ValueError("Earlier fixed campaign entry lacks final receipt")
+            raise ValueError("Earlier fixed campaign finish receipt differs")
         elapsed = finish.get("model_work_elapsed_seconds")
+        total_elapsed = finish.get("elapsed_seconds")
         if (type(elapsed) not in (int, float) or not math.isfinite(elapsed) or
-                elapsed < 0 or elapsed > runner.MODEL_SECONDS):
+                elapsed < 0 or elapsed > runner.MODEL_SECONDS or
+                type(total_elapsed) not in (int, float) or
+                not math.isfinite(total_elapsed) or total_elapsed < elapsed or
+                total_elapsed > runner.MODEL_SECONDS + AUDIT_SECONDS + 120 or
+                abs((finish_at - start_at).total_seconds() - total_elapsed) > 5):
             raise ValueError("Earlier context model-work seconds invalid")
+        worker_started_at = old_gate.utc(finish.get("worker_started_utc"))
+        worker_finished_at = old_gate.utc(finish.get("worker_finished_utc"))
+        if (not start_at <= worker_started_at <= worker_finished_at <= finish_at or
+                abs((worker_finished_at - worker_started_at).total_seconds() -
+                    elapsed) > 5):
+            raise ValueError("Earlier parent-measured worker elapsed time differs")
+        worker_code = finish.get("worker_returncode")
+        auditor_code = finish.get("auditor_returncode")
+        if ((worker_code is not None and type(worker_code) is not int) or
+                (auditor_code is not None and type(auditor_code) is not int) or
+                type(finish.get("post_run_source_verified")) is not bool):
+            raise ValueError("Earlier context process or source receipt invalid")
+        if worker_code is not None and not all(
+                (capture / name).is_file() for name in
+                ("worker_stdout.txt", "worker_stderr.txt")):
+            raise ValueError("Earlier context worker streams absent")
+        claim_path = capture / "worker_claim.json"
+        if claim_path.exists():
+            claim = _json(claim_path)
+            if (claim.get("status") != "context_worker_claimed_no_retry" or
+                    claim.get("context_index") != earlier or
+                    claim.get("context_label") != label or
+                    claim.get("attempt_id") != attempt or
+                    claim.get("freeze_sha256") != freeze_sha or
+                    not start_at < old_gate.utc(claim.get("wall_utc")) < finish_at):
+                raise ValueError("Earlier context worker claim differs")
+        elif worker_code == 0 or finish["status"] == FINISH_OK:
+            raise ValueError("Earlier successful worker claim absent")
+        if finish["status"] == FINISH_OK:
+            result_path = output / "result.json"
+            audit_path = output / "audit.json"
+            result = _json(result_path)
+            audit = _json(audit_path)
+            if (worker_code != 0 or auditor_code != 0 or
+                    finish.get("post_run_source_verified") is not True or
+                    finish.get("error_sha256") is not None or
+                    (output / "error.json").exists() or
+                    finish.get("result_sha256") != sha(result_path) or
+                    finish.get("audit_sha256") != sha(audit_path) or
+                    result.get("status") !=
+                        "completed_fp32_nonbeaver_local_linearity_raw_only" or
+                    result.get("context", {}).get("index") != earlier or
+                    result.get("context", {}).get("label") != label or
+                    result.get("attempt_id") != attempt or
+                    result.get("freeze_sha256") != freeze_sha or
+                    result.get("actual_counts") != runner.COUNTS or
+                    audit.get("status") !=
+                        "audited_voxtral_fp32_nonbeaver_saved_data_only" or
+                    audit.get("context") != result.get("context") or
+                    audit.get("attempt_id") != attempt or
+                    audit.get("freeze_sha256") != freeze_sha or
+                    audit.get("result_sha256") != sha(result_path) or
+                    audit.get("preflight_receipt_sha256") != sha(CPU_PREFLIGHT) or
+                    audit.get("protocol_v5_sha256") != PROTOCOL_SHA or
+                    audit.get("worker_invalidity_disagreement") is not False):
+                raise ValueError("Earlier successful model/audit evidence differs")
+            result_elapsed = result.get("elapsed_seconds")
+            if (type(result_elapsed) not in (int, float) or
+                    not math.isfinite(result_elapsed) or
+                    result_elapsed < 0 or result_elapsed > elapsed):
+                raise ValueError("Earlier worker elapsed time differs")
+        else:
+            if (not isinstance(finish.get("failure_reason"), str) or
+                    not finish["failure_reason"]):
+                raise ValueError("Earlier failed-entry receipt invalid")
+            for name, key in (("result.json", "result_sha256"),
+                              ("audit.json", "audit_sha256"),
+                              ("error.json", "error_sha256")):
+                recorded = finish.get(key)
+                path = output / name
+                if recorded is not None and (not path.is_file() or recorded != sha(path)):
+                    raise ValueError("Earlier failed-entry file hash differs")
+        if (finish.get("worker_output_bytes") != _tree_bytes(output) or
+                type(finish.get("launcher_output_bytes_before_finish")) is not int or
+                type(finish.get("combined_output_bytes_before_finish")) is not int):
+            raise ValueError("Earlier fixed campaign output receipt differs")
+        capture_bytes_without_finish = (
+            _tree_bytes(capture) - (capture / "launch_finish.json").stat().st_size)
+        if finish["combined_output_bytes_before_finish"] != (
+                _tree_bytes(output) + capture_bytes_without_finish):
+            raise ValueError("Earlier fixed campaign output byte total differs")
         if (_tree_bytes(RUNS / label / attempt) +
                 _tree_bytes(runner.RUNS / label / attempt) > MAX_OUTPUT_BYTES):
             raise ValueError("Earlier fixed campaign entry exceeded output cap")
@@ -396,12 +531,15 @@ def verify_worker_start(index: int, attempt_id: str, freeze_sha256: str) -> dict
     if ATTEMPT_ID.fullmatch(attempt_id) is None:
         raise ValueError("Attempt ID malformed")
     freeze, upstream = verify_freeze()
-    reservation = _reservation()
+    reservation = _reservation(freeze, upstream)
     used = _check_prior_entries(index, reservation)
     label = runner.CONTEXT_LABELS[index]
     capture = RUNS / label / attempt_id
     output = runner.RUNS / label / attempt_id
     start = _json(capture / "launch_start.json")
+    expected_command = [sys.executable, str(Path(runner.__file__).resolve()),
+                        "--run-context", str(index), "--attempt-id", attempt_id,
+                        "--freeze-sha256", freeze_sha256]
     if (reservation["attempt_ids"][index] != attempt_id or
             reservation["freeze_sha256"] != freeze_sha256 or
             start.get("status") != "context_launch_started" or
@@ -409,8 +547,18 @@ def verify_worker_start(index: int, attempt_id: str, freeze_sha256: str) -> dict
             start.get("context_index") != index or
             start.get("context_label") != label or
             start.get("freeze_sha256") != freeze_sha256 or
+            start.get("worker_command") != expected_command or
+            start.get("worker_output") != str(output) or
+            start.get("prior_model_work_seconds") !=
+                upstream["prior_model_work_seconds"] or
             start.get("cumulative_prior_model_work_seconds") !=
                 upstream["prior_model_work_seconds"] + used or
+            start.get("process_cap_seconds") != runner.MODEL_SECONDS or
+            start.get("max_mps_driver_bytes") != runner.MAX_DRIVER_BYTES or
+            start.get("max_output_bytes") != MAX_OUTPUT_BYTES or
+            start.get("max_worker_bytes") != runner.MAX_WORKER_BYTES or
+            start.get("max_capture_bytes") != MAX_CAPTURE_BYTES or
+            start.get("planned_counts") != runner.COUNTS or
             old_gate.utc(start.get("wall_utc")) <= old_gate.utc(freeze["reviewed_utc"]) or
             old_gate.utc(start.get("wall_utc")) <= old_gate.utc(reservation["wall_utc"]) or
             output.exists() or (capture / "worker_claim.json").exists()):
@@ -434,28 +582,36 @@ def _bounded(command: list[str], capture: Path, names: tuple[str, str],
                                 env={**os.environ, "HF_HUB_OFFLINE": "1",
                                      "TRANSFORMERS_OFFLINE": "1"},
                                 start_new_session=True)
-        while True:
-            code = proc.poll()
-            elapsed = time.monotonic() - began
-            if elapsed >= seconds:
-                reason = "context_process_timeout"
-            elif max((capture / names[0]).stat().st_size,
-                     (capture / names[1]).stat().st_size) >= MAX_CAPTURE_BYTES:
-                reason = "context_capture_byte_cap"
-            elif _tree_bytes(capture) + _tree_bytes(output) >= \
-                    MAX_OUTPUT_BYTES - FINISH_RESERVE_BYTES:
-                reason = "context_combined_output_byte_cap"
-            if reason and code is None:
-                os.killpg(proc.pid, signal.SIGKILL if elapsed >= seconds else signal.SIGTERM)
+        try:
+            while True:
+                code = proc.poll()
+                elapsed = time.monotonic() - began
+                if elapsed >= seconds:
+                    reason = "context_process_timeout"
+                elif max((capture / names[0]).stat().st_size,
+                         (capture / names[1]).stat().st_size) >= MAX_CAPTURE_BYTES:
+                    reason = "context_capture_byte_cap"
+                elif _tree_bytes(capture) + _tree_bytes(output) >= \
+                        MAX_OUTPUT_BYTES - FINISH_RESERVE_BYTES:
+                    reason = "context_combined_output_byte_cap"
+                if reason and code is None:
+                    os.killpg(proc.pid, signal.SIGKILL if elapsed >= seconds else signal.SIGTERM)
+                    try:
+                        code = proc.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        os.killpg(proc.pid, signal.SIGKILL)
+                        code = proc.wait(timeout=5)
+                    break
+                if reason or code is not None:
+                    break
+                time.sleep(0.1)
+        finally:
+            if proc.poll() is None:
                 try:
-                    code = proc.wait(timeout=5)
-                except subprocess.TimeoutExpired:
                     os.killpg(proc.pid, signal.SIGKILL)
-                    code = proc.wait(timeout=5)
-                break
-            if reason or code is not None:
-                break
-            time.sleep(0.1)
+                except ProcessLookupError:
+                    pass
+                proc.wait(timeout=5)
     return code, time.monotonic() - began, reason
 
 
@@ -514,7 +670,7 @@ def launch_context(index: int) -> dict:
     if not isinstance(index, int) or index not in range(4):
         raise ValueError("Context index invalid")
     frozen, upstream = verify_freeze()
-    reservation = _reservation()
+    reservation = _reservation(frozen, upstream)
     used = _check_prior_entries(index, reservation)
     label = runner.CONTEXT_LABELS[index]
     attempt_id = reservation["attempt_ids"][index]
@@ -560,9 +716,13 @@ def launch_context(index: int) -> dict:
               "cumulative_prior_model_work_seconds": cumulative_prior}
     began = time.monotonic()
     try:
-        code, elapsed, reason = _bounded(command, capture,
-                                         ("worker_stdout.txt", "worker_stderr.txt"),
-                                         output, runner.MODEL_SECONDS)
+        finish["worker_started_utc"] = datetime.now(timezone.utc).isoformat()
+        try:
+            code, elapsed, reason = _bounded(
+                command, capture, ("worker_stdout.txt", "worker_stderr.txt"),
+                output, runner.MODEL_SECONDS)
+        finally:
+            finish["worker_finished_utc"] = datetime.now(timezone.utc).isoformat()
         finish["worker_returncode"] = code
         finish["model_work_elapsed_seconds"] = elapsed
         if reason or code != 0 or elapsed >= runner.MODEL_SECONDS:

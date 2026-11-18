@@ -16,6 +16,56 @@ import voxtral_fp32_nonbeaver_linearity_launch_gate_v1 as gate
 
 
 class FourEntryGateTests(unittest.TestCase):
+    def _write_prior_failure(self, root: Path, reservation: dict,
+                             *, elapsed: float = 17.25) -> Path:
+        label = gate.runner.CONTEXT_LABELS[0]
+        attempt = reservation["attempt_ids"][0]
+        capture = root / label / attempt
+        output = root / "worker" / label / attempt
+        start_at = datetime(2026, 11, 18, 17, 0, 1, tzinfo=timezone.utc)
+        worker_done_at = start_at + timedelta(seconds=elapsed)
+        finish_at = worker_done_at + timedelta(seconds=1)
+        gate._put(capture / "launch_start.json", {
+            "status": "context_launch_started", "context_index": 0,
+            "context_label": label, "attempt_id": attempt,
+            "freeze_sha256": reservation["freeze_sha256"],
+            "wall_utc": start_at.isoformat(),
+            "worker_command": [sys.executable, str(Path(gate.runner.__file__).resolve()),
+                               "--run-context", "0", "--attempt-id", attempt,
+                               "--freeze-sha256", reservation["freeze_sha256"]],
+            "worker_output": str(output),
+            "prior_model_work_seconds": reservation["prior_model_work_seconds"],
+            "cumulative_prior_model_work_seconds": reservation["prior_model_work_seconds"],
+            "process_cap_seconds": gate.runner.MODEL_SECONDS,
+            "max_mps_driver_bytes": gate.runner.MAX_DRIVER_BYTES,
+            "max_output_bytes": gate.MAX_OUTPUT_BYTES,
+            "max_worker_bytes": gate.runner.MAX_WORKER_BYTES,
+            "max_capture_bytes": gate.MAX_CAPTURE_BYTES,
+            "planned_counts": gate.runner.COUNTS,
+        })
+        gate._put(capture / "launch_finish.json", {
+            "status": gate.FINISH_FAILED, "context_index": 0,
+            "context_label": label, "attempt_id": attempt,
+            "freeze_sha256": reservation["freeze_sha256"],
+            "wall_utc": finish_at.isoformat(),
+            "worker_started_utc": start_at.isoformat(),
+            "worker_finished_utc": worker_done_at.isoformat(),
+            "model_work_elapsed_seconds": elapsed,
+            "elapsed_seconds": elapsed + 1,
+            "prior_model_work_seconds": reservation["prior_model_work_seconds"],
+            "cumulative_prior_model_work_seconds": reservation["prior_model_work_seconds"],
+            "worker_returncode": None, "auditor_returncode": None,
+            "post_run_source_verified": False,
+            "result_sha256": None, "audit_sha256": None,
+            "error_sha256": None, "failure_reason": "worker failed before claim",
+            "worker_output_bytes": 0,
+            "launcher_output_bytes_before_finish":
+                (capture / "launch_start.json").stat().st_size,
+            "combined_output_bytes_before_finish":
+                (capture / "launch_start.json").stat().st_size,
+        })
+        return capture
+
     def test_fixed_four_context_scope_and_caps(self):
         self.assertEqual(tuple(gate.runner.CONTEXT_LABELS),
                          ("piper_silver", "piper_teal", "kokoro_silver", "kokoro_teal"))
@@ -76,6 +126,31 @@ class FourEntryGateTests(unittest.TestCase):
                     gate.reserve_all("20261118T170000000001Z")
             self.assertFalse((root / "launch/campaign_reservation.json").exists())
 
+    def test_reservation_rejects_false_prior_time_and_stale_utc(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            campaign = "20261118T170000000001Z"
+            baseline = {
+                "status": gate.CAMPAIGN_STATUS, "campaign_id": campaign,
+                "attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)],
+                "context_labels": list(gate.runner.CONTEXT_LABELS),
+                "freeze_sha256": "f" * 64,
+                "wall_utc": "2026-11-18T17:00:00+00:00",
+                "prior_model_work_seconds": 368.4824181678705,
+            }
+            frozen = {"reviewed_utc": "2026-11-18T16:00:00+00:00"}
+            upstream = {"prior_model_work_seconds": 368.4824181678705}
+            with mock.patch.object(gate, "RUNS", root), \
+                    mock.patch.object(gate, "sha", return_value="f" * 64):
+                path = root / "campaign_reservation.json"
+                gate._put(path, {**baseline, "prior_model_work_seconds": -999999.0})
+                with self.assertRaisesRegex(ValueError, "prior model-work"):
+                    gate._reservation(frozen, upstream)
+                path.unlink()
+                gate._put(path, {**baseline, "wall_utc": "2020-01-01T00:00:00+00:00"})
+                with self.assertRaisesRegex(ValueError, "reservation differs"):
+                    gate._reservation(frozen, upstream)
+
     def test_byte_budget_requires_v5_and_two_subcap_engine_rehearsals(self):
         budget = gate._json(gate.BYTE_BUDGET)
         gate.verify_byte_budget(budget, budget["runner_sha256"])
@@ -96,16 +171,15 @@ class FourEntryGateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             campaign = "20261118T170000000001Z"
-            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)]}
-            with mock.patch.object(gate, "RUNS", root):
+            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)],
+                           "prior_model_work_seconds": 368.4824181678705,
+                           "freeze_sha256": "f" * 64,
+                           "wall_utc": "2026-11-18T17:00:00+00:00"}
+            with mock.patch.object(gate, "RUNS", root), \
+                    mock.patch.object(gate.runner, "RUNS", root / "worker"):
                 with self.assertRaises(FileNotFoundError):
                     gate._check_prior_entries(1, reservation)
-                prior = root / gate.runner.CONTEXT_LABELS[0] / reservation["attempt_ids"][0]
-                gate._put(prior / "launch_finish.json", {
-                    "status": gate.FINISH_FAILED, "context_index": 0,
-                    "attempt_id": reservation["attempt_ids"][0],
-                    "model_work_elapsed_seconds": 17.25,
-                })
+                self._write_prior_failure(root, reservation)
                 self.assertEqual(gate._check_prior_entries(1, reservation), 17.25)
                 later = root / gate.runner.CONTEXT_LABELS[2] / reservation["attempt_ids"][2]
                 gate._put(later / "launch_start.json", {"status": "context_launch_started"})
@@ -116,31 +190,121 @@ class FourEntryGateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             campaign = "20261118T170000000001Z"
-            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)]}
-            prior = root / gate.runner.CONTEXT_LABELS[0] / reservation["attempt_ids"][0]
-            gate._put(prior / "launch_finish.json", {
-                "status": gate.FINISH_FAILED, "context_index": 0,
-                "attempt_id": reservation["attempt_ids"][0],
-                "model_work_elapsed_seconds": 301,
-            })
-            with mock.patch.object(gate, "RUNS", root):
+            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)],
+                           "prior_model_work_seconds": 368.4824181678705,
+                           "freeze_sha256": "f" * 64,
+                           "wall_utc": "2026-11-18T17:00:00+00:00"}
+            with mock.patch.object(gate, "RUNS", root), \
+                    mock.patch.object(gate.runner, "RUNS", root / "worker"):
+                prior = self._write_prior_failure(root, reservation, elapsed=301)
                 with self.assertRaisesRegex(ValueError, "model-work seconds"):
+                    gate._check_prior_entries(1, reservation)
+
+    def test_minimal_success_and_mutated_elapsed_cannot_admit_next_entry(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            campaign = "20261118T170000000001Z"
+            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)],
+                           "prior_model_work_seconds": 368.4824181678705,
+                           "freeze_sha256": "f" * 64,
+                           "wall_utc": "2026-11-18T17:00:00+00:00"}
+            prior = root / gate.runner.CONTEXT_LABELS[0] / reservation["attempt_ids"][0]
+            with mock.patch.object(gate, "RUNS", root), \
+                    mock.patch.object(gate.runner, "RUNS", root / "worker"):
+                gate._put(prior / "launch_finish.json", {
+                    "status": gate.FINISH_OK, "context_index": 0,
+                    "attempt_id": reservation["attempt_ids"][0],
+                    "model_work_elapsed_seconds": 0,
+                })
+                with self.assertRaises((ValueError, FileNotFoundError)):
+                    gate._check_prior_entries(1, reservation)
+                (prior / "launch_finish.json").unlink()
+                self._write_prior_failure(root, reservation)
+                saved = gate._json(prior / "launch_finish.json")
+                saved["model_work_elapsed_seconds"] = 0
+                (prior / "launch_finish.json").write_text(json.dumps(saved))
+                with self.assertRaisesRegex(ValueError, "parent-measured"):
+                    gate._check_prior_entries(1, reservation)
+                saved["model_work_elapsed_seconds"] = 25
+                (prior / "launch_finish.json").write_text(json.dumps(saved))
+                with self.assertRaisesRegex(ValueError, "model-work seconds"):
+                    gate._check_prior_entries(1, reservation)
+
+    def test_completed_prior_requires_claim_and_matching_result_audit(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            campaign = "20261118T170000000001Z"
+            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)],
+                           "prior_model_work_seconds": 368.4824181678705,
+                           "freeze_sha256": "f" * 64,
+                           "wall_utc": "2026-11-18T17:00:00+00:00"}
+            with mock.patch.object(gate, "RUNS", root), \
+                    mock.patch.object(gate.runner, "RUNS", root / "worker"):
+                capture = self._write_prior_failure(root, reservation, elapsed=8)
+                attempt = reservation["attempt_ids"][0]
+                label = gate.runner.CONTEXT_LABELS[0]
+                output = root / "worker" / label / attempt
+                context = {"index": 0, "label": label, "engine": "piper",
+                           "recipient": "silver", "donor": "teal"}
+                gate._put(capture / "worker_claim.json", {
+                    "status": "context_worker_claimed_no_retry", "context_index": 0,
+                    "context_label": label, "attempt_id": attempt,
+                    "freeze_sha256": reservation["freeze_sha256"],
+                    "wall_utc": "2026-11-18T17:00:02+00:00",
+                })
+                (capture / "worker_stdout.txt").write_bytes(b"")
+                (capture / "worker_stderr.txt").write_bytes(b"")
+                gate._put(output / "result.json", {
+                    "status": "completed_fp32_nonbeaver_local_linearity_raw_only",
+                    "context": context, "attempt_id": attempt,
+                    "freeze_sha256": reservation["freeze_sha256"],
+                    "actual_counts": gate.runner.COUNTS, "elapsed_seconds": 6,
+                })
+                result_sha = gate.sha(output / "result.json")
+                gate._put(output / "audit.json", {
+                    "status": "audited_voxtral_fp32_nonbeaver_saved_data_only",
+                    "context": context, "attempt_id": attempt,
+                    "freeze_sha256": reservation["freeze_sha256"],
+                    "result_sha256": result_sha,
+                    "preflight_receipt_sha256": gate.sha(gate.CPU_PREFLIGHT),
+                    "protocol_v5_sha256": gate.PROTOCOL_SHA,
+                    "worker_invalidity_disagreement": False,
+                })
+                finish_path = capture / "launch_finish.json"
+                saved = gate._json(finish_path)
+                saved.update({
+                    "status": gate.FINISH_OK, "worker_returncode": 0,
+                    "auditor_returncode": 0, "post_run_source_verified": True,
+                    "result_sha256": result_sha,
+                    "audit_sha256": gate.sha(output / "audit.json"),
+                    "worker_output_bytes": gate._tree_bytes(output),
+                })
+                saved.pop("failure_reason")
+                saved["combined_output_bytes_before_finish"] = (
+                    gate._tree_bytes(capture) - finish_path.stat().st_size +
+                    gate._tree_bytes(output))
+                finish_path.write_text(json.dumps(saved))
+                self.assertEqual(gate._check_prior_entries(1, reservation), 8)
+                (capture / "worker_claim.json").unlink()
+                with self.assertRaisesRegex(ValueError, "claim absent"):
                     gate._check_prior_entries(1, reservation)
 
     def test_prior_output_overshoot_blocks_next_entry(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             campaign = "20261118T170000000001Z"
-            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)]}
-            prior = root / gate.runner.CONTEXT_LABELS[0] / reservation["attempt_ids"][0]
-            gate._put(prior / "launch_finish.json", {
-                "status": gate.FINISH_FAILED, "context_index": 0,
-                "attempt_id": reservation["attempt_ids"][0],
-                "model_work_elapsed_seconds": 1,
-            })
-            (prior / "large.bin").write_bytes(b"x" * 1024)
+            reservation = {"attempt_ids": [f"{campaign}_{i:02d}" for i in range(4)],
+                           "prior_model_work_seconds": 368.4824181678705,
+                           "freeze_sha256": "f" * 64,
+                           "wall_utc": "2026-11-18T17:00:00+00:00"}
             with mock.patch.object(gate, "RUNS", root), \
+                    mock.patch.object(gate.runner, "RUNS", root / "worker"), \
                     mock.patch.object(gate, "MAX_OUTPUT_BYTES", 1000):
+                prior = self._write_prior_failure(root, reservation, elapsed=1)
+                (prior / "large.bin").write_bytes(b"x" * 1024)
+                saved = gate._json(prior / "launch_finish.json")
+                saved["combined_output_bytes_before_finish"] += 1024
+                (prior / "launch_finish.json").write_text(json.dumps(saved))
                 with self.assertRaisesRegex(ValueError, "output cap"):
                     gate._check_prior_entries(1, reservation)
 
