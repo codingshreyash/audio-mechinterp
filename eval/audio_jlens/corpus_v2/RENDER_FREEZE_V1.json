@@ -1,0 +1,15 @@
+{
+  "status": "independently_reviewed_cpu_renderer_frozen",
+  "scope": "Render and technical WAV audit only; no Qwen, Voxtral, ASR, or security outcome",
+  "candidate_sha256": "ac2f9598e4459191569662aa34803c5a72e57ff686d415e60935a4f716a11a93",
+  "candidate_validation_sha256": "67e3eec5e14b30a61efbbce449547ec2d5083a87d12a84f0aee8d0e715a59d56",
+  "renderer_sha256": "5109c97f92e199ea41ead8658701febaf3eaf3182bd99b319a978c0af274ad69",
+  "auditor_sha256": "24d7d4a5ff3b36b3c53657ced10189f4551366fde007d9393eae4796035ead5e",
+  "protocol_sha256": "9e2085e6a1a056b53d99e001dbc4be36c80c7d742c232b075335e0a4718aa436",
+  "independent_review_sha256": "42c96660bdf67e970ddf87206ddfde9c3c57b026ca08a73413fecc8969161033",
+  "planned_primary_pairs": 60,
+  "planned_matched_records": 240,
+  "planned_wavs": 480,
+  "inactive_reserve_pairs": 12,
+  "model_inference_authorized": false
+}
