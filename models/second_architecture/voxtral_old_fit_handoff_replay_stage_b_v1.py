@@ -23,6 +23,9 @@ HERE = Path(__file__).resolve().parent
 PROTOCOL = HERE / "VOXTRAL_OLD_FIT_NUMERICAL_HANDOFF_PROSPECTIVE_V1.md"
 # Update only through a new review/freeze if the committed protocol changes.
 PROTOCOL_SHA256 = "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b"
+NATIVE_SOURCE_SHA256 = "99c398948260525a9aa7074abb11d2e2390d4feee1d74662a5e4971f2517de11"
+NATIVE_TEST_SHA256 = "8771997481b787e02cd077a9be50abd1f6463e3f61980db7cee84a3b31713aeb"
+NATIVE_TEST = HERE / "test_voxtral_old_fit_handoff_native_stage_a_v1.py"
 SOURCE_REPLAY_STAGES = {
     "encoder31": (("projector_word", 4), ("lm_input_word", 4),
                   ("lm0", 4), ("lm14", 4), ("lm29", 16), ("lm29_raw", 4)),
@@ -58,6 +61,9 @@ def sha_file(path: Path) -> str:
 def require_protocol() -> None:
     if sha_file(PROTOCOL) != PROTOCOL_SHA256:
         raise ValueError("Stage-B protocol bytes changed")
+    if (sha_file(Path(native.__file__)) != NATIVE_SOURCE_SHA256 or
+            sha_file(NATIVE_TEST) != NATIVE_TEST_SHA256):
+        raise ValueError("Committed native Stage-A dependency bytes changed")
 
 
 def load_audited_native_attempt(attempt: Path, audit_path: Path, *,
@@ -80,7 +86,6 @@ def load_audited_native_attempt(attempt: Path, audit_path: Path, *,
     if sha_file(audit_path) != expected_audit_sha256:
         raise ValueError("Stage-A audit file differs from frozen hash")
     files = {"meta_sha256": "meta.json", "model_layout_sha256": "model_layout.json",
-             "probes_sha256": "probes.pt", "details_sha256": "details.pt",
              "progress_sha256": "progress.jsonl"}
     result_path = attempt / "result.json"
     result_raw = result_path.read_bytes()
@@ -94,10 +99,22 @@ def load_audited_native_attempt(attempt: Path, audit_path: Path, *,
         path = attempt / name
         if sha_file(path) != result.get(key):
             raise ValueError(f"Stage-A {name} hash differs")
-    for key, name in (("probes_bytes", "probes.pt"), ("details_bytes", "details.pt")):
-        if (not isinstance(result.get(key), int) or
-                (attempt / name).stat().st_size != result[key]):
-            raise ValueError(f"Stage-A {name} size differs")
+    sidecars = {}
+    for stem in ("probes", "details"):
+        expected_sha = result.get(f"{stem}_sha256")
+        relative = result.get(f"{stem}_path")
+        if (not isinstance(expected_sha, str) or len(expected_sha) != 64 or
+                any(char not in "0123456789abcdef" for char in expected_sha) or
+                relative != f"blobs/{expected_sha}.pt"):
+            raise ValueError(f"Stage-A {stem} content-addressed path differs")
+        path = attempt / relative
+        if (not path.is_file() or path.resolve().parent != (attempt / "blobs").resolve() or
+                sha_file(path) != expected_sha):
+            raise ValueError(f"Stage-A {stem} sidecar hash differs")
+        if (type(result.get(f"{stem}_bytes")) is not int or
+                path.stat().st_size != result[f"{stem}_bytes"]):
+            raise ValueError(f"Stage-A {stem} sidecar size differs")
+        sidecars[stem] = path
     audit = json.loads(audit_path.read_bytes(),
                        parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
     if (not isinstance(audit, dict) or audit.get("status") != expected_audit_status or
@@ -106,8 +123,8 @@ def load_audited_native_attempt(attempt: Path, audit_path: Path, *,
             audit.get("result_sha256") != hashlib.sha256(result_raw).hexdigest() or
             audit.get("details_sha256") != result["details_sha256"]):
         raise ValueError("Independent Stage-A audit does not bind this completed result")
-    probes = torch.load(attempt / "probes.pt", map_location="cpu", weights_only=True)
-    details = torch.load(attempt / "details.pt", map_location="cpu", weights_only=True)
+    probes = torch.load(sidecars["probes"], map_location="cpu", weights_only=True)
+    details = torch.load(sidecars["details"], map_location="cpu", weights_only=True)
     if (not isinstance(probes, dict) or not isinstance(details, dict) or
             not isinstance(details.get("probes"), dict) or
             set(probes) != {"lm", "projector_word", "lm_input_word"}):
@@ -323,8 +340,9 @@ def full_model_lm_override(model: Any, batch: dict[str, torch.Tensor], lm_input:
     lm_hits = []
     def override(_module, args, kwargs):
         original = kwargs.get("inputs_embeds")
-        if not isinstance(original, torch.Tensor) or tuple(original.shape) != expected_shape:
-            raise ValueError("Full-model LM input shape changed")
+        if (not isinstance(original, torch.Tensor) or tuple(original.shape) != expected_shape or
+                original.dtype != torch.float32):
+            raise ValueError("Full-model LM input shape/dtype changed")
         lm_hits.append(original)
         kwargs = dict(kwargs)
         kwargs["inputs_embeds"] = lm_input.to(original.device)
@@ -376,9 +394,12 @@ def source_replay_forward(model: Any, batch: dict[str, torch.Tensor], *,
     lm_hits, handles = _language_stages(model, dtype=torch.float32, expected_width=lm_shape[-1])
     module = (model.model.audio_tower.layers[31] if site == "encoder31" else
               model.model.multi_modal_projector)
+    source_hits = []
     def source_hook(_module, _inputs, output):
-        if not isinstance(output, torch.Tensor) or tuple(output.shape) != shape:
-            raise ValueError("Replay source hook shape changed")
+        if (not isinstance(output, torch.Tensor) or tuple(output.shape) != shape or
+                output.dtype != torch.float32):
+            raise ValueError("Replay source hook shape/dtype changed")
+        source_hits.append(output)
         return source_leaf
     def projector_hook(_module, _inputs, output):
         if not isinstance(output, torch.Tensor) or output.dtype != torch.float32:
@@ -401,7 +422,8 @@ def source_replay_forward(model: Any, batch: dict[str, torch.Tensor], *,
     finally:
         for handle in handles:
             handle.remove()
-    if (any(len(values) != 1 for values in hits.values()) or
+    if (len(source_hits) != 1 or
+            any(len(values) != 1 for values in hits.values()) or
             any(len(values) != 1 for values in lm_hits.values()) or
             any(not torch.isfinite(values[0]).all() for values in hits.values()) or
             any(not torch.isfinite(values[0]).all() for values in lm_hits.values())):

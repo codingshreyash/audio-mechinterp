@@ -132,26 +132,38 @@ class StageBReplayTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             attempt = Path(tmp) / "native"
             attempt.mkdir()
+            blobs = attempt / "blobs"
+            blobs.mkdir()
             probes = native.fixed_probes()
             details = fake_details()
             details["probes"] = probes
-            torch.save(probes, attempt / "probes.pt")
-            torch.save(details, attempt / "details.pt")
+            probes_tmp = blobs / "probes.tmp"
+            details_tmp = blobs / "details.tmp"
+            torch.save(probes, probes_tmp)
+            torch.save(details, details_tmp)
             for name in ("meta.json", "model_layout.json", "progress.jsonl"):
                 (attempt / name).write_text("{}\n")
+            probes_sha = target.sha_file(probes_tmp)
+            details_sha = target.sha_file(details_tmp)
+            probes_path = blobs / f"{probes_sha}.pt"
+            details_path = blobs / f"{details_sha}.pt"
+            probes_tmp.rename(probes_path)
+            details_tmp.rename(details_path)
             result = {
                 "status": "completed_old_fit_handoff_stage_a_native_only",
                 "arm": "bf16", "protocol_sha256": target.PROTOCOL_SHA256,
                 "parity_passed": True,
-                "probes_bytes": (attempt / "probes.pt").stat().st_size,
-                "details_bytes": (attempt / "details.pt").stat().st_size,
+                "probes_bytes": probes_path.stat().st_size,
+                "details_bytes": details_path.stat().st_size,
+                "probes_path": f"blobs/{probes_sha}.pt",
+                "details_path": f"blobs/{details_sha}.pt",
             }
             for key, name in (("meta_sha256", "meta.json"),
                               ("model_layout_sha256", "model_layout.json"),
-                              ("probes_sha256", "probes.pt"),
-                              ("details_sha256", "details.pt"),
                               ("progress_sha256", "progress.jsonl")):
                 result[key] = target.sha_file(attempt / name)
+            result["probes_sha256"] = probes_sha
+            result["details_sha256"] = details_sha
             (attempt / "result.json").write_text(json.dumps(result))
             audit = {"status": "audited_completed_old_fit_handoff_stage_a_native_only",
                      "arm": "bf16", "protocol_sha256": target.PROTOCOL_SHA256,
@@ -167,6 +179,13 @@ class StageBReplayTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "audit file"):
                 target.load_audited_native_attempt(
                     attempt, audit_path, expected_audit_sha256="0" * 64)
+            result["details_path"] = "../details.pt"
+            (attempt / "result.json").write_text(json.dumps(result))
+            with self.assertRaisesRegex(ValueError, "content-addressed path"):
+                target.load_audited_native_attempt(
+                    attempt, audit_path, expected_audit_sha256=pinned)
+            result["details_path"] = f"blobs/{details_sha}.pt"
+            (attempt / "result.json").write_text(json.dumps(result))
             (attempt / "meta.json").write_text('{"changed":true}\n')
             with self.assertRaisesRegex(ValueError, "meta.json"):
                 target.load_audited_native_attempt(
@@ -184,6 +203,16 @@ class StageBReplayTests(unittest.TestCase):
         altered["lm_terminal"]["lm14"][0] += 1
         with self.assertRaisesRegex(ValueError, "LM14|lm14"):
             target.assert_direct_parity(altered, direct)
+        def wrong_dtype(_module, args, kwargs):
+            changed = dict(kwargs)
+            changed["inputs_embeds"] = kwargs["inputs_embeds"].to(torch.bfloat16)
+            return args, changed
+        handle = model.model.language_model.register_forward_pre_hook(wrong_dtype, with_kwargs=True)
+        try:
+            with self.assertRaisesRegex(ValueError, "shape/dtype"):
+                target.full_model_lm_override(model, batch, lm_input, torch.float32, device="cpu")
+        finally:
+            handle.remove()
 
     def test_full_source_override_connects_expected_fake_gradients(self):
         model, batch = fake_model_and_batch()
@@ -201,6 +230,28 @@ class StageBReplayTests(unittest.TestCase):
             self.assertEqual(tuple(gradient.shape), target.SOURCE_SHAPES[site])
             self.assertEqual(replay["saved"]["audio_placeholder_positions"], list(range(375)))
             del replay, gradient
+
+    def test_source_hook_rejects_wrong_dtype_and_duplicate_invocation(self):
+        model, batch = fake_model_and_batch()
+        source = batch["input_features"].to(torch.bfloat16)
+        wrong = dict(batch)
+        wrong["input_features"] = source
+        with self.assertRaisesRegex(ValueError, "shape/dtype"):
+            target.source_replay_forward(model, wrong, site="encoder31",
+                                         full_source=source, probes=native.fixed_probes(),
+                                         device="cpu")
+
+        class DuplicateSourceModel(FakeModel):
+            def forward(self, *, input_ids, input_features, **kwargs):
+                self.model.audio_tower.layers[31](input_features)
+                return super().forward(input_ids=input_ids, input_features=input_features, **kwargs)
+
+        duplicate = DuplicateSourceModel()
+        duplicate.lm_head = FakeHead()
+        with self.assertRaisesRegex(ValueError, "hook count"):
+            target.source_replay_forward(duplicate, batch, site="encoder31",
+                                         full_source=source, probes=native.fixed_probes(),
+                                         device="cpu")
 
     def test_exact_source_replay_vjp_plan_runs_on_fake_graph(self):
         model, batch = fake_model_and_batch()
