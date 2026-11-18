@@ -1,0 +1,19 @@
+# Stage-B admission after the preserved Stage-A audit failure
+
+18 November 2026. This source-only amendment was written after both Stage-A model processes and before any Stage-B model process. The scientific estimand, old FIT case, model checkpoint, source rows, signed steps, probe definitions, replay counts, decision rules and resource limits remain those in `VOXTRAL_OLD_FIT_NUMERICAL_HANDOFF_PROSPECTIVE_V1.md`. It does not repair the failed original BF16 launcher receipt.
+
+## Exact Stage-A evidence
+
+The original BF16 attempt `20261118T131755298331Z` has `launch_failed`, runner return code 0 and frozen v1 auditor return code 1 because the saved device string was `mps:0`. Its twelve raw files are bound by `VOXTRAL_STAGE_A_BF16_FAILED_ATTEMPT_MANIFEST_V1.json`; ten small files are committed and two tensor sidecars remain local. A separately reviewed audit-only v2 source accepted those unchanged saved tensors. The committed posthoc audit and receipt have saved-tensor arithmetic scope, not live execution attestation.
+
+The distinct FP32-only continuation attempt `20261118T134440087432Z` completed under the separately reviewed freeze `VOXTRAL_STAGE_A_FP32_POSTHOC_CONTINUATION_FREEZE_V1.json`. Its v2 auditor accepted 36 native pairs, 72 patched forwards, 44 VJPs and 24 LM0 control cells. `VOXTRAL_STAGE_A_FP32_CONTINUATION_ATTEMPT_MANIFEST_V1.json` binds all twelve raw files; its ten small files are committed and its two tensor sidecars remain local. The independent FP32 result review at commit `857b42405c0e50211221efd9b5c57ac4b94378ac` is a prerequisite. The original BF16 status remains `launch_failed` in every downstream receipt.
+
+## Stage-B driver admission
+
+The Stage-B driver now verifies the original BF16 frozen source and failure receipt, the unchanged twelve-file manifest, the posthoc v2 audit/receipt and review, the FP32 continuation freeze and its first-add Git blob, the one-shot FP32 reservation, the FP32 twelve-file manifest, accepted v2 audit, result review, source/count/layout/sidecar hashes, UTC chronology and full cumulative resource reservation. Both Stage-A model-process times count: `63.245136791840196 + 155.3182365419343 = 218.5633733337745` seconds. Reserving the full 600-second BF16 and 1,800-second FP32 Stage-B caps stays below the 4,500-second cumulative limit. Saved-tensor audit does not prove execution of each forward or backward call.
+
+Stage B reads the original BF16 archived tensors through the reviewed posthoc v2 audit path. The in-memory Stage-A binding retains both manifest SHA-256 values, both result and audit SHA-256 values and the explicit original BF16 failure status; it does not manufacture a successful BF16 launch. The BF16 direct-LM and FP32 replay grids are unchanged. The driver's CLI `--run` remains closed until a distinct reviewed Stage-B launch gate and external freeze exist.
+
+For the later FP32 Stage-B phase, the BF16 Stage-B manifest must bind the first Stage-B freeze, one-shot phase reservation, launcher start/finish receipts, worker result and CPU audit hashes. Its external parent-process elapsed time must be at least the worker's reported elapsed time and below 600 seconds; the parent time, including worker finalization, counts toward 4,500 seconds. The launcher receipts must show BF16 Stage B started after FP32 Stage A finished and after its own freeze, with runner and auditor return codes zero. An independently reviewed BF16 Stage-B result is required before FP32 Stage B. A second, separately reviewed FP32-only Stage-B freeze and one-shot launcher are still required.
+
+The local large tensor sidecars are required for read-only independent re-audit. A Git checkout without them cannot reproduce the saved-tensor conclusions. No Stage-B model result, audio-specific mechanism or security finding is claimed by this amendment.

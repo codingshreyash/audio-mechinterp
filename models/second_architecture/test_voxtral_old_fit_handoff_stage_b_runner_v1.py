@@ -60,95 +60,57 @@ def fake_vjps(_trace, _probes, site):
 
 
 class StageBDriverTests(unittest.TestCase):
-    def test_two_audited_stage_a_manifests_bind_exact_files_and_no_retry(self):
+    def test_real_failed_bf16_posthoc_and_fp32_continuation_are_bound(self):
+        bound = driver.verify_stage_a_manifests()
+        self.assertEqual(bound["original_bf16_launch_status"], "launch_failed")
+        self.assertEqual(bound["stage_a_model_work_seconds"], 218.5633733337745)
+        self.assertEqual(bound["arms"]["bf16"]["audit_path"], driver.continuation.POSTHOC_AUDIT)
+        self.assertEqual(bound["arms"]["fp32"]["manifest_sha256"],
+                         "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f")
+        self.assertEqual(bound["arms"]["fp32"]["result"]["actual_counts"],
+                         driver.stage_a_runner.planned_counts())
+        self.assertEqual(driver.phase_preflight("bf16_direct_lm", stage_a=bound)[2]
+                         ["estimated_tensor_payload_bytes"], 140550144)
+        with self.assertRaisesRegex(ValueError, "Bound file absent"):
+            driver.verify_bf16_stage_b_manifest(bound)
+
+    def test_fp32_manifest_in_memory_tamper_and_missing_review_fail_closed(self):
+        original = driver.read_json
+        def changed_manifest(path):
+            value = original(path)
+            if path == driver.STAGE_A_MANIFESTS["fp32"]:
+                value["files"][0]["sha256"] = "0" * 64
+            return value
+        with mock.patch.object(driver, "read_json", side_effect=changed_manifest):
+            with self.assertRaisesRegex(ValueError, "raw file changed"):
+                driver.verify_stage_a_manifests()
+        with mock.patch.object(driver, "STAGE_A_FP32_RESULT_REVIEW_SHA", "0" * 64):
+            with self.assertRaisesRegex(ValueError, "independent result review lacks GO"):
+                driver.verify_stage_a_manifests()
+
+    def test_one_shot_attempt_and_symlinked_bound_file_are_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            runs = root / "runs"
-            freeze = root / "freeze.json"
-            freeze.write_text(json.dumps({
-                "status": "frozen_old_fit_handoff_stage_a_v1",
-                "protocol_sha256": driver.replay.PROTOCOL_SHA256,
-                "runner_sha256": driver.STAGE_A_RUNNER_SHA,
-                "native_source_sha256": driver.replay.NATIVE_SOURCE_SHA256,
-                "auditor_sha256": driver.STAGE_A_AUDITOR_SHA}))
-            frozen_sha = driver.sha(freeze)
-            manifests = {}
-            for arm, elapsed in (("bf16", 20.0), ("fp32", 30.0)):
-                attempt = runs / arm / "once"
-                runner = attempt / "runner"
-                blobs = runner / "blobs"
-                blobs.mkdir(parents=True)
-                for name in ("meta.json", "model_layout.json", "progress.jsonl"):
-                    (runner / name).write_text("{}\n")
-                result = {"status": driver.stage_a_runner.RESULT_STATUS, "arm": arm,
-                          "script_sha256": driver.STAGE_A_RUNNER_SHA,
-                          "native_source_sha256": driver.replay.NATIVE_SOURCE_SHA256,
-                          "protocol_sha256": driver.replay.PROTOCOL_SHA256,
-                          "parity_passed": True, "elapsed_seconds": elapsed - 1,
-                          "planned_counts": driver.stage_a_runner.planned_counts(),
-                          "actual_counts": driver.stage_a_runner.planned_counts()}
-                for name in ("meta", "model_layout", "progress"):
-                    path = runner / ("progress.jsonl" if name == "progress" else f"{name}.json")
-                    result[f"{name}_sha256"] = driver.sha(path)
-                for name in ("probes", "details"):
-                    payload = f"{arm}:{name}".encode()
-                    digest = driver.hashlib.sha256(payload).hexdigest()
-                    (blobs / f"{digest}.pt").write_bytes(payload)
-                    result[f"{name}_sha256"] = digest
-                    result[f"{name}_path"] = f"blobs/{digest}.pt"
-                    result[f"{name}_bytes"] = len(payload)
-                (runner / "result.json").write_text(json.dumps(result))
-                audit = {"status": driver.STAGE_A_AUDIT_STATUS, "arm": arm,
-                         "result_sha256": driver.sha(runner / "result.json"),
-                         "auditor_sha256": driver.STAGE_A_AUDITOR_SHA,
-                         "runner_sha256": driver.STAGE_A_RUNNER_SHA,
-                         "native_source_sha256": driver.replay.NATIVE_SOURCE_SHA256,
-                         "protocol_sha256": driver.replay.PROTOCOL_SHA256,
-                         "probes_sha256": result["probes_sha256"],
-                         "details_sha256": result["details_sha256"]}
-                (attempt / "audit.json").write_text(json.dumps(audit))
-                start = {"arm": arm, "freeze_receipt_sha256": frozen_sha,
-                         "runner_sha256": driver.STAGE_A_RUNNER_SHA,
-                         "auditor_sha256": driver.STAGE_A_AUDITOR_SHA,
-                         "wall_utc": "2026-11-18T01:00:00+00:00" if arm == "bf16"
-                         else "2026-11-18T03:00:00+00:00"}
-                finish = {"status": driver.STAGE_A_LAUNCH_STATUS, "arm": arm,
-                          "freeze_receipt_sha256": frozen_sha,
-                          "post_run_source_verified": True, "runner_returncode": 0,
-                          "auditor_returncode": 0, "runner_result_sha256": driver.sha(runner / "result.json"),
-                          "audit_sha256": driver.sha(attempt / "audit.json"),
-                          "model_work_elapsed_seconds": elapsed,
-                          "wall_utc": "2026-11-18T02:00:00+00:00" if arm == "bf16"
-                          else "2026-11-18T04:00:00+00:00"}
-                (attempt / "launch_start.json").write_text(json.dumps(start))
-                (attempt / "launch_finish.json").write_text(json.dumps(finish))
-                manifest = root / f"{arm}.json"
-                manifest.write_text(json.dumps({
-                    "status": driver.STAGE_A_LAUNCH_STATUS, "arm": arm,
-                    "attempt_relative_path": "once", "freeze_receipt_sha256": frozen_sha,
-                    "launch_start_sha256": driver.sha(attempt / "launch_start.json"),
-                    "launch_finish_sha256": driver.sha(attempt / "launch_finish.json"),
-                    "result_sha256": driver.sha(runner / "result.json"),
-                    "audit_sha256": driver.sha(attempt / "audit.json"),
-                    "model_work_elapsed_seconds": elapsed}))
-                manifests[arm] = manifest
-            with mock.patch.object(driver, "committed_same"), \
-                 mock.patch.object(driver, "strictly_later"):
-                bound = driver.verify_stage_a_manifests(repo=root, runs=runs,
-                                                         freeze=freeze, manifests=manifests)
-                self.assertEqual(bound["stage_a_model_work_seconds"], 50)
-                blob = next((runs / "bf16/once/runner/blobs").iterdir())
-                original = blob.read_bytes()
-                blob.write_bytes(b"tampered")
-                with self.assertRaisesRegex(ValueError, "blob differs"):
-                    driver.verify_stage_a_manifests(repo=root, runs=runs,
-                                                     freeze=freeze, manifests=manifests)
-                blob.write_bytes(original)
-                # A second attempt is a permanent no-retry failure.
-                (runs / "fp32/extra").mkdir()
-                with self.assertRaisesRegex(ValueError, "retried"):
-                    driver.verify_stage_a_manifests(repo=root, runs=runs,
-                                                     freeze=freeze, manifests=manifests)
+            (root / "fp32/once").mkdir(parents=True)
+            self.assertEqual(driver._one_attempt(root, "fp32", "once"), root / "fp32/once")
+            (root / "fp32/twice").mkdir()
+            with self.assertRaisesRegex(ValueError, "retried"):
+                driver._one_attempt(root, "fp32", "once")
+            file = root / "source.json"
+            copy_path = root / "copy.json"
+            copy_path.write_text("same bytes\n")
+            file.symlink_to(copy_path.name)
+            with self.assertRaisesRegex(ValueError, "symlink"):
+                driver.committed_same(root, file)
+
+    def test_parent_elapsed_must_cover_worker_and_respect_phase_cap(self):
+        self.assertEqual(driver.checked_parent_elapsed(12.5, 12.0, 600), 12.5)
+        for parent, worker in ((11.0, 12.0), (600.0, 12.0),
+                               (float("nan"), 12.0), (12.0, float("inf")),
+                               (True, 1.0), (12.0, 0.0)):
+            with self.subTest(parent=parent, worker=worker):
+                with self.assertRaisesRegex(ValueError, "parent/worker elapsed"):
+                    driver.checked_parent_elapsed(parent, worker, 600)
 
     def test_source_is_closed_without_external_review_or_stage_a(self):
         with self.assertRaisesRegex(ValueError, "external freeze absent"):

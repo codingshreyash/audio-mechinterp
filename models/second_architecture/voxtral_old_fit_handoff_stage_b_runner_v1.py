@@ -27,22 +27,30 @@ import voxtral_fit_pilot_capability_v1 as fixture
 import voxtral_old_fit_handoff_native_stage_a_v1 as native
 import voxtral_old_fit_handoff_replay_stage_b_v1 as replay
 import voxtral_old_fit_handoff_stage_a_runner_v1 as stage_a_runner
+import voxtral_stage_a_fp32_posthoc_continuation_gate_v1 as continuation
 import voxtral_v1_fit_backward_numerical_followup_v2 as prior
 
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 STAGE_A_RUNS = HERE / "runs/voxtral_old_fit_handoff_stage_a_launch_v1"
+STAGE_A_FP32_RUNS = HERE / "runs/voxtral_stage_a_fp32_posthoc_continuation_v1"
 RUNS = HERE / "runs/voxtral_old_fit_handoff_stage_b_v1"
 STAGE_A_FREEZE = HERE / "VOXTRAL_OLD_FIT_HANDOFF_STAGE_A_EXTERNAL_FREEZE_V1.json"
 STAGE_A_MANIFESTS = {
-    "bf16": HERE / "VOXTRAL_OLD_FIT_HANDOFF_STAGE_A_BF16_ATTEMPT_MANIFEST_V1.json",
-    "fp32": HERE / "VOXTRAL_OLD_FIT_HANDOFF_STAGE_A_FP32_ATTEMPT_MANIFEST_V1.json",
+    "bf16": HERE / "VOXTRAL_STAGE_A_BF16_FAILED_ATTEMPT_MANIFEST_V1.json",
+    "fp32": HERE / "VOXTRAL_STAGE_A_FP32_CONTINUATION_ATTEMPT_MANIFEST_V1.json",
 }
+STAGE_A_FP32_RESULT_REVIEW = HERE / "VOXTRAL_STAGE_A_FP32_CONTINUATION_RESULT_INDEPENDENT_REVIEW_V1.md"
+STAGE_A_FP32_RESULT_REVIEW_SHA = "d7cf2172c95ee9b381ff577a2684971a9f28da290a2a5aa59f345ae76b6d120c"
+STAGE_A_FP32_RESULT_REVIEW_COMMIT = "857b42405c0e50211221efd9b5c57ac4b94378ac"
 STAGE_B_BF16_MANIFEST = HERE / "VOXTRAL_OLD_FIT_HANDOFF_STAGE_B_BF16_ATTEMPT_MANIFEST_V1.json"
+STAGE_B_BF16_RESULT_REVIEW = HERE / "VOXTRAL_OLD_FIT_HANDOFF_STAGE_B_BF16_RESULT_INDEPENDENT_REVIEW_V1.md"
+STAGE_B_FREEZE = HERE / "VOXTRAL_OLD_FIT_HANDOFF_STAGE_B_EXTERNAL_FREEZE_V1.json"
+STAGE_B_LAUNCH_RUNS = HERE / "runs/voxtral_old_fit_handoff_stage_b_launch_v1"
 PHASES = ("bf16_direct_lm", "fp32_replay")
 STAGE_A_RUNNER_SHA = "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc"
-STAGE_A_AUDITOR_SHA = "4f800ed604295ae0e4fbd53c893fccd14b8968badb43b835e6ec975e49b0cf3d"
+STAGE_A_AUDITOR_SHA = continuation.V2_AUDITOR_SHA
 STAGE_B_PRIMITIVES_SHA = "bef337c90a024e034e60818761b4be79371ca0767f83d28efe29269ba0cc89e1"
 STAGE_A_LAUNCH_STATUS = "launch_completed_audited_old_fit_handoff_stage_a_native_only"
 STAGE_A_AUDIT_STATUS = "audited_completed_old_fit_handoff_stage_a_native_only"
@@ -76,7 +84,8 @@ def read_json(path: Path) -> dict[str, Any]:
 
 
 def committed_same(repo: Path, path: Path) -> None:
-    if path.is_symlink() or not path.is_file():
+    continuation.require_regular_path(repo, path)
+    if not path.is_file():
         raise ValueError(f"Required committed file absent: {path.name}")
     relative = path.resolve().relative_to(repo.resolve()).as_posix()
     result = subprocess.run(["git", "-C", str(repo), "show", f"HEAD:{relative}"],
@@ -86,6 +95,7 @@ def committed_same(repo: Path, path: Path) -> None:
 
 
 def first_add(repo: Path, path: Path) -> str:
+    committed_same(repo, path)
     relative = path.resolve().relative_to(repo.resolve()).as_posix()
     result = subprocess.run(["git", "-C", str(repo), "log", "--diff-filter=A",
                              "--format=%H", "HEAD", "--", relative],
@@ -93,6 +103,10 @@ def first_add(repo: Path, path: Path) -> str:
     lines = result.stdout.splitlines()
     if result.returncode or len(lines) != 1 or not re.fullmatch(r"[0-9a-f]{40}", lines[0]):
         raise ValueError("Receipt must have one Git first-add commit")
+    first_bytes = subprocess.run(["git", "-C", str(repo), "show", f"{lines[0]}:{relative}"],
+                                 capture_output=True, check=False)
+    if first_bytes.returncode or path.read_bytes() != first_bytes.stdout:
+        raise ValueError(f"Receipt changed after first-add: {path.name}")
     return lines[0]
 
 
@@ -114,102 +128,185 @@ def _one_attempt(runs: Path, arm: str, name: str) -> Path:
     return attempt
 
 
-def verify_stage_a_manifests(*, repo: Path = REPO, runs: Path = STAGE_A_RUNS,
-                             freeze: Path = STAGE_A_FREEZE,
-                             manifests: dict[str, Path] = STAGE_A_MANIFESTS) -> dict[str, Any]:
-    """Bind both external manifests to audited full Stage-A byte chains.
+def _stage_a_fp32_file_chain(manifest: dict, attempt: Path) -> None:
+    """Rehash all 12 FP32 attempt files, including both local tensor sidecars."""
+    prefix = f"runs/voxtral_stage_a_fp32_posthoc_continuation_v1/fp32/{attempt.name}/"
+    rows = manifest.get("files")
+    if not isinstance(rows, list) or len(rows) != 12 or manifest.get("local_large_sidecars_required") is not True:
+        raise ValueError("FP32 Stage-A file manifest is incomplete")
+    seen: set[str] = set()
+    local = 0
+    total = 0
+    for row in rows:
+        if not isinstance(row, dict) or set(row) != {"path", "bytes", "sha256", "git_committed"}:
+            raise ValueError("FP32 Stage-A file row schema invalid")
+        rel = row["path"]
+        if (not isinstance(rel, str) or not rel.startswith(prefix) or
+                ".." in Path(rel).parts or rel in seen or
+                type(row["bytes"]) is not int or row["bytes"] < 0 or
+                type(row["git_committed"]) is not bool or
+                not isinstance(row["sha256"], str) or
+                re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) is None):
+            raise ValueError("FP32 Stage-A file row invalid")
+        seen.add(rel)
+        path = HERE / rel
+        continuation.require_regular_path(REPO, path)
+        if path.stat().st_size != row["bytes"] or sha(path) != row["sha256"]:
+            raise ValueError(f"FP32 Stage-A raw file changed: {rel}")
+        if row["git_committed"]:
+            committed_same(REPO, path)
+        elif path.suffix == ".pt" and "/runner/blobs/" in rel:
+            local += 1
+        else:
+            raise ValueError("Unexpected uncommitted FP32 Stage-A file")
+        total += row["bytes"]
+    actual = {p.relative_to(HERE).as_posix() for p in attempt.rglob("*") if p.is_file()}
+    if seen != actual or local != 2 or manifest.get("entire_attempt_bytes") != total or total >= int(1.5 * 1024**3):
+        raise ValueError("FP32 Stage-A file set, local sidecars, or cap changed")
 
-    This intentionally rechecks the sidecars instead of trusting manifest
-    paths or a runner-authored `parity_passed` flag on its own.
-    """
+
+def verify_stage_a_manifests() -> dict[str, Any]:
+    """Bind the failed BF16 launch, later audit, and separate FP32 continuation."""
     replay.require_protocol()
-    if sha(Path(stage_a_runner.__file__)) != STAGE_A_RUNNER_SHA or \
-            sha(HERE / "voxtral_old_fit_handoff_stage_a_audit_v1.py") != STAGE_A_AUDITOR_SHA or \
-            sha(Path(replay.__file__)) != STAGE_B_PRIMITIVES_SHA:
+    if (sha(Path(stage_a_runner.__file__)) != STAGE_A_RUNNER_SHA or
+            sha(continuation.AUDITOR) != STAGE_A_AUDITOR_SHA or
+            sha(Path(replay.__file__)) != STAGE_B_PRIMITIVES_SHA or
+            STAGE_A_MANIFESTS["bf16"] != continuation.FAILED_MANIFEST):
         raise ValueError("Reviewed Stage-A/Stage-B dependency bytes changed")
-    for file in (freeze, manifests["bf16"], manifests["fp32"]):
-        committed_same(repo, file)
-    strictly_later(repo, freeze, manifests["bf16"])
-    strictly_later(repo, manifests["bf16"], manifests["fp32"])
-    freeze_sha = sha(freeze)
-    frozen = read_json(freeze)
-    if (frozen.get("status") != "frozen_old_fit_handoff_stage_a_v1" or
-            frozen.get("protocol_sha256") != replay.PROTOCOL_SHA256 or
-            frozen.get("runner_sha256") != STAGE_A_RUNNER_SHA or
-            frozen.get("native_source_sha256") != replay.NATIVE_SOURCE_SHA256 or
-            frozen.get("auditor_sha256") != STAGE_A_AUDITOR_SHA):
-        raise ValueError("Stage-A external freeze does not bind reviewed source")
-    bound: dict[str, Any] = {"freeze_sha256": freeze_sha, "arms": {}}
-    previous = None
-    for arm in ("bf16", "fp32"):
-        path = manifests[arm]
-        manifest = read_json(path)
-        expected = {"status", "arm", "attempt_relative_path", "freeze_receipt_sha256",
-                    "launch_start_sha256", "launch_finish_sha256", "result_sha256",
-                    "audit_sha256", "model_work_elapsed_seconds"}
-        if (set(manifest) != expected or manifest["status"] != STAGE_A_LAUNCH_STATUS or
-                manifest["arm"] != arm or manifest["freeze_receipt_sha256"] != freeze_sha):
-            raise ValueError(f"Stage-A {arm} manifest schema/status invalid")
-        attempt = _one_attempt(runs, arm, manifest["attempt_relative_path"])
-        files = {"start": attempt / "launch_start.json", "finish": attempt / "launch_finish.json",
-                 "result": attempt / "runner/result.json", "audit": attempt / "audit.json"}
-        for key, field in (("start", "launch_start_sha256"), ("finish", "launch_finish_sha256"),
-                           ("result", "result_sha256"), ("audit", "audit_sha256")):
-            if files[key].is_symlink() or not files[key].is_file() or sha(files[key]) != manifest[field]:
-                raise ValueError(f"Stage-A {arm} {key} receipt bytes differ")
-        start, finish, result, audit = (read_json(files[key]) for key in files)
-        if (start.get("arm") != arm or start.get("freeze_receipt_sha256") != freeze_sha or
-                start.get("runner_sha256") != STAGE_A_RUNNER_SHA or
-                start.get("auditor_sha256") != STAGE_A_AUDITOR_SHA or
-                finish.get("status") != STAGE_A_LAUNCH_STATUS or finish.get("arm") != arm or
-                finish.get("freeze_receipt_sha256") != freeze_sha or
-                finish.get("post_run_source_verified") is not True or
-                finish.get("runner_returncode") != 0 or finish.get("auditor_returncode") != 0 or
-                finish.get("runner_result_sha256") != manifest["result_sha256"] or
-                finish.get("audit_sha256") != manifest["audit_sha256"] or
-                result.get("status") != stage_a_runner.RESULT_STATUS or result.get("arm") != arm or
-                result.get("script_sha256") != STAGE_A_RUNNER_SHA or
-                result.get("native_source_sha256") != replay.NATIVE_SOURCE_SHA256 or
-                result.get("protocol_sha256") != replay.PROTOCOL_SHA256 or
-                result.get("parity_passed") is not True or
-                result.get("planned_counts") != stage_a_runner.planned_counts() or
-                result.get("actual_counts") != stage_a_runner.planned_counts() or
-                audit.get("status") != STAGE_A_AUDIT_STATUS or audit.get("arm") != arm or
-                audit.get("result_sha256") != manifest["result_sha256"] or
-                audit.get("auditor_sha256") != STAGE_A_AUDITOR_SHA or
-                audit.get("runner_sha256") != STAGE_A_RUNNER_SHA or
-                audit.get("native_source_sha256") != replay.NATIVE_SOURCE_SHA256 or
-                audit.get("protocol_sha256") != replay.PROTOCOL_SHA256):
-            raise ValueError(f"Stage-A {arm} source/hook/parity/audit chain invalid")
-        for stem in ("meta", "model_layout", "progress"):
-            file = attempt / "runner" / ("progress.jsonl" if stem == "progress" else f"{stem}.json")
-            if file.is_symlink() or not file.is_file() or sha(file) != result.get(f"{stem}_sha256"):
-                raise ValueError(f"Stage-A {arm} {stem} hash differs")
-        for stem in ("probes", "details"):
-            digest = result.get(f"{stem}_sha256")
-            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest) or \
-                    result.get(f"{stem}_path") != f"blobs/{digest}.pt":
-                raise ValueError(f"Stage-A {arm} {stem} blob descriptor differs")
-            file = attempt / "runner/blobs" / f"{digest}.pt"
-            if (file.is_symlink() or not file.is_file() or sha(file) != digest or
-                    file.stat().st_size != result.get(f"{stem}_bytes") or
-                    audit.get(f"{stem}_sha256") != digest):
-                raise ValueError(f"Stage-A {arm} {stem} blob differs")
-        elapsed = manifest["model_work_elapsed_seconds"]
-        if (isinstance(elapsed, bool) or not isinstance(elapsed, (int, float)) or
-                not math.isfinite(elapsed) or not 0 < elapsed < stage_a_runner.MAX_SECONDS[arm] or
-                elapsed != finish.get("model_work_elapsed_seconds") or
-                not isinstance(result.get("elapsed_seconds"), (int, float)) or
-                not 0 < result["elapsed_seconds"] <= elapsed):
-            raise ValueError(f"Stage-A {arm} model-work time invalid")
-        if previous is not None and not strictly_after_utc(previous, start.get("wall_utc")):
-            raise ValueError("FP32 Stage-A started before BF16 Stage-A finished")
-        previous = finish.get("wall_utc")
-        bound["arms"][arm] = {"manifest": manifest, "manifest_sha256": sha(path),
-                              "attempt": attempt, "result": result, "audit": audit,
-                              "elapsed_seconds": float(elapsed)}
-    bound["stage_a_model_work_seconds"] = sum(bound["arms"][arm]["elapsed_seconds"]
-                                             for arm in ("bf16", "fp32"))
+    preserved = continuation.verify_preserved_bf16()
+    posthoc = continuation.verify_posthoc_receipt(preserved)
+    frozen = continuation.verify_continuation_freeze(preserved, posthoc)
+    bf_manifest = preserved["manifest"]
+    bf_result, bf_finish = preserved["result"], preserved["finish"]
+    if (bf_finish.get("status") != "launch_failed" or bf_result.get("parity_passed") is not True or
+            bf_result.get("planned_counts") != stage_a_runner.planned_counts() or
+            bf_result.get("actual_counts") != stage_a_runner.planned_counts()):
+        raise ValueError("BF16 Stage-A original failure or saved parity differs")
+    fp_path = STAGE_A_MANIFESTS["fp32"]
+    committed_same(REPO, fp_path)
+    strictly_later(REPO, continuation.FREEZE, fp_path)
+    manifest = read_json(fp_path)
+    attempt = _one_attempt(STAGE_A_FP32_RUNS, "fp32", manifest.get("attempt_id"))
+    if (manifest.get("schema") != "voxtral_stage_a_fp32_continuation_attempt_manifest_v1" or
+            manifest.get("status") != "launch_completed_v2_audited_native_old_fit_case" or
+            manifest.get("arm") != "fp32" or
+            manifest.get("audit_scope") !=
+            "saved_tensor_and_receipt_arithmetic_only_no_model_execution_attestation" or
+            manifest.get("original_bf16_launch_status") != "launch_failed" or
+            manifest.get("original_bf16_launch_finish_sha256") !=
+            continuation.ORIGINAL_FINISH_SHA or
+            manifest.get("posthoc_bf16_receipt_sha256") != posthoc["receipt_sha256"] or
+            manifest.get("continuation_freeze_sha256") != frozen["receipt_sha256"] or
+            manifest.get("runner_source_sha256") != STAGE_A_RUNNER_SHA or
+            manifest.get("native_source_sha256") != replay.NATIVE_SOURCE_SHA256 or
+            manifest.get("protocol_sha256") != replay.PROTOCOL_SHA256 or
+            manifest.get("v2_auditor_sha256") != STAGE_A_AUDITOR_SHA or
+            manifest.get("planned_counts") != stage_a_runner.planned_counts() or
+            manifest.get("actual_counts") != stage_a_runner.planned_counts()):
+        raise ValueError("FP32 Stage-A manifest source or scope invalid")
+    _stage_a_fp32_file_chain(manifest, attempt)
+    reservation = STAGE_A_FP32_RUNS / "fp32_reservation.json"
+    committed_same(REPO, reservation)
+    if (manifest.get("reservation_path") != reservation.relative_to(HERE).as_posix() or
+            manifest.get("reservation_sha256") != sha(reservation) or
+            read_json(reservation) != {
+                "status": "arm_reserved_no_retry", "arm": "fp32", "attempt": attempt.name,
+                "continuation_freeze_sha256": frozen["receipt_sha256"],
+                "original_launch_status": "launch_failed"}):
+        raise ValueError("FP32 Stage-A one-shot reservation invalid")
+    paths = {"start": attempt / "launch_start.json", "finish": attempt / "launch_finish.json",
+             "result": attempt / "runner/result.json", "audit": attempt / "audit.json"}
+    fields = {"start": "launch_start_sha256", "finish": "launch_finish_sha256",
+              "result": "runner_result_sha256", "audit": "audit_sha256"}
+    if any(sha(paths[key]) != manifest.get(field) for key, field in fields.items()):
+        raise ValueError("FP32 Stage-A launch/result/audit hash differs")
+    start, finish, result, audit = (read_json(paths[key]) for key in paths)
+    if (start.get("status") != "launch_started" or start.get("arm") != "fp32" or
+            start.get("continuation_freeze_sha256") != frozen["receipt_sha256"] or
+            start.get("posthoc_receipt_sha256") != posthoc["receipt_sha256"] or
+            start.get("original_launch_status") != "launch_failed" or
+            start.get("runner_sha256") != STAGE_A_RUNNER_SHA or
+            start.get("auditor_sha256") != STAGE_A_AUDITOR_SHA or
+            finish.get("status") != STAGE_A_LAUNCH_STATUS or finish.get("arm") != "fp32" or
+            finish.get("continuation_freeze_sha256") != frozen["receipt_sha256"] or
+            finish.get("original_launch_status") != "launch_failed" or
+            finish.get("runner_returncode") != 0 or finish.get("auditor_returncode") != 0 or
+            finish.get("post_run_source_verified") is not True or
+            finish.get("runner_result_sha256") != manifest["runner_result_sha256"] or
+            finish.get("audit_sha256") != manifest["audit_sha256"] or
+            result.get("status") != stage_a_runner.RESULT_STATUS or result.get("arm") != "fp32" or
+            result.get("script_sha256") != STAGE_A_RUNNER_SHA or
+            result.get("native_source_sha256") != replay.NATIVE_SOURCE_SHA256 or
+            result.get("protocol_sha256") != replay.PROTOCOL_SHA256 or
+            result.get("parity_passed") is not True or
+            result.get("planned_counts") != stage_a_runner.planned_counts() or
+            result.get("actual_counts") != stage_a_runner.planned_counts() or
+            audit.get("status") != STAGE_A_AUDIT_STATUS or audit.get("arm") != "fp32" or
+            audit.get("result_sha256") != manifest["runner_result_sha256"] or
+            audit.get("auditor_sha256") != STAGE_A_AUDITOR_SHA or
+            audit.get("runner_sha256") != STAGE_A_RUNNER_SHA or
+            audit.get("native_source_sha256") != replay.NATIVE_SOURCE_SHA256 or
+            audit.get("protocol_sha256") != replay.PROTOCOL_SHA256):
+        raise ValueError("FP32 Stage-A source/hook/parity/audit chain invalid")
+    for stem in ("meta", "model_layout", "progress", "details", "probes"):
+        expected = result.get(f"{stem}_sha256")
+        if not isinstance(expected, str) or re.fullmatch(r"[0-9a-f]{64}", expected) is None:
+            raise ValueError(f"FP32 Stage-A {stem} digest invalid")
+        filename = "progress.jsonl" if stem == "progress" else f"{stem}.json"
+        path = attempt / "runner" / filename if stem not in ("details", "probes") else \
+            attempt / "runner/blobs" / f"{expected}.pt"
+        if stem in ("details", "probes"):
+            if (result.get(f"{stem}_path") != f"blobs/{expected}.pt" or
+                    result.get(f"{stem}_bytes") != path.stat().st_size or
+                    manifest.get("local_tensor_sidecars", {}).get(stem) != {
+                        "path": path.relative_to(HERE).as_posix(), "bytes": path.stat().st_size,
+                        "sha256": expected} or audit.get(f"{stem}_sha256") != expected):
+                raise ValueError(f"FP32 Stage-A {stem} sidecar descriptor differs")
+        if sha(path) != expected:
+            raise ValueError(f"FP32 Stage-A {stem} bytes differ")
+    expected_audited = {"audited_native_pairs": 36, "audited_patch_forwards": 72,
+                        "audited_vjps": 44, "audited_lm0_control_cells": 24}
+    if manifest.get("audited_counts") != expected_audited or any(
+            audit.get(key) != value for key, value in expected_audited.items()):
+        raise ValueError("FP32 Stage-A audited count differs")
+    elapsed = manifest.get("model_work_elapsed_seconds")
+    if (type(elapsed) not in (int, float) or not math.isfinite(elapsed) or
+            not 0 < elapsed < stage_a_runner.MAX_SECONDS["fp32"] or
+            finish.get("model_work_elapsed_seconds") != elapsed or
+            type(result.get("elapsed_seconds")) not in (int, float) or
+            not 0 < result["elapsed_seconds"] <= elapsed or
+            manifest.get("prior_model_work_seconds") != bf_finish["model_work_elapsed_seconds"] or
+            manifest.get("cumulative_model_work_seconds") !=
+            bf_finish["model_work_elapsed_seconds"] + elapsed or
+            not strictly_after_utc(bf_finish.get("wall_utc"), start.get("wall_utc")) or
+            not strictly_after_utc(frozen["receipt"]["reviewed_utc"], start.get("wall_utc")) or
+            not strictly_after_utc(start.get("wall_utc"), finish.get("wall_utc")) or
+            manifest.get("launch_started_utc") != start.get("wall_utc") or
+            manifest.get("launch_finished_utc") != finish.get("wall_utc")):
+        raise ValueError("FP32 Stage-A time or chronology invalid")
+    committed_same(REPO, STAGE_A_FP32_RESULT_REVIEW)
+    strictly_later(REPO, fp_path, STAGE_A_FP32_RESULT_REVIEW)
+    if (sha(STAGE_A_FP32_RESULT_REVIEW) != STAGE_A_FP32_RESULT_REVIEW_SHA or
+            first_add(REPO, STAGE_A_FP32_RESULT_REVIEW) != STAGE_A_FP32_RESULT_REVIEW_COMMIT or
+            "Decision: GO for Stage-A FP32 saved-result provenance; Stage B HOLD pending separate "
+            "source review and freeze." not in STAGE_A_FP32_RESULT_REVIEW.read_text()):
+        raise ValueError("FP32 Stage-A independent result review lacks GO")
+    bf_elapsed = float(bf_finish["model_work_elapsed_seconds"])
+    bound: dict[str, Any] = {"freeze_sha256": sha(STAGE_A_FREEZE),
+                             "continuation_freeze_sha256": frozen["receipt_sha256"],
+                             "original_bf16_launch_status": "launch_failed", "arms": {
+        "bf16": {"manifest": {"result_sha256": continuation.ORIGINAL_RESULT_SHA,
+                              "audit_sha256": sha(continuation.POSTHOC_AUDIT)},
+                 "manifest_sha256": sha(STAGE_A_MANIFESTS["bf16"]),
+                 "attempt": continuation.ORIGINAL_ATTEMPT, "result": bf_result,
+                 "audit": posthoc["audit"], "audit_path": continuation.POSTHOC_AUDIT,
+                 "elapsed_seconds": bf_elapsed, "launch_finish_utc": bf_finish["wall_utc"]},
+        "fp32": {"manifest": {"result_sha256": manifest["runner_result_sha256"],
+                              "audit_sha256": manifest["audit_sha256"]},
+                 "manifest_sha256": sha(fp_path), "attempt": attempt,
+                 "result": result, "audit": audit, "audit_path": paths["audit"],
+                 "elapsed_seconds": float(elapsed), "launch_finish_utc": finish["wall_utc"]}}}
+    bound["stage_a_model_work_seconds"] = bf_elapsed + float(elapsed)
     if bound["stage_a_model_work_seconds"] + sum(CAP_SECONDS.values()) > MAX_TOTAL_SECONDS:
         raise ValueError("Cumulative four-process cap lacks full Stage-B reservation")
     return bound
@@ -355,7 +452,7 @@ def phase_preflight(phase: str, *, stage_a: dict) -> tuple[dict, tuple, dict]:
         raise ValueError("Unknown Stage-B phase")
     bf = stage_a["arms"]["bf16"]
     result, details = replay.load_audited_native_attempt(
-        bf["attempt"] / "runner", bf["attempt"] / "audit.json",
+        bf["attempt"] / "runner", bf["audit_path"],
         expected_audit_sha256=bf["manifest"]["audit_sha256"])
     if sha(bf["attempt"] / "runner/result.json") != bf["manifest"]["result_sha256"] or \
             result["details_sha256"] != bf["result"]["details_sha256"]:
@@ -369,6 +466,15 @@ def phase_preflight(phase: str, *, stage_a: dict) -> tuple[dict, tuple, dict]:
     return details, pairs, estimate
 
 
+def checked_parent_elapsed(parent: object, worker: object, cap: int) -> float:
+    """Count the external child-process wall time, including worker finalization."""
+    if (type(parent) not in (int, float) or type(worker) not in (int, float) or
+            not math.isfinite(parent) or not math.isfinite(worker) or
+            not 0 < worker <= parent < cap):
+        raise ValueError("Stage-B parent/worker elapsed time invalid")
+    return float(parent)
+
+
 def verify_bf16_stage_b_manifest(stage_a: dict, *, repo: Path = REPO,
                                  runs: Path = RUNS,
                                  manifest_path: Path = STAGE_B_BF16_MANIFEST) -> dict:
@@ -378,14 +484,60 @@ def verify_bf16_stage_b_manifest(stage_a: dict, *, repo: Path = REPO,
     value = read_json(manifest_path)
     expected = {"status", "phase", "attempt_relative_path", "stage_a_bf16_manifest_sha256",
                 "stage_a_fp32_manifest_sha256", "result_sha256", "audit_sha256",
-                "model_work_elapsed_seconds"}
+                "model_work_elapsed_seconds", "stage_b_freeze_sha256",
+                "launch_start_sha256", "launch_finish_sha256", "reservation_sha256"}
     if (set(value) != expected or value["status"] !=
             "audited_completed_old_fit_handoff_stage_b_bf16_direct_lm_only" or
             value["phase"] != "bf16_direct_lm" or
             value["stage_a_bf16_manifest_sha256"] != stage_a["arms"]["bf16"]["manifest_sha256"] or
             value["stage_a_fp32_manifest_sha256"] != stage_a["arms"]["fp32"]["manifest_sha256"]):
         raise ValueError("Stage-B BF16 external manifest does not bind Stage A")
+    committed_same(repo, STAGE_B_FREEZE)
+    strictly_later(repo, STAGE_A_FP32_RESULT_REVIEW, STAGE_B_FREEZE)
+    if value["stage_b_freeze_sha256"] != sha(STAGE_B_FREEZE):
+        raise ValueError("Stage-B BF16 external freeze differs")
     attempt = _one_attempt(runs, "bf16_direct_lm", value["attempt_relative_path"])
+    wrapper = _one_attempt(STAGE_B_LAUNCH_RUNS, "bf16_direct_lm", value["attempt_relative_path"])
+    reservation = STAGE_B_LAUNCH_RUNS / "bf16_direct_lm_reservation.json"
+    for path in (wrapper / "launch_start.json", wrapper / "launch_finish.json", reservation):
+        committed_same(repo, path)
+    for path, field in ((wrapper / "launch_start.json", "launch_start_sha256"),
+                        (wrapper / "launch_finish.json", "launch_finish_sha256"),
+                        (reservation, "reservation_sha256")):
+        if value[field] != sha(path):
+            raise ValueError(f"Stage-B BF16 launcher receipt differs: {field}")
+    strictly_later(repo, STAGE_B_FREEZE, wrapper / "launch_start.json")
+    strictly_later(repo, wrapper / "launch_finish.json", manifest_path)
+    start, finish, reserved = (read_json(path) for path in
+                               (wrapper / "launch_start.json", wrapper / "launch_finish.json",
+                                reservation))
+    if (reserved != {"status": "phase_reserved_no_retry", "phase": "bf16_direct_lm",
+                     "attempt_id": attempt.name,
+                     "stage_b_freeze_sha256": value["stage_b_freeze_sha256"]} or
+            start.get("status") != "launch_started" or
+            start.get("phase") != "bf16_direct_lm" or
+            start.get("attempt_id") != attempt.name or
+            start.get("stage_b_freeze_sha256") != value["stage_b_freeze_sha256"] or
+            start.get("driver_sha256") != sha(Path(__file__)) or
+            start.get("auditor_sha256") != sha(HERE / "voxtral_old_fit_handoff_stage_b_audit_v1.py") or
+            start.get("stage_a_manifest_sha256") != {
+                arm: stage_a["arms"][arm]["manifest_sha256"] for arm in ("bf16", "fp32")} or
+            finish.get("status") !=
+            "launch_completed_audited_old_fit_handoff_stage_b_bf16_direct_lm_only" or
+            finish.get("phase") != "bf16_direct_lm" or
+            finish.get("attempt_id") != attempt.name or
+            finish.get("stage_b_freeze_sha256") != value["stage_b_freeze_sha256"] or
+            finish.get("runner_returncode") != 0 or finish.get("auditor_returncode") != 0 or
+            finish.get("post_run_source_verified") is not True or
+            finish.get("runner_result_sha256") != value["result_sha256"] or
+            finish.get("audit_sha256") != value["audit_sha256"] or
+            finish.get("model_work_elapsed_seconds") != value["model_work_elapsed_seconds"] or
+            not strictly_after_utc(stage_a["arms"]["fp32"]["launch_finish_utc"],
+                                   start.get("wall_utc")) or
+            not strictly_after_utc(read_json(STAGE_B_FREEZE).get("reviewed_utc"),
+                                   start.get("wall_utc")) or
+            not strictly_after_utc(start.get("wall_utc"), finish.get("wall_utc"))):
+        raise ValueError("Stage-B BF16 launcher chronology or status differs")
     result_path, audit_path = attempt / "result.json", attempt / "audit.json"
     if (result_path.is_symlink() or audit_path.is_symlink() or
             not result_path.is_file() or not audit_path.is_file() or
@@ -393,17 +545,17 @@ def verify_bf16_stage_b_manifest(stage_a: dict, *, repo: Path = REPO,
         raise ValueError("Stage-B BF16 result/audit bytes differ")
     result, audit = read_json(result_path), read_json(audit_path)
     if (result.get("status") != STATUS or result.get("phase") != "bf16_direct_lm" or
+            result.get("script_sha256") != sha(Path(__file__)) or
             result.get("actual_counts") != COUNTS["bf16_direct_lm"] or
             result.get("stage_a_manifest_sha256") != {
                 arm: stage_a["arms"][arm]["manifest_sha256"] for arm in ("bf16", "fp32")} or
             audit.get("status") != "audited_completed_old_fit_handoff_stage_b_bf16_direct_lm_only" or
-            audit.get("result_sha256") != value["result_sha256"]):
+            audit.get("result_sha256") != value["result_sha256"] or
+            audit.get("auditor_sha256") != sha(HERE / "voxtral_old_fit_handoff_stage_b_audit_v1.py")):
         raise ValueError("Stage-B BF16 auditor did not bind complete replay")
-    elapsed = value["model_work_elapsed_seconds"]
-    if (isinstance(elapsed, bool) or not isinstance(elapsed, (int, float)) or
-            not math.isfinite(elapsed) or not 0 < elapsed < CAP_SECONDS["bf16_direct_lm"] or
-            result.get("elapsed_seconds") != elapsed):
-        raise ValueError("Stage-B BF16 model-work time invalid")
+    elapsed = checked_parent_elapsed(value["model_work_elapsed_seconds"],
+                                     result.get("elapsed_seconds"),
+                                     CAP_SECONDS["bf16_direct_lm"])
     for stem in ("meta", "progress", "details"):
         filename = "progress.jsonl" if stem == "progress" else f"{stem}.json"
         if stem == "details":
@@ -418,6 +570,11 @@ def verify_bf16_stage_b_manifest(stage_a: dict, *, repo: Path = REPO,
             raise ValueError(f"Stage-B BF16 {stem} bytes differ")
     if stage_a_runner.directory_bytes(attempt) >= MAX_B_BYTES:
         raise ValueError("Stage-B BF16 output cap reached")
+    committed_same(repo, STAGE_B_BF16_RESULT_REVIEW)
+    strictly_later(repo, manifest_path, STAGE_B_BF16_RESULT_REVIEW)
+    if ("Decision: GO for Stage-B BF16 saved-result provenance; FP32 Stage-B HOLD pending "
+            "separate gate." not in STAGE_B_BF16_RESULT_REVIEW.read_text()):
+        raise ValueError("Stage-B BF16 independent result review lacks GO")
     return {"manifest_sha256": sha(manifest_path), "elapsed_seconds": float(elapsed),
             "attempt": attempt, "result": result, "audit": audit}
 
