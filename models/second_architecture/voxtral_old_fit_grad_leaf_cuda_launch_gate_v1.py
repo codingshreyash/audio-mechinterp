@@ -214,6 +214,7 @@ def validate_receipt(receipt: dict) -> None:
     import jsonschema  # CPU-only preflight dependency, never a model import.
     schema = read_json(ENV_SCHEMA)
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(receipt)
+    require_receipt_source_review(receipt)
     if receipt["sources"]["runner"] != sha(RUNNER) or receipt["sources"]["auditor"] != sha(AUDITOR) or \
             receipt["sources"]["gate"] != sha(GATE):
         raise ValueError("Environment source hashes differ")
@@ -227,6 +228,12 @@ def validate_receipt(receipt: dict) -> None:
         raise ValueError("Input bundle bytes/path differ")
     if Path(receipt["storage"]["output_root"]).resolve() != WORKER_RUNS.resolve():
         raise ValueError("Environment output root differs")
+
+
+def require_receipt_source_review(receipt: dict) -> None:
+    """The receipt cites the earlier source review, never its later self-review."""
+    if receipt.get("provenance", {}).get("environment_source_review_sha256") != sha(SOURCE_REVIEW):
+        raise ValueError("Environment receipt source-review pin differs")
 
 
 def verify_live_environment(receipt: dict) -> None:

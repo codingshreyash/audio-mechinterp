@@ -147,6 +147,16 @@ class GateTests(unittest.TestCase):
         review.write_text("# Review\n\n" + gate.GO_SOURCE + "\n")
         gate.require_decision(review, gate.GO_SOURCE)
 
+    def test_environment_receipt_cites_prior_source_review(self) -> None:
+        review = self.root / "source_review.md"
+        review.write_text("source review\n")
+        with patch.object(gate, "SOURCE_REVIEW", review):
+            good = {"provenance": {"environment_source_review_sha256": gate.sha(review)}}
+            gate.require_receipt_source_review(good)
+            bad = {"provenance": {"environment_source_review_sha256": "f" * 64}}
+            with self.assertRaisesRegex(ValueError, "source-review pin"):
+                gate.require_receipt_source_review(bad)
+
     def test_final_audit_rejects_duplicate_site_with_valid_case_counts(self) -> None:
         self.run_root.mkdir()
         self.worker_root.mkdir()
