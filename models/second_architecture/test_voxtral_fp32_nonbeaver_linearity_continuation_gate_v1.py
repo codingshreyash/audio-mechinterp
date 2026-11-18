@@ -128,12 +128,33 @@ class ContinuationGateTests(unittest.TestCase):
         self.assertIn("Sleep", found[0])
         self.assertIn("DarkWake", found[1])
 
+    def test_power_log_requires_old_event_and_recent_terminal_snapshot(self):
+        collected = datetime(2026, 11, 18, 19, 20, tzinfo=timezone.utc)
+        old = "2026-11-18 14:00:00 -0500 Assertions\told event\n"
+        recent = "2026-11-18 14:19:59 -0500 Assertions\trecent event\n"
+        terminal = ("2026-11-18 14:20:00 -0500 : Showing all currently held "
+                    "IOKit power assertions\n")
+        gate._power_log_coverage(old + terminal, collected - timedelta(minutes=10),
+                                 collected, collected)
+        with self.assertRaisesRegex(ValueError, "coverage"):
+            gate._power_log_coverage(old + recent, collected - timedelta(minutes=10),
+                                     collected, collected)
+        stale_terminal = ("2026-11-18 14:05:00 -0500 : Showing all currently held "
+                          "IOKit power assertions\n")
+        with self.assertRaisesRegex(ValueError, "coverage"):
+            gate._power_log_coverage(old + stale_terminal,
+                                     collected - timedelta(minutes=10), collected, collected)
+        with self.assertRaisesRegex(ValueError, "coverage"):
+            gate._power_log_coverage(recent + terminal,
+                                     collected - timedelta(minutes=10), collected, collected)
+
     def test_host_probe_rejects_battery_closed_lid_and_recent_sleep(self):
         now = datetime.now(timezone.utc)
         recent = now.astimezone().strftime("%Y-%m-%d %H:%M:%S %z")
         old = (now - timedelta(days=1)).astimezone().strftime("%Y-%m-%d %H:%M:%S %z")
-        quiet_log = f"{old} Sleep\tOld event\n"
-        event_log = quiet_log + f"{recent} DarkWake\tRecent event\n"
+        terminal = f"{recent} : Showing all currently held IOKit power assertions\n"
+        quiet_log = f"{old} Sleep\tOld event\n" + terminal
+        event_log = f"{old} Sleep\tOld event\n{recent} DarkWake\tRecent event\n" + terminal
 
         def values(*, ac=True, open_lid=True, log=quiet_log):
             return iter(("Now drawing from 'AC Power'\n" if ac else
@@ -156,7 +177,9 @@ class ContinuationGateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             capture = Path(temp)
             start_at = datetime(2026, 11, 18, 19, 0, tzinfo=timezone.utc)
-            log = "2026-11-18 14:01:00 -0500 DarkWake\ttransition\n"
+            log = ("2026-11-17 14:00:00 -0500 Sleep\told event\n"
+                   "2026-11-18 14:01:00 -0500 DarkWake\ttransition\n"
+                   "2026-11-18 14:02:00 -0500 : Showing all currently held IOKit power assertions\n")
             probe = {"collected_utc": (start_at + timedelta(minutes=2)).isoformat(),
                      "commands": gate.HOST_COMMANDS,
                      "outputs": {"power_log": log,

@@ -1,7 +1,6 @@
 """Source-only reproductions of continuation gate review blockers.
 
-These expected failures document current fail-open conditions. Remove each
-decorator only after the production gate rejects its synthetic input.
+These reproductions remain as regression tests for the corrected source gate.
 """
 
 from __future__ import annotations
@@ -18,7 +17,6 @@ import voxtral_fp32_nonbeaver_linearity_continuation_gate_v1 as gate
 
 
 class ContinuationSourceHoldTests(unittest.TestCase):
-    @unittest.expectedFailure
     def test_preflight_rejects_stale_power_log_without_recent_coverage(self):
         old = (datetime.now(timezone.utc) - timedelta(days=1)).astimezone()
         stale_log = old.strftime("%Y-%m-%d %H:%M:%S %z") + " Assertions\tOld event\n"
@@ -32,7 +30,6 @@ class ContinuationSourceHoldTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "coverage|stale|recent"):
                 gate._host_probe()
 
-    @unittest.expectedFailure
     def test_saved_preflight_rejects_stale_power_log_without_recent_coverage(self):
         with tempfile.TemporaryDirectory() as temp:
             capture = Path(temp)
@@ -54,7 +51,6 @@ class ContinuationSourceHoldTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "coverage|stale|recent"):
                 gate._check_pre_host_record(capture, start)
 
-    @unittest.expectedFailure
     def test_saved_postrun_rejects_log_truncated_before_run(self):
         with tempfile.TemporaryDirectory() as temp:
             capture = Path(temp)
@@ -77,10 +73,14 @@ class ContinuationSourceHoldTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "coverage|stale|recent"):
                 gate._check_post_host_record(capture, start, finish)
 
-    @unittest.expectedFailure
     def test_completed_slot_rejects_start_before_actual_predecessor_finish(self):
+        self._assert_completed_slot_rejects_backdated_start(2)
+
+    def test_final_slot_rejects_start_before_actual_predecessor_finish(self):
+        self._assert_completed_slot_rejects_backdated_start(3)
+
+    def _assert_completed_slot_rejects_backdated_start(self, index: int):
         reservation = gate.v1._json(gate.v1.RUNS / "campaign_reservation.json")
-        index = 2
         label = gate.v1.runner.CONTEXT_LABELS[index]
         attempt = reservation["attempt_ids"][index]
         start_at = datetime(2026, 11, 18, 19, 59, tzinfo=timezone.utc)
@@ -140,6 +140,12 @@ class ContinuationSourceHoldTests(unittest.TestCase):
         }
 
         def raw(path):
+            if path.name == "launch_finish.json":
+                return {"status": gate.v1.FINISH_OK,
+                        "context_index": index - 1,
+                        "context_label": gate.v1.runner.CONTEXT_LABELS[index - 1],
+                        "attempt_id": reservation["attempt_ids"][index - 1],
+                        "wall_utc": predecessor_finish.isoformat()}
             return {"launch_start.json": start, "worker_claim.json": claim,
                     "result.json": result, "audit.json": audit}[path.name]
 

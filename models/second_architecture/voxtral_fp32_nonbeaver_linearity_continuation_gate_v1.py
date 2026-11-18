@@ -54,6 +54,9 @@ FREEZE_GO = "Decision: GO for non-beaver FP32 continuation external freeze; only
 STATUS = "frozen_voxtral_fp32_nonbeaver_continuation_v1"
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 POWER_EVENT = re.compile(r"^(\d{4}-\d\d-\d\d)\s+(\d\d:\d\d:\d\d)\s+([+-]\d{4})\s+([^\t]+)\t", re.MULTILINE)
+POWER_TERMINAL = re.compile(
+    r"^(\d{4}-\d\d-\d\d)\s+(\d\d:\d\d:\d\d)\s+([+-]\d{4})\s+: Showing all currently held IOKit power assertions\s*$",
+    re.MULTILINE)
 HOST_COMMANDS = {
     "power": ["pmset", "-g", "batt"],
     "clamshell": ["ioreg", "-a", "-r", "-c", "IOPMrootDomain", "-d", "1"],
@@ -316,6 +319,21 @@ def _v2_capture(index: int, reservation: dict) -> Path:
     return RUNS / v1.runner.CONTEXT_LABELS[index] / reservation["attempt_ids"][index]
 
 
+def _actual_predecessor_finish(index: int, reservation: dict) -> datetime:
+    if index not in (2, 3):
+        raise ValueError("Continuation predecessor index invalid")
+    earlier = index - 1
+    label, attempt = v1.runner.CONTEXT_LABELS[earlier], reservation["attempt_ids"][earlier]
+    root = v1.RUNS if earlier == 1 else RUNS
+    receipt = v1._json(root / label / attempt / "launch_finish.json")
+    if (receipt.get("status") != v1.FINISH_OK or
+            receipt.get("context_index") != earlier or
+            receipt.get("context_label") != label or
+            receipt.get("attempt_id") != attempt):
+        raise ValueError("Continuation predecessor finish differs")
+    return v1.old_gate.utc(receipt.get("wall_utc"))
+
+
 def _check_new_completed(index: int, reservation: dict, cumulative: float,
                          after: datetime, *, preview: dict | None = None) -> tuple[float, datetime]:
     label, attempt = v1.runner.CONTEXT_LABELS[index], reservation["attempt_ids"][index]
@@ -324,7 +342,8 @@ def _check_new_completed(index: int, reservation: dict, cumulative: float,
     finish = preview if preview is not None else v1._json(capture / "launch_finish.json")
     command = [sys.executable, str(WORKER.resolve()), "--run-context", str(index),
                "--attempt-id", attempt, "--continuation-freeze-sha256", v1.sha(FREEZE)]
-    if (start.get("status") != "context_launch_started" or
+    if (after != _actual_predecessor_finish(index, reservation) or
+            start.get("status") != "context_launch_started" or
             start.get("context_index") != index or start.get("context_label") != label or
             start.get("attempt_id") != attempt or start.get("freeze_sha256") != V1_FREEZE_SHA or
             start.get("continuation_freeze_sha256") != v1.sha(FREEZE) or
@@ -432,6 +451,23 @@ def _power_events(log: str, start: datetime, end: datetime) -> list[str]:
     return found
 
 
+def _power_log_coverage(log: str, start: datetime, end: datetime,
+                        collected: datetime) -> None:
+    """Require a log that starts before the interval and ends at collection."""
+    events = list(POWER_EVENT.finditer(log))
+    snapshots = list(POWER_TERMINAL.finditer(log))
+    if not events or not snapshots:
+        raise ValueError("Host power-log coverage lacks events or terminal snapshot")
+    parse = lambda match: datetime.strptime(
+        " ".join(match.group(1, 2, 3)), "%Y-%m-%d %H:%M:%S %z")
+    oldest = min(parse(match) for match in events)
+    terminal = parse(snapshots[-1])
+    if (oldest > start or terminal < end - timedelta(seconds=1) or
+            terminal < collected - timedelta(seconds=5) or
+            terminal > collected + timedelta(seconds=1)):
+        raise ValueError("Host power-log coverage is stale or truncated")
+
+
 def _host_probe(*, require_stable: bool = True) -> dict:
     batt = _run_command(["pmset", "-g", "batt"])
     lid = _run_command(["ioreg", "-a", "-r", "-c", "IOPMrootDomain", "-d", "1"])
@@ -444,6 +480,8 @@ def _host_probe(*, require_stable: bool = True) -> dict:
             raise ValueError("Host is not on external power")
         if plistlib.loads(lid.encode())[0].get("AppleClamshellState") is not False:
             raise ValueError("Host clamshell is closed or unverifiable")
+        _power_log_coverage(log, collected - timedelta(minutes=10), collected,
+                            collected)
         if _power_events(log, collected - timedelta(minutes=10), collected):
             raise ValueError("Host had recent sleep, DarkWake, or thermal transition")
     return {"collected_utc": collected.isoformat(),
@@ -498,10 +536,12 @@ def _check_pre_host_record(capture: Path, start: dict) -> None:
             plistlib.loads(outputs["clamshell"].encode())[0].get("AppleClamshellState") is not False):
         raise ValueError("Pre-run host was not plugged in with lid open")
     when = v1.old_gate.utc(probe.get("collected_utc"))
+    log = _load_power_log(capture, probe)
     if (not when <= v1.old_gate.utc(start["wall_utc"]) or
             (v1.old_gate.utc(start["wall_utc"]) - when).total_seconds() > 30 or
-            _power_events(_load_power_log(capture, probe), when - timedelta(minutes=10), when)):
+            _power_events(log, when - timedelta(minutes=10), when)):
         raise ValueError("Pre-run host stability differs")
+    _power_log_coverage(log, when - timedelta(minutes=10), when, when)
 
 
 def _check_post_host_record(capture: Path, start: dict, finish: dict) -> None:
@@ -519,6 +559,8 @@ def _check_post_host_record(capture: Path, start: dict, finish: dict) -> None:
     finished = v1.old_gate.utc(finish["wall_utc"])
     if not finished <= collected <= finished + timedelta(seconds=30):
         raise ValueError("Post-run host collection time differs")
+    _power_log_coverage(log, v1.old_gate.utc(start["wall_utc"]) - timedelta(seconds=1),
+                        finished + timedelta(seconds=1), collected)
     if _power_events(log, v1.old_gate.utc(start["wall_utc"]) - timedelta(seconds=1),
                      finished + timedelta(seconds=1)):
         raise ValueError("Host slept, DarkWoke, or had thermal transition during slot")
@@ -556,6 +598,7 @@ def verify_worker_start(index: int, attempt_id: str, continuation_freeze_sha256:
             start.get("max_capture_bytes") != 8 * 1024**2 or
             output.exists() or (capture / "worker_claim.json").exists() or
             (v1.RUNS / label / attempt_id).exists() or
+            v1.old_gate.utc(start["wall_utc"]) <= _actual_predecessor_finish(index, reservation) or
             v1.old_gate.utc(start["wall_utc"]) <= v1.old_gate.utc(freeze["reviewed_utc"])):
         raise ValueError("Continuation worker admission failed")
     _check_pre_host_record(capture, start)
@@ -573,6 +616,7 @@ def launch_context(index: int) -> dict:
         raise ValueError("Continuation requires pinned second_architecture environment")
     freeze, upstream, reservation = verify_freeze()
     used = check_prior(index, reservation)
+    predecessor_finish = _actual_predecessor_finish(index, reservation)
     label, attempt = v1.runner.CONTEXT_LABELS[index], reservation["attempt_ids"][index]
     capture, output = _v2_capture(index, reservation), v1.runner.RUNS / label / attempt
     if (capture.exists() or output.exists() or
@@ -605,6 +649,8 @@ def launch_context(index: int) -> dict:
              "max_output_bytes": 2 * 1024**3, "max_worker_bytes": v1.runner.MAX_WORKER_BYTES,
              "max_capture_bytes": 8 * 1024**2, "planned_counts": v1.runner.COUNTS,
              "pre_host": host}
+    if v1.old_gate.utc(start["wall_utc"]) <= predecessor_finish:
+        raise ValueError("Continuation start predates predecessor finish")
     v1._put(capture / "launch_start.json", start)
     finish = {"status": v1.FINISH_FAILED, "context_index": index,
               "context_label": label, "attempt_id": attempt,
@@ -685,7 +731,7 @@ def launch_context(index: int) -> dict:
             finish["worker_output_bytes"] = v1._tree_bytes(output)
             try:
                 _check_new_completed(index, reservation, cumulative,
-                    v1.old_gate.utc(start["wall_utc"]) - timedelta(microseconds=1),
+                    predecessor_finish,
                     preview=finish)
             except Exception as exc:
                 finish["status"] = v1.FINISH_FAILED
@@ -693,7 +739,7 @@ def launch_context(index: int) -> dict:
         v1._write_finish(capture, output, finish)
         if finish["status"] == v1.FINISH_OK:
             _check_new_completed(index, reservation, cumulative,
-                v1.old_gate.utc(start["wall_utc"]) - timedelta(microseconds=1))
+                predecessor_finish)
     return finish
 
 
