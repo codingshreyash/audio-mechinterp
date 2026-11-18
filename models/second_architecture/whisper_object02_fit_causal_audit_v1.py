@@ -286,8 +286,11 @@ def checked_result(value: dict[str, Any], tokenizer: Any | None = None) -> dict[
         decoded = tokenizer.batch_decode([ids], skip_special_tokens=True)[0].strip()
         require(decoded == transcript, "saved transcript does not decode from token IDs")
     eos_seen = EOS_ID in ids
-    require(value.get("eos_seen") is eos_seen and value.get("censored") is (not eos_seen),
-            "EOS/censor flags differ from IDs")
+    eos_terminated = ids[-1] == EOS_ID
+    require(value.get("eos_seen") is eos_seen
+            and value.get("eos_terminated") is eos_terminated
+            and value.get("censored") is (not eos_terminated),
+            "EOS termination/censor flags differ from IDs")
     scores = value.get("step_scores")
     require(isinstance(scores, list) and 1 <= len(scores) <= 128
             and 1 <= len(ids) - len(scores) <= 4,
@@ -313,7 +316,8 @@ def checked_result(value: dict[str, Any], tokenizer: Any | None = None) -> dict[
             and 0 < value["rss_bytes"] <= MAX_RSS,
             "per-decode time or RSS invalid")
     return {"token_ids": ids, "transcript": transcript, "words": words(transcript),
-            "eos_seen": eos_seen, "censored": not eos_seen}
+            "eos_seen": eos_seen, "eos_terminated": eos_terminated,
+            "censored": not eos_terminated}
 
 
 def load_capture(path: Path, expected_sha: str) -> np.ndarray:
@@ -472,7 +476,7 @@ def audit_rows(rows: list[dict[str, Any]], output: Path, cases: dict[str, dict[s
         alternative = WORDS[1 - WORDS.index(word)]
         require(baselines[key]["words"].count(word) == 1
                 and alternative not in baselines[key]["words"]
-                and baselines[key]["eos_seen"] and row.get("eligible") is True,
+                and baselines[key]["eos_terminated"] and row.get("eligible") is True,
                 f"clean baseline ineligible: {key}")
         require(row.get("capture_complete") is True,
                 "baseline capture incomplete")
@@ -526,7 +530,7 @@ def audit_rows(rows: list[dict[str, Any]], output: Path, cases: dict[str, dict[s
         baseline = baselines[recipient]
         independent = recompute_outcome(result["transcript"], rec_word, donor_word,
                                         baseline["transcript"])
-        independent["target_replacement"] = independent["target_replacement"] and result["eos_seen"]
+        independent["target_replacement"] = independent["target_replacement"] and result["eos_terminated"]
         independent["token_difference_count"] = (sum(left != right for left, right in zip(
             result["token_ids"], baseline["token_ids"]))
             + abs(len(result["token_ids"]) - len(baseline["token_ids"])))
@@ -570,7 +574,8 @@ def audit_rows(rows: list[dict[str, Any]], output: Path, cases: dict[str, dict[s
                          "donor_word_appears": donor_word in result["words"],
                          "wer_vs_recipient": edit_distance(baseline["words"], result["words"])
                                              / max(1, len(baseline["words"])),
-                         "eos_seen": result["eos_seen"]})
+                         "eos_seen": result["eos_seen"],
+                         "eos_terminated": result["eos_terminated"]})
     require(actual == expected_matrix(), "intervention matrix incomplete")
     require(len(random_arm_seeds) == 8 and len(random_edit_hashes) == 8,
             "eight independent random edits absent")

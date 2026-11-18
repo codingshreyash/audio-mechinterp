@@ -23,7 +23,8 @@ def fake_result(word: str, *, hook_count: int | None = None) -> dict:
                "alias_margin_status": "multi_token_alias"}
               for selected in (token, 50256)]
     return {"token_ids": [50257, token, 50256], "transcript": f"Say {word} now.",
-            "eos_seen": True, "censored": False, "step_scores": scores,
+            "eos_seen": True, "eos_terminated": True, "censored": False,
+            "step_scores": scores,
             "elapsed_seconds": 0.1, "rss_bytes": 100, "hook_count": hook_count}
 
 
@@ -229,6 +230,27 @@ class WhisperSavedAuditTests(unittest.TestCase):
         rows[1]["result"]["step_scores"] = []
         with self.assertRaisesRegex(ValueError, "step-score coverage"):
             self.check_rows(rows)
+
+    def test_mid_sequence_eos_does_not_count_as_termination(self) -> None:
+        result = fake_result("plate")
+        result["token_ids"] = [50257, 100, 50256, 101]
+        result["step_scores"] = [
+            {"token_id": token, "selected_score": 1.0,
+             "top2_ids": [token, 200], "top2_scores": [1.0, 0.0],
+             "generation_processed_plate_minus_cup_first_token_score": None,
+             "alias_margin_status": "multi_token_alias"}
+            for token in (100, 50256, 101)
+        ]
+        result["eos_seen"] = True
+        result["eos_terminated"] = False
+        result["censored"] = True
+        checked = audit.checked_result(result)
+        self.assertFalse(checked["eos_terminated"])
+        self.assertTrue(checked["censored"])
+        result["eos_terminated"] = True
+        result["censored"] = False
+        with self.assertRaisesRegex(ValueError, "EOS termination"):
+            audit.checked_result(result)
 
     def test_reported_wer_corruption_rejected(self) -> None:
         rows = copy.deepcopy(self.rows)
