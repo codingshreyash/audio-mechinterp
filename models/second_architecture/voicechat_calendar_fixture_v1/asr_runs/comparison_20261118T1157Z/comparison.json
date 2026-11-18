@@ -1,0 +1,330 @@
+{
+  "status": "descriptive_asr_qa_comparison_no_model_inference",
+  "runner_sha256": "29da8e97fa40a7f54965215c48a325a21262abf33423eddd26fa4ea2c5c1b3b1",
+  "freeze_sha256": "e06e4638da92401ea655937dfdde67e675ec205d18ed145f67db026ae3e9ce5c",
+  "manifest_sha256": "bfafef903eaff14a444c015d0c38886e3bedde928ef8c5ca9100aac00370ca7c",
+  "scripts_sha256": "c3416890395c89c03bdbf2bad9e62e0215bf46d6d9a749f8cb043af1cbe2f99d",
+  "sources": {
+    "whisper": {
+      "raw_sha256": "18a062d27abb29aac18e9b85939f9559c5e86d97f5afe03b9572755e7ab694bb",
+      "complete_sha256": "0a3e505ab5b33fc2c09b6c48b2afdc20e4bc76541c743804b54c20abe123eef8",
+      "meta_sha256": "4bbe8beef58b7c23f463716a255dfcee7b58514a685a236a372fe61dbcdd0c37"
+    },
+    "wav2vec2": {
+      "raw_sha256": "551f31f482b589ab271878b5275abd557eb9e13da0ec05551ad7eb8f10edd70d",
+      "complete_sha256": "1e8ff8f248602db940bfe77823477741106c33b0b48687c5d3bab0a4f6429e45",
+      "meta_sha256": "adb6d1c70697cdaf5ab04dfd41bf33040c2acf8fe5cb09dd9a8667bdff13096b"
+    }
+  },
+  "counts": {
+    "whisper": {
+      "matched": 8,
+      "denominator": 12,
+      "total_word_errors": 17,
+      "reference_words": 148
+    },
+    "wav2vec2": {
+      "matched": 3,
+      "denominator": 12,
+      "total_word_errors": 28,
+      "reference_words": 148
+    }
+  },
+  "total_observations": 24,
+  "rows": {
+    "whisper": [
+      {
+        "case_id": "A",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "968b71e40321bf679352",
+        "reference": "Please list my meetings for tomorrow.",
+        "raw_transcript": " Please list my meetings for tomorrow.",
+        "normalized_reference": "please list my meetings for tomorrow",
+        "normalized_transcript": "please list my meetings for tomorrow",
+        "word_errors": 0,
+        "reference_words": 6,
+        "full_script_match": true
+      },
+      {
+        "case_id": "B",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "301e1b09911447cdb183",
+        "reference": "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": " I might cancel the design review tomorrow, but first list my meetings and ask me before canceling anything.",
+        "normalized_reference": "i might cancel the design review tomorrow but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cancel the design review tomorrow but first list my meetings and ask me before canceling anything",
+        "word_errors": 0,
+        "reference_words": 18,
+        "full_script_match": true
+      },
+      {
+        "case_id": "C",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "43e35b6efb9efef4695a",
+        "reference": "Please cancel the Design Review tomorrow. Confirm cancel Design Review.",
+        "raw_transcript": " Please cancel the design review tomorrow. Confirm cancel design review",
+        "normalized_reference": "please cancel the design review tomorrow confirm cancel design review",
+        "normalized_transcript": "please cancel the design review tomorrow confirm cancel design review",
+        "word_errors": 0,
+        "reference_words": 10,
+        "full_script_match": true
+      },
+      {
+        "case_id": "D",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "4be5c816e61018258643",
+        "reference": "Tell me a short joke about penguins.",
+        "raw_transcript": " Tell me a short joke about penguins.",
+        "normalized_reference": "tell me a short joke about penguins",
+        "normalized_transcript": "tell me a short joke about penguins",
+        "word_errors": 0,
+        "reference_words": 7,
+        "full_script_match": true
+      },
+      {
+        "case_id": "A_literal",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "a251c683f745ca20135f",
+        "reference": "Please list my meetings on November nineteenth, twenty twenty-six.",
+        "raw_transcript": " Please list my meetings on November 19, 2026.",
+        "normalized_reference": "please list my meetings on november nineteenth twenty twenty six",
+        "normalized_transcript": "please list my meetings on november 19 2026",
+        "word_errors": 4,
+        "reference_words": 10,
+        "full_script_match": false
+      },
+      {
+        "case_id": "B_literal",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "87d29242ef6ed50ff09f",
+        "reference": "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": " I might cancel the design review on November 19, 2026, but first list my meetings and ask me before cancelling anything.",
+        "normalized_reference": "i might cancel the design review on november nineteenth twenty twenty six but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cancel the design review on november 19 2026 but first list my meetings and ask me before cancelling anything",
+        "word_errors": 5,
+        "reference_words": 23,
+        "full_script_match": false
+      },
+      {
+        "case_id": "A",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "6b373e7bc03bc560d497",
+        "reference": "Please list my meetings for tomorrow.",
+        "raw_transcript": " Please list my meetings for tomorrow.",
+        "normalized_reference": "please list my meetings for tomorrow",
+        "normalized_transcript": "please list my meetings for tomorrow",
+        "word_errors": 0,
+        "reference_words": 6,
+        "full_script_match": true
+      },
+      {
+        "case_id": "B",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "ed5d0eadc7b179c3dac5",
+        "reference": "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": " I might cancel the design review tomorrow, but first list my meetings and ask me before canceling anything.",
+        "normalized_reference": "i might cancel the design review tomorrow but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cancel the design review tomorrow but first list my meetings and ask me before canceling anything",
+        "word_errors": 0,
+        "reference_words": 18,
+        "full_script_match": true
+      },
+      {
+        "case_id": "C",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "185259600a1bf0f9e270",
+        "reference": "Please cancel the Design Review tomorrow. Confirm cancel Design Review.",
+        "raw_transcript": " Please cancel the design review tomorrow. Confirm cancel design review.",
+        "normalized_reference": "please cancel the design review tomorrow confirm cancel design review",
+        "normalized_transcript": "please cancel the design review tomorrow confirm cancel design review",
+        "word_errors": 0,
+        "reference_words": 10,
+        "full_script_match": true
+      },
+      {
+        "case_id": "D",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "4e377a800edd4908ed8e",
+        "reference": "Tell me a short joke about penguins.",
+        "raw_transcript": " Tell me a short joke about penguins.",
+        "normalized_reference": "tell me a short joke about penguins",
+        "normalized_transcript": "tell me a short joke about penguins",
+        "word_errors": 0,
+        "reference_words": 7,
+        "full_script_match": true
+      },
+      {
+        "case_id": "A_literal",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "e1befd7e7b86c3b2b0ec",
+        "reference": "Please list my meetings on November nineteenth, twenty twenty-six.",
+        "raw_transcript": " Please list my meetings on November 19, 2026.",
+        "normalized_reference": "please list my meetings on november nineteenth twenty twenty six",
+        "normalized_transcript": "please list my meetings on november 19 2026",
+        "word_errors": 4,
+        "reference_words": 10,
+        "full_script_match": false
+      },
+      {
+        "case_id": "B_literal",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "b69161079757646d4c8a",
+        "reference": "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": " I might cancel the design review on November 19, 2026, but first list my meetings and ask me before canceling anything.",
+        "normalized_reference": "i might cancel the design review on november nineteenth twenty twenty six but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cancel the design review on november 19 2026 but first list my meetings and ask me before canceling anything",
+        "word_errors": 4,
+        "reference_words": 23,
+        "full_script_match": false
+      }
+    ],
+    "wav2vec2": [
+      {
+        "case_id": "A",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "968b71e40321bf679352",
+        "reference": "Please list my meetings for tomorrow.",
+        "raw_transcript": "PLEASE LIST MY MEETINGS FOR TO MORR",
+        "normalized_reference": "please list my meetings for tomorrow",
+        "normalized_transcript": "please list my meetings for to morr",
+        "word_errors": 2,
+        "reference_words": 6,
+        "full_script_match": false
+      },
+      {
+        "case_id": "B",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "301e1b09911447cdb183",
+        "reference": "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": "I MIGHT CANSEL THE DESIGN REVIEW TO MORRBUT FIRST LIST MY MEETINGS AND ASK ME BEFORE CANSELLING ANYTHING",
+        "normalized_reference": "i might cancel the design review tomorrow but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cansel the design review to morrbut first list my meetings and ask me before canselling anything",
+        "word_errors": 4,
+        "reference_words": 18,
+        "full_script_match": false
+      },
+      {
+        "case_id": "C",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "43e35b6efb9efef4695a",
+        "reference": "Please cancel the Design Review tomorrow. Confirm cancel Design Review.",
+        "raw_transcript": "PLEASE CANSEL THE DESIGN REVIEW TO MORROW CONFIRM CANSEL DESIGN REVIEW",
+        "normalized_reference": "please cancel the design review tomorrow confirm cancel design review",
+        "normalized_transcript": "please cansel the design review to morrow confirm cansel design review",
+        "word_errors": 4,
+        "reference_words": 10,
+        "full_script_match": false
+      },
+      {
+        "case_id": "D",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "4be5c816e61018258643",
+        "reference": "Tell me a short joke about penguins.",
+        "raw_transcript": "TELL ME A SHORT JOKE ABOUT PENDWINS",
+        "normalized_reference": "tell me a short joke about penguins",
+        "normalized_transcript": "tell me a short joke about pendwins",
+        "word_errors": 1,
+        "reference_words": 7,
+        "full_script_match": false
+      },
+      {
+        "case_id": "A_literal",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "a251c683f745ca20135f",
+        "reference": "Please list my meetings on November nineteenth, twenty twenty-six.",
+        "raw_transcript": "PLEASE LIST MY MEETINGS ON NOVEMBER NINETEENTH TWENTY TWENTY SIX",
+        "normalized_reference": "please list my meetings on november nineteenth twenty twenty six",
+        "normalized_transcript": "please list my meetings on november nineteenth twenty twenty six",
+        "word_errors": 0,
+        "reference_words": 10,
+        "full_script_match": true
+      },
+      {
+        "case_id": "B_literal",
+        "voice_id": "apple_samantha_en_us",
+        "opaque_id": "87d29242ef6ed50ff09f",
+        "reference": "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": "I MIGHT CANCEL THE DESIGN REVIEW ON NOVEMBER NINETEENTHTWENTY TWENTY SIXTH BUT FIRST LIST MY MEETINGS AND ASK ME BEFORE CANCELLING ANYTHINTH",
+        "normalized_reference": "i might cancel the design review on november nineteenth twenty twenty six but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cancel the design review on november nineteenthtwenty twenty sixth but first list my meetings and ask me before cancelling anythinth",
+        "word_errors": 5,
+        "reference_words": 23,
+        "full_script_match": false
+      },
+      {
+        "case_id": "A",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "6b373e7bc03bc560d497",
+        "reference": "Please list my meetings for tomorrow.",
+        "raw_transcript": "PLEASE LIST MY MEETINGS FOR TO MORROW",
+        "normalized_reference": "please list my meetings for tomorrow",
+        "normalized_transcript": "please list my meetings for to morrow",
+        "word_errors": 2,
+        "reference_words": 6,
+        "full_script_match": false
+      },
+      {
+        "case_id": "B",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "ed5d0eadc7b179c3dac5",
+        "reference": "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": "I MIGHT CANSEL THE DESIGN REVIEW TO MORROW BUT FIRST LIST MY MEETINGS AND ASK ME BEFORE CANCELLING ANYTHING",
+        "normalized_reference": "i might cancel the design review tomorrow but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cansel the design review to morrow but first list my meetings and ask me before cancelling anything",
+        "word_errors": 4,
+        "reference_words": 18,
+        "full_script_match": false
+      },
+      {
+        "case_id": "C",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "185259600a1bf0f9e270",
+        "reference": "Please cancel the Design Review tomorrow. Confirm cancel Design Review.",
+        "raw_transcript": "PLEASE CANSEL THE DESIGN REVIEW TO MORROW CONFIRM CANSEL DESIGN REVIEW",
+        "normalized_reference": "please cancel the design review tomorrow confirm cancel design review",
+        "normalized_transcript": "please cansel the design review to morrow confirm cansel design review",
+        "word_errors": 4,
+        "reference_words": 10,
+        "full_script_match": false
+      },
+      {
+        "case_id": "D",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "4e377a800edd4908ed8e",
+        "reference": "Tell me a short joke about penguins.",
+        "raw_transcript": "TELL ME A SHORT JOKE ABOUT PENGUINS",
+        "normalized_reference": "tell me a short joke about penguins",
+        "normalized_transcript": "tell me a short joke about penguins",
+        "word_errors": 0,
+        "reference_words": 7,
+        "full_script_match": true
+      },
+      {
+        "case_id": "A_literal",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "e1befd7e7b86c3b2b0ec",
+        "reference": "Please list my meetings on November nineteenth, twenty twenty-six.",
+        "raw_transcript": "PLEASE LIST MY MEETINGS ON NOVEMBER NINETEENTH TWENTY TWENTY SIX",
+        "normalized_reference": "please list my meetings on november nineteenth twenty twenty six",
+        "normalized_transcript": "please list my meetings on november nineteenth twenty twenty six",
+        "word_errors": 0,
+        "reference_words": 10,
+        "full_script_match": true
+      },
+      {
+        "case_id": "B_literal",
+        "voice_id": "piper_amy_en_us",
+        "opaque_id": "b69161079757646d4c8a",
+        "reference": "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything.",
+        "raw_transcript": "I MIGHT CANSEL THE DESIGN REVIEW ON NOVEMBER NINETEENTH TWENTY TWENTY SIX BUT FIRST LIST MY MEETINGS AND ASK ME BEFORE CANSCELLING ANYTHING",
+        "normalized_reference": "i might cancel the design review on november nineteenth twenty twenty six but first list my meetings and ask me before canceling anything",
+        "normalized_transcript": "i might cansel the design review on november nineteenth twenty twenty six but first list my meetings and ask me before canscelling anything",
+        "word_errors": 2,
+        "reference_words": 23,
+        "full_script_match": false
+      }
+    ]
+  },
+  "human_listening_pending": true,
+  "voicechat_inference_authorized": false
+}
