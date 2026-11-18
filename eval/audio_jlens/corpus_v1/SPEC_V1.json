@@ -1,0 +1,1833 @@
+{
+  "schema_version": 1,
+  "status": "selection_frozen_before_cpu_render_and_candidate_answers",
+  "purpose": "new corpus for reusable audio-time transport; stimulus selection only",
+  "seed": 20261118,
+  "selection_rule": "adjacent word pairs in fixed category lists, then seeded category shuffle; first 6 fit, next 3 dev, final 3 locked test; first 3 fit pairs/category map fit",
+  "historical_excluded_words": [
+    "blue",
+    "cat",
+    "dog",
+    "eight",
+    "friday",
+    "monday",
+    "north",
+    "red",
+    "seven",
+    "south"
+  ],
+  "model_id_for_tokenizer_only": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision_for_tokenizer_only": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "tokenizer_json_sha256": "8441917e39ae0244e06d704b95b3124795cec478e297f9afac39ba670d7e9d99",
+  "tokenizer_config_sha256": "569aa7a9171e36dfff80f0a7550ab0c9c09e46ac840fea5030641417394fb0d2",
+  "tokenizer_eos_id": 151645,
+  "source_tts_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "source_tts_render_helper_sha256": "c3f4f9f71d9c7db8db3af414dbde72ebe7e0a9bc1a0c354ed0d86b8dbe3d9783",
+  "proposal_sha256_at_selection": "78b972e7f40347e82341853369ee894b1cb9d90e7f6207bd1f13d81ee665a12d",
+  "spec_generator_sha256": "f0a36672c76036e59ef3331d332b61ddbbd76ac20f120e1e4855f3098c6ee4ee",
+  "system_prompt": "Repeat only the single word explicitly introduced before the final question in the spoken request.",
+  "render": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "subtype": "PCM_16",
+    "gap_samples": 1920,
+    "word_slot_padding": "right-pad each word to the longer processed word fragment in its pair/engine; do not trim or normalize",
+    "voices": {
+      "piper": {
+        "family": "Piper VITS",
+        "package": "piper-tts==1.8.0",
+        "model_repo": "rhasspy/piper-voices",
+        "model_revision": "0ca208afc2a2ee102b1e961e72e0a7e4907be3d0",
+        "voice": "en_US-amy-medium",
+        "model_file": "en/en_US/amy/medium/en_US-amy-medium.onnx",
+        "model_sha256": "cf9ccdec59f05adee47173f6fb4d89e8b0c5f30c178748d2572fe4efd1d2724c",
+        "config_file": "en/en_US/amy/medium/en_US-amy-medium.onnx.json",
+        "config_sha256": "27490c2197e3e7b566b051fc0b1dae21200e72b44c209731419effdbbe0789e5",
+        "synthesis": {
+          "speaker_id": null,
+          "length_scale": 1.0,
+          "noise_scale": 0.0,
+          "noise_w_scale": 0.0,
+          "normalize_audio": false,
+          "volume": 1.0
+        }
+      },
+      "kokoro": {
+        "family": "Kokoro StyleTTS2 plus iSTFTNet",
+        "package": "kokoro-onnx==0.6.1",
+        "model_repo": "speaches-ai/Kokoro-82M-v1.0-ONNX",
+        "model_revision": "dc196c76d64fed9203906231372bcb98135815df",
+        "voice": "af_bella",
+        "model_file": "model.onnx",
+        "model_sha256": "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5",
+        "voices_file": "voices.bin",
+        "voices_sha256": "bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d",
+        "synthesis": {
+          "speed": 1.0,
+          "lang": "en-us",
+          "trim": false,
+          "sentence_pause": 0.25,
+          "clause_pause": 0.1,
+          "continuous": false
+        }
+      }
+    }
+  },
+  "word_pairs": {
+    "fit_pool": [
+      {
+        "pair_id": "animal_06",
+        "category": "animal",
+        "words": [
+          "deer",
+          "moose"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "animal_09",
+        "category": "animal",
+        "words": [
+          "turtle",
+          "cow"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "animal_08",
+        "category": "animal",
+        "words": [
+          "beaver",
+          "monkey"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "animal_11",
+        "category": "animal",
+        "words": [
+          "snake",
+          "frog"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "animal_03",
+        "category": "animal",
+        "words": [
+          "goat",
+          "duck"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "animal_01",
+        "category": "animal",
+        "words": [
+          "lion",
+          "tiger"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "color_06",
+        "category": "color",
+        "words": [
+          "cyan",
+          "violet"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "color_05",
+        "category": "color",
+        "words": [
+          "silver",
+          "teal"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "color_03",
+        "category": "color",
+        "words": [
+          "black",
+          "white"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "color_10",
+        "category": "color",
+        "words": [
+          "crimson",
+          "cream"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "color_02",
+        "category": "color",
+        "words": [
+          "pink",
+          "brown"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "color_07",
+        "category": "color",
+        "words": [
+          "beige",
+          "coral"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "object_09",
+        "category": "object",
+        "words": [
+          "pillow",
+          "carpet"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "object_02",
+        "category": "object",
+        "words": [
+          "plate",
+          "cup"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "object_05",
+        "category": "object",
+        "words": [
+          "phone",
+          "book"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "object_07",
+        "category": "object",
+        "words": [
+          "window",
+          "door"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "object_11",
+        "category": "object",
+        "words": [
+          "hammer",
+          "ladder"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "object_01",
+        "category": "object",
+        "words": [
+          "spoon",
+          "fork"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "nature_10",
+        "category": "nature",
+        "words": [
+          "grove",
+          "pond"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "nature_00",
+        "category": "nature",
+        "words": [
+          "river",
+          "lake"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "nature_09",
+        "category": "nature",
+        "words": [
+          "waterfall",
+          "garden"
+        ],
+        "map_fit": true
+      },
+      {
+        "pair_id": "nature_08",
+        "category": "nature",
+        "words": [
+          "cave",
+          "stream"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "nature_03",
+        "category": "nature",
+        "words": [
+          "valley",
+          "island"
+        ],
+        "map_fit": false
+      },
+      {
+        "pair_id": "nature_04",
+        "category": "nature",
+        "words": [
+          "beach",
+          "canyon"
+        ],
+        "map_fit": false
+      }
+    ],
+    "development": [
+      {
+        "pair_id": "animal_05",
+        "category": "animal",
+        "words": [
+          "rabbit",
+          "fox"
+        ]
+      },
+      {
+        "pair_id": "animal_00",
+        "category": "animal",
+        "words": [
+          "bear",
+          "wolf"
+        ]
+      },
+      {
+        "pair_id": "animal_04",
+        "category": "animal",
+        "words": [
+          "goose",
+          "mouse"
+        ]
+      },
+      {
+        "pair_id": "color_08",
+        "category": "color",
+        "words": [
+          "olive",
+          "navy"
+        ]
+      },
+      {
+        "pair_id": "color_09",
+        "category": "color",
+        "words": [
+          "lavender",
+          "turquoise"
+        ]
+      },
+      {
+        "pair_id": "color_04",
+        "category": "color",
+        "words": [
+          "gray",
+          "gold"
+        ]
+      },
+      {
+        "pair_id": "object_00",
+        "category": "object",
+        "words": [
+          "chair",
+          "table"
+        ]
+      },
+      {
+        "pair_id": "object_08",
+        "category": "object",
+        "words": [
+          "mirror",
+          "blanket"
+        ]
+      },
+      {
+        "pair_id": "object_04",
+        "category": "object",
+        "words": [
+          "lamp",
+          "clock"
+        ]
+      },
+      {
+        "pair_id": "nature_06",
+        "category": "nature",
+        "words": [
+          "meadow",
+          "swamp"
+        ]
+      },
+      {
+        "pair_id": "nature_11",
+        "category": "nature",
+        "words": [
+          "reef",
+          "rain"
+        ]
+      },
+      {
+        "pair_id": "nature_01",
+        "category": "nature",
+        "words": [
+          "ocean",
+          "forest"
+        ]
+      }
+    ],
+    "locked_test": [
+      {
+        "pair_id": "animal_07",
+        "category": "animal",
+        "words": [
+          "panda",
+          "camel"
+        ]
+      },
+      {
+        "pair_id": "animal_10",
+        "category": "animal",
+        "words": [
+          "pig",
+          "chicken"
+        ]
+      },
+      {
+        "pair_id": "animal_02",
+        "category": "animal",
+        "words": [
+          "horse",
+          "sheep"
+        ]
+      },
+      {
+        "pair_id": "color_11",
+        "category": "color",
+        "words": [
+          "tan",
+          "lime"
+        ]
+      },
+      {
+        "pair_id": "color_01",
+        "category": "color",
+        "words": [
+          "orange",
+          "purple"
+        ]
+      },
+      {
+        "pair_id": "color_00",
+        "category": "color",
+        "words": [
+          "green",
+          "yellow"
+        ]
+      },
+      {
+        "pair_id": "object_10",
+        "category": "object",
+        "words": [
+          "candle",
+          "basket"
+        ]
+      },
+      {
+        "pair_id": "object_03",
+        "category": "object",
+        "words": [
+          "bowl",
+          "knife"
+        ]
+      },
+      {
+        "pair_id": "object_06",
+        "category": "object",
+        "words": [
+          "pen",
+          "pencil"
+        ]
+      },
+      {
+        "pair_id": "nature_05",
+        "category": "nature",
+        "words": [
+          "glacier",
+          "volcano"
+        ]
+      },
+      {
+        "pair_id": "nature_02",
+        "category": "nature",
+        "words": [
+          "desert",
+          "mountain"
+        ]
+      },
+      {
+        "pair_id": "nature_07",
+        "category": "nature",
+        "words": [
+          "marsh",
+          "cliff"
+        ]
+      }
+    ]
+  },
+  "templates": {
+    "fit": [
+      {
+        "id": "fit_chosen",
+        "prefix": "The word I chose is",
+        "suffix": "What word did I choose?"
+      },
+      {
+        "id": "fit_remember",
+        "prefix": "Please remember this word:",
+        "suffix": "Repeat that word."
+      }
+    ],
+    "development": [
+      {
+        "id": "dev_listen",
+        "prefix": "Listen for my chosen word:",
+        "suffix": "Tell me the chosen word."
+      },
+      {
+        "id": "dev_hear",
+        "prefix": "I will say one word now:",
+        "suffix": "Which word did you hear?"
+      }
+    ],
+    "locked_test": [
+      {
+        "id": "test_answer",
+        "prefix": "Here is my answer word:",
+        "suffix": "Reply with only that word."
+      },
+      {
+        "id": "test_attention",
+        "prefix": "Pay attention to this word:",
+        "suffix": "What word was spoken?"
+      }
+    ]
+  },
+  "aliases": {
+    "bear": [
+      {
+        "surface": "bear",
+        "token_id": 67660
+      },
+      {
+        "surface": "Bear",
+        "token_id": 88585
+      },
+      {
+        "surface": " bear",
+        "token_id": 11722
+      },
+      {
+        "surface": " Bear",
+        "token_id": 23985
+      }
+    ],
+    "wolf": [
+      {
+        "surface": "wolf",
+        "token_id": 76230
+      },
+      {
+        "surface": "Wolf",
+        "token_id": 95434
+      },
+      {
+        "surface": " wolf",
+        "token_id": 36542
+      },
+      {
+        "surface": " Wolf",
+        "token_id": 25230
+      }
+    ],
+    "lion": [
+      {
+        "surface": "lion",
+        "token_id": 78151
+      },
+      {
+        "surface": " lion",
+        "token_id": 39032
+      },
+      {
+        "surface": " Lion",
+        "token_id": 32099
+      }
+    ],
+    "tiger": [
+      {
+        "surface": " tiger",
+        "token_id": 51735
+      },
+      {
+        "surface": " Tiger",
+        "token_id": 35745
+      }
+    ],
+    "horse": [
+      {
+        "surface": "horse",
+        "token_id": 59675
+      },
+      {
+        "surface": " horse",
+        "token_id": 15223
+      },
+      {
+        "surface": " Horse",
+        "token_id": 33292
+      }
+    ],
+    "sheep": [
+      {
+        "surface": " sheep",
+        "token_id": 31912
+      },
+      {
+        "surface": " Sheep",
+        "token_id": 82908
+      }
+    ],
+    "goat": [
+      {
+        "surface": " goat",
+        "token_id": 53292
+      },
+      {
+        "surface": " Goat",
+        "token_id": 92772
+      }
+    ],
+    "duck": [
+      {
+        "surface": "duck",
+        "token_id": 72970
+      },
+      {
+        "surface": " duck",
+        "token_id": 35985
+      },
+      {
+        "surface": " Duck",
+        "token_id": 45770
+      }
+    ],
+    "goose": [
+      {
+        "surface": " goose",
+        "token_id": 62137
+      },
+      {
+        "surface": " Goose",
+        "token_id": 81107
+      }
+    ],
+    "mouse": [
+      {
+        "surface": "mouse",
+        "token_id": 13237
+      },
+      {
+        "surface": "Mouse",
+        "token_id": 10493
+      },
+      {
+        "surface": " mouse",
+        "token_id": 8644
+      },
+      {
+        "surface": " Mouse",
+        "token_id": 17721
+      }
+    ],
+    "rabbit": [
+      {
+        "surface": "rabbit",
+        "token_id": 86345
+      },
+      {
+        "surface": " rabbit",
+        "token_id": 38724
+      },
+      {
+        "surface": " Rabbit",
+        "token_id": 48331
+      }
+    ],
+    "fox": [
+      {
+        "surface": "fox",
+        "token_id": 15011
+      },
+      {
+        "surface": "Fox",
+        "token_id": 47314
+      },
+      {
+        "surface": " fox",
+        "token_id": 38835
+      },
+      {
+        "surface": " Fox",
+        "token_id": 13282
+      }
+    ],
+    "deer": [
+      {
+        "surface": "deer",
+        "token_id": 96262
+      },
+      {
+        "surface": " deer",
+        "token_id": 38049
+      },
+      {
+        "surface": " Deer",
+        "token_id": 63091
+      }
+    ],
+    "moose": [
+      {
+        "surface": " Moose",
+        "token_id": 68128
+      }
+    ],
+    "panda": [
+      {
+        "surface": " panda",
+        "token_id": 88222
+      },
+      {
+        "surface": " Panda",
+        "token_id": 72410
+      }
+    ],
+    "camel": [
+      {
+        "surface": "camel",
+        "token_id": 93321
+      },
+      {
+        "surface": " camel",
+        "token_id": 49152
+      },
+      {
+        "surface": " Camel",
+        "token_id": 68154
+      }
+    ],
+    "beaver": [
+      {
+        "surface": " Beaver",
+        "token_id": 91434
+      }
+    ],
+    "monkey": [
+      {
+        "surface": "monkey",
+        "token_id": 96016
+      },
+      {
+        "surface": "Monkey",
+        "token_id": 96838
+      },
+      {
+        "surface": " monkey",
+        "token_id": 38703
+      },
+      {
+        "surface": " Monkey",
+        "token_id": 57837
+      }
+    ],
+    "turtle": [
+      {
+        "surface": "turtle",
+        "token_id": 81109
+      },
+      {
+        "surface": " turtle",
+        "token_id": 36089
+      },
+      {
+        "surface": " Turtle",
+        "token_id": 66806
+      }
+    ],
+    "cow": [
+      {
+        "surface": "cow",
+        "token_id": 18921
+      },
+      {
+        "surface": "Cow",
+        "token_id": 89915
+      },
+      {
+        "surface": " cow",
+        "token_id": 19362
+      },
+      {
+        "surface": " Cow",
+        "token_id": 21851
+      }
+    ],
+    "pig": [
+      {
+        "surface": "pig",
+        "token_id": 89500
+      },
+      {
+        "surface": " pig",
+        "token_id": 23694
+      },
+      {
+        "surface": " Pig",
+        "token_id": 48554
+      }
+    ],
+    "chicken": [
+      {
+        "surface": "Chicken",
+        "token_id": 83863
+      },
+      {
+        "surface": " chicken",
+        "token_id": 16158
+      },
+      {
+        "surface": " Chicken",
+        "token_id": 33519
+      }
+    ],
+    "snake": [
+      {
+        "surface": "snake",
+        "token_id": 72139
+      },
+      {
+        "surface": "Snake",
+        "token_id": 83420
+      },
+      {
+        "surface": " snake",
+        "token_id": 25265
+      },
+      {
+        "surface": " Snake",
+        "token_id": 39656
+      }
+    ],
+    "frog": [
+      {
+        "surface": "frog",
+        "token_id": 85982
+      },
+      {
+        "surface": " frog",
+        "token_id": 59881
+      },
+      {
+        "surface": " Frog",
+        "token_id": 71419
+      }
+    ],
+    "green": [
+      {
+        "surface": "green",
+        "token_id": 13250
+      },
+      {
+        "surface": "Green",
+        "token_id": 19576
+      },
+      {
+        "surface": " green",
+        "token_id": 6176
+      },
+      {
+        "surface": " Green",
+        "token_id": 7840
+      }
+    ],
+    "yellow": [
+      {
+        "surface": "yellow",
+        "token_id": 27869
+      },
+      {
+        "surface": "Yellow",
+        "token_id": 47699
+      },
+      {
+        "surface": " yellow",
+        "token_id": 13753
+      },
+      {
+        "surface": " Yellow",
+        "token_id": 25462
+      }
+    ],
+    "orange": [
+      {
+        "surface": "orange",
+        "token_id": 34164
+      },
+      {
+        "surface": "Orange",
+        "token_id": 41969
+      },
+      {
+        "surface": " orange",
+        "token_id": 18575
+      },
+      {
+        "surface": " Orange",
+        "token_id": 21958
+      }
+    ],
+    "purple": [
+      {
+        "surface": "purple",
+        "token_id": 56507
+      },
+      {
+        "surface": "Purple",
+        "token_id": 74513
+      },
+      {
+        "surface": " purple",
+        "token_id": 24932
+      },
+      {
+        "surface": " Purple",
+        "token_id": 40389
+      }
+    ],
+    "pink": [
+      {
+        "surface": "pink",
+        "token_id": 63249
+      },
+      {
+        "surface": "Pink",
+        "token_id": 71352
+      },
+      {
+        "surface": " pink",
+        "token_id": 18217
+      },
+      {
+        "surface": " Pink",
+        "token_id": 26119
+      }
+    ],
+    "brown": [
+      {
+        "surface": "brown",
+        "token_id": 64461
+      },
+      {
+        "surface": "Brown",
+        "token_id": 48388
+      },
+      {
+        "surface": " brown",
+        "token_id": 13876
+      },
+      {
+        "surface": " Brown",
+        "token_id": 10471
+      }
+    ],
+    "black": [
+      {
+        "surface": "black",
+        "token_id": 11453
+      },
+      {
+        "surface": "Black",
+        "token_id": 14417
+      },
+      {
+        "surface": " black",
+        "token_id": 3691
+      },
+      {
+        "surface": " Black",
+        "token_id": 5235
+      }
+    ],
+    "white": [
+      {
+        "surface": "white",
+        "token_id": 5782
+      },
+      {
+        "surface": "White",
+        "token_id": 14075
+      },
+      {
+        "surface": " white",
+        "token_id": 4158
+      },
+      {
+        "surface": " White",
+        "token_id": 5807
+      }
+    ],
+    "gray": [
+      {
+        "surface": "gray",
+        "token_id": 11650
+      },
+      {
+        "surface": "Gray",
+        "token_id": 28174
+      },
+      {
+        "surface": " gray",
+        "token_id": 17545
+      },
+      {
+        "surface": " Gray",
+        "token_id": 23366
+      }
+    ],
+    "gold": [
+      {
+        "surface": "gold",
+        "token_id": 34537
+      },
+      {
+        "surface": "Gold",
+        "token_id": 25434
+      },
+      {
+        "surface": " gold",
+        "token_id": 6623
+      },
+      {
+        "surface": " Gold",
+        "token_id": 7421
+      }
+    ],
+    "silver": [
+      {
+        "surface": "silver",
+        "token_id": 81914
+      },
+      {
+        "surface": "Silver",
+        "token_id": 52343
+      },
+      {
+        "surface": " silver",
+        "token_id": 14961
+      },
+      {
+        "surface": " Silver",
+        "token_id": 14997
+      }
+    ],
+    "teal": [
+      {
+        "surface": " teal",
+        "token_id": 94607
+      }
+    ],
+    "cyan": [
+      {
+        "surface": "cyan",
+        "token_id": 69746
+      },
+      {
+        "surface": " cyan",
+        "token_id": 57888
+      },
+      {
+        "surface": " Cyan",
+        "token_id": 92143
+      }
+    ],
+    "violet": [
+      {
+        "surface": " violet",
+        "token_id": 79736
+      },
+      {
+        "surface": " Violet",
+        "token_id": 73474
+      }
+    ],
+    "beige": [
+      {
+        "surface": " beige",
+        "token_id": 78265
+      }
+    ],
+    "coral": [
+      {
+        "surface": " coral",
+        "token_id": 52003
+      },
+      {
+        "surface": " Coral",
+        "token_id": 63816
+      }
+    ],
+    "olive": [
+      {
+        "surface": " olive",
+        "token_id": 32113
+      },
+      {
+        "surface": " Olive",
+        "token_id": 46714
+      }
+    ],
+    "navy": [
+      {
+        "surface": " navy",
+        "token_id": 44774
+      },
+      {
+        "surface": " Navy",
+        "token_id": 19036
+      }
+    ],
+    "lavender": [
+      {
+        "surface": " lavender",
+        "token_id": 80360
+      }
+    ],
+    "turquoise": [
+      {
+        "surface": " turquoise",
+        "token_id": 95947
+      }
+    ],
+    "crimson": [
+      {
+        "surface": " crimson",
+        "token_id": 96019
+      },
+      {
+        "surface": " Crimson",
+        "token_id": 66077
+      }
+    ],
+    "cream": [
+      {
+        "surface": "cream",
+        "token_id": 46000
+      },
+      {
+        "surface": "Cream",
+        "token_id": 98781
+      },
+      {
+        "surface": " cream",
+        "token_id": 12644
+      },
+      {
+        "surface": " Cream",
+        "token_id": 29700
+      }
+    ],
+    "tan": [
+      {
+        "surface": "tan",
+        "token_id": 52591
+      },
+      {
+        "surface": "Tan",
+        "token_id": 76097
+      },
+      {
+        "surface": " tan",
+        "token_id": 14197
+      },
+      {
+        "surface": " Tan",
+        "token_id": 24548
+      }
+    ],
+    "lime": [
+      {
+        "surface": "lime",
+        "token_id": 38943
+      },
+      {
+        "surface": " lime",
+        "token_id": 41719
+      },
+      {
+        "surface": " Lime",
+        "token_id": 70496
+      }
+    ],
+    "chair": [
+      {
+        "surface": "chair",
+        "token_id": 34196
+      },
+      {
+        "surface": "Chair",
+        "token_id": 84195
+      },
+      {
+        "surface": " chair",
+        "token_id": 10496
+      },
+      {
+        "surface": " Chair",
+        "token_id": 16090
+      }
+    ],
+    "table": [
+      {
+        "surface": "table",
+        "token_id": 2005
+      },
+      {
+        "surface": "Table",
+        "token_id": 2556
+      },
+      {
+        "surface": " table",
+        "token_id": 1965
+      },
+      {
+        "surface": " Table",
+        "token_id": 6633
+      }
+    ],
+    "spoon": [
+      {
+        "surface": " spoon",
+        "token_id": 45505
+      },
+      {
+        "surface": " Spoon",
+        "token_id": 93513
+      }
+    ],
+    "fork": [
+      {
+        "surface": "fork",
+        "token_id": 44738
+      },
+      {
+        "surface": " fork",
+        "token_id": 22435
+      },
+      {
+        "surface": " Fork",
+        "token_id": 47850
+      }
+    ],
+    "plate": [
+      {
+        "surface": "plate",
+        "token_id": 1750
+      },
+      {
+        "surface": "Plate",
+        "token_id": 64709
+      },
+      {
+        "surface": " plate",
+        "token_id": 11968
+      },
+      {
+        "surface": " Plate",
+        "token_id": 30303
+      }
+    ],
+    "cup": [
+      {
+        "surface": "cup",
+        "token_id": 36665
+      },
+      {
+        "surface": " cup",
+        "token_id": 10525
+      },
+      {
+        "surface": " Cup",
+        "token_id": 10861
+      }
+    ],
+    "bowl": [
+      {
+        "surface": " bowl",
+        "token_id": 19212
+      },
+      {
+        "surface": " Bowl",
+        "token_id": 20288
+      }
+    ],
+    "knife": [
+      {
+        "surface": "knife",
+        "token_id": 42720
+      },
+      {
+        "surface": "Knife",
+        "token_id": 56405
+      },
+      {
+        "surface": " knife",
+        "token_id": 21430
+      },
+      {
+        "surface": " Knife",
+        "token_id": 61202
+      }
+    ],
+    "lamp": [
+      {
+        "surface": "lamp",
+        "token_id": 94757
+      },
+      {
+        "surface": " lamp",
+        "token_id": 27962
+      },
+      {
+        "surface": " Lamp",
+        "token_id": 41177
+      }
+    ],
+    "clock": [
+      {
+        "surface": "clock",
+        "token_id": 20666
+      },
+      {
+        "surface": "Clock",
+        "token_id": 26104
+      },
+      {
+        "surface": " clock",
+        "token_id": 8866
+      },
+      {
+        "surface": " Clock",
+        "token_id": 26142
+      }
+    ],
+    "phone": [
+      {
+        "surface": "phone",
+        "token_id": 4844
+      },
+      {
+        "surface": "Phone",
+        "token_id": 6939
+      },
+      {
+        "surface": " phone",
+        "token_id": 4540
+      },
+      {
+        "surface": " Phone",
+        "token_id": 14307
+      }
+    ],
+    "book": [
+      {
+        "surface": "book",
+        "token_id": 2190
+      },
+      {
+        "surface": "Book",
+        "token_id": 7134
+      },
+      {
+        "surface": " book",
+        "token_id": 2311
+      },
+      {
+        "surface": " Book",
+        "token_id": 5893
+      }
+    ],
+    "pen": [
+      {
+        "surface": "pen",
+        "token_id": 2752
+      },
+      {
+        "surface": "Pen",
+        "token_id": 28205
+      },
+      {
+        "surface": " pen",
+        "token_id": 5750
+      },
+      {
+        "surface": " Pen",
+        "token_id": 13294
+      }
+    ],
+    "pencil": [
+      {
+        "surface": " pencil",
+        "token_id": 46118
+      }
+    ],
+    "window": [
+      {
+        "surface": "window",
+        "token_id": 5507
+      },
+      {
+        "surface": "Window",
+        "token_id": 4267
+      },
+      {
+        "surface": " window",
+        "token_id": 3241
+      },
+      {
+        "surface": " Window",
+        "token_id": 13642
+      }
+    ],
+    "door": [
+      {
+        "surface": "door",
+        "token_id": 10787
+      },
+      {
+        "surface": "Door",
+        "token_id": 52260
+      },
+      {
+        "surface": " door",
+        "token_id": 6006
+      },
+      {
+        "surface": " Door",
+        "token_id": 24191
+      }
+    ],
+    "mirror": [
+      {
+        "surface": "mirror",
+        "token_id": 73225
+      },
+      {
+        "surface": "Mirror",
+        "token_id": 54216
+      },
+      {
+        "surface": " mirror",
+        "token_id": 17846
+      },
+      {
+        "surface": " Mirror",
+        "token_id": 33854
+      }
+    ],
+    "blanket": [
+      {
+        "surface": " blanket",
+        "token_id": 38039
+      }
+    ],
+    "pillow": [
+      {
+        "surface": " pillow",
+        "token_id": 42325
+      },
+      {
+        "surface": " Pillow",
+        "token_id": 80735
+      }
+    ],
+    "carpet": [
+      {
+        "surface": " carpet",
+        "token_id": 27854
+      },
+      {
+        "surface": " Carpet",
+        "token_id": 71208
+      }
+    ],
+    "candle": [
+      {
+        "surface": " candle",
+        "token_id": 37799
+      },
+      {
+        "surface": " Candle",
+        "token_id": 72897
+      }
+    ],
+    "basket": [
+      {
+        "surface": "basket",
+        "token_id": 59764
+      },
+      {
+        "surface": "Basket",
+        "token_id": 73649
+      },
+      {
+        "surface": " basket",
+        "token_id": 14024
+      },
+      {
+        "surface": " Basket",
+        "token_id": 33117
+      }
+    ],
+    "hammer": [
+      {
+        "surface": "hammer",
+        "token_id": 45334
+      },
+      {
+        "surface": " hammer",
+        "token_id": 23457
+      },
+      {
+        "surface": " Hammer",
+        "token_id": 36894
+      }
+    ],
+    "ladder": [
+      {
+        "surface": " ladder",
+        "token_id": 35765
+      }
+    ],
+    "river": [
+      {
+        "surface": "river",
+        "token_id": 5469
+      },
+      {
+        "surface": "River",
+        "token_id": 85699
+      },
+      {
+        "surface": " river",
+        "token_id": 14796
+      },
+      {
+        "surface": " River",
+        "token_id": 10948
+      }
+    ],
+    "lake": [
+      {
+        "surface": "lake",
+        "token_id": 62110
+      },
+      {
+        "surface": "Lake",
+        "token_id": 81289
+      },
+      {
+        "surface": " lake",
+        "token_id": 21800
+      },
+      {
+        "surface": " Lake",
+        "token_id": 11678
+      }
+    ],
+    "ocean": [
+      {
+        "surface": "Ocean",
+        "token_id": 96183
+      },
+      {
+        "surface": " ocean",
+        "token_id": 17951
+      },
+      {
+        "surface": " Ocean",
+        "token_id": 21575
+      }
+    ],
+    "forest": [
+      {
+        "surface": "forest",
+        "token_id": 50655
+      },
+      {
+        "surface": "Forest",
+        "token_id": 49578
+      },
+      {
+        "surface": " forest",
+        "token_id": 13638
+      },
+      {
+        "surface": " Forest",
+        "token_id": 19988
+      }
+    ],
+    "desert": [
+      {
+        "surface": " desert",
+        "token_id": 23603
+      },
+      {
+        "surface": " Desert",
+        "token_id": 42186
+      }
+    ],
+    "mountain": [
+      {
+        "surface": "Mountain",
+        "token_id": 91169
+      },
+      {
+        "surface": " mountain",
+        "token_id": 16301
+      },
+      {
+        "surface": " Mountain",
+        "token_id": 18634
+      }
+    ],
+    "valley": [
+      {
+        "surface": " valley",
+        "token_id": 33581
+      },
+      {
+        "surface": " Valley",
+        "token_id": 13046
+      }
+    ],
+    "island": [
+      {
+        "surface": " island",
+        "token_id": 12922
+      },
+      {
+        "surface": " Island",
+        "token_id": 10720
+      }
+    ],
+    "beach": [
+      {
+        "surface": " beach",
+        "token_id": 11321
+      },
+      {
+        "surface": " Beach",
+        "token_id": 12721
+      }
+    ],
+    "canyon": [
+      {
+        "surface": " canyon",
+        "token_id": 83200
+      },
+      {
+        "surface": " Canyon",
+        "token_id": 40460
+      }
+    ],
+    "glacier": [
+      {
+        "surface": " glacier",
+        "token_id": 93767
+      },
+      {
+        "surface": " Glacier",
+        "token_id": 95386
+      }
+    ],
+    "volcano": [
+      {
+        "surface": " volcano",
+        "token_id": 65206
+      }
+    ],
+    "meadow": [
+      {
+        "surface": " Meadow",
+        "token_id": 88742
+      }
+    ],
+    "swamp": [
+      {
+        "surface": " swamp",
+        "token_id": 66072
+      },
+      {
+        "surface": " Swamp",
+        "token_id": 82811
+      }
+    ],
+    "marsh": [
+      {
+        "surface": "marsh",
+        "token_id": 36239
+      },
+      {
+        "surface": "Marsh",
+        "token_id": 79712
+      },
+      {
+        "surface": " marsh",
+        "token_id": 31996
+      },
+      {
+        "surface": " Marsh",
+        "token_id": 39063
+      }
+    ],
+    "cliff": [
+      {
+        "surface": " cliff",
+        "token_id": 43006
+      },
+      {
+        "surface": " Cliff",
+        "token_id": 47852
+      }
+    ],
+    "cave": [
+      {
+        "surface": " cave",
+        "token_id": 25385
+      },
+      {
+        "surface": " Cave",
+        "token_id": 49392
+      }
+    ],
+    "stream": [
+      {
+        "surface": "stream",
+        "token_id": 4027
+      },
+      {
+        "surface": "Stream",
+        "token_id": 3027
+      },
+      {
+        "surface": " stream",
+        "token_id": 4269
+      },
+      {
+        "surface": " Stream",
+        "token_id": 9203
+      }
+    ],
+    "waterfall": [
+      {
+        "surface": " waterfall",
+        "token_id": 69051
+      }
+    ],
+    "garden": [
+      {
+        "surface": " garden",
+        "token_id": 13551
+      },
+      {
+        "surface": " Garden",
+        "token_id": 19021
+      }
+    ],
+    "grove": [
+      {
+        "surface": " Grove",
+        "token_id": 40134
+      }
+    ],
+    "pond": [
+      {
+        "surface": "pond",
+        "token_id": 3511
+      },
+      {
+        "surface": " pond",
+        "token_id": 35570
+      },
+      {
+        "surface": " Pond",
+        "token_id": 70865
+      }
+    ],
+    "reef": [
+      {
+        "surface": " reef",
+        "token_id": 70045
+      },
+      {
+        "surface": " Reef",
+        "token_id": 75936
+      }
+    ],
+    "rain": [
+      {
+        "surface": "rain",
+        "token_id": 29093
+      },
+      {
+        "surface": "Rain",
+        "token_id": 59039
+      },
+      {
+        "surface": " rain",
+        "token_id": 11174
+      },
+      {
+        "surface": " Rain",
+        "token_id": 21911
+      }
+    ]
+  },
+  "expected": {
+    "word_pairs": 48,
+    "unique_words": 96,
+    "fit_pool_pairs": 24,
+    "map_fit_pairs": 12,
+    "development_pairs": 12,
+    "locked_test_pairs": 12,
+    "matched_audio_pairs": 192,
+    "wav_clips": 384,
+    "map_fit_recipient_examples": 48,
+    "development_directions": 96,
+    "locked_test_directions": 96
+  }
+}
