@@ -1,0 +1,2924 @@
+{
+  "metadata": {
+    "status": "fit_only_conditional_router_diagnostic_v1",
+    "script_sha256": "a4cca7d759098531a7d504859f1dd86402b116a0cfbf33ba4dccb06be1081a65",
+    "protocol_sha256": "e69bb992a753df568c77e4c56d8444f543c24d9b93e2a0af0d6f0241d99e211d",
+    "input_sha256": {
+      "stage1": "8276aca0e24fcaa1397693e0353f9c7ee59190036f3516c0c13ebcbc6208b641",
+      "heterogeneity": "336a2589743c06a2e5be71f3fce694e7a01c78450dc81dc07c6368a01bc58903",
+      "calibration": "76085f0dab8f37b6052024b582ff34533cac3d1c579b27b39a631c536d9cd110"
+    },
+    "case_count": 48,
+    "pair_count": 12,
+    "site_shapes": {
+      "encoder31": {
+        "source_features": [
+          48,
+          6,
+          1280
+        ],
+        "jacobians": [
+          48,
+          6,
+          16,
+          1280
+        ]
+      },
+      "connector": {
+        "source_features": [
+          48,
+          6,
+          2048
+        ],
+        "jacobians": [
+          48,
+          6,
+          16,
+          2048
+        ]
+      }
+    },
+    "rank": 16,
+    "alpha": 0.025,
+    "pca_components": 8,
+    "lambda": 0.5,
+    "bootstrap_reps": 10000,
+    "max_seconds": 1200,
+    "max_rss_bytes": 17179869184,
+    "basis_gram_max_abs": 8.368441000161653e-07
+  },
+  "results": {
+    "encoder31": {
+      "rows": [
+        {
+          "case_id": "animal_06/fit_chosen/kokoro/deer",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/kokoro/beaver",
+          "bandwidth": 111.44688861408878,
+          "rank16_capture_fraction": 0.36976510518935435,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.8654379009893605,
+              "full_terminal_l2": 3.1158999532895875
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.8624261808199665,
+              "full_terminal_l2": 3.114097820290121
+            },
+            "zero": {
+              "projected_terminal_l2": 1.9117011113338047,
+              "full_terminal_l2": 3.143815352680086
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.14214999364020175,
+              "full_terminal_l2": 2.499836056739415
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.8638747221868341,
+              "full_terminal_l2": 3.114964355661919
+            }
+          }
+        },
+        {
+          "case_id": "animal_06/fit_chosen/kokoro/moose",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/kokoro/monkey",
+          "bandwidth": 111.44688861408878,
+          "rank16_capture_fraction": 0.03717883307360193,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.4779796793263851,
+              "full_terminal_l2": 1.4051275981347409
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4748984320571253,
+              "full_terminal_l2": 1.404082445177399
+            },
+            "zero": {
+              "projected_terminal_l2": 0.2596492616466019,
+              "full_terminal_l2": 1.3466018745340897
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.011225700338944145,
+              "full_terminal_l2": 1.3213799195032236
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.47737370411162106,
+              "full_terminal_l2": 1.4049215802101898
+            }
+          }
+        },
+        {
+          "case_id": "animal_06/fit_chosen/piper/deer",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/piper/beaver",
+          "bandwidth": 111.44688861408878,
+          "rank16_capture_fraction": 0.16558165850765855,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7111153839669421,
+              "full_terminal_l2": 1.8728906486536008
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7125045312876795,
+              "full_terminal_l2": 1.8734185332372468
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7718306219080151,
+              "full_terminal_l2": 1.8967753228162199
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.025513329652531776,
+              "full_terminal_l2": 1.7328257425477456
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7110086496594685,
+              "full_terminal_l2": 1.8728501253339425
+            }
+          }
+        },
+        {
+          "case_id": "animal_06/fit_chosen/piper/moose",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/piper/monkey",
+          "bandwidth": 111.44688861408878,
+          "rank16_capture_fraction": 0.10009480939972773,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7529776451783835,
+              "full_terminal_l2": 2.0685163778295865
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7552028548010771,
+              "full_terminal_l2": 2.069327432708448
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6425379401308566,
+              "full_terminal_l2": 2.0309208500397027
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.02982871966353321,
+              "full_terminal_l2": 1.9268301192276869
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7508340170186781,
+              "full_terminal_l2": 2.0677370217805944
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/kokoro/beaver",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/kokoro/cow",
+          "bandwidth": 111.69194268693138,
+          "rank16_capture_fraction": 0.15741458719045606,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.3181866714236144,
+              "full_terminal_l2": 1.446719427675231
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.315914897536422,
+              "full_terminal_l2": 1.4462214791873322
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6100049860213091,
+              "full_terminal_l2": 1.5374850354978968
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.031028779241895645,
+              "full_terminal_l2": 1.4116363300774484
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3186540307733622,
+              "full_terminal_l2": 1.4468222888511673
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/kokoro/monkey",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/kokoro/turtle",
+          "bandwidth": 111.69194268693138,
+          "rank16_capture_fraction": 0.08248988724261094,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5051442391056357,
+              "full_terminal_l2": 2.056082300312138
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5024942582680227,
+              "full_terminal_l2": 2.0554328507630513
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5976076362940945,
+              "full_terminal_l2": 2.080730260844104
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.12824097879155164,
+              "full_terminal_l2": 1.9971854046770696
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5048813681304379,
+              "full_terminal_l2": 2.05601773319838
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/piper/beaver",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/piper/cow",
+          "bandwidth": 111.69194268693138,
+          "rank16_capture_fraction": 0.1025975446635616,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.3723710581102549,
+              "full_terminal_l2": 1.0415764098352902
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3686325259232736,
+              "full_terminal_l2": 1.0402457160867506
+            },
+            "zero": {
+              "projected_terminal_l2": 0.3289055175911705,
+              "full_terminal_l2": 1.0268397572266268
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03140019888797783,
+              "full_terminal_l2": 0.9732456145222321
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.37300463046297894,
+              "full_terminal_l2": 1.0418030846990813
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/piper/monkey",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/piper/turtle",
+          "bandwidth": 111.69194268693138,
+          "rank16_capture_fraction": 0.08876203747827083,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.48243648772027903,
+              "full_terminal_l2": 1.2231263537673633
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.48023088007566445,
+              "full_terminal_l2": 1.2222580778509857
+            },
+            "zero": {
+              "projected_terminal_l2": 0.3507920682515537,
+              "full_terminal_l2": 1.1774328102668956
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.019199482277728157,
+              "full_terminal_l2": 1.1241270585081777
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.48186545543172704,
+              "full_terminal_l2": 1.2229012345822587
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/kokoro/cow",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/kokoro/black",
+          "bandwidth": 110.11495093369186,
+          "rank16_capture_fraction": 0.37577572405402765,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5265125123679846,
+              "full_terminal_l2": 1.6824925033811624
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5303330415491728,
+              "full_terminal_l2": 1.683691994934321
+            },
+            "zero": {
+              "projected_terminal_l2": 1.2398453661142903,
+              "full_terminal_l2": 2.0225681456685796
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.031202978371787243,
+              "full_terminal_l2": 1.5982926417783385
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5274293603924646,
+              "full_terminal_l2": 1.6827796433420372
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/kokoro/turtle",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/kokoro/white",
+          "bandwidth": 110.11495093369186,
+          "rank16_capture_fraction": 0.12075443128536167,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6443244484769708,
+              "full_terminal_l2": 1.3481241758641718
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.641101356565067,
+              "full_terminal_l2": 1.3465867030227574
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4388484031161867,
+              "full_terminal_l2": 1.2628826126908221
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.022873629001196945,
+              "full_terminal_l2": 1.1844018670542438
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6422389564923647,
+              "full_terminal_l2": 1.3471286778043527
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/piper/cow",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/piper/black",
+          "bandwidth": 110.11495093369186,
+          "rank16_capture_fraction": 0.30355910187287977,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.32216641032670273,
+              "full_terminal_l2": 1.639980222858729
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3191331979997267,
+              "full_terminal_l2": 1.6393870588109913
+            },
+            "zero": {
+              "projected_terminal_l2": 1.061627667412184,
+              "full_terminal_l2": 1.9268619408043581
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.047169144840506855,
+              "full_terminal_l2": 1.6087165105329726
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.32216237394266256,
+              "full_terminal_l2": 1.6399794294611962
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/piper/turtle",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/piper/white",
+          "bandwidth": 110.11495093369186,
+          "rank16_capture_fraction": 0.11046766039717103,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8395691530338311,
+              "full_terminal_l2": 1.421176494464184
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8435694555257037,
+              "full_terminal_l2": 1.423543356748248
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4040893917231311,
+              "full_terminal_l2": 1.2157936514570187
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.017443758625942572,
+              "full_terminal_l2": 1.1468087245531382
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.8413519356847801,
+              "full_terminal_l2": 1.4222304120418203
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/kokoro/black",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/kokoro/silver",
+          "bandwidth": 110.8410248083694,
+          "rank16_capture_fraction": 0.41763560665339416,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.27720352526562864,
+              "full_terminal_l2": 0.6246512245930876
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.2744387909247908,
+              "full_terminal_l2": 0.6234292331473432
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4740393504033232,
+              "full_terminal_l2": 0.733526207639634
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.013039473430158042,
+              "full_terminal_l2": 0.5599262350728568
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.27579521029559395,
+              "full_terminal_l2": 0.6240275277229476
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/kokoro/white",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/kokoro/teal",
+          "bandwidth": 110.8410248083694,
+          "rank16_capture_fraction": 0.4633245350290449,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.23303580605577207,
+              "full_terminal_l2": 0.7722256533826495
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.23012249986147276,
+              "full_terminal_l2": 0.7713515011105251
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6840646705770825,
+              "full_terminal_l2": 1.0049732730971777
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.015455826497240135,
+              "full_terminal_l2": 0.7363868751535854
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.2325965244986311,
+              "full_terminal_l2": 0.7720932038447058
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/piper/black",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/piper/silver",
+          "bandwidth": 110.8410248083694,
+          "rank16_capture_fraction": 0.36156235805595194,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.33948594012152483,
+              "full_terminal_l2": 0.7607035873911399
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3427171978038199,
+              "full_terminal_l2": 0.7621511149609128
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5122941696616923,
+              "full_terminal_l2": 0.8519768773998017
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.014566781166560168,
+              "full_terminal_l2": 0.6809048689344761
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3391477033295119,
+              "full_terminal_l2": 0.7605527004003562
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/piper/white",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/piper/teal",
+          "bandwidth": 110.8410248083694,
+          "rank16_capture_fraction": 0.4865903738425213,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.3672043212550569,
+              "full_terminal_l2": 0.9380686516200651
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3688448780274987,
+              "full_terminal_l2": 0.9387120567917648
+            },
+            "zero": {
+              "projected_terminal_l2": 0.8403629382189614,
+              "full_terminal_l2": 1.2047172649381286
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.02268053943644578,
+              "full_terminal_l2": 0.8635091737973409
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3713223942364997,
+              "full_terminal_l2": 0.9396883007862216
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/kokoro/silver",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/kokoro/cyan",
+          "bandwidth": 111.64018780467615,
+          "rank16_capture_fraction": 0.1768175212522436,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.4016368220243705,
+              "full_terminal_l2": 1.0361970988327849
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4006333240437612,
+              "full_terminal_l2": 1.035808548395821
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4426957765135475,
+              "full_terminal_l2": 1.0527923720948262
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.016126419716933578,
+              "full_terminal_l2": 0.9553284004448708
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.402430404387573,
+              "full_terminal_l2": 1.0365049550800334
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/kokoro/teal",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/kokoro/violet",
+          "bandwidth": 111.64018780467615,
+          "rank16_capture_fraction": 0.20006358149016404,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.3493874437460524,
+              "full_terminal_l2": 1.727875383881733
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.34776107951443497,
+              "full_terminal_l2": 1.7275472563919172
+            },
+            "zero": {
+              "projected_terminal_l2": 0.8462593703168512,
+              "full_terminal_l2": 1.8919927632245008
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.2211965382960543,
+              "full_terminal_l2": 1.7065783322571628
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3512485191974495,
+              "full_terminal_l2": 1.7282526665115985
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/piper/silver",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/piper/cyan",
+          "bandwidth": 111.64018780467615,
+          "rank16_capture_fraction": 0.17106265723503028,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5538067358354428,
+              "full_terminal_l2": 1.3062039084241965
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5582257461835541,
+              "full_terminal_l2": 1.3080836122703312
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5374004583406761,
+              "full_terminal_l2": 1.2993328709973566
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.030086652202966236,
+              "full_terminal_l2": 1.183373105658642
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5563732406337405,
+              "full_terminal_l2": 1.3072941262839504
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/piper/teal",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/piper/violet",
+          "bandwidth": 111.64018780467615,
+          "rank16_capture_fraction": 0.14715963813008223,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5390348876836234,
+              "full_terminal_l2": 1.4361736574697448
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5385924127381994,
+              "full_terminal_l2": 1.4360076435801805
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5529638771075296,
+              "full_terminal_l2": 1.4414593711890706
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.017764110522698606,
+              "full_terminal_l2": 1.3312969840782616
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5349027061095752,
+              "full_terminal_l2": 1.4346278500339724
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/kokoro/cyan",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/kokoro/lake",
+          "bandwidth": 112.58359995217813,
+          "rank16_capture_fraction": 0.4448658991423353,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.1918190059682048,
+              "full_terminal_l2": 2.3870577435189646
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.2004424993587888,
+              "full_terminal_l2": 2.3913749866662477
+            },
+            "zero": {
+              "projected_terminal_l2": 1.8514684408315474,
+              "full_terminal_l2": 2.7758868237561973
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03393291917765051,
+              "full_terminal_l2": 2.0685170046599453
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.1920518933826971,
+              "full_terminal_l2": 2.3871740290066468
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/kokoro/violet",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/kokoro/river",
+          "bandwidth": 112.58359995217813,
+          "rank16_capture_fraction": 0.21093512417513105,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.41823122705407134,
+              "full_terminal_l2": 1.3318781646939655
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4153143019090371,
+              "full_terminal_l2": 1.330965085916672
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6537924696620868,
+              "full_terminal_l2": 1.4235261930388519
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03594269851072657,
+              "full_terminal_l2": 1.2650194033496949
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4168297646207335,
+              "full_terminal_l2": 1.3314387478029899
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/piper/cyan",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/piper/lake",
+          "bandwidth": 112.58359995217813,
+          "rank16_capture_fraction": 0.18285343611022822,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6617850171652931,
+              "full_terminal_l2": 2.0891965736782048
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6597612526714314,
+              "full_terminal_l2": 2.0885563970263212
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9373893889377197,
+              "full_terminal_l2": 2.192140925981752
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.023416051633305072,
+              "full_terminal_l2": 1.9817495818542437
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.662406288603922,
+              "full_terminal_l2": 2.0893934540313475
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/piper/violet",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/piper/river",
+          "bandwidth": 112.58359995217813,
+          "rank16_capture_fraction": 0.1806583642295753,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.49824623426144876,
+              "full_terminal_l2": 1.1649554917609013
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4996605199552413,
+              "full_terminal_l2": 1.165561075724238
+            },
+            "zero": {
+              "projected_terminal_l2": 0.49446691963079725,
+              "full_terminal_l2": 1.1633441367406203
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.015799424446285234,
+              "full_terminal_l2": 1.0531484470509944
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.49712323740105235,
+              "full_terminal_l2": 1.164475633410305
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/kokoro/lake",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/kokoro/garden",
+          "bandwidth": 110.77711325469184,
+          "rank16_capture_fraction": 0.21665902531986517,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.34548991372830484,
+              "full_terminal_l2": 1.0055562070292103
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3422365824281025,
+              "full_terminal_l2": 1.0044430710239924
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4966400964102623,
+              "full_terminal_l2": 1.0669728952862405
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.030348360262375362,
+              "full_terminal_l2": 0.9448285072800832
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3461032040745067,
+              "full_terminal_l2": 1.0057670874096607
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/kokoro/river",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/kokoro/waterfall",
+          "bandwidth": 110.77711325469184,
+          "rank16_capture_fraction": 0.20928074298768382,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.3243190543215593,
+              "full_terminal_l2": 1.4848021805850362
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.32713330491006054,
+              "full_terminal_l2": 1.4854194240166454
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7454297187554321,
+              "full_terminal_l2": 1.6294538658720696
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.02469967859795301,
+              "full_terminal_l2": 1.4491599708150151
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3274141727695811,
+              "full_terminal_l2": 1.485481305181319
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/piper/lake",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/piper/garden",
+          "bandwidth": 110.77711325469184,
+          "rank16_capture_fraction": 0.3023083273795764,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.34923036685435416,
+              "full_terminal_l2": 1.1871796163926265
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.34911310850075256,
+              "full_terminal_l2": 1.187145128012273
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7468883104422781,
+              "full_terminal_l2": 1.3584091778359335
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.010304320923631696,
+              "full_terminal_l2": 1.134698030633762
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.34922090729545724,
+              "full_terminal_l2": 1.1871768338594784
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/piper/river",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/piper/waterfall",
+          "bandwidth": 110.77711325469184,
+          "rank16_capture_fraction": 0.13607039665477172,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6519795381361844,
+              "full_terminal_l2": 1.199448008153188
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6557415974421942,
+              "full_terminal_l2": 1.2014970867552115
+            },
+            "zero": {
+              "projected_terminal_l2": 0.3995540264244879,
+              "full_terminal_l2": 1.083162675046827
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.01106394585290641,
+              "full_terminal_l2": 1.006836835199894
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6493207597053879,
+              "full_terminal_l2": 1.1980048641144296
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/kokoro/garden",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/kokoro/grove",
+          "bandwidth": 111.51527942964779,
+          "rank16_capture_fraction": 0.13470932415908551,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.28310277910628423,
+              "full_terminal_l2": 0.828022275945338
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.28248062037781085,
+              "full_terminal_l2": 0.8278097652949383
+            },
+            "zero": {
+              "projected_terminal_l2": 0.30701914853139484,
+              "full_terminal_l2": 0.8365013270471457
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.015151922277805303,
+              "full_terminal_l2": 0.7782694182954011
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.2834691550983117,
+              "full_terminal_l2": 0.8281476123766589
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/kokoro/waterfall",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/kokoro/pond",
+          "bandwidth": 111.51527942964779,
+          "rank16_capture_fraction": 0.13327410365794523,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.45255668770359814,
+              "full_terminal_l2": 1.0977178791918314
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.454638714541593,
+              "full_terminal_l2": 1.0985778753629734
+            },
+            "zero": {
+              "projected_terminal_l2": 0.3921664429313753,
+              "full_terminal_l2": 1.074230660703978
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.02788019143704914,
+              "full_terminal_l2": 1.0004770312878117
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4532389317466363,
+              "full_terminal_l2": 1.0979993242871062
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/piper/garden",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/piper/grove",
+          "bandwidth": 111.51527942964779,
+          "rank16_capture_fraction": 0.22027106518618383,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.32321599300720155,
+              "full_terminal_l2": 1.0533761975591547
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.32594338408458384,
+              "full_terminal_l2": 1.0542162612357564
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5328667653575165,
+              "full_terminal_l2": 1.1353765193569358
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.0500805243618412,
+              "full_terminal_l2": 1.0038132047704342
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.32338805818577,
+              "full_terminal_l2": 1.053429006402923
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/piper/waterfall",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/piper/pond",
+          "bandwidth": 111.51527942964779,
+          "rank16_capture_fraction": 0.1408468019658001,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.36487220636461126,
+              "full_terminal_l2": 1.0572724770009057
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.36326586368393415,
+              "full_terminal_l2": 1.0567191924494108
+            },
+            "zero": {
+              "projected_terminal_l2": 0.40178035545749263,
+              "full_terminal_l2": 1.070570330834715
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.041345571693468065,
+              "full_terminal_l2": 0.9931781378772616
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3654202093244067,
+              "full_terminal_l2": 1.0574617216419009
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/kokoro/grove",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/kokoro/cup",
+          "bandwidth": 111.16650262148868,
+          "rank16_capture_fraction": 0.15689263071264095,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6394254003309623,
+              "full_terminal_l2": 1.8925112529865837
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6370100995536364,
+              "full_terminal_l2": 1.8916965563871848
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7683810466266338,
+              "full_terminal_l2": 1.939882258585112
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03493968809247162,
+              "full_terminal_l2": 1.7815596184439333
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6388933354947823,
+              "full_terminal_l2": 1.8923315502302065
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/kokoro/pond",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/kokoro/plate",
+          "bandwidth": 111.16650262148868,
+          "rank16_capture_fraction": 0.20275394767243018,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6309092945342447,
+              "full_terminal_l2": 1.4760976371071106
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6257480628318561,
+              "full_terminal_l2": 1.4738990225541082
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6729738217911785,
+              "full_terminal_l2": 1.4945605391581815
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03269491302086616,
+              "full_terminal_l2": 1.334873200147667
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6306927790058936,
+              "full_terminal_l2": 1.4760051073674978
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/piper/grove",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/piper/cup",
+          "bandwidth": 111.16650262148868,
+          "rank16_capture_fraction": 0.2641967150600764,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.085936183277149,
+              "full_terminal_l2": 2.019162314159325
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.086069603039288,
+              "full_terminal_l2": 2.019234073683189
+            },
+            "zero": {
+              "projected_terminal_l2": 1.0200323936461915,
+              "full_terminal_l2": 1.9844961347546657
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.030459735801534268,
+              "full_terminal_l2": 1.7025529843514635
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.0849462972965336,
+              "full_terminal_l2": 2.0186301115722105
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/piper/pond",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/piper/plate",
+          "bandwidth": 111.16650262148868,
+          "rank16_capture_fraction": 0.10064009585296577,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6916863979332843,
+              "full_terminal_l2": 1.6094920147756842
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6951004123462624,
+              "full_terminal_l2": 1.6109621536502035
+            },
+            "zero": {
+              "projected_terminal_l2": 0.48614882161251327,
+              "full_terminal_l2": 1.5324408364096582
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.019067604847113662,
+              "full_terminal_l2": 1.4534090264705757
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6907485276012013,
+              "full_terminal_l2": 1.60908918353113
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/kokoro/cup",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/kokoro/book",
+          "bandwidth": 112.55948590282208,
+          "rank16_capture_fraction": 0.33690667902362803,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5599439583031911,
+              "full_terminal_l2": 1.8607314170999736
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5604677244024268,
+              "full_terminal_l2": 1.8608890978144543
+            },
+            "zero": {
+              "projected_terminal_l2": 1.26484961152311,
+              "full_terminal_l2": 2.1791347249566457
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.021413721210696537,
+              "full_terminal_l2": 1.7746106426688448
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5554396043458822,
+              "full_terminal_l2": 1.8593808989912755
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/kokoro/plate",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/kokoro/phone",
+          "bandwidth": 112.55948590282208,
+          "rank16_capture_fraction": 0.1760873638751228,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5863881629807692,
+              "full_terminal_l2": 1.3561386451980297
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5826996491033125,
+              "full_terminal_l2": 1.3545478297036238
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5653038304273182,
+              "full_terminal_l2": 1.3471558217442137
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.051066506420564886,
+              "full_terminal_l2": 1.223874265120832
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5913798791765104,
+              "full_terminal_l2": 1.358304499761076
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/piper/cup",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/piper/book",
+          "bandwidth": 112.55948590282208,
+          "rank16_capture_fraction": 0.35510290922784005,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6135719339937813,
+              "full_terminal_l2": 2.1343216003529957
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6148544466767072,
+              "full_terminal_l2": 2.134690648815217
+            },
+            "zero": {
+              "projected_terminal_l2": 1.5169130376769953,
+              "full_terminal_l2": 2.5455613532707284
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.020418035128542525,
+              "full_terminal_l2": 2.0443276040307663
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6115316932366722,
+              "full_terminal_l2": 2.133735969150035
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/piper/plate",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/piper/phone",
+          "bandwidth": 112.55948590282208,
+          "rank16_capture_fraction": 0.17393592600561866,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6990499372738812,
+              "full_terminal_l2": 1.64647353151619
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7036154754601148,
+              "full_terminal_l2": 1.6484171245333703
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6840371631968729,
+              "full_terminal_l2": 1.6401555973847006
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03176441043329783,
+              "full_terminal_l2": 1.4910441305395326
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7052355942190303,
+              "full_terminal_l2": 1.649109313253525
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/kokoro/book",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/kokoro/carpet",
+          "bandwidth": 112.15955856963065,
+          "rank16_capture_fraction": 0.31923315446000367,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7691058016934113,
+              "full_terminal_l2": 1.9361646566603905
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7728693921674289,
+              "full_terminal_l2": 1.9376627511827258
+            },
+            "zero": {
+              "projected_terminal_l2": 1.2167644288827413,
+              "full_terminal_l2": 2.153537855448875
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.01920318705136328,
+              "full_terminal_l2": 1.776957733771891
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7696025789159125,
+              "full_terminal_l2": 1.9363620458123771
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/kokoro/phone",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/kokoro/pillow",
+          "bandwidth": 112.15955856963065,
+          "rank16_capture_fraction": 0.2834113812878915,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.37433561316133035,
+              "full_terminal_l2": 1.495146219599394
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.37194556094133735,
+              "full_terminal_l2": 1.4945496189131497
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9103332542248407,
+              "full_terminal_l2": 1.709982887727915
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.02486636649664783,
+              "full_terminal_l2": 1.4477407837791603
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.37374262163034655,
+              "full_terminal_l2": 1.4949978643973025
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/piper/book",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/piper/carpet",
+          "bandwidth": 112.15955856963065,
+          "rank16_capture_fraction": 0.2646123309660793,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5600318100043183,
+              "full_terminal_l2": 1.8559358089708224
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5599542776000327,
+              "full_terminal_l2": 1.8559124149625277
+            },
+            "zero": {
+              "projected_terminal_l2": 1.0613993673143503,
+              "full_terminal_l2": 2.063354194451479
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.05608691979225679,
+              "full_terminal_l2": 1.7703129576551329
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5603067822761265,
+              "full_terminal_l2": 1.8560188003765792
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/piper/phone",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/piper/pillow",
+          "bandwidth": 112.15955856963065,
+          "rank16_capture_fraction": 0.265339966068897,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.34171852595607655,
+              "full_terminal_l2": 1.5686904395418928
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.33898521305377927,
+              "full_terminal_l2": 1.568097292905058
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9201075512717255,
+              "full_terminal_l2": 1.7862295113086808
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.023479297648099882,
+              "full_terminal_l2": 1.531198662642438
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.34156235587096523,
+              "full_terminal_l2": 1.5686564272601748
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/kokoro/carpet",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/kokoro/deer",
+          "bandwidth": 109.98504731906887,
+          "rank16_capture_fraction": 0.10800493670716589,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.43355373709547895,
+              "full_terminal_l2": 1.0230562901865687
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4316436672869275,
+              "full_terminal_l2": 1.0222482992897681
+            },
+            "zero": {
+              "projected_terminal_l2": 0.3224445706018732,
+              "full_terminal_l2": 0.9811451586364345
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.027108286853240304,
+              "full_terminal_l2": 0.9270437987016101
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.43155854683168826,
+              "full_terminal_l2": 1.0222123606666624
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/kokoro/pillow",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/kokoro/moose",
+          "bandwidth": 109.98504731906887,
+          "rank16_capture_fraction": 0.13367193410685763,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.3352553237595978,
+              "full_terminal_l2": 1.188253486115563
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3348477114841161,
+              "full_terminal_l2": 1.1881385459434357
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4477910973824237,
+              "full_terminal_l2": 1.224772253391854
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.030022837751850395,
+              "full_terminal_l2": 1.14037344477535
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3350552726924832,
+              "full_terminal_l2": 1.1881970588169255
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/piper/carpet",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/piper/deer",
+          "bandwidth": 109.98504731906887,
+          "rank16_capture_fraction": 0.16453479412532646,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5151825276860473,
+              "full_terminal_l2": 1.073351734631352
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5180534172799964,
+              "full_terminal_l2": 1.0747326428367334
+            },
+            "zero": {
+              "projected_terminal_l2": 0.41787454422446235,
+              "full_terminal_l2": 1.0301893119997867
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.020981099528412428,
+              "full_terminal_l2": 0.9418657431429324
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5161405617397283,
+              "full_terminal_l2": 1.0738118966608954
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/piper/pillow",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/piper/moose",
+          "bandwidth": 109.98504731906887,
+          "rank16_capture_fraction": 0.4193244439232069,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6768100850296707,
+              "full_terminal_l2": 1.6640797989492233
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6753986421379999,
+              "full_terminal_l2": 1.6635062407394186
+            },
+            "zero": {
+              "projected_terminal_l2": 1.2918637586734159,
+              "full_terminal_l2": 1.9949941432433798
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03795687545901852,
+              "full_terminal_l2": 1.5207006330893063
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6780956746963552,
+              "full_terminal_l2": 1.6646030844723674
+            }
+          }
+        }
+      ],
+      "summary": {
+        "conditional": {
+          "mean_projected_terminal_l2": 0.5470160372645442,
+          "median_projected_terminal_l2": 0.5016952366835422,
+          "mean_full_terminal_l2": 1.4710391936462834,
+          "median_full_terminal_l2": 1.4286750759669644
+        },
+        "global_pair_excluded": {
+          "mean_projected_terminal_l2": 0.5469327634736497,
+          "median_projected_terminal_l2": 0.501077389111632,
+          "mean_full_terminal_l2": 1.4711011270596936,
+          "median_full_terminal_l2": 1.4297755001642143
+        },
+        "zero": {
+          "mean_projected_terminal_l2": 0.7298791867735813,
+          "median_projected_terminal_l2": 0.6262714630760828,
+          "mean_full_terminal_l2": 1.5534718068558433,
+          "median_full_terminal_l2": 1.4324927821139612
+        },
+        "local_in_sample_oracle": {
+          "mean_projected_terminal_l2": 0.03520183602737144,
+          "median_projected_terminal_l2": 0.02631080825288604,
+          "mean_full_terminal_l2": 1.3559318909901013,
+          "median_full_terminal_l2": 1.3263384517907426
+        },
+        "wrong_router": {
+          "mean_projected_terminal_l2": 0.5470711373794693,
+          "median_projected_terminal_l2": 0.5010023027657451,
+          "mean_full_terminal_l2": 1.4710535981140778,
+          "median_full_terminal_l2": 1.4284291310378965
+        }
+      },
+      "mean_rank16_capture_fraction": 0.2224174890018135,
+      "conditional_over_global_projected_l2": 1.0001522559927947,
+      "pair_bootstrap_95_percentile_ratio": [
+        0.9991862770419857,
+        1.0013224329784782
+      ]
+    },
+    "connector": {
+      "rows": [
+        {
+          "case_id": "animal_06/fit_chosen/kokoro/deer",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/kokoro/beaver",
+          "bandwidth": 145.17386113327177,
+          "rank16_capture_fraction": 0.31867697719537136,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.575134657653264,
+              "full_terminal_l2": 2.9174263735550157
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.5712764525999932,
+              "full_terminal_l2": 2.9153451157888965
+            },
+            "zero": {
+              "projected_terminal_l2": 1.6794584011349585,
+              "full_terminal_l2": 2.975047517431727
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.09220470687792984,
+              "full_terminal_l2": 2.4574028582479146
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.571248356295114,
+              "full_terminal_l2": 2.9153299731682254
+            }
+          }
+        },
+        {
+          "case_id": "animal_06/fit_chosen/kokoro/moose",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/kokoro/monkey",
+          "bandwidth": 145.17386113327177,
+          "rank16_capture_fraction": 0.04008766793809829,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8572544250275683,
+              "full_terminal_l2": 1.875116450908562
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8546740036979664,
+              "full_terminal_l2": 1.8739381543583056
+            },
+            "zero": {
+              "projected_terminal_l2": 0.34080336270857414,
+              "full_terminal_l2": 1.7021525319345214
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.014776891729849289,
+              "full_terminal_l2": 1.6677513805774051
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.8563709239138566,
+              "full_terminal_l2": 1.8747127018614216
+            }
+          }
+        },
+        {
+          "case_id": "animal_06/fit_chosen/piper/deer",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/piper/beaver",
+          "bandwidth": 145.17386113327177,
+          "rank16_capture_fraction": 0.1585944601894471,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7651141413222373,
+              "full_terminal_l2": 2.3310028041527664
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7658306089655347,
+              "full_terminal_l2": 2.331238071064018
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9559395499757293,
+              "full_terminal_l2": 2.4004155057072234
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.044142706601950125,
+              "full_terminal_l2": 2.202299449451448
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7668030180994813,
+              "full_terminal_l2": 2.331557696708882
+            }
+          }
+        },
+        {
+          "case_id": "animal_06/fit_chosen/piper/moose",
+          "pair_id": "animal_06",
+          "wrong_query_case_id": "animal_08/fit_chosen/piper/monkey",
+          "bandwidth": 145.17386113327177,
+          "rank16_capture_fraction": 0.09202548433224893,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.0247476611362047,
+              "full_terminal_l2": 2.3603295037600796
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.0232853810452696,
+              "full_terminal_l2": 2.3596950155282985
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6769190776865933,
+              "full_terminal_l2": 2.2314270741985514
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.031382199883037795,
+              "full_terminal_l2": 2.1265070521072746
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.0237185012309804,
+              "full_terminal_l2": 2.3598828712534594
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/kokoro/beaver",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/kokoro/cow",
+          "bandwidth": 145.6193703447258,
+          "rank16_capture_fraction": 0.13728651234706957,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5969459293913809,
+              "full_terminal_l2": 2.1403981296279784
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5951147630504254,
+              "full_terminal_l2": 2.1398881499436597
+            },
+            "zero": {
+              "projected_terminal_l2": 0.819958566966076,
+              "full_terminal_l2": 2.21298245941442
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.08128495589540209,
+              "full_terminal_l2": 2.0570772398197437
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6006492905010107,
+              "full_terminal_l2": 2.141433930761957
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/kokoro/monkey",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/kokoro/turtle",
+          "bandwidth": 145.6193703447258,
+          "rank16_capture_fraction": 0.1303167242651718,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6961743349506394,
+              "full_terminal_l2": 2.2972293715452388
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6960455279750617,
+              "full_terminal_l2": 2.297190340902424
+            },
+            "zero": {
+              "projected_terminal_l2": 0.8474328144306128,
+              "full_terminal_l2": 2.347497829894887
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.12457960779914132,
+              "full_terminal_l2": 2.1927435101284454
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6955872607244552,
+              "full_terminal_l2": 2.297051526957793
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/piper/beaver",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/piper/cow",
+          "bandwidth": 145.6193703447258,
+          "rank16_capture_fraction": 0.11629036873755257,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5186999813993335,
+              "full_terminal_l2": 1.7191798443124688
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5184267650849,
+              "full_terminal_l2": 1.7190974302776525
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5945835231192935,
+              "full_terminal_l2": 1.7435764569712415
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03107807034012755,
+              "full_terminal_l2": 1.6393581617648505
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5197045091309863,
+              "full_terminal_l2": 1.71948319096751
+            }
+          }
+        },
+        {
+          "case_id": "animal_08/fit_chosen/piper/monkey",
+          "pair_id": "animal_08",
+          "wrong_query_case_id": "animal_09/fit_chosen/piper/turtle",
+          "bandwidth": 145.6193703447258,
+          "rank16_capture_fraction": 0.061922075492723404,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.727968452259921,
+              "full_terminal_l2": 1.4478913862610916
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7261745295434077,
+              "full_terminal_l2": 1.4469902709260285
+            },
+            "zero": {
+              "projected_terminal_l2": 0.3215597670170279,
+              "full_terminal_l2": 1.2922274226581172
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.04261738400367606,
+              "full_terminal_l2": 1.2523048052720371
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7280902770286969,
+              "full_terminal_l2": 1.4479526407188839
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/kokoro/cow",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/kokoro/black",
+          "bandwidth": 145.07541262296542,
+          "rank16_capture_fraction": 0.36129066465225107,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5503793634478016,
+              "full_terminal_l2": 2.0910436098857113
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5553420568593961,
+              "full_terminal_l2": 2.0923553085562885
+            },
+            "zero": {
+              "projected_terminal_l2": 1.517223949021789,
+              "full_terminal_l2": 2.5241858003251885
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.07114785840876815,
+              "full_terminal_l2": 2.0185658322613294
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5521190945436907,
+              "full_terminal_l2": 2.09150219432893
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/kokoro/turtle",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/kokoro/white",
+          "bandwidth": 145.07541262296542,
+          "rank16_capture_fraction": 0.11638147784954031,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8938939184802943,
+              "full_terminal_l2": 2.442511627946253
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8950009265825213,
+              "full_terminal_l2": 2.4429169813854474
+            },
+            "zero": {
+              "projected_terminal_l2": 0.8249374802095208,
+              "full_terminal_l2": 2.4181269758975508
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.06198792652021371,
+              "full_terminal_l2": 2.273908265086595
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.8940096001797351,
+              "full_terminal_l2": 2.4425539669622203
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/piper/cow",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/piper/black",
+          "bandwidth": 145.07541262296542,
+          "rank16_capture_fraction": 0.37330980393233854,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.43443632488507644,
+              "full_terminal_l2": 2.359575570107137
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4259219889753166,
+              "full_terminal_l2": 2.358022789925494
+            },
+            "zero": {
+              "projected_terminal_l2": 1.790001611543196,
+              "full_terminal_l2": 2.9296701368752296
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.10295220831666317,
+              "full_terminal_l2": 2.321521257213207
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4360096170599356,
+              "full_terminal_l2": 2.359865745140569
+            }
+          }
+        },
+        {
+          "case_id": "animal_09/fit_chosen/piper/turtle",
+          "pair_id": "animal_09",
+          "wrong_query_case_id": "color_03/fit_chosen/piper/white",
+          "bandwidth": 145.07541262296542,
+          "rank16_capture_fraction": 0.1203771700982967,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.3725410165460683,
+              "full_terminal_l2": 2.0264229911818257
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.3801845755001068,
+              "full_terminal_l2": 2.0316079224770505
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5515015342865159,
+              "full_terminal_l2": 1.5895517088158708
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.023627716205038778,
+              "full_terminal_l2": 1.4909993456596782
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.3774082720899425,
+              "full_terminal_l2": 2.0297228498909896
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/kokoro/black",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/kokoro/silver",
+          "bandwidth": 145.83687494829212,
+          "rank16_capture_fraction": 0.3763239796759725,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.2504737182401187,
+              "full_terminal_l2": 0.8817834067062709
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.2489807251178082,
+              "full_terminal_l2": 0.8813604789583079
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6567426004542617,
+              "full_terminal_l2": 1.0705679605161755
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.024355114601045814,
+              "full_terminal_l2": 0.8458120474936057
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.24910764405123445,
+              "full_terminal_l2": 0.8813963408837243
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/kokoro/white",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/kokoro/teal",
+          "bandwidth": 145.83687494829212,
+          "rank16_capture_fraction": 0.4809805472333971,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.4287997288248204,
+              "full_terminal_l2": 1.1183940932224117
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4276716840904233,
+              "full_terminal_l2": 1.117962078413338
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9943542993010505,
+              "full_terminal_l2": 1.433763102600609
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03669773977026088,
+              "full_terminal_l2": 1.0335776475150518
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4282911841814319,
+              "full_terminal_l2": 1.1181992117637296
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/piper/black",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/piper/silver",
+          "bandwidth": 145.83687494829212,
+          "rank16_capture_fraction": 0.413247587286244,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.31215275563314016,
+              "full_terminal_l2": 0.838155424396107
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3138037622873245,
+              "full_terminal_l2": 0.8387717055972387
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6527980047889297,
+              "full_terminal_l2": 1.015485332811085
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.01837957894538046,
+              "full_terminal_l2": 0.7780764504461831
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.31227188879859485,
+              "full_terminal_l2": 0.8381998005615149
+            }
+          }
+        },
+        {
+          "case_id": "color_03/fit_chosen/piper/white",
+          "pair_id": "color_03",
+          "wrong_query_case_id": "color_05/fit_chosen/piper/teal",
+          "bandwidth": 145.83687494829212,
+          "rank16_capture_fraction": 0.5116002221710926,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.4808311557153575,
+              "full_terminal_l2": 1.1127706378388615
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4821384463693201,
+              "full_terminal_l2": 1.113336145912334
+            },
+            "zero": {
+              "projected_terminal_l2": 1.0270824177675708,
+              "full_terminal_l2": 1.435952032077673
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03448556788730573,
+              "full_terminal_l2": 1.0041160229407728
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.48351139256805137,
+              "full_terminal_l2": 1.113931397853607
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/kokoro/silver",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/kokoro/cyan",
+          "bandwidth": 146.30945380379404,
+          "rank16_capture_fraction": 0.18284262309152757,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5192630909925448,
+              "full_terminal_l2": 1.5894802473523173
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5209304112681937,
+              "full_terminal_l2": 1.5900257202858339
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7106138580538757,
+              "full_terminal_l2": 1.6618619758155244
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.04413436866831757,
+              "full_terminal_l2": 1.5029175239801378
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5192816522125285,
+              "full_terminal_l2": 1.5894863116858784
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/kokoro/teal",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/kokoro/violet",
+          "bandwidth": 146.30945380379404,
+          "rank16_capture_fraction": 0.16135742742220047,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.47351642718806936,
+              "full_terminal_l2": 2.1698175230758934
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4692334644642915,
+              "full_terminal_l2": 2.1688868848010006
+            },
+            "zero": {
+              "projected_terminal_l2": 0.928824174323485,
+              "full_terminal_l2": 2.3122725823987875
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.3218049298846251,
+              "full_terminal_l2": 2.1418329891962764
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.47578325436398655,
+              "full_terminal_l2": 2.170313337322329
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/piper/silver",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/piper/cyan",
+          "bandwidth": 146.30945380379404,
+          "rank16_capture_fraction": 0.14756762505754453,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.786290722576572,
+              "full_terminal_l2": 1.7221272242806742
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7942911867368628,
+              "full_terminal_l2": 1.7257947641716311
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6374784415241305,
+              "full_terminal_l2": 1.659472111897703
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.030336562677560224,
+              "full_terminal_l2": 1.5324455453068853
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7878791494669453,
+              "full_terminal_l2": 1.7228530496546666
+            }
+          }
+        },
+        {
+          "case_id": "color_05/fit_chosen/piper/teal",
+          "pair_id": "color_05",
+          "wrong_query_case_id": "color_06/fit_chosen/piper/violet",
+          "bandwidth": 146.30945380379404,
+          "rank16_capture_fraction": 0.09762368034807305,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7689963881860096,
+              "full_terminal_l2": 2.0626435900489564
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7694279816153436,
+              "full_terminal_l2": 2.0628045358682274
+            },
+            "zero": {
+              "projected_terminal_l2": 0.629521661429585,
+              "full_terminal_l2": 2.0148053267149066
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.047546570853082656,
+              "full_terminal_l2": 1.9145243954780666
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7642059243205057,
+              "full_terminal_l2": 2.0608623989448223
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/kokoro/cyan",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/kokoro/lake",
+          "bandwidth": 143.8119828412494,
+          "rank16_capture_fraction": 0.490313974359914,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.9783889291774004,
+              "full_terminal_l2": 3.617606116964365
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.9837074676004542,
+              "full_terminal_l2": 3.6205174471617454
+            },
+            "zero": {
+              "projected_terminal_l2": 2.970589831247776,
+              "full_terminal_l2": 4.242340806950368
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.0616311497112128,
+              "full_terminal_l2": 3.029331068632889
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.9739512279029472,
+              "full_terminal_l2": 3.615181144910378
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/kokoro/violet",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/kokoro/river",
+          "bandwidth": 143.8119828412494,
+          "rank16_capture_fraction": 0.18090894537334498,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6905450452681635,
+              "full_terminal_l2": 2.1050349723925663
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6934831684057219,
+              "full_terminal_l2": 2.1060006381357317
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9345441862964098,
+              "full_terminal_l2": 2.1972011577735233
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.07568232970660635,
+              "full_terminal_l2": 1.9899869236480978
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6903822956466585,
+              "full_terminal_l2": 2.1049815885499727
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/piper/cyan",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/piper/lake",
+          "bandwidth": 143.8119828412494,
+          "rank16_capture_fraction": 0.2203332042148866,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8418852695060904,
+              "full_terminal_l2": 2.50756503496344
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8405843996013826,
+              "full_terminal_l2": 2.5071285827232765
+            },
+            "zero": {
+              "projected_terminal_l2": 1.2556482160176228,
+              "full_terminal_l2": 2.6750260080424892
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03651609716824164,
+              "full_terminal_l2": 2.36229660260182
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.8434757840040222,
+              "full_terminal_l2": 2.5080994789347124
+            }
+          }
+        },
+        {
+          "case_id": "color_06/fit_chosen/piper/violet",
+          "pair_id": "color_06",
+          "wrong_query_case_id": "nature_00/fit_chosen/piper/river",
+          "bandwidth": 143.8119828412494,
+          "rank16_capture_fraction": 0.13350007373253417,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.792047879700279,
+              "full_terminal_l2": 1.60835620313765
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7871779066794219,
+              "full_terminal_l2": 1.6059635390670817
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5494469791495185,
+              "full_terminal_l2": 1.5037825370730606
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.025221282273800473,
+              "full_terminal_l2": 1.4000378767564412
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7900197355230251,
+              "full_terminal_l2": 1.6073583964246285
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/kokoro/lake",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/kokoro/garden",
+          "bandwidth": 145.5621375911171,
+          "rank16_capture_fraction": 0.2201243903935447,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5300982773941538,
+              "full_terminal_l2": 1.4673153021474705
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5253998775344311,
+              "full_terminal_l2": 1.465624455244521
+            },
+            "zero": {
+              "projected_terminal_l2": 0.72690131158851,
+              "full_terminal_l2": 1.5493208639638754
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.07766334267100058,
+              "full_terminal_l2": 1.3704164925138358
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5297314978495592,
+              "full_terminal_l2": 1.467182835958909
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/kokoro/river",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/kokoro/waterfall",
+          "bandwidth": 145.5621375911171,
+          "rank16_capture_fraction": 0.20991714519049587,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.37646141081596207,
+              "full_terminal_l2": 1.9843203895572181
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3829888087388701,
+              "full_terminal_l2": 1.9855690977887808
+            },
+            "zero": {
+              "projected_terminal_l2": 1.004244626324838,
+              "full_terminal_l2": 2.1918738773487663
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.040630468511927746,
+              "full_terminal_l2": 1.9487059608460333
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.3811419272702973,
+              "full_terminal_l2": 1.9852136872497124
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/piper/lake",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/piper/garden",
+          "bandwidth": 145.5621375911171,
+          "rank16_capture_fraction": 0.3268397610940583,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.31313953037333253,
+              "full_terminal_l2": 1.3631762633237627
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.3125347814328579,
+              "full_terminal_l2": 1.3630374714923903
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9244604759152644,
+              "full_terminal_l2": 1.6170405325504937
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.014588764076907082,
+              "full_terminal_l2": 1.3268029081377304
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.31381394853422195,
+              "full_terminal_l2": 1.3633313443683863
+            }
+          }
+        },
+        {
+          "case_id": "nature_00/fit_chosen/piper/river",
+          "pair_id": "nature_00",
+          "wrong_query_case_id": "nature_09/fit_chosen/piper/waterfall",
+          "bandwidth": 145.5621375911171,
+          "rank16_capture_fraction": 0.11700025440343687,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7724792217924852,
+              "full_terminal_l2": 1.5758978407091093
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7769581155260478,
+              "full_terminal_l2": 1.578098149844686
+            },
+            "zero": {
+              "projected_terminal_l2": 0.4999976308276968,
+              "full_terminal_l2": 1.461754849962663
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.0171856991438141,
+              "full_terminal_l2": 1.3736902990490647
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7709693220830618,
+              "full_terminal_l2": 1.575158262445123
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/kokoro/garden",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/kokoro/grove",
+          "bandwidth": 146.03743085741093,
+          "rank16_capture_fraction": 0.11312133541751296,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.2932248340330746,
+              "full_terminal_l2": 1.0332380551384872
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.29167014943879344,
+              "full_terminal_l2": 1.0327979237883704
+            },
+            "zero": {
+              "projected_terminal_l2": 0.35384042416462624,
+              "full_terminal_l2": 1.0520471041459232
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.015691955458310557,
+              "full_terminal_l2": 0.9908815832681658
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.2937159778643124,
+              "full_terminal_l2": 1.033377545334515
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/kokoro/waterfall",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/kokoro/pond",
+          "bandwidth": 146.03743085741093,
+          "rank16_capture_fraction": 0.13459030938241812,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5258016478037483,
+              "full_terminal_l2": 1.4435918928214262
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5267231258707442,
+              "full_terminal_l2": 1.4439277793111824
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5301930012857486,
+              "full_terminal_l2": 1.4451971448258416
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.025026021328254364,
+              "full_terminal_l2": 1.3446622066817568
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5267635407539963,
+              "full_terminal_l2": 1.4439425226735425
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/piper/garden",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/piper/grove",
+          "bandwidth": 146.03743085741093,
+          "rank16_capture_fraction": 0.238456889519346,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.4323954261581837,
+              "full_terminal_l2": 1.3592149204539221
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.43590614199604477,
+              "full_terminal_l2": 1.3603358265030685
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7210693815215097,
+              "full_terminal_l2": 1.4766314614606548
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.05906805604433961,
+              "full_terminal_l2": 1.2899567772360474
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4307619743357431,
+              "full_terminal_l2": 1.3586961670387943
+            }
+          }
+        },
+        {
+          "case_id": "nature_09/fit_chosen/piper/waterfall",
+          "pair_id": "nature_09",
+          "wrong_query_case_id": "nature_10/fit_chosen/piper/pond",
+          "bandwidth": 146.03743085741093,
+          "rank16_capture_fraction": 0.11473392679270021,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6180404248237114,
+              "full_terminal_l2": 1.5771385078176507
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6154986605055038,
+              "full_terminal_l2": 1.576144190074378
+            },
+            "zero": {
+              "projected_terminal_l2": 0.5223667143174152,
+              "full_terminal_l2": 1.5421604698660984
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.06296015089470987,
+              "full_terminal_l2": 1.4523621876073494
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6173365171069594,
+              "full_terminal_l2": 1.5768627973384401
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/kokoro/grove",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/kokoro/cup",
+          "bandwidth": 145.10163776690734,
+          "rank16_capture_fraction": 0.17324501919856383,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.0417700251262094,
+              "full_terminal_l2": 2.826726398044804
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.0418755268325708,
+              "full_terminal_l2": 2.8267652800005
+            },
+            "zero": {
+              "projected_terminal_l2": 1.2028926153731296,
+              "full_terminal_l2": 2.88999093155536
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.07796016818118788,
+              "full_terminal_l2": 2.6289113444186345
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.04174989875622,
+              "full_terminal_l2": 2.8267189802133483
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/kokoro/pond",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/kokoro/plate",
+          "bandwidth": 145.10163776690734,
+          "rank16_capture_fraction": 0.21457308025736985,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.0126399505031622,
+              "full_terminal_l2": 2.3206974875769153
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.0081730012372634,
+              "full_terminal_l2": 2.3187518087592354
+            },
+            "zero": {
+              "projected_terminal_l2": 1.091409602372871,
+              "full_terminal_l2": 2.3561349018894333
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.10492589688611513,
+              "full_terminal_l2": 2.0907430196551453
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.014060027043838,
+              "full_terminal_l2": 2.321317491695683
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/piper/grove",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/piper/cup",
+          "bandwidth": 145.10163776690734,
+          "rank16_capture_fraction": 0.21440905337751906,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.0440986415111109,
+              "full_terminal_l2": 2.328102042389277
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.0447188554512685,
+              "full_terminal_l2": 2.3283802606187045
+            },
+            "zero": {
+              "projected_terminal_l2": 1.0870840007627436,
+              "full_terminal_l2": 2.347694293513549
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03095385323989809,
+              "full_terminal_l2": 2.0810754727838976
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.044216525503314,
+              "full_terminal_l2": 2.328154913130337
+            }
+          }
+        },
+        {
+          "case_id": "nature_10/fit_chosen/piper/pond",
+          "pair_id": "nature_10",
+          "wrong_query_case_id": "object_02/fit_chosen/piper/plate",
+          "bandwidth": 145.10163776690734,
+          "rank16_capture_fraction": 0.14587974096899595,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7369739684220779,
+              "full_terminal_l2": 2.20309589372177
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7390894978432895,
+              "full_terminal_l2": 2.2038044780484505
+            },
+            "zero": {
+              "projected_terminal_l2": 0.8580287415208359,
+              "full_terminal_l2": 2.2464892461123243
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.04959041617567254,
+              "full_terminal_l2": 2.076766698131245
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7400952747735068,
+              "full_terminal_l2": 2.2041419878819566
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/kokoro/cup",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/kokoro/book",
+          "bandwidth": 146.15338283771257,
+          "rank16_capture_fraction": 0.33490170316300694,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.6900742760949646,
+              "full_terminal_l2": 2.0114891139718587
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.6836336154872702,
+              "full_terminal_l2": 2.0092886468860556
+            },
+            "zero": {
+              "projected_terminal_l2": 1.3407347994774343,
+              "full_terminal_l2": 2.3167768438929564
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.026372843369446133,
+              "full_terminal_l2": 1.8895982127767144
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.6830292064814342,
+              "full_terminal_l2": 2.00908308745791
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/kokoro/plate",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/kokoro/phone",
+          "bandwidth": 146.15338283771257,
+          "rank16_capture_fraction": 0.1882190798592561,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5626698861256361,
+              "full_terminal_l2": 2.008690340854815
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5550010403364536,
+              "full_terminal_l2": 2.006555664016537
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9284981334852043,
+              "full_terminal_l2": 2.1401746324764286
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.09013945152921007,
+              "full_terminal_l2": 1.9303792360555234
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5636143513649161,
+              "full_terminal_l2": 2.0089551078046393
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/piper/cup",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/piper/book",
+          "bandwidth": 146.15338283771257,
+          "rank16_capture_fraction": 0.3700242128202971,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8509066551782373,
+              "full_terminal_l2": 2.5922646217566356
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8520114626455727,
+              "full_terminal_l2": 2.592627483191093
+            },
+            "zero": {
+              "projected_terminal_l2": 1.8766204776321238,
+              "full_terminal_l2": 3.0850441197153256
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.04020379563613207,
+              "full_terminal_l2": 2.448961140424162
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.84763644830982,
+              "full_terminal_l2": 2.591193023102894
+            }
+          }
+        },
+        {
+          "case_id": "object_02/fit_chosen/piper/plate",
+          "pair_id": "object_02",
+          "wrong_query_case_id": "object_05/fit_chosen/piper/phone",
+          "bandwidth": 146.15338283771257,
+          "rank16_capture_fraction": 0.1831869922411229,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.754254546723805,
+              "full_terminal_l2": 2.212082786462438
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.761092933674656,
+              "full_terminal_l2": 2.2144238058904535
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9848030730005463,
+              "full_terminal_l2": 2.3009229670720703
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.04329749787334914,
+              "full_terminal_l2": 2.0799721691073736
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7571210954551348,
+              "full_terminal_l2": 2.2130618360126753
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/kokoro/book",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/kokoro/carpet",
+          "bandwidth": 146.93339679057334,
+          "rank16_capture_fraction": 0.31961709824980944,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8164228998991471,
+              "full_terminal_l2": 2.1704967776189483
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8214433631011991,
+              "full_terminal_l2": 2.172390183198572
+            },
+            "zero": {
+              "projected_terminal_l2": 1.3783872122166152,
+              "full_terminal_l2": 2.4381264907973246
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.021004151933512304,
+              "full_terminal_l2": 2.011206409159154
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.8201429337508068,
+              "full_terminal_l2": 2.171898787304272
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/kokoro/phone",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/kokoro/pillow",
+          "bandwidth": 146.93339679057334,
+          "rank16_capture_fraction": 0.27905453109643386,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5565811858673207,
+              "full_terminal_l2": 1.9684235098782545
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.5531116614827861,
+              "full_terminal_l2": 1.9674452993258165
+            },
+            "zero": {
+              "projected_terminal_l2": 1.1746743838403,
+              "full_terminal_l2": 2.2236834246071226
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.0566114348317456,
+              "full_terminal_l2": 1.888945031034063
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5565223881309724,
+              "full_terminal_l2": 1.9684068868438067
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/piper/book",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/piper/carpet",
+          "bandwidth": 146.93339679057334,
+          "rank16_capture_fraction": 0.2723838490778434,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.5788235898293975,
+              "full_terminal_l2": 1.8126736243562822
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.577127587301358,
+              "full_terminal_l2": 1.8121327692549973
+            },
+            "zero": {
+              "projected_terminal_l2": 1.0510070397853026,
+              "full_terminal_l2": 2.0137935646751086
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.04208591408648623,
+              "full_terminal_l2": 1.7182899062070356
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.5789191538704102,
+              "full_terminal_l2": 1.812704141577334
+            }
+          }
+        },
+        {
+          "case_id": "object_05/fit_chosen/piper/phone",
+          "pair_id": "object_05",
+          "wrong_query_case_id": "object_09/fit_chosen/piper/pillow",
+          "bandwidth": 146.93339679057334,
+          "rank16_capture_fraction": 0.22727016638098205,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.4057516185095226,
+              "full_terminal_l2": 1.7626974853765138
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.4031813030810474,
+              "full_terminal_l2": 1.7621076057451255
+            },
+            "zero": {
+              "projected_terminal_l2": 0.9302790451314337,
+              "full_terminal_l2": 1.9513807816380828
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.030881401719017695,
+              "full_terminal_l2": 1.7156403016287363
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4059223166268908,
+              "full_terminal_l2": 1.76273678566243
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/kokoro/carpet",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/kokoro/deer",
+          "bandwidth": 145.11749947497316,
+          "rank16_capture_fraction": 0.15842986196347045,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.7142118561162005,
+              "full_terminal_l2": 1.6834251646024525
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.7160060327256996,
+              "full_terminal_l2": 1.684187147005996
+            },
+            "zero": {
+              "projected_terminal_l2": 0.6614160965215414,
+              "full_terminal_l2": 1.6617138437235612
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.05282884852317205,
+              "full_terminal_l2": 1.5253238065517254
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.7088889059777878,
+              "full_terminal_l2": 1.6811737544952223
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/kokoro/pillow",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/kokoro/moose",
+          "bandwidth": 145.11749947497316,
+          "rank16_capture_fraction": 0.15036634361221732,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.44171951546520655,
+              "full_terminal_l2": 1.8165162837424593
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.44745762052680343,
+              "full_terminal_l2": 1.8179201293087073
+            },
+            "zero": {
+              "projected_terminal_l2": 0.7412476959144908,
+              "full_terminal_l2": 1.9115604514429976
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.16141715381543448,
+              "full_terminal_l2": 1.769370208101424
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.4439000379267249,
+              "full_terminal_l2": 1.81704774840443
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/piper/carpet",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/piper/deer",
+          "bandwidth": 145.11749947497316,
+          "rank16_capture_fraction": 0.2062816408511959,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 0.8065402655960024,
+              "full_terminal_l2": 1.8157156614687604
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 0.8078385447193492,
+              "full_terminal_l2": 1.8162927298103337
+            },
+            "zero": {
+              "projected_terminal_l2": 0.829311979993643,
+              "full_terminal_l2": 1.8259448260184459
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.03693961185498678,
+              "full_terminal_l2": 1.627169530618125
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 0.8074289969193797,
+              "full_terminal_l2": 1.8161106101254656
+            }
+          }
+        },
+        {
+          "case_id": "object_09/fit_chosen/piper/pillow",
+          "pair_id": "object_09",
+          "wrong_query_case_id": "animal_06/fit_chosen/piper/moose",
+          "bandwidth": 145.11749947497316,
+          "rank16_capture_fraction": 0.39172426624490075,
+          "errors": {
+            "conditional": {
+              "projected_terminal_l2": 1.1854149016891964,
+              "full_terminal_l2": 2.870605982665085
+            },
+            "global_pair_excluded": {
+              "projected_terminal_l2": 1.182718789246964,
+              "full_terminal_l2": 2.8694936759012575
+            },
+            "zero": {
+              "projected_terminal_l2": 2.0980443236911053,
+              "full_terminal_l2": 3.3521575421281935
+            },
+            "local_in_sample_oracle": {
+              "projected_terminal_l2": 0.06769437549095217,
+              "full_terminal_l2": 2.6152921104428746
+            },
+            "wrong_router": {
+              "projected_terminal_l2": 1.1873925276564157,
+              "full_terminal_l2": 2.871423206668637
+            }
+          }
+        }
+      ],
+      "summary": {
+        "conditional": {
+          "mean_projected_terminal_l2": 0.7166036640283376,
+          "median_projected_terminal_l2": 0.6933596901094015,
+          "mean_full_terminal_l2": 1.9489470517516658,
+          "median_full_terminal_l2": 1.9965053652060165
+        },
+        "global_pair_excluded": {
+          "mean_projected_terminal_l2": 0.7166847641844436,
+          "median_projected_terminal_l2": 0.6947643481903918,
+          "mean_full_terminal_l2": 1.949061248609136,
+          "median_full_terminal_l2": 1.996062380902659
+        },
+        "zero": {
+          "mean_projected_terminal_l2": 0.9663641061483131,
+          "median_projected_terminal_l2": 0.8912446087180501,
+          "mean_full_terminal_l2": 2.062229323337063,
+          "median_full_terminal_l2": 2.0774899795956676
+        },
+        "local_in_sample_oracle": {
+          "mean_projected_terminal_l2": 0.05675614162510042,
+          "median_projected_terminal_l2": 0.0429574409385126,
+          "mean_full_terminal_l2": 1.800635776333791,
+          "median_full_terminal_l2": 1.8892716219053887
+        },
+        "wrong_router": {
+          "mean_projected_terminal_l2": 0.7167657218371571,
+          "median_projected_terminal_l2": 0.6929847781855569,
+          "mean_full_terminal_l2": 1.9489542761874847,
+          "median_full_terminal_l2": 1.9970843975271757
+        }
+      },
+      "mean_rank16_capture_fraction": 0.22348979017819456,
+      "conditional_over_global_projected_l2": 0.9998868398490398,
+      "pair_bootstrap_95_percentile_ratio": [
+        0.998957003354115,
+        1.000785694181355
+      ]
+    },
+    "bootstrap_seed": 18384006079802748869
+  },
+  "elapsed_seconds": 0.3539717081002891,
+  "peak_rss_bytes": 464846848,
+  "limits": "FIT-only projected-terminal diagnostic; basis includes all FIT pairs; no nonlinear score/answer/security claim"
+}
