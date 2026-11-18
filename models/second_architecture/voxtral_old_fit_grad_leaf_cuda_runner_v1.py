@@ -161,6 +161,16 @@ def lm0_pre_hook(captured: list[torch.Tensor], flags: list[dict[str, bool]]):
     return hook
 
 
+def checked_lm_terminals(hits: dict[str, list[torch.Tensor]]) -> dict[str, torch.Tensor]:
+    """Validate every saved post-block vector, including finiteness."""
+    expected = {"lm0", "lm7", "lm14", "lm22", "lm29"}
+    if set(hits) != expected or any(len(values) != 1 for values in hits.values()):
+        raise ValueError("LM terminal hook count differs")
+    return {name: cpu(checked(values[0][0, -1], (replay.LM_INPUT_SHAPE[-1],),
+                              torch.float32, f"LM {name} terminal finiteness"))
+            for name, values in hits.items()}
+
+
 def passive_forward(model: Any, batch: dict[str, torch.Tensor], ordinal: int,
                     device: str = "cuda") -> dict:
     """Observe the two CUDA source sites without overriding either source."""
@@ -266,7 +276,7 @@ def full_forward(model: Any, batch: dict[str, torch.Tensor], *, site: str,
               "source_sha256": tensor_sha(full_source), "source_post_full": source_seen[0],
               "projector_full": projector_seen[0], "lm_input_full": lm_input_seen[0],
               "lm0_input_full": lm0_input_seen[0],
-              "lm_terminal": {name: cpu(values[0][0, -1]) for name, values in lm_hits.items()},
+              "lm_terminal": checked_lm_terminals(lm_hits),
               "first_answer_logits": logits, "audio_placeholder_positions": positions,
               "hook_counts": counts}
     del output, source_leaf, lm_hits
@@ -317,7 +327,7 @@ def direct_forward(model: Any, batch: dict[str, torch.Tensor], *, site: str,
                   "lm0_pre": lm0_flags[0]},
               "input_sha256": tensor_sha(lm_input), "lm_input_full": cpu(leaf),
               "lm0_input_full": lm0_seen[0],
-              "lm_terminal": {name: cpu(values[0][0, -1]) for name, values in lm_hits.items()},
+              "lm_terminal": checked_lm_terminals(lm_hits),
               "first_answer_logits": cpu(checked(logits, (LOGIT_WIDTH,), torch.float32,
                                                    "direct first logits")),
               "hook_counts": counts}
@@ -444,46 +454,14 @@ def execution_metadata(model: Any) -> dict:
 def run_case(output: Path, *, case_index: int, attempt_id: str,
              freeze_sha256: str, admission: dict) -> dict:
     """Execute one preclaimed case. The independent gate supplies admission."""
-    if output.exists() or case_index not in (0, 1):
-        raise ValueError("Case invalid or attempt directory already exists; no retry")
-    required = {"environment_receipt_sha256", "checkpoint_tree_sha256"}
-    if not isinstance(admission, dict) or not required.issubset(admission):
-        raise ValueError("Reviewed admission absent")
-    if case_index == 0 and not {"input_bundle_path", "input_bundle_sha256"}.issubset(admission):
-        raise ValueError("Reviewed beaver sidecar admission absent")
+    if output.exists():
+        raise ValueError("Attempt directory already exists; no retry")
     started = time.monotonic()
-    # Input and source values are fixed before the first model load.
-    if case_index == 0:
-        batch, bf16, sources = checked_beaver_archive(
-            Path(admission["input_bundle_path"]), admission["input_bundle_sha256"])
-    else:
-        batch, bf16, sources = checked_waterfall_batch(), {}, {}
-    if os.statvfs(output.parent).f_bavail * os.statvfs(output.parent).f_frsize < 30 * 1024**3:
-        raise OSError("Fewer than 30 GiB free before worker start")
+    # The gate has already made an exclusive no-retry claim. Establish a
+    # receipt-capable directory before any input/preflight/disk check.
     output.mkdir(parents=True, exist_ok=False)
     progress = output / "progress.jsonl"
     progress.touch(exist_ok=False)
-    source_rule = ("archived_mps_bf16_cast_fp32" if case_index == 0 else
-                   "two_passive_cuda_no_grad_first_source")
-    planned = {"passive_forwards": 0 if case_index == 0 else 2,
-               "full_forwards": 16, "direct_forwards": 16, "vjps": 0, "generations": 0}
-    meta = {
-        "schema": "voxtral_old_fit_grad_leaf_cuda_meta_v1", "status": "started",
-        "case_id": CASE_IDS[case_index], "case_index": case_index,
-        "attempt_id": attempt_id, "freeze_sha256": freeze_sha256,
-        "protocol_v1_sha256": sha(PROTOCOL_V1), "protocol_v2_sha256": sha(PROTOCOL_V2),
-        "schema_sha256": sha(SCHEMA), "runner_sha256": sha(Path(__file__)),
-        "environment_receipt_sha256": admission["environment_receipt_sha256"],
-        "checkpoint_tree_sha256": admission["checkpoint_tree_sha256"],
-        "source_rule": source_rule, "batch_sha256": BATCH_SHA[case_index],
-        "source_sha256": {site: tensor_sha(sources[site]) for site in sources},
-        "full_schedule": full_schedule(), "direct_schedule": direct_schedule(),
-        "planned_counts": planned,
-        "caps": {"cuda_bytes": MAX_CUDA_BYTES, "rss_bytes": MAX_RSS_BYTES,
-                 "worker_seconds": MAX_SECONDS, "worker_output_bytes": MAX_WORKER_BYTES,
-                 "total_output_bytes": MAX_OUTPUT_BYTES},
-        "started_utc": utc(), "started_monotonic": started,
-    }
 
     def mark(phase: str) -> None:
         if torch.cuda.is_available() and torch.cuda.is_initialized():
@@ -503,6 +481,43 @@ def run_case(output: Path, *, case_index: int, attempt_id: str,
                                "process_rss_bytes": rss, "utc": utc()})
 
     try:
+        if case_index not in (0, 1):
+            raise ValueError("Case index invalid")
+        required = {"environment_receipt_sha256", "checkpoint_tree_sha256"}
+        if not isinstance(admission, dict) or not required.issubset(admission):
+            raise ValueError("Reviewed admission absent")
+        if case_index == 0 and not {"input_bundle_path", "input_bundle_sha256"}.issubset(admission):
+            raise ValueError("Reviewed beaver sidecar admission absent")
+        # Input and source values are fixed before the first model load.
+        if case_index == 0:
+            batch, bf16, sources = checked_beaver_archive(
+                Path(admission["input_bundle_path"]), admission["input_bundle_sha256"])
+        else:
+            batch, bf16, sources = checked_waterfall_batch(), {}, {}
+        if os.statvfs(output.parent).f_bavail * os.statvfs(output.parent).f_frsize < 30 * 1024**3:
+            raise OSError("Fewer than 30 GiB free before worker start")
+        source_rule = ("archived_mps_bf16_cast_fp32" if case_index == 0 else
+                       "two_passive_cuda_no_grad_first_source")
+        planned = {"passive_forwards": 0 if case_index == 0 else 2,
+                   "full_forwards": 16, "direct_forwards": 16, "vjps": 0, "generations": 0}
+        meta = {
+        "schema": "voxtral_old_fit_grad_leaf_cuda_meta_v1", "status": "started",
+        "case_id": CASE_IDS[case_index], "case_index": case_index,
+        "attempt_id": attempt_id, "freeze_sha256": freeze_sha256,
+        "protocol_v1_sha256": sha(PROTOCOL_V1), "protocol_v2_sha256": sha(PROTOCOL_V2),
+        "schema_sha256": sha(SCHEMA), "runner_sha256": sha(Path(__file__)),
+        "environment_receipt_sha256": admission["environment_receipt_sha256"],
+        "checkpoint_tree_sha256": admission["checkpoint_tree_sha256"],
+        "source_rule": source_rule, "batch_sha256": BATCH_SHA[case_index],
+        "source_sha256": {site: tensor_sha(sources[site]) for site in sources},
+        "full_schedule": full_schedule(), "direct_schedule": direct_schedule(),
+        "planned_counts": planned,
+        "caps": {"cuda_bytes": MAX_CUDA_BYTES, "rss_bytes": MAX_RSS_BYTES,
+                 "worker_seconds": MAX_SECONDS, "worker_output_bytes": MAX_WORKER_BYTES,
+                 "total_output_bytes": MAX_OUTPUT_BYTES},
+        "started_utc": utc(), "started_monotonic": started,
+        }
+
         put_json(output / "meta.json", meta)
         mark("preflight_complete_before_model_load")
         configure_cuda()

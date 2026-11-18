@@ -41,13 +41,28 @@ class CudaRunnerSourceTests(unittest.TestCase):
             writer.write(b"45")
         self.assertEqual(raw.getvalue(), b"123")
 
-    def test_bad_admission_cannot_make_attempt_directory(self):
+    def test_bad_admission_writes_error_receipt_before_model_load(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "attempt"
             with self.assertRaisesRegex(ValueError, "admission"):
                 target.run_case(output, case_index=0, attempt_id="fixed",
                                 freeze_sha256="a" * 64, admission={})
-            self.assertFalse(output.exists())
+            self.assertTrue((output / "error.json").is_file())
+            self.assertFalse((output / "meta.json").exists())
+
+    def test_low_disk_preflight_writes_error_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "attempt"
+            admission = {"environment_receipt_sha256": "a" * 64,
+                         "checkpoint_tree_sha256": "b" * 64}
+            with patch.object(target, "checked_waterfall_batch", return_value={}), \
+                    patch.object(target.os, "statvfs", return_value=type(
+                        "LowDisk", (), {"f_bavail": 0, "f_frsize": 1})()):
+                with self.assertRaisesRegex(OSError, "30 GiB"):
+                    target.run_case(output, case_index=1, attempt_id="attempt",
+                                    freeze_sha256="c" * 64, admission=admission)
+            self.assertTrue((output / "error.json").is_file())
+            self.assertFalse((output / "meta.json").exists())
 
     def test_passive_capture_both_sites_and_full_direct_hooks(self):
         model, batch = fake_model_and_batch()
@@ -84,6 +99,27 @@ class CudaRunnerSourceTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "hash differs"):
                     target.checked_beaver_archive(path, target.BEAVER_ARCHIVE_SHA)
             loader.assert_not_called()
+
+    def test_nonfinite_direct_lm_terminal_rejected(self):
+        model, batch = fake_model_and_batch()
+        model.eval()
+        lm_input = torch.zeros(target.replay.LM_INPUT_SHAPE, dtype=torch.float32)
+        original_hooks = target.language_hooks
+
+        def poisoned_hooks(current_model):
+            hits, handles = original_hooks(current_model)
+
+            def poison(_module, _args, output):
+                hits["lm0"][0] = torch.full_like(output, float("nan"))
+
+            handles.append(current_model.model.language_model.layers[0].register_forward_hook(poison))
+            return hits, handles
+
+        with patch.object(target, "language_hooks", side_effect=poisoned_hooks):
+            with self.assertRaisesRegex(ValueError, "LM.*(finite|finiteness)"):
+                target.direct_forward(model, batch, site="encoder31", origin_ordinal=0,
+                                      lm_input=lm_input, mode="N0", ordinal=16,
+                                      repeat=0, device="cpu")
 
 
 if __name__ == "__main__":
