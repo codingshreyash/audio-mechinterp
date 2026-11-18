@@ -1,0 +1,8 @@
+{
+  "status": "context_worker_claimed_no_retry",
+  "context_index": 1,
+  "context_label": "piper_teal",
+  "attempt_id": "20261118T182308460007Z_01",
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "wall_utc": "2026-11-18T18:28:44.049126+00:00"
+}

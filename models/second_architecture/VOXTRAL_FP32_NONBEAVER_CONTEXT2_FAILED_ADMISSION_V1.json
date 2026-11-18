@@ -1,0 +1,45 @@
+{
+  "schema": "voxtral_fp32_nonbeaver_context2_failed_admission_v1",
+  "scope": "read_only_reproduction_of_pre_start_admission_failure",
+  "campaign_id": "20261118T182308460007Z",
+  "attempt_id": "20261118T182308460007Z_02",
+  "command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_fp32_nonbeaver_linearity_launch_gate_v1.py",
+    "--run-context",
+    "2"
+  ],
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "started_utc": "2026-11-18T19:01:41.528018+00:00",
+  "finished_utc": "2026-11-18T19:02:38.841622+00:00",
+  "exit_code": 1,
+  "stdout": "",
+  "error_type": "ValueError",
+  "error_message": "Earlier context model-work seconds invalid",
+  "error_site": "voxtral_fp32_nonbeaver_linearity_launch_gate_v1.py:_check_prior_entries",
+  "gate_sha256": "14cd58e9f5706be0da2453664a14aef11d7f5cb5f55f354b1028aca717df0a9d",
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "attempt_directories": [
+    {
+      "context": "kokoro_silver",
+      "attempt_id": "20261118T182308460007Z_02",
+      "launch_exists_before": false,
+      "launch_exists_after": false,
+      "worker_exists_before": false,
+      "worker_exists_after": false
+    },
+    {
+      "context": "kokoro_teal",
+      "attempt_id": "20261118T182308460007Z_03",
+      "launch_exists_before": false,
+      "launch_exists_after": false,
+      "worker_exists_before": false,
+      "worker_exists_after": false
+    }
+  ],
+  "interpretation_limit": "This record reproduces the gate rejection. The earlier failed invocation did not create a start or finish receipt. Absence of the reserved attempt directories was checked before and after this reproduction; no model worker was started."
+}

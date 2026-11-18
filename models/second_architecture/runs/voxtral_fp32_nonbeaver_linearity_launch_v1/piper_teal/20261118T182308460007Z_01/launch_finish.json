@@ -1,0 +1,23 @@
+{
+  "status": "context_launch_completed_cpu_audited_only",
+  "context_index": 1,
+  "context_label": "piper_teal",
+  "attempt_id": "20261118T182308460007Z_01",
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "worker_returncode": 0,
+  "auditor_returncode": 0,
+  "result_sha256": "e0a852540943f2c7bbbb50ff369450283cd550d9f3e8670f2441be5b6848eb40",
+  "audit_sha256": "692b5d2bc458e0b10a9223637c8b9d08ab5cb64c4b8f81835f99e16f27992372",
+  "error_sha256": null,
+  "post_run_source_verified": true,
+  "model_work_elapsed_seconds": 151.86878254101612,
+  "prior_model_work_seconds": 368.4824181678705,
+  "cumulative_prior_model_work_seconds": 507.3362194178626,
+  "worker_started_utc": "2026-11-18T18:28:15.345817+00:00",
+  "worker_finished_utc": "2026-11-18T18:31:01.022211+00:00",
+  "wall_utc": "2026-11-18T18:32:10.910491+00:00",
+  "elapsed_seconds": 210.4409978329204,
+  "worker_output_bytes": 1302794865,
+  "launcher_output_bytes_before_finish": 2940,
+  "combined_output_bytes_before_finish": 1302797805
+}

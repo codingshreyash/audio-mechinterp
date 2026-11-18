@@ -1,0 +1,19 @@
+{
+  "status": "four_contexts_reserved_no_retry",
+  "campaign_id": "20261118T182308460007Z",
+  "attempt_ids": [
+    "20261118T182308460007Z_00",
+    "20261118T182308460007Z_01",
+    "20261118T182308460007Z_02",
+    "20261118T182308460007Z_03"
+  ],
+  "context_labels": [
+    "piper_silver",
+    "piper_teal",
+    "kokoro_silver",
+    "kokoro_teal"
+  ],
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "wall_utc": "2026-11-18T18:23:36.693828+00:00",
+  "prior_model_work_seconds": 368.4824181678705
+}

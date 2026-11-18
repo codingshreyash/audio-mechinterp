@@ -1,0 +1,35 @@
+{
+  "status": "context_launch_started",
+  "context_index": 0,
+  "context_label": "piper_silver",
+  "attempt_id": "20261118T182308460007Z_00",
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "wall_utc": "2026-11-18T18:24:13.182344+00:00",
+  "worker_command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_fp32_nonbeaver_linearity_runner_v1.py",
+    "--run-context",
+    "0",
+    "--attempt-id",
+    "20261118T182308460007Z_00",
+    "--freeze-sha256",
+    "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f"
+  ],
+  "worker_output": "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00",
+  "prior_model_work_seconds": 368.4824181678705,
+  "cumulative_prior_model_work_seconds": 368.4824181678705,
+  "process_cap_seconds": 300,
+  "max_mps_driver_bytes": 32212254720,
+  "max_output_bytes": 2147483648,
+  "max_worker_bytes": 2122317824,
+  "max_capture_bytes": 8388608,
+  "planned_counts": {
+    "patch_forwards": 96,
+    "vjps": 8,
+    "g1_clean_graphs": 2,
+    "n0_clean_references": 2,
+    "donor_captures": 1,
+    "recipient_passive_captures": 1,
+    "natural_generations": 2
+  }
+}

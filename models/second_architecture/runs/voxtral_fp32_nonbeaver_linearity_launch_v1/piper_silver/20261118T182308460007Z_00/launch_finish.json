@@ -1,0 +1,23 @@
+{
+  "status": "context_launch_completed_cpu_audited_only",
+  "context_index": 0,
+  "context_label": "piper_silver",
+  "attempt_id": "20261118T182308460007Z_00",
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "worker_returncode": 0,
+  "auditor_returncode": 0,
+  "result_sha256": "761e7540baf870876125db36cfa62740b62366076898adc4a615750a84fb7edf",
+  "audit_sha256": "2000cb46e0ad025ba6fc07df7c5a741debd06f09e07858eaad6b08363a7d2edb",
+  "error_sha256": null,
+  "post_run_source_verified": true,
+  "model_work_elapsed_seconds": 138.8538012499921,
+  "prior_model_work_seconds": 368.4824181678705,
+  "cumulative_prior_model_work_seconds": 368.4824181678705,
+  "worker_started_utc": "2026-11-18T18:24:13.182705+00:00",
+  "worker_finished_utc": "2026-11-18T18:26:32.036596+00:00",
+  "wall_utc": "2026-11-18T18:27:26.990732+00:00",
+  "elapsed_seconds": 193.80826329207048,
+  "worker_output_bytes": 1302795283,
+  "launcher_output_bytes_before_finish": 3433,
+  "combined_output_bytes_before_finish": 1302798716
+}

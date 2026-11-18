@@ -1,0 +1,286 @@
+{
+  "campaign_id": "20261118T182308460007Z",
+  "completed_contexts": [
+    {
+      "actual_counts": {
+        "donor_captures": 1,
+        "g1_clean_graphs": 2,
+        "n0_clean_references": 2,
+        "natural_generations": 2,
+        "patch_forwards": 96,
+        "recipient_passive_captures": 1,
+        "vjps": 8
+      },
+      "attempt_id": "20261118T182308460007Z_00",
+      "audit_sha256": "2000cb46e0ad025ba6fc07df7c5a741debd06f09e07858eaad6b08363a7d2edb",
+      "context_index": 0,
+      "context_label": "piper_silver",
+      "result_sha256": "761e7540baf870876125db36cfa62740b62366076898adc4a615750a84fb7edf",
+      "saved_cpu_audit_rerun": {
+        "command": [
+          "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+          "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_fp32_nonbeaver_linearity_launch_gate_v1.py",
+          "--verify-saved-prior",
+          "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00"
+        ],
+        "exit_code": 0,
+        "stdout": "{\"status\": \"prior_saved_cpu_revalidated_read_only\"}\n"
+      },
+      "sidecar_bytes": 1302473589,
+      "sidecar_sha256": "363f2dbe24ba98582951793f4df2b26614c6ebfdfff76a941c94b633c4b0309f",
+      "status": "context_launch_completed_cpu_audited_only",
+      "timing_seconds": {
+        "parent_monotonic_model_work": 138.8538012499921,
+        "parent_monotonic_start_to_finish": 193.80826329207048,
+        "utc_minus_parent_model_work": 8.975000790201193e-05,
+        "utc_minus_parent_start_to_finish": 0.00012470792952967713,
+        "utc_start_to_finish": 193.808388,
+        "utc_worker_start_to_finish": 138.853891
+      }
+    },
+    {
+      "actual_counts": {
+        "donor_captures": 1,
+        "g1_clean_graphs": 2,
+        "n0_clean_references": 2,
+        "natural_generations": 2,
+        "patch_forwards": 96,
+        "recipient_passive_captures": 1,
+        "vjps": 8
+      },
+      "attempt_id": "20261118T182308460007Z_01",
+      "audit_sha256": "692b5d2bc458e0b10a9223637c8b9d08ab5cb64c4b8f81835f99e16f27992372",
+      "context_index": 1,
+      "context_label": "piper_teal",
+      "result_sha256": "e0a852540943f2c7bbbb50ff369450283cd550d9f3e8670f2441be5b6848eb40",
+      "saved_cpu_audit_rerun": {
+        "command": [
+          "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+          "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_fp32_nonbeaver_linearity_launch_gate_v1.py",
+          "--verify-saved-prior",
+          "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01"
+        ],
+        "exit_code": 0,
+        "stdout": "{\"status\": \"prior_saved_cpu_revalidated_read_only\"}\n"
+      },
+      "sidecar_bytes": 1302473589,
+      "sidecar_sha256": "89dafb044a4249a9858ed4251b6693244c3a7133dfe2ddfcba4fa8edc64595ad",
+      "status": "context_launch_completed_cpu_audited_only",
+      "timing_seconds": {
+        "parent_monotonic_model_work": 151.86878254101612,
+        "parent_monotonic_start_to_finish": 210.4409978329204,
+        "utc_minus_parent_model_work": 13.807611458983871,
+        "utc_minus_parent_start_to_finish": 25.1243381670796,
+        "utc_start_to_finish": 235.565336,
+        "utc_worker_start_to_finish": 165.676394
+      }
+    }
+  ],
+  "failed_admission": {
+    "attempt_id": "20261118T182308460007Z_02",
+    "error": "Earlier context model-work seconds invalid",
+    "exit_code": 1,
+    "receipt_bytes": 1883,
+    "receipt_path": "models/second_architecture/VOXTRAL_FP32_NONBEAVER_CONTEXT2_FAILED_ADMISSION_V1.json",
+    "receipt_sha256": "1064196125fa258b384bca6a4bc1f703a8dad8d7cae765ce0400d99d3416863a",
+    "remaining_attempt_directories_absent": true
+  },
+  "freeze": {
+    "auditor_review_commit": "a142526f2f089786fd05e1264b1a7bb2ca4acb73",
+    "path": "models/second_architecture/VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_V1.json",
+    "sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+    "source_review_commit": "645a90a020959cb47bee46b50647b280fa3ba3f4",
+    "source_sha256": {
+      "auditor_sha256": "70a1ac3c4e4da92bb1fa1034bd866195024dcd423ea35a2386e233bce5dca8e2",
+      "gate_sha256": "14cd58e9f5706be0da2453664a14aef11d7f5cb5f55f354b1028aca717df0a9d",
+      "runner_sha256": "91e622f7fd8f4d9dac00ca7a0baaf02d74faf9326109d10674ebf5673310bc04"
+    }
+  },
+  "interpretation_limit": "This preserves two completed saved-data contexts and a reproduced failed pre-start admission. CPU audit checks retained tensors and numerical validity; it does not establish model execution provenance, outcome efficacy, a reusable lens, an audio security finding, or time-localized acoustic causality.",
+  "planned_counts_per_context": {
+    "donor_captures": 1,
+    "g1_clean_graphs": 2,
+    "n0_clean_references": 2,
+    "natural_generations": 2,
+    "patch_forwards": 96,
+    "recipient_passive_captures": 1,
+    "vjps": 8
+  },
+  "pre_evidence_git_head": "53dfb0cc6f6b49364012de12272b9a55cf0ba060",
+  "raw_file_count": 27,
+  "raw_files": [
+    {
+      "bytes": 538,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/campaign_reservation.json",
+      "sha256": "b37e26fdd8f9331cbf52b8b37b7785062c7c8a056b28c7cdfb2b4e90417f015b",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 0,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/audit_stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 145,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/audit_stdout.txt",
+      "sha256": "1474c9d4914a2f7aec3f368b149002c0e28cfe3c5937047fa11b8338a8e43050",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1044,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/launch_finish.json",
+      "sha256": "e62da1fe67b777dd7f41f9b348ba12d96bffd3cea032eaf30108074547bb80a0",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1339,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/launch_start.json",
+      "sha256": "e6b4db4f823d570fd33aac7625d1b8f78dd0d4109531029ae269a139533bfe1f",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 289,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/worker_claim.json",
+      "sha256": "f402187d63b19b97ec6679acbaa227138af8661f3d89e1cade18d38cd4eb9037",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1401,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/worker_stderr.txt",
+      "sha256": "d1be3e8df43e1df3e7dd070e98e105c471ecd86379ee10a7ecea775ee11d2661",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 259,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_silver/20261118T182308460007Z_00/worker_stdout.txt",
+      "sha256": "2816089357d14d12354ae48496a49dd087f129676eb8a36b18733cd433a92c5c",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 117044,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00/audit.json",
+      "sha256": "2000cb46e0ad025ba6fc07df7c5a741debd06f09e07858eaad6b08363a7d2edb",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1302473589,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00/blobs/363f2dbe24ba98582951793f4df2b26614c6ebfdfff76a941c94b633c4b0309f.pt",
+      "sha256": "363f2dbe24ba98582951793f4df2b26614c6ebfdfff76a941c94b633c4b0309f",
+      "storage": "local_content_addressed_sidecar"
+    },
+    {
+      "bytes": 12189,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00/meta.json",
+      "sha256": "7f07971a34d009ac52ed149eb30ac5a85b42ad6730f955d28ea3d1e38d308e50",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 156750,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00/model_layout.json",
+      "sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 33787,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00/progress.jsonl",
+      "sha256": "ac6c351009aa45e6e954784994c76ffe868e3461ca66ea33ac8cf7b45c752024",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1924,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_silver/20261118T182308460007Z_00/result.json",
+      "sha256": "761e7540baf870876125db36cfa62740b62366076898adc4a615750a84fb7edf",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 0,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/audit_stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 145,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/audit_stdout.txt",
+      "sha256": "5a025b7cee8dcccea3bd5683bc6d58569563cb9f3d5a0697c01c82dbd970f74c",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1042,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/launch_finish.json",
+      "sha256": "0c5ac9f690785291a7d56d75be1a82a4bc2f38ae62a38bfb64a615da2c2eae02",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1335,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/launch_start.json",
+      "sha256": "da2c2ff984a0fc29946fb6cb3de28a0c566a546576ff682325746be59c74426f",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 287,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/worker_claim.json",
+      "sha256": "e93cfc54e55577d1a2271809449950387762a510aeb301fa00a6a9095a95f29c",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 916,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/worker_stderr.txt",
+      "sha256": "9c352b3492e6e0a72b5fb5ee552251d2bb0751e0bf38adbdfa43098cbcadd3ef",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 257,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_launch_v1/piper_teal/20261118T182308460007Z_01/worker_stdout.txt",
+      "sha256": "6a02f0929823a7b86b41c5b11c5b7502dfd8818d8930f84fefab79fd5ef85ca5",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 116617,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01/audit.json",
+      "sha256": "692b5d2bc458e0b10a9223637c8b9d08ab5cb64c4b8f81835f99e16f27992372",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1302473589,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01/blobs/89dafb044a4249a9858ed4251b6693244c3a7133dfe2ddfcba4fa8edc64595ad.pt",
+      "sha256": "89dafb044a4249a9858ed4251b6693244c3a7133dfe2ddfcba4fa8edc64595ad",
+      "storage": "local_content_addressed_sidecar"
+    },
+    {
+      "bytes": 12187,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01/meta.json",
+      "sha256": "1eb734d0547825d0ea87a745926925b3e09e521c429599d5d1358a25cb8d3dbb",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 156750,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01/model_layout.json",
+      "sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 33800,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01/progress.jsonl",
+      "sha256": "64e323605c8df9cf57c4b935b6ca279c506d9588bd4b9926da15dcad13227e43",
+      "storage": "git_raw_receipt"
+    },
+    {
+      "bytes": 1922,
+      "path": "models/second_architecture/runs/voxtral_fp32_nonbeaver_linearity_v1/piper_teal/20261118T182308460007Z_01/result.json",
+      "sha256": "e0a852540943f2c7bbbb50ff369450283cd550d9f3e8670f2441be5b6848eb40",
+      "storage": "git_raw_receipt"
+    }
+  ],
+  "raw_manifest_line_format": "sha256 + two spaces + repository-relative path + LF; reservation first; then context order piper_silver, piper_teal, launch files sorted by name then worker files sorted by path",
+  "raw_manifest_sha256": "bdd3f1d3161c60201b361a1014a4fddbaf4e28e939d936bd170d2f486173c645",
+  "raw_total_bytes": 2605599145,
+  "reserved_context_labels": [
+    "piper_silver",
+    "piper_teal",
+    "kokoro_silver",
+    "kokoro_teal"
+  ],
+  "schema": "voxtral_fp32_nonbeaver_piper_evidence_manifest_v1",
+  "scope": "provenance_only_no_outcome_efficacy"
+}

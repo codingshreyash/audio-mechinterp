@@ -1,0 +1,46 @@
+{
+  "status": "completed_fp32_nonbeaver_local_linearity_raw_only",
+  "scope": "old_fit_color05_fp32_local_linearity_numerical_only",
+  "context": {
+    "index": 0,
+    "label": "piper_silver",
+    "engine": "piper",
+    "recipient": "silver",
+    "donor": "teal"
+  },
+  "attempt_id": "20261118T182308460007Z_00",
+  "freeze_sha256": "c28ffecbd7487b92ff98bc47bd2872af30f0a8400cbe65a4caac30b179cafb4f",
+  "protocol_v2_sha256": "04f99648f5483fa7f32da80515c31e3f8472511c954cd95711d8eba09bb5b42d",
+  "protocol_v3_sha256": "a222ce0f06a0e82b2c22bf6231e605983d726610b2f51dfbe7299de3ea8d79bd",
+  "protocol_v4_sha256": "edff669ab0c611a50160896b5b4b75e7621dde743c4e769a7b10af08f92a9d94",
+  "protocol_v5_sha256": "99de95003190de6b5fb55c5ba8bed446dfea7cdd8cf53c0569d304bcb942b49b",
+  "preflight_receipt_sha256": "5ef97e47e66c37b6c8ecb64b366daf4a713cfea1dfdee2f7f59ca75324b08401",
+  "meta_sha256": "7f07971a34d009ac52ed149eb30ac5a85b42ad6730f955d28ea3d1e38d308e50",
+  "progress_sha256": "ac6c351009aa45e6e954784994c76ffe868e3461ca66ea33ac8cf7b45c752024",
+  "model_layout_sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad",
+  "details_sha256": "363f2dbe24ba98582951793f4df2b26614c6ebfdfff76a941c94b633c4b0309f",
+  "details_path": "blobs/363f2dbe24ba98582951793f4df2b26614c6ebfdfff76a941c94b633c4b0309f.pt",
+  "details_bytes": 1302473589,
+  "planned_counts": {
+    "patch_forwards": 96,
+    "vjps": 8,
+    "g1_clean_graphs": 2,
+    "n0_clean_references": 2,
+    "donor_captures": 1,
+    "recipient_passive_captures": 1,
+    "natural_generations": 2
+  },
+  "actual_counts": {
+    "patch_forwards": 96,
+    "vjps": 8,
+    "g1_clean_graphs": 2,
+    "n0_clean_references": 2,
+    "donor_captures": 1,
+    "recipient_passive_captures": 1,
+    "natural_generations": 2
+  },
+  "invalidities": [],
+  "elapsed_seconds": 109.29418083303608,
+  "peak_mps_driver_bytes": 28793470976,
+  "output_bytes_before_result": 1302676315
+}

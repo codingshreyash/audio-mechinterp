@@ -1,0 +1,1 @@
+{"status": "completed_fp32_nonbeaver_local_linearity_raw_only", "context": {"index": 0, "label": "piper_silver", "engine": "piper", "recipient": "silver", "donor": "teal"}, "details_sha256": "363f2dbe24ba98582951793f4df2b26614c6ebfdfff76a941c94b633c4b0309f"}
