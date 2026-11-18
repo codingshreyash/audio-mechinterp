@@ -126,7 +126,7 @@ def preflight() -> dict[str, Any]:
     import torch
     import transformers
     from huggingface_hub import snapshot_download
-    from transformers.models.whisper import feature_extraction_whisper, modeling_whisper, processing_whisper, tokenization_whisper
+    from transformers.models.whisper import feature_extraction_whisper, generation_whisper, modeling_whisper, processing_whisper, tokenization_whisper
 
     cases, windows = check_case_manifest()
     snapshot = Path(snapshot_download(MODEL_ID, revision=MODEL_REVISION, local_files_only=True))
@@ -137,7 +137,7 @@ def preflight() -> dict[str, Any]:
     shape = {k: config[k] for k in ("num_mel_bins", "max_source_positions", "d_model", "encoder_layers")}
     if shape != {"num_mel_bins": 80, "max_source_positions": 1500, "d_model": 384, "encoder_layers": 4}:
         raise ValueError("Whisper config shape mismatch")
-    source_modules = [modeling_whisper, feature_extraction_whisper, processing_whisper, tokenization_whisper]
+    source_modules = [modeling_whisper, generation_whisper, feature_extraction_whisper, processing_whisper, tokenization_whisper]
     source_hashes = {module.__name__: file_sha(Path(inspect.getfile(module))) for module in source_modules}
     script_relative = str(Path(__file__).resolve().relative_to(ROOT))
     dirty = subprocess.run(["git", "diff", "--quiet", "--", script_relative], cwd=ROOT, check=False)
@@ -461,10 +461,9 @@ def execute(expected_preflight: Path, output: Path) -> None:
             if any(count != 1 for count in counts.values()) or set(captures) != set(CAPTURE_SITES):
                 raise ValueError(f"capture hooks did not fire exactly once: {counts}")
             other_word = WORDS[1 - WORDS.index(case.word)]
-            if (normalized_words(result["transcript"]).count(case.word) != 1
-                    or other_word in normalized_words(result["transcript"])
-                    or result["censored"]):
-                raise ValueError(f"baseline target-word eligibility failed: {case.key}")
+            eligible = (normalized_words(result["transcript"]).count(case.word) == 1
+                        and other_word not in normalized_words(result["transcript"])
+                        and not result["censored"])
             states[case.key] = captures
             baselines[case.key] = result
             hashes = {}
@@ -476,7 +475,9 @@ def execute(expected_preflight: Path, output: Path) -> None:
                 np.save(tensor_path, tensor.numpy(), allow_pickle=False)
                 hashes[site] = file_sha(tensor_path)
             capture_hashes[case.key] = hashes
-            append_record(output / "records.jsonl", {"type": "baseline", "case": case.key, "result": result, "capture_sha256": hashes})
+            append_record(output / "records.jsonl", {"type": "baseline", "case": case.key, "result": result, "capture_sha256": hashes, "eligible": eligible, "capture_hook_counts": counts})
+            if not eligible:
+                raise ValueError(f"baseline target-word eligibility failed: {case.key}")
             check_budget()
 
         for engine in ("piper", "kokoro"):
@@ -530,8 +531,7 @@ def execute(expected_preflight: Path, output: Path) -> None:
                         count = [0]
                         handle = install_patch_hook(model, site, source, window, "self" if condition == "self" else "donor", None, count)
                         result = run_model(model, processor, batches[recipient], hook=handle, hook_count=count)
-                        if condition == "self" and result["token_ids"] != baselines[recipient]["token_ids"]:
-                            raise ValueError(f"self patch changed tokens: {recipient}/{site}")
+                        control_pass = None if condition != "self" else result["token_ids"] == baselines[recipient]["token_ids"]
                         outcome = transcript_outcome(result["transcript"], recipient_word, donor_word, baselines[recipient]["transcript"])
                         outcome["target_replacement"] = outcome["target_replacement"] and not result["censored"]
                         outcome["token_difference_count"] = sum(a != b for a, b in zip(result["token_ids"], baselines[recipient]["token_ids"])) + abs(len(result["token_ids"]) - len(baselines[recipient]["token_ids"]))
@@ -542,8 +542,11 @@ def execute(expected_preflight: Path, output: Path) -> None:
                             "state_shape": [1, 1500, 384], "state_dtype": "float32", "finite_checked": True,
                             "recipient_state_sha256": capture_hashes[recipient][site],
                             "source_state_sha256": capture_hashes[recipient if condition == "self" else donor][site],
+                            "control_pass": control_pass,
                             "outcome": outcome,
                         })
+                        if control_pass is False:
+                            raise ValueError(f"self patch changed tokens: {recipient}/{site}")
                         check_budget()
                 for condition, window, seed in (("full_donor", (0, 1500), None), *(("random", case.window, seed) for seed in SEEDS)):
                     check_budget()
@@ -551,8 +554,7 @@ def execute(expected_preflight: Path, output: Path) -> None:
                     patch_audit: dict[str, Any] = {}
                     handle = install_patch_hook(model, "post_norm", states[donor]["post_norm"], window, condition, seed, count, patch_audit)
                     result = run_model(model, processor, batches[recipient], hook=handle, hook_count=count)
-                    if condition == "full_donor" and result["token_ids"] != baselines[donor]["token_ids"]:
-                        raise ValueError(f"full-donor implementation control failed: {recipient}")
+                    control_pass = None if condition != "full_donor" else result["token_ids"] == baselines[donor]["token_ids"]
                     outcome = transcript_outcome(result["transcript"], recipient_word, donor_word, baselines[recipient]["transcript"])
                     outcome["target_replacement"] = outcome["target_replacement"] and not result["censored"]
                     outcome["token_difference_count"] = sum(a != b for a, b in zip(result["token_ids"], baselines[recipient]["token_ids"])) + abs(len(result["token_ids"]) - len(baselines[recipient]["token_ids"]))
@@ -563,8 +565,11 @@ def execute(expected_preflight: Path, output: Path) -> None:
                         "state_shape": [1, 1500, 384], "state_dtype": "float32", "finite_checked": True,
                         "recipient_state_sha256": capture_hashes[recipient]["post_norm"],
                         "source_state_sha256": capture_hashes[donor]["post_norm"],
+                        "control_pass": control_pass,
                         "outcome": outcome,
                     })
+                    if control_pass is False:
+                        raise ValueError(f"full-donor implementation control failed: {recipient}")
                     check_budget()
         check_budget()
         append_record(output / "records.jsonl", {"type": "complete", "elapsed_seconds": time.monotonic() - start, "rss_bytes": current_rss_bytes()})
