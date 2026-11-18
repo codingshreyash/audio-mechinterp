@@ -1,0 +1,20 @@
+# Independent review of Voxtral development transfer result
+
+**18 November 2026. Stop before locked-test inference.** I reviewed the sealed development run committed as `a0838b3` and its CPU audit committed as `4d4fc6a` against the frozen [development protocol](PROSPECTIVE_VOXTRAL_DEV_TRANSFER_V1.md) and [audit protocol](VOXTRAL_DEV_TRANSFER_AUDIT_PROTOCOL_V1.md). The raw `result.json` SHA-256 is `1c43c22720237a703441854f4e8a7fb7f41fad62bacb1be7f72d4958452e6edd`; the committed `audit.json` SHA-256 is `e79a0ae2fb09526be4830a9be1fa975459f7b9f61099e373c6113261a5490467`. I reran the pinned CPU auditor on the complete directory and obtained a result exactly equal to the committed audit. No model inference or locked-test answer was opened for this review.
+
+The auditor rechecked frozen source and corpus hashes, all selected development WAV/PCM and mask geometry, processor features, complete suffix decoding and answer classes, score arithmetic, 48 checkpoint and attempt hashes, and the invocation/resource chain. I separately counted the committed raw logs and checkpoint hashes: **48 records, 96 directions, 5,184 rows** = 384 captures + 4,800 complete generations + 0 invalid slots. Those generations entail 9,600 recorded teacher-forced candidate-score forwards. All 96 planned directions remain in the denominators. There was one receipted invocation; cumulative time was **3,911.36 s** (about 65.2 min), below the 7,200 s cap. The largest checkpoint MPS driver observation was **10,680,057,856 bytes** (about 9.95 GiB), below the 30 GiB cap. The committed raw files match their result/checkpoint hashes.
+
+The task-validity gate passed: **87/96** clean natural answers were valid exact recipients, and **87/96** had a non-recipient blank baseline. Blank answers were 84 valid `other` and 12 malformed surfaces; malformed answers stayed in the planned denominator. The whole-word and control counts below were recomputed directly from the per-record raw JSONL files using the frozen arm-specific eligibility rules.
+
+| Site and arm | Whole-word success /96 | Pre | Post | Padding | Random | Effect gate | Strict time gate |
+| --- | ---: | ---: | ---: | ---: | ---: | --- | --- |
+| Encoder 31 restoration | 82 | 0 | 0 | 0 | 0 | Pass | Fail |
+| Encoder 31 loss | 83 | 4 | 1 | 2 | 6 | Pass | Pass |
+| Projector restoration | 82 | 0 | 0 | 0 | 0 | Pass | Fail |
+| Projector loss | 84 | 12 | 1 | 2 | **56** | **Fail** | Pass |
+
+The projector loss main edit changed the complete answer in 84/96 planned directions, but its equal-norm random control also met the loss-success definition in **56/96**. That exceeds the frozen control ceiling of **18/96**, so projector loss does **not** establish a specific word-row effect under this gate. A main edit beating the random control in raw count (84 > 56) does not repair the failed ceiling. Encoder 31 passed both effect arms and its strict loss time gate; this is a **site-limited partial result**. Projector restoration passed the effect gate, but cross-site effect transfer requires both arms at both sites. Although both loss time gates passed, `development_advance_gate` is **false** in the raw result and the independently recomputed audit.
+
+Restoration time preference also remains unproven. The prior FIT restoration time gate failed. In development, the strict valid-complete-answer paired-score counts were only 80/96 for encoder post and 76/96, 81/96, and 82/96 for projector post, padding, and random, respectively, below the required **84/96** despite finite teacher-forced scores for all 96 pairs. The descriptive word-quarter counts and these constructed state edits do not locate a unique acoustic time window or show an attacker-reachable audio perturbation.
+
+**Decision:** report the complete negative/partial development result and stop this protocol before locked-test inference. The audit verifies provenance and internal arithmetic of saved outputs without a second model forward. It does not establish a reusable lens, generated-speech/tool behavior, or a security vulnerability.
