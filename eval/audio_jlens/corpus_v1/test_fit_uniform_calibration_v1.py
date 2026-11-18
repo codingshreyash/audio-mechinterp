@@ -10,12 +10,36 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fit_uniform_calibration_v1 import (add_uniform_bins, clean_forward,
                                         finish_summary, patched_forward,
-                                        prefix_score)
+                                        prefix_score,
+                                        projected_map_diagnostic,
+                                        require_matching_source_shapes)
 from fit_uniform_baselines_v1 import (feature_matrix, pair_cv, ridge_fit,
                                       ridge_predict)
 
 
 class FitUniformCalibrationTests(unittest.TestCase):
+    def test_full_donor_recipient_shape_required(self):
+        current = torch.zeros(6, 2)
+        recipient = {"source_shapes": {"connector": [6, 2]}}
+        donor = {"source_shapes": {"connector": [6, 2]}}
+        require_matching_source_shapes(current, recipient, donor, "connector")
+        donor["source_shapes"]["connector"] = [7, 2]
+        with self.assertRaisesRegex(ValueError, "full source tensor shapes"):
+            require_matching_source_shapes(current, recipient, donor, "connector")
+
+    def test_rank16_map_diagnostic_identity_case(self):
+        basis = torch.eye(2048, 16)
+        jacobian = torch.zeros(6, 16, 2)
+        jacobian[1, 0, 0] = 2
+        delta = torch.zeros(6, 2)
+        delta[1, 0] = 3
+        measured = torch.zeros(2048)
+        measured[0] = 1.5
+        result = projected_map_diagnostic(basis, jacobian, delta, measured, .25)
+        self.assertAlmostEqual(result["rank16_capture_fraction"], 1)
+        self.assertAlmostEqual(result["projected_relative_error"], 0)
+        self.assertAlmostEqual(result["projected_cosine"], 1)
+
     def test_clean_and_patched_hooks_measure_same_toy_edit(self):
         class Toy(torch.nn.Module):
             def __init__(self):

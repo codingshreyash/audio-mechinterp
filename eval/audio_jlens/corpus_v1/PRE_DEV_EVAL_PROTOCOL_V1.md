@@ -32,6 +32,19 @@ For both ridge maps, divide every input by the FIT-only global RMS of the corres
 
 ## Development decision, then locked test
 
+To bound compute, run a fixed two-stage evaluation without changing prompts,
+scoring, cases, or thresholds. **Stage A** records all 96 clean complete
+answers and all 96 × two sites × six uniform-edit alphas, including complete
+greedy answers and V1/V2 first-step scores. It evaluates the four primary
+conditions below. If either site fails, stop and publish that result; the
+secondary time controls and teacher-forced complete-sequence scores are not
+needed to assert a failed primary gate. If both sites pass, **Stage B** runs
+the predeclared time controls, natural-waveform comparison, full donor-row
+patch, and canonical complete-sequence scores on every planned development
+direction. A positive development claim requires both stages. This sequence
+is specified before development inference; Stage B methods cannot be chosen
+using Stage A item outcomes. The locked test follows the same two-stage rule.
+
 Run development once with frozen code/artifacts, then evaluate locked test only if both primary sites pass development. For each site, primary MAE is mean `|ΔS_pred−ΔS_measured|` across **96 directions × three small alphas**; invalid planned conditions count as failures of the gate and remain in the planned count. Report per-category, voice, template, and pair-level rows. A site passes only if:
 
 1. At least **72/96** clean unpatched answers are semantically correct, one-word, and end on EOS; at least **72/96** clean first tokens are classified by one of the two V2 prefix sets, with at least 75% purity among classified outputs.

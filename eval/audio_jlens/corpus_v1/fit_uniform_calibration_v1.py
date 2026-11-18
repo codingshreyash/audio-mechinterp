@@ -69,6 +69,44 @@ def add_uniform_bins(value: torch.Tensor, rows: list[list[int]],
     return patched
 
 
+def require_matching_source_shapes(current: torch.Tensor, recipient_record: dict,
+                                   donor_record: dict, site: str) -> None:
+    shape = list(current.shape)
+    if (shape != recipient_record["source_shapes"][site]
+            or shape != donor_record["source_shapes"][site]):
+        raise ValueError("Donor/recipient full source tensor shapes differ")
+
+
+def projected_map_diagnostic(basis: torch.Tensor, jacobian: torch.Tensor,
+                             delta_bins: torch.Tensor,
+                             measured_terminal_delta: torch.Tensor,
+                             alpha: float) -> dict:
+    if (basis.shape != (2048, 16) or jacobian.shape[0:2] != (6, 16)
+            or delta_bins.shape != (6, jacobian.shape[-1])
+            or measured_terminal_delta.shape != (2048,)):
+        raise ValueError("FIT map diagnostic shape mismatch")
+    predicted_coordinates = torch.einsum("bkd,bd->k", jacobian, delta_bins) * alpha
+    measured_coordinates = basis.T @ measured_terminal_delta
+    predicted = basis @ predicted_coordinates
+    projected = basis @ measured_coordinates
+    actual_norm = float(measured_terminal_delta.norm())
+    projected_norm = float(projected.norm())
+    predicted_norm = float(predicted.norm())
+    return {
+        "predicted_terminal_delta": predicted,
+        "projected_measured_terminal_delta_norm": projected_norm,
+        "measured_terminal_delta_norm": actual_norm,
+        "rank16_capture_fraction": (projected_norm**2 / actual_norm**2
+                                    if actual_norm > 0 else None),
+        "projected_relative_error": (float((predicted - projected).norm())
+                                     / projected_norm if projected_norm > 0 else None),
+        "projected_cosine": (float(torch.dot(predicted_coordinates,
+                                             measured_coordinates)
+                                   / (predicted_norm * projected_norm))
+                             if predicted_norm > 0 and projected_norm > 0 else None),
+    }
+
+
 def clean_forward(model, batch, modules) -> tuple[dict, torch.Tensor]:
     captured = {}
     calls = {site: 0 for site in (*SITES, TARGET)}
@@ -273,6 +311,9 @@ def main() -> None:
         site_results = {}
         for site in SITES:
             rows = row_sets[site]
+            require_matching_source_shapes(
+                clean[site], stage1["records"][i], stage1["records"][donor_index], site
+            )
             if rows != stage1["records"][donor_index]["row_indices"][site]:
                 raise ValueError("Donor and recipient FIT row sets differ")
             current_means = torch.stack([
@@ -300,12 +341,27 @@ def main() -> None:
             final_logits = logits_from_residual(model, h_patch.to(model.device)).detach().float().cpu()
             if (final_logits - raw_logits).abs().max() > 1e-3:
                 raise ValueError("Terminal residual norm/head logits mismatch")
+            diagnostic = projected_map_diagnostic(
+                lens["basis"], lens["jacobians"][site], delta,
+                h_patch - h_clean, ALPHA,
+            )
+            predicted_logits = logits_from_residual(
+                model,
+                (h_clean + diagnostic["predicted_terminal_delta"]).to(model.device),
+            ).detach().float().cpu()
+            measured_v2 = prefix_score(raw_logits, v2_d, v2_r) - baseline_v2
+            predicted_v2 = prefix_score(predicted_logits, v2_d, v2_r) - baseline_v2
             site_results[site] = {
                 "delta_bins": delta,
                 "terminal_delta_per_alpha": (h_patch - h_clean) / ALPHA,
                 "zero_v2_scores": zero_scores,
-                "measured_v2_delta_score": prefix_score(raw_logits, v2_d, v2_r) - baseline_v2,
+                "measured_v2_delta_score": measured_v2,
+                "map_predicted_v2_delta_score": predicted_v2,
+                "map_absolute_v2_error": abs(predicted_v2 - measured_v2),
                 "measured_v1_delta_score": prefix_score(raw_logits, v1_d, v1_r) - baseline_v1,
+                "rank16_capture_fraction": diagnostic["rank16_capture_fraction"],
+                "projected_relative_error": diagnostic["projected_relative_error"],
+                "projected_cosine": diagnostic["projected_cosine"],
                 "source_rows": rows,
                 "source_shape": list(clean[site].shape),
                 "source_mean_vs_stage1_max_abs": source_mean_max_abs,
