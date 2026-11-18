@@ -1,0 +1,399 @@
+{
+  "status": "passed_independent_cpu_only_development_audit",
+  "run_dir": "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_dev_transfer_v1/20261118T1016Z",
+  "result_sha256": "1c43c22720237a703441854f4e8a7fb7f41fad62bacb1be7f72d4958452e6edd",
+  "meta_sha256": "2fac062d7ba5e21327d41939d8a93e5c0a90d5bfc89199adc9fac9d509a576c9",
+  "records": 48,
+  "directions": 96,
+  "captures": 384,
+  "generations": 4800,
+  "invalid_conditions": 0,
+  "teacher_forced_score_forwards": 9600,
+  "peak_checkpoint_mps_driver_bytes": 10680057856,
+  "resource_receipts": {
+    "invocations": 1,
+    "cumulative_seconds": 3911.3613245829474
+  },
+  "summary": {
+    "planned_directions": 96,
+    "clean_correct": 87,
+    "restoration_eligible": 87,
+    "blank_classes": {
+      "other": 84,
+      "malformed_surface": 12
+    },
+    "task_validity_gate": true,
+    "sites": {
+      "encoder31": {
+        "restore": {
+          "whole_word_success_of_96": 82,
+          "eligible_success_rate": 0.9425287356321839,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_96": {
+            "word_0": 0,
+            "word_1": 43,
+            "word_2": 12,
+            "word_3": 0
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 20
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 18
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 23
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 21
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 94,
+              "strict_wins_of_96": 94,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 80,
+              "strict_wins_of_96": 80,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_96": 84,
+              "strict_wins_of_96": 84,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "random": {
+              "valid_of_96": 89,
+              "strict_wins_of_96": 89,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_96": 83,
+          "eligible_success_rate": 0.9540229885057471,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_96": {
+            "word_0": 2,
+            "word_1": 73,
+            "word_2": 16,
+            "word_3": 1
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 21
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 22
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 22
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 18
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 43
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 41
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 42
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 4,
+            "post": 1,
+            "padding": 2,
+            "random": 6
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "random": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_96": {
+          "opposite": 84,
+          "other": 12
+        }
+      },
+      "projector": {
+        "restore": {
+          "whole_word_success_of_96": 82,
+          "eligible_success_rate": 0.9425287356321839,
+          "whole_word_effect_gate": true,
+          "word_quarter_success_of_96": {
+            "word_0": 0,
+            "word_1": 35,
+            "word_2": 13,
+            "word_3": 0
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 20
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 18
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 23
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 21
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 40
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 0,
+            "post": 0,
+            "padding": 0,
+            "random": 0
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 96,
+              "strict_wins_of_96": 96,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 76,
+              "strict_wins_of_96": 76,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            },
+            "padding": {
+              "valid_of_96": 81,
+              "strict_wins_of_96": 81,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            },
+            "random": {
+              "valid_of_96": 82,
+              "strict_wins_of_96": 82,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": false
+            }
+          },
+          "time_preference_gate": false
+        },
+        "loss": {
+          "whole_word_success_of_96": 84,
+          "eligible_success_rate": 0.9655172413793104,
+          "whole_word_effect_gate": false,
+          "word_quarter_success_of_96": {
+            "word_0": 0,
+            "word_1": 69,
+            "word_2": 16,
+            "word_3": 4
+          },
+          "subgroup_breakdown": {
+            "category": {
+              "animal": {
+                "planned": 24,
+                "whole_success": 21
+              },
+              "color": {
+                "planned": 24,
+                "whole_success": 21
+              },
+              "nature": {
+                "planned": 24,
+                "whole_success": 23
+              },
+              "object": {
+                "planned": 24,
+                "whole_success": 19
+              }
+            },
+            "voice": {
+              "kokoro": {
+                "planned": 48,
+                "whole_success": 43
+              },
+              "piper": {
+                "planned": 48,
+                "whole_success": 41
+              }
+            },
+            "template": {
+              "dev_hear": {
+                "planned": 48,
+                "whole_success": 42
+              },
+              "dev_listen": {
+                "planned": 48,
+                "whole_success": 42
+              }
+            }
+          },
+          "control_success_of_96": {
+            "pre": 12,
+            "post": 1,
+            "padding": 2,
+            "random": 56
+          },
+          "invalid_main_or_control_conditions": 0,
+          "score_comparisons": {
+            "pre": {
+              "valid_of_96": 92,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "post": {
+              "valid_of_96": 93,
+              "strict_wins_of_96": 93,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            },
+            "padding": {
+              "valid_of_96": 93,
+              "strict_wins_of_96": 92,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 95,
+              "passes": true
+            },
+            "random": {
+              "valid_of_96": 93,
+              "strict_wins_of_96": 93,
+              "finite_score_only_pairs_of_96": 96,
+              "finite_score_only_wins_of_96": 96,
+              "passes": true
+            }
+          },
+          "time_preference_gate": true
+        },
+        "opposite_word_control_classes_of_96": {
+          "opposite": 84,
+          "other": 12
+        }
+      }
+    },
+    "development_advance_gate": false
+  },
+  "limits": "Saved scalar scores and hidden-state hashes are audited without a second model forward"
+}
