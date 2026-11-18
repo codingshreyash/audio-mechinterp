@@ -1,0 +1,92 @@
+{
+  "schema": "voxtral_old_fit_grad_mode_parity_failed_attempt_manifest_v1",
+  "status": "frozen_failed_before_diagnostic_forwards_or_saved_result_no_retry",
+  "attempt_id": "20261118T151548690094Z",
+  "launch_start_utc": "2026-11-18T15:15:56.838487+00:00",
+  "worker_claim_utc": "2026-11-18T15:16:05.415337+00:00",
+  "launch_finish_utc": "2026-11-18T15:16:25.289181+00:00",
+  "freeze_sha256": "70601c9d95da4553237a48af258044db25a2e9fc70c40eda9e44a3f745cde06a",
+  "freeze_independent_review_sha256": "0f6bd05f8a10263e504a844cef39167f828a4311fa752281caa87f2866690b08",
+  "runner_sha256": "1f92935f219b6b6a86c5307ec57ad69ddabcb1c0de2387e8c2c99b49888c3d91",
+  "launch_gate_sha256": "93bd26d235b6a60eb296b951850f40ac41d06f29fb57ab5ffce906e32cebfa59",
+  "raw_receipts_commit": "9b8b4d5306376fa5e2660e41a14709e45efa9ad5",
+  "launcher_status": "diagnostic_launch_failed_no_retry",
+  "worker_returncode": 1,
+  "auditor_returncode": null,
+  "worker_error_type": "ValueError",
+  "worker_error": "Old-FIT batch is not a tensor mapping",
+  "last_progress_phase": "model_loaded",
+  "observed_full_forwards": 0,
+  "observed_direct_forwards": 0,
+  "result_present": false,
+  "audit_present": false,
+  "tensor_sidecar_present": false,
+  "parent_model_work_elapsed_seconds": 28.450194334145635,
+  "worker_elapsed_seconds": 18.96985283307731,
+  "prior_model_work_seconds": 288.0265444586985,
+  "stage_b_failed_attempt_seconds": 41.18471045792103,
+  "raw_file_count": 10,
+  "total_raw_bytes": 163803,
+  "files": [
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_launch_v1/reservation.json",
+      "sha256": "2f9bb2adfcbfcafacf33a8c18c4c7a4a817fa9f62f61a1a20fe0299ec8ed5596",
+      "bytes": 176,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_launch_v1/20261118T151548690094Z/launch_start.json",
+      "sha256": "e96056e9bedf642d656f254c6ec3c270ecddca7c25d3a50c1dbfd489cbb52462",
+      "bytes": 1119,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_launch_v1/20261118T151548690094Z/worker_claim.json",
+      "sha256": "013e9841a944a238b6d95da646bc49dbb9da5e1f3a487ecfb15fb6bac6a15f15",
+      "bytes": 232,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_launch_v1/20261118T151548690094Z/launch_finish.json",
+      "sha256": "2a8cb9d8ddb903e7bd154c8a1bbba82b64fa44c6d02d85b8d8e744792bd27047",
+      "bytes": 826,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_launch_v1/20261118T151548690094Z/worker_stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_launch_v1/20261118T151548690094Z/worker_stderr.txt",
+      "sha256": "87c188cf5487c1610d66495021d3b134778d1f4f5b8274f0523d1ffc657b0ea5",
+      "bytes": 1312,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_v1/20261118T151548690094Z/meta.json",
+      "sha256": "b8818b017fc08c22e6d1693c10adf568a2a4c60acf53ceae3c99752a4c3468e1",
+      "bytes": 2889,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_v1/20261118T151548690094Z/progress.jsonl",
+      "sha256": "0f26b061ff7776bf28933a3be238bed771bcdc7f4bc064cf4a88cea6eba4643f",
+      "bytes": 215,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_v1/20261118T151548690094Z/error.json",
+      "sha256": "80a64e0a159f09d26d006ae0be1904f4c9fc6828e8ec59033d4ad3f9846192dc",
+      "bytes": 284,
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_mode_parity_v1/20261118T151548690094Z/model_layout.json",
+      "sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad",
+      "bytes": 156750,
+      "git_committed": true
+    }
+  ]
+}
