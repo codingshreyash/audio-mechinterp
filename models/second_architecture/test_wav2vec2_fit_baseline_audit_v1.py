@@ -220,6 +220,25 @@ class Wav2Vec2BaselineAuditTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "trace values differ"):
                     audit.validate_trace(changed, output, baselines, cases)
 
+    def test_completion_load_report_rejects_missing_or_extra_weight_keys(self) -> None:
+        receipt = {"masking_load_note": {"checkpoint_key_absent": True}}
+        complete = {"load_info": {
+            "missing_keys": ["wav2vec2.masked_spec_embed"],
+            "unexpected_keys": [], "mismatched_keys": [], "error_msgs": [],
+        }}
+        audit.validate_completion_load(receipt, complete)
+        for field, changed_value in (
+            ("missing_keys", []),
+            ("missing_keys", ["wav2vec2.masked_spec_embed", "lm_head.weight"]),
+            ("unexpected_keys", ["unexpected.parameter"]),
+            ("mismatched_keys", ["lm_head.weight"]),
+            ("error_msgs", ["load failed"]),
+        ):
+            changed = copy.deepcopy(complete)
+            changed["load_info"][field] = changed_value
+            with self.assertRaisesRegex(ValueError, "checkpoint load report"):
+                audit.validate_completion_load(receipt, changed)
+
 
 if __name__ == "__main__":
     unittest.main()

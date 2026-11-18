@@ -425,6 +425,21 @@ def audit_preflight(record: dict[str, Any], expected_path: Path,
             and assets["tokenizer_config.json"] == TOKENIZER_CONFIG_SHA
             and assets["vocab.json"] == VOCAB_SHA,
             "pinned tokenizer assets differ")
+    if "masking_load_note" in receipt:
+        note = {"expected_missing_key": "wav2vec2.masked_spec_embed",
+                "checkpoint_key_absent": True,
+                "inactive_condition": "eval mode; mask_time_indices=None; mask_feature_prob=0.0",
+                "loading_info_gate": "exactly this missing key; no unexpected/mismatched/error keys"}
+        require(receipt["masking_load_note"] == note,
+                "preflight masking load note differs")
+        config = parse_json((snapshot / "config.json").read_text())
+        require(config.get("mask_time_prob") == 0.05
+                and config.get("mask_feature_prob") == 0.0,
+                "pinned masking configuration differs")
+        from safetensors import safe_open
+        with safe_open(snapshot / "model.safetensors", framework="pt", device="cpu") as tensor_file:
+            require("wav2vec2.masked_spec_embed" not in tensor_file.keys(),
+                    "masking checkpoint key unexpectedly present")
     source_hashes = receipt.get("source_hashes")
     require(isinstance(source_hashes, dict), "installed source hash inventory absent")
     require(source_hashes.get("transformers.models.wav2vec2.feature_extraction_wav2vec2")
@@ -488,6 +503,14 @@ def audit_preflight(record: dict[str, Any], expected_path: Path,
             and limits.get("max_output_bytes") == MAX_OUTPUT_BYTES,
             "preflight resource limits differ")
     return receipt
+
+
+def validate_completion_load(receipt: dict[str, Any], complete: dict[str, Any]) -> None:
+    require(receipt.get("masking_load_note") is not None
+            and complete.get("load_info") == {
+                "missing_keys": ["wav2vec2.masked_spec_embed"],
+                "unexpected_keys": [], "mismatched_keys": [], "error_msgs": [],
+            }, "checkpoint load report differs")
 
 
 def audit(output: Path, expected_preflight: Path,
@@ -564,6 +587,7 @@ def audit(output: Path, expected_preflight: Path,
             "trace coverage differs")
     complete = rows[-1]
     require(complete.get("schema") == "wav2vec2_fit_baseline_run_v1", "completion schema differs")
+    validate_completion_load(receipt, complete)
     require(isinstance(complete.get("elapsed_seconds"), (int, float))
             and 0 <= complete["elapsed_seconds"] <= MAX_SECONDS
             and type(complete.get("rss_bytes")) is int and 0 < complete["rss_bytes"] <= MAX_RSS,
