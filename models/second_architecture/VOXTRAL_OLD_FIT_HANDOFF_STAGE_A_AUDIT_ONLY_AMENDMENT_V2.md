@@ -1,0 +1,18 @@
+# Stage-A audit-only amendment v2
+
+18 November 2026. Written after the BF16 runner completed and the frozen v1 auditor rejected the saved parameter-layout device spelling, and before any FP32 Stage-A or Stage-B continuation. This is an amendment to the **CPU audit and continuation gate only**. It does not change the frozen estimand, cases, model revision, runner, native hooks, probe seed, alpha grid, arithmetic mode, thresholds, resource caps, raw sidecars, or the no-retry rule in `VOXTRAL_OLD_FIT_NUMERICAL_HANDOFF_PROSPECTIVE_V1.md`.
+
+## Reason and permitted change
+
+The original BF16 launch at `runs/voxtral_old_fit_handoff_stage_a_launch_v1/bf16/20261118T131755298331Z` remains `launch_failed`: its v1 auditor returned 1. The runner returned 0 and left an immutable completed raw result with SHA-256 `f7b3906aff2b1bb9c7b8fb818402982a9020d8507fcba9cf51cc58821dddd325`. The 762 parameter records in `model_layout.json` serialize the MPS device as `"mps:0"`; the v1 auditor accepts only `"mps"`. The runner's `parameter_layout` helper explicitly validates MPS device *type*, then serializes `str(param.device)`. See `VOXTRAL_OLD_FIT_HANDOFF_STAGE_A_BF16_AUDIT_DIAGNOSIS_V1.md` for the read-only diagnostic and limits.
+
+`voxtral_old_fit_handoff_stage_a_audit_v2.py` is a copy of the frozen v1 auditor with exactly one validation predicate broadened: a parameter-row device string may equal `"mps"` or `"mps:0"`. Other strings, including `"cpu"` and `"mps:1"`, remain invalid. The aggregate MPS dtype/device counts, every parameter's expected dtype, number and shape checks, all raw hashes, progress checks, saved-tensor numerical checks, and audit scope remain identical. `test_voxtral_old_fit_handoff_stage_a_audit_v2.py` exercises the two accepted spellings, rejected spellings, and selected unchanged layout checks without model inference. The old v1 auditor and its review/freeze remain intact.
+
+## Required independent process
+
+1. Independently review the exact v2 auditor diff against the frozen v1 auditor and the CPU regression. Record their SHA-256 values and a source-review commit. The amended code cannot be treated as preapproved by the original v1 review.
+2. Run v2 as a **posthoc CPU audit** against the original, unchanged BF16 `runner/` directory. Publish a separate content-bound receipt recording the original failed launch ID/status; original result, details, probes, and layout hashes; v1 and v2 auditor hashes; v2 audit output hash; review commit; and the scope limit that saved-tensor arithmetic is checked without attesting model execution. Do not modify the original launch, result, raw sidecars, or v1 audit stderr.
+3. Independently review that posthoc receipt and the exact model-output interpretation before treating the BF16 raw result as audited evidence. The amended audit success is a new fact about the preserved bytes, **not** a retroactive success of the original launch.
+4. Before FP32 or Stage B model execution, make an externally reviewed new continuation freeze/gate that pins this amendment, v2 auditor/review, posthoc audit receipt/review, the unchanged original BF16 attempt, the existing runner/native/protocol sources, and the original cumulative model-work accounting. It must stop if any bound hash or required check differs. It must carry forward the original `launch_failed` status and the protocol's no-retry rule. FP32 remains a fresh process under its original fixed Stage-A plan; Stage B remains conditional on both Stage-A arms meeting the original source, hook, and parity criteria.
+
+Until all applicable steps are complete, no FP32 or Stage B continuation is admitted by this document.
