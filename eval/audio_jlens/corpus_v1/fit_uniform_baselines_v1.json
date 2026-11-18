@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "script_sha256": "b20a0ce98d123c864bdd12480e377d3c419ecc27aed1a1a54a909d89a6c94567",
+    "protocol_sha256": "f6bbc9b61fb846ee1ca586ab4863d79f43ecc43d1d5a66c9fb6c38653077564a",
+    "calibration_sha256": "76085f0dab8f37b6052024b582ff34533cac3d1c579b27b39a631c536d9cd110",
+    "calibration_report_sha256": "b130aa4af85a807671f537aaabbaddf922bc8f2632d8721c9188c2b6aa8e7bfa",
+    "lens_sha256": "fef84a20f437c37ca665e4026bb3645ccd558e549c7ffe2adff20e6a867ba12c",
+    "gamma_grid": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "alpha_trained": 0.025,
+    "n_fit": 48,
+    "n_fit_pairs": 12
+  },
+  "status": "fit_only_comparators_no_development_or_test",
+  "baseline_sha256": "d84c358d2756aa7531cd8319884f14085d68c8e7fe84d3d85737eefd606385cf",
+  "chosen_gamma": {
+    "encoder31": {
+      "global": 0.1,
+      "six_bin": 0.0001
+    },
+    "connector": {
+      "global": 0.1,
+      "six_bin": 0.0001
+    }
+  },
+  "fit_pair_cv_rmse": {
+    "encoder31": {
+      "global": 7.641130667080783,
+      "six_bin": 7.678474629472852
+    },
+    "connector": {
+      "global": 9.988653972624688,
+      "six_bin": 9.670242923505228
+    }
+  },
+  "numerical_floor_v2_by_site": {
+    "encoder31": 0.0001,
+    "connector": 0.0001
+  },
+  "cpu_peak_rss_bytes": 304447488
+}

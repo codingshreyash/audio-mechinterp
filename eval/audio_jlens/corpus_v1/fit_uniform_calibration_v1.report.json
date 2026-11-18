@@ -1,0 +1,53 @@
+{
+  "metadata": {
+    "status": "fit_only_uniform_calibration_no_development_or_test",
+    "script_sha256": "62af1fa55038863e80365901c6b9b146a680d98aa67e0060558cc5c06ca40ef4",
+    "protocol_sha256": "f6bbc9b61fb846ee1ca586ab4863d79f43ecc43d1d5a66c9fb6c38653077564a",
+    "scoring_v2_sha256": "e7ea18cd0d5e2638bec64b8733049a5a2754ecd674080d93766db8409b46dd9b",
+    "lens_sha256": "fef84a20f437c37ca665e4026bb3645ccd558e549c7ffe2adff20e6a867ba12c",
+    "stage1_sha256": "8276aca0e24fcaa1397693e0353f9c7ee59190036f3516c0c13ebcbc6208b641",
+    "fit_report_sha256": "bd5b281dc8eb0e6b2653f496fe0e4901df9cab035b975415dde0c00a686b498e",
+    "fit_metadata": {
+      "purpose": "FIT-only rank16 corpus-average rectangular audio transport",
+      "script_sha256": "cd02101b6dcb7a62a49e19814e6e3eb65e7e9ec7b4f1061f017ca5f5e211ffa3",
+      "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+      "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+      "scoring_v2_sha256": "e7ea18cd0d5e2638bec64b8733049a5a2754ecd674080d93766db8409b46dd9b",
+      "proposal_sha256": "78b972e7f40347e82341853369ee894b1cb9d90e7f6207bd1f13d81ee665a12d",
+      "cases_sha256": "90dec22441194a9db1f39f163857ef1a593641a7d50f6bac3c667c8e70d4493f",
+      "model_id": "Qwen/Qwen2.5-Omni-3B",
+      "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+      "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+      "target": "text.residual.35",
+      "sites": [
+        "encoder31",
+        "connector"
+      ],
+      "rank": 16,
+      "n_fit": 48,
+      "basis_definition": "uncentered SVD of 24 undirected natural-audio pair/voice terminal-state differences; first fit template only",
+      "svd_relative_rank_tolerance": 1e-06,
+      "grad_vs_no_grad_terminal_max_abs_tolerance": 0.001,
+      "site_definition": "post-encoder31 and post-connector output; terminal post-text-block35 prompt-last",
+      "bin_definition": "four equal quarters of frozen swapped-word sample interval plus one quarter before and after; nominal row-center tie earlier",
+      "averaging": "each of 48 contexts equal weight; four contexts per lexical pair, so pairs equal weight",
+      "dtype": "float32",
+      "device": "mps",
+      "max_mps_driver_bytes": 32212254720
+    },
+    "alpha": 0.025,
+    "zero_repeats": 3,
+    "zero_drift_limit": 0.0001,
+    "max_mps_driver_bytes": 32212254720
+  },
+  "summary": {
+    "planned_fit_contexts": 48,
+    "completed_fit_contexts": 48,
+    "numerical_floor_v2_by_site": {
+      "encoder31": 0.0001,
+      "connector": 0.0001
+    }
+  },
+  "raw_sha256": "76085f0dab8f37b6052024b582ff34533cac3d1c579b27b39a631c536d9cd110",
+  "memory_sha256": "97fedd8c0fb00c6718efa4fb3275f212cb1c9b7bcb339b8d38a137664eb1e722"
+}
