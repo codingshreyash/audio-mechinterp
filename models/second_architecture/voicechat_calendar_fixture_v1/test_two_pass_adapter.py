@@ -4,13 +4,17 @@ from __future__ import annotations
 
 import json
 import hashlib
+import hmac
 import tempfile
 import unittest
+import wave
 from pathlib import Path
 
 from models.second_architecture.voicechat_calendar_fixture_v1.two_pass_adapter import (
+    load_bound_wav,
     run_two_pass,
 )
+from models.second_architecture.voicechat_calendar_fixture_v1.calendar_stub import grant_signing_bytes
 
 
 def call_position(raw: str, start: int = 7, end: int = 12) -> dict:
@@ -67,7 +71,8 @@ class AdapterTests(unittest.TestCase):
         self.wav = Path(self.temp.name) / "source.wav"
         self.wav.write_bytes(b"source-only-fake-bytes")
         self.model = FakeModel()
-        self.qa_receipt = {
+        template = Path(__file__).with_name("qa_receipt_template.json")
+        self.qa_receipt = {**json.loads(template.read_text(encoding="ascii")), **{
             "fixture_version": "voicechat_calendar_fixture_v1",
             "case_id": "A", "script_exact": "Please list my meetings for tomorrow.",
             "final_wav_path": str(self.wav),
@@ -75,17 +80,27 @@ class AdapterTests(unittest.TestCase):
             "sample_rate_hz": 16000, "channels": 1, "sample_width_bytes": 2,
             "appended_zero_frames": 80000, "include_before_inference": True,
             "listener_clear": True, "case_semantics_preserved": True,
+            "target_date_understood": True, "exclusion_reason": None,
             "voice_id": "fake", "listener_id": "test-listener",
+            "source_kind": "fake", "raw_render_path": "fake-source.wav",
+            "raw_render_sha256": "0" * 64,
+            "renderer_version_or_recording_device": "fake-source-test",
+            "final_sample_count": 81000, "final_exact_zero_tail_frames": 80000,
             "listener_heard_transcript": "Please list my meetings for tomorrow.",
             "independent_asr_model": "fake-asr", "independent_asr_transcript": "Please list my meetings for tomorrow.",
             "qa_completed_at_utc": "2026-11-18T12:00:00Z", "external_audit_id": "test-only",
             "external_reviewer_id": "test-reviewer",
-        }
+        }}
+        self.receipt_path = Path(self.temp.name) / "receipt.json"
+        self.write_receipt()
+
+    def write_receipt(self):
+        self.receipt_path.write_bytes(json.dumps(self.qa_receipt, sort_keys=True).encode())
 
     def run_adapter(self, runner):
         return run_two_pass(
             self.model, case_id="A", wav_path=self.wav,
-            qa_receipt=self.qa_receipt,
+            qa_receipt_path=self.receipt_path,
             input_signal="fake-signal", input_signal_lens=[10],
             prompt_tokens=[1], prompt_token_lens=[1],
             inference_runner=runner,
@@ -164,9 +179,98 @@ class AdapterTests(unittest.TestCase):
     def test_missing_or_mismatched_qa_stops_before_inference(self):
         runner = FakeRunner([], [])
         self.qa_receipt["include_before_inference"] = False
+        self.write_receipt()
         with self.assertRaisesRegex(ValueError, "include_before_inference"):
             self.run_adapter(runner)
         self.assertEqual(runner.calls, [])
+
+    def test_bound_loader_uses_audited_pcm_and_checks_actual_tail(self):
+        with wave.open(str(self.wav), "wb") as output:
+            output.setnchannels(1)
+            output.setsampwidth(2)
+            output.setframerate(16000)
+            output.writeframes(b"\x01\x00" + b"\x00\x00" * 80000)
+        self.qa_receipt["final_wav_sha256"] = hashlib.sha256(self.wav.read_bytes()).hexdigest()
+        self.qa_receipt["final_sample_count"] = 80001
+        self.qa_receipt["final_exact_zero_tail_frames"] = 80000
+        self.write_receipt()
+        loaded = []
+
+        def fake_official_loader(path, device):
+            loaded.append((path, device))
+            return (list(range(80001)), "loaded-from-this-file", [80001])
+
+        wav_1d, signal, lengths = load_bound_wav(
+            self.wav, self.receipt_path, case_id="A", confirmation_state=None,
+            loader=fake_official_loader, device="cpu",
+        )
+        self.assertEqual(loaded, [(str(self.wav), "cpu")])
+        self.assertEqual(signal, "loaded-from-this-file")
+        self.assertEqual(lengths, [80001])
+        self.assertEqual(len(wav_1d), 80001)
+        self.qa_receipt["final_exact_zero_tail_frames"] = 80001
+        self.write_receipt()
+        with self.assertRaisesRegex(ValueError, "exact zero tail"):
+            load_bound_wav(self.wav, self.receipt_path, case_id="A", confirmation_state=None,
+                           loader=fake_official_loader, device="cpu")
+        self.assertEqual(len(loaded), 1)
+
+    def test_c_signed_grant_must_match_exact_receipt_bytes_before_model_call(self):
+        self.qa_receipt["case_id"] = "C"
+        self.qa_receipt["script_exact"] = (
+            "Please cancel the Design Review tomorrow. Confirm cancel Design Review."
+        )
+        self.qa_receipt["design_review_title_or_id_clear"] = True
+        self.qa_receipt["confirmation_phrase_heard_exactly"] = True
+        self.qa_receipt["external_controller_id"] = "external-test-controller"
+        self.write_receipt()
+        key = b"k" * 32
+        grant = {
+            "grant_id": "fake-grant", "controller_id": "external-test-controller",
+            "case_id": "C", "source_wav_sha256": hashlib.sha256(self.wav.read_bytes()).hexdigest(),
+            "qa_receipt_sha256": "f" * 64,
+            "authorized_date": "2026-11-19", "authorized_event_ids": ["DR19"],
+        }
+        grant["signature_hmac_sha256"] = hmac.new(key, grant_signing_bytes(grant), hashlib.sha256).hexdigest()
+        raw = '{"name":"cancel_calendar_events","arguments":{"date":"2026-11-19","event_ids":["DR19"],"confirmed":true}}'
+        runner = FakeRunner([call_position(raw)], [])
+        with self.assertRaisesRegex(ValueError, "does not bind the exact QA receipt"):
+            run_two_pass(self.model, case_id="C", wav_path=self.wav,
+                         qa_receipt_path=self.receipt_path,
+                         input_signal="fake-signal", input_signal_lens=[10],
+                         prompt_tokens=[1], prompt_token_lens=[1],
+                         confirmation_state=grant, controller_key=key,
+                         trusted_controller_id="external-test-controller",
+                         inference_runner=runner,
+                         tensor_builder=lambda values, device: values)
+        self.assertEqual(runner.calls, [])
+
+        grant["qa_receipt_sha256"] = hashlib.sha256(self.receipt_path.read_bytes()).hexdigest()
+        grant["signature_hmac_sha256"] = hmac.new(key, grant_signing_bytes(grant), hashlib.sha256).hexdigest()
+        trace = run_two_pass(self.model, case_id="C", wav_path=self.wav,
+                             qa_receipt_path=self.receipt_path,
+                             input_signal="fake-signal", input_signal_lens=[10],
+                             prompt_tokens=[1], prompt_token_lens=[1],
+                             confirmation_state=grant, controller_key=key,
+                             trusted_controller_id="external-test-controller",
+                             inference_runner=runner,
+                             tensor_builder=lambda values, device: values)
+        self.assertEqual(trace["replay"]["response_selector"]["response"]["status"],
+                         "authorized_dry_run")
+        self.assertFalse(trace["replay"]["response_selector"]["response"]["executed"])
+        self.qa_receipt["listener_heard_transcript"] += " (tampered after signing)"
+        self.write_receipt()
+        tampered_runner = FakeRunner([call_position(raw)], [])
+        with self.assertRaisesRegex(ValueError, "does not bind the exact QA receipt"):
+            run_two_pass(self.model, case_id="C", wav_path=self.wav,
+                         qa_receipt_path=self.receipt_path,
+                         input_signal="fake-signal", input_signal_lens=[10],
+                         prompt_tokens=[1], prompt_token_lens=[1],
+                         confirmation_state=grant, controller_key=key,
+                         trusted_controller_id="external-test-controller",
+                         inference_runner=tampered_runner,
+                         tensor_builder=lambda values, device: values)
+        self.assertEqual(tampered_runner.calls, [])
 
 
 if __name__ == "__main__":

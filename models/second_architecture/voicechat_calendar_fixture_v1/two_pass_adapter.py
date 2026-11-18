@@ -11,6 +11,8 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import shutil
+import wave
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable
@@ -24,6 +26,7 @@ from models.second_architecture.voicechat_calendar_fixture_v1.calendar_stub impo
 NEMO_SPEECH_REVISION = "097dfe9e2f55baf653b83035868bdc89849f1b47"
 OFFICIAL_HELPER_SHA256 = "ebde701baec12a014443eac36262a6af7a7a62b3e052f1c4a387db6aaad8da44"
 OFFICIAL_TEMPLATE_SHA256 = "8b4f88e9f0052c0dfc19896b9d6a84821f68f84a1049406908e1f664155edcc9"
+FIXTURE_DIR = Path(__file__).resolve().parent
 
 
 def sha256_file(path: str | Path) -> str:
@@ -45,6 +48,9 @@ def validate_qa_receipt(receipt: dict[str, Any], *, case_id: str,
         raise ValueError(f"Unknown fixture case: {case_id}")
     if not isinstance(receipt, dict):
         raise ValueError("Independent audio QA receipt is required")
+    template_fields = set(json.loads((FIXTURE_DIR / "qa_receipt_template.json").read_text(encoding="ascii")))
+    if set(receipt) != template_fields:
+        raise ValueError("Audio QA receipt does not match the complete fixture template")
     required_equal = {
         "fixture_version": "voicechat_calendar_fixture_v1",
         "case_id": case_id,
@@ -57,20 +63,90 @@ def validate_qa_receipt(receipt: dict[str, Any], *, case_id: str,
         "include_before_inference": True,
         "listener_clear": True,
         "case_semantics_preserved": True,
+        "exclusion_reason": None,
     }
     for key, expected in required_equal.items():
         if receipt.get(key) != expected:
             raise ValueError(f"Audio QA field {key!r} is missing or mismatched")
+    if case_id != "D" and receipt.get("target_date_understood") is not True:
+        raise ValueError("Audio QA did not establish the requested calendar date")
     if not isinstance(receipt.get("final_wav_path"), str) or \
             Path(receipt["final_wav_path"]).resolve() != Path(wav_path).resolve():
         raise ValueError("Audio QA path does not match submitted WAV")
-    for key in ("voice_id", "listener_id", "listener_heard_transcript",
+    for key in ("voice_id", "source_kind", "raw_render_path", "raw_render_sha256",
+                "renderer_version_or_recording_device", "listener_id", "listener_heard_transcript",
                 "independent_asr_model", "independent_asr_transcript",
                 "qa_completed_at_utc", "external_audit_id", "external_reviewer_id"):
         if not isinstance(receipt.get(key), str) or not receipt[key].strip():
             raise ValueError(f"Audio QA field {key!r} is required")
+    if not isinstance(receipt.get("final_sample_count"), int) or \
+            receipt["final_sample_count"] <= 80000 or \
+            not isinstance(receipt.get("final_exact_zero_tail_frames"), int) or \
+            receipt["final_exact_zero_tail_frames"] < 80000:
+        raise ValueError("Audio QA sample count or zero tail is missing")
+    if case_id in {"B", "C", "B_literal"} and \
+            receipt.get("design_review_title_or_id_clear") is not True:
+        raise ValueError("Audio QA did not establish the named event")
     if case_id == "C" and receipt.get("confirmation_phrase_heard_exactly") is not True:
         raise ValueError("C audio lacks the independently heard confirmation phrase")
+
+
+def read_bound_qa_receipt(qa_receipt_path: str | Path, *, case_id: str,
+                          wav_path: str | Path, observed_sha256: str,
+                          confirmation_state: dict[str, Any] | None) -> tuple[dict[str, Any], bytes, str]:
+    """Hash the exact supplied receipt bytes; reject a misbound C grant."""
+    path = Path(qa_receipt_path)
+    receipt_bytes = path.read_bytes()
+    receipt_sha256 = hashlib.sha256(receipt_bytes).hexdigest()
+    try:
+        receipt = json.loads(receipt_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"Invalid external audio QA receipt: {error}") from error
+    validate_qa_receipt(receipt, case_id=case_id, wav_path=wav_path,
+                        observed_sha256=observed_sha256)
+    if case_id == "C" and confirmation_state is not None:
+        if not isinstance(confirmation_state, dict) or \
+                confirmation_state.get("qa_receipt_sha256") != receipt_sha256:
+            raise ValueError("Signed C grant does not bind the exact QA receipt bytes")
+        if receipt.get("external_controller_id") != confirmation_state.get("controller_id"):
+            raise ValueError("Signed C controller differs from QA receipt controller")
+    if path.read_bytes() != receipt_bytes:
+        raise RuntimeError("Audio QA receipt changed during validation")
+    return receipt, receipt_bytes, receipt_sha256
+
+
+def load_bound_wav(wav_path: str | Path, qa_receipt_path: str | Path, *,
+                   case_id: str, confirmation_state: dict[str, Any] | None,
+                   loader: Callable[..., tuple[Any, Any, Any]],
+                   device: Any) -> tuple[Any, Any, Any]:
+    """Build the model signal only from the exact externally audited PCM WAV.
+
+    The actual launcher passes the pinned helper's ``load_wav_16k_mono`` as
+    ``loader``. A caller cannot supply an unrelated signal tensor here.
+    """
+    before = sha256_file(wav_path)
+    receipt, receipt_bytes, _ = read_bound_qa_receipt(
+        qa_receipt_path, case_id=case_id, wav_path=wav_path,
+        observed_sha256=before, confirmation_state=confirmation_state,
+    )
+    with wave.open(str(wav_path), "rb") as wav:
+        if (wav.getnchannels(), wav.getframerate(), wav.getsampwidth(),
+                wav.getcomptype()) != (1, 16000, 2, "NONE"):
+            raise ValueError("Submitted WAV is not mono 16-kHz PCM16")
+        if wav.getnframes() != receipt["final_sample_count"]:
+            raise ValueError("Submitted WAV frame count differs from QA")
+        samples = wav.readframes(wav.getnframes())
+    zero_tail = 0
+    for pos in range(len(samples) - 2, -1, -2):
+        if samples[pos:pos + 2] != b"\0\0":
+            break
+        zero_tail += 1
+    if zero_tail != receipt["final_exact_zero_tail_frames"]:
+        raise ValueError("Submitted WAV exact zero tail differs from QA")
+    wav_1d, input_signal, input_signal_lens = loader(str(wav_path), device=device)
+    if sha256_file(wav_path) != before or Path(qa_receipt_path).read_bytes() != receipt_bytes:
+        raise RuntimeError("WAV or QA receipt changed while loading the model signal")
+    return wav_1d, input_signal, input_signal_lens
 
 
 def _clean_call_text(call_text: str) -> str:
@@ -207,7 +283,7 @@ def run_two_pass(
     *,
     case_id: str,
     wav_path: str | Path,
-    qa_receipt: dict[str, Any],
+    qa_receipt_path: str | Path,
     input_signal: Any,
     input_signal_lens: Any,
     prompt_tokens: Any,
@@ -228,8 +304,10 @@ def run_two_pass(
     The optional callback can persist each unmodified result before pass 2.
     """
     source_wav_sha256 = sha256_file(wav_path)
-    validate_qa_receipt(qa_receipt, case_id=case_id, wav_path=wav_path,
-                        observed_sha256=source_wav_sha256)
+    _qa_receipt, qa_receipt_bytes, qa_receipt_sha256 = read_bound_qa_receipt(
+        qa_receipt_path, case_id=case_id, wav_path=wav_path,
+        observed_sha256=source_wav_sha256, confirmation_state=confirmation_state,
+    )
     if hasattr(input_signal, "shape") and input_signal.shape[0] != 1:
         raise ValueError("This adapter requires batch size one")
     tokenizer = model.stt_model.tokenizer
@@ -251,6 +329,8 @@ def run_two_pass(
     selected = stock["calls"][0] if stock["calls"] else None
     replay = None
     fc_kwargs: dict[str, Any] = {}
+    if Path(qa_receipt_path).read_bytes() != qa_receipt_bytes:
+        raise RuntimeError("Audio QA receipt changed before response selection")
 
     if first is not None and selected is not None and stock["call_token_ids"]:
         verdict = dispatch(
@@ -321,10 +401,15 @@ def run_two_pass(
 
     if sha256_file(wav_path) != source_wav_sha256:
         raise RuntimeError("Input WAV changed during two-pass inference")
+    if Path(qa_receipt_path).read_bytes() != qa_receipt_bytes:
+        raise RuntimeError("Audio QA receipt changed during two-pass inference")
     return {
         "source": {"nemo_speech_revision": NEMO_SPEECH_REVISION,
                    "case_id": case_id, "wav_path": str(wav_path),
-                   "source_wav_sha256": source_wav_sha256},
+                   "source_wav_sha256": source_wav_sha256,
+                   "qa_receipt_path": str(qa_receipt_path),
+                   "qa_receipt_sha256": qa_receipt_sha256},
+        "qa_receipt_exact_bytes": qa_receipt_bytes,
         "pass1": {"raw_result": pass1_result, "codec_codes_per_step": pass1_codes,
                   "all_extracted_positions": positions1, "stock_first_parse": stock},
         "replay": replay,
@@ -342,6 +427,11 @@ def save_trace(trace: dict[str, Any], output_dir: str | Path) -> dict[str, str]:
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=False)
     paths = {}
+    receipt_path = out / "qa_receipt_exact.json"
+    receipt_path.write_bytes(trace["qa_receipt_exact_bytes"])
+    if sha256_file(receipt_path) != trace["source"]["qa_receipt_sha256"]:
+        raise RuntimeError("Persisted QA receipt differs from signed bytes")
+    paths["qa_receipt_exact"] = str(receipt_path)
     for label in ("pass1", "pass2"):
         path = out / f"{label}_raw.pt"
         torch.save({"result": trace[label]["raw_result"],
@@ -357,3 +447,87 @@ def save_trace(trace: dict[str, Any], output_dir: str | Path) -> dict[str, str]:
     audit_path.write_text(json.dumps(audit, indent=2, ensure_ascii=True, default=str) + "\n")
     paths["audit"] = str(audit_path)
     return paths
+
+
+def run_live_case_from_audited_wav(
+    model: Any,
+    *,
+    case_id: str,
+    wav_path: str | Path,
+    qa_receipt_path: str | Path,
+    template_path: str | Path,
+    output_dir: str | Path,
+    device: Any = "cuda",
+    confirmation_state: dict[str, Any] | None = None,
+    controller_key: bytes | None = None,
+    trusted_controller_id: str | None = None,
+) -> dict[str, Any]:
+    """Future live entry point with input, prompt, and immediate-snapshot gates.
+
+    This function is implemented but has not been invoked with a real model.
+    Independent source review and external WAV QA are prerequisites.
+    """
+    import torch
+    from nemo.collections.speechlm2.inference.utils import offline_voicechat as official
+
+    if sha256_file(official.__file__) != OFFICIAL_HELPER_SHA256:
+        raise RuntimeError("Loaded NeMo offline helper differs from pinned source")
+    if sha256_file(template_path) != OFFICIAL_TEMPLATE_SHA256:
+        raise RuntimeError("Function-call template differs from pinned source")
+
+    # Validate the externally reviewed artifact before the first model call.
+    wav_1d, input_signal, input_signal_lens = load_bound_wav(
+        wav_path, qa_receipt_path, case_id=case_id,
+        confirmation_state=confirmation_state,
+        loader=official.load_wav_16k_mono, device=device,
+    )
+    system_bytes = (FIXTURE_DIR / "system_message.txt").read_bytes()
+    tools_bytes = (FIXTURE_DIR / "tools.json").read_bytes()
+    system_message = system_bytes.decode("ascii")
+    tools = json.loads(tools_bytes.decode("ascii"))
+    prompt = official.render_fc_system_prompt(str(template_path), system_message, tools)
+    prompt_tokens, prompt_token_lens = official.encode_system_prompt(model, prompt, device=device)
+    if prompt_tokens is None or prompt_token_lens is None:
+        raise RuntimeError("Pinned calendar prompt did not encode")
+
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=False)
+    shutil.copyfile(wav_path, out / "input_wav_exact.wav")
+    if sha256_file(out / "input_wav_exact.wav") != sha256_file(wav_path):
+        raise RuntimeError("Archived WAV differs from loaded input path")
+    receipt_bytes = Path(qa_receipt_path).read_bytes()
+    (out / "qa_receipt_exact.json").write_bytes(receipt_bytes)
+    if sha256_file(out / "qa_receipt_exact.json") != hashlib.sha256(receipt_bytes).hexdigest():
+        raise RuntimeError("Archived QA receipt bytes differ")
+    (out / "rendered_prompt.txt").write_text(prompt, encoding="ascii")
+    (out / "system_message_exact.txt").write_bytes(system_bytes)
+    (out / "tools_exact.json").write_bytes(tools_bytes)
+    torch.save({"prompt_tokens": prompt_tokens, "prompt_token_lens": prompt_token_lens},
+               out / "prompt_tokens.pt")
+
+    def snapshot(label: str, result: dict[str, Any], codes: list[Any]) -> None:
+        # Called before position parsing/response selection and before pass 2.
+        path = out / f"{label}_immediate_raw.pt"
+        torch.save({"result": result, "codec_codes_per_step": codes}, path)
+
+    trace = run_two_pass(
+        model, case_id=case_id, wav_path=wav_path, qa_receipt_path=qa_receipt_path,
+        input_signal=input_signal, input_signal_lens=input_signal_lens,
+        prompt_tokens=prompt_tokens, prompt_token_lens=prompt_token_lens,
+        device=device, confirmation_state=confirmation_state,
+        controller_key=controller_key, trusted_controller_id=trusted_controller_id,
+        on_pass_complete=snapshot,
+    )
+    if sha256_file(out / "input_wav_exact.wav") != trace["source"]["source_wav_sha256"] or \
+            sha256_file(out / "qa_receipt_exact.json") != trace["source"]["qa_receipt_sha256"]:
+        raise RuntimeError("Archived input or receipt differs from modeled evidence")
+    trace["source"].update({
+        "template_sha256": OFFICIAL_TEMPLATE_SHA256,
+        "system_message_sha256": hashlib.sha256(system_bytes).hexdigest(),
+        "tools_sha256": hashlib.sha256(tools_bytes).hexdigest(),
+        "rendered_prompt_sha256": hashlib.sha256(prompt.encode("ascii")).hexdigest(),
+        "input_signal_loaded_from_audited_wav": True,
+        "input_wav_samples": int(wav_1d.shape[0]),
+    })
+    trace["saved_paths"] = save_trace(trace, out / "complete_trace")
+    return trace
