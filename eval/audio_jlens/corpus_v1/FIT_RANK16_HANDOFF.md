@@ -5,7 +5,7 @@
 ## Method
 
 1. Capture unedited post-encoder31, post-connector, and post-text-block35 prompt-last states for the 48 fit contexts. Partition each frozen word slot into four equal time bins plus one preword and one postword bin. The source state for a bin is the mean over its disjoint mapped rows.
-2. Compute 24 undirected fit pair/voice terminal-state differences, then an orthonormal rank-16 target basis by SVD. Save the basis, singular values, fit-only category source means, and terminal means in a stage-1 checkpoint.
+2. Compute 24 undirected fit pair/voice terminal-state differences, then an orthonormal rank-16 target basis by **uncentered** SVD. These are natural-audio differences, not uniform-edit effects. Save the basis, singular values, fit-only category source means, and terminal means in a stage-1 checkpoint.
 3. For every fit context, make one grad-enabled forward and 16 target-basis VJPs through the same graph. Sum gradient rows within each bin and average across the 48 contexts. Save separate `[6,16,1280]` encoder and `[6,16,2048]` connector maps. Their values predict the rank-16 terminal response to a uniform additive edit of all rows in each bin; they do not predict a full donor rowwise swap by definition.
 
 Stage 2 checkpoints after every complete context and verifies that the saved case IDs remain an exact prefix of the frozen list. The checkpoint is authoritative if the progress JSONL missed its last line. The code records MPS driver allocation after model load, each stage-1 capture, and every VJP; it aborts above 30 GiB. It rejects changed script/spec/manifest/scoring hashes on resume. Use distinct output prefixes for smoke and full fit.

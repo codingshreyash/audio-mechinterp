@@ -222,6 +222,7 @@ def fit_metadata(spec: dict, cases: list[dict]) -> dict:
         "transformers_revision": TRANSFORMERS_REVISION,
         "target": TARGET, "sites": list(SITES),
         "rank": RANK, "n_fit": N_FIT,
+        "basis_definition": "uncentered SVD of 24 undirected natural-audio pair/voice terminal-state differences; first fit template only",
         "svd_relative_rank_tolerance": SVD_RELATIVE_TOL,
         "grad_vs_no_grad_terminal_max_abs_tolerance": TARGET_MODE_MAX_ABS_TOL,
         "site_definition": "post-encoder31 and post-connector output; terminal post-text-block35 prompt-last",
