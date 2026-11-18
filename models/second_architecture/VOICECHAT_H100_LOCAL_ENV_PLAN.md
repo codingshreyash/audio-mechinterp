@@ -8,7 +8,7 @@
 | --- | --- |
 | NeMo Speech source | `NVIDIA-NeMo/Speech@097dfe9e2f55baf653b83035868bdc89849f1b47`, matching the [published VoiceChat branch code](https://github.com/NVIDIA-NeMo/Speech/tree/097dfe9e2f55baf653b83035868bdc89849f1b47) |
 | VoiceChat checkpoint | `nvidia/NVIDIA-NemotronLabs-VoiceChat-11B@443794ea956ef0065f001967ffd00e77f519cb39`, matching the [model card](https://huggingface.co/nvidia/NVIDIA-NemotronLabs-VoiceChat-11B) |
-| Optional text comparator | `nvidia/NVIDIA-Nemotron-Nano-9B-v2@6533e8de2c68e4536bf7c411d7a3ce5734111476`; separate from the VoiceChat task, so stage only if needed |
+| Required Nano metadata/code/tokenizer | `nvidia/NVIDIA-Nemotron-Nano-9B-v2@6533e8de2c68e4536bf7c411d7a3ce5734111476`; stage exactly the six small files pinned in [the dependency audit](VOICECHAT_NANO_V2_METADATA_DEPENDENCY.md) in a dedicated HF cache. Full Nano weights are not required for this VoiceChat load path. A separate Nano text comparator remains optional. |
 | Main weight file | `model.safetensors`, **44,382,749,892 bytes** (41.34 GiB); expected SHA-256 `d553750c29434a6bb524377e17634c6cafdbf621892e643a77f406e51570354b`, from Hugging Face's pinned revision metadata/`x-linked-etag`. Verify actual bytes after any later download. |
 | Host | Linux, one H100 with at least 75,000 MiB reported VRAM, batch size 1. NVIDIA lists H100 test hardware and A100 support in its [model card](https://huggingface.co/nvidia/NVIDIA-NemotronLabs-VoiceChat-11B#software-integration). Neither card nor this plan measures headroom for these hooks. |
 | Disk planning | Allow at least **150 GiB free before staging**: 41.34 GiB weights, possible duplicate HF cache, source/build packages, fixtures, and bounded logs. Require at least **60 GiB free after staging** in the local preflight. These are conservative operational estimates, not measured consumption. |
@@ -38,16 +38,36 @@ pip install ninja packaging wheel einops
 pip install --no-build-isolation --no-deps causal-conv1d==1.6.2.post1 mamba-ssm==2.3.2.post1
 python -m pip freeze > /path/to/run-artifacts/voicechat-pinned-pip-freeze.txt
 hf download nvidia/NVIDIA-NemotronLabs-VoiceChat-11B --revision 443794ea956ef0065f001967ffd00e77f519cb39 --local-dir /path/to/voicechat-checkpoint
+python - <<'PY'
+from pathlib import Path
+from huggingface_hub import hf_hub_download
+
+home = Path('/path/to/nano-hf-home')
+repo_id = 'nvidia/NVIDIA-Nemotron-Nano-9B-v2'
+revision = '6533e8de2c68e4536bf7c411d7a3ce5734111476'
+files = (
+    'config.json', 'configuration_nemotron_h.py', 'modeling_nemotron_h.py',
+    'tokenizer_config.json', 'tokenizer.json', 'special_tokens_map.json',
+)
+for filename in files:
+    hf_hub_download(repo_id=repo_id, filename=filename, revision=revision,
+                    cache_dir=str(home / 'hub'))
+ref = home / 'hub' / 'models--nvidia--NVIDIA-Nemotron-Nano-9B-v2' / 'refs' / 'main'
+ref.parent.mkdir(parents=True, exist_ok=True)
+ref.write_text(revision + '\n')
+PY
 ```
 
-The [`voicechat_h100_local_preflight.py`](voicechat_h100_local_preflight.py) script performs **only local reads** and returns a nonzero status on drift. It pins SHA-256 for the five relevant NeMo source files, checkpoint config, and weight; checks the exact git commit, clean worktree, function-head config, key package versions, GPU name/VRAM, disk headroom, and frozen fixture and QA-receipt hashes. It never imports NeMo, accesses the network, downloads a model, or runs inference. The worktree rule rejects all modified/staged tracked files and ordinary untracked files via `git status --porcelain=v1 --untracked-files=all -z`. It enumerates ignored files with `git ls-files --others --ignored --exclude-standard -z` and allows only named, non-symlink setuptools metadata files directly under a root `*.egg-info/` directory, which an editable install may generate. Ignored Python, compiled caches, config, templates, build code, and any other ignored file fail. Keep other build outputs, caches, and logs outside the NeMo checkout. The five hashes are extra checks, not substitutes for this source-tree gate; the receipt records the number of allowed generated metadata files.
+The [`voicechat_h100_local_preflight.py`](voicechat_h100_local_preflight.py) script performs **only local reads** and returns a nonzero status on drift. It pins SHA-256 for the five relevant NeMo source files, checkpoint config, VoiceChat weight, and all six Nano dependency files; checks the exact Git commit, clean worktree, function-head config, key package versions, GPU name/VRAM, disk headroom, and frozen fixture and QA-receipt hashes. It never imports NeMo, accesses the network, downloads model weights, or runs inference. In `ready`, after verifying the Nano custom-code bytes, it imports the pinned Transformers 4.56.0 metadata/config, tokenizer, and dynamic model **class** from the unchanged repository ID in an offline subprocess. It does not instantiate the Nano model. The worktree rule rejects all modified/staged tracked files and ordinary untracked files via `git status --porcelain=v1 --untracked-files=all -z`. It enumerates ignored files with `git ls-files --others --ignored --exclude-standard -z` and allows only named, non-symlink setuptools metadata files directly under a root `*.egg-info/` directory, which an editable install may generate. Ignored Python, compiled caches, config, templates, build code, and any other ignored file fail. Keep other build outputs, caches, and logs outside the NeMo checkout. The five hashes are extra checks, not substitutes for this source-tree gate; the receipt records the number of allowed generated metadata files.
 
 ```bash
 python voicechat_h100_local_preflight.py --self-test
 python voicechat_h100_local_preflight.py --phase source --nemo-dir /path/to/Speech --checkpoint-dir /path/to/voicechat-checkpoint
-python voicechat_h100_local_preflight.py --phase ready --nemo-dir /path/to/Speech --checkpoint-dir /path/to/voicechat-checkpoint --fixture-manifest /path/to/fixtures/FROZEN_FIXTURE.json
+python voicechat_h100_local_preflight.py --phase ready --nemo-dir /path/to/Speech --checkpoint-dir /path/to/voicechat-checkpoint --fixture-manifest /path/to/fixtures/FROZEN_FIXTURE.json --nano-hf-home /path/to/nano-hf-home
 # On an A100 80GB host only, add: --gpu-policy a100-80gb
 ```
+
+`--phase source` needs only NeMo plus VoiceChat `config.json`; `--phase ready` additionally requires `--nano-hf-home`. The Nano gate requires a dedicated `hub` containing only this repository's cache and optional `.locks`, only the pinned snapshot, exactly the six pinned files, and `refs/main` pointing at the pinned commit. Snapshot symlinks must resolve within that repository cache; blob files must be exactly those referenced by the six snapshot files, excluding stray Nano weight blobs. The ready subprocess sets `HF_HOME`, `HF_HUB_CACHE`, `HF_MODULES_CACHE`, `HF_HUB_OFFLINE=1`, and `TRANSFORMERS_OFFLINE=1`; it resolves `AutoConfig`, the fast `AutoTokenizer`, and the dynamic model class by the **original repository ID** under the pinned installed Transformers version. Apply the same offline cache variables to the eventual VoiceChat pilot and assay commands. The full model load remains the check for any further dynamic import or runtime dependency that this metadata-only preflight cannot establish.
 
 The fixture manifest must have `status=frozen_voicechat_dual_head_fixture`; `system_prompt`, `tool_schema`, and `stub_calendar` entries with `path` and SHA-256; exactly two distinct `tts_voice_ids`; `human_voice_id` (or null); an explicit `human_script_ids` subset; and one frozen `trailing_silence_samples` value. Every artifact path must be normalized and strictly relative to the manifest directory: no absolute path, `.`, `..`, repeated separator, or backslash, and its resolved target must remain inside that directory. The mandatory matrix is **6 scripts** (`A`, `B`, `C`, `D`, `A_literal`, `B_literal`) × **2 TTS voices = 12 WAVs**. Up to six separately recorded human WAVs extend only the scripts named in `human_script_ids`. Every declared `(script_id, voice_id)` must appear exactly once with a unique resolved WAV path, unique final-WAV SHA-256, and frozen transcript. No absent human case is silently counted as tested.
 

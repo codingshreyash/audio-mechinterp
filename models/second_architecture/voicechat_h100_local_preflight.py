@@ -27,6 +27,16 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 NEMO_COMMIT = "097dfe9e2f55baf653b83035868bdc89849f1b47"
 VOICECHAT_COMMIT = "443794ea956ef0065f001967ffd00e77f519cb39"
 NANO_COMMIT = "6533e8de2c68e4536bf7c411d7a3ce5734111476"
+NANO_REPO_ID = "nvidia/NVIDIA-Nemotron-Nano-9B-v2"
+NANO_CACHE_REPO = "models--nvidia--NVIDIA-Nemotron-Nano-9B-v2"
+NANO_FILES_SHA256 = {
+    "config.json": "642dc554a725ea216be55c3018d0a6f3dc9963b24779c3cc97f5a0ea21e9dcc3",
+    "configuration_nemotron_h.py": "18186204622431c336a7c2813a80f0d37937dde962b8aebddf24caf5bffa03f7",
+    "modeling_nemotron_h.py": "9c831864760ab5d62787040fbd05039e6dfec4b6239d1fcc96ec635efc114734",
+    "tokenizer_config.json": "a3e4d48a0f8b4ce6fd746464199299cbdefe6ee202e34048940da2d9838a9aa6",
+    "tokenizer.json": "3277c00fe5fb3963b3cb7c07b7f183722d2af4d775a4aea7cfb3684d7cccbc2f",
+    "special_tokens_map.json": "2a4d2e7403546286e5d75f5b6b3c197490be67fb1e2118e5c60ad5c26e6668b1",
+}
 SOURCE_SHA256 = {
     "nemo/collections/speechlm2/models/duplex_stt_model.py": "415e1e01584bab96d9c059d5b0fe9162adaf19677ef43e565c3afad6e073e74b",
     "nemo/collections/speechlm2/models/nemotron_voicechat.py": "fe11dcdde3c31d7144469dab0c6ec9629ff8f7e4dbf881d8d1db258243a67f80",
@@ -186,11 +196,98 @@ def check_source(nemo_dir: Path, checkpoint_dir: Path) -> dict:
     stt = config["model"]["stt"]["model"]
     require(stt["use_function_head"] is True, "function head disabled")
     require(stt["duplex_function_channel_weight"] == 2.0, "function channel weight drift")
-    require(stt["pretrained_llm"] == "nvidia/NVIDIA-Nemotron-Nano-9B-v2", "backbone drift")
+    require(stt["pretrained_llm"] == NANO_REPO_ID, "backbone drift")
+    speech_generation = config["model"]["speech_generation"]["model"]
+    require(speech_generation["pretrained_lm_name"] == NANO_REPO_ID and
+            speech_generation["tts_config"]["cas_config"]["pretrained_tokenizer_name"] == NANO_REPO_ID,
+            "speech-generation Nano repository ID drift")
     return {"nemo_commit": head, "nemo_worktree": "clean_except_setuptools_metadata",
             "nemo_generated_metadata_files_allowed": generated_metadata_count,
             "voicechat_commit": VOICECHAT_COMMIT,
             "source_files_verified": len(SOURCE_SHA256), "config_sha256": CONFIG_SHA256}
+
+
+def check_nano_cache(hf_home: Path, *, expected_files: dict[str, str] | None = None,
+                     revision: str = NANO_COMMIT) -> dict:
+    """Verify a dedicated offline HF cache without importing or loading a model."""
+    require(hf_home.is_absolute() and hf_home.is_dir(),
+            "--nano-hf-home must be an existing absolute directory")
+    home = hf_home.resolve()
+    hub = home / "hub"
+    repo = hub / NANO_CACHE_REPO
+    snapshot = repo / "snapshots" / revision
+    require(hub.is_dir() and repo.is_dir() and snapshot.is_dir(),
+            "pinned Nano HF cache/snapshot missing")
+    require({p.name for p in hub.iterdir()} <= {NANO_CACHE_REPO, ".locks"},
+            "Nano HF_HOME hub is not dedicated to the pinned repository")
+    require({p.name for p in (repo / "snapshots").iterdir()} == {revision},
+            "Nano cache has an unexpected snapshot revision")
+    refs = repo / "refs"
+    main_ref = refs / "main"
+    require(refs.is_dir() and {p.name for p in refs.iterdir()} == {"main"} and
+            main_ref.is_file() and not main_ref.is_symlink() and
+            main_ref.read_text().strip() == revision,
+            "Nano refs/main does not select the pinned revision")
+    expected = NANO_FILES_SHA256 if expected_files is None else expected_files
+    require({p.name for p in snapshot.iterdir()} == set(expected),
+            "Nano snapshot file set differs from the six-file pin")
+    referenced_blobs: set[Path] = set()
+    for filename, digest in expected.items():
+        path = snapshot / filename
+        require(path.resolve().is_relative_to(repo),
+                f"Nano cache file resolves outside its repository: {filename}")
+        if path.is_symlink():
+            referenced_blobs.add(path.resolve())
+        check_file(path, digest)
+    blobs = repo / "blobs"
+    actual_blobs = {item.resolve() for item in blobs.iterdir()} if blobs.is_dir() else set()
+    require(actual_blobs == referenced_blobs,
+            "Nano cache contains an unreferenced or missing blob (including possible weights)")
+    return {"nano_repo_id": NANO_REPO_ID, "nano_revision": revision,
+            "nano_hf_home": str(home), "nano_refs_main": revision,
+            "nano_snapshot": str(snapshot), "nano_files_verified": len(expected)}
+
+
+def verify_nano_offline(hf_home: Path) -> dict:
+    """Resolve the unchanged repo ID offline using pinned Transformers; no weights/model instance."""
+    environment = os.environ.copy()
+    environment.update(HF_HOME=str(hf_home), HF_HUB_CACHE=str(hf_home / "hub"),
+                       HF_MODULES_CACHE=str(hf_home / "modules"),
+                       HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1",
+                       HF_HUB_DISABLE_TELEMETRY="1")
+    environment.pop("TRANSFORMERS_CACHE", None)
+    program = f"""
+import json
+from transformers import AutoConfig, AutoTokenizer
+from transformers.dynamic_module_utils import get_class_from_dynamic_module
+repo = {NANO_REPO_ID!r}
+config = AutoConfig.from_pretrained(repo, trust_remote_code=True, local_files_only=True)
+tokenizer = AutoTokenizer.from_pretrained(repo, use_fast=True, local_files_only=True)
+model_class = get_class_from_dynamic_module(
+    config.auto_map["AutoModelForCausalLM"], repo, local_files_only=True)
+assert config.model_type == "nemotron_h"
+assert config.hidden_size == 4480 and config.num_hidden_layers == 56
+assert tokenizer.is_fast and len(tokenizer) == 131072 and tokenizer.bos_token_id == 1
+print("NANO_OFFLINE_RECEIPT=" + json.dumps({{
+    "config_class": config.__class__.__name__,
+    "model_class": model_class.__name__,
+    "tokenizer_class": tokenizer.__class__.__name__,
+    "tokenizer_length": len(tokenizer),
+    "bos_token_id": tokenizer.bos_token_id,
+}}))
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", program], env=environment, check=False,
+        capture_output=True, text=True, timeout=180,
+    )
+    require(completed.returncode == 0,
+            f"Nano offline metadata/class resolution failed: {completed.stderr[-2000:]}")
+    receipts = [line.removeprefix("NANO_OFFLINE_RECEIPT=")
+                for line in completed.stdout.splitlines()
+                if line.startswith("NANO_OFFLINE_RECEIPT=")]
+    require(len(receipts) == 1, "Nano offline resolver did not return one receipt")
+    return {"nano_offline_resolver": json.loads(receipts[0]),
+            "nano_offline_env": "dedicated_HF_HOME_HF_HUB_OFFLINE_TRANSFORMERS_OFFLINE"}
 
 
 def check_fixtures(path: Path) -> dict:
@@ -438,6 +535,62 @@ def self_test() -> dict:
                 tracked.write_text("x = 1\n")
             else:
                 dirty_file.unlink()
+
+        nano_home = root / "nano_hf_home"
+        nano_repo = nano_home / "hub" / NANO_CACHE_REPO
+        nano_ref = nano_repo / "refs" / "main"
+        nano_snapshot = nano_repo / "snapshots" / NANO_COMMIT
+        nano_ref.parent.mkdir(parents=True)
+        nano_snapshot.mkdir(parents=True)
+        nano_ref.write_text(NANO_COMMIT + "\n")
+        synthetic_hashes = {}
+        for filename in NANO_FILES_SHA256:
+            artifact = nano_snapshot / filename
+            artifact.write_bytes(("synthetic " + filename).encode())
+            synthetic_hashes[filename] = sha256(artifact)
+
+        def expect_nano_failure(label: str) -> None:
+            try:
+                check_nano_cache(nano_home, expected_files=synthetic_hashes)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError(f"{label} Nano cache did not fail closed")
+
+        require(check_nano_cache(nano_home, expected_files=synthetic_hashes)
+                ["nano_files_verified"] == 6, "six-file Nano cache self-test failed")
+        nano_ref.write_text("0" * 40 + "\n")
+        expect_nano_failure("wrong refs/main")
+        nano_ref.write_text(NANO_COMMIT + "\n")
+        token_config = nano_snapshot / "tokenizer_config.json"
+        token_config_bytes = token_config.read_bytes()
+        token_config.unlink()
+        expect_nano_failure("missing Nano tokenizer config")
+        token_config.write_bytes(token_config_bytes)
+        token_config.write_bytes(b"changed")
+        expect_nano_failure("changed Nano tokenizer config")
+        token_config.write_bytes(token_config_bytes)
+        extra_snapshot = nano_repo / "snapshots" / ("1" * 40)
+        extra_snapshot.mkdir()
+        expect_nano_failure("unexpected Nano snapshot")
+        extra_snapshot.rmdir()
+        outside = root / "outside-config.json"
+        outside.write_bytes((nano_snapshot / "config.json").read_bytes())
+        config_file = nano_snapshot / "config.json"
+        config_file.unlink()
+        config_file.symlink_to(outside)
+        expect_nano_failure("Nano snapshot symlink escape")
+        config_file.unlink()
+        blobs = nano_repo / "blobs"
+        blobs.mkdir()
+        config_blob = blobs / "synthetic-config-blob"
+        config_blob.write_bytes(outside.read_bytes())
+        config_file.symlink_to(Path("../../blobs") / config_blob.name)
+        require(check_nano_cache(nano_home, expected_files=synthetic_hashes)
+                ["nano_files_verified"] == 6, "normal HF blob symlink self-test failed")
+        extra_blob = blobs / "unreferenced-weight-like-blob"
+        extra_blob.write_bytes(b"unexpected")
+        expect_nano_failure("unreferenced Nano blob")
     return {"status": "self_test_passed_no_model_or_network"}
 
 
@@ -448,6 +601,8 @@ def main() -> None:
     parser.add_argument("--nemo-dir", type=Path)
     parser.add_argument("--checkpoint-dir", type=Path)
     parser.add_argument("--fixture-manifest", type=Path)
+    parser.add_argument("--nano-hf-home", type=Path,
+                        help="dedicated Hugging Face cache containing the six pinned Nano metadata files")
     parser.add_argument("--gpu-policy", choices=("h100", "a100-80gb"), default="h100")
     args = parser.parse_args()
     try:
@@ -461,8 +616,12 @@ def main() -> None:
             result.update(check_source(args.nemo_dir, args.checkpoint_dir))
             if args.phase == "ready":
                 require(args.fixture_manifest is not None, "--ready requires --fixture-manifest")
+                require(args.nano_hf_home is not None, "--ready requires --nano-hf-home")
                 result.update(check_fixtures(args.fixture_manifest))
+                result.update(check_nano_cache(args.nano_hf_home))
                 result.update(check_runtime(args.checkpoint_dir, args.gpu_policy))
+                result.update(verify_nano_offline(args.nano_hf_home.resolve()))
+                check_nano_cache(args.nano_hf_home)
                 result["status"] = "local_ready_preflight_passed_no_model_or_network"
         print(json.dumps(result, indent=2))
     except Exception as exc:
