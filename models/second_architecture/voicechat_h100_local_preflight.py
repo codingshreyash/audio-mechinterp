@@ -736,6 +736,12 @@ def main() -> None:
     parser.add_argument("--nemo-dir", type=Path)
     parser.add_argument("--checkpoint-dir", type=Path)
     parser.add_argument("--fixture-manifest", type=Path)
+    parser.add_argument("--qa-v2-manifest", type=Path,
+                        help="frozen all-12 human audio QA manifest; required for ready/preload")
+    parser.add_argument("--qa-v2-ledger", type=Path,
+                        help="external pre-inference anchor receipt for the v2 manifest")
+    parser.add_argument("--trusted-controller-id",
+                        help="controller ID for the two signed C dry-run grants")
     parser.add_argument("--nano-hf-home", type=Path,
                         help="dedicated Hugging Face cache containing the six pinned Nano metadata files")
     parser.add_argument("--gpu-policy", choices=("h100", "a100-80gb"), default="h100")
@@ -750,9 +756,21 @@ def main() -> None:
             result = {"status": "local_source_preflight_passed_no_model_or_network"}
             result.update(check_source(args.nemo_dir, args.checkpoint_dir))
             if args.phase in ("ready", "preload"):
-                require(args.fixture_manifest is not None, f"--{args.phase} requires --fixture-manifest")
+                require(args.qa_v2_manifest is not None and args.qa_v2_ledger is not None,
+                        f"--{args.phase} requires --qa-v2-manifest and --qa-v2-ledger")
+                require(args.trusted_controller_id, "missing trusted controller ID")
+                key_hex = os.environ.get("VOICECHAT_CONTROLLER_KEY_HEX", "")
+                require(len(key_hex) >= 64, "missing external controller key in environment")
+                try:
+                    controller_key = bytes.fromhex(key_hex)
+                except ValueError as error:
+                    raise ValueError("invalid external controller key encoding") from error
+                require(len(controller_key) >= 32, "external controller key too short")
                 require(args.nano_hf_home is not None, f"--{args.phase} requires --nano-hf-home")
-                result.update(check_fixtures(args.fixture_manifest))
+                from models.second_architecture.voicechat_calendar_fixture_v1.audio_qa_v2 import check_audio_qa_v2
+                result.update(check_audio_qa_v2(args.qa_v2_manifest, args.qa_v2_ledger,
+                                                controller_key=controller_key,
+                                                trusted_controller_id=args.trusted_controller_id))
                 result.update(check_nano_cache(args.nano_hf_home))
                 result.update(check_runtime(args.checkpoint_dir, args.gpu_policy))
                 if args.phase == "ready":

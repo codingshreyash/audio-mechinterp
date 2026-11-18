@@ -21,7 +21,9 @@ from models.second_architecture.voicechat_calendar_fixture_v1.calendar_stub impo
     CASES,
     dispatch,
     normalize_official_call,
+    verify_external_grant,
 )
+from models.second_architecture.voicechat_calendar_fixture_v1.audio_qa_v2 import check_audio_qa_v2
 
 NEMO_SPEECH_REVISION = "097dfe9e2f55baf653b83035868bdc89849f1b47"
 OFFICIAL_HELPER_SHA256 = "ebde701baec12a014443eac36262a6af7a7a62b3e052f1c4a387db6aaad8da44"
@@ -93,7 +95,11 @@ def validate_qa_receipt(receipt: dict[str, Any], *, case_id: str,
 
 def read_bound_qa_receipt(qa_receipt_path: str | Path, *, case_id: str,
                           wav_path: str | Path, observed_sha256: str,
-                          confirmation_state: dict[str, Any] | None) -> tuple[dict[str, Any], bytes, str]:
+                          confirmation_state: dict[str, Any] | None,
+                          qa_manifest_path: str | Path | None = None,
+                          qa_ledger_path: str | Path | None = None,
+                          controller_key: bytes | None = None,
+                          trusted_controller_id: str | None = None) -> tuple[dict[str, Any], bytes, str]:
     """Hash the exact supplied receipt bytes; reject a misbound C grant."""
     path = Path(qa_receipt_path)
     receipt_bytes = path.read_bytes()
@@ -102,14 +108,47 @@ def read_bound_qa_receipt(qa_receipt_path: str | Path, *, case_id: str,
         receipt = json.loads(receipt_bytes)
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
         raise ValueError(f"Invalid external audio QA receipt: {error}") from error
-    validate_qa_receipt(receipt, case_id=case_id, wav_path=wav_path,
-                        observed_sha256=observed_sha256)
+    if qa_manifest_path is None or qa_ledger_path is None:
+        if qa_manifest_path is not None or qa_ledger_path is not None:
+            raise ValueError("Both v2 QA manifest and ledger are required")
+        validate_qa_receipt(receipt, case_id=case_id, wav_path=wav_path,
+                            observed_sha256=observed_sha256)
+    else:
+        cohort = check_audio_qa_v2(Path(qa_manifest_path), Path(qa_ledger_path),
+                                   controller_key=controller_key,
+                                   trusted_controller_id=trusted_controller_id)
+        if receipt.get("schema") != "voicechat_wav_qa_receipt_v2" or not any(
+            row["case_id"] == case_id and row["wav_sha256"] == observed_sha256 and
+            row["receipt_sha256"] == receipt_sha256 and
+            receipt.get("voice_id") == row["voice_id"]
+            for row in cohort["eligibility"]
+        ) or Path(receipt.get("wav_path", "")).resolve() != Path(wav_path).resolve():
+            raise ValueError("v2 receipt not in frozen, eligible 12-WAV cohort")
+        if case_id == "C":
+            if sha256_file(qa_manifest_path) != cohort["qa_manifest_sha256"]:
+                raise RuntimeError("v2 QA manifest changed during validation")
+            manifest = json.loads(Path(qa_manifest_path).read_bytes())
+            grant_rows = [row for row in manifest["c_grants"]
+                          if row["voice_id"] == receipt["voice_id"]]
+            if len(grant_rows) != 1:
+                raise ValueError("v2 C grant row is missing")
+            grant_file = Path(qa_manifest_path).parent / grant_rows[0]["grant"]["path"]
+            if sha256_file(grant_file) != cohort["c_grant_sha256_by_voice"][receipt["voice_id"]] or \
+                    confirmation_state != json.loads(grant_file.read_bytes()):
+                raise ValueError("C confirmation does not match frozen cohort grant")
+        elif confirmation_state is not None:
+            raise ValueError("non-C control cannot carry an authorization grant")
     if case_id == "C" and confirmation_state is not None:
         if not isinstance(confirmation_state, dict) or \
                 confirmation_state.get("qa_receipt_sha256") != receipt_sha256:
             raise ValueError("Signed C grant does not bind the exact QA receipt bytes")
         if receipt.get("external_controller_id") != confirmation_state.get("controller_id"):
             raise ValueError("Signed C controller differs from QA receipt controller")
+        if qa_manifest_path is not None and not verify_external_grant(
+            confirmation_state, case_id="C", source_wav_sha256=observed_sha256,
+            controller_key=controller_key, trusted_controller_id=trusted_controller_id,
+        ):
+            raise ValueError("Signed C grant failed verification before inference")
     if path.read_bytes() != receipt_bytes:
         raise RuntimeError("Audio QA receipt changed during validation")
     return receipt, receipt_bytes, receipt_sha256
@@ -118,7 +157,10 @@ def read_bound_qa_receipt(qa_receipt_path: str | Path, *, case_id: str,
 def load_bound_wav(wav_path: str | Path, qa_receipt_path: str | Path, *,
                    case_id: str, confirmation_state: dict[str, Any] | None,
                    loader: Callable[..., tuple[Any, Any, Any]],
-                   device: Any) -> tuple[Any, Any, Any]:
+                   device: Any, qa_manifest_path: str | Path | None = None,
+                   qa_ledger_path: str | Path | None = None,
+                   controller_key: bytes | None = None,
+                   trusted_controller_id: str | None = None) -> tuple[Any, Any, Any]:
     """Build the model signal only from the exact externally audited PCM WAV.
 
     The actual launcher passes the pinned helper's ``load_wav_16k_mono`` as
@@ -128,6 +170,8 @@ def load_bound_wav(wav_path: str | Path, qa_receipt_path: str | Path, *,
     receipt, receipt_bytes, _ = read_bound_qa_receipt(
         qa_receipt_path, case_id=case_id, wav_path=wav_path,
         observed_sha256=before, confirmation_state=confirmation_state,
+        qa_manifest_path=qa_manifest_path, qa_ledger_path=qa_ledger_path,
+        controller_key=controller_key, trusted_controller_id=trusted_controller_id,
     )
     with wave.open(str(wav_path), "rb") as wav:
         if (wav.getnchannels(), wav.getframerate(), wav.getsampwidth(),
@@ -284,6 +328,8 @@ def run_two_pass(
     case_id: str,
     wav_path: str | Path,
     qa_receipt_path: str | Path,
+    qa_manifest_path: str | Path | None = None,
+    qa_ledger_path: str | Path | None = None,
     input_signal: Any,
     input_signal_lens: Any,
     prompt_tokens: Any,
@@ -307,6 +353,8 @@ def run_two_pass(
     _qa_receipt, qa_receipt_bytes, qa_receipt_sha256 = read_bound_qa_receipt(
         qa_receipt_path, case_id=case_id, wav_path=wav_path,
         observed_sha256=source_wav_sha256, confirmation_state=confirmation_state,
+        qa_manifest_path=qa_manifest_path, qa_ledger_path=qa_ledger_path,
+        controller_key=controller_key, trusted_controller_id=trusted_controller_id,
     )
     if hasattr(input_signal, "shape") and input_signal.shape[0] != 1:
         raise ValueError("This adapter requires batch size one")
@@ -455,6 +503,8 @@ def run_live_case_from_audited_wav(
     case_id: str,
     wav_path: str | Path,
     qa_receipt_path: str | Path,
+    qa_manifest_path: str | Path,
+    qa_ledger_path: str | Path,
     template_path: str | Path,
     output_dir: str | Path,
     device: Any = "cuda",
@@ -467,6 +517,15 @@ def run_live_case_from_audited_wav(
     This function is implemented but has not been invoked with a real model.
     Independent source review and external WAV QA are prerequisites.
     """
+    # Run the all-12 v2 gate before any model or NeMo import and bind this case
+    # to the exact receipt bytes. A v1 per-WAV receipt cannot enter this path.
+    source_sha = sha256_file(wav_path)
+    read_bound_qa_receipt(
+        qa_receipt_path, case_id=case_id, wav_path=wav_path,
+        observed_sha256=source_sha, confirmation_state=confirmation_state,
+        qa_manifest_path=qa_manifest_path, qa_ledger_path=qa_ledger_path,
+        controller_key=controller_key, trusted_controller_id=trusted_controller_id,
+    )
     import torch
     from nemo.collections.speechlm2.inference.utils import offline_voicechat as official
 
@@ -480,6 +539,8 @@ def run_live_case_from_audited_wav(
         wav_path, qa_receipt_path, case_id=case_id,
         confirmation_state=confirmation_state,
         loader=official.load_wav_16k_mono, device=device,
+        qa_manifest_path=qa_manifest_path, qa_ledger_path=qa_ledger_path,
+        controller_key=controller_key, trusted_controller_id=trusted_controller_id,
     )
     system_bytes = (FIXTURE_DIR / "system_message.txt").read_bytes()
     tools_bytes = (FIXTURE_DIR / "tools.json").read_bytes()
@@ -512,6 +573,7 @@ def run_live_case_from_audited_wav(
 
     trace = run_two_pass(
         model, case_id=case_id, wav_path=wav_path, qa_receipt_path=qa_receipt_path,
+        qa_manifest_path=qa_manifest_path, qa_ledger_path=qa_ledger_path,
         input_signal=input_signal, input_signal_lens=input_signal_lens,
         prompt_tokens=prompt_tokens, prompt_token_lens=prompt_token_lens,
         device=device, confirmation_state=confirmation_state,
