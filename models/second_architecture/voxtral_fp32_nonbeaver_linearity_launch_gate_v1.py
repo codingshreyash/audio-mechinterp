@@ -1,6 +1,6 @@
 """Fail-closed, four-entry, one-shot launcher for the non-beaver FP32 pilot.
 
-This source is inert until the V3 protocol, CPU preflight, both independent
+This source is inert until the V5 protocol, CPU preflight, both independent
 source reviews, an external freeze, and its later independent review are
 committed. A campaign reserves all four fixed contexts before any model load.
 """
@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import shutil
@@ -32,17 +33,19 @@ AUDITOR = HERE / "voxtral_fp32_nonbeaver_linearity_audit_v1.py"
 AUDITOR_TESTS = HERE / "test_voxtral_fp32_nonbeaver_linearity_audit_v1.py"
 RUNNER_TESTS = HERE / "test_voxtral_fp32_nonbeaver_linearity_runner_v1.py"
 GATE_TESTS = HERE / "test_voxtral_fp32_nonbeaver_linearity_launch_gate_v1.py"
-PROTOCOL = HERE / "VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_PROSPECTIVE_V3.md"
-CONCEPTUAL_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_CONCEPTUAL_REVIEW_V3.md"
-CPU_PREFLIGHT = HERE / "VOXTRAL_FP32_NONBEAVER_CPU_PREFLIGHT_V1.json"
+PROTOCOL = HERE / "VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_PROSPECTIVE_V5.md"
+CONCEPTUAL_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_CONCEPTUAL_REVIEW_V5.md"
+CPU_PREFLIGHT = HERE / "VOXTRAL_FP32_NONBEAVER_CPU_PREFLIGHT_V5.json"
+BYTE_BUDGET = HERE / "VOXTRAL_FP32_NONBEAVER_BYTE_BUDGET_V1.json"
+BYTE_BUDGET_PROBE = HERE / "voxtral_fp32_nonbeaver_byte_budget_probe_v5.py"
 SOURCE_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_INDEPENDENT_SOURCE_REVIEW_V1.md"
 AUDITOR_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md"
 FREEZE = HERE / "VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_V1.json"
 FREEZE_REVIEW = HERE / "VOXTRAL_FP32_NONBEAVER_EXTERNAL_FREEZE_INDEPENDENT_REVIEW_V1.md"
 PREVIOUS_MANIFEST = HERE / "VOXTRAL_OLD_FIT_GRAD_LEAF_FACTORIAL_ATTEMPT_MANIFEST_V1.json"
 PREVIOUS_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_LEAF_FACTORIAL_RESULT_INDEPENDENT_REVIEW_V1.md"
-PROTOCOL_SHA = "a222ce0f06a0e82b2c22bf6231e605983d726610b2f51dfbe7299de3ea8d79bd"
-CONCEPTUAL_REVIEW_GO = ("Decision: GO for V3 non-beaver FP32 local-linearity "
+PROTOCOL_SHA = "99de95003190de6b5fb55c5ba8bed446dfea7cdd8cf53c0569d304bcb942b49b"
+CONCEPTUAL_REVIEW_GO = ("Decision: GO for V5 non-beaver FP32 local-linearity "
                         "protocol design only; model launch HOLD until source "
                         "and external freeze reviews.")
 SOURCE_GO = "Decision: GO for non-beaver FP32 runner and launch gate source only; model HOLD until external freeze."
@@ -88,6 +91,8 @@ BOUND = {
     "auditor_sha256": AUDITOR,
     "auditor_tests_sha256": AUDITOR_TESTS,
     "cpu_preflight_sha256": CPU_PREFLIGHT,
+    "byte_budget_sha256": BYTE_BUDGET,
+    "byte_budget_probe_sha256": BYTE_BUDGET_PROBE,
     "source_review_sha256": SOURCE_REVIEW,
     "auditor_review_sha256": AUDITOR_REVIEW,
     "selection_sha256": HERE / "VOXTRAL_FIT_V2_SELECTION.json",
@@ -96,10 +101,13 @@ BOUND = {
     "previous_review_sha256": PREVIOUS_REVIEW,
     "previous_freeze_sha256": previous_gate.FREEZE,
     "previous_freeze_review_sha256": previous_gate.FREEZE_REVIEW,
+    **runner.SOURCE_DEPENDENCIES,
     **WAVS,
 }
 REVIEWED_RUNNER_KEYS = ("protocol_sha256", "runner_sha256", "runner_tests_sha256",
-                        "gate_sha256", "gate_tests_sha256", "cpu_preflight_sha256")
+                        "gate_sha256", "gate_tests_sha256", "cpu_preflight_sha256",
+                        "byte_budget_sha256", "byte_budget_probe_sha256",
+                        *runner.SOURCE_DEPENDENCIES)
 REVIEWED_AUDITOR_KEYS = ("auditor_sha256", "auditor_tests_sha256")
 
 
@@ -203,10 +211,37 @@ def _reviewed_at(commit: str, keys: tuple[str, ...]) -> None:
         old_gate.ancestor(REPO, source_commit, commit)
 
 
+def verify_byte_budget(budget: dict, runner_sha256: str) -> None:
+    """Check the source-only serialized rehearsal before any reservation."""
+    rows = budget.get("measurements")
+    if (not isinstance(rows, list) or len(rows) != 2 or
+            any(not isinstance(row, dict) for row in rows)):
+        raise ValueError("V5 output byte budget measurements absent")
+    if (budget.get("schema") != "voxtral_fp32_nonbeaver_byte_budget_v1" or
+            budget.get("status") != "verified_source_only_serialized_byte_budget" or
+            budget.get("protocol_v5_sha256") != PROTOCOL_SHA or
+            budget.get("runner_sha256") != runner_sha256 or
+            budget.get("max_output_bytes_per_context") != MAX_OUTPUT_BYTES or
+            budget.get("max_worker_bytes_per_context") != runner.MAX_WORKER_BYTES or
+            budget.get("max_campaign_bytes") != MAX_CAMPAIGN_BYTES or
+            budget.get("contexts_per_engine") != 2 or
+            {row.get("engine") for row in rows} != {"piper", "kokoro"} or
+            any(type(row.get("serialized_bytes")) is not int or
+                row["serialized_bytes"] >= runner.MAX_WORKER_BYTES
+                for row in rows) or
+            budget.get("max_serialized_bytes") !=
+                max(row["serialized_bytes"] for row in rows) or
+            budget.get("four_context_sidecar_bytes") !=
+                2 * sum(row["serialized_bytes"] for row in rows) or
+            budget.get("campaign_headroom_after_sidecars_bytes") !=
+                MAX_CAMPAIGN_BYTES - budget["four_context_sidecar_bytes"]):
+        raise ValueError("Independent V5 output byte budget receipt differs")
+
+
 def verify_freeze() -> tuple[dict, dict]:
     """Read-only admission; every missing review or freeze is a hard HOLD."""
     if not PROTOCOL_SHA or sha(PROTOCOL) != PROTOCOL_SHA:
-        raise ValueError("V3 protocol has no reviewed immutable source pin")
+        raise ValueError("V5 protocol has no reviewed immutable source pin")
     prior_seconds = _check_previous()
     if prior_seconds + 4 * runner.MODEL_SECONDS > TOTAL_MODEL_SECONDS:
         raise ValueError("Cumulative four-entry model-work cap exceeded")
@@ -215,7 +250,7 @@ def verify_freeze() -> tuple[dict, dict]:
             runner.MAX_WORKER_BYTES >= MAX_OUTPUT_BYTES - 16 * 1024**2 or
             tuple(runner.CONTEXT_LABELS) !=
             ("piper_silver", "piper_teal", "kokoro_silver", "kokoro_teal")):
-        raise ValueError("Runner schedule or resource cap differs from V3")
+        raise ValueError("Runner schedule or resource cap differs from V5")
     for key, path in BOUND.items():
         old_gate.committed_same(REPO, path)
         digest = sha(path)
@@ -223,7 +258,7 @@ def verify_freeze() -> tuple[dict, dict]:
             raise ValueError(f"Bound file hash malformed: {key}")
     if (CONCEPTUAL_REVIEW_GO not in CONCEPTUAL_REVIEW.read_text() or
             PROTOCOL_SHA not in CONCEPTUAL_REVIEW.read_text()):
-        raise ValueError("Independent V3 conceptual review absent")
+        raise ValueError("Independent V5 conceptual review absent")
     for key, expected in EXPECTED_WAV_SHA.items():
         if sha(BOUND[key]) != expected:
             raise ValueError(f"Selected FIT audio changed: {key}")
@@ -236,6 +271,8 @@ def verify_freeze() -> tuple[dict, dict]:
         raise ValueError("Runner and auditor reviews share commit")
     _reviewed_at(source_commit, REVIEWED_RUNNER_KEYS)
     _reviewed_at(auditor_commit, REVIEWED_AUDITOR_KEYS)
+    runner.verify_cpu_preflight_receipt(_json(CPU_PREFLIGHT))
+    verify_byte_budget(_json(BYTE_BUDGET), sha(BOUND["runner_sha256"]))
     conceptual_commit = old_gate.first_add(REPO, CONCEPTUAL_REVIEW)
     for later in (source_commit, auditor_commit):
         if later == conceptual_commit:
@@ -256,7 +293,7 @@ def verify_freeze() -> tuple[dict, dict]:
             freeze["planned_counts_per_context"] !=
             {"patch_forwards": 96, "vjps": 8, "g1_clean_graphs": 2,
              "n0_clean_references": 2, "donor_captures": 1,
-             "natural_generations": 2} or
+             "recipient_passive_captures": 1, "natural_generations": 2} or
             freeze["process_cap_seconds"] != 300 or
             freeze["audit_cap_seconds"] != AUDIT_SECONDS or
             freeze["max_mps_driver_bytes"] != 30 * 1024**3 or
@@ -327,7 +364,8 @@ def reserve_all(campaign_id: str) -> dict:
     return reservation
 
 
-def _check_prior_entries(index: int, reservation: dict) -> None:
+def _check_prior_entries(index: int, reservation: dict) -> float:
+    used = 0.0
     for earlier in range(index):
         label = runner.CONTEXT_LABELS[earlier]
         attempt = reservation["attempt_ids"][earlier]
@@ -336,11 +374,20 @@ def _check_prior_entries(index: int, reservation: dict) -> None:
                 finish.get("context_index") != earlier or
                 finish.get("status") not in (FINISH_OK, FINISH_FAILED)):
             raise ValueError("Earlier fixed campaign entry lacks final receipt")
+        elapsed = finish.get("model_work_elapsed_seconds")
+        if (type(elapsed) not in (int, float) or not math.isfinite(elapsed) or
+                elapsed < 0 or elapsed > runner.MODEL_SECONDS):
+            raise ValueError("Earlier context model-work seconds invalid")
+        if (_tree_bytes(RUNS / label / attempt) +
+                _tree_bytes(runner.RUNS / label / attempt) > MAX_OUTPUT_BYTES):
+            raise ValueError("Earlier fixed campaign entry exceeded output cap")
+        used += elapsed
     for later in range(index + 1, 4):
         label = runner.CONTEXT_LABELS[later]
         attempt = reservation["attempt_ids"][later]
         if (RUNS / label / attempt / "launch_start.json").exists():
             raise ValueError("Later fixed campaign entry started out of order")
+    return used
 
 
 def verify_worker_start(index: int, attempt_id: str, freeze_sha256: str) -> dict:
@@ -350,7 +397,7 @@ def verify_worker_start(index: int, attempt_id: str, freeze_sha256: str) -> dict
         raise ValueError("Attempt ID malformed")
     freeze, upstream = verify_freeze()
     reservation = _reservation()
-    _check_prior_entries(index, reservation)
+    used = _check_prior_entries(index, reservation)
     label = runner.CONTEXT_LABELS[index]
     capture = RUNS / label / attempt_id
     output = runner.RUNS / label / attempt_id
@@ -362,7 +409,10 @@ def verify_worker_start(index: int, attempt_id: str, freeze_sha256: str) -> dict
             start.get("context_index") != index or
             start.get("context_label") != label or
             start.get("freeze_sha256") != freeze_sha256 or
+            start.get("cumulative_prior_model_work_seconds") !=
+                upstream["prior_model_work_seconds"] + used or
             old_gate.utc(start.get("wall_utc")) <= old_gate.utc(freeze["reviewed_utc"]) or
+            old_gate.utc(start.get("wall_utc")) <= old_gate.utc(reservation["wall_utc"]) or
             output.exists() or (capture / "worker_claim.json").exists()):
         raise ValueError("Worker claim failed four-entry one-shot admission")
     _put(capture / "worker_claim.json", {
@@ -450,6 +500,11 @@ def _write_finish(capture: Path, output: Path, finish: dict) -> None:
                     "original_sha256": original_sha,
                     "retained_prefix_bytes": len(prefix),
                 }
+    finish["combined_output_bytes_before_finish"] = (
+        _tree_bytes(output) + _tree_bytes(capture))
+    if finish["combined_output_bytes_before_finish"] + FINISH_RESERVE_BYTES > MAX_OUTPUT_BYTES:
+        finish["status"] = FINISH_FAILED
+        finish["failure_reason"] = "context_output_cap_unenforceable_external_mutation"
     _put(capture / "launch_finish.json", finish)
 
 
@@ -460,7 +515,7 @@ def launch_context(index: int) -> dict:
         raise ValueError("Context index invalid")
     frozen, upstream = verify_freeze()
     reservation = _reservation()
-    _check_prior_entries(index, reservation)
+    used = _check_prior_entries(index, reservation)
     label = runner.CONTEXT_LABELS[index]
     attempt_id = reservation["attempt_ids"][index]
     capture = RUNS / label / attempt_id
@@ -469,6 +524,9 @@ def launch_context(index: int) -> dict:
         raise ValueError("This context already started; no retry")
     if _tree_bytes(RUNS) + _tree_bytes(runner.RUNS) >= MAX_CAMPAIGN_BYTES:
         raise ValueError("Eight-GiB campaign output cap reached")
+    cumulative_prior = upstream["prior_model_work_seconds"] + used
+    if cumulative_prior + (4 - index) * runner.MODEL_SECONDS > TOTAL_MODEL_SECONDS:
+        raise ValueError("Cumulative model-work reservation exceeds cap")
     capture.mkdir(parents=True, exist_ok=False)
     freeze_sha = sha(FREEZE)
     command = [sys.executable, str(Path(runner.__file__).resolve()),
@@ -481,6 +539,7 @@ def launch_context(index: int) -> dict:
         "wall_utc": datetime.now(timezone.utc).isoformat(),
         "worker_command": command, "worker_output": str(output),
         "prior_model_work_seconds": upstream["prior_model_work_seconds"],
+        "cumulative_prior_model_work_seconds": cumulative_prior,
         "process_cap_seconds": runner.MODEL_SECONDS,
         "max_mps_driver_bytes": runner.MAX_DRIVER_BYTES,
         "max_output_bytes": MAX_OUTPUT_BYTES,
@@ -488,7 +547,8 @@ def launch_context(index: int) -> dict:
         "max_capture_bytes": MAX_CAPTURE_BYTES,
         "planned_counts": {"patch_forwards": 96, "vjps": 8,
                            "g1_clean_graphs": 2, "n0_clean_references": 2,
-                           "donor_captures": 1, "natural_generations": 2},
+                           "donor_captures": 1, "recipient_passive_captures": 1,
+                           "natural_generations": 2},
     })
     finish = {"status": FINISH_FAILED, "context_index": index,
               "context_label": label, "attempt_id": attempt_id,
@@ -496,7 +556,8 @@ def launch_context(index: int) -> dict:
               "auditor_returncode": None, "result_sha256": None,
               "audit_sha256": None, "error_sha256": None,
               "post_run_source_verified": False, "model_work_elapsed_seconds": 0.0,
-              "prior_model_work_seconds": upstream["prior_model_work_seconds"]}
+              "prior_model_work_seconds": upstream["prior_model_work_seconds"],
+              "cumulative_prior_model_work_seconds": cumulative_prior}
     began = time.monotonic()
     try:
         code, elapsed, reason = _bounded(command, capture,
@@ -518,6 +579,13 @@ def launch_context(index: int) -> dict:
         result_path = output / "result.json"
         if not result_path.is_file() or (output / "error.json").exists():
             raise ValueError("Worker result absent or error present")
+        result = _json(result_path)
+        if (result.get("status") != "completed_fp32_nonbeaver_local_linearity_raw_only" or
+                result.get("context", {}).get("index") != index or
+                result.get("context", {}).get("label") != label or
+                result.get("attempt_id") != attempt_id or
+                result.get("freeze_sha256") != freeze_sha):
+            raise ValueError("Worker result context or source binding differs")
         finish["result_sha256"] = sha(result_path)
         if sha(FREEZE) != freeze_sha or verify_freeze()[0] != frozen:
             raise ValueError("Source/freeze changed after model process")
@@ -533,11 +601,14 @@ def launch_context(index: int) -> dict:
             raise ValueError(reason or "Independent CPU auditor rejected context")
         audit = _json(audit_path)
         if (audit.get("status") != "audited_voxtral_fp32_nonbeaver_saved_data_only" or
-                audit.get("context_index") != index or
-                audit.get("context_label") != label or
+                audit.get("context", {}).get("index") != index or
+                audit.get("context", {}).get("label") != label or
                 audit.get("attempt_id") != attempt_id or
                 audit.get("result_sha256") != finish["result_sha256"] or
-                audit.get("freeze_sha256") != freeze_sha):
+                audit.get("freeze_sha256") != freeze_sha or
+                audit.get("preflight_receipt_sha256") != sha(CPU_PREFLIGHT) or
+                audit.get("protocol_v5_sha256") != PROTOCOL_SHA or
+                audit.get("worker_invalidity_disagreement") is not False):
             raise ValueError("CPU audit result binding differs")
         finish["audit_sha256"] = sha(audit_path)
         if sha(FREEZE) != freeze_sha or verify_freeze()[0] != frozen:
