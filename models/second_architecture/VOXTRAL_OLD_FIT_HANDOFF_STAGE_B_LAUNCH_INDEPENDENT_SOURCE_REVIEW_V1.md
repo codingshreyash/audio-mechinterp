@@ -19,3 +19,11 @@ The final reviewed source hashes are launcher `46e669a0eec6df56573a572ee22bc9e7e
 **Decision: GO for Stage-B launcher source; model run HOLD until external freeze.**
 
 This GO does not create or approve either phase freeze. The BF16 external freeze requires a separate independent review before its one permitted model process. FP32 requires its own later freeze after a reviewed BF16 Stage-B result. These source checks establish bounded execution logic and saved-evidence arithmetic admission; future result reviews must verify the actual receipts and tensor sidecars.
+
+## Exact-review-hash amendment rereview — GO for source only
+
+Commit `60e70ef` changed only the launcher gate, its CPU test, and the launch protocol. I inspected the diff: the BF16 freeze review must name the exact BF16 freeze SHA-256, the FP32 freeze review must name the exact FP32 freeze SHA-256, and the BF16 Stage-B result review must name the exact BF16 manifest SHA-256. Existing first-add and Git chronology checks still apply. The synthetic reviewed-freeze fixture now includes the bound freeze hash. All **15 CPU tests** pass, and the real `--check-freeze` stops at the absent BF16 external freeze before a model process. The new gate SHA-256 is `8bf750e1f79095c714a57cb78a4c0793f6b98122fb64d5453398c820e2058858`; tests `a8968ad034457674135725c15618d9e3355395497088d514eecc75c1a5043bdc`; protocol `b0d8f46905f83be14cdbaadef47ee8a351e49c8b67f594b4a4d305135a0f2701`. Worker and adapter hashes remain `f4128106dccb07510b7be75437941ff3dc1ff2d0fd36c9181155842821ae1a7c` and `69b8e064fbcda35cdd9b93fdd16a9fdfd5cd2d523e17fb0104847d171da6d703`.
+
+**Decision: GO for Stage-B launcher source; model run HOLD until external freeze.**
+
+This source GO supersedes the preceding source GO only for the changed bytes. It is not a freeze review or an authorization of a Stage-B result. The external BF16 freeze must be committed after this review and checked by an independent reviewer before the one-shot BF16 replay.
