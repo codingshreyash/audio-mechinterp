@@ -1,0 +1,384 @@
+{
+  "status": "completed_numerical_feasibility_only",
+  "meta_sha256": "f151ced4e4e830d041e1f8e109eb3b37a05e57ba8b2e38a4ff06914334603558",
+  "progress_sha256": "450b57d85295fced1beeb17ff8da0a2a92d3ab5822655ca137d4bfac0492cc8b",
+  "details_sha256": "1bc49aa650b96c7ac6cb2f545da98e198edfa18998ebae8dc263c70ad5ad7b3c",
+  "model_load_seconds": 0.8270725829061121,
+  "vjp_seconds": [
+    0.3174687090795487,
+    0.22708012512885034,
+    0.22691791597753763,
+    0.2286996659822762
+  ],
+  "natural_suffix_ids": [
+    5934,
+    14844,
+    2
+  ],
+  "passive_suffix_ids": [
+    5934,
+    14844,
+    2
+  ],
+  "passive_hook_shapes": {
+    "encoder31": [
+      [
+        1,
+        1500,
+        1280
+      ]
+    ],
+    "projector": [
+      [
+        375,
+        3072
+      ]
+    ],
+    "lm29": [
+      [
+        1,
+        396,
+        3072
+      ],
+      [
+        1,
+        1,
+        3072
+      ],
+      [
+        1,
+        1,
+        3072
+      ],
+      [
+        1,
+        1,
+        3072
+      ]
+    ]
+  },
+  "no_grad_hook_events": {
+    "encoder31": {
+      "shape": [
+        1,
+        1500,
+        1280
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "projector": {
+      "shape": [
+        375,
+        3072
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "lm29": {
+      "shape": [
+        1,
+        396,
+        3072
+      ],
+      "dtype": "torch.bfloat16"
+    }
+  },
+  "shared_graph_hook_events": {
+    "encoder31": {
+      "shape": [
+        1,
+        1500,
+        1280
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "projector": {
+      "shape": [
+        375,
+        3072
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "lm29": {
+      "shape": [
+        1,
+        396,
+        3072
+      ],
+      "dtype": "torch.bfloat16"
+    }
+  },
+  "shared_graph_vjp_connected_both_sources": true,
+  "raw_source_vjp_dtypes": {
+    "encoder31": [
+      "torch.bfloat16"
+    ],
+    "projector": [
+      "torch.bfloat16"
+    ]
+  },
+  "selected_gradient_storage_dtype": "torch.float32",
+  "contraction_dtype": "torch.float32",
+  "source_shapes": {
+    "encoder31": [
+      1500,
+      1280
+    ],
+    "projector": [
+      375,
+      3072
+    ]
+  },
+  "source_hashes": {
+    "encoder31": "e0abb561ad91255d1945c81c1dead1a75266f09d0e7f3695a123040fef47b2b6",
+    "projector": "a96b5e19ffefe48e537b30ddecb9de11c8c40becf4b4dd3f2813ab5583fce100"
+  },
+  "donor_hashes": {
+    "encoder31": "6277e1dd59e29e91dcfe89b50a1c22c22f01c0971794f0fc5c3d0d5422702e7d",
+    "projector": "97c3e9bb93ecbde1029789626b8040dc69c9add5cb361b8502e6dd579cc50e1e"
+  },
+  "terminal_shape": [
+    3072
+  ],
+  "measured_terminal_hashes": {
+    "encoder31": {
+      "zero": "076cd3e8760d67e6b41ac940f48a3bd320969b190cd9951cea1eb9408066aca0",
+      "alpha": "9c893f633d8b215343acb93cd71b7651f2611b0213b6fcbd181852c10760f460"
+    },
+    "projector": {
+      "zero": "076cd3e8760d67e6b41ac940f48a3bd320969b190cd9951cea1eb9408066aca0",
+      "alpha": "787b761245932f2ca0ab1c3378abd0d8cae0dfcef7a881d2436a2263e4a7d902"
+    }
+  },
+  "no_grad_minus_grad_four": [
+    0.046875,
+    0.0,
+    -0.25,
+    -0.125
+  ],
+  "edits": {
+    "encoder31": {
+      "intended_norm": 0.1021750420331955,
+      "realized_norm": 0.3722463548183441,
+      "mean_fidelity_ratio": 0.2599633563570216,
+      "row_nonuniformity_ratio": 0.286484479961907,
+      "mean_fidelity_over_10pct": true,
+      "row_nonuniformity_over_10pct": true,
+      "effective_sha256": "9a9d8135728328e67eb6f060995ce3e77a34b4dc13c1ef0fe74676244f2bf9cf"
+    },
+    "projector": {
+      "intended_norm": 0.12702523171901703,
+      "realized_norm": 0.22519417107105255,
+      "mean_fidelity_ratio": 0.14960193061919388,
+      "row_nonuniformity_ratio": 0.16076474897573914,
+      "mean_fidelity_over_10pct": true,
+      "row_nonuniformity_over_10pct": true,
+      "effective_sha256": "38a1fa9cfa4d604794b91dd0f90fb009885bbe3020d5aaf255972e532bf936ea"
+    }
+  },
+  "predictions": {
+    "encoder31": {
+      "uniform_mean": [
+        0.000975687347818166,
+        0.0005876250797882676,
+        -0.000693547772243619,
+        -0.001083125127479434
+      ],
+      "rowwise_oracle": [
+        0.0008620871230959892,
+        0.0004415359580889344,
+        -0.0005421475507318974,
+        -0.0010637387167662382
+      ],
+      "ideal_uniform": [
+        0.0011346014216542244,
+        0.0005734662408940494,
+        -0.0006269524456001818,
+        -0.0011440172092989087
+      ]
+    },
+    "projector": {
+      "uniform_mean": [
+        0.0006724453996866941,
+        3.8399186450988054e-05,
+        0.00010987778659909964,
+        -0.0006644974928349257
+      ],
+      "rowwise_oracle": [
+        0.0006623670342378318,
+        9.43975755944848e-05,
+        0.00024211849085986614,
+        -0.0006041828310117126
+      ],
+      "ideal_uniform": [
+        0.0006539993919432163,
+        -3.9389386074617505e-05,
+        1.885526580736041e-05,
+        -0.0005490424227900803
+      ]
+    }
+  },
+  "measured": {
+    "encoder31": {
+      "zero_hook_events": {
+        "encoder31": {
+          "shape": [
+            1,
+            1500,
+            1280
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "projector": {
+          "shape": [
+            375,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "lm29": {
+          "shape": [
+            1,
+            396,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        }
+      },
+      "alpha_hook_events": {
+        "encoder31": {
+          "shape": [
+            1,
+            1500,
+            1280
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "projector": {
+          "shape": [
+            375,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "lm29": {
+          "shape": [
+            1,
+            396,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        }
+      },
+      "delta_four": [
+        -0.03125,
+        0.0,
+        0.25,
+        -0.125
+      ],
+      "zero_minus_clean_four": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "uniform_error": {
+        "absolute_l2": 0.2814986447588688,
+        "relative_l2": 1.0008840702537558,
+        "measured_l2": 0.28125
+      },
+      "rowwise_error": {
+        "absolute_l2": 0.281359104444129,
+        "relative_l2": 1.0003879269124587,
+        "measured_l2": 0.28125
+      },
+      "ideal_error": {
+        "absolute_l2": 0.2814307464332716,
+        "relative_l2": 1.0006426539849658,
+        "measured_l2": 0.28125
+      }
+    },
+    "projector": {
+      "zero_hook_events": {
+        "encoder31": {
+          "shape": [
+            1,
+            1500,
+            1280
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "projector": {
+          "shape": [
+            375,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "lm29": {
+          "shape": [
+            1,
+            396,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        }
+      },
+      "alpha_hook_events": {
+        "encoder31": {
+          "shape": [
+            1,
+            1500,
+            1280
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "projector": {
+          "shape": [
+            375,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        "lm29": {
+          "shape": [
+            1,
+            396,
+            3072
+          ],
+          "dtype": "torch.bfloat16"
+        }
+      },
+      "delta_four": [
+        0.0,
+        0.0625,
+        0.0,
+        -0.125
+      ],
+      "zero_minus_clean_four": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "uniform_error": {
+        "absolute_l2": 0.13914464781601896,
+        "relative_l2": 0.9956380519100353,
+        "measured_l2": 0.13975424859373686
+      },
+      "rowwise_error": {
+        "absolute_l2": 0.13917354595807707,
+        "relative_l2": 0.9958448301822446,
+        "measured_l2": 0.13975424859373686
+      },
+      "ideal_error": {
+        "absolute_l2": 0.13928260529367362,
+        "relative_l2": 0.996625195263764,
+        "measured_l2": 0.13975424859373686
+      }
+    }
+  },
+  "peak_mps_driver_bytes": 12875120640,
+  "peak_mps_current_bytes": 2607941888,
+  "elapsed_seconds": 11.47312608291395,
+  "scope": "one old FIT pair/direction, one bin, four raw coordinates; no v2 or efficacy"
+}

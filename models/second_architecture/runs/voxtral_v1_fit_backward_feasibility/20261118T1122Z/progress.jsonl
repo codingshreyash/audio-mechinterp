@@ -1,0 +1,23 @@
+{"elapsed_seconds": 0.0005697079468518496, "phase": "attempt_started", "protocol_sha256": "8fa6aa224e150b2579e335d14f7dafddd542eacdf733bc92ab7f3ff281384148", "script_sha256": "cc48437b96d47c766f5ba9f86eb5789481fecd7d1469c09a503d225a42ed3be1", "wall_utc": "2026-11-18T11:22:15.355676+00:00"}
+{"elapsed_seconds": 6.849290875019506, "installed_sources": {"feature_extraction_whisper": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb", "modeling_llama": "affc6a4ab36b562a6b4c90b84c4e7939c5417a69ad7bd37e858be5583f189830", "modeling_voxtral": "2d3ec9d78c469b77c42a8d5ba258185fb1c58f4c2c7bf6007ec724436dfc7056", "processing_voxtral": "239e84657d1a0287ab27a540c946a787a69b4b0bf45727d6b24bee21ccec0296"}, "phase": "preflight_validated"}
+{"elapsed_seconds": 6.854092790978029, "fraction_limit": 0.8012819990316539, "phase": "mps_ready", "recommended_max_bytes": 40200896512}
+{"current_bytes": 0, "driver_bytes": 458752, "elapsed_seconds": 6.857951124897227, "peak_driver_bytes": 458752, "phase": "before_model_load"}
+{"current_bytes": 512, "driver_bytes": 9365192704, "elapsed_seconds": 7.688306957948953, "peak_driver_bytes": 9365192704, "phase": "model_loaded"}
+{"current_bytes": 512, "driver_bytes": 10659446784, "elapsed_seconds": 8.162224458064884, "peak_driver_bytes": 10659446784, "phase": "natural_generation"}
+{"current_bytes": 512, "driver_bytes": 10659446784, "elapsed_seconds": 8.487735790899023, "peak_driver_bytes": 10659479552, "phase": "passive_generation"}
+{"current_bytes": 8978944, "driver_bytes": 10659430400, "elapsed_seconds": 8.798611500067636, "peak_driver_bytes": 10659479552, "phase": "no_grad_prompt"}
+{"current_bytes": 8978944, "driver_bytes": 10659430400, "elapsed_seconds": 9.032022333005443, "peak_driver_bytes": 10659479552, "phase": "donor_no_grad_prompt"}
+{"current_bytes": 2571884544, "driver_bytes": 12875071488, "elapsed_seconds": 9.313372916076332, "peak_driver_bytes": 12875071488, "phase": "recipient_shared_graph"}
+{"current_bytes": 2571884544, "driver_bytes": 12875071488, "elapsed_seconds": 9.316569790942594, "peak_driver_bytes": 12875071488, "phase": "before_vjp_0"}
+{"current_bytes": 2578241536, "driver_bytes": 12875087872, "elapsed_seconds": 9.638365499908105, "peak_driver_bytes": 12875087872, "phase": "after_vjp_0"}
+{"current_bytes": 2574374912, "driver_bytes": 12875087872, "elapsed_seconds": 9.642657999880612, "peak_driver_bytes": 12875087872, "phase": "before_vjp_1"}
+{"current_bytes": 2578241536, "driver_bytes": 12875087872, "elapsed_seconds": 9.875436875037849, "peak_driver_bytes": 12875104256, "phase": "after_vjp_1"}
+{"current_bytes": 2574374912, "driver_bytes": 12875087872, "elapsed_seconds": 9.881617000093684, "peak_driver_bytes": 12875104256, "phase": "before_vjp_2"}
+{"current_bytes": 2578241536, "driver_bytes": 12875087872, "elapsed_seconds": 10.115100000053644, "peak_driver_bytes": 12875104256, "phase": "after_vjp_2"}
+{"current_bytes": 2574374912, "driver_bytes": 12875087872, "elapsed_seconds": 10.120389749994501, "peak_driver_bytes": 12875104256, "phase": "before_vjp_3"}
+{"current_bytes": 24183296, "driver_bytes": 12875087872, "elapsed_seconds": 10.355994540965185, "peak_driver_bytes": 12875104256, "phase": "after_vjp_3"}
+{"current_bytes": 11469312, "driver_bytes": 12875087872, "elapsed_seconds": 10.63487104093656, "peak_driver_bytes": 12875120640, "phase": "zero_patch_encoder31"}
+{"current_bytes": 11469312, "driver_bytes": 12875087872, "elapsed_seconds": 10.906540875090286, "peak_driver_bytes": 12875120640, "phase": "alpha_patch_encoder31"}
+{"current_bytes": 11469312, "driver_bytes": 12875087872, "elapsed_seconds": 11.177828290965408, "peak_driver_bytes": 12875120640, "phase": "zero_patch_projector"}
+{"current_bytes": 11469312, "driver_bytes": 12875087872, "elapsed_seconds": 11.44414533302188, "peak_driver_bytes": 12875120640, "phase": "alpha_patch_projector"}
+{"current_bytes": 11469312, "driver_bytes": 12875087872, "elapsed_seconds": 11.456066583050415, "peak_driver_bytes": 12875120640, "phase": "details_saved"}
