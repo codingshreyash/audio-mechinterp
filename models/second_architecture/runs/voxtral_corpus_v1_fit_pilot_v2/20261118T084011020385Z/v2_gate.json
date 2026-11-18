@@ -1,0 +1,12 @@
+{
+  "status": "complete",
+  "runner_sha256": "7ac333dadd4f645c4b173fd23a56fcee4bf45728abfaaabc91b87d3207d068a3",
+  "selection_sha256": "f897d360dbcec9c09f1813f9c070294753fbabc25c6213ba6bdac34b1d79b56b",
+  "result_sha256": "6cc84dc1a4ced9ce17380eab3836079c462c9974f31337f146416730b5536ccf",
+  "capability_gate_pass": true,
+  "first_template_natural_endpoints_passing": 16,
+  "first_template_natural_endpoints_planned": 16,
+  "stage2_all_16_exact_pass": true,
+  "intervention_gate_pass": true,
+  "first_template_failures": []
+}
