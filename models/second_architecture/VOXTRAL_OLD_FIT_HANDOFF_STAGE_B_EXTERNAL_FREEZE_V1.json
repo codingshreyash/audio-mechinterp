@@ -1,0 +1,33 @@
+{
+  "audit_scope": "old_fit_one_case_saved_data_arithmetic_only_no_execution_attestation",
+  "auditor_review_sha256": "86ea3dde1d795bc4870d7c471d35f752a70d5e380f71ef63ba03ca0aa00b663c",
+  "auditor_sha256": "45cbf7f1b1767d8a736ab5569a06a152b8c2705c010fbfb9cc45f7d039575cf0",
+  "auditor_tests_sha256": "9d8b1e777706420c1deef6ee9a719eba8a7d589403252db513baac07df8b7810",
+  "bf16_posthoc_receipt_sha256": "df4e16989a67a4cc3e4584aa74c99f3b0a2601e82d8226adc7beb2d41bd38ba7",
+  "bf16_posthoc_review_sha256": "ed1b03dab9e7842a852c6ad851f3ad7bcfc7b0bfbf66f3343be40ec3d64f5ad5",
+  "bf16_stage_a_manifest_sha256": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+  "driver_amendment_sha256": "392c5e061c1c1fdad8610eab96d46840073d4a50099c02d98cc4e93065895409",
+  "driver_review_sha256": "059cd803c401ce7294a9d963d74c24e01855c951d0f2f65c73bf3c0f99f34dc5",
+  "driver_sha256": "f685a920a61bb1885ce86df44e41899adca886f42b90f5a6577ae7e6cffaf71e",
+  "driver_tests_sha256": "517c136a45e84ca7a5173d0424e56fb63eda668807b97f6e7cbc54632b651724",
+  "fp32_stage_a_freeze_sha256": "31e41dcee185432e7236f5ff4226e1062c8066a034a66d75f89916a4a4ef1dcf",
+  "fp32_stage_a_manifest_sha256": "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f",
+  "fp32_stage_a_review_sha256": "d7cf2172c95ee9b381ff577a2684971a9f28da290a2a5aa59f345ae76b6d120c",
+  "launcher_review_commit": "dd9132d57f3d304733a4877e4f7ed562fff41269",
+  "max_total_bytes": 5368709120,
+  "max_total_seconds": 4500,
+  "permitted_phases": [
+    "bf16_direct_lm"
+  ],
+  "prospective_protocol_sha256": "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b",
+  "replay_primitives_sha256": "bef337c90a024e034e60818761b4be79371ca0767f83d28efe29269ba0cc89e1",
+  "reviewed_utc": "2026-11-18T14:24:27.711301+00:00",
+  "stage_a_model_work_seconds": 218.5633733337745,
+  "stage_b_audit_adapter_sha256": "69b8e064fbcda35cdd9b93fdd16a9fdfd5cd2d523e17fb0104847d171da6d703",
+  "stage_b_launch_gate_sha256": "8bf750e1f79095c714a57cb78a4c0793f6b98122fb64d5453398c820e2058858",
+  "stage_b_launch_protocol_sha256": "b0d8f46905f83be14cdbaadef47ee8a351e49c8b67f594b4a4d305135a0f2701",
+  "stage_b_launch_tests_sha256": "a8968ad034457674135725c15618d9e3355395497088d514eecc75c1a5043bdc",
+  "stage_b_launcher_review_sha256": "32103f5802d0e4c8f7597f85424b8be45e93d36e17a39ae760ce8b846f3c7082",
+  "stage_b_worker_sha256": "f4128106dccb07510b7be75437941ff3dc1ff2d0fd36c9181155842821ae1a7c",
+  "status": "frozen_old_fit_handoff_stage_b_bf16_v1"
+}
