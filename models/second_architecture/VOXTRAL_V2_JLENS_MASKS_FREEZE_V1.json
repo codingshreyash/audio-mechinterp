@@ -1,0 +1,18 @@
+{
+  "status": "independently_reviewed_voxtral_v2_masks_frozen",
+  "scope": "CPU-only nominal audio time masks; no model or ASR inference",
+  "builder_sha256": "e0a2d6b5ca3f52a9a426af1fc12ffdc9b50e60b3dd06a0282f560b2a020e5339",
+  "independent_review_sha256": "acc51cc8500c1aeeade40bca2c9d7a633fb2c544254f72fcc1900313acb91dde",
+  "source_sha256": {
+    "manifest": "15395c7d132eb3f1c1a6b2b7d555146faa83be4ee2b77fba4f481cf70f26761d",
+    "binding": "858f8f68fce65ee60e328b1536b34608ced6b3e84d725f229460c6376e14af93",
+    "candidates": "ac2f9598e4459191569662aa34803c5a72e57ff686d415e60935a4f716a11a93",
+    "validation": "67e3eec5e14b30a61efbbce449547ec2d5083a87d12a84f0aee8d0e715a59d56",
+    "render_freeze": "ca90162648f41c56997452a30c9c95791530929c231306ea7529dc2268071410",
+    "design": "d103791610184dd1c3b4beac2ac5cb0bb74d9cd03b55ac6bfaac43c755a293fa",
+    "old_builder": "ab8bdcf0374794c32b904cbdee37cba48c87296cef2970fbc0af896e0d21c2fc"
+  },
+  "planned_records": 240,
+  "planned_wavs": 480,
+  "model_inference_authorized": false
+}
