@@ -1,0 +1,27 @@
+{
+  "status": "frozen_old_fit_handoff_stage_a_v1",
+  "permitted_arms": [
+    "bf16",
+    "fp32"
+  ],
+  "audit_scope": "posthoc_one_old_fit_case_native_stage_only_no_security_claim",
+  "source_review_commit": "6430f8d4e3c41c0578eecc08eafa083b6bda3941",
+  "auditor_review_commit": "d6e9e97fb232b6395987f51e24b666e5e3acf813",
+  "launcher_review_commit": "3094df22238ca1100dbdc81df3bf2e85189b4a73",
+  "reviewed_utc": "2026-11-18T13:16:24.745520+00:00",
+  "protocol_sha256": "61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b",
+  "plan_review_sha256": "8377420a6ae632a7a4cce5b6f69790eb834ec6218e48fd53952c3445edf58e19",
+  "native_source_sha256": "dc63b8c10ef605e1cc8538e3d37d8d2531e50ca7a46140ee1ee551054e3de978",
+  "native_tests_sha256": "e2e3c1b51f72d54c573665c96d984ea73857af6560d2a38ef0d51be28b8a0a77",
+  "runner_sha256": "9f8f6b52d3e218acc496b78b35247cfdf322672cd487e585b92d58f08205f1dc",
+  "runner_schema_sha256": "b6a9674f65ee352ed6635a48a39ef9bffb932419844e52bb6d28db8c7e9d41d5",
+  "runner_review_sha256": "f82b000baa4aaa817292860d72e4bb61dbc761f90d2d607e69215368186bf1ef",
+  "auditor_sha256": "4f800ed604295ae0e4fbd53c893fccd14b8968badb43b835e6ec975e49b0cf3d",
+  "auditor_tests_sha256": "ea9588c657b5dde9bfbb5963e68ed8512987e4371d05206d917f5c8803e23351",
+  "auditor_hold_review_sha256": "e0f31b8bf4b13f537e3257df7e68bf55559c543f0e5ef046733df0beb4fb0fcb",
+  "auditor_review_sha256": "055c02fda105f6c0bc3a8b295294833ef7f170b6206baae75b57e779e48a8f51",
+  "launcher_sha256": "f79b15843f661d00130455b83f2cf534eaeee3c9ce1c770859bb522b967bd29f",
+  "launcher_tests_sha256": "982a6c66f0068189d31e57fd3350b82bb7e1e46529ea8bc8a086a57c5f329369",
+  "launcher_protocol_sha256": "4b996b1b906e68bdad50ff4bfb7509c2f95a7f9d85199c713fb783c047d8b602",
+  "launcher_review_sha256": "429433753c4f314bfc80a25886510ee66b48139291c765dde514f9c39966ea84"
+}
