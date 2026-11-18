@@ -220,6 +220,8 @@ def check_nano_cache(hf_home: Path, *, expected_files: dict[str, str] | None = N
             "pinned Nano HF cache/snapshot missing")
     require({p.name for p in hub.iterdir()} <= {NANO_CACHE_REPO, ".locks"},
             "Nano HF_HOME hub is not dedicated to the pinned repository")
+    require({p.name for p in repo.iterdir()} == {"refs", "snapshots", "blobs"},
+            "Nano repository cache root has extra or missing entries")
     require({p.name for p in (repo / "snapshots").iterdir()} == {revision},
             "Nano cache has an unexpected snapshot revision")
     refs = repo / "refs"
@@ -246,6 +248,52 @@ def check_nano_cache(hf_home: Path, *, expected_files: dict[str, str] | None = N
     return {"nano_repo_id": NANO_REPO_ID, "nano_revision": revision,
             "nano_hf_home": str(home), "nano_refs_main": revision,
             "nano_snapshot": str(snapshot), "nano_files_verified": len(expected)}
+
+
+def check_pristine_modules_cache(hf_home: Path) -> None:
+    """Custom code must not be preseeded before Transformers copies pinned bytes."""
+    modules = hf_home / "modules"
+    require(not modules.is_symlink() and
+            (not modules.exists() or (modules.is_dir() and not any(modules.iterdir()))),
+            "Nano Transformers modules cache must be absent or empty before resolution")
+
+
+def check_generated_modules_cache(hf_home: Path, *, expected_files: dict[str, str] | None = None,
+                                  revision: str = NANO_COMMIT) -> dict:
+    """Verify the exact executable custom Python copied by Transformers."""
+    modules = hf_home / "modules"
+    module_root = (modules / "transformers_modules" / "nvidia" /
+                   "NVIDIA-Nemotron-Nano-9B-v2" / revision)
+    expected = NANO_FILES_SHA256 if expected_files is None else expected_files
+    dynamic_files = {module_root / name: expected[name] for name in
+                     ("configuration_nemotron_h.py", "modeling_nemotron_h.py")}
+    require(modules.is_dir() and not modules.is_symlink() and module_root.is_dir(),
+            "pinned Nano dynamic-module directory missing or redirected")
+    allowed_dirs = {modules}
+    cursor = module_root
+    while cursor != modules:
+        allowed_dirs.add(cursor)
+        cursor = cursor.parent
+    for item in modules.rglob("*"):
+        require(not item.is_symlink(), f"symlink in Nano modules cache: {item}")
+        if item.is_dir():
+            require(item in allowed_dirs or
+                    (item.name == "__pycache__" and item.parent in allowed_dirs),
+                    f"unexpected Nano modules directory: {item}")
+        elif item.name == "__init__.py":
+            require(item.parent in allowed_dirs and item.read_bytes() == b"",
+                    f"unexpected executable Nano module initializer: {item}")
+        elif item.suffix == ".pyc":
+            require(item.parent.name == "__pycache__" and
+                    item.parent.parent in allowed_dirs,
+                    f"unexpected compiled Nano module: {item}")
+        else:
+            require(item in dynamic_files, f"unexpected Nano modules file: {item}")
+            check_file(item, dynamic_files[item])
+    for path, digest in dynamic_files.items():
+        check_file(path, digest)
+    return {"nano_dynamic_module_files_verified": len(dynamic_files),
+            "nano_modules_cache": str(modules)}
 
 
 def verify_nano_offline(hf_home: Path) -> dict:
@@ -542,6 +590,7 @@ def self_test() -> dict:
         nano_snapshot = nano_repo / "snapshots" / NANO_COMMIT
         nano_ref.parent.mkdir(parents=True)
         nano_snapshot.mkdir(parents=True)
+        (nano_repo / "blobs").mkdir()
         nano_ref.write_text(NANO_COMMIT + "\n")
         synthetic_hashes = {}
         for filename in NANO_FILES_SHA256:
@@ -559,6 +608,14 @@ def self_test() -> dict:
 
         require(check_nano_cache(nano_home, expected_files=synthetic_hashes)
                 ["nano_files_verified"] == 6, "six-file Nano cache self-test failed")
+        extra_root_file = nano_repo / "model.safetensors"
+        extra_root_file.write_bytes(b"unexpected weight")
+        expect_nano_failure("Nano repository root weight")
+        extra_root_file.unlink()
+        extra_root_dir = nano_repo / "other"
+        extra_root_dir.mkdir()
+        expect_nano_failure("Nano repository root directory")
+        extra_root_dir.rmdir()
         nano_ref.write_text("0" * 40 + "\n")
         expect_nano_failure("wrong refs/main")
         nano_ref.write_text(NANO_COMMIT + "\n")
@@ -582,7 +639,6 @@ def self_test() -> dict:
         expect_nano_failure("Nano snapshot symlink escape")
         config_file.unlink()
         blobs = nano_repo / "blobs"
-        blobs.mkdir()
         config_blob = blobs / "synthetic-config-blob"
         config_blob.write_bytes(outside.read_bytes())
         config_file.symlink_to(Path("../../blobs") / config_blob.name)
@@ -591,6 +647,44 @@ def self_test() -> dict:
         extra_blob = blobs / "unreferenced-weight-like-blob"
         extra_blob.write_bytes(b"unexpected")
         expect_nano_failure("unreferenced Nano blob")
+        extra_blob.unlink()
+
+        check_pristine_modules_cache(nano_home)
+        modules = nano_home / "modules"
+        module_root = (modules / "transformers_modules" / "nvidia" /
+                       "NVIDIA-Nemotron-Nano-9B-v2" / NANO_COMMIT)
+        module_root.mkdir(parents=True)
+        seeded = module_root / "modeling_nemotron_h.py"
+        seeded.write_bytes(b"unverified preseeded code")
+        try:
+            check_pristine_modules_cache(nano_home)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("preseeded Nano dynamic code did not fail closed")
+        shutil.rmtree(modules)
+        check_pristine_modules_cache(nano_home)
+        module_root.mkdir(parents=True)
+        for name in ("configuration_nemotron_h.py", "modeling_nemotron_h.py"):
+            (module_root / name).write_bytes((nano_snapshot / name).read_bytes())
+        require(check_generated_modules_cache(nano_home, expected_files=synthetic_hashes)
+                ["nano_dynamic_module_files_verified"] == 2,
+                "copied Nano custom-code hash self-test failed")
+        (module_root / "extra.py").write_bytes(b"unexpected executable code")
+        try:
+            check_generated_modules_cache(nano_home, expected_files=synthetic_hashes)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("extra Nano dynamic code did not fail closed")
+        (module_root / "extra.py").unlink()
+        (module_root / "modeling_nemotron_h.py").write_bytes(b"changed custom code")
+        try:
+            check_generated_modules_cache(nano_home, expected_files=synthetic_hashes)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("changed Nano dynamic code did not fail closed")
     return {"status": "self_test_passed_no_model_or_network"}
 
 
@@ -620,7 +714,9 @@ def main() -> None:
                 result.update(check_fixtures(args.fixture_manifest))
                 result.update(check_nano_cache(args.nano_hf_home))
                 result.update(check_runtime(args.checkpoint_dir, args.gpu_policy))
+                check_pristine_modules_cache(args.nano_hf_home.resolve())
                 result.update(verify_nano_offline(args.nano_hf_home.resolve()))
+                result.update(check_generated_modules_cache(args.nano_hf_home.resolve()))
                 check_nano_cache(args.nano_hf_home)
                 result["status"] = "local_ready_preflight_passed_no_model_or_network"
         print(json.dumps(result, indent=2))
