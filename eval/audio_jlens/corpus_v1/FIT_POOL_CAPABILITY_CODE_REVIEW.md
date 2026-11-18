@@ -1,0 +1,10 @@
+# Fit-pool capability runner: independent static review
+
+**Verdict:** No blocker found before the bounded MPS run. Reviewed committed source at `4ff545e9186b78c14f30d17c979122b5270f45eb`. No Qwen inference was run in this review.
+
+- `load_fit_cases()` binds the frozen spec and rendered manifest SHA-256 values, validates the selected fit-pool pair metadata and clip hashes, and reads only fit-pool WAVs. It rejects duplicate or missing groups and produces exactly 192 sorted case IDs. It reads development/test metadata from the shared manifest but does not open their WAVs.
+- Tokenizer files, EOS ID, all answer aliases, the model checkpoint revision, and the Transformers source revision are pinned. The runner uses the established audio batch adapter and extracts generated IDs after the prompt prefix. Raw decode, EOS completion, strict word match, one-terminal-punctuation semantic match, and first-token alias match are recorded separately. A 16-token non-EOS output remains in the planned denominator and fails the word-plus-EOS measures.
+- Output metadata binds the script, corpus, cases, model, prompt, generation limit, dtype, and device. Resume requires identical metadata and a saved case-ID prefix. Progress is appended per answer; memory measurements are logged after load and each answer. The 30 GiB MPS per-process cap is set before model loading, with a measured driver-memory abort.
+- CPU verification passed: 3/3 unit tests and `--validate-only`. Validation reported 192 cases, 48 primary map-fit cases, 48 per category, 96 per voice, and 96 per fit template.
+
+**Limitations:** Resume validates saved row IDs and metadata, but it does not recalculate each saved row's answer classification or audio fields. A manually altered progress file could therefore contaminate a resumed report; preserve the sidecar hashes and review saved results before drawing conclusions. The 30 GiB guard samples after each answer, so a transient peak within generation is bounded by the MPS process cap rather than the log sample. This run measures model answer capability on synthetic fit audio; it does not yet evaluate a Jacobian lens or unseen splits.

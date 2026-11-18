@@ -1,0 +1,15 @@
+{
+  "status": "fit_pool_only",
+  "script_sha256": "8ddd9518cf452bf35532581110c7b296fb8876f558aa81fdecf81bbb8d9adac0",
+  "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "cases_sha256": "b690782c0fe550c20c07456b939bd50d24a03ef80784b6090aee9c6526066b9e",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "system_prompt": "Repeat only the single word explicitly introduced before the final question in the spoken request.",
+  "max_new_tokens": 16,
+  "dtype": "float32",
+  "device": "mps",
+  "memory_limit_driver_bytes": 32212254720
+}
