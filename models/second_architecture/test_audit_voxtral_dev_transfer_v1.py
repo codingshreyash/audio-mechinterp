@@ -85,7 +85,8 @@ class DevelopmentAuditTests(unittest.TestCase):
                 for arm in audit.ARMS:
                     byslot[("patch", site, word, arm, "whole")] = {
                         "type": "generation", "edit": {"target_bf16_norm": 10.0,
-                                                         "effective_bf16_norm": 10.0}}
+                                                         "effective_bf16_norm": 10.0,
+                                                         "alpha": 1.0}}
                     for name in audit.CONTROLS:
                         byslot[("patch", site, word, arm, name)] = {
                             "type": "generation", "edit": {"target_bf16_norm": 10.0,
@@ -102,6 +103,11 @@ class DevelopmentAuditTests(unittest.TestCase):
         self.assertAlmostEqual(changed["alpha"], changed["target_bf16_norm"] /
                                changed["unscaled_edit_norm"])
         with self.assertRaisesRegex(AssertionError, "control target differs"):
+            audit.verify_patch_norm_groups(byslot, record)
+        changed.update(target_bf16_norm=10.0, effective_bf16_norm=9.9, alpha=2.0)
+        whole = byslot[("patch", "encoder31", first_word, "restore", "whole")]["edit"]
+        whole["alpha"] = 0.5
+        with self.assertRaisesRegex(AssertionError, "whole-word target/effective"):
             audit.verify_patch_norm_groups(byslot, record)
 
     def synthetic_rows(self):

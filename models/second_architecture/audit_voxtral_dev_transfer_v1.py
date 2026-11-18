@@ -437,6 +437,8 @@ def verify_row(row: dict, record: dict, byslot: dict, processor, special: set[in
                     target/edit["unscaled_edit_norm"], 1e-5)
                     and abs(effective-target) <= max(.05*target, 1e-6)+1e-5,
                     "single-scale BF16 norm rule")
+            if name in ("whole", "word_0", "word_1", "word_2", "word_3"):
+                require(edit["alpha"] == 1.0, "direct donor patch alpha changed")
             if name == "self":
                 require(edit["alpha"] == 0 and edit["effective_bf16_norm"] == 0,
                         "self edit nonzero")
@@ -467,7 +469,8 @@ def verify_patch_norm_groups(byslot: dict, record: dict) -> None:
                 target = whole_edit.get("target_bf16_norm")
                 effective = whole_edit.get("effective_bf16_norm")
                 require(isinstance(target, (int, float)) and target > 0
-                        and near(target, effective, 1e-6),
+                        and near(target, effective, 1e-6)
+                        and whole_edit.get("alpha") == 1.0,
                         "whole-word target/effective BF16 norm mismatch")
                 for name in CONTROLS:
                     row = byslot[("patch", site, word, arm, name)]
