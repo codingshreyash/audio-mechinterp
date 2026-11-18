@@ -1,0 +1,8 @@
+{
+  "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "rendered_matched_pairs": 192,
+  "rendered_clips": 384,
+  "all_outside_word_pcm_equal": true,
+  "status": "rendered_without_candidate_model_answers"
+}
