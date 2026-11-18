@@ -1,0 +1,142 @@
+{
+  "schema": "voxtral_old_fit_grad_leaf_factorial_attempt_manifest_v1",
+  "status": "launch_completed_cpu_audited_saved_data_only",
+  "attempt_id": "20261118T154253722766Z",
+  "scope": "one_old_fit_case_grad_leaf_factorial_only_no_vjp_no_security_claim",
+  "audit_scope": "saved_tensor_and_receipt_arithmetic_only_no_independent_model_execution_attestation",
+  "raw_receipts_commit": "2390875fa08087a2029d953c7ae05eeda7341fc6",
+  "freeze_sha256": "8f79c6b14c1a2dbeaa9d68f68b3015990efcabca433bc5d8d40b07fb357558de",
+  "freeze_independent_review_sha256": "c21f3cc75e41a5f438b9323476ccf760c674787b0a67c67f6ac616147e74ab0d",
+  "source_review_sha256": "66c1a8832fdd50bb09b28b9f8754daccc68998d05728cf2cadb3af2543bd6a0e",
+  "auditor_source_review_sha256": "1e55d6a7a147a0637e2e04fdee547eaff0a4c371ee142c0615a922aa5edf0ce1",
+  "protocol_sha256": "2b79d069f4cac3fa01f5a51d533cf98dc8d609e53ee571d9be0b617036533186",
+  "runner_sha256": "72fa47e6310177004b613206229c2421bde34a5fd7bb27cac369697a0af0c5ab",
+  "launch_gate_sha256": "1283721d389c17afd6b58be54f2feeec0d34ffc9dfd84d4d88ab246199c9538f",
+  "auditor_source_sha256": "653d081e903fb8c87bbfd32c92867655c14d37d2e9154ce664cb7543ce240259",
+  "failed_stage_b_fp32_manifest_sha256": "24514b86315355c6f353f0bf5e7fc8518d4c3ccf16e06f195a90aca703d2aa97",
+  "failed_v1_diagnostic_manifest_sha256": "0a2335dcab3ce5bb4cd66f5d0095074058c37537743b1c42764da06438811280",
+  "launch_start_utc": "2026-11-18T15:43:12.157990+00:00",
+  "worker_claim_utc": "2026-11-18T15:43:30.472675+00:00",
+  "launch_finish_utc": "2026-11-18T15:44:41.842847+00:00",
+  "launcher_status": "diagnostic_launch_completed_cpu_audited_only",
+  "worker_returncode": 0,
+  "auditor_returncode": 0,
+  "post_run_source_verified": true,
+  "result_sha256": "9d044a4204fdfe8f5f4a03a0e3ec7f471c8f0375615db0c84e4500fb6ad106d5",
+  "audit_sha256": "4739b0bd6a92603ee5946b519240b8f908afbdc929e6c538fb4c48511aeba4e8",
+  "worker_model_elapsed_seconds": 32.90982404211536,
+  "parent_model_work_elapsed_seconds": 52.005679375026375,
+  "prior_model_work_seconds": 316.4767387928441,
+  "cumulative_model_work_seconds": 368.4824181678705,
+  "process_cap_seconds": 300,
+  "max_mps_driver_bytes": 32212254720,
+  "peak_mps_driver_bytes": 28793470976,
+  "max_output_bytes": 1073741824,
+  "worker_output_bytes": 510841992,
+  "planned_counts": {
+    "full_forwards": 16,
+    "direct_forwards": 16,
+    "vjps": 0,
+    "generations": 0
+  },
+  "actual_counts": {
+    "full_forwards": 16,
+    "direct_forwards": 16,
+    "vjps": 0,
+    "generations": 0
+  },
+  "audited_saved_call_counts": {
+    "direct_forwards": 16,
+    "full_forwards": 16,
+    "generations": 0,
+    "vjps": 0
+  },
+  "local_tensor_sidecar": {
+    "path": "runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/blobs/0bc13e5831d3c4c325ad903bcbbdadf9f40d2e38eb67346ac68847bb1840dea2.pt",
+    "bytes": 509990581,
+    "sha256": "0bc13e5831d3c4c325ad903bcbbdadf9f40d2e38eb67346ac68847bb1840dea2",
+    "git_committed": false
+  },
+  "raw_file_count": 13,
+  "total_raw_bytes": 854641,
+  "files": [
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/audit_stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/audit_stdout.txt",
+      "bytes": 155,
+      "sha256": "059ee751f4fd4944cdb10ff18df6bbd41175c8dca4420e5e17bd0c141117b3eb",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/launch_finish.json",
+      "bytes": 849,
+      "sha256": "2373f98345eaad0277c7dc026b8cff4224bf5fb807b3a3af41043400530bc167",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/launch_start.json",
+      "bytes": 1177,
+      "sha256": "65c6131601e93d00bf6dcecee2bbbd271a1fb330cb0cf94e686aa79da874967a",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/worker_claim.json",
+      "bytes": 232,
+      "sha256": "6fe074d469374db2c61e6acbf335fa347241544da53891fe45b7fe6eb06a8aa8",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/worker_stderr.txt",
+      "bytes": 483,
+      "sha256": "d3e3ccaae3231a042a23c05f74e4f3338d34e8b4bfd2f5b6fee686da070be602",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/20261118T154253722766Z/worker_stdout.txt",
+      "bytes": 158,
+      "sha256": "c9253372f013fe04755836c8a0d21058624a9c37cbf468fc20cf6ed2815f333a",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_launch_v1/reservation.json",
+      "bytes": 176,
+      "sha256": "4061b6a5ee44470917c6288436c5c85c482ff1135759302ebc60fa491410d4ff",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/audit.json",
+      "bytes": 685251,
+      "sha256": "4739b0bd6a92603ee5946b519240b8f908afbdc929e6c538fb4c48511aeba4e8",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/meta.json",
+      "bytes": 3458,
+      "sha256": "da4d8e65d074e9ce17358b47a0b6443bb95e59800b23f12ce9bc14969f1eab09",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/model_layout.json",
+      "bytes": 156750,
+      "sha256": "0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/progress.jsonl",
+      "bytes": 4046,
+      "sha256": "b59fdbf7b42d795c675a772666eb1fec5875363ac29e0a9df424fb451018e71b",
+      "git_committed": true
+    },
+    {
+      "path": "runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z/result.json",
+      "bytes": 1906,
+      "sha256": "9d044a4204fdfe8f5f4a03a0e3ec7f471c8f0375615db0c84e4500fb6ad106d5",
+      "git_committed": true
+    }
+  ]
+}
