@@ -34,6 +34,8 @@ LOCALITY_SHA = "15074ffee8bde339810b4be667e3ce40bd6a45e234739ea37c614497b6eba4a2
 MODEL_ID = "facebook/wav2vec2-base-960h"
 MODEL_REVISION = "22aad52d435eb6dbaf354bdad9b0da84ce7d6156"
 WEIGHTS_SHA = "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a"
+SNAPSHOT = (Path.home() / ".cache/huggingface/hub"
+            / "models--facebook--wav2vec2-base-960h/snapshots" / MODEL_REVISION)
 PAIR_WORDS = {"color_05": ("silver", "teal"), "object_02": ("plate", "cup")}
 ENGINES = ("piper", "kokoro")
 SLOTS = {
@@ -199,14 +201,15 @@ def preflight() -> dict[str, Any]:
     import soundfile
     import torch
     import transformers
-    from huggingface_hub import snapshot_download
     from transformers.models.wav2vec2 import (feature_extraction_wav2vec2,
                                              modeling_wav2vec2,
                                              processing_wav2vec2,
                                              tokenization_wav2vec2)
 
     cases, stats = trusted_cases()
-    snapshot = Path(snapshot_download(MODEL_ID, revision=MODEL_REVISION, local_files_only=True))
+    snapshot = SNAPSHOT
+    if not snapshot.is_dir():
+        raise ValueError("pinned local Wav2Vec2 snapshot absent")
     weights = snapshot / "model.safetensors"
     if not weights.is_file() or sha(weights) != WEIGHTS_SHA:
         raise ValueError("Wav2Vec2 checkpoint bytes changed")
@@ -452,10 +455,9 @@ def execute(expected_preflight: Path, output: Path) -> None:
     try:
         check_budget(start, output, before_forward=True)
         torch.set_num_threads(4)
-        processor = Wav2Vec2Processor.from_pretrained(MODEL_ID, revision=MODEL_REVISION,
-                                                      local_files_only=True)
-        model = Wav2Vec2ForCTC.from_pretrained(MODEL_ID, revision=MODEL_REVISION,
-                                              local_files_only=True).to("cpu", dtype=torch.float32).eval()
+        processor = Wav2Vec2Processor.from_pretrained(SNAPSHOT, local_files_only=True)
+        model = Wav2Vec2ForCTC.from_pretrained(SNAPSHOT, local_files_only=True).to(
+            "cpu", dtype=torch.float32).eval()
         if any(p.device.type != "cpu" or p.dtype != torch.float32 for p in model.parameters()):
             raise ValueError("model not entirely CPU float32")
         cases, stats = trusted_cases()
