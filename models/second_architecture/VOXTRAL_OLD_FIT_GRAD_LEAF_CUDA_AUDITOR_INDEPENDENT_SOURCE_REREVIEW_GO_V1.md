@@ -1,0 +1,21 @@
+# CUDA old-FIT saved-data auditor: independent source rereview GO V1
+
+18 November 2026. **Source-level GO for the corrected CPU auditor, conditional on an independently reviewed executable freeze.** No CUDA worker, checkpoint weight load, or model forward was run for this review. The earlier [HOLD](VOXTRAL_OLD_FIT_GRAD_LEAF_CUDA_AUDITOR_INDEPENDENT_SOURCE_REVIEW_HOLD_V1.md) remains the record of the first source version; this rereview addresses its identity gap.
+
+## Exact source and contract
+
+- Corrected auditor commit `d62bffeaa5341fe0b933d98b120d9a9bb799e729`; auditor SHA-256 `9c0fde688fbd195da70a83d8db9e4ca723eb7209a4647c96c596c35376c240b6`.
+- Corrected original tests SHA-256 `b1c8dd4ca887282eee20e10c27d4cd7524f8f6cfa2f02a14144002d599f306b0`; independent negative tests SHA-256 `d51d729d00579bb81fb8baa20167ac6947ce83b8f5967d71343adfd26fb73067`.
+- Reviewed against V1 protocol SHA-256 `188925bc4022aa9841502d310899b5f9b28bf8ec0ba32ab7f7acb3fc45579050`, V2 amendment SHA-256 `c86537552b55f6542c88d2be9a7c71d5e1cecd589c6a11cc89eec514c49419ca`, result schema SHA-256 `c90f46adcf73a8466232be15ba37d9a1d18b0eca234f2b4648f480bff6b7ad4d`, and runner source SHA-256 `2bfb6be63102577dff06ef5a96330560a61a4584695bcfaba63318b41bbd8c9c` at the time of the original HOLD. Runner source may be revised separately; the later freeze must pin its final reviewed SHA.
+
+## Rereview result
+
+From `models/second_architecture`, `./.venv/bin/python -m unittest test_voxtral_old_fit_grad_leaf_cuda_audit_v1 test_voxtral_old_fit_grad_leaf_cuda_audit_independent_review_v1 -v` passed **13/13** CPU synthetic tests. The prior invented runner/checkpoint/environment hash test now yields `invalid`, as does the zero-parameter model layout. Altering the actual receipt bytes after pinning or changing a recorded GPU name away from the hashed receipt also yields `invalid`. A mixed valid/invalid synthetic campaign still retains four planned cells and 66 planned forwards.
+
+Production CLI requires `--freeze`, `--expected-freeze-sha256`, and `--environment-receipt`. It checks the actual freeze bytes against the externally supplied expected digest, checks the actual environment receipt bytes against the digest in that freeze, and requires matching freeze/receipt runner and checkpoint identities. The checkpoint repo, revision, and tree digest are compared with the pinned Voxtral identity. The saved worker's freeze, runner, checkpoint, and environment hashes must match those trusted pins. The auditor rehashes the environment receipt during each case audit and compares corresponding runtime software, GPU name/memory, and CUDA control fields with the receipt. It also verifies the saved layout's ordered parameter names, shapes, and element counts against a canonical structure digest derived from the independently reviewed prior MPS layout. The prior layout file SHA-256 `0c5c3c2d2b7683def9361645a6686b098722e11c0647974cef5ed76e8473f2ad` is checked by the test; its recorded 762 named parameters and 4,676,271,104 parameters agree with the auditor constants. Each saved layout row must also declare FP32 on CUDA with a consistent positive shape and element count.
+
+The synthetic fixture uses a compact one-parameter structure and explicit `synthetic_fixture=True` pins. The production CLI constructs pins through `trusted_pins()` and supplies the real shape specification; it exposes no synthetic-pins option. The existing payload logic still checks exact two-case order, passive/source rules, call and hook schedules, raw-byte signed-zero equality for 24 direct/full comparisons per cell (96 across both cases), caps, content-addressed sidecars, and four-cell denominator. This rereview did not rerun the model or prove any scientific pattern.
+
+## Boundary of GO
+
+The expected freeze digest must come from the independent reviewed freeze decision, not from worker output or a value chosen after seeing results. The freeze, environment receipt, final runner and gate, and their identity checks need their own reviews before any weight load. The auditor verifies saved bytes and recorded identity against that trust anchor; it cannot itself attest that a live model forward occurred or identify an internal cause. No audio-specific mechanism or security effect is established by these synthetic tests.
