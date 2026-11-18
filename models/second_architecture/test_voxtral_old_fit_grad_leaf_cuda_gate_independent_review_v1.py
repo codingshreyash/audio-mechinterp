@@ -22,6 +22,12 @@ SPEC.loader.exec_module(gate)
 
 
 class IndependentGateNegativeTests(unittest.TestCase):
+    @unittest.expectedFailure
+    def test_gate_auditor_review_target_has_exact_independent_go(self) -> None:
+        """Current gate target is absent; the existing rereview uses another path."""
+        self.assertTrue(gate.AUDITOR_REVIEW.is_file())
+        gate.require_decision(gate.AUDITOR_REVIEW, gate.GO_AUDITOR)
+
     def test_quoted_go_inside_hold_review_must_not_admit_source(self) -> None:
         with tempfile.TemporaryDirectory(dir=gate.REPO) as directory:
             source = Path(directory) / "source.py"
