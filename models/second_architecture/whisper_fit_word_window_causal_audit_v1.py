@@ -228,8 +228,9 @@ def checked_result(value: dict[str, Any], tokenizer: Any | None = None) -> dict[
     require(value.get("eos_seen") is eos_seen and value.get("censored") is (not eos_seen),
             "EOS/censor flags differ from IDs")
     scores = value.get("step_scores")
-    require(isinstance(scores, list) and len(scores) <= 128
-            and len(scores) <= len(ids), "step-score length invalid")
+    require(isinstance(scores, list) and 1 <= len(scores) <= 128
+            and 1 <= len(ids) - len(scores) <= 4,
+            "step-score coverage/length invalid")
     for i, score in enumerate(scores):
         require(score.get("token_id") == ids[len(ids) - len(scores) + i]
                 and len(score.get("top2_ids", [])) == 2
@@ -238,6 +239,13 @@ def checked_result(value: dict[str, Any], tokenizer: Any | None = None) -> dict[
         for number in [score.get("selected_score"), *score["top2_scores"]]:
             require(isinstance(number, (int, float)) and math.isfinite(number),
                     "nonfinite step score")
+        margin = score.get("generation_processed_silver_minus_teal_first_token_score")
+        status = score.get("alias_margin_status")
+        require(status in {"finite", "multi_token_alias", "nonfinite_suppressed_alias"}
+                and ((status == "finite" and isinstance(margin, (int, float))
+                      and math.isfinite(margin)) or
+                     (status != "finite" and margin is None)),
+                "alias score/status mismatch")
     require(isinstance(value.get("elapsed_seconds"), (int, float))
             and 0 <= value["elapsed_seconds"] <= MAX_SECONDS
             and type(value.get("rss_bytes")) is int
@@ -288,14 +296,34 @@ def audit_traces(trace_rows: list[dict[str, Any]], output: Path,
                     and bool(np.isfinite(actual).all()), "trace dtype/finite invalid")
             if site == "mel":
                 expected = np.linalg.norm(silver[site] - teal[site], axis=1)[0]
+                expected_maxabs = np.max(np.abs(silver[site] - teal[site]), axis=1)[0]
                 word_window = tuple(value * 2 for value in WINDOWS[engine][0])
                 prefix = tuple(value * 2 for value in WINDOWS[engine][1])
             else:
                 expected = np.linalg.norm(silver[site] - teal[site], axis=-1)[0]
+                expected_maxabs = np.max(np.abs(silver[site] - teal[site]), axis=-1)[0]
                 word_window, prefix = WINDOWS[engine]
             require(actual.shape == expected.shape and saved.get("shape") == list(expected.shape)
                     and np.allclose(actual, expected, rtol=1e-5, atol=1e-6),
                     "trace differs from captured donor-recipient states")
+            expected_maxabs_name = f"captures/{engine}_{site}_silver_teal_maxabs.npy"
+            require(saved.get("maxabs_path") == expected_maxabs_name,
+                    "maxabs trace path changed")
+            maxabs_path = output / expected_maxabs_name
+            require(maxabs_path.is_file() and not maxabs_path.is_symlink()
+                    and sha(maxabs_path) == saved.get("maxabs_sha256"),
+                    "maxabs trace hash differs")
+            actual_maxabs = np.load(maxabs_path, allow_pickle=False)
+            require(actual_maxabs.dtype == np.float32
+                    and actual_maxabs.shape == expected_maxabs.shape
+                    and bool(np.isfinite(actual_maxabs).all())
+                    and np.allclose(actual_maxabs, expected_maxabs, rtol=1e-5, atol=1e-6),
+                    "maxabs trace differs from captured states")
+            reported_max = saved.get("global_max_abs_difference")
+            require(isinstance(reported_max, (int, float)) and math.isfinite(reported_max)
+                    and math.isclose(reported_max, float(expected_maxabs.max()),
+                                     rel_tol=1e-5, abs_tol=1e-6),
+                    "global maxabs differs from captures")
             require(saved.get("word_window") == list(word_window)
                     and saved.get("prefix_window") == list(prefix), "trace window differs")
             outside = np.ones(len(expected), dtype=bool)
@@ -331,6 +359,9 @@ def recompute_outcome(transcript: str, recipient_word: str,
         "donor_once_recipient_absent": observed.count(donor_word) == 1
                                       and observed.count(recipient_word) == 0,
         "recipient_transcript_match": observed == base,
+        "wer_to_recipient": edit_distance(observed, base) / max(1, len(base)),
+        "wer_to_single_word_donor_counterfactual": edit_distance(observed, expected)
+                                                     / max(1, len(expected)),
         "normalized_words": observed,
     }
 
@@ -414,6 +445,10 @@ def audit_rows(rows: list[dict[str, Any]], output: Path, cases: dict[str, dict[s
         require(row.get("window") == list(expected_window), "intervention window changed")
         require(row.get("hook_count") == 1, "intervention hook did not fire once")
         require(row.get("valid_hook") is True, "intervention hook validity absent/false")
+        require(row.get("state_shape") == list(STATE_SHAPE)
+                and row.get("state_dtype") == "float32"
+                and row.get("finite_checked") is True,
+                "intervention state metadata invalid")
         result = checked_result(row.get("result"), tokenizer)
         require(row["result"].get("hook_count") == 1, "result hook count differs")
         source = recipient if condition == "self" else donor

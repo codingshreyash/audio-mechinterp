@@ -16,8 +16,13 @@ from models.second_architecture import whisper_fit_word_window_causal_audit_v1 a
 
 def fake_result(word: str, *, hook_count: int | None = None) -> dict:
     token = 100 if word == "silver" else 101
+    scores = [{"token_id": selected, "selected_score": 1.0,
+               "top2_ids": [selected, 200], "top2_scores": [1.0, 0.0],
+               "generation_processed_silver_minus_teal_first_token_score": None,
+               "alias_margin_status": "multi_token_alias"}
+              for selected in (token, 50256)]
     return {"token_ids": [50257, token, 50256], "transcript": f"Say {word} now.",
-            "eos_seen": True, "censored": False, "step_scores": [],
+            "eos_seen": True, "censored": False, "step_scores": scores,
             "elapsed_seconds": 0.1, "rss_bytes": 100, "hook_count": hook_count}
 
 
@@ -53,6 +58,8 @@ class WhisperSavedAuditTests(unittest.TestCase):
             row = {"type": "intervention", "recipient": recipient, "donor": donor,
                    "site": site, "condition": condition, "window": list(window),
                    "result": result, "hook_count": 1, "valid_hook": True,
+                   "state_shape": list(audit.STATE_SHAPE), "state_dtype": "float32",
+                   "finite_checked": True,
                    "recipient_state_sha256": hashes[recipient][site],
                    "source_state_sha256": hashes[recipient if condition == "self" else donor][site],
                    "outcome": outcome,
@@ -104,6 +111,7 @@ class WhisperSavedAuditTests(unittest.TestCase):
         rows = copy.deepcopy(self.rows)
         row = next(row for row in rows if row.get("condition") == "self")
         row["result"]["token_ids"][1] = 999
+        row["result"]["step_scores"][0]["token_id"] = 999
         row["outcome"]["token_difference_count"] = 1
         with self.assertRaisesRegex(ValueError, "self-patch"):
             self.check_rows(rows)
@@ -148,6 +156,7 @@ class WhisperSavedAuditTests(unittest.TestCase):
                 silver = captures[f"{engine}_silver"][site]
                 teal = captures[f"{engine}_teal"][site]
                 delta = np.linalg.norm(silver - teal, axis=1 if site == "mel" else -1)[0]
+                maxabs = np.max(np.abs(silver - teal), axis=1 if site == "mel" else -1)[0]
                 word, prefix = audit.WINDOWS[engine]
                 if site == "mel":
                     word = tuple(value * 2 for value in word)
@@ -158,12 +167,18 @@ class WhisperSavedAuditTests(unittest.TestCase):
                 relative = f"captures/{engine}_{site}_silver_teal_l2.npy"
                 path = self.output / relative
                 np.save(path, delta, allow_pickle=False)
+                maxabs_relative = f"captures/{engine}_{site}_silver_teal_maxabs.npy"
+                maxabs_path = self.output / maxabs_relative
+                np.save(maxabs_path, maxabs, allow_pickle=False)
                 details[site] = {"path": relative, "sha256": audit.sha(path),
+                                 "maxabs_path": maxabs_relative,
+                                 "maxabs_sha256": audit.sha(maxabs_path),
                                  "shape": list(delta.shape), "word_window": list(word),
                                  "prefix_window": list(prefix),
                                  "word_l2_sum": float(delta[slice(*word)].sum()),
                                  "prefix_l2_sum": float(delta[slice(*prefix)].sum()),
                                  "remaining_l2_sum": float(delta[mask].sum()),
+                                 "global_max_abs_difference": float(maxabs.max()),
                                  "first_nonzero_frame": 0}
             rows.append({"type": "trace", "engine": engine,
                          "words": list(audit.WORDS), "traces": details})
@@ -171,12 +186,30 @@ class WhisperSavedAuditTests(unittest.TestCase):
         rows[0]["traces"]["post_norm"]["word_l2_sum"] += 20
         with self.assertRaisesRegex(ValueError, "word_l2_sum"):
             audit.audit_traces(rows, self.output, captures)
+        rows[0]["traces"]["post_norm"]["word_l2_sum"] -= 20
+        rows[0]["traces"]["post_norm"]["global_max_abs_difference"] += 2
+        with self.assertRaisesRegex(ValueError, "global maxabs"):
+            audit.audit_traces(rows, self.output, captures)
+
+    def test_missing_generation_scores_rejected(self) -> None:
+        rows = copy.deepcopy(self.rows)
+        rows[1]["result"]["step_scores"] = []
+        with self.assertRaisesRegex(ValueError, "step-score coverage"):
+            self.check_rows(rows)
+
+    def test_reported_wer_corruption_rejected(self) -> None:
+        rows = copy.deepcopy(self.rows)
+        row = next(row for row in rows if row.get("condition") == "word")
+        row["outcome"]["wer_to_recipient"] = 0.0
+        with self.assertRaisesRegex(ValueError, "stored outcome"):
+            self.check_rows(rows)
 
     def test_failed_control_is_preserved_without_outcome(self) -> None:
         rows = copy.deepcopy(self.rows[:8])
         row = next(row for row in self.rows if row.get("condition") == "self")
         row = copy.deepcopy(row)
         row["result"]["token_ids"][1] = 999
+        row["result"]["step_scores"][0]["token_id"] = 999
         row["control_pass"] = False
         rows.append(row)
         rows.append({"type": "failure", "error_type": "ValueError",
