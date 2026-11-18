@@ -1,0 +1,696 @@
+{
+  "baseline_count": 4,
+  "input_manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "intervention_count": 48,
+  "limits": "Saved-data consistency only; hook/model execution cannot be independently proven from JSON and captures.",
+  "outcome_counts": [
+    {
+      "condition": "prefix",
+      "count": 4,
+      "site": "post_block1",
+      "target_replacement": false
+    },
+    {
+      "condition": "self",
+      "count": 4,
+      "site": "post_block1",
+      "target_replacement": false
+    },
+    {
+      "condition": "word",
+      "count": 4,
+      "site": "post_block1",
+      "target_replacement": true
+    },
+    {
+      "condition": "prefix",
+      "count": 4,
+      "site": "post_conv_pos",
+      "target_replacement": false
+    },
+    {
+      "condition": "self",
+      "count": 4,
+      "site": "post_conv_pos",
+      "target_replacement": false
+    },
+    {
+      "condition": "word",
+      "count": 4,
+      "site": "post_conv_pos",
+      "target_replacement": true
+    },
+    {
+      "condition": "full_donor",
+      "count": 4,
+      "site": "post_norm",
+      "target_replacement": true
+    },
+    {
+      "condition": "prefix",
+      "count": 4,
+      "site": "post_norm",
+      "target_replacement": false
+    },
+    {
+      "condition": "random",
+      "count": 8,
+      "site": "post_norm",
+      "target_replacement": false
+    },
+    {
+      "condition": "self",
+      "count": 4,
+      "site": "post_norm",
+      "target_replacement": false
+    },
+    {
+      "condition": "word",
+      "count": 4,
+      "site": "post_norm",
+      "target_replacement": true
+    }
+  ],
+  "outcomes": [
+    {
+      "condition": "word",
+      "donor": "piper_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "piper_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "piper_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "full_donor",
+      "donor": "piper_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "random",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": 20261118,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "random",
+      "donor": "piper_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_silver",
+      "seed": 20261119,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "piper_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "piper_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "piper_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "full_donor",
+      "donor": "piper_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "random",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": 20261118,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "random",
+      "donor": "piper_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "piper_teal",
+      "seed": 20261119,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "kokoro_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "kokoro_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "kokoro_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "full_donor",
+      "donor": "kokoro_teal",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "random",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": 20261118,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.5454545454545454
+    },
+    {
+      "condition": "random",
+      "donor": "kokoro_teal",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_silver",
+      "seed": 20261119,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "kokoro_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_conv_pos",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "kokoro_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_block1",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "word",
+      "donor": "kokoro_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "prefix",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "self",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "full_donor",
+      "donor": "kokoro_silver",
+      "donor_word_appears": true,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": null,
+      "site": "post_norm",
+      "target_replacement": true,
+      "wer_vs_recipient": 0.09090909090909091
+    },
+    {
+      "condition": "random",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": 20261118,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    },
+    {
+      "condition": "random",
+      "donor": "kokoro_silver",
+      "donor_word_appears": false,
+      "eos_seen": true,
+      "recipient": "kokoro_teal",
+      "seed": 20261119,
+      "site": "post_norm",
+      "target_replacement": false,
+      "wer_vs_recipient": 0.0
+    }
+  ],
+  "records_sha256": "990eab76bdbb793b46e6ed3e677e202473cfcf97913f1591f32c901b8c04036f",
+  "status": "independent_saved_data_audit_pass",
+  "trace": {
+    "kokoro": {
+      "mel": {
+        "first_nonzero_frame": 233,
+        "prefix_l2_sum": 0.0,
+        "remaining_l2_sum": 0.0,
+        "word_l2_sum": 205.5397491455078
+      },
+      "post_block0": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 19.871318817138672,
+        "remaining_l2_sum": 136.5722198486328,
+        "word_l2_sum": 188.93141174316406
+      },
+      "post_block1": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 39.01301193237305,
+        "remaining_l2_sum": 326.16094970703125,
+        "word_l2_sum": 294.9971923828125
+      },
+      "post_block2": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 78.67256164550781,
+        "remaining_l2_sum": 572.0963134765625,
+        "word_l2_sum": 495.6858215332031
+      },
+      "post_block3": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 152.62930297851562,
+        "remaining_l2_sum": 1061.6373291015625,
+        "word_l2_sum": 1137.5
+      },
+      "post_conv_pos": {
+        "first_nonzero_frame": 116,
+        "prefix_l2_sum": 0.0,
+        "remaining_l2_sum": 0.0,
+        "word_l2_sum": 142.39645385742188
+      },
+      "post_norm": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 132.9178009033203,
+        "remaining_l2_sum": 954.0294189453125,
+        "word_l2_sum": 1020.1409301757812
+      }
+    },
+    "piper": {
+      "mel": {
+        "first_nonzero_frame": 195,
+        "prefix_l2_sum": 0.0,
+        "remaining_l2_sum": 0.0,
+        "word_l2_sum": 380.57342529296875
+      },
+      "post_block0": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 23.400800704956055,
+        "remaining_l2_sum": 255.38775634765625,
+        "word_l2_sum": 236.01882934570312
+      },
+      "post_block1": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 38.24124526977539,
+        "remaining_l2_sum": 440.4468994140625,
+        "word_l2_sum": 374.8005065917969
+      },
+      "post_block2": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 66.2433853149414,
+        "remaining_l2_sum": 700.5185546875,
+        "word_l2_sum": 662.6936645507812
+      },
+      "post_block3": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 136.82362365722656,
+        "remaining_l2_sum": 1259.3302001953125,
+        "word_l2_sum": 1875.0401611328125
+      },
+      "post_conv_pos": {
+        "first_nonzero_frame": 97,
+        "prefix_l2_sum": 0.0,
+        "remaining_l2_sum": 0.0,
+        "word_l2_sum": 208.69784545898438
+      },
+      "post_norm": {
+        "first_nonzero_frame": 0,
+        "prefix_l2_sum": 117.5472412109375,
+        "remaining_l2_sum": 1097.111328125,
+        "word_l2_sum": 1255.549560546875
+      }
+    }
+  }
+}
