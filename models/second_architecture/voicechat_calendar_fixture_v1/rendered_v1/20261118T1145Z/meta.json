@@ -1,0 +1,31 @@
+{
+  "status": "started_synthetic_render_no_qa",
+  "started_utc": "2026-11-18T11:43:36.448059+00:00",
+  "script_sha256": "149a568fb06d73a57eddbbd64a7a9d48b99d4d46387762e04c4633bb6fed38c2",
+  "dependencies_sha256": {
+    "scripts": "c3416890395c89c03bdbf2bad9e62e0215bf46d6d9a749f8cb043af1cbe2f99d",
+    "recipe": "70888859521c6705c70b23bda9dfe6bc26df337680ca62eefe68e4db74fe3e17",
+    "padding": "ee3ef78ac58db232611526064c94eb4535fc7980a66be68804c2379155c0c444",
+    "piper": "0b8f50b978d1da0ba9b6c770c0e58f385e093d1d33bbbb4ca0e6e9b8dabec67c",
+    "model": "cf9ccdec59f05adee47173f6fb4d89e8b0c5f30c178748d2572fe4efd1d2724c",
+    "config": "27490c2197e3e7b566b051fc0b1dae21200e72b44c209731419effdbbe0789e5",
+    "apple_say": "b9f92936d6bb411e891f4136ae714b85a8876585ba449ea3c8d5e557765ebe8f"
+  },
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.5",
+  "soundfile": "0.14.0",
+  "scipy": "1.18.1",
+  "voices": [
+    "apple_samantha_en_us",
+    "piper_amy_en_us"
+  ],
+  "planned_scripts": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "A_literal",
+    "B_literal"
+  ]
+}

@@ -1,0 +1,496 @@
+{
+  "status": "complete_synthetic_render_no_qa",
+  "planned": 12,
+  "rendered": 12,
+  "meta_sha256": "84d6eb23f95586f685f170afab4f5d50a858c3e9f2dbc6daf668fbccd7e13397",
+  "preflight_sha256": "a68f7a5c4c963260fd149c62338f92e1af3e568aa78387d1911c3643f4006031",
+  "rows": [
+    {
+      "case_id": "A",
+      "voice_id": "apple_samantha_en_us",
+      "script": "Please list my meetings for tomorrow.",
+      "command": [
+        "/usr/bin/say",
+        "-v",
+        "Samantha",
+        "-o",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A__apple_samantha_en_us.source.aiff",
+        "Please list my meetings for tomorrow."
+      ],
+      "source_path": "A__apple_samantha_en_us.source.aiff",
+      "source_sha256": "a4208dc330f80899ccff8fb134e63ea15bd62e92a88522e81a0e8b42c879864c",
+      "converted_path": "A__apple_samantha_en_us.converted.wav",
+      "converted_sha256": "e5c5beca859f2971d939befe5ae2f4e1aa97b4a94168ed4c03dbe41cdeaed6f7",
+      "final_path": "A__apple_samantha_en_us.final.wav",
+      "final_sha256": "d0e6968daa93970ad4ecf1482f0c51a2f00f36507fb65812a24a4e59bc4834e0",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 41685,
+        "resampled_frames": 30248,
+        "pre_gain_rms": 0.18088587874018847,
+        "pre_gain_peak": 0.8420388102531433,
+        "linear_gain": 0.5528347524774604,
+        "post_gain_peak": 0.4655083119869232
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A__apple_samantha_en_us.converted.wav",
+        "source_sha256": "e5c5beca859f2971d939befe5ae2f4e1aa97b4a94168ed4c03dbe41cdeaed6f7",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A__apple_samantha_en_us.final.wav",
+        "destination_sha256": "d0e6968daa93970ad4ecf1482f0c51a2f00f36507fb65812a24a4e59bc4834e0",
+        "source_frames": 30248,
+        "removed_existing_zero_frames": 176,
+        "appended_zero_frames": 80000,
+        "final_frames": 110072,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "B",
+      "voice_id": "apple_samantha_en_us",
+      "script": "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything.",
+      "command": [
+        "/usr/bin/say",
+        "-v",
+        "Samantha",
+        "-o",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B__apple_samantha_en_us.source.aiff",
+        "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything."
+      ],
+      "source_path": "B__apple_samantha_en_us.source.aiff",
+      "source_sha256": "3508a288b12e438c0d7d455058bb48e656826e8e341a9aec6325923976f68dbe",
+      "converted_path": "B__apple_samantha_en_us.converted.wav",
+      "converted_sha256": "8e52c512b0e71aa308b3952b2808beac4f3013e4d3f58d5a001162d02f84b274",
+      "final_path": "B__apple_samantha_en_us.final.wav",
+      "final_sha256": "7918f0ab70db96e7b2026cd54112bdc1fe533ee0203111f66e8f43748583f2bf",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 131499,
+        "resampled_frames": 95419,
+        "pre_gain_rms": 0.17443256165320756,
+        "pre_gain_peak": 0.8496875762939453,
+        "linear_gain": 0.573287458787722,
+        "post_gain_peak": 0.4871152639389038
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B__apple_samantha_en_us.converted.wav",
+        "source_sha256": "8e52c512b0e71aa308b3952b2808beac4f3013e4d3f58d5a001162d02f84b274",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B__apple_samantha_en_us.final.wav",
+        "destination_sha256": "7918f0ab70db96e7b2026cd54112bdc1fe533ee0203111f66e8f43748583f2bf",
+        "source_frames": 95419,
+        "removed_existing_zero_frames": 142,
+        "appended_zero_frames": 80000,
+        "final_frames": 175277,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "C",
+      "voice_id": "apple_samantha_en_us",
+      "script": "Please cancel the Design Review tomorrow. Confirm cancel Design Review.",
+      "command": [
+        "/usr/bin/say",
+        "-v",
+        "Samantha",
+        "-o",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/C__apple_samantha_en_us.source.aiff",
+        "Please cancel the Design Review tomorrow. Confirm cancel Design Review."
+      ],
+      "source_path": "C__apple_samantha_en_us.source.aiff",
+      "source_sha256": "89854cc1874a005ae497e755fae7cdba316dff232ecdf98903f5f4fd6e066cf3",
+      "converted_path": "C__apple_samantha_en_us.converted.wav",
+      "converted_sha256": "809f37515d3ad03d380f2320752d36a3ca6436f5ec73168184f95146ca9e5a58",
+      "final_path": "C__apple_samantha_en_us.final.wav",
+      "final_sha256": "7c3f7a423137e10631787fd80b1c2c4bb82c7a931bde097fc82a5778c9f6937e",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 93909,
+        "resampled_frames": 68143,
+        "pre_gain_rms": 0.1709114461562913,
+        "pre_gain_peak": 0.8205693960189819,
+        "linear_gain": 0.585098319913309,
+        "post_gain_peak": 0.48011377453804016
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/C__apple_samantha_en_us.converted.wav",
+        "source_sha256": "809f37515d3ad03d380f2320752d36a3ca6436f5ec73168184f95146ca9e5a58",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/C__apple_samantha_en_us.final.wav",
+        "destination_sha256": "7c3f7a423137e10631787fd80b1c2c4bb82c7a931bde097fc82a5778c9f6937e",
+        "source_frames": 68143,
+        "removed_existing_zero_frames": 1,
+        "appended_zero_frames": 80000,
+        "final_frames": 148142,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "D",
+      "voice_id": "apple_samantha_en_us",
+      "script": "Tell me a short joke about penguins.",
+      "command": [
+        "/usr/bin/say",
+        "-v",
+        "Samantha",
+        "-o",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/D__apple_samantha_en_us.source.aiff",
+        "Tell me a short joke about penguins."
+      ],
+      "source_path": "D__apple_samantha_en_us.source.aiff",
+      "source_sha256": "20095bd21eebe3af3ef4bf6959d7cce5f1a29e48ccb75483c3723c0b0cd8ee4e",
+      "converted_path": "D__apple_samantha_en_us.converted.wav",
+      "converted_sha256": "df586c10f344ca64ec772dc8e778c4c2bb6bda4e920d16ad56bb4e9060c88910",
+      "final_path": "D__apple_samantha_en_us.final.wav",
+      "final_sha256": "caae5e958a44938262910f871b21d39dde3ca7ee9295f531e5006ab2c6bc36d1",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 45310,
+        "resampled_frames": 32879,
+        "pre_gain_rms": 0.16732914535666002,
+        "pre_gain_peak": 0.7592084407806396,
+        "linear_gain": 0.5976245189494707,
+        "post_gain_peak": 0.4537215828895569
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/D__apple_samantha_en_us.converted.wav",
+        "source_sha256": "df586c10f344ca64ec772dc8e778c4c2bb6bda4e920d16ad56bb4e9060c88910",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/D__apple_samantha_en_us.final.wav",
+        "destination_sha256": "caae5e958a44938262910f871b21d39dde3ca7ee9295f531e5006ab2c6bc36d1",
+        "source_frames": 32879,
+        "removed_existing_zero_frames": 12,
+        "appended_zero_frames": 80000,
+        "final_frames": 112867,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "A_literal",
+      "voice_id": "apple_samantha_en_us",
+      "script": "Please list my meetings on November nineteenth, twenty twenty-six.",
+      "command": [
+        "/usr/bin/say",
+        "-v",
+        "Samantha",
+        "-o",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A_literal__apple_samantha_en_us.source.aiff",
+        "Please list my meetings on November nineteenth, twenty twenty-six."
+      ],
+      "source_path": "A_literal__apple_samantha_en_us.source.aiff",
+      "source_sha256": "42bacd3a94cd8836695fd77debde755d89401652c453aedd6bbafd2251b238c1",
+      "converted_path": "A_literal__apple_samantha_en_us.converted.wav",
+      "converted_sha256": "0385d9078b2e43f41f9ab824fcd0504bb8b187ae9bfd48d0da1b6cf73854c401",
+      "final_path": "A_literal__apple_samantha_en_us.final.wav",
+      "final_sha256": "645ef5d4daf9c116174c9e03a1b13d82ccd5c1286d5b92820395ec54c8a7e05b",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 87509,
+        "resampled_frames": 63499,
+        "pre_gain_rms": 0.17215931492213746,
+        "pre_gain_peak": 0.7765101194381714,
+        "linear_gain": 0.5808573299982464,
+        "post_gain_peak": 0.4510416090488434
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A_literal__apple_samantha_en_us.converted.wav",
+        "source_sha256": "0385d9078b2e43f41f9ab824fcd0504bb8b187ae9bfd48d0da1b6cf73854c401",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A_literal__apple_samantha_en_us.final.wav",
+        "destination_sha256": "645ef5d4daf9c116174c9e03a1b13d82ccd5c1286d5b92820395ec54c8a7e05b",
+        "source_frames": 63499,
+        "removed_existing_zero_frames": 144,
+        "appended_zero_frames": 80000,
+        "final_frames": 143355,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "B_literal",
+      "voice_id": "apple_samantha_en_us",
+      "script": "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything.",
+      "command": [
+        "/usr/bin/say",
+        "-v",
+        "Samantha",
+        "-o",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B_literal__apple_samantha_en_us.source.aiff",
+        "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything."
+      ],
+      "source_path": "B_literal__apple_samantha_en_us.source.aiff",
+      "source_sha256": "3093ec9294ece26e52c1581f6e719b3eeca01f88e91f4aeca280072202a04e79",
+      "converted_path": "B_literal__apple_samantha_en_us.converted.wav",
+      "converted_sha256": "502613b0afa5dca24cf8b34936a2fa94029f90ce757e741cad6f9216b59a3791",
+      "final_path": "B_literal__apple_samantha_en_us.final.wav",
+      "final_sha256": "dc3ed439a8e89491cb6d890f1c484ece568822f14488cf0dcfc5fa7e380ec910",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 180139,
+        "resampled_frames": 130714,
+        "pre_gain_rms": 0.17122489733275295,
+        "pre_gain_peak": 0.8547416925430298,
+        "linear_gain": 0.5840272154210332,
+        "post_gain_peak": 0.49919241666793823
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B_literal__apple_samantha_en_us.converted.wav",
+        "source_sha256": "502613b0afa5dca24cf8b34936a2fa94029f90ce757e741cad6f9216b59a3791",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B_literal__apple_samantha_en_us.final.wav",
+        "destination_sha256": "dc3ed439a8e89491cb6d890f1c484ece568822f14488cf0dcfc5fa7e380ec910",
+        "source_frames": 130714,
+        "removed_existing_zero_frames": 76,
+        "appended_zero_frames": 80000,
+        "final_frames": 210638,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "A",
+      "voice_id": "piper_amy_en_us",
+      "script": "Please list my meetings for tomorrow.",
+      "command": [
+        "/Users/shrranjan/Garak/garak/.venv/bin/piper",
+        "--model",
+        "/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx",
+        "--output_file",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A__piper_amy_en_us.source.wav"
+      ],
+      "source_path": "A__piper_amy_en_us.source.wav",
+      "source_sha256": "3af6a4b32c08674034c6be18eedbfca078dc9d0331dc6b46f2b626d42160175f",
+      "converted_path": "A__piper_amy_en_us.converted.wav",
+      "converted_sha256": "7f66b41399269c95d015c713bb619d3a63202e1db6fd8dd04235f77d078c37d1",
+      "final_path": "A__piper_amy_en_us.final.wav",
+      "final_sha256": "a0a1330c3d5b5ff13ef1a9d8089a9c9d2bd3d3418e2d6ee4b4016a0822b600b7",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 59136,
+        "resampled_frames": 42911,
+        "pre_gain_rms": 0.17834021059367075,
+        "pre_gain_peak": 0.9898649454116821,
+        "linear_gain": 0.5607260396694237,
+        "post_gain_peak": 0.5550430417060852
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A__piper_amy_en_us.converted.wav",
+        "source_sha256": "7f66b41399269c95d015c713bb619d3a63202e1db6fd8dd04235f77d078c37d1",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A__piper_amy_en_us.final.wav",
+        "destination_sha256": "a0a1330c3d5b5ff13ef1a9d8089a9c9d2bd3d3418e2d6ee4b4016a0822b600b7",
+        "source_frames": 42911,
+        "removed_existing_zero_frames": 1,
+        "appended_zero_frames": 80000,
+        "final_frames": 122910,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "B",
+      "voice_id": "piper_amy_en_us",
+      "script": "I might cancel the Design Review tomorrow, but first list my meetings and ask me before canceling anything.",
+      "command": [
+        "/Users/shrranjan/Garak/garak/.venv/bin/piper",
+        "--model",
+        "/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx",
+        "--output_file",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B__piper_amy_en_us.source.wav"
+      ],
+      "source_path": "B__piper_amy_en_us.source.wav",
+      "source_sha256": "e65a7bd02a06e0efb1447d73d7947afe96c30f0d53ebeb25fffbd0e8ca27b2d2",
+      "converted_path": "B__piper_amy_en_us.converted.wav",
+      "converted_sha256": "d85cc8a01029d4a20f5f2606a53daf036f2d0b76f2b2b20918e52e4b936ecddf",
+      "final_path": "B__piper_amy_en_us.final.wav",
+      "final_sha256": "5f994999fd5e6c275a6c218389fd7003e1dc5675ee7cce66d2212a61e7fac78b",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 155904,
+        "resampled_frames": 113128,
+        "pre_gain_rms": 0.10652164201081131,
+        "pre_gain_peak": 0.9903534650802612,
+        "linear_gain": 0.9387763661195778,
+        "post_gain_peak": 0.9297204613685608
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B__piper_amy_en_us.converted.wav",
+        "source_sha256": "d85cc8a01029d4a20f5f2606a53daf036f2d0b76f2b2b20918e52e4b936ecddf",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B__piper_amy_en_us.final.wav",
+        "destination_sha256": "5f994999fd5e6c275a6c218389fd7003e1dc5675ee7cce66d2212a61e7fac78b",
+        "source_frames": 113128,
+        "removed_existing_zero_frames": 0,
+        "appended_zero_frames": 80000,
+        "final_frames": 193128,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "C",
+      "voice_id": "piper_amy_en_us",
+      "script": "Please cancel the Design Review tomorrow. Confirm cancel Design Review.",
+      "command": [
+        "/Users/shrranjan/Garak/garak/.venv/bin/piper",
+        "--model",
+        "/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx",
+        "--output_file",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/C__piper_amy_en_us.source.wav"
+      ],
+      "source_path": "C__piper_amy_en_us.source.wav",
+      "source_sha256": "f3df7b8db873b800a3e035354d92fcec78a8e17a209840473f13e7a33fb07345",
+      "converted_path": "C__piper_amy_en_us.converted.wav",
+      "converted_sha256": "81fd75a895e1e3e5d6769cf89f592cfa811cd0e6a5e4d692ae677c96681e1d23",
+      "final_path": "C__piper_amy_en_us.final.wav",
+      "final_sha256": "d43d8bf28f0e9721d1a95ab129701c46ca55ebddf08304c0082beebdc759a176",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 120832,
+        "resampled_frames": 87679,
+        "pre_gain_rms": 0.16096988132124418,
+        "pre_gain_peak": 1.002046823501587,
+        "linear_gain": 0.6212342282866702,
+        "post_gain_peak": 0.622505784034729
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/C__piper_amy_en_us.converted.wav",
+        "source_sha256": "81fd75a895e1e3e5d6769cf89f592cfa811cd0e6a5e4d692ae677c96681e1d23",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/C__piper_amy_en_us.final.wav",
+        "destination_sha256": "d43d8bf28f0e9721d1a95ab129701c46ca55ebddf08304c0082beebdc759a176",
+        "source_frames": 87679,
+        "removed_existing_zero_frames": 1,
+        "appended_zero_frames": 80000,
+        "final_frames": 167678,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "D",
+      "voice_id": "piper_amy_en_us",
+      "script": "Tell me a short joke about penguins.",
+      "command": [
+        "/Users/shrranjan/Garak/garak/.venv/bin/piper",
+        "--model",
+        "/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx",
+        "--output_file",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/D__piper_amy_en_us.source.wav"
+      ],
+      "source_path": "D__piper_amy_en_us.source.wav",
+      "source_sha256": "439377cf7a4f26bde62e7427fcb41b1af61e932051a2481cd2c11e05b2b123ae",
+      "converted_path": "D__piper_amy_en_us.converted.wav",
+      "converted_sha256": "a0e0fc4f37a1fb27d2f686ee6bb3acbd282e7a3430ef50762846f3ea0d6d3b95",
+      "final_path": "D__piper_amy_en_us.final.wav",
+      "final_sha256": "2a8d3d3ff8f89dc3f599c9c1b96fc592636ccab232f762d69ee9a6503c542763",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 65792,
+        "resampled_frames": 47741,
+        "pre_gain_rms": 0.13929662464012066,
+        "pre_gain_peak": 1.0004527568817139,
+        "linear_gain": 0.7178924848922555,
+        "post_gain_peak": 0.7182174921035767
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/D__piper_amy_en_us.converted.wav",
+        "source_sha256": "a0e0fc4f37a1fb27d2f686ee6bb3acbd282e7a3430ef50762846f3ea0d6d3b95",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/D__piper_amy_en_us.final.wav",
+        "destination_sha256": "2a8d3d3ff8f89dc3f599c9c1b96fc592636ccab232f762d69ee9a6503c542763",
+        "source_frames": 47741,
+        "removed_existing_zero_frames": 1,
+        "appended_zero_frames": 80000,
+        "final_frames": 127740,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "A_literal",
+      "voice_id": "piper_amy_en_us",
+      "script": "Please list my meetings on November nineteenth, twenty twenty-six.",
+      "command": [
+        "/Users/shrranjan/Garak/garak/.venv/bin/piper",
+        "--model",
+        "/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx",
+        "--output_file",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A_literal__piper_amy_en_us.source.wav"
+      ],
+      "source_path": "A_literal__piper_amy_en_us.source.wav",
+      "source_sha256": "c541c2bd1701e934ac4d1ffa4743c7bf77257990074c6fc278742ccc571647c9",
+      "converted_path": "A_literal__piper_amy_en_us.converted.wav",
+      "converted_sha256": "2740bfdea125ac38bac5d0302946259684f25c0b0376230da2b01a2d23603c9d",
+      "final_path": "A_literal__piper_amy_en_us.final.wav",
+      "final_sha256": "c4f4ff8613a1d496ad82a1202284c891156b5158eabf27b76ab241bbbe986dba",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 105472,
+        "resampled_frames": 76533,
+        "pre_gain_rms": 0.16986675634959858,
+        "pre_gain_peak": 0.9870149493217468,
+        "linear_gain": 0.5886967064596941,
+        "post_gain_peak": 0.5810524821281433
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A_literal__piper_amy_en_us.converted.wav",
+        "source_sha256": "2740bfdea125ac38bac5d0302946259684f25c0b0376230da2b01a2d23603c9d",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/A_literal__piper_amy_en_us.final.wav",
+        "destination_sha256": "c4f4ff8613a1d496ad82a1202284c891156b5158eabf27b76ab241bbbe986dba",
+        "source_frames": 76533,
+        "removed_existing_zero_frames": 0,
+        "appended_zero_frames": 80000,
+        "final_frames": 156533,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    },
+    {
+      "case_id": "B_literal",
+      "voice_id": "piper_amy_en_us",
+      "script": "I might cancel the Design Review on November nineteenth, twenty twenty-six, but first list my meetings and ask me before canceling anything.",
+      "command": [
+        "/Users/shrranjan/Garak/garak/.venv/bin/piper",
+        "--model",
+        "/Users/shrranjan/Garak/garak/knowledge/multilingual_mechinterp_pilot/english_tts_transfer_20261117/models/en_US-amy-medium.onnx",
+        "--output_file",
+        "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B_literal__piper_amy_en_us.source.wav"
+      ],
+      "source_path": "B_literal__piper_amy_en_us.source.wav",
+      "source_sha256": "8541f9065929e9836c5d62be66a56b1024904825ed9390dc4720ddab32ef703f",
+      "converted_path": "B_literal__piper_amy_en_us.converted.wav",
+      "converted_sha256": "21c7620a448e4e04c01275cf483a87baf834ce843b436988f9353d2c724679cf",
+      "final_path": "B_literal__piper_amy_en_us.final.wav",
+      "final_sha256": "9cc16ddd56b64cda54e80fb3e6f5bac10b1e800904e941874866ea85b0a85591",
+      "conversion": {
+        "source_rate_hz": 22050,
+        "source_frames": 193280,
+        "resampled_frames": 140249,
+        "pre_gain_rms": 0.11832092779823551,
+        "pre_gain_peak": 0.9974050521850586,
+        "linear_gain": 0.8451590252108493,
+        "post_gain_peak": 0.8429659008979797
+      },
+      "padding": {
+        "source": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B_literal__piper_amy_en_us.converted.wav",
+        "source_sha256": "21c7620a448e4e04c01275cf483a87baf834ce843b436988f9353d2c724679cf",
+        "destination": "models/second_architecture/voicechat_calendar_fixture_v1/rendered_v1/20261118T1145Z/B_literal__piper_amy_en_us.final.wav",
+        "destination_sha256": "9cc16ddd56b64cda54e80fb3e6f5bac10b1e800904e941874866ea85b0a85591",
+        "source_frames": 140249,
+        "removed_existing_zero_frames": 0,
+        "appended_zero_frames": 80000,
+        "final_frames": 220249,
+        "sample_rate_hz": 16000,
+        "channels": 1,
+        "sample_width_bytes": 2
+      }
+    }
+  ],
+  "model_inference_authorized": false
+}
