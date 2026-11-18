@@ -1,0 +1,20 @@
+# Independent CUDA old-FIT runner and launch gate source review
+
+18 November 2026. This is a source-only decision after the runner rereview, the gate HOLDs at commits `01aa5f4`, `019c617`, and `559eca1`, the corrected gate/environment commit `e925f05`, and the canonical independent auditor review at commit `1aaf73a`. No Brev instance, CUDA model load, or GPU forward was used.
+
+Decision: GO for CUDA runner and launch gate source only; live model HOLD until external freeze.
+
+## Exact bytes reviewed
+
+- Runner `voxtral_old_fit_grad_leaf_cuda_runner_v1.py`: SHA-256 `80bd61f0f76ca53c45ed92a3ed01bb057c7bf658e1190e6f04d1b5a4d504c510`; original tests `6674f78b0dbe19d7c605aeef7bb6bc749a0c7384d22d5edad2d1a53e77c0dd45`. Its independent source rereview is commit `4e81f12`.
+- Gate `voxtral_old_fit_grad_leaf_cuda_launch_gate_v1.py`: SHA-256 `f6bb81f142b0a229db00913eb7d31a9defa3062a7e54dc1c908f605c453c0c50`; original tests `53c146f8aaabd9241a8e0e0a694ace1820817309628b35a92bd270582e6ac2ae`; independent gate tests `cee283d4de6c697e9a26be51400cd3bdc8d0658cb1ee5a14e64ce8dcb07e04df` (committed at `365b4c1`).
+- Auditor `voxtral_old_fit_grad_leaf_cuda_audit_v1.py`: SHA-256 `9c0fde688fbd195da70a83d8db9e4ca723eb7209a4647c96c596c35376c240b6`. Its separate canonical GO review is SHA-256 `2c790a124c8996d952f10e2028cc44fd594a89be379bdda43f1335e79462eb1b` at the gate's exact `AUDITOR_REVIEW` path. This review checks interface compatibility; the auditor's independent decision remains its own record.
+- Environment preparation note SHA-256 `9173ec7f9ef82ecfebae87f7f0d61a7823fffbc0a07a4de267c848700081fcf5`; receipt schema SHA-256 `371d5f3cdb0b5e665d443d25065f6596ec38a19485d522639249ce984aa8ffcb`. Protocol V1/V2 SHA-256 values are `188925bc4022aa9841502d310899b5f9b28bf8ec0ba32ab7f7acb3fc45579050` and `c86537552b55f6542c88d2be9a7c71d5e1cecd589c6a11cc89eec514c49419ca`; result schema is `c90f46adcf73a8466232be15ba37d9a1d18b0eca234f2b4648f480bff6b7ad4d`. The CPU byte-pilot receipt/source are `b9bdccc69698ef2fde417f88b918bd54e7aa62a937ec787c34041e229e8232cd` and `a515051406481a5bed7c09d8676678b5ecaa0b4d41e1f5c4ba20495240b3f5e9`.
+
+## Rereview result
+
+All **12** CPU-only gate tests pass: nine original tests and three independent tests. The formerly pending canonical auditor review binding is now an ordinary passing test. The gate accepts one exact standalone GO decision line and rejects contradictory review text. It verifies committed source/review bytes and independent commit chronology, binds the receipt's source-review hash, checkpoint tree, input sidecar and environment hashes, and passes the independently expected freeze hash and receipt path to the corrected auditor CLI. The final campaign check requires beaver then waterfall, 66 saved forwards, 96 direct/full comparisons, both exact saved result hashes, and the four ordered case/site identities. The worker claim is exclusive and cannot be retried; waterfall needs the beaver CPU audit to have completed.
+
+The environment note now has two explicit Git bundles: a setup checkout before the environment receipt, and a final checkout from the reviewed local HEAD after receipt review, external freeze, and freeze review. The final checkout path matches the receipt's output root and the gate's path computation. It must verify HEAD, Git object integrity, source/review ancestry, checkpoint/WAV/sidecar bytes, and at least 30 GiB free disk before any weight load. The gate's 42 GiB CUDA, 110 GiB RAM, 600-second worker, 120-second per-case audit, 1 GiB case, 2.5 GiB campaign and 8 MiB stream controls remain fixed. Its external memory checks are sampled; oversized streams preserve a 512-byte prefix plus original hash/size, which limits failure-log inspection.
+
+This GO is restricted to the reviewed source and tests. The Linux environment receipt and wheelhouse, executable freeze, independent freeze review, and remote final checkout still need their own checks. The gate currently fails closed without those artifacts. No CUDA diagnostic result, audio-specific mechanism, or security finding follows from this source review.
