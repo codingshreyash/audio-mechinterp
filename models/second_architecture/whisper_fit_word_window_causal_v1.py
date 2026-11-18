@@ -13,6 +13,7 @@ import json
 import math
 import os
 import resource
+import subprocess
 import sys
 import time
 from dataclasses import dataclass
@@ -138,6 +139,16 @@ def preflight() -> dict[str, Any]:
         raise ValueError("Whisper config shape mismatch")
     source_modules = [modeling_whisper, feature_extraction_whisper, processing_whisper, tokenization_whisper]
     source_hashes = {module.__name__: file_sha(Path(inspect.getfile(module))) for module in source_modules}
+    script_relative = str(Path(__file__).resolve().relative_to(ROOT))
+    dirty = subprocess.run(["git", "diff", "--quiet", "--", script_relative], cwd=ROOT, check=False)
+    staged_dirty = subprocess.run(["git", "diff", "--cached", "--quiet", "--", script_relative], cwd=ROOT, check=False)
+    if dirty.returncode != 0 or staged_dirty.returncode != 0:
+        raise ValueError("runner source has uncommitted changes")
+    source_commit = subprocess.check_output(
+        ["git", "log", "-1", "--format=%H", "--", script_relative], cwd=ROOT, text=True
+    ).strip()
+    if len(source_commit) != 40:
+        raise ValueError("runner has no committed source revision")
     asset_names = ("tokenizer.json", "tokenizer_config.json", "special_tokens_map.json", "generation_config.json", "preprocessor_config.json")
     asset_hashes = {}
     for name in asset_names:
@@ -145,15 +156,20 @@ def preflight() -> dict[str, Any]:
         if not asset.is_file():
             raise ValueError(f"missing cached Whisper asset: {name}")
         asset_hashes[name] = file_sha(asset)
+    snapshot_hashes = {path.name: file_sha(path) for path in sorted(snapshot.iterdir()) if path.is_file()}
+    if "model.safetensors" not in snapshot_hashes or snapshot_hashes["model.safetensors"] != WEIGHT_SHA:
+        raise ValueError("Whisper snapshot file inventory mismatch")
     return {
         "schema": "whisper_fit_word_window_preflight_v1",
         "script_sha256": file_sha(Path(__file__)),
+        "script_source_git_commit": source_commit,
         "manifest_sha256": MANIFEST_SHA,
         "model_id": MODEL_ID,
         "model_revision": MODEL_REVISION,
         "checkpoint_sha256": WEIGHT_SHA,
         "config_sha256": file_sha(snapshot / "config.json"),
         "asset_sha256": asset_hashes,
+        "snapshot_files_sha256": snapshot_hashes,
         "source_hashes": source_hashes,
         "torch_version": torch.__version__,
         "transformers_version": transformers.__version__,
