@@ -302,7 +302,7 @@ def accumulate_one_vjp(accumulator: dict, gradients: dict[str, torch.Tensor],
             if not row_indices:
                 raise ValueError("Empty source bin")
             accumulator["jacobian_sums"][site][bin_index, coordinate] += (
-                grad[row_indices].sum(dim=0).detach().double().cpu()
+                grad[row_indices].sum(dim=0).detach().float().cpu().double()
             )
 
 

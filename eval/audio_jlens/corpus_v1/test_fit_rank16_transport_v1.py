@@ -115,6 +115,26 @@ class CorpusTransportTests(unittest.TestCase):
         self.assertAlmostEqual(float(means["animal"]["target"][0]), 5.5)
         self.assertAlmostEqual(float(means["object"]["target"][0]), 41.5)
 
+    @unittest.skipUnless(torch.backends.mps.is_available(), "MPS unavailable")
+    def test_mps_vjp_accumulation_moves_to_cpu_before_float64(self):
+        stage1 = {"target_basis": torch.zeros(2048, RANK),
+                  "target_basis_sha256": "toy", "metadata": {},
+                  "source_bin_means": {
+                      "encoder31": torch.zeros(48, 6, 3),
+                      "connector": torch.zeros(48, 6, 2),
+                  }}
+        acc = empty_accumulator(stage1)
+        gradients = {
+            "encoder31": torch.ones(6, 3, device="mps"),
+            "connector": 2 * torch.ones(6, 2, device="mps"),
+        }
+        rows = {site: [[i] for i in range(6)] for site in SITES}
+        accumulate_one_vjp(acc, gradients, rows, 0)
+        self.assertEqual(acc["jacobian_sums"]["encoder31"].dtype, torch.float64)
+        self.assertEqual(acc["jacobian_sums"]["connector"].device.type, "cpu")
+        self.assertTrue(torch.all(acc["jacobian_sums"]["encoder31"][:, 0] == 1))
+        self.assertTrue(torch.all(acc["jacobian_sums"]["connector"][:, 0] == 2))
+
 
 if __name__ == "__main__":
     unittest.main()
