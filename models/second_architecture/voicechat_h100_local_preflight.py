@@ -12,6 +12,7 @@ import copy
 import hashlib
 import importlib.metadata
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -125,15 +126,42 @@ def check_qa_receipt(base: Path, descriptor: dict, *, kind: str, wav_sha256: str
     return local, descriptor["sha256"]
 
 
-def check_clean_worktree(source_root: Path) -> None:
-    """Reject modified, staged, untracked, and ignored files in the source checkout."""
+EGG_INFO_METADATA = frozenset({
+    "PKG-INFO", "SOURCES.txt", "dependency_links.txt", "entry_points.txt",
+    "namespace_packages.txt", "not-zip-safe", "requires.txt", "top_level.txt", "zip-safe",
+})
+
+
+def allowed_generated_metadata(relative: Path) -> bool:
+    """Allow only setuptools metadata, never ignored importable code/cache."""
+    parts = relative.parts
+    return (len(parts) == 2 and parts[0].endswith(".egg-info") and
+            parts[1] in EGG_INFO_METADATA)
+
+
+def check_clean_worktree(source_root: Path) -> int:
+    """Reject source drift; allow narrowly specified ignored editable-install metadata."""
     status = subprocess.run(
-        ["git", "-C", str(source_root), "status", "--porcelain=v1", "--untracked-files=all",
-         "--ignored", "-z"],
+        ["git", "-C", str(source_root), "status", "--porcelain=v1",
+         "--untracked-files=all", "-z"],
         check=True, capture_output=True,
     ).stdout
-    require(not status, f"NeMo worktree is not clean (tracked, untracked, or ignored): "
-            f"{status[:160]!r}")
+    require(not status, f"NeMo worktree has tracked/untracked drift: {status[:160]!r}")
+    ignored = subprocess.run(
+        ["git", "-C", str(source_root), "ls-files", "--others", "--ignored",
+         "--exclude-standard", "-z"],
+        check=True, capture_output=True,
+    ).stdout
+    allowed_count = 0
+    for encoded in ignored.split(b"\x00"):
+        if not encoded:
+            continue
+        relative = Path(os.fsdecode(encoded))
+        local = source_root / relative
+        require(allowed_generated_metadata(relative) and not local.is_symlink() and
+                local.is_file(), f"NeMo ignored source/artifact not allowed: {relative}")
+        allowed_count += 1
+    return allowed_count
 
 
 def check_source(nemo_dir: Path, checkpoint_dir: Path) -> dict:
@@ -149,7 +177,7 @@ def check_source(nemo_dir: Path, checkpoint_dir: Path) -> dict:
         check=True, capture_output=True, text=True,
     ).stdout.strip()
     require(head == NEMO_COMMIT, f"NeMo HEAD drift: {head}")
-    check_clean_worktree(source_root)
+    generated_metadata_count = check_clean_worktree(source_root)
     for relative, expected in SOURCE_SHA256.items():
         check_file(source_root / relative, expected)
     config_path = checkpoint_dir / "config.json"
@@ -159,7 +187,8 @@ def check_source(nemo_dir: Path, checkpoint_dir: Path) -> dict:
     require(stt["use_function_head"] is True, "function head disabled")
     require(stt["duplex_function_channel_weight"] == 2.0, "function channel weight drift")
     require(stt["pretrained_llm"] == "nvidia/NVIDIA-Nemotron-Nano-9B-v2", "backbone drift")
-    return {"nemo_commit": head, "nemo_worktree": "clean_including_ignored",
+    return {"nemo_commit": head, "nemo_worktree": "clean_except_setuptools_metadata",
+            "nemo_generated_metadata_files_allowed": generated_metadata_count,
             "voicechat_commit": VOICECHAT_COMMIT,
             "source_files_verified": len(SOURCE_SHA256), "config_sha256": CONFIG_SHA256}
 
@@ -374,16 +403,30 @@ def self_test() -> dict:
         source = root / "source"
         source.mkdir()
         subprocess.run(["git", "init", "-q", str(source)], check=True)
-        (source / ".gitignore").write_text("ignored.py\n")
+        (source / ".gitignore").write_text(
+            "ignored.py\nignored.json\nignored.jinja\n*.egg-info/\n"
+            "__pycache__/\nbuild/\n")
         tracked = source / "tracked.py"
         tracked.write_text("x = 1\n")
         subprocess.run(["git", "-C", str(source), "add", "."], check=True)
         subprocess.run(["git", "-C", str(source), "-c", "user.name=Preflight",
                         "-c", "user.email=preflight@example.invalid", "commit", "-qm", "base"],
                        check=True)
-        check_clean_worktree(source)
+        require(check_clean_worktree(source) == 0, "clean source self-test failed")
+        egg_info = source / "nemo_toolkit.egg-info"
+        egg_info.mkdir()
+        for name in ("PKG-INFO", "SOURCES.txt"):
+            (egg_info / name).write_text("generated setuptools metadata\n")
+        require(check_clean_worktree(source) == 2,
+                "editable-install metadata should be allowed")
         for label, dirty_file in (("modified", tracked), ("untracked", source / "extra.py"),
-                                  ("ignored", source / "ignored.py")):
+                                  ("ignored Python", source / "ignored.py"),
+                                  ("ignored config", source / "ignored.json"),
+                                  ("ignored template", source / "ignored.jinja"),
+                                  ("ignored pycache", source / "__pycache__" / "module.pyc"),
+                                  ("ignored build code", source / "build" / "module.py"),
+                                  ("egg-info code", egg_info / "evil.py")):
+            dirty_file.parent.mkdir(exist_ok=True)
             dirty_file.write_text("x = 2\n")
             try:
                 check_clean_worktree(source)
