@@ -1,0 +1,21 @@
+{
+  "status": "audited_completed_numerical_feasibility_only",
+  "run_dir": "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_v1_fit_backward_feasibility/20261118T1122Z",
+  "result_sha256": "d4ccfd213cf3a5ebebd3a7c0ecebab691dc15632f61076669d7535bd58154ebe",
+  "details_sha256": "1bc49aa650b96c7ac6cb2f545da98e198edfa18998ebae8dc263c70ad5ad7b3c",
+  "sites": {
+    "encoder31": {
+      "fidelity_ratio": 0.2599633563570216,
+      "row_nonuniformity_ratio": 0.286484479961907,
+      "uniform_relative_l2": 1.0008840702537558,
+      "rowwise_relative_l2": 1.0003879269124587
+    },
+    "projector": {
+      "fidelity_ratio": 0.14960193061919388,
+      "row_nonuniformity_ratio": 0.16076474897573914,
+      "uniform_relative_l2": 0.9956380519100353,
+      "rowwise_relative_l2": 0.9958448301822446
+    }
+  },
+  "scope": "old FIT numerical provenance only; no efficacy or security claim"
+}
