@@ -1,0 +1,14 @@
+{
+  "attempt_relative_path": "20261118T142640188473Z",
+  "audit_sha256": "d4f8f8b67c83766e1d0358ff0067e27aeac52a1641ae96f4e23604acb3bd9a0f",
+  "launch_finish_sha256": "ac85650f06a7005a7733b771aedb465539e378b93cf4312f54c517c126e56b9e",
+  "launch_start_sha256": "d1203201bfd183f84025a967cf97b63bd929aa4a1d0c076232d3a8aee3da1d8d",
+  "model_work_elapsed_seconds": 28.278460667002946,
+  "phase": "bf16_direct_lm",
+  "reservation_sha256": "5f87e6dd165db1e93194324108f4d4b1e07ab1eef5ffba3f04005eef1fed8a4c",
+  "result_sha256": "733b678a23ab8f21926de836e5a9bc48b7f1d6e5891142c85b1cf47cb1feb1a6",
+  "stage_a_bf16_manifest_sha256": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+  "stage_a_fp32_manifest_sha256": "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f",
+  "stage_b_freeze_sha256": "18a8602ab5eac1a5099f98349ef6a0ef6456c721faca6cabeccbc351f9e3bb55",
+  "status": "audited_completed_old_fit_handoff_stage_b_bf16_direct_lm_only"
+}
