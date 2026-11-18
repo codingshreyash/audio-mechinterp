@@ -84,6 +84,12 @@ class NativeStageATests(unittest.TestCase):
             self.assertLess(estimate["estimated_tensor_payload_bytes"],
                             estimate["draft_hard_archive_cap_bytes"])
             self.assertGreater(estimate["estimated_tensor_payload_bytes"], 600_000_000)
+            self.assertEqual(estimate["source_effective_edit_bytes"], 3_538_944)
+            self.assertEqual(estimate["probe_float64_bytes"], 1_966_080)
+            self.assertEqual(estimate["estimated_tensor_payload_bytes"],
+                             sum(value for key, value in estimate.items()
+                                 if key.endswith("_bytes") and key not in (
+                                     "estimated_tensor_payload_bytes", "draft_hard_archive_cap_bytes")))
         self.assertGreater(target.estimate_native_archive_bytes("fp32")["estimated_tensor_payload_bytes"],
                            target.estimate_native_archive_bytes("bf16")["estimated_tensor_payload_bytes"])
         self.assertLess(target.estimate_native_archive_bytes("fp32")["estimated_tensor_payload_bytes"],
@@ -104,6 +110,10 @@ class NativeStageATests(unittest.TestCase):
         self.assertEqual(clean["saved"]["source_full_pre_hashes"]["encoder31"],
                          clean["saved"]["source_full_post_hashes"]["encoder31"])
         self.assertEqual(clean["saved"]["audio_placeholder_positions"], list(range(375)))
+        self.assertEqual(clean["saved"]["hook_events"], clean["events"])
+        self.assertEqual(clean["saved"]["hook_events"]["lm_input"],
+                         {"calls": 1, "shape": [1, 396, 3072], "dtype": "torch.float32"})
+        self.assertEqual(clean["saved"]["hook_events"]["final_norm"]["calls"], 1)
         self.assertTrue(torch.equal(clean["saved"]["projector_full"],
                                     clean["saved"]["lm_input_full"][0, :375]))
         gradient = torch.autograd.grad(clean["graph_targets"]["lm29"][0],
@@ -154,6 +164,31 @@ class NativeStageATests(unittest.TestCase):
         self.assertTrue(torch.equal(zero["prepatch_lm0"], edited["prepatch_lm0"]))
         self.assertFalse(torch.equal(zero["lm_terminal"]["lm29"], edited["lm_terminal"]["lm29"]))
         self.assertEqual(set(edited["lm_terminal"]), {f"lm{i}" for i in target.LM_LAYERS})
+        self.assertEqual(edited["hook_events"]["lm29"]["calls"], 1)
+
+    def test_full_boundary_descriptors_and_each_cycle_odd_even(self):
+        saved = {"projector_full": torch.zeros((375, 3072)),
+                 "lm_input_full": torch.zeros((1, 396, 3072)),
+                 "lm_terminal": {"lm29": torch.zeros(3072)},
+                 "audio_placeholder_positions": list(range(375))}
+        saved["projector_full"][0, 0] = 1
+        saved["lm_input_full"][0, 0, 0] = 2
+        self.assertEqual(target.full_stage_vector(saved, "projector_word", ROWS).numel(), 375 * 3072)
+        self.assertEqual(target.full_stage_vector(saved, "lm_input_word", ROWS).numel(), 396 * 3072)
+        self.assertEqual(float(target.stage_vector(saved, "projector_word", ROWS).abs().sum()), 0)
+        self.assertEqual(float(target.full_stage_vector(saved, "projector_word", ROWS).abs().sum()), 1)
+        self.assertEqual(float(target.full_stage_vector(saved, "lm_input_word", ROWS).abs().sum()), 2)
+        rows = []
+        for cycle in range(3):
+            for magnitude in (.00625, .025, .1):
+                rows.append({"cycle": cycle, "alpha": magnitude,
+                             "measured": [10 * cycle + magnitude]})
+                rows.append({"cycle": cycle, "alpha": -magnitude,
+                             "measured": [-2 * cycle - magnitude]})
+        paired = target.cycle_odd_even(rows)
+        self.assertEqual(len(paired["0.1"]["cycles"]), 3)
+        self.assertAlmostEqual(paired["0.1"]["cycles"]["2"]["measured_odd"][0], 12.1)
+        self.assertAlmostEqual(paired["0.1"]["cycles"]["2"]["measured_even"][0], 8)
 
     def test_content_addressed_sidecar_and_hard_write_cap(self):
         with tempfile.TemporaryDirectory() as directory:

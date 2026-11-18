@@ -98,7 +98,8 @@ def pure_prompt_forward(model, batch, dtype) -> dict:
     if state.shape != (1, 396, 3072) or state.dtype != dtype or logits.shape != (1, 1, 131072):
         raise ValueError("Pure prompt state/logits shape or dtype changed")
     return {"final_full": state.detach().cpu().clone(),
-            "first_answer_logits": logits[0, 0].detach().cpu().clone()}
+            "first_answer_logits": logits[0, 0].detach().cpu().clone(),
+            "hook_events": {}, "hook_mode": "none"}
 
 
 def generate_source_condition(model, batch, dtype, site: str, rows: list[int],
@@ -152,7 +153,8 @@ def parity_checks(model, batch, dtype, prepared: dict, receipt) -> dict:
             not torch.equal(pure["first_answer_logits"], passive["saved"]["first_answer_logits"]):
         raise ValueError("Pure/passive prompt state or logit parity failed")
     saved = {"pure": pure, "passive": {"final_full": passive["saved"]["final_full"],
-                                      "first_answer_logits": passive["saved"]["first_answer_logits"]}}
+                                      "first_answer_logits": passive["saved"]["first_answer_logits"],
+                                      "hook_events": passive["saved"]["hook_events"]}}
     for site in prior.SITES:
         for mode in ("self", "zero"):
             trace = native.trace_forward(model, batch, dtype, rows, patch_site=site,
@@ -163,7 +165,8 @@ def parity_checks(model, batch, dtype, prepared: dict, receipt) -> dict:
                     not torch.equal(trace["saved"]["first_answer_logits"], pure["first_answer_logits"]):
                 raise ValueError(f"Pure/{site}/{mode} complete-prompt parity failed")
             saved[f"{site}_{mode}"] = {"final_full": trace["saved"]["final_full"],
-                                      "first_answer_logits": trace["saved"]["first_answer_logits"]}
+                                      "first_answer_logits": trace["saved"]["first_answer_logits"],
+                                      "hook_events": trace["saved"]["hook_events"]}
             receipt(f"after_parity_{site}_{mode}")
     natural = prior.generate(model, batch, dtype, passive=False)["suffix_ids"]
     receipt("after_natural_generation")
@@ -312,7 +315,8 @@ def run_arm(arm: str, output: Path) -> None:
             donor_trace = {"source_hashes": {site: first.tensor_sha(donor["saved"]["source_rows"][site])
                                               for site in prior.SITES},
                            "lm_terminal": donor["saved"]["lm_terminal"],
-                           "first_answer_logits": donor["saved"]["first_answer_logits"]}
+                           "first_answer_logits": donor["saved"]["first_answer_logits"],
+                           "hook_events": donor["saved"]["hook_events"]}
             receipt("donor_capture")
             clean = native.trace_forward(model, batch, dtype, prepared["rows"], grad=True,
                                          archive_full_source=True)

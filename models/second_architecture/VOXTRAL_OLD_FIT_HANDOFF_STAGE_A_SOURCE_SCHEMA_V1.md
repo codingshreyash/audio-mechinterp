@@ -19,21 +19,31 @@ sidecars are moved after successful exclusive serialization to
 Every trace has selected prepatch source rows, full projector output, full
 post-replacement LM input, first-answer logits, terminal states after LM
 blocks 0/7/14/22/29, 375 audio-placeholder indices, native per-coordinate
-ULP spacing, stage/source hashes and realized edit metrics. All cycle-0
+ULP spacing, stage/source hashes, realized edit metrics and per-boundary hook
+call counts, shapes and dtypes. All cycle-0
 traces also contain full prepatch and postpatch encoder and projector source
 tensors. Full source hashes are recorded on the remaining cycles; equality
 there is a model-forward provenance assertion, while cycle-0 full tensors
 permit independent bitwise equality checks. `source_vjps` contains 44 FP32
 selected-row VJP tensors for each source site. `lm0_controls` contains the 24
 fixed matched cells (zero/edit), one self control and the fixed unit vector.
-The six parity prompt states include the complete `[1,396,3072]` state and
-first-answer logits; the six greedy suffixes are also recorded.
+The six parity prompt states include the complete `[1,396,3072]` state,
+first-answer logits and hook-event records (the no-hook condition records
+an empty event set); the six greedy suffixes are also recorded. Donor and
+compact LM0-control traces also store their applicable hook events. At the
+projector and LM-input boundaries, full-state L2 and changed-coordinate
+descriptors use the complete saved tensors, while fixed word-row projections
+use only the selected three rows. Odd/even values retain each of the three
+signed-alpha pairs separately under `odd_even[magnitude].cycles[cycle]`;
+per-magnitude medians are an additional summary.
 
-The prospective tensor-payload estimate is **711,725,056 bytes BF16** and
-**1,407,672,320 bytes FP32**. It includes 72 paired traces, 25 full-source
+The prospective tensor-payload estimate is **716,569,600 bytes BF16** and
+**1,412,809,728 bytes FP32**. It includes 72 paired traces, 25 full-source
 captures (24 cycle-0 forwards and one clean graph), 44 VJPs, probes, first
-answer logits, per-coordinate ULP arrays, compact LM0 controls and complete
-parity states. The FP32 estimate leaves 202,940,416 bytes below the hard
+answer logits, all 72 realized FP32 source-edit tensors, duplicated probe
+banks in the early frozen and final analysis sidecars, control unit and
+directions, donor states, per-coordinate ULP arrays, compact LM0 controls
+and complete parity states. The FP32 estimate leaves 197,803,008 bytes below the hard
 1,610,612,736-byte cap for metadata and serialization overhead. The runner
 checks this estimate before model load and enforces the cap while writing;
 it preserves a failed attempt if exact serialization exceeds the cap.

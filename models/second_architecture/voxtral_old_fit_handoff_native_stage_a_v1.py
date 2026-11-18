@@ -111,8 +111,11 @@ def estimate_native_archive_bytes(arm: str) -> dict[str, int]:
     traces = (NATIVE_PATCH_FORWARDS_PER_ARM + 1) * per_forward_elements * native_bytes
     full_sources = (REPLAY_CYCLE_FORWARDS_PER_ARM + 1) * full_source_per_forward_elements * native_bytes
     gradients = VJP_COUNT * (12 * 1280 + 3 * 3072) * 4
-    probes = (16 * 3072 + 2 * 4 * 9216) * 8
+    # The probe bank is intentionally present both in probes.pt (frozen before
+    # load) and in details.pt (self-contained raw analysis sidecar).
+    probes = 2 * (16 * 3072 + 2 * 4 * 9216) * 8
     first_answer_logits = (NATIVE_PATCH_FORWARDS_PER_ARM + 1) * 131072 * native_bytes
+    source_effective_edits = 2 * 3 * 6 * (12 * 1280 + 3 * 3072) * 4
     per_coordinate_ulp = (NATIVE_PATCH_FORWARDS_PER_ARM + 1) * sum(STAGE_WIDTHS.values()) * 4
     compact_control = LM0_CONTROL_FORWARDS_PER_ARM * len(LM_LAYERS) * 3072 * native_bytes
     # Six complete prompt-final states and six logit vectors are retained for
@@ -120,14 +123,20 @@ def estimate_native_archive_bytes(arm: str) -> dict[str, int]:
     parity_states = 6 * 396 * 3072 * native_bytes
     parity_logits = 6 * 131072 * native_bytes
     control_prepatch_and_edits = LM0_CONTROL_FORWARDS_PER_ARM * 3072 * (native_bytes + 4)
+    control_unit_and_directions = (3072 + 1280 + 3072) * 4
+    donor_terminal_and_logits = (len(LM_LAYERS) * 3072 + 131072) * native_bytes
     total = (traces + full_sources + gradients + probes + first_answer_logits + per_coordinate_ulp +
-             compact_control + parity_states + parity_logits + control_prepatch_and_edits)
+             source_effective_edits + compact_control + parity_states + parity_logits +
+             control_prepatch_and_edits + control_unit_and_directions + donor_terminal_and_logits)
     return {"native_trace_bytes": traces, "first_cycle_full_source_bytes": full_sources,
             "selected_vjp_fp32_bytes": gradients, "probe_float64_bytes": probes,
             "first_answer_logit_bytes": first_answer_logits,
             "per_coordinate_native_ulp_bytes": per_coordinate_ulp,
+            "source_effective_edit_bytes": source_effective_edits,
             "compact_lm0_control_bytes": compact_control,
             "control_prepatch_and_edit_bytes": control_prepatch_and_edits,
+            "control_unit_and_directions_bytes": control_unit_and_directions,
+            "donor_terminal_and_logit_bytes": donor_terminal_and_logits,
             "parity_state_bytes": parity_states, "parity_logit_bytes": parity_logits,
             "estimated_tensor_payload_bytes": total,
             "draft_hard_archive_cap_bytes": ARCHIVE_CAP_BYTES[arm]}
@@ -305,10 +314,15 @@ def trace_forward(
         "first_answer_logits": first.tensor_sha(saved["first_answer_logits"]),
         **{key: first.tensor_sha(value) for key, value in saved["lm_terminal"].items()},
     }
+    events = {stage: {"calls": len(values), "shape": list(values[0].shape),
+                      "dtype": str(values[0].dtype)} for stage, values in hits.items()}
+    if capture_final_full:
+        events["final_norm"] = {"calls": len(final_hits), "shape": list(final_hits[0].shape),
+                                "dtype": str(final_hits[0].dtype)}
+    saved["hook_events"] = events
     return {"saved": saved, "graph_sources": graph_sources if grad else None,
             "graph_targets": graph_targets if grad else None,
-            "events": {stage: {"calls": len(values), "shape": list(values[0].shape),
-                                "dtype": str(values[0].dtype)} for stage, values in hits.items()}}
+            "events": events}
 
 
 def source_vjps(clean_trace: dict[str, Any], probes: dict[str, torch.Tensor],
@@ -379,6 +393,46 @@ def stage_vector(saved: dict[str, Any], stage: str, rows: dict[str, list[int]]) 
     raise ValueError("Unknown stage")
 
 
+def full_stage_vector(saved: dict[str, Any], stage: str, rows: dict[str, list[int]]) -> torch.Tensor:
+    """Complete saved boundary state for descriptive change metrics."""
+    if stage == "projector_word":
+        return saved["projector_full"].reshape(-1).float()
+    if stage == "lm_input_word":
+        return saved["lm_input_full"].reshape(-1).float()
+    return stage_vector(saved, stage, rows)
+
+
+def cycle_odd_even(measured_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Keep each frozen signed pair; median is only an optional summary."""
+    output = {}
+    selected = {(row["cycle"], row["alpha"]): row for row in measured_rows}
+    if len(selected) != len(measured_rows):
+        raise ValueError("Duplicate frozen signed pair in odd/even diagnostic")
+    for magnitude in (0.00625, 0.025, 0.1):
+        cycles = {}
+        odds, evens = [], []
+        for cycle in range(3):
+            positive = selected.get((cycle, magnitude))
+            negative = selected.get((cycle, -magnitude))
+            if positive is None or negative is None:
+                raise ValueError("Missing frozen signed pair for odd/even diagnostic")
+            p = torch.tensor(positive["measured"], dtype=torch.float64)
+            n = torch.tensor(negative["measured"], dtype=torch.float64)
+            if p.shape != n.shape:
+                raise ValueError("Signed pair vector widths differ")
+            odd, even = (p - n) / 2, (p + n) / 2
+            odds.append(odd)
+            evens.append(even)
+            cycles[str(cycle)] = {"positive_alpha": magnitude, "negative_alpha": -magnitude,
+                                  "measured_odd": odd.tolist(), "measured_even": even.tolist()}
+        output[str(magnitude)] = {
+            "cycles": cycles,
+            "median_measured_odd": torch.stack(odds).median(0).values.tolist(),
+            "median_measured_even": torch.stack(evens).median(0).values.tolist(),
+        }
+    return output
+
+
 def analyze_native_pairs(observations: dict[str, list[dict]], vjps: dict,
                          probes: dict[str, torch.Tensor], rows: dict[str, list[int]],
                          directions: dict[str, torch.Tensor]) -> dict[str, Any]:
@@ -426,7 +480,8 @@ def analyze_native_pairs(observations: dict[str, list[dict]], vjps: dict,
                 if resolved and n_prediction > resolution:
                     cosine = float(torch.dot(predicted.double(), measured.double()) /
                                    (n_prediction * n_measured))
-                full_delta = stage_vector(edited, parent_stage, rows) - stage_vector(zero, parent_stage, rows)
+                full_delta = (full_stage_vector(edited, parent_stage, rows) -
+                              full_stage_vector(zero, parent_stage, rows))
                 measured_rows.append({"cycle": record["cycle"], "alpha": record["alpha"],
                                       "measured": measured.tolist(), "predicted_rowwise": predicted.tolist(),
                                       "predicted_uniform": uniform.tolist(), "predicted_ideal": ideal.tolist(),
@@ -445,14 +500,7 @@ def analyze_native_pairs(observations: dict[str, list[dict]], vjps: dict,
                 verdict = "diagnostic_mismatch"
             else:
                 verdict = "indeterminate"
-            odd_even = {}
-            for magnitude in (0.00625, 0.025, 0.1):
-                positive = torch.stack([torch.tensor(r["measured"], dtype=torch.float64)
-                                        for r in measured_rows if r["alpha"] == magnitude]).median(0).values
-                negative = torch.stack([torch.tensor(r["measured"], dtype=torch.float64)
-                                        for r in measured_rows if r["alpha"] == -magnitude]).median(0).values
-                odd_even[str(magnitude)] = {"measured_odd": ((positive - negative) / 2).tolist(),
-                                            "measured_even": ((positive + negative) / 2).tolist()}
+            odd_even = cycle_odd_even(measured_rows)
             site_analysis[stage] = {"zero_repeat_spread_l2": noise, "resolution_l2": resolution,
                                     "records": measured_rows, "odd_even": odd_even, "verdict": verdict}
         analysis[site] = site_analysis
@@ -559,4 +607,6 @@ def compact_lm0_control_forward(model: Any, batch: dict[str, torch.Tensor], dtyp
         raise ValueError("Nonfinite LM0 control state")
     return {"prepatch_lm0": prepatch[0], "effective_edit_lm0": effective[0],
             "lm_terminal": {f"lm{i}": _capture_cpu(hits[f"lm{i}"][0][0, -1]) for i in LM_LAYERS},
-            "kind": "self" if self_patch else "zero" if scalar == 0 else "edited"}
+            "kind": "self" if self_patch else "zero" if scalar == 0 else "edited",
+            "hook_events": {stage: {"calls": len(values), "shape": list(values[0].shape),
+                                    "dtype": str(values[0].dtype)} for stage, values in hits.items()}}
