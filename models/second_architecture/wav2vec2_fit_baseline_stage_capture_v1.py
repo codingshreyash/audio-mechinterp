@@ -482,14 +482,14 @@ def execute(expected_preflight: Path, output: Path) -> None:
                 forward_start = time.monotonic()
                 arrays, counts = model_forward(model, input_tensor, case.frames)
                 ids = arrays["logits"].argmax(axis=-1)[0].astype(np.int64).tolist()
+                in_progress = {"case_key": case.key, "mode": mode,
+                               "argmax_ids": ids, "hook_counts": counts}
                 transcript = processor.batch_decode([ids])[0]
                 target, other_word = case.word, next(w for w in PAIR_WORDS[case.pair_id] if w != target)
                 tokens = normalized_words(transcript)
                 eligible = tokens.count(target) == 1 and tokens.count(other_word) == 0
-                in_progress = {"case_key": case.key, "mode": mode, "argmax_ids": ids,
-                               "hook_counts": counts,
-                               "transcript": transcript, "normalized_words": tokens,
-                               "eligible": eligible}
+                in_progress.update({"transcript": transcript,
+                                    "normalized_words": tokens, "eligible": eligible})
                 check_budget(start, output)
                 hashes: dict[str, str] = {}
                 shapes: dict[str, list[int]] = {}
