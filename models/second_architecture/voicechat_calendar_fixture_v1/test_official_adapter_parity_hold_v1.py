@@ -1,7 +1,7 @@
 """Preserved source-only parity HOLD reproductions; no model or real WAV is run.
 
-These are expected failures against source commit 546757a. Remove the
-decorators only after the comparator rejects each missing-evidence case.
+These reproduced three missing-evidence passes in source commit 546757a.
+They now assert that the corrected comparator rejects each case.
 """
 
 import contextlib
@@ -24,7 +24,6 @@ def fixture():
 
 
 class MissingEvidenceHoldReproductions(unittest.TestCase):
-    @unittest.expectedFailure
     def test_rejects_missing_core_result_fields_in_all_arms(self):
         trace, calls, stocks = fixture()
         for phase in ("pass1", "pass2"):
@@ -35,7 +34,6 @@ class MissingEvidenceHoldReproductions(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare_stock_adapter(*stocks, trace, calls)
 
-    @unittest.expectedFailure
     def test_rejects_missing_replay_injection_in_all_arms(self):
         trace, calls, stocks = fixture()
         self.assertIsNotNone(trace["replay"])
@@ -45,7 +43,6 @@ class MissingEvidenceHoldReproductions(unittest.TestCase):
         with self.assertRaises(ValueError):
             compare_stock_adapter(*stocks, trace, calls)
 
-    @unittest.expectedFailure
     def test_rejects_empty_tts_capture_for_generated_audio(self):
         trace, calls, stocks = fixture()
         self.assertIsNotNone(trace["pass2"]["raw_result"]["audio"])

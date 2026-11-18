@@ -15,9 +15,11 @@ It must not use a live calendar or interpret that response as a model decision.
 `compare_stock_adapter` requires two TTS-wrapped stock runs, a third stock run
 without that wrapper, the QA-gated adapter's trace, and its two captured
 `inference_runner` kwargs dictionaries. It checks both passes' common inputs,
-exact discrete text/function/audio-token results, exact injected call/response
-token tensors and steps, the official first-call parser result, and all TTS
-codes available in the wrapped arms. It compares the **unspliced** pass-2 PCM
+required nonempty core text/function results, exact discrete
+text/function/audio-token results, complete call/response injection tensors
+when replay occurs, no injection when it does not, the official first-call
+parser result, and nonempty pass-2 TTS-code captures in the wrapped arms. It
+compares the **unspliced** pass-2 PCM
 samples. Stock repeat, stock wrapper versus no-wrapper, and stock versus
 adapter must each have maximum absolute PCM difference no greater than the
 predeclared tolerance of `1e-4`; a larger stock-repeat difference fails the

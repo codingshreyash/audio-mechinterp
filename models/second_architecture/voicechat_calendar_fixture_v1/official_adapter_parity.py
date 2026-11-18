@@ -27,6 +27,10 @@ INJECTION_KEYS = (
     "function_calls", "function_call_lengths", "function_call_steps",
     "function_responses", "function_response_lengths", "function_response_steps",
 )
+REQUIRED_RESULT_KEYS = (
+    "tokens_text", "tokens_function_pred", "tokens_function",
+    "tokens_len", "text", "tokens_audio",
+)
 
 
 def _copy(value: Any) -> Any:
@@ -57,6 +61,15 @@ def _same(left: Any, right: Any) -> bool:
 def _require_same(left: Any, right: Any, label: str) -> None:
     if not _same(left, right):
         raise ValueError(f"VoiceChat parity failed at {label}")
+
+
+def _has_content(value: Any) -> bool:
+    value = _plain(value)
+    if value is None:
+        return False
+    if isinstance(value, (dict, tuple, list, str, bytes)):
+        return len(value) > 0
+    return True
 
 
 def capture_stock_helper(
@@ -165,6 +178,26 @@ def _compare_discrete(left: dict[str, Any], right: dict[str, Any], label: str) -
         _require_same(left.get(key), right.get(key), f"{label}.{key}")
 
 
+def _require_result_evidence(result: dict[str, Any], phase: str, label: str) -> None:
+    for key in REQUIRED_RESULT_KEYS:
+        if key not in result:
+            raise ValueError(f"VoiceChat parity missing {label}.{phase}.{key}")
+        if key != "tokens_audio" and not _has_content(result[key]):
+            raise ValueError(f"VoiceChat parity missing {label}.{phase}.{key} value")
+    if phase == "pass2" and ("audio_len" not in result or result["audio_len"] is None or
+                             "audio" not in result or result["audio"] is None):
+        raise ValueError(f"VoiceChat parity missing {label}.pass2 raw audio or length")
+
+
+def _require_injection(kwargs: dict[str, Any], *, replay: bool, label: str) -> None:
+    present = {key for key in INJECTION_KEYS if key in kwargs}
+    expected = set(INJECTION_KEYS) if replay else set()
+    if present != expected:
+        raise ValueError(f"VoiceChat parity missing or unexpected {label} injection fields")
+    if any(not _has_content(kwargs[key]) for key in present):
+        raise ValueError(f"VoiceChat parity missing {label} injection tensor")
+
+
 def _compare_inputs(left: dict[str, Any], right: dict[str, Any], label: str) -> None:
     for key in COMMON_INPUT_KEYS:
         if key not in left or key not in right:
@@ -205,6 +238,23 @@ def compare_stock_adapter(
     if adapter_trace.get("external_tool_execution") is not False:
         raise ValueError("Adapter trace must have no external tool execution")
 
+    replay = adapter_trace.get("replay")
+    for label, stock in (("stock_a", stock_a), ("stock_b", stock_b),
+                         ("stock_no_tts_wrapper", stock_no_tts_wrapper)):
+        for phase in ("pass1", "pass2"):
+            _require_result_evidence(stock[phase]["result"], phase, label)
+            _require_injection(stock[phase]["kwargs"],
+                               replay=replay is not None and phase == "pass2",
+                               label=f"{label}.{phase}")
+    for phase, call in zip(("pass1", "pass2"), adapter_calls):
+        _require_result_evidence(adapter_trace[phase]["raw_result"], phase, "adapter")
+        _require_injection(call, replay=replay is not None and phase == "pass2",
+                           label=f"adapter.{phase}")
+    if not all(_has_content(codes) and all(_has_content(code) for code in codes)
+               for codes in (stock_a["pass2"]["codes"], stock_b["pass2"]["codes"],
+                             adapter_trace["pass2"]["codec_codes_per_step"])):
+        raise ValueError("VoiceChat parity missing pass-2 TTS code capture")
+
     for label, stock in (("stock_b", stock_b), ("stock_no_tts_wrapper", stock_no_tts_wrapper)):
         _require_same(stock_a["fc_output"], stock["fc_output"], f"{label}.fc_output")
         for key in ("call_step", "response_step", "response_token_ids", "api_response"):
@@ -226,7 +276,6 @@ def compare_stock_adapter(
 
     parsed = adapter_trace["pass1"]["stock_first_parse"]["calls"]
     _require_same(stock_a["fc_output"]["tool_calls"], parsed, "adapter.pass1.parser")
-    replay = adapter_trace.get("replay")
     if replay is None:
         if stock_a["fc_output"]["tool_calls"] or any(
             key in adapter_calls[1] for key in INJECTION_KEYS
