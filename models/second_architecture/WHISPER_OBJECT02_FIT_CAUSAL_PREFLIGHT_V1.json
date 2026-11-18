@@ -1,0 +1,178 @@
+{
+  "asset_sha256": {
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d"
+  },
+  "capture_sites": [
+    "post_conv_pos",
+    "post_block0",
+    "post_block1",
+    "post_block2",
+    "post_block3",
+    "post_norm"
+  ],
+  "cases": [
+    {
+      "file_sha256": "c94cac1885730ce36238a9e8a7b736bc469daa96e711c956fabadd206222766a",
+      "frames": 89040,
+      "key": "kokoro_cup",
+      "pcm_sha256": "60acca534e9453f9c48b91028a155dbac5ac12c7cda400caaf84ebdd082b39f4"
+    },
+    {
+      "file_sha256": "2fbb5182032f95dc70bb57545f9c94aa245ed73371edb2281f51eceb56fd24db",
+      "frames": 89040,
+      "key": "kokoro_plate",
+      "pcm_sha256": "86fb91e4622267279e3d5515374c9702f4f971687d91424cf6863b6f5dbde96e"
+    },
+    {
+      "file_sha256": "12537b7770110e07b9e4f7764051df268096ed60cd993ae98ba4fa37e6c0cd0d",
+      "frames": 79817,
+      "key": "piper_cup",
+      "pcm_sha256": "5712f0829c59432816c20284638232c619c7dfc3b5f6b515d50c1cb3b3255d8e"
+    },
+    {
+      "file_sha256": "42d0d964d124001db5d0eebc214f4dc8efeeee38f81850b22ae12d4bf0155a92",
+      "frames": 79817,
+      "key": "piper_plate",
+      "pcm_sha256": "7aa1d0e13f984f4157930d28b7a10e81e25a47c36e062f565fa435892ed7043c"
+    }
+  ],
+  "checkpoint_sha256": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+  "config_sha256": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+  "device": "cpu",
+  "generation": {
+    "do_sample": false,
+    "max_new_tokens": 128,
+    "num_beams": 1,
+    "output_scores": true,
+    "return_dict_in_generate": true
+  },
+  "intervention_sites": [
+    "post_conv_pos",
+    "post_block1",
+    "post_norm"
+  ],
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "model_id": "openai/whisper-tiny.en",
+  "model_revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+  "prior_asr_screen_sha256": "41da6ee4dd67a2f7b06ece24354fdb0ca6911f7017ec514e170f55f61d38a5e7",
+  "python_version": "3.12.13",
+  "random_arm_seeds": [
+    {
+      "arm_seed": 2455157234218324769,
+      "base_seed": 20261118,
+      "donor_word": "cup",
+      "engine": "piper",
+      "recipient_word": "plate"
+    },
+    {
+      "arm_seed": 3764681248501384143,
+      "base_seed": 20261119,
+      "donor_word": "cup",
+      "engine": "piper",
+      "recipient_word": "plate"
+    },
+    {
+      "arm_seed": 8980844488008332317,
+      "base_seed": 20261118,
+      "donor_word": "plate",
+      "engine": "piper",
+      "recipient_word": "cup"
+    },
+    {
+      "arm_seed": 2488970253573860679,
+      "base_seed": 20261119,
+      "donor_word": "plate",
+      "engine": "piper",
+      "recipient_word": "cup"
+    },
+    {
+      "arm_seed": 6564227184319107746,
+      "base_seed": 20261118,
+      "donor_word": "cup",
+      "engine": "kokoro",
+      "recipient_word": "plate"
+    },
+    {
+      "arm_seed": 2830963375588633434,
+      "base_seed": 20261119,
+      "donor_word": "cup",
+      "engine": "kokoro",
+      "recipient_word": "plate"
+    },
+    {
+      "arm_seed": 1221283004763563139,
+      "base_seed": 20261118,
+      "donor_word": "plate",
+      "engine": "kokoro",
+      "recipient_word": "cup"
+    },
+    {
+      "arm_seed": 6458067247427744679,
+      "base_seed": 20261119,
+      "donor_word": "plate",
+      "engine": "kokoro",
+      "recipient_word": "cup"
+    }
+  ],
+  "schema": "whisper_object02_fit_causal_preflight_v1",
+  "script_sha256": "6bd6bd2d3f490853e974dd1c6e640612012f3d1cdb44704350ce3df9caa3b83b",
+  "script_source_git_commit": "b133d7ad63910749bdb38fce7a6ce23a5bb13949",
+  "snapshot_files_sha256": {
+    "added_tokens.json": "560be47bea388757f8d4cc185c5d82067426cbb6361e38016dd90ddc01ab203a",
+    "config.json": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "model.safetensors": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+    "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d",
+    "vocab.json": "3ba3c3109ff33976c4bd966589c11ee14fcaa1f4c9e5e154c2ed7f99d80709e7"
+  },
+  "soundfile_version": "0.14.0",
+  "source_hashes": {
+    "transformers.models.whisper.feature_extraction_whisper": "34a6d8aad9f7f274819622929e4ff74be2a136fcd61f80ec968f9e05c45c7f3a",
+    "transformers.models.whisper.generation_whisper": "f1977185be107a5a184b88f30c56a3bfaef75a34908bc52bbbf596e13186476f",
+    "transformers.models.whisper.modeling_whisper": "a9065b02eae60ad0b47ec2e72379971d974238ee412842dd0f8ad58766f48e5d",
+    "transformers.models.whisper.processing_whisper": "940603025729c0ed1f0ddfb33be37320286476c20ed5482abd806e639a0230d6",
+    "transformers.models.whisper.tokenization_whisper": "c89b322886fa13312b2ec948338a4001b66b6a33614575e96d1a692df211aaf2"
+  },
+  "threads": 4,
+  "torch_version": "2.15.0",
+  "transformers_version": "5.12.1",
+  "windows": {
+    "kokoro": {
+      "prefix_window": [
+        10,
+        84
+      ],
+      "slot_samples": [
+        33920,
+        54320
+      ],
+      "word_window": [
+        101,
+        175
+      ]
+    },
+    "piper": {
+      "prefix_window": [
+        10,
+        59
+      ],
+      "slot_samples": [
+        30527,
+        42788
+      ],
+      "word_window": [
+        90,
+        139
+      ]
+    }
+  }
+}
