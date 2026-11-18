@@ -22,6 +22,7 @@ import unicodedata
 import wave
 from datetime import datetime, timedelta
 from pathlib import Path, PurePosixPath, PureWindowsPath
+from unittest.mock import patch
 
 
 NEMO_COMMIT = "097dfe9e2f55baf653b83035868bdc89849f1b47"
@@ -277,16 +278,11 @@ def check_generated_modules_cache(hf_home: Path, *, expected_files: dict[str, st
     for item in modules.rglob("*"):
         require(not item.is_symlink(), f"symlink in Nano modules cache: {item}")
         if item.is_dir():
-            require(item in allowed_dirs or
-                    (item.name == "__pycache__" and item.parent in allowed_dirs),
+            require(item in allowed_dirs,
                     f"unexpected Nano modules directory: {item}")
         elif item.name == "__init__.py":
             require(item.parent in allowed_dirs and item.read_bytes() == b"",
                     f"unexpected executable Nano module initializer: {item}")
-        elif item.suffix == ".pyc":
-            require(item.parent.name == "__pycache__" and
-                    item.parent.parent in allowed_dirs,
-                    f"unexpected compiled Nano module: {item}")
         else:
             require(item in dynamic_files, f"unexpected Nano modules file: {item}")
             check_file(item, dynamic_files[item])
@@ -302,12 +298,15 @@ def verify_nano_offline(hf_home: Path) -> dict:
     environment.update(HF_HOME=str(hf_home), HF_HUB_CACHE=str(hf_home / "hub"),
                        HF_MODULES_CACHE=str(hf_home / "modules"),
                        HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1",
-                       HF_HUB_DISABLE_TELEMETRY="1")
+                       HF_HUB_DISABLE_TELEMETRY="1", PYTHONDONTWRITEBYTECODE="1")
     environment.pop("TRANSFORMERS_CACHE", None)
+    environment.pop("PYTHONPYCACHEPREFIX", None)
     program = f"""
 import json
+import sys
 from transformers import AutoConfig, AutoTokenizer
 from transformers.dynamic_module_utils import get_class_from_dynamic_module
+assert sys.dont_write_bytecode
 repo = {NANO_REPO_ID!r}
 config = AutoConfig.from_pretrained(repo, trust_remote_code=True, local_files_only=True)
 tokenizer = AutoTokenizer.from_pretrained(repo, use_fast=True, local_files_only=True)
@@ -325,7 +324,7 @@ print("NANO_OFFLINE_RECEIPT=" + json.dumps({{
 }}))
 """
     completed = subprocess.run(
-        [sys.executable, "-c", program], env=environment, check=False,
+        [sys.executable, "-B", "-c", program], env=environment, check=False,
         capture_output=True, text=True, timeout=180,
     )
     require(completed.returncode == 0,
@@ -335,7 +334,22 @@ print("NANO_OFFLINE_RECEIPT=" + json.dumps({{
                 if line.startswith("NANO_OFFLINE_RECEIPT=")]
     require(len(receipts) == 1, "Nano offline resolver did not return one receipt")
     return {"nano_offline_resolver": json.loads(receipts[0]),
-            "nano_offline_env": "dedicated_HF_HOME_HF_HUB_OFFLINE_TRANSFORMERS_OFFLINE"}
+            "nano_offline_env": "dedicated_HF_HOME_HF_HUB_OFFLINE_TRANSFORMERS_OFFLINE_no_bytecode"}
+
+
+def check_preload_environment(hf_home: Path) -> dict:
+    """Require the later model process to inherit the reviewed offline cache policy."""
+    home = hf_home.resolve()
+    expected_paths = {"HF_HOME": home, "HF_HUB_CACHE": home / "hub",
+                      "HF_MODULES_CACHE": home / "modules"}
+    for variable, expected in expected_paths.items():
+        require(os.environ.get(variable) == str(expected),
+                f"preload requires {variable}={expected}")
+    for variable in ("HF_HUB_OFFLINE", "TRANSFORMERS_OFFLINE", "PYTHONDONTWRITEBYTECODE"):
+        require(os.environ.get(variable) == "1", f"preload requires {variable}=1")
+    require(not os.environ.get("PYTHONPYCACHEPREFIX"),
+            "preload requires PYTHONPYCACHEPREFIX unset")
+    return {"nano_preload_environment": "offline_pinned_cache_no_bytecode"}
 
 
 def check_fixtures(path: Path) -> dict:
@@ -670,6 +684,17 @@ def self_test() -> dict:
         require(check_generated_modules_cache(nano_home, expected_files=synthetic_hashes)
                 ["nano_dynamic_module_files_verified"] == 2,
                 "copied Nano custom-code hash self-test failed")
+        bytecode = module_root / "__pycache__" / "modeling_nemotron_h.cpython-312.pyc"
+        bytecode.parent.mkdir()
+        bytecode.write_bytes(b"unverified executable bytecode")
+        try:
+            check_generated_modules_cache(nano_home, expected_files=synthetic_hashes)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("unverified Nano bytecode did not fail closed")
+        bytecode.unlink()
+        bytecode.parent.rmdir()
         (module_root / "extra.py").write_bytes(b"unexpected executable code")
         try:
             check_generated_modules_cache(nano_home, expected_files=synthetic_hashes)
@@ -685,13 +710,29 @@ def self_test() -> dict:
             pass
         else:
             raise AssertionError("changed Nano dynamic code did not fail closed")
+        resolved_nano_home = nano_home.resolve()
+        preload_env = {"HF_HOME": str(resolved_nano_home),
+                       "HF_HUB_CACHE": str(resolved_nano_home / "hub"),
+                       "HF_MODULES_CACHE": str(resolved_nano_home / "modules"),
+                       "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1",
+                       "PYTHONDONTWRITEBYTECODE": "1"}
+        with patch.dict(os.environ, preload_env):
+            os.environ.pop("PYTHONPYCACHEPREFIX", None)
+            check_preload_environment(nano_home)
+            os.environ["PYTHONDONTWRITEBYTECODE"] = "0"
+            try:
+                check_preload_environment(nano_home)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("preload without bytecode suppression did not fail closed")
     return {"status": "self_test_passed_no_model_or_network"}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--self-test", action="store_true")
-    parser.add_argument("--phase", choices=("source", "ready"))
+    parser.add_argument("--phase", choices=("source", "ready", "preload"))
     parser.add_argument("--nemo-dir", type=Path)
     parser.add_argument("--checkpoint-dir", type=Path)
     parser.add_argument("--fixture-manifest", type=Path)
@@ -708,17 +749,20 @@ def main() -> None:
                     "--phase requires --nemo-dir and --checkpoint-dir")
             result = {"status": "local_source_preflight_passed_no_model_or_network"}
             result.update(check_source(args.nemo_dir, args.checkpoint_dir))
-            if args.phase == "ready":
-                require(args.fixture_manifest is not None, "--ready requires --fixture-manifest")
-                require(args.nano_hf_home is not None, "--ready requires --nano-hf-home")
+            if args.phase in ("ready", "preload"):
+                require(args.fixture_manifest is not None, f"--{args.phase} requires --fixture-manifest")
+                require(args.nano_hf_home is not None, f"--{args.phase} requires --nano-hf-home")
                 result.update(check_fixtures(args.fixture_manifest))
                 result.update(check_nano_cache(args.nano_hf_home))
                 result.update(check_runtime(args.checkpoint_dir, args.gpu_policy))
-                check_pristine_modules_cache(args.nano_hf_home.resolve())
-                result.update(verify_nano_offline(args.nano_hf_home.resolve()))
+                if args.phase == "ready":
+                    check_pristine_modules_cache(args.nano_hf_home.resolve())
+                    result.update(verify_nano_offline(args.nano_hf_home.resolve()))
+                else:
+                    result.update(check_preload_environment(args.nano_hf_home.resolve()))
                 result.update(check_generated_modules_cache(args.nano_hf_home.resolve()))
                 check_nano_cache(args.nano_hf_home)
-                result["status"] = "local_ready_preflight_passed_no_model_or_network"
+                result["status"] = f"local_{args.phase}_preflight_passed_no_model_or_network"
         print(json.dumps(result, indent=2))
     except Exception as exc:
         print(json.dumps({"status": "failed_closed_no_model_or_network",
