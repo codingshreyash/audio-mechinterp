@@ -13,6 +13,11 @@ import voxtral_old_fit_grad_mode_parity_launch_gate_v1 as target
 
 
 class GraphNoGradGateTests(unittest.TestCase):
+    def test_corrected_sources_require_new_review_paths(self):
+        self.assertTrue(target.SOURCE_REVIEW.name.endswith("INDEPENDENT_SOURCE_REVIEW_V2.md"))
+        self.assertTrue(target.AUDITOR_REVIEW.name.endswith(
+            "AUDITOR_INDEPENDENT_SOURCE_REVIEW_V2.md"))
+
     def test_failed_attempt_remains_failed_and_time_is_preserved(self):
         manifest, stage_a, prior = target.verify_failed_provenance()
         self.assertEqual(manifest["attempt_id"], target.FAILED_ID)

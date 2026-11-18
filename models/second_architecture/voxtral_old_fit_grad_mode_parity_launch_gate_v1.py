@@ -27,8 +27,8 @@ REPO = HERE.parents[1]
 RUNS = HERE / "runs/voxtral_old_fit_grad_mode_parity_launch_v1"
 FREEZE = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_EXTERNAL_FREEZE_V1.json"
 FREEZE_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_EXTERNAL_FREEZE_INDEPENDENT_REVIEW_V1.md"
-SOURCE_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_INDEPENDENT_SOURCE_REVIEW_V1.md"
-AUDITOR_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md"
+SOURCE_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_INDEPENDENT_SOURCE_REVIEW_V2.md"
+AUDITOR_REVIEW = HERE / "VOXTRAL_OLD_FIT_GRAD_MODE_PARITY_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V2.md"
 AUDITOR = HERE / "voxtral_old_fit_grad_mode_parity_audit_v1.py"
 AUDITOR_TESTS = HERE / "test_voxtral_old_fit_grad_mode_parity_audit_v1.py"
 TESTS = HERE / "test_voxtral_old_fit_grad_mode_parity_launch_gate_v1.py"
@@ -187,19 +187,19 @@ def verify_freeze() -> tuple[dict, dict]:
         rel = old_gate.regular(REPO, path)
         if old_gate._git(REPO, "show", f"{source_commit}:{rel}") != path.read_bytes():
             raise ValueError(f"Source review does not contain reviewed {key}")
-        added = old_gate.first_add(REPO, path)
-        if added == source_commit:
+        source_change = old_gate._git(REPO, "log", "-1", "--format=%H", "HEAD", "--", rel).decode().strip()
+        if source_change == source_commit:
             raise ValueError(f"Source review self-authored {key}")
-        old_gate.ancestor(REPO, added, source_commit)
+        old_gate.ancestor(REPO, source_change, source_commit)
     for key in ("auditor_sha256", "auditor_tests_sha256"):
         path = BOUND[key]
         rel = old_gate.regular(REPO, path)
         if old_gate._git(REPO, "show", f"{auditor_commit}:{rel}") != path.read_bytes():
             raise ValueError(f"Auditor review does not contain reviewed {key}")
-        added = old_gate.first_add(REPO, path)
-        if added == auditor_commit:
+        source_change = old_gate._git(REPO, "log", "-1", "--format=%H", "HEAD", "--", rel).decode().strip()
+        if source_change == auditor_commit:
             raise ValueError(f"Auditor review self-authored {key}")
-        old_gate.ancestor(REPO, added, auditor_commit)
+        old_gate.ancestor(REPO, source_change, auditor_commit)
     old_gate.committed_same(REPO, FREEZE)
     freeze = _json(FREEZE)
     expected = {"status", "attempt_scope", "source_review_commit",
