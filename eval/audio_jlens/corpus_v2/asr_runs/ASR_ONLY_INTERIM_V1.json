@@ -1,0 +1,47 @@
+{
+  "status": "complete_asr_only_human_qa_pending",
+  "scope": "posthoc ASR-only summary from frozen auditor functions; no corpus quality go decision",
+  "planned_clips": 480,
+  "auditor_sha256": "2b39238dcad768a428b184a185b07217f592db4fcb5ebb5276fa5a0958857573",
+  "freeze_sha256": "5f2e6af1794936723f3e8d61189fd4f8095046e84c8a8980f60154a18d326a7e",
+  "runs": {
+    "whisper": {
+      "complete_sha256": "4b6b28a64644023b286873d8b98e829f5bea4c5a6a8f677944f07569bac27f4a",
+      "raw_sha256": "42cf652346c8bc5f4c6f1af3d5188d3436d23dd80c94ece2955ae0bcbf8b68fe"
+    },
+    "wav2vec2": {
+      "complete_sha256": "5d22b63b6fd7020a9dfd5c2654799db2e38b87882e56061fd19efcf1a1c89f27",
+      "raw_sha256": "b3814e87b996604319b878f4193ab4781423331bb7cb354ac64a3862a2a30379"
+    }
+  },
+  "aggregate": {
+    "whisper": {
+      "clips": 480,
+      "literal_script_exact": 0,
+      "normalized_script_exact": 269,
+      "target_exactly_once": 338,
+      "paired_alternative_present": 0,
+      "empty": 0,
+      "truncated": 0,
+      "word_errors": 645,
+      "reference_words": 4992,
+      "wer": 0.12920673076923078
+    },
+    "wav2vec2": {
+      "clips": 480,
+      "literal_script_exact": 0,
+      "normalized_script_exact": 246,
+      "target_exactly_once": 370,
+      "paired_alternative_present": 0,
+      "empty": 0,
+      "truncated": 0,
+      "word_errors": 505,
+      "reference_words": 4992,
+      "wer": 0.10116185897435898
+    }
+  },
+  "asr_disagreement_count": 259,
+  "requires_secondary_from_asr_alone": 285,
+  "human_primary_responses": 0,
+  "candidate_model_inference_authorized": false
+}
