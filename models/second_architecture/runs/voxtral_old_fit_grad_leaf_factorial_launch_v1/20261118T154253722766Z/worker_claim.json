@@ -1,0 +1,6 @@
+{
+  "status": "diagnostic_worker_claimed_no_retry",
+  "attempt_id": "20261118T154253722766Z",
+  "freeze_sha256": "8f79c6b14c1a2dbeaa9d68f68b3015990efcabca433bc5d8d40b07fb357558de",
+  "wall_utc": "2026-11-18T15:43:30.472675+00:00"
+}

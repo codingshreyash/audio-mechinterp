@@ -1,0 +1,19 @@
+{
+  "status": "diagnostic_launch_completed_cpu_audited_only",
+  "attempt_id": "20261118T154253722766Z",
+  "freeze_sha256": "8f79c6b14c1a2dbeaa9d68f68b3015990efcabca433bc5d8d40b07fb357558de",
+  "worker_returncode": 0,
+  "auditor_returncode": 0,
+  "result_sha256": "9d044a4204fdfe8f5f4a03a0e3ec7f471c8f0375615db0c84e4500fb6ad106d5",
+  "error_sha256": null,
+  "audit_sha256": "4739b0bd6a92603ee5946b519240b8f908afbdc929e6c538fb4c48511aeba4e8",
+  "post_run_source_verified": true,
+  "model_work_elapsed_seconds": 52.005679375026375,
+  "prior_model_work_seconds": 316.4767387928441,
+  "failed_attempt_seconds": 41.18471045792103,
+  "failed_v1_attempt_seconds": 28.450194334145635,
+  "wall_utc": "2026-11-18T15:44:41.842847+00:00",
+  "elapsed_seconds": 89.6839644999709,
+  "worker_output_bytes": 510841992,
+  "launcher_output_bytes_before_finish": 2205
+}

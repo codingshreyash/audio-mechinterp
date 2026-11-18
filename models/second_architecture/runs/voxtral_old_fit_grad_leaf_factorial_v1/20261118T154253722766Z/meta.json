@@ -1,0 +1,216 @@
+{
+  "status": "started_old_fit_fp32_grad_leaf_factorial_diagnostic_only",
+  "scope": "one_old_fit_case_grad_leaf_factorial_only_no_vjp_no_security_claim",
+  "protocol_sha256": "2b79d069f4cac3fa01f5a51d533cf98dc8d609e53ee571d9be0b617036533186",
+  "runner_sha256": "72fa47e6310177004b613206229c2421bde34a5fd7bb27cac369697a0af0c5ab",
+  "failed_stage_b_fp32_manifest_sha256": "24514b86315355c6f353f0bf5e7fc8518d4c3ccf16e06f195a90aca703d2aa97",
+  "failed_v1_diagnostic_manifest_sha256": "0a2335dcab3ce5bb4cd66f5d0095074058c37537743b1c42764da06438811280",
+  "stage_a_manifest_sha256": {
+    "bf16": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+    "fp32": "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f"
+  },
+  "source_sha256": {
+    "encoder31": "e0abb561ad91255d1945c81c1dead1a75266f09d0e7f3695a123040fef47b2b6",
+    "projector": "a96b5e19ffefe48e537b30ddecb9de11c8c40becf4b4dd3f2813ab5583fce100"
+  },
+  "full_schedule": [
+    [
+      "encoder31",
+      "N0",
+      0
+    ],
+    [
+      "encoder31",
+      "G1",
+      0
+    ],
+    [
+      "encoder31",
+      "G0",
+      0
+    ],
+    [
+      "encoder31",
+      "N1",
+      0
+    ],
+    [
+      "encoder31",
+      "N1",
+      1
+    ],
+    [
+      "encoder31",
+      "G0",
+      1
+    ],
+    [
+      "encoder31",
+      "G1",
+      1
+    ],
+    [
+      "encoder31",
+      "N0",
+      1
+    ],
+    [
+      "projector",
+      "G1",
+      0
+    ],
+    [
+      "projector",
+      "N0",
+      0
+    ],
+    [
+      "projector",
+      "N1",
+      0
+    ],
+    [
+      "projector",
+      "G0",
+      0
+    ],
+    [
+      "projector",
+      "G0",
+      1
+    ],
+    [
+      "projector",
+      "N1",
+      1
+    ],
+    [
+      "projector",
+      "N0",
+      1
+    ],
+    [
+      "projector",
+      "G1",
+      1
+    ]
+  ],
+  "direct_schedule": [
+    [
+      "encoder31",
+      "N0",
+      "N0",
+      0
+    ],
+    [
+      "encoder31",
+      "N0",
+      "G1",
+      0
+    ],
+    [
+      "encoder31",
+      "N0",
+      "G0",
+      0
+    ],
+    [
+      "encoder31",
+      "N0",
+      "N1",
+      0
+    ],
+    [
+      "encoder31",
+      "N0",
+      "N1",
+      1
+    ],
+    [
+      "encoder31",
+      "N0",
+      "G0",
+      1
+    ],
+    [
+      "encoder31",
+      "N0",
+      "G1",
+      1
+    ],
+    [
+      "encoder31",
+      "N0",
+      "N0",
+      1
+    ],
+    [
+      "projector",
+      "N0",
+      "G1",
+      0
+    ],
+    [
+      "projector",
+      "N0",
+      "N0",
+      0
+    ],
+    [
+      "projector",
+      "N0",
+      "N1",
+      0
+    ],
+    [
+      "projector",
+      "N0",
+      "G0",
+      0
+    ],
+    [
+      "projector",
+      "N0",
+      "G0",
+      1
+    ],
+    [
+      "projector",
+      "N0",
+      "N1",
+      1
+    ],
+    [
+      "projector",
+      "N0",
+      "N0",
+      1
+    ],
+    [
+      "projector",
+      "N0",
+      "G1",
+      1
+    ]
+  ],
+  "planned_counts": {
+    "full_forwards": 16,
+    "direct_forwards": 16,
+    "vjps": 0,
+    "generations": 0
+  },
+  "prior_model_work_seconds": 316.4767387928441,
+  "process_cap_seconds": 300,
+  "max_mps_driver_bytes": 32212254720,
+  "max_output_bytes": 1073741824,
+  "max_worker_bytes": 1048576000,
+  "archive_estimate": {
+    "source_pair_bytes": 73728000,
+    "lm_input_pair_bytes": 58392576,
+    "selected_vjp_bytes": 3391488,
+    "stage_vector_upper_bytes": 5038080,
+    "estimated_tensor_payload_bytes": 140550144,
+    "per_process_output_cap_bytes": 1073741824
+  },
+  "fresh_v2_corpus_opened": false
+}

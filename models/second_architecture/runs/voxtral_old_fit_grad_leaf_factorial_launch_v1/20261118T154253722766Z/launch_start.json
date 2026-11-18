@@ -1,0 +1,29 @@
+{
+  "status": "diagnostic_launch_started",
+  "attempt_id": "20261118T154253722766Z",
+  "freeze_sha256": "8f79c6b14c1a2dbeaa9d68f68b3015990efcabca433bc5d8d40b07fb357558de",
+  "wall_utc": "2026-11-18T15:43:12.157990+00:00",
+  "worker_command": [
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/.venv/bin/python",
+    "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_grad_leaf_factorial_runner_v1.py",
+    "--attempt-id",
+    "20261118T154253722766Z",
+    "--freeze-sha256",
+    "8f79c6b14c1a2dbeaa9d68f68b3015990efcabca433bc5d8d40b07fb357558de"
+  ],
+  "worker_output": "/Users/shrranjan/audio-mechinterp/models/second_architecture/runs/voxtral_old_fit_grad_leaf_factorial_v1/20261118T154253722766Z",
+  "prior_model_work_seconds": 316.4767387928441,
+  "failed_attempt_seconds": 41.18471045792103,
+  "failed_v1_attempt_seconds": 28.450194334145635,
+  "process_cap_seconds": 300,
+  "max_mps_driver_bytes": 32212254720,
+  "max_output_bytes": 1073741824,
+  "max_worker_bytes": 1048576000,
+  "max_capture_bytes": 8388608,
+  "planned_counts": {
+    "full_forwards": 16,
+    "direct_forwards": 16,
+    "vjps": 0,
+    "generations": 0
+  }
+}
