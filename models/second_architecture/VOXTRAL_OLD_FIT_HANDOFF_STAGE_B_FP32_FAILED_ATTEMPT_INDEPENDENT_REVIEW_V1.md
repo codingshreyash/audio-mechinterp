@@ -1,0 +1,13 @@
+# Independent review: failed Stage B FP32 replay attempt
+
+18 November 2026. This is a **read-only provenance review** of the one reserved FP32 replay attempt `20261118T143734566440Z`. I did not rerun the model, change the raw files, or reinterpret the original Stage A BF16 `launch_failed` result.
+
+**Decision: GO for failed-attempt provenance; no Stage-B retry authorized.**
+
+The failed-attempt manifest is `VOXTRAL_OLD_FIT_HANDOFF_STAGE_B_FP32_FAILED_ATTEMPT_MANIFEST_V1.json`, SHA-256 `24514b86315355c6f353f0bf5e7fc8518d4c3ccf16e06f195a90aca703d2aa97`, first added in commit `ec828fb91acf21d79cacb7ccc53bf59eac409b6f`. Its ten listed raw files total 164,304 bytes. I independently rehashed every file, checked the exact file set across the gate and worker attempt directories plus the reservation, and compared each file with its current and first-add Git blob from commit `e10f8e9`. No `result.json`, `audit.json`, or tensor sidecar exists for this attempt.
+
+The saved launcher source, worker, driver, auditor, FP32 freeze and freeze-review hashes match the manifest. The Git chain orders the launcher source review, FP32 freeze, freeze review, raw attempt, and failure manifest. UTC receipts order the freeze's `reviewed_utc` before `launch_start`, exclusive `worker_claim`, and `launch_finish`. The parent finish records `launch_failed`, runner return code 1, no auditor call, no result or audit hash, and 41.18471045792103 seconds of process time. The worker error records 34.139111791038886 seconds before its exception. The parent time counts after the prior 246.84183400077745 seconds, for 288.0265444586985 seconds consumed. The original Stage A BF16 finish still says `launch_failed`.
+
+The traceback identifies `_same_replay(first, second)` on the first encoder31 clean-source replay, then `assert_direct_parity`, which raises `Direct LM replay mismatch at lm0`. Progress shows the clean graph, clean repeat, and self forward markers before that exception. **LM0 is the first state compared by that assertion; the saved attempt does not show where the two forwards first diverged.** The projector and LM-input comparisons occur later and were not reached. The first and second state tensors were not saved, so this record cannot measure their difference or establish its cause. The parent `runner_error_sha256` is null because it failed before setting that field; the separate manifest binds `error.json` exactly.
+
+The reservation and exclusive worker claim make this attempt one-shot under the frozen protocol. This review validates the failure record, not a completed FP32 replay, numerical localization, audio mechanism, or security finding. Any follow-up must use a distinct prospective diagnostic and its own reviewed source and freeze.
