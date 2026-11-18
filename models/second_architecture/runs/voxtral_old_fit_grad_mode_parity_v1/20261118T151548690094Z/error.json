@@ -1,0 +1,7 @@
+{
+  "status": "invalid_old_fit_fp32_graph_inference_parity_diagnostic",
+  "error_type": "ValueError",
+  "error": "Old-FIT batch is not a tensor mapping",
+  "elapsed_seconds": 18.96985283307731,
+  "progress_sha256": "0f26b061ff7776bf28933a3be238bed771bcdc7f4bc064cf4a88cea6eba4643f"
+}

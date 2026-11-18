@@ -1,0 +1,2 @@
+{"elapsed_seconds": 14.246605542022735, "mps_driver_bytes": 458752, "phase": "preflight_complete_before_model_load"}
+{"elapsed_seconds": 18.967873207991943, "mps_driver_bytes": 28793470976, "phase": "model_loaded"}

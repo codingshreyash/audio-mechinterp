@@ -1,0 +1,175 @@
+{
+  "status": "started_old_fit_fp32_graph_inference_parity_diagnostic_only",
+  "scope": "one_old_fit_case_forward_parity_only_no_vjp_no_security_claim",
+  "protocol_sha256": "06d587f4b4742b26882c8a99bd901966f7b68aea7957777d9e226e854ed08f79",
+  "runner_sha256": "1f92935f219b6b6a86c5307ec57ad69ddabcb1c0de2387e8c2c99b49888c3d91",
+  "failed_stage_b_fp32_manifest_sha256": "24514b86315355c6f353f0bf5e7fc8518d4c3ccf16e06f195a90aca703d2aa97",
+  "stage_a_manifest_sha256": {
+    "bf16": "ee04b2f7a3e319c89d4426c78b03ad77107afb0dac927a80ca005dd33529ee02",
+    "fp32": "3605289cdefe106db9075033dedd9b20dff9cb1f106fd5e9771a243a40bdaa3f"
+  },
+  "source_sha256": {
+    "encoder31": "e0abb561ad91255d1945c81c1dead1a75266f09d0e7f3695a123040fef47b2b6",
+    "projector": "a96b5e19ffefe48e537b30ddecb9de11c8c40becf4b4dd3f2813ab5583fce100"
+  },
+  "full_schedule": [
+    [
+      "encoder31",
+      "N",
+      0
+    ],
+    [
+      "encoder31",
+      "G",
+      0
+    ],
+    [
+      "encoder31",
+      "G",
+      1
+    ],
+    [
+      "encoder31",
+      "N",
+      1
+    ],
+    [
+      "projector",
+      "G",
+      0
+    ],
+    [
+      "projector",
+      "N",
+      0
+    ],
+    [
+      "projector",
+      "N",
+      1
+    ],
+    [
+      "projector",
+      "G",
+      1
+    ]
+  ],
+  "direct_schedule": [
+    [
+      "encoder31",
+      "N",
+      "N",
+      0
+    ],
+    [
+      "encoder31",
+      "N",
+      "G",
+      0
+    ],
+    [
+      "encoder31",
+      "N",
+      "G",
+      1
+    ],
+    [
+      "encoder31",
+      "N",
+      "N",
+      1
+    ],
+    [
+      "encoder31",
+      "G",
+      "N",
+      0
+    ],
+    [
+      "encoder31",
+      "G",
+      "G",
+      0
+    ],
+    [
+      "encoder31",
+      "G",
+      "G",
+      1
+    ],
+    [
+      "encoder31",
+      "G",
+      "N",
+      1
+    ],
+    [
+      "projector",
+      "N",
+      "N",
+      0
+    ],
+    [
+      "projector",
+      "N",
+      "G",
+      0
+    ],
+    [
+      "projector",
+      "N",
+      "G",
+      1
+    ],
+    [
+      "projector",
+      "N",
+      "N",
+      1
+    ],
+    [
+      "projector",
+      "G",
+      "N",
+      0
+    ],
+    [
+      "projector",
+      "G",
+      "G",
+      0
+    ],
+    [
+      "projector",
+      "G",
+      "G",
+      1
+    ],
+    [
+      "projector",
+      "G",
+      "N",
+      1
+    ]
+  ],
+  "planned_counts": {
+    "full_forwards": 8,
+    "direct_forwards": 16,
+    "vjps": 0,
+    "generations": 0
+  },
+  "prior_model_work_seconds": 288.0265444586985,
+  "process_cap_seconds": 180,
+  "max_mps_driver_bytes": 32212254720,
+  "max_output_bytes": 1073741824,
+  "max_worker_bytes": 1048576000,
+  "archive_estimate": {
+    "source_pair_bytes": 73728000,
+    "lm_input_pair_bytes": 58392576,
+    "selected_vjp_bytes": 3391488,
+    "stage_vector_upper_bytes": 5038080,
+    "estimated_tensor_payload_bytes": 140550144,
+    "per_process_output_cap_bytes": 1073741824
+  },
+  "fresh_v2_corpus_opened": false
+}

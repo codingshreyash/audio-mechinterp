@@ -1,0 +1,11 @@
+W1118 10:16:12.183000 27400 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/762 [00:00<?, ?it/s]Loading weights:   0%|          | 1/762 [00:00<01:49,  6.96it/s]Loading weights:  60%|██████    | 461/762 [00:00<00:00, 2293.14it/s]Loading weights:  96%|█████████▌| 731/762 [00:00<00:00, 798.37it/s] Loading weights: 100%|██████████| 762/762 [00:01<00:00, 494.14it/s]
+Traceback (most recent call last):
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_grad_mode_parity_runner_v1.py", line 448, in <module>
+    main()
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_grad_mode_parity_runner_v1.py", line 442, in main
+    result = run_diagnostic(output, upstream=upstream, model_factory=None, device="mps")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shrranjan/audio-mechinterp/models/second_architecture/voxtral_old_fit_grad_mode_parity_runner_v1.py", line 343, in run_diagnostic
+    raise ValueError("Old-FIT batch is not a tensor mapping")
+ValueError: Old-FIT batch is not a tensor mapping

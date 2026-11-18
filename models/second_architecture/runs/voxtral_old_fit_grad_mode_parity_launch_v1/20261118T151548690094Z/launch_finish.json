@@ -1,0 +1,20 @@
+{
+  "status": "diagnostic_launch_failed_no_retry",
+  "attempt_id": "20261118T151548690094Z",
+  "freeze_sha256": "70601c9d95da4553237a48af258044db25a2e9fc70c40eda9e44a3f745cde06a",
+  "worker_returncode": 1,
+  "auditor_returncode": null,
+  "result_sha256": null,
+  "error_sha256": "80a64e0a159f09d26d006ae0be1904f4c9fc6828e8ec59033d4ad3f9846192dc",
+  "audit_sha256": null,
+  "post_run_source_verified": false,
+  "model_work_elapsed_seconds": 28.450194334145635,
+  "prior_model_work_seconds": 288.0265444586985,
+  "failed_attempt_seconds": 41.18471045792103,
+  "failure_reason": "Diagnostic worker failed or exceeded cap",
+  "exception_type": "ValueError",
+  "wall_utc": "2026-11-18T15:16:25.289181+00:00",
+  "elapsed_seconds": 28.450451500015333,
+  "worker_output_bytes": 160138,
+  "launcher_output_bytes_before_finish": 2663
+}
