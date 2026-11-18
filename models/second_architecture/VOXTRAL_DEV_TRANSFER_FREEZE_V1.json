@@ -1,0 +1,17 @@
+{
+  "status": "frozen_before_voxtral_development_inference",
+  "protocol_sha256": "779fb190e93ab233f386cb1c33bd01d69fd9dc7e8a5d8c4276549bba55ec64b9",
+  "index_sha256": "bc739cf1f0d265426cc760ddd6a42223554b1097cab6ba87c2c8b81129d1b971",
+  "mask_builder_sha256": "f62b7f83832257b99d01a57c9b4374a8b8a087fac83cd9bc50054f7d87fcf49a",
+  "masks_sha256": "eeed0dc96aeda651be1034381a770fd0ed2022706d3f33c08f967391638c1181",
+  "runner_sha256": "6f428f9840e2e9defd6eb6ba3be8c67d0ca624c1e25fee8122eb2e356944a6ed",
+  "auditor_sha256": "98c6c103cb091f027a05c966bf04425289d63d6e10aa5e6bbf73ed616c563669",
+  "runner_independent_review_sha256": "09dcf51783e4e06c8843ab275583978a238af729dad44c38c27ade371f03c237",
+  "auditor_independent_review_sha256": "e3dc88eeb016ea1eb02aa39b9675a66298ada119e9773f50a8551a7efb8b1eb6",
+  "planned_records": 48,
+  "planned_directions": 96,
+  "planned_progress_rows": 5184,
+  "max_cumulative_seconds": 7200,
+  "max_mps_driver_bytes": 32212254720,
+  "scope": "One-shot word/template development transfer with synthetic voices and constructed hidden-state interventions; locked test sealed"
+}
