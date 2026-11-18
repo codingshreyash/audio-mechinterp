@@ -1,0 +1,12 @@
+# Independent plan review: Whisper object-word FIT causal replication
+
+18 November 2026. Review target: committed `WHISPER_OBJECT02_FIT_CAUSAL_REPLICATION_PROSPECTIVE_V1.md` at `41a399735281ad45a13cc534ee4cc78595e54242`. **Decision: GO for implementation only.** I inspected the frozen manifest and saved Whisper ASR screen but did not load model weights, run inference, inspect corpus v2, or inspect a locked test. The runner, auditor, no-weight preflight, and their source reviews remain required before a live pass.
+
+I independently checked these plan facts:
+
+- Manifest SHA-256 is `adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f`; saved ASR screen SHA-256 is `41da6ee4dd67a2f7b06ece24354fdb0ca6911f7017ec514e170f55f61d38a5e7`. `object_02` is the first `object_*` pair among the manifest's FIT, `map_fit=true` object IDs (`object_02`, `object_05`, `object_09`). Both engines have `fit_chosen`, `plate`/`cup`, the stated voices, and all four saved screen records have `normalized_exact=true` and `target_word_exactly_once=true`.
+- The four WAV hashes match the manifest. Piper has 79,817 samples per WAV and slot `[30527,42788)`; Kokoro has 89,040 per WAV and slot `[33920,54320)`. Direct PCM comparison confirms each engine's files are identical outside its slot and differ inside it.
+- The specified `floor(start*50/16000)-5` and `ceil(end*50/16000)+5` rule yields Piper `W=[90,139)` and Kokoro `W=[101,175)`. Prefixes `[10,59)` and `[10,84)` are equal width and do not overlap the word window.
+- The matrix is four baselines plus `2 engines × 2 directions × 3 sites × 3 conditions = 36` site arms, four full-donor controls, and eight random controls: 52 complete decodes. The specified SHA-256 arm-seed derivation yields eight distinct 63-bit seeds across engine, direction, and base seed; the runner must additionally check eight distinct **realized edit hashes** before drawing a specificity conclusion.
+
+The first `silver`/`teal` assay motivated this choice. The new pair is prospective for the **causal intervention**, while both pairs come from the same already-open FIT corpus and use the same two synthetic TTS voices. A positive plate/cup result would support transfer across one lexical category within this checkpoint; it would not validate natural speech, multilingual behavior, an audio-language action path, or a security vulnerability. The saved ASR screen is an eligibility filter, and the live four-baseline gate must be enforced independently.
