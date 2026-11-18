@@ -1,0 +1,3061 @@
+{
+  "status": "fit_only_complete_all_48",
+  "script_sha256": "b4e6ecd247d98e1059cdae006661fd05316c9baa8d7570e43b99f78357c4f763",
+  "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "cases_sha256": "90dec22441194a9db1f39f163857ef1a593641a7d50f6bac3c667c8e70d4493f",
+  "model_id": "Qwen/Qwen2.5-Omni-3B",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "system_prompt": "Repeat only the single word explicitly introduced before the final question in the spoken request.",
+  "site": "unpatched prompt-last Thinker logits",
+  "dtype": "float32",
+  "device": "mps",
+  "max_mps_driver_bytes": 32212254720,
+  "policy": "original SPEC_V1.json one-token aliases only; no expanded tokenization",
+  "progress_sha256": "4a5e422100958aad653b8c37ab007f16766e348fb1cd1d7cbe5c3a88cdf74d29",
+  "memory_sha256": "f737f639003fcc0b9f385876a2bb20a3de841b9ba85371090ef0200b1f4b0e3e",
+  "cases": [
+    {
+      "case_id": "animal_06/fit_chosen/kokoro/deer",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "deer",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_06_fit_chosen_deer.wav",
+      "audio_sha256": "1132c0b7c3ecdfdcd150afb8285c988c341ec988f5284b8663a6d09d17662f6c",
+      "expected_aliases": [
+        {
+          "surface": "deer",
+          "token_id": 96262
+        },
+        {
+          "surface": " deer",
+          "token_id": 38049
+        },
+        {
+          "surface": " Deer",
+          "token_id": 63091
+        }
+      ],
+      "foil_word": "moose",
+      "foil_aliases": [
+        {
+          "surface": " Moose",
+          "token_id": 68128
+        }
+      ],
+      "prompt_tokens": 171,
+      "forward_seconds": 0.37499558296985924,
+      "metrics": {
+        "expected_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "foil_alias_token_ids": [
+          68128
+        ],
+        "expected_log_mass": -2.441814422607422,
+        "foil_log_mass": -17.081146240234375,
+        "expected_mass": 0.08700285106897354,
+        "foil_mass": 3.81726650289238e-08,
+        "correct_minus_foil_log_odds": 14.639331817626953,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 30665,
+        "top_vocab_log_probability": -0.5673866271972656,
+        "top_vocab_token_text": "Dear"
+      }
+    },
+    {
+      "case_id": "animal_06/fit_chosen/kokoro/moose",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "moose",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_06_fit_chosen_moose.wav",
+      "audio_sha256": "7e5d8590ea5e6e59494cb3c52aa07decae79d055f207a7407255b8ccaa434575",
+      "expected_aliases": [
+        {
+          "surface": " Moose",
+          "token_id": 68128
+        }
+      ],
+      "foil_word": "deer",
+      "foil_aliases": [
+        {
+          "surface": "deer",
+          "token_id": 96262
+        },
+        {
+          "surface": " deer",
+          "token_id": 38049
+        },
+        {
+          "surface": " Deer",
+          "token_id": 63091
+        }
+      ],
+      "prompt_tokens": 171,
+      "forward_seconds": 0.2977544160094112,
+      "metrics": {
+        "expected_alias_token_ids": [
+          68128
+        ],
+        "foil_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "expected_log_mass": -6.720572471618652,
+        "foil_log_mass": -11.005033493041992,
+        "expected_mass": 0.0012058477150276303,
+        "foil_mass": 1.6617845176369883e-05,
+        "correct_minus_foil_log_odds": 4.28446102142334,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 44,
+        "top_vocab_log_probability": -0.7144451141357422,
+        "top_vocab_token_text": "M"
+      }
+    },
+    {
+      "case_id": "animal_06/fit_chosen/piper/deer",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "deer",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_06_fit_chosen_deer.wav",
+      "audio_sha256": "1eca95bd014c2bd84b2beae20aa7ab2aa9c65ad77b21699a4d79e6c36e22567c",
+      "expected_aliases": [
+        {
+          "surface": "deer",
+          "token_id": 96262
+        },
+        {
+          "surface": " deer",
+          "token_id": 38049
+        },
+        {
+          "surface": " Deer",
+          "token_id": 63091
+        }
+      ],
+      "foil_word": "moose",
+      "foil_aliases": [
+        {
+          "surface": " Moose",
+          "token_id": 68128
+        }
+      ],
+      "prompt_tokens": 160,
+      "forward_seconds": 0.2859906249213964,
+      "metrics": {
+        "expected_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "foil_alias_token_ids": [
+          68128
+        ],
+        "expected_log_mass": -3.7241764068603516,
+        "foil_log_mass": -17.846670150756836,
+        "expected_mass": 0.024132968857884407,
+        "foil_mass": 1.7753730929825906e-08,
+        "correct_minus_foil_log_odds": 14.122493743896484,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 30665,
+        "top_vocab_log_probability": -0.28872108459472656,
+        "top_vocab_token_text": "Dear"
+      }
+    },
+    {
+      "case_id": "animal_06/fit_chosen/piper/moose",
+      "pair_id": "animal_06",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "moose",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_06_fit_chosen_moose.wav",
+      "audio_sha256": "55b493e0f07fdd471c5354283b4faa4c5f972c9595fe85558a2f566942e893ad",
+      "expected_aliases": [
+        {
+          "surface": " Moose",
+          "token_id": 68128
+        }
+      ],
+      "foil_word": "deer",
+      "foil_aliases": [
+        {
+          "surface": "deer",
+          "token_id": 96262
+        },
+        {
+          "surface": " deer",
+          "token_id": 38049
+        },
+        {
+          "surface": " Deer",
+          "token_id": 63091
+        }
+      ],
+      "prompt_tokens": 160,
+      "forward_seconds": 0.2830662920605391,
+      "metrics": {
+        "expected_alias_token_ids": [
+          68128
+        ],
+        "foil_alias_token_ids": [
+          38049,
+          63091,
+          96262
+        ],
+        "expected_log_mass": -5.994953155517578,
+        "foil_log_mass": -10.827430725097656,
+        "expected_mass": 0.00249129394069314,
+        "foil_mass": 1.9847535440931097e-05,
+        "correct_minus_foil_log_odds": 4.832477569580078,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 44,
+        "top_vocab_log_probability": -0.7839088439941406,
+        "top_vocab_token_text": "M"
+      }
+    },
+    {
+      "case_id": "animal_08/fit_chosen/kokoro/beaver",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "beaver",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_08_fit_chosen_beaver.wav",
+      "audio_sha256": "b334e7ecb1d1397f1f92c1e1f505a9b2a0b05a8feb1db757d655ea93bad85319",
+      "expected_aliases": [
+        {
+          "surface": " Beaver",
+          "token_id": 91434
+        }
+      ],
+      "foil_word": "monkey",
+      "foil_aliases": [
+        {
+          "surface": "monkey",
+          "token_id": 96016
+        },
+        {
+          "surface": "Monkey",
+          "token_id": 96838
+        },
+        {
+          "surface": " monkey",
+          "token_id": 38703
+        },
+        {
+          "surface": " Monkey",
+          "token_id": 57837
+        }
+      ],
+      "prompt_tokens": 176,
+      "forward_seconds": 0.3021532909478992,
+      "metrics": {
+        "expected_alias_token_ids": [
+          91434
+        ],
+        "foil_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "expected_log_mass": -3.6562318801879883,
+        "foil_log_mass": -12.147930145263672,
+        "expected_mass": 0.025829659774899483,
+        "foil_mass": 5.299330041452777e-06,
+        "correct_minus_foil_log_odds": 8.491698265075684,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 3430,
+        "top_vocab_log_probability": -0.3340740203857422,
+        "top_vocab_token_text": "Be"
+      }
+    },
+    {
+      "case_id": "animal_08/fit_chosen/kokoro/monkey",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "monkey",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_08_fit_chosen_monkey.wav",
+      "audio_sha256": "b2784dd16113845f8dafd17d49ff4a74cdcf4a8b0275b9b83e31fd496d9c6d29",
+      "expected_aliases": [
+        {
+          "surface": "monkey",
+          "token_id": 96016
+        },
+        {
+          "surface": "Monkey",
+          "token_id": 96838
+        },
+        {
+          "surface": " monkey",
+          "token_id": 38703
+        },
+        {
+          "surface": " Monkey",
+          "token_id": 57837
+        }
+      ],
+      "foil_word": "beaver",
+      "foil_aliases": [
+        {
+          "surface": " Beaver",
+          "token_id": 91434
+        }
+      ],
+      "prompt_tokens": 176,
+      "forward_seconds": 0.29685437493026257,
+      "metrics": {
+        "expected_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "foil_alias_token_ids": [
+          91434
+        ],
+        "expected_log_mass": -0.030897140502929688,
+        "foil_log_mass": -18.891407012939453,
+        "expected_mass": 0.9695752859115601,
+        "foil_mass": 6.245485462130773e-09,
+        "correct_minus_foil_log_odds": 18.860509872436523,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 96838,
+        "top_vocab_log_probability": -0.5712490081787109,
+        "top_vocab_token_text": "Monkey"
+      }
+    },
+    {
+      "case_id": "animal_08/fit_chosen/piper/beaver",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "beaver",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_08_fit_chosen_beaver.wav",
+      "audio_sha256": "267b68d794afcd3cabcac9f98eabd310207b08bf3c1527ae6dc43c87d57b304a",
+      "expected_aliases": [
+        {
+          "surface": " Beaver",
+          "token_id": 91434
+        }
+      ],
+      "foil_word": "monkey",
+      "foil_aliases": [
+        {
+          "surface": "monkey",
+          "token_id": 96016
+        },
+        {
+          "surface": "Monkey",
+          "token_id": 96838
+        },
+        {
+          "surface": " monkey",
+          "token_id": 38703
+        },
+        {
+          "surface": " Monkey",
+          "token_id": 57837
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.2895812909118831,
+      "metrics": {
+        "expected_alias_token_ids": [
+          91434
+        ],
+        "foil_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "expected_log_mass": -4.045962333679199,
+        "foil_log_mass": -12.210987091064453,
+        "expected_mass": 0.017492862418293953,
+        "foil_mass": 4.975488081981894e-06,
+        "correct_minus_foil_log_odds": 8.165024757385254,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 3430,
+        "top_vocab_log_probability": -0.365081787109375,
+        "top_vocab_token_text": "Be"
+      }
+    },
+    {
+      "case_id": "animal_08/fit_chosen/piper/monkey",
+      "pair_id": "animal_08",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "monkey",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_08_fit_chosen_monkey.wav",
+      "audio_sha256": "83b85c468f21dfb3f5aa90d451b31063a4f33e1e01245294f33d342be6340001",
+      "expected_aliases": [
+        {
+          "surface": "monkey",
+          "token_id": 96016
+        },
+        {
+          "surface": "Monkey",
+          "token_id": 96838
+        },
+        {
+          "surface": " monkey",
+          "token_id": 38703
+        },
+        {
+          "surface": " Monkey",
+          "token_id": 57837
+        }
+      ],
+      "foil_word": "beaver",
+      "foil_aliases": [
+        {
+          "surface": " Beaver",
+          "token_id": 91434
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.2895571659319103,
+      "metrics": {
+        "expected_alias_token_ids": [
+          38703,
+          57837,
+          96016,
+          96838
+        ],
+        "foil_alias_token_ids": [
+          91434
+        ],
+        "expected_log_mass": -0.03182220458984375,
+        "foil_log_mass": -19.06390953063965,
+        "expected_mass": 0.9686787724494934,
+        "foil_mass": 5.255926804892397e-09,
+        "correct_minus_foil_log_odds": 19.032087326049805,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 96016,
+        "top_vocab_log_probability": -0.5547370910644531,
+        "top_vocab_token_text": "monkey"
+      }
+    },
+    {
+      "case_id": "animal_09/fit_chosen/kokoro/cow",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "cow",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_09_fit_chosen_cow.wav",
+      "audio_sha256": "b142051d592e49034edf0cb561e36c5e761e091d30c408781e22a442ba06bbc7",
+      "expected_aliases": [
+        {
+          "surface": "cow",
+          "token_id": 18921
+        },
+        {
+          "surface": "Cow",
+          "token_id": 89915
+        },
+        {
+          "surface": " cow",
+          "token_id": 19362
+        },
+        {
+          "surface": " Cow",
+          "token_id": 21851
+        }
+      ],
+      "foil_word": "turtle",
+      "foil_aliases": [
+        {
+          "surface": "turtle",
+          "token_id": 81109
+        },
+        {
+          "surface": " turtle",
+          "token_id": 36089
+        },
+        {
+          "surface": " Turtle",
+          "token_id": 66806
+        }
+      ],
+      "prompt_tokens": 172,
+      "forward_seconds": 0.2908158339560032,
+      "metrics": {
+        "expected_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "foil_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "expected_log_mass": -0.0537872314453125,
+        "foil_log_mass": -14.099796295166016,
+        "expected_mass": 0.9476337432861328,
+        "foil_mass": 7.525516139139654e-07,
+        "correct_minus_foil_log_odds": 14.046009063720703,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 89915,
+        "top_vocab_log_probability": -0.6058712005615234,
+        "top_vocab_token_text": "Cow"
+      }
+    },
+    {
+      "case_id": "animal_09/fit_chosen/kokoro/turtle",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "turtle",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_animal_09_fit_chosen_turtle.wav",
+      "audio_sha256": "c721503737d5c2b298f7be30dc32ccaf36f2bab690b6d104c22c7bd6da39b626",
+      "expected_aliases": [
+        {
+          "surface": "turtle",
+          "token_id": 81109
+        },
+        {
+          "surface": " turtle",
+          "token_id": 36089
+        },
+        {
+          "surface": " Turtle",
+          "token_id": 66806
+        }
+      ],
+      "foil_word": "cow",
+      "foil_aliases": [
+        {
+          "surface": "cow",
+          "token_id": 18921
+        },
+        {
+          "surface": "Cow",
+          "token_id": 89915
+        },
+        {
+          "surface": " cow",
+          "token_id": 19362
+        },
+        {
+          "surface": " Cow",
+          "token_id": 21851
+        }
+      ],
+      "prompt_tokens": 172,
+      "forward_seconds": 0.2910528751090169,
+      "metrics": {
+        "expected_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "foil_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "expected_log_mass": -1.3305740356445312,
+        "foil_log_mass": -13.746892929077148,
+        "expected_mass": 0.26432549953460693,
+        "foil_mass": 1.0710266451496864e-06,
+        "correct_minus_foil_log_odds": 12.416318893432617,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 51,
+        "top_vocab_log_probability": -0.37758445739746094,
+        "top_vocab_token_text": "T"
+      }
+    },
+    {
+      "case_id": "animal_09/fit_chosen/piper/cow",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "cow",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_09_fit_chosen_cow.wav",
+      "audio_sha256": "f642bbf87634458d05ed67af25a550dfcc53179f5d8c8a15f48eb8286ed4d834",
+      "expected_aliases": [
+        {
+          "surface": "cow",
+          "token_id": 18921
+        },
+        {
+          "surface": "Cow",
+          "token_id": 89915
+        },
+        {
+          "surface": " cow",
+          "token_id": 19362
+        },
+        {
+          "surface": " Cow",
+          "token_id": 21851
+        }
+      ],
+      "foil_word": "turtle",
+      "foil_aliases": [
+        {
+          "surface": "turtle",
+          "token_id": 81109
+        },
+        {
+          "surface": " turtle",
+          "token_id": 36089
+        },
+        {
+          "surface": " Turtle",
+          "token_id": 66806
+        }
+      ],
+      "prompt_tokens": 159,
+      "forward_seconds": 0.2828605000395328,
+      "metrics": {
+        "expected_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "foil_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "expected_log_mass": -0.053546905517578125,
+        "foil_log_mass": -14.93726634979248,
+        "expected_mass": 0.9478614926338196,
+        "foil_mass": 3.257074183693476e-07,
+        "correct_minus_foil_log_odds": 14.883719444274902,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 18921,
+        "top_vocab_log_probability": -0.7435932159423828,
+        "top_vocab_token_text": "cow"
+      }
+    },
+    {
+      "case_id": "animal_09/fit_chosen/piper/turtle",
+      "pair_id": "animal_09",
+      "category": "animal",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "turtle",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_animal_09_fit_chosen_turtle.wav",
+      "audio_sha256": "cacf3a4ca0466869aa687e85af6e60c762f4d0ce3856ceb035818ba898c5f76d",
+      "expected_aliases": [
+        {
+          "surface": "turtle",
+          "token_id": 81109
+        },
+        {
+          "surface": " turtle",
+          "token_id": 36089
+        },
+        {
+          "surface": " Turtle",
+          "token_id": 66806
+        }
+      ],
+      "foil_word": "cow",
+      "foil_aliases": [
+        {
+          "surface": "cow",
+          "token_id": 18921
+        },
+        {
+          "surface": "Cow",
+          "token_id": 89915
+        },
+        {
+          "surface": " cow",
+          "token_id": 19362
+        },
+        {
+          "surface": " Cow",
+          "token_id": 21851
+        }
+      ],
+      "prompt_tokens": 159,
+      "forward_seconds": 0.28137937490828335,
+      "metrics": {
+        "expected_alias_token_ids": [
+          36089,
+          66806,
+          81109
+        ],
+        "foil_alias_token_ids": [
+          18921,
+          19362,
+          21851,
+          89915
+        ],
+        "expected_log_mass": -1.3345088958740234,
+        "foil_log_mass": -13.813207626342773,
+        "expected_mass": 0.2632874548435211,
+        "foil_mass": 1.002305566544237e-06,
+        "correct_minus_foil_log_odds": 12.47869873046875,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 51,
+        "top_vocab_log_probability": -0.3749561309814453,
+        "top_vocab_token_text": "T"
+      }
+    },
+    {
+      "case_id": "color_03/fit_chosen/kokoro/black",
+      "pair_id": "color_03",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "black",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_03_fit_chosen_black.wav",
+      "audio_sha256": "e1377ad16b19cf8d77a6a03f95eb4d2a2e8f650a7be9acfe9d733fce9f03ba25",
+      "expected_aliases": [
+        {
+          "surface": "black",
+          "token_id": 11453
+        },
+        {
+          "surface": "Black",
+          "token_id": 14417
+        },
+        {
+          "surface": " black",
+          "token_id": 3691
+        },
+        {
+          "surface": " Black",
+          "token_id": 5235
+        }
+      ],
+      "foil_word": "white",
+      "foil_aliases": [
+        {
+          "surface": "white",
+          "token_id": 5782
+        },
+        {
+          "surface": "White",
+          "token_id": 14075
+        },
+        {
+          "surface": " white",
+          "token_id": 4158
+        },
+        {
+          "surface": " White",
+          "token_id": 5807
+        }
+      ],
+      "prompt_tokens": 171,
+      "forward_seconds": 0.29019591701216996,
+      "metrics": {
+        "expected_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "foil_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "expected_log_mass": -0.053836822509765625,
+        "foil_log_mass": -7.432318687438965,
+        "expected_mass": 0.9475866556167603,
+        "foil_mass": 0.0005918137030676007,
+        "correct_minus_foil_log_odds": 7.378481864929199,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14417,
+        "top_vocab_log_probability": -0.5141258239746094,
+        "top_vocab_token_text": "Black"
+      }
+    },
+    {
+      "case_id": "color_03/fit_chosen/kokoro/white",
+      "pair_id": "color_03",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "white",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_03_fit_chosen_white.wav",
+      "audio_sha256": "ca7f37eb1d670531046a0515252be172296f5f3b20012be548514390a310a925",
+      "expected_aliases": [
+        {
+          "surface": "white",
+          "token_id": 5782
+        },
+        {
+          "surface": "White",
+          "token_id": 14075
+        },
+        {
+          "surface": " white",
+          "token_id": 4158
+        },
+        {
+          "surface": " White",
+          "token_id": 5807
+        }
+      ],
+      "foil_word": "black",
+      "foil_aliases": [
+        {
+          "surface": "black",
+          "token_id": 11453
+        },
+        {
+          "surface": "Black",
+          "token_id": 14417
+        },
+        {
+          "surface": " black",
+          "token_id": 3691
+        },
+        {
+          "surface": " Black",
+          "token_id": 5235
+        }
+      ],
+      "prompt_tokens": 171,
+      "forward_seconds": 0.2945617919322103,
+      "metrics": {
+        "expected_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "foil_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "expected_log_mass": -0.03761863708496094,
+        "foil_log_mass": -8.059577941894531,
+        "expected_mass": 0.963080108165741,
+        "foil_mass": 0.000316060206387192,
+        "correct_minus_foil_log_odds": 8.02195930480957,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14075,
+        "top_vocab_log_probability": -0.5338191986083984,
+        "top_vocab_token_text": "White"
+      }
+    },
+    {
+      "case_id": "color_03/fit_chosen/piper/black",
+      "pair_id": "color_03",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "black",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_03_fit_chosen_black.wav",
+      "audio_sha256": "363e9cf4786f195488139e2f0932b7484f7f07860d2c00eb1db556587c230e9f",
+      "expected_aliases": [
+        {
+          "surface": "black",
+          "token_id": 11453
+        },
+        {
+          "surface": "Black",
+          "token_id": 14417
+        },
+        {
+          "surface": " black",
+          "token_id": 3691
+        },
+        {
+          "surface": " Black",
+          "token_id": 5235
+        }
+      ],
+      "foil_word": "white",
+      "foil_aliases": [
+        {
+          "surface": "white",
+          "token_id": 5782
+        },
+        {
+          "surface": "White",
+          "token_id": 14075
+        },
+        {
+          "surface": " white",
+          "token_id": 4158
+        },
+        {
+          "surface": " White",
+          "token_id": 5807
+        }
+      ],
+      "prompt_tokens": 158,
+      "forward_seconds": 0.27618529205210507,
+      "metrics": {
+        "expected_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "foil_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "expected_log_mass": -0.062046051025390625,
+        "foil_log_mass": -7.704795837402344,
+        "expected_mass": 0.9398396015167236,
+        "foil_mass": 0.0004506607074290514,
+        "correct_minus_foil_log_odds": 7.642749786376953,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14417,
+        "top_vocab_log_probability": -0.5507240295410156,
+        "top_vocab_token_text": "Black"
+      }
+    },
+    {
+      "case_id": "color_03/fit_chosen/piper/white",
+      "pair_id": "color_03",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "white",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_03_fit_chosen_white.wav",
+      "audio_sha256": "9f7e6e9d45c33e5f1eb1690aba2a1b725495669abd723099ac00f43ac3e0e15c",
+      "expected_aliases": [
+        {
+          "surface": "white",
+          "token_id": 5782
+        },
+        {
+          "surface": "White",
+          "token_id": 14075
+        },
+        {
+          "surface": " white",
+          "token_id": 4158
+        },
+        {
+          "surface": " White",
+          "token_id": 5807
+        }
+      ],
+      "foil_word": "black",
+      "foil_aliases": [
+        {
+          "surface": "black",
+          "token_id": 11453
+        },
+        {
+          "surface": "Black",
+          "token_id": 14417
+        },
+        {
+          "surface": " black",
+          "token_id": 3691
+        },
+        {
+          "surface": " Black",
+          "token_id": 5235
+        }
+      ],
+      "prompt_tokens": 158,
+      "forward_seconds": 0.2709470419213176,
+      "metrics": {
+        "expected_alias_token_ids": [
+          4158,
+          5782,
+          5807,
+          14075
+        ],
+        "foil_alias_token_ids": [
+          3691,
+          5235,
+          11453,
+          14417
+        ],
+        "expected_log_mass": -0.04505348205566406,
+        "foil_log_mass": -8.464072227478027,
+        "expected_mass": 0.9559463262557983,
+        "foil_mass": 0.00021091144299134612,
+        "correct_minus_foil_log_odds": 8.419018745422363,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 14075,
+        "top_vocab_log_probability": -0.7083148956298828,
+        "top_vocab_token_text": "White"
+      }
+    },
+    {
+      "case_id": "color_05/fit_chosen/kokoro/silver",
+      "pair_id": "color_05",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "silver",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_05_fit_chosen_silver.wav",
+      "audio_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e",
+      "expected_aliases": [
+        {
+          "surface": "silver",
+          "token_id": 81914
+        },
+        {
+          "surface": "Silver",
+          "token_id": 52343
+        },
+        {
+          "surface": " silver",
+          "token_id": 14961
+        },
+        {
+          "surface": " Silver",
+          "token_id": 14997
+        }
+      ],
+      "foil_word": "teal",
+      "foil_aliases": [
+        {
+          "surface": " teal",
+          "token_id": 94607
+        }
+      ],
+      "prompt_tokens": 174,
+      "forward_seconds": 0.2904004589654505,
+      "metrics": {
+        "expected_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "foil_alias_token_ids": [
+          94607
+        ],
+        "expected_log_mass": -0.029140472412109375,
+        "foil_log_mass": -17.943723678588867,
+        "expected_mass": 0.971280038356781,
+        "foil_mass": 1.6111643574845402e-08,
+        "correct_minus_foil_log_odds": 17.914583206176758,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81914,
+        "top_vocab_log_probability": -0.5139789581298828,
+        "top_vocab_token_text": "silver"
+      }
+    },
+    {
+      "case_id": "color_05/fit_chosen/kokoro/teal",
+      "pair_id": "color_05",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "teal",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_05_fit_chosen_teal.wav",
+      "audio_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365",
+      "expected_aliases": [
+        {
+          "surface": " teal",
+          "token_id": 94607
+        }
+      ],
+      "foil_word": "silver",
+      "foil_aliases": [
+        {
+          "surface": "silver",
+          "token_id": 81914
+        },
+        {
+          "surface": "Silver",
+          "token_id": 52343
+        },
+        {
+          "surface": " silver",
+          "token_id": 14961
+        },
+        {
+          "surface": " Silver",
+          "token_id": 14997
+        }
+      ],
+      "prompt_tokens": 174,
+      "forward_seconds": 0.29230237496085465,
+      "metrics": {
+        "expected_alias_token_ids": [
+          94607
+        ],
+        "foil_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "expected_log_mass": -5.219509124755859,
+        "foil_log_mass": -12.657892227172852,
+        "expected_mass": 0.0054099843837320805,
+        "foil_mass": 3.182345153618371e-06,
+        "correct_minus_foil_log_odds": 7.438383102416992,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6639,
+        "top_vocab_log_probability": -0.31817626953125,
+        "top_vocab_token_text": "Te"
+      }
+    },
+    {
+      "case_id": "color_05/fit_chosen/piper/silver",
+      "pair_id": "color_05",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "silver",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_05_fit_chosen_silver.wav",
+      "audio_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9",
+      "expected_aliases": [
+        {
+          "surface": "silver",
+          "token_id": 81914
+        },
+        {
+          "surface": "Silver",
+          "token_id": 52343
+        },
+        {
+          "surface": " silver",
+          "token_id": 14961
+        },
+        {
+          "surface": " Silver",
+          "token_id": 14997
+        }
+      ],
+      "foil_word": "teal",
+      "foil_aliases": [
+        {
+          "surface": " teal",
+          "token_id": 94607
+        }
+      ],
+      "prompt_tokens": 167,
+      "forward_seconds": 0.29111025016754866,
+      "metrics": {
+        "expected_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "foil_alias_token_ids": [
+          94607
+        ],
+        "expected_log_mass": -0.029821395874023438,
+        "foil_log_mass": -17.90814971923828,
+        "expected_mass": 0.9706188440322876,
+        "foil_mass": 1.6695114624099006e-08,
+        "correct_minus_foil_log_odds": 17.878328323364258,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81914,
+        "top_vocab_log_probability": -0.4111785888671875,
+        "top_vocab_token_text": "silver"
+      }
+    },
+    {
+      "case_id": "color_05/fit_chosen/piper/teal",
+      "pair_id": "color_05",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "teal",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_05_fit_chosen_teal.wav",
+      "audio_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9",
+      "expected_aliases": [
+        {
+          "surface": " teal",
+          "token_id": 94607
+        }
+      ],
+      "foil_word": "silver",
+      "foil_aliases": [
+        {
+          "surface": "silver",
+          "token_id": 81914
+        },
+        {
+          "surface": "Silver",
+          "token_id": 52343
+        },
+        {
+          "surface": " silver",
+          "token_id": 14961
+        },
+        {
+          "surface": " Silver",
+          "token_id": 14997
+        }
+      ],
+      "prompt_tokens": 167,
+      "forward_seconds": 0.2902984591200948,
+      "metrics": {
+        "expected_alias_token_ids": [
+          94607
+        ],
+        "foil_alias_token_ids": [
+          14961,
+          14997,
+          52343,
+          81914
+        ],
+        "expected_log_mass": -5.636447906494141,
+        "foil_log_mass": -13.310968399047852,
+        "expected_mass": 0.003565510967746377,
+        "foil_mass": 1.656227141211275e-06,
+        "correct_minus_foil_log_odds": 7.674520492553711,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6639,
+        "top_vocab_log_probability": -0.4587383270263672,
+        "top_vocab_token_text": "Te"
+      }
+    },
+    {
+      "case_id": "color_06/fit_chosen/kokoro/cyan",
+      "pair_id": "color_06",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "cyan",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_06_fit_chosen_cyan.wav",
+      "audio_sha256": "027790f94231f2de54ad4079029c4c46966373944c95a1d636d48dde4f8da2d9",
+      "expected_aliases": [
+        {
+          "surface": "cyan",
+          "token_id": 69746
+        },
+        {
+          "surface": " cyan",
+          "token_id": 57888
+        },
+        {
+          "surface": " Cyan",
+          "token_id": 92143
+        }
+      ],
+      "foil_word": "violet",
+      "foil_aliases": [
+        {
+          "surface": " violet",
+          "token_id": 79736
+        },
+        {
+          "surface": " Violet",
+          "token_id": 73474
+        }
+      ],
+      "prompt_tokens": 176,
+      "forward_seconds": 0.30091020790860057,
+      "metrics": {
+        "expected_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "foil_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "expected_log_mass": -0.21660232543945312,
+        "foil_log_mass": -15.952653884887695,
+        "expected_mass": 0.8052501082420349,
+        "foil_mass": 1.179914264071158e-07,
+        "correct_minus_foil_log_odds": 15.736051559448242,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 69746,
+        "top_vocab_log_probability": -0.22277450561523438,
+        "top_vocab_token_text": "cyan"
+      }
+    },
+    {
+      "case_id": "color_06/fit_chosen/kokoro/violet",
+      "pair_id": "color_06",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "violet",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_color_06_fit_chosen_violet.wav",
+      "audio_sha256": "3c368a84409667eeaa9a5647a91a8a7a70d0e013152cc7f7e285f5acd6ccb383",
+      "expected_aliases": [
+        {
+          "surface": " violet",
+          "token_id": 79736
+        },
+        {
+          "surface": " Violet",
+          "token_id": 73474
+        }
+      ],
+      "foil_word": "cyan",
+      "foil_aliases": [
+        {
+          "surface": "cyan",
+          "token_id": 69746
+        },
+        {
+          "surface": " cyan",
+          "token_id": 57888
+        },
+        {
+          "surface": " Cyan",
+          "token_id": 92143
+        }
+      ],
+      "prompt_tokens": 176,
+      "forward_seconds": 0.3008432500064373,
+      "metrics": {
+        "expected_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "foil_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "expected_log_mass": -4.457680702209473,
+        "foil_log_mass": -10.898179054260254,
+        "expected_mass": 0.011589210480451584,
+        "foil_mass": 1.8491877199267037e-05,
+        "correct_minus_foil_log_odds": 6.440498352050781,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 53,
+        "top_vocab_log_probability": -0.6233177185058594,
+        "top_vocab_token_text": "V"
+      }
+    },
+    {
+      "case_id": "color_06/fit_chosen/piper/cyan",
+      "pair_id": "color_06",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "cyan",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_06_fit_chosen_cyan.wav",
+      "audio_sha256": "8c27cf3dc2b33747746f5c8f803e0eeee257d20aa08f27e97f9d84372c0f9ea8",
+      "expected_aliases": [
+        {
+          "surface": "cyan",
+          "token_id": 69746
+        },
+        {
+          "surface": " cyan",
+          "token_id": 57888
+        },
+        {
+          "surface": " Cyan",
+          "token_id": 92143
+        }
+      ],
+      "foil_word": "violet",
+      "foil_aliases": [
+        {
+          "surface": " violet",
+          "token_id": 79736
+        },
+        {
+          "surface": " Violet",
+          "token_id": 73474
+        }
+      ],
+      "prompt_tokens": 164,
+      "forward_seconds": 0.2956953749526292,
+      "metrics": {
+        "expected_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "foil_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "expected_log_mass": -8.613959312438965,
+        "foil_log_mass": -19.509593963623047,
+        "expected_mass": 0.00018155365251004696,
+        "foil_mass": 3.3658209552811513e-09,
+        "correct_minus_foil_log_odds": 10.895634651184082,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 91246,
+        "top_vocab_log_probability": -0.9558544158935547,
+        "top_vocab_token_text": "sand"
+      }
+    },
+    {
+      "case_id": "color_06/fit_chosen/piper/violet",
+      "pair_id": "color_06",
+      "category": "color",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "violet",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_color_06_fit_chosen_violet.wav",
+      "audio_sha256": "e85e25ca8acb7a39bfcebe876dd1b161dedac034c420540286300899241ecf7e",
+      "expected_aliases": [
+        {
+          "surface": " violet",
+          "token_id": 79736
+        },
+        {
+          "surface": " Violet",
+          "token_id": 73474
+        }
+      ],
+      "foil_word": "cyan",
+      "foil_aliases": [
+        {
+          "surface": "cyan",
+          "token_id": 69746
+        },
+        {
+          "surface": " cyan",
+          "token_id": 57888
+        },
+        {
+          "surface": " Cyan",
+          "token_id": 92143
+        }
+      ],
+      "prompt_tokens": 164,
+      "forward_seconds": 0.29088491713628173,
+      "metrics": {
+        "expected_alias_token_ids": [
+          73474,
+          79736
+        ],
+        "foil_alias_token_ids": [
+          57888,
+          69746,
+          92143
+        ],
+        "expected_log_mass": -4.9550371170043945,
+        "foil_log_mass": -10.639008522033691,
+        "expected_mass": 0.007047818973660469,
+        "foil_mass": 2.3962786144693382e-05,
+        "correct_minus_foil_log_odds": 5.683971405029297,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 53,
+        "top_vocab_log_probability": -0.6985321044921875,
+        "top_vocab_token_text": "V"
+      }
+    },
+    {
+      "case_id": "nature_00/fit_chosen/kokoro/lake",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "lake",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_00_fit_chosen_lake.wav",
+      "audio_sha256": "a23af150cb8d32b3c614ecf06472904e1aba24449a9c431b3035ef60baa8921b",
+      "expected_aliases": [
+        {
+          "surface": "lake",
+          "token_id": 62110
+        },
+        {
+          "surface": "Lake",
+          "token_id": 81289
+        },
+        {
+          "surface": " lake",
+          "token_id": 21800
+        },
+        {
+          "surface": " Lake",
+          "token_id": 11678
+        }
+      ],
+      "foil_word": "river",
+      "foil_aliases": [
+        {
+          "surface": "river",
+          "token_id": 5469
+        },
+        {
+          "surface": "River",
+          "token_id": 85699
+        },
+        {
+          "surface": " river",
+          "token_id": 14796
+        },
+        {
+          "surface": " River",
+          "token_id": 10948
+        }
+      ],
+      "prompt_tokens": 171,
+      "forward_seconds": 0.2911345830652863,
+      "metrics": {
+        "expected_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "foil_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "expected_log_mass": -0.0206298828125,
+        "foil_log_mass": -11.484587669372559,
+        "expected_mass": 0.9795814156532288,
+        "foil_mass": 1.0287431905453559e-05,
+        "correct_minus_foil_log_odds": 11.463957786560059,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 81289,
+        "top_vocab_log_probability": -0.5983695983886719,
+        "top_vocab_token_text": "Lake"
+      }
+    },
+    {
+      "case_id": "nature_00/fit_chosen/kokoro/river",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "river",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_00_fit_chosen_river.wav",
+      "audio_sha256": "ce6e0b72bbd3118c55035cbe9a06badd6e3c9d006db2254b8dd940180781c514",
+      "expected_aliases": [
+        {
+          "surface": "river",
+          "token_id": 5469
+        },
+        {
+          "surface": "River",
+          "token_id": 85699
+        },
+        {
+          "surface": " river",
+          "token_id": 14796
+        },
+        {
+          "surface": " River",
+          "token_id": 10948
+        }
+      ],
+      "foil_word": "lake",
+      "foil_aliases": [
+        {
+          "surface": "lake",
+          "token_id": 62110
+        },
+        {
+          "surface": "Lake",
+          "token_id": 81289
+        },
+        {
+          "surface": " lake",
+          "token_id": 21800
+        },
+        {
+          "surface": " Lake",
+          "token_id": 11678
+        }
+      ],
+      "prompt_tokens": 171,
+      "forward_seconds": 0.29128341702744365,
+      "metrics": {
+        "expected_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "foil_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "expected_log_mass": -0.029474258422851562,
+        "foil_log_mass": -10.571340560913086,
+        "expected_mass": 0.9709558486938477,
+        "foil_mass": 2.5640420062700287e-05,
+        "correct_minus_foil_log_odds": 10.541866302490234,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 85699,
+        "top_vocab_log_probability": -0.5059623718261719,
+        "top_vocab_token_text": "River"
+      }
+    },
+    {
+      "case_id": "nature_00/fit_chosen/piper/lake",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "lake",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_00_fit_chosen_lake.wav",
+      "audio_sha256": "d6fc4fd906e12cacc7c14052587509f495ad27c14678f1c0b88b4cb8cc414ba7",
+      "expected_aliases": [
+        {
+          "surface": "lake",
+          "token_id": 62110
+        },
+        {
+          "surface": "Lake",
+          "token_id": 81289
+        },
+        {
+          "surface": " lake",
+          "token_id": 21800
+        },
+        {
+          "surface": " Lake",
+          "token_id": 11678
+        }
+      ],
+      "foil_word": "river",
+      "foil_aliases": [
+        {
+          "surface": "river",
+          "token_id": 5469
+        },
+        {
+          "surface": "River",
+          "token_id": 85699
+        },
+        {
+          "surface": " river",
+          "token_id": 14796
+        },
+        {
+          "surface": " River",
+          "token_id": 10948
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.2899849999230355,
+      "metrics": {
+        "expected_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "foil_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "expected_log_mass": -0.025096893310546875,
+        "foil_log_mass": -11.668861389160156,
+        "expected_mass": 0.9752154350280762,
+        "foil_mass": 8.556140528526157e-06,
+        "correct_minus_foil_log_odds": 11.64376449584961,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 62110,
+        "top_vocab_log_probability": -0.6402053833007812,
+        "top_vocab_token_text": "lake"
+      }
+    },
+    {
+      "case_id": "nature_00/fit_chosen/piper/river",
+      "pair_id": "nature_00",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "river",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_00_fit_chosen_river.wav",
+      "audio_sha256": "420cfd8dcda7b7904a139b095f101a1d9bb880d3c55d85ca6626dfe0deb39329",
+      "expected_aliases": [
+        {
+          "surface": "river",
+          "token_id": 5469
+        },
+        {
+          "surface": "River",
+          "token_id": 85699
+        },
+        {
+          "surface": " river",
+          "token_id": 14796
+        },
+        {
+          "surface": " River",
+          "token_id": 10948
+        }
+      ],
+      "foil_word": "lake",
+      "foil_aliases": [
+        {
+          "surface": "lake",
+          "token_id": 62110
+        },
+        {
+          "surface": "Lake",
+          "token_id": 81289
+        },
+        {
+          "surface": " lake",
+          "token_id": 21800
+        },
+        {
+          "surface": " Lake",
+          "token_id": 11678
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.2891990840435028,
+      "metrics": {
+        "expected_alias_token_ids": [
+          5469,
+          10948,
+          14796,
+          85699
+        ],
+        "foil_alias_token_ids": [
+          11678,
+          21800,
+          62110,
+          81289
+        ],
+        "expected_log_mass": -0.014398574829101562,
+        "foil_log_mass": -10.445115089416504,
+        "expected_mass": 0.9857045412063599,
+        "foil_mass": 2.9090029784129e-05,
+        "correct_minus_foil_log_odds": 10.430716514587402,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 85699,
+        "top_vocab_log_probability": -0.44769859313964844,
+        "top_vocab_token_text": "River"
+      }
+    },
+    {
+      "case_id": "nature_09/fit_chosen/kokoro/garden",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "garden",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_09_fit_chosen_garden.wav",
+      "audio_sha256": "e2beb015842d6912ef32d8b2979b0f56443a7fc61655d5e011606ffd07bd3823",
+      "expected_aliases": [
+        {
+          "surface": " garden",
+          "token_id": 13551
+        },
+        {
+          "surface": " Garden",
+          "token_id": 19021
+        }
+      ],
+      "foil_word": "waterfall",
+      "foil_aliases": [
+        {
+          "surface": " waterfall",
+          "token_id": 69051
+        }
+      ],
+      "prompt_tokens": 176,
+      "forward_seconds": 0.2972036248538643,
+      "metrics": {
+        "expected_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "foil_alias_token_ids": [
+          69051
+        ],
+        "expected_log_mass": -5.807577133178711,
+        "foil_log_mass": -17.339454650878906,
+        "expected_mass": 0.003004701342433691,
+        "foil_mass": 2.948292276983011e-08,
+        "correct_minus_foil_log_odds": 11.531877517700195,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.4946403503417969,
+        "top_vocab_token_text": "G"
+      }
+    },
+    {
+      "case_id": "nature_09/fit_chosen/kokoro/waterfall",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "waterfall",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_09_fit_chosen_waterfall.wav",
+      "audio_sha256": "63893f7571eba35d5eac9c9ebdbcfeba1ae88f14057a8b33ba1f852d3cc64514",
+      "expected_aliases": [
+        {
+          "surface": " waterfall",
+          "token_id": 69051
+        }
+      ],
+      "foil_word": "garden",
+      "foil_aliases": [
+        {
+          "surface": " garden",
+          "token_id": 13551
+        },
+        {
+          "surface": " Garden",
+          "token_id": 19021
+        }
+      ],
+      "prompt_tokens": 176,
+      "forward_seconds": 0.2968061249703169,
+      "metrics": {
+        "expected_alias_token_ids": [
+          69051
+        ],
+        "foil_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "expected_log_mass": -2.5292606353759766,
+        "foil_log_mass": -16.853485107421875,
+        "expected_mass": 0.07971794158220291,
+        "foil_mass": 4.793187713403313e-08,
+        "correct_minus_foil_log_odds": 14.324224472045898,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 28253,
+        "top_vocab_log_probability": -0.6496295928955078,
+        "top_vocab_token_text": "Water"
+      }
+    },
+    {
+      "case_id": "nature_09/fit_chosen/piper/garden",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "garden",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_09_fit_chosen_garden.wav",
+      "audio_sha256": "e64137502eac21d71e9c39f6b9a571399518e5ac9a96ec03e34456ee8273b7a7",
+      "expected_aliases": [
+        {
+          "surface": " garden",
+          "token_id": 13551
+        },
+        {
+          "surface": " Garden",
+          "token_id": 19021
+        }
+      ],
+      "foil_word": "waterfall",
+      "foil_aliases": [
+        {
+          "surface": " waterfall",
+          "token_id": 69051
+        }
+      ],
+      "prompt_tokens": 168,
+      "forward_seconds": 0.2896021669730544,
+      "metrics": {
+        "expected_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "foil_alias_token_ids": [
+          69051
+        ],
+        "expected_log_mass": -5.7241973876953125,
+        "foil_log_mass": -17.483999252319336,
+        "expected_mass": 0.0032659736461937428,
+        "foil_mass": 2.5515001667031356e-08,
+        "correct_minus_foil_log_odds": 11.759801864624023,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.6219673156738281,
+        "top_vocab_token_text": "G"
+      }
+    },
+    {
+      "case_id": "nature_09/fit_chosen/piper/waterfall",
+      "pair_id": "nature_09",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "waterfall",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_09_fit_chosen_waterfall.wav",
+      "audio_sha256": "05b367cfc538c4c6a7dfd5e9d113b37be42eee1be497dd9c48f7548131adeaef",
+      "expected_aliases": [
+        {
+          "surface": " waterfall",
+          "token_id": 69051
+        }
+      ],
+      "foil_word": "garden",
+      "foil_aliases": [
+        {
+          "surface": " garden",
+          "token_id": 13551
+        },
+        {
+          "surface": " Garden",
+          "token_id": 19021
+        }
+      ],
+      "prompt_tokens": 168,
+      "forward_seconds": 0.29017070797272027,
+      "metrics": {
+        "expected_alias_token_ids": [
+          69051
+        ],
+        "foil_alias_token_ids": [
+          13551,
+          19021
+        ],
+        "expected_log_mass": -2.2965145111083984,
+        "foil_log_mass": -17.014785766601562,
+        "expected_mass": 0.10060890763998032,
+        "foil_mass": 4.079175752735864e-08,
+        "correct_minus_foil_log_odds": 14.718271255493164,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 12987,
+        "top_vocab_log_probability": -0.6642494201660156,
+        "top_vocab_token_text": "water"
+      }
+    },
+    {
+      "case_id": "nature_10/fit_chosen/kokoro/grove",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "grove",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_10_fit_chosen_grove.wav",
+      "audio_sha256": "cec9ad7fefa593651b54205702e631f6f318cfc847d338685a4bb5548dfdcd6e",
+      "expected_aliases": [
+        {
+          "surface": " Grove",
+          "token_id": 40134
+        }
+      ],
+      "foil_word": "pond",
+      "foil_aliases": [
+        {
+          "surface": "pond",
+          "token_id": 3511
+        },
+        {
+          "surface": " pond",
+          "token_id": 35570
+        },
+        {
+          "surface": " Pond",
+          "token_id": 70865
+        }
+      ],
+      "prompt_tokens": 173,
+      "forward_seconds": 0.29020437505096197,
+      "metrics": {
+        "expected_alias_token_ids": [
+          40134
+        ],
+        "foil_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "expected_log_mass": -4.012101173400879,
+        "foil_log_mass": -13.307235717773438,
+        "expected_mass": 0.018095333129167557,
+        "foil_mass": 1.6624209138171864e-06,
+        "correct_minus_foil_log_odds": 9.295134544372559,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 38,
+        "top_vocab_log_probability": -0.5993366241455078,
+        "top_vocab_token_text": "G"
+      }
+    },
+    {
+      "case_id": "nature_10/fit_chosen/kokoro/pond",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "pond",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_nature_10_fit_chosen_pond.wav",
+      "audio_sha256": "02aac5da78c0eaff8fca4fdf117a9b7f65635e0d15d8356c585ecb07ae87ea4f",
+      "expected_aliases": [
+        {
+          "surface": "pond",
+          "token_id": 3511
+        },
+        {
+          "surface": " pond",
+          "token_id": 35570
+        },
+        {
+          "surface": " Pond",
+          "token_id": 70865
+        }
+      ],
+      "foil_word": "grove",
+      "foil_aliases": [
+        {
+          "surface": " Grove",
+          "token_id": 40134
+        }
+      ],
+      "prompt_tokens": 173,
+      "forward_seconds": 0.2965000830590725,
+      "metrics": {
+        "expected_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "foil_alias_token_ids": [
+          40134
+        ],
+        "expected_log_mass": -0.9465179443359375,
+        "foil_log_mass": -17.78692626953125,
+        "expected_mass": 0.388090044260025,
+        "foil_mass": 1.8846733951249917e-08,
+        "correct_minus_foil_log_odds": 16.840408325195312,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.5223236083984375,
+        "top_vocab_token_text": "P"
+      }
+    },
+    {
+      "case_id": "nature_10/fit_chosen/piper/grove",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "grove",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_10_fit_chosen_grove.wav",
+      "audio_sha256": "60bbf3747a7ac1651585e45a85b38b76eaeeaedc56b64f4aeb4b25b11c878316",
+      "expected_aliases": [
+        {
+          "surface": " Grove",
+          "token_id": 40134
+        }
+      ],
+      "foil_word": "pond",
+      "foil_aliases": [
+        {
+          "surface": "pond",
+          "token_id": 3511
+        },
+        {
+          "surface": " pond",
+          "token_id": 35570
+        },
+        {
+          "surface": " Pond",
+          "token_id": 70865
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.28881137492135167,
+      "metrics": {
+        "expected_alias_token_ids": [
+          40134
+        ],
+        "foil_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "expected_log_mass": -6.729373931884766,
+        "foil_log_mass": -15.271620750427246,
+        "expected_mass": 0.0011952811619266868,
+        "foil_mass": 2.3314139241392695e-07,
+        "correct_minus_foil_log_odds": 8.54224681854248,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 73089,
+        "top_vocab_log_probability": -0.7943668365478516,
+        "top_vocab_token_text": "growth"
+      }
+    },
+    {
+      "case_id": "nature_10/fit_chosen/piper/pond",
+      "pair_id": "nature_10",
+      "category": "nature",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "pond",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_nature_10_fit_chosen_pond.wav",
+      "audio_sha256": "67da55301f55994ed53128677e51324914178c0a2f52031d4ebb2ebf545775dc",
+      "expected_aliases": [
+        {
+          "surface": "pond",
+          "token_id": 3511
+        },
+        {
+          "surface": " pond",
+          "token_id": 35570
+        },
+        {
+          "surface": " Pond",
+          "token_id": 70865
+        }
+      ],
+      "foil_word": "grove",
+      "foil_aliases": [
+        {
+          "surface": " Grove",
+          "token_id": 40134
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.2889219580683857,
+      "metrics": {
+        "expected_alias_token_ids": [
+          3511,
+          35570,
+          70865
+        ],
+        "foil_alias_token_ids": [
+          40134
+        ],
+        "expected_log_mass": -0.8412456512451172,
+        "foil_log_mass": -17.94125747680664,
+        "expected_mass": 0.43117308616638184,
+        "foil_mass": 1.615142686262061e-08,
+        "correct_minus_foil_log_odds": 17.100011825561523,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.60003662109375,
+        "top_vocab_token_text": "P"
+      }
+    },
+    {
+      "case_id": "object_02/fit_chosen/kokoro/cup",
+      "pair_id": "object_02",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "cup",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_02_fit_chosen_cup.wav",
+      "audio_sha256": "c94cac1885730ce36238a9e8a7b736bc469daa96e711c956fabadd206222766a",
+      "expected_aliases": [
+        {
+          "surface": "cup",
+          "token_id": 36665
+        },
+        {
+          "surface": " cup",
+          "token_id": 10525
+        },
+        {
+          "surface": " Cup",
+          "token_id": 10861
+        }
+      ],
+      "foil_word": "plate",
+      "foil_aliases": [
+        {
+          "surface": "plate",
+          "token_id": 1750
+        },
+        {
+          "surface": "Plate",
+          "token_id": 64709
+        },
+        {
+          "surface": " plate",
+          "token_id": 11968
+        },
+        {
+          "surface": " Plate",
+          "token_id": 30303
+        }
+      ],
+      "prompt_tokens": 170,
+      "forward_seconds": 0.29013191699050367,
+      "metrics": {
+        "expected_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "foil_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "expected_log_mass": -1.7593727111816406,
+        "foil_log_mass": -13.323909759521484,
+        "expected_mass": 0.1721528321504593,
+        "foil_mass": 1.634931322769262e-06,
+        "correct_minus_foil_log_odds": 11.564537048339844,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 34,
+        "top_vocab_log_probability": -0.268524169921875,
+        "top_vocab_token_text": "C"
+      }
+    },
+    {
+      "case_id": "object_02/fit_chosen/kokoro/plate",
+      "pair_id": "object_02",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "plate",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_02_fit_chosen_plate.wav",
+      "audio_sha256": "2fbb5182032f95dc70bb57545f9c94aa245ed73371edb2281f51eceb56fd24db",
+      "expected_aliases": [
+        {
+          "surface": "plate",
+          "token_id": 1750
+        },
+        {
+          "surface": "Plate",
+          "token_id": 64709
+        },
+        {
+          "surface": " plate",
+          "token_id": 11968
+        },
+        {
+          "surface": " Plate",
+          "token_id": 30303
+        }
+      ],
+      "foil_word": "cup",
+      "foil_aliases": [
+        {
+          "surface": "cup",
+          "token_id": 36665
+        },
+        {
+          "surface": " cup",
+          "token_id": 10525
+        },
+        {
+          "surface": " Cup",
+          "token_id": 10861
+        }
+      ],
+      "prompt_tokens": 170,
+      "forward_seconds": 0.290619625011459,
+      "metrics": {
+        "expected_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "foil_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "expected_log_mass": -0.037982940673828125,
+        "foil_log_mass": -14.946159362792969,
+        "expected_mass": 0.9627293348312378,
+        "foil_mass": 3.228237517305388e-07,
+        "correct_minus_foil_log_odds": 14.90817642211914,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 64709,
+        "top_vocab_log_probability": -0.6063385009765625,
+        "top_vocab_token_text": "Plate"
+      }
+    },
+    {
+      "case_id": "object_02/fit_chosen/piper/cup",
+      "pair_id": "object_02",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "cup",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_02_fit_chosen_cup.wav",
+      "audio_sha256": "12537b7770110e07b9e4f7764051df268096ed60cd993ae98ba4fa37e6c0cd0d",
+      "expected_aliases": [
+        {
+          "surface": "cup",
+          "token_id": 36665
+        },
+        {
+          "surface": " cup",
+          "token_id": 10525
+        },
+        {
+          "surface": " Cup",
+          "token_id": 10861
+        }
+      ],
+      "foil_word": "plate",
+      "foil_aliases": [
+        {
+          "surface": "plate",
+          "token_id": 1750
+        },
+        {
+          "surface": "Plate",
+          "token_id": 64709
+        },
+        {
+          "surface": " plate",
+          "token_id": 11968
+        },
+        {
+          "surface": " Plate",
+          "token_id": 30303
+        }
+      ],
+      "prompt_tokens": 156,
+      "forward_seconds": 0.26889758300967515,
+      "metrics": {
+        "expected_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "foil_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "expected_log_mass": -1.9678974151611328,
+        "foil_log_mass": -13.644201278686523,
+        "expected_mass": 0.1397503912448883,
+        "foil_mass": 1.1868578440044075e-06,
+        "correct_minus_foil_log_odds": 11.67630386352539,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 34,
+        "top_vocab_log_probability": -0.22607040405273438,
+        "top_vocab_token_text": "C"
+      }
+    },
+    {
+      "case_id": "object_02/fit_chosen/piper/plate",
+      "pair_id": "object_02",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "plate",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_02_fit_chosen_plate.wav",
+      "audio_sha256": "42d0d964d124001db5d0eebc214f4dc8efeeee38f81850b22ae12d4bf0155a92",
+      "expected_aliases": [
+        {
+          "surface": "plate",
+          "token_id": 1750
+        },
+        {
+          "surface": "Plate",
+          "token_id": 64709
+        },
+        {
+          "surface": " plate",
+          "token_id": 11968
+        },
+        {
+          "surface": " Plate",
+          "token_id": 30303
+        }
+      ],
+      "foil_word": "cup",
+      "foil_aliases": [
+        {
+          "surface": "cup",
+          "token_id": 36665
+        },
+        {
+          "surface": " cup",
+          "token_id": 10525
+        },
+        {
+          "surface": " Cup",
+          "token_id": 10861
+        }
+      ],
+      "prompt_tokens": 156,
+      "forward_seconds": 0.26935479207895696,
+      "metrics": {
+        "expected_alias_token_ids": [
+          1750,
+          11968,
+          30303,
+          64709
+        ],
+        "foil_alias_token_ids": [
+          10525,
+          10861,
+          36665
+        ],
+        "expected_log_mass": -0.11891555786132812,
+        "foil_log_mass": -14.673858642578125,
+        "expected_mass": 0.8878827095031738,
+        "foil_mass": 4.2386170662211953e-07,
+        "correct_minus_foil_log_odds": 14.554943084716797,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 1750,
+        "top_vocab_log_probability": -0.7920608520507812,
+        "top_vocab_token_text": "plate"
+      }
+    },
+    {
+      "case_id": "object_05/fit_chosen/kokoro/book",
+      "pair_id": "object_05",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "book",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_05_fit_chosen_book.wav",
+      "audio_sha256": "34c71fadb25453acefab4015fa6e21cb08f65a9b4775319c5362588b48b4a3c8",
+      "expected_aliases": [
+        {
+          "surface": "book",
+          "token_id": 2190
+        },
+        {
+          "surface": "Book",
+          "token_id": 7134
+        },
+        {
+          "surface": " book",
+          "token_id": 2311
+        },
+        {
+          "surface": " Book",
+          "token_id": 5893
+        }
+      ],
+      "foil_word": "phone",
+      "foil_aliases": [
+        {
+          "surface": "phone",
+          "token_id": 4844
+        },
+        {
+          "surface": "Phone",
+          "token_id": 6939
+        },
+        {
+          "surface": " phone",
+          "token_id": 4540
+        },
+        {
+          "surface": " Phone",
+          "token_id": 14307
+        }
+      ],
+      "prompt_tokens": 173,
+      "forward_seconds": 0.2905260408297181,
+      "metrics": {
+        "expected_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "foil_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "expected_log_mass": -0.07466506958007812,
+        "foil_log_mass": -12.258158683776855,
+        "expected_mass": 0.9280542731285095,
+        "foil_mass": 4.74623584523215e-06,
+        "correct_minus_foil_log_odds": 12.183493614196777,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 7134,
+        "top_vocab_log_probability": -0.4435462951660156,
+        "top_vocab_token_text": "Book"
+      }
+    },
+    {
+      "case_id": "object_05/fit_chosen/kokoro/phone",
+      "pair_id": "object_05",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "phone",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_05_fit_chosen_phone.wav",
+      "audio_sha256": "b0e18ead56814cf52de617ff5de953b6f4b36a1b05d380f733025d341a5b1164",
+      "expected_aliases": [
+        {
+          "surface": "phone",
+          "token_id": 4844
+        },
+        {
+          "surface": "Phone",
+          "token_id": 6939
+        },
+        {
+          "surface": " phone",
+          "token_id": 4540
+        },
+        {
+          "surface": " Phone",
+          "token_id": 14307
+        }
+      ],
+      "foil_word": "book",
+      "foil_aliases": [
+        {
+          "surface": "book",
+          "token_id": 2190
+        },
+        {
+          "surface": "Book",
+          "token_id": 7134
+        },
+        {
+          "surface": " book",
+          "token_id": 2311
+        },
+        {
+          "surface": " Book",
+          "token_id": 5893
+        }
+      ],
+      "prompt_tokens": 173,
+      "forward_seconds": 0.28992329095490277,
+      "metrics": {
+        "expected_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "foil_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "expected_log_mass": -0.03452110290527344,
+        "foil_log_mass": -11.37492847442627,
+        "expected_mass": 0.966067910194397,
+        "foil_mass": 1.1479721251816954e-05,
+        "correct_minus_foil_log_odds": 11.340407371520996,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 4844,
+        "top_vocab_log_probability": -0.5912113189697266,
+        "top_vocab_token_text": "phone"
+      }
+    },
+    {
+      "case_id": "object_05/fit_chosen/piper/book",
+      "pair_id": "object_05",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "book",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_05_fit_chosen_book.wav",
+      "audio_sha256": "dc0c32935a9b4ca7d32687487fab349f31769745d2d1e1695d3f8552d216eb37",
+      "expected_aliases": [
+        {
+          "surface": "book",
+          "token_id": 2190
+        },
+        {
+          "surface": "Book",
+          "token_id": 7134
+        },
+        {
+          "surface": " book",
+          "token_id": 2311
+        },
+        {
+          "surface": " Book",
+          "token_id": 5893
+        }
+      ],
+      "foil_word": "phone",
+      "foil_aliases": [
+        {
+          "surface": "phone",
+          "token_id": 4844
+        },
+        {
+          "surface": "Phone",
+          "token_id": 6939
+        },
+        {
+          "surface": " phone",
+          "token_id": 4540
+        },
+        {
+          "surface": " Phone",
+          "token_id": 14307
+        }
+      ],
+      "prompt_tokens": 160,
+      "forward_seconds": 0.28104058280587196,
+      "metrics": {
+        "expected_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "foil_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "expected_log_mass": -0.10385513305664062,
+        "foil_log_mass": -12.245280265808105,
+        "expected_mass": 0.9013558626174927,
+        "foil_mass": 4.807755431102123e-06,
+        "correct_minus_foil_log_odds": 12.141425132751465,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 7134,
+        "top_vocab_log_probability": -0.6377372741699219,
+        "top_vocab_token_text": "Book"
+      }
+    },
+    {
+      "case_id": "object_05/fit_chosen/piper/phone",
+      "pair_id": "object_05",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "phone",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_05_fit_chosen_phone.wav",
+      "audio_sha256": "5149cff88931330d05a439ec92d04ecde485275d92684d1486172d8141578696",
+      "expected_aliases": [
+        {
+          "surface": "phone",
+          "token_id": 4844
+        },
+        {
+          "surface": "Phone",
+          "token_id": 6939
+        },
+        {
+          "surface": " phone",
+          "token_id": 4540
+        },
+        {
+          "surface": " Phone",
+          "token_id": 14307
+        }
+      ],
+      "foil_word": "book",
+      "foil_aliases": [
+        {
+          "surface": "book",
+          "token_id": 2190
+        },
+        {
+          "surface": "Book",
+          "token_id": 7134
+        },
+        {
+          "surface": " book",
+          "token_id": 2311
+        },
+        {
+          "surface": " Book",
+          "token_id": 5893
+        }
+      ],
+      "prompt_tokens": 160,
+      "forward_seconds": 0.28018249990418553,
+      "metrics": {
+        "expected_alias_token_ids": [
+          4540,
+          4844,
+          6939,
+          14307
+        ],
+        "foil_alias_token_ids": [
+          2190,
+          2311,
+          5893,
+          7134
+        ],
+        "expected_log_mass": -0.06226539611816406,
+        "foil_log_mass": -12.054912567138672,
+        "expected_mass": 0.9396334886550903,
+        "foil_mass": 5.815914391860133e-06,
+        "correct_minus_foil_log_odds": 11.992647171020508,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 4844,
+        "top_vocab_log_probability": -0.4447669982910156,
+        "top_vocab_token_text": "phone"
+      }
+    },
+    {
+      "case_id": "object_09/fit_chosen/kokoro/carpet",
+      "pair_id": "object_09",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "carpet",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_09_fit_chosen_carpet.wav",
+      "audio_sha256": "534d9c66d2f9684c2929c8e61f84f63914360688f1a370bc6dd1403ce7e3a085",
+      "expected_aliases": [
+        {
+          "surface": " carpet",
+          "token_id": 27854
+        },
+        {
+          "surface": " Carpet",
+          "token_id": 71208
+        }
+      ],
+      "foil_word": "pillow",
+      "foil_aliases": [
+        {
+          "surface": " pillow",
+          "token_id": 42325
+        },
+        {
+          "surface": " Pillow",
+          "token_id": 80735
+        }
+      ],
+      "prompt_tokens": 173,
+      "forward_seconds": 0.2901232501026243,
+      "metrics": {
+        "expected_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "foil_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "expected_log_mass": -4.59932804107666,
+        "foil_log_mass": -16.46282386779785,
+        "expected_mass": 0.01005859300494194,
+        "foil_mass": 7.084128839096593e-08,
+        "correct_minus_foil_log_odds": 11.863495826721191,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6918,
+        "top_vocab_log_probability": -0.49462127685546875,
+        "top_vocab_token_text": "car"
+      }
+    },
+    {
+      "case_id": "object_09/fit_chosen/kokoro/pillow",
+      "pair_id": "object_09",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "kokoro",
+      "word": "pillow",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/kokoro_object_09_fit_chosen_pillow.wav",
+      "audio_sha256": "167e92fb027673986e876a5d9a315fa9e184b21d3a4e20ad87459275b23f1eea",
+      "expected_aliases": [
+        {
+          "surface": " pillow",
+          "token_id": 42325
+        },
+        {
+          "surface": " Pillow",
+          "token_id": 80735
+        }
+      ],
+      "foil_word": "carpet",
+      "foil_aliases": [
+        {
+          "surface": " carpet",
+          "token_id": 27854
+        },
+        {
+          "surface": " Carpet",
+          "token_id": 71208
+        }
+      ],
+      "prompt_tokens": 173,
+      "forward_seconds": 0.29130204184912145,
+      "metrics": {
+        "expected_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "foil_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "expected_log_mass": -4.768764495849609,
+        "foil_log_mass": -15.720131874084473,
+        "expected_mass": 0.00849086418747902,
+        "foil_mass": 1.48879010453129e-07,
+        "correct_minus_foil_log_odds": 10.951367378234863,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 49846,
+        "top_vocab_log_probability": -0.7416439056396484,
+        "top_vocab_token_text": "pill"
+      }
+    },
+    {
+      "case_id": "object_09/fit_chosen/piper/carpet",
+      "pair_id": "object_09",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "carpet",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_09_fit_chosen_carpet.wav",
+      "audio_sha256": "79d8a4db980cbcd2036b9de00b0bc40e1e391c7c67a9431e230e1e52f76bd529",
+      "expected_aliases": [
+        {
+          "surface": " carpet",
+          "token_id": 27854
+        },
+        {
+          "surface": " Carpet",
+          "token_id": 71208
+        }
+      ],
+      "foil_word": "pillow",
+      "foil_aliases": [
+        {
+          "surface": " pillow",
+          "token_id": 42325
+        },
+        {
+          "surface": " Pillow",
+          "token_id": 80735
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.28997049992904067,
+      "metrics": {
+        "expected_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "foil_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "expected_log_mass": -4.71237850189209,
+        "foil_log_mass": -16.23822021484375,
+        "expected_mass": 0.008983384817838669,
+        "foil_mass": 8.868099854453249e-08,
+        "correct_minus_foil_log_odds": 11.52584171295166,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 6918,
+        "top_vocab_log_probability": -0.3313465118408203,
+        "top_vocab_token_text": "car"
+      }
+    },
+    {
+      "case_id": "object_09/fit_chosen/piper/pillow",
+      "pair_id": "object_09",
+      "category": "object",
+      "template": "fit_chosen",
+      "engine": "piper",
+      "word": "pillow",
+      "map_fit": true,
+      "audio_path": "eval/audio_jlens/corpus_v1/rendered/clips/piper_object_09_fit_chosen_pillow.wav",
+      "audio_sha256": "afce5ba6fa33733e9372e08919d8e2855ee77cee9fed0587b7291c63f97061f1",
+      "expected_aliases": [
+        {
+          "surface": " pillow",
+          "token_id": 42325
+        },
+        {
+          "surface": " Pillow",
+          "token_id": 80735
+        }
+      ],
+      "foil_word": "carpet",
+      "foil_aliases": [
+        {
+          "surface": " carpet",
+          "token_id": 27854
+        },
+        {
+          "surface": " Carpet",
+          "token_id": 71208
+        }
+      ],
+      "prompt_tokens": 162,
+      "forward_seconds": 0.2896863338537514,
+      "metrics": {
+        "expected_alias_token_ids": [
+          42325,
+          80735
+        ],
+        "foil_alias_token_ids": [
+          27854,
+          71208
+        ],
+        "expected_log_mass": -4.95130729675293,
+        "foil_log_mass": -14.8690767288208,
+        "expected_mass": 0.0070741549134254456,
+        "foil_mass": 3.486920547857153e-07,
+        "correct_minus_foil_log_odds": 9.917769432067871,
+        "correct_mass_gt_foil": true,
+        "top_vocab_token_id": 47,
+        "top_vocab_log_probability": -0.8697357177734375,
+        "top_vocab_token_text": "P"
+      }
+    }
+  ],
+  "summary": {
+    "planned": 48,
+    "completed": 48,
+    "expected_mass_gt_foil": 48,
+    "groups": {
+      "category/animal": {
+        "planned": 12,
+        "expected_mass_gt_foil": 12,
+        "median_log_odds": 12.47869873046875
+      },
+      "category/color": {
+        "planned": 12,
+        "expected_mass_gt_foil": 12,
+        "median_log_odds": 7.674520492553711
+      },
+      "category/nature": {
+        "planned": 12,
+        "expected_mass_gt_foil": 12,
+        "median_log_odds": 11.531877517700195
+      },
+      "category/object": {
+        "planned": 12,
+        "expected_mass_gt_foil": 12,
+        "median_log_odds": 11.67630386352539
+      },
+      "engine/kokoro": {
+        "planned": 24,
+        "expected_mass_gt_foil": 24,
+        "median_log_odds": 11.531877517700195
+      },
+      "engine/piper": {
+        "planned": 24,
+        "expected_mass_gt_foil": 24,
+        "median_log_odds": 11.64376449584961
+      },
+      "pair/animal_06": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 4.832477569580078
+      },
+      "pair/animal_08": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 8.491698265075684
+      },
+      "pair/animal_09": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 12.47869873046875
+      },
+      "pair/color_03": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 7.642749786376953
+      },
+      "pair/color_05": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 7.674520492553711
+      },
+      "pair/color_06": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 6.440498352050781
+      },
+      "pair/nature_00": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 10.541866302490234
+      },
+      "pair/nature_09": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 11.759801864624023
+      },
+      "pair/nature_10": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 9.295134544372559
+      },
+      "pair/object_02": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 11.67630386352539
+      },
+      "pair/object_05": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 11.992647171020508
+      },
+      "pair/object_09": {
+        "planned": 4,
+        "expected_mass_gt_foil": 4,
+        "median_log_odds": 10.951367378234863
+      }
+    }
+  }
+}

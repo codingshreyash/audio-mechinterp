@@ -1,0 +1,9 @@
+# Single-token fit score: independent static review
+
+**Verdict:** No blocker before MPS. Reviewed committed runner at `92aa40b`; no Qwen inference was run. Two CPU unit tests and `--validate-only` passed. The latter reported exactly 48 contexts and case SHA-256 `90dec22441194a9db1f39f163857ef1a593641a7d50f6bac3c667c8e70d4493f`.
+
+- The runner first validates the frozen spec, manifest, tokenizer, and fit-pool WAV hashes. It opens all 192 fit-pool clips for validation, then forwards only the 48 preselected map-fit cases: 12 word pairs × two voices × two directions, using `fit_chosen` only. It does not open development or locked-test audio or answer files.
+- `first_step_metrics` deduplicates the frozen one-token alias IDs, rejects empty/overlapping or out-of-vocabulary classes, and computes `logsumexp(class logits) − logsumexp(full-vocabulary logits)`. The expected-minus-foil log odds therefore have the intended orientation; the full-vocabulary normalizer cancels in the difference. The prompt-last logits are evaluated with an unpatched FP32 Thinker forward.
+- Output metadata binds the script, spec, manifest, selected cases, model revision, Transformers revision, prompt, dtype, device, and alias policy. Progress is appended per case and SHA-bound to the final report. The runner refuses overwrite and intentionally does not resume. The 30 GiB MPS cap is set before model loading, and post-load/per-case memory samples are persisted with an over-limit abort.
+
+**Interpretation limits:** These alias masses are restricted first-token probabilities. The preceding fit capability run found that many correct complete words use different multi-token segmentations, so this score is not complete-answer likelihood. Group `torch.median` uses the lower middle item for even-sized groups; that descriptive field is not a gate. The runner does not bind an adapter-source hash in its result metadata, though it does pin model, Transformers, corpus, and its own script.
