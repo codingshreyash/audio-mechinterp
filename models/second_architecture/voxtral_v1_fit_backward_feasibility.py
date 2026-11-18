@@ -23,9 +23,10 @@ import voxtral_fit_pilot_capability_v1 as base
 HERE = Path(__file__).resolve().parent
 PROTOCOL = HERE / "VOXTRAL_V1_FIT_BACKWARD_FEASIBILITY_PROTOCOL.md"
 RUNS = HERE / "runs/voxtral_v1_fit_backward_feasibility"
-PROTOCOL_SHA = "221d31776234ec99d07bb15ad74cae7431c9dde75de83b997a1b312c847dfc49"
+PROTOCOL_SHA = "96b8648bd6c9be4bcd3b1c0860933ecb8581039ab79d732bd51f73e28ac4bff2"
 PRIOR_SHA = "64d799bbb40b58b128b049877d18bde7774c2dc16717af97e692aa4531e907b5"
 FRONTEND_SHA = "026445da1ac2c4c2f4b8f45ab2f8d7a1f4679924774714951b16d5cd29de0788"
+LLAMA_SHA = "affc6a4ab36b562a6b4c90b84c4e7939c5417a69ad7bd37e858be5583f189830"
 RECIPIENT = "beaver"
 DONOR = "monkey"
 BIN = "word_0"
@@ -47,9 +48,14 @@ def preflight() -> dict:
     import torch
     import transformers
     from transformers import AutoProcessor
+    from transformers.models.llama import modeling_llama
 
     if torch.__version__ != "2.15.0" or transformers.__version__ != "5.20.2":
         raise ValueError("Pinned PyTorch or Transformers version changed")
+    llama_actual = base.sha(Path(modeling_llama.__file__))
+    if llama_actual != LLAMA_SHA:
+        raise ValueError("Pinned LM29 Llama implementation changed")
+    sources = {**sources, "modeling_llama": llama_actual}
     processor = AutoProcessor.from_pretrained(str(base.SNAPSHOT), local_files_only=True)
     batches = prior.make_batches(processor, record)
     frontend = prior.frontend_check(processor, batches, record)
@@ -98,7 +104,7 @@ def uniform_edit(recipient, donor, rows: list[int], alpha: float) -> dict:
 
 
 def contract_rows(grad_rows, edit: dict) -> dict[str, float]:
-    """All inputs are selected FP32 rows; sum gradients for a uniform edit."""
+    """Contract FP32 copies of selected BF16 VJPs with realized FP32 edits."""
     import torch
 
     g = grad_rows.float()
@@ -130,11 +136,16 @@ def check_resource(torch, memory, start: float) -> dict:
     peak_driver = max(driver, memory.driver_max)
     if peak_driver >= base.MEMORY_LIMIT_BYTES:
         raise MemoryError("30 GiB MPS driver cap reached")
+    elapsed = check_time(start)
+    return {"elapsed_seconds": elapsed, "driver_bytes": driver,
+            "current_bytes": current, "peak_driver_bytes": peak_driver}
+
+
+def check_time(start: float) -> float:
     elapsed = time.monotonic() - start
     if elapsed >= MAX_SECONDS:
         raise TimeoutError("15-minute FIT backward pilot cap reached")
-    return {"elapsed_seconds": elapsed, "driver_bytes": driver,
-            "current_bytes": current, "peak_driver_bytes": peak_driver}
+    return elapsed
 
 
 def capture_prompt(model, batch, *, grad: bool, patch_site: str | None = None,
@@ -241,44 +252,56 @@ def generate_suffix(model, batch, *, passive: bool) -> dict:
     return {"suffix_ids": suffix, "hook_shapes": hits}
 
 
-def run(prepared: dict, output: Path) -> None:
-    import torch
-    from transformers import VoxtralForConditionalGeneration
-
-    if not torch.backends.mps.is_available():
-        raise RuntimeError("MPS unavailable")
-    recommended = int(torch.mps.recommended_max_memory())
-    if recommended <= 0:
-        raise RuntimeError("MPS recommended limit unavailable")
-    fraction = min(1.0, base.MEMORY_LIMIT_BYTES / recommended)
-    torch.mps.set_per_process_memory_fraction(fraction)
+def run(output: Path) -> None:
+    """Create a one-shot receipt before CPU preflight or any MPS setup."""
     started = time.monotonic()
     output.mkdir(parents=True, exist_ok=False)
-    meta = {"purpose": "old_v1_fit_backward_feasibility_only", "script_sha256": base.sha(Path(__file__)),
-            "protocol_sha256": PROTOCOL_SHA, "first_runner_sha256": PRIOR_SHA,
-            "first_v2_fit_pilot_sha256": prior.EXPECTED["pilot"],
-            "frontend_helper_sha256": FRONTEND_SHA,
-            "model_snapshot": prepared["snapshot"], "installed_sources": prepared["sources"],
-            "versions": prepared["versions"], "record_key": "animal_08|piper|fit_chosen",
-            "recipient": RECIPIENT, "donor": DONOR, "bin": BIN, "alpha": ALPHA,
-            "target_coordinates": list(TARGET_COORDS),
-            "wav_hashes": {w: next(c["wav_sha256"] for c in prepared["record"]["clips"] if c["word"] == w)
-                           for w in (RECIPIENT, DONOR)},
-            "masks_sha256": prior.EXPECTED["masks"],
-            "source_rows": {s: prepared["record"]["site_maps"][s]["bins"][BIN] for s in prior.SITES},
-            "saved_natural_suffix_ids": prepared["saved"]["generated_token_ids"],
-            "fresh_v2_corpus_opened": False, "cap_seconds": MAX_SECONDS,
-            "cap_mps_driver_bytes": base.MEMORY_LIMIT_BYTES,
-            "mps_recommended_max_bytes": recommended, "mps_fraction_limit": fraction}
-    base.exclusive_json(output / "meta.json", meta)
     progress = output / "progress.jsonl"
     progress.touch(exist_ok=False)
+    base.append_line(progress, {"phase": "attempt_started", "wall_utc": datetime.now(timezone.utc).isoformat(),
+                                "elapsed_seconds": time.monotonic() - started,
+                                "script_sha256": base.sha(Path(__file__)), "protocol_sha256": PROTOCOL_SHA})
 
     def receipt(phase: str, memory) -> None:
         base.append_line(progress, {"phase": phase, **check_resource(torch, memory, started)})
 
     try:
+        prepared = preflight()
+        preflight_seconds = check_time(started)
+        base.append_line(progress, {"phase": "preflight_validated", "elapsed_seconds": preflight_seconds,
+                                    "installed_sources": prepared["sources"]})
+        import torch
+
+        if not torch.backends.mps.is_available():
+            raise RuntimeError("MPS unavailable")
+        recommended = int(torch.mps.recommended_max_memory())
+        if recommended <= 0:
+            raise RuntimeError("MPS recommended limit unavailable")
+        fraction = min(1.0, base.MEMORY_LIMIT_BYTES / recommended)
+        torch.mps.set_per_process_memory_fraction(fraction)
+        base.append_line(progress, {"phase": "mps_ready", "elapsed_seconds": check_time(started),
+                                    "recommended_max_bytes": recommended, "fraction_limit": fraction})
+        from transformers import VoxtralForConditionalGeneration
+        meta = {"purpose": "old_v1_fit_backward_feasibility_only", "script_sha256": base.sha(Path(__file__)),
+                "protocol_sha256": PROTOCOL_SHA, "first_runner_sha256": PRIOR_SHA,
+                "first_v2_fit_pilot_sha256": prior.EXPECTED["pilot"],
+                "frontend_helper_sha256": FRONTEND_SHA, "llama_modeling_sha256": LLAMA_SHA,
+                "model_snapshot": prepared["snapshot"], "installed_sources": prepared["sources"],
+                "versions": prepared["versions"], "record_key": "animal_08|piper|fit_chosen",
+                "recipient": RECIPIENT, "donor": DONOR, "bin": BIN, "alpha": ALPHA,
+                "target_coordinates": list(TARGET_COORDS),
+                "wav_hashes": {w: next(c["wav_sha256"] for c in prepared["record"]["clips"] if c["word"] == w)
+                               for w in (RECIPIENT, DONOR)},
+                "masks_sha256": prior.EXPECTED["masks"],
+                "source_rows": {s: prepared["record"]["site_maps"][s]["bins"][BIN] for s in prior.SITES},
+                "saved_natural_suffix_ids": prepared["saved"]["generated_token_ids"],
+                "fresh_v2_corpus_opened": False, "cap_seconds": MAX_SECONDS,
+                "cap_mps_driver_bytes": base.MEMORY_LIMIT_BYTES,
+                "preflight_elapsed_seconds": preflight_seconds,
+                "mps_recommended_max_bytes": recommended, "mps_fraction_limit": fraction}
+        base.exclusive_json(output / "meta.json", meta)
         with base.MemorySampler(torch) as memory:
+            receipt("before_model_load", memory)
             t0 = time.monotonic()
             model = VoxtralForConditionalGeneration.from_pretrained(
                 str(base.SNAPSHOT), local_files_only=True, dtype=torch.bfloat16,
@@ -315,6 +338,7 @@ def run(prepared: dict, output: Path) -> None:
             if any(float(torch.linalg.vector_norm(zero_edits[s]["effective"])) != 0 for s in prior.SITES):
                 raise ValueError("Zero BF16 edit was not exact")
             grads = {s: [] for s in prior.SITES}
+            raw_vjp_dtypes = {s: set() for s in prior.SITES}
             pred = {s: {name: [] for name in ("uniform_mean", "rowwise_oracle", "ideal_uniform")}
                     for s in prior.SITES}
             vjp_seconds = []
@@ -328,7 +352,10 @@ def run(prepared: dict, output: Path) -> None:
                 torch.mps.synchronize()
                 vjp_seconds.append(time.monotonic() - t1)
                 for site, g in (("encoder31", ge[0]), ("projector", gp)):
-                    if not torch.isfinite(g).all() or float(torch.linalg.vector_norm(g)) <= 0:
+                    raw_vjp_dtypes[site].add(str(g.dtype))
+                    if g.dtype != torch.bfloat16:
+                        raise ValueError(f"Unexpected {site} VJP dtype: {g.dtype}")
+                    if not torch.isfinite(g).all() or float(torch.linalg.vector_norm(g.float())) <= 0:
                         raise ValueError(f"Disconnected/nonfinite/zero {site} gradient at {coord}")
                     selected = g.detach().float().cpu()[meta["source_rows"][site]].contiguous()
                     grads[site].append(selected)
@@ -382,6 +409,9 @@ def run(prepared: dict, output: Path) -> None:
                       "no_grad_hook_events": no_grad_hooks,
                       "shared_graph_hook_events": clean_hooks,
                       "shared_graph_vjp_connected_both_sources": True,
+                      "raw_source_vjp_dtypes": {s: sorted(raw_vjp_dtypes[s]) for s in prior.SITES},
+                      "selected_gradient_storage_dtype": "torch.float32",
+                      "contraction_dtype": "torch.float32",
                       "source_shapes": {s: list(rec_states[s].shape) for s in prior.SITES},
                       "source_hashes": {s: prior.tensor_sha(rec_states[s]) for s in prior.SITES},
                       "donor_hashes": {s: prior.tensor_sha(donor_states[s]) for s in prior.SITES},
@@ -421,8 +451,8 @@ def main() -> None:
         parser.error("--output-dir requires --run")
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
-    prepared = preflight()
     if args.validate_only:
+        prepared = preflight()
         print(json.dumps({"status": "validated_cpu_only", "record_key": "animal_08|piper|fit_chosen",
                           "recipient": RECIPIENT, "donor": DONOR, "bin": BIN,
                           "rows": {s: prepared["record"]["site_maps"][s]["bins"][BIN]
@@ -430,7 +460,7 @@ def main() -> None:
                           "snapshot_revision": prepared["snapshot"]["revision"]}, indent=2))
         return
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    run(prepared, args.output_dir or RUNS / stamp)
+    run(args.output_dir or RUNS / stamp)
 
 
 if __name__ == "__main__":

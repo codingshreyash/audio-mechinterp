@@ -1,6 +1,10 @@
 """CPU tests for the frozen, non-running backward feasibility math."""
 
 import unittest
+import json
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
 
 import torch
 
@@ -43,6 +47,51 @@ class BackwardFeasibilityMathTests(unittest.TestCase):
             pilot.vector_error([1], [1])
         with self.assertRaises(ValueError):
             pilot.vector_error([0, 1, float("nan"), 3], [0, 1, 2, 3])
+
+    def test_bf16_leaf_returns_bf16_vjp_before_fp32_storage(self):
+        leaf = torch.tensor([1.0, 2.0], dtype=torch.bfloat16, requires_grad=True)
+        target = (leaf * 2).float().sum()
+        (raw_vjp,) = torch.autograd.grad(target, (leaf,))
+        self.assertEqual(raw_vjp.dtype, torch.bfloat16)
+        self.assertEqual(raw_vjp.float().dtype, torch.float32)
+
+    def test_preflight_failure_has_start_and_error_receipts(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "one_shot"
+            with patch.object(pilot, "preflight", side_effect=ValueError("fixture preflight failure")):
+                with self.assertRaisesRegex(ValueError, "fixture preflight failure"):
+                    pilot.run(output)
+            progress = [json.loads(line) for line in (output / "progress.jsonl").read_text().splitlines()]
+            error = json.loads((output / "error.json").read_text())
+            self.assertEqual(progress[0]["phase"], "attempt_started")
+            self.assertEqual(error["error_type"], "ValueError")
+            self.assertFalse((output / "meta.json").exists())
+            with self.assertRaises(FileExistsError):
+                pilot.run(output)
+
+    def test_mps_failure_is_inside_attempt_receipt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "one_shot"
+            with patch.object(pilot, "preflight", return_value={"sources": {"modeling_llama": pilot.LLAMA_SHA}}), \
+                 patch.object(torch.backends.mps, "is_available", return_value=False):
+                with self.assertRaisesRegex(RuntimeError, "MPS unavailable"):
+                    pilot.run(output)
+            progress = [json.loads(line) for line in (output / "progress.jsonl").read_text().splitlines()]
+            error = json.loads((output / "error.json").read_text())
+            self.assertEqual([entry["phase"] for entry in progress], ["attempt_started", "preflight_validated"])
+            self.assertEqual(error["error_type"], "RuntimeError")
+
+    def test_preflight_time_counts_toward_attempt_cap(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "one_shot"
+            with patch.object(pilot, "preflight", return_value={"sources": {}}), \
+                 patch.object(pilot, "check_time", side_effect=TimeoutError("cap")):
+                with self.assertRaisesRegex(TimeoutError, "cap"):
+                    pilot.run(output)
+            progress = [json.loads(line) for line in (output / "progress.jsonl").read_text().splitlines()]
+            error = json.loads((output / "error.json").read_text())
+            self.assertEqual([entry["phase"] for entry in progress], ["attempt_started"])
+            self.assertEqual(error["error_type"], "TimeoutError")
 
 
 if __name__ == "__main__":
