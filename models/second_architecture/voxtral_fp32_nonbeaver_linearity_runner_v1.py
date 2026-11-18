@@ -33,8 +33,12 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 PROTOCOL_V2 = HERE / 'VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_PROSPECTIVE_V2.md'
 PROTOCOL_V3 = HERE / 'VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_PROSPECTIVE_V3.md'
+PROTOCOL_V4 = HERE / 'VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_PROSPECTIVE_V4.md'
+PROTOCOL_V5 = HERE / 'VOXTRAL_FP32_NONBEAVER_LOCAL_LINEARITY_PROSPECTIVE_V5.md'
 PROTOCOL_V2_SHA = '04f99648f5483fa7f32da80515c31e3f8472511c954cd95711d8eba09bb5b42d'
 PROTOCOL_V3_SHA = 'a222ce0f06a0e82b2c22bf6231e605983d726610b2f51dfbe7299de3ea8d79bd'
+PROTOCOL_V4_SHA = 'edff669ab0c611a50160896b5b4b75e7621dde743c4e769a7b10af08f92a9d94'
+PROTOCOL_V5_SHA = '99de95003190de6b5fb55c5ba8bed446dfea7cdd8cf53c0569d304bcb942b49b'
 SELECTION_SHA = 'f897d360dbcec9c09f1813f9c070294753fbabc25c6213ba6bdac34b1d79b56b'
 MASKS_SHA = 'a634fc0ab8454b7a82802c56a5365dc90e79f446e4d280cee6321adfead4108e'
 BASIS_SEED = 3693039655029897049
@@ -64,7 +68,7 @@ SOURCE_DEPENDENCIES = {
     'sidecar_writer_sha256': Path(sidecars.__file__).resolve(),
 }
 RUNS = HERE / 'runs/voxtral_fp32_nonbeaver_linearity_v1'
-PREFLIGHT_RECEIPT = HERE / 'VOXTRAL_FP32_NONBEAVER_CPU_PREFLIGHT_V1.json'
+PREFLIGHT_RECEIPT = HERE / 'VOXTRAL_FP32_NONBEAVER_CPU_PREFLIGHT_V5.json'
 SITES = ('encoder31', 'projector')
 MODES = ('G1', 'N0')
 ALPHAS = (0.00625, -0.00625, 0.025, -0.025, 0.1, -0.1)
@@ -148,7 +152,8 @@ def _pcm(path: Path) -> tuple[bytes, int]:
 
 
 def _selected_records() -> dict[str, dict]:
-    if sha(PROTOCOL_V2) != PROTOCOL_V2_SHA or sha(PROTOCOL_V3) != PROTOCOL_V3_SHA:
+    if (sha(PROTOCOL_V2) != PROTOCOL_V2_SHA or sha(PROTOCOL_V3) != PROTOCOL_V3_SHA or
+            sha(PROTOCOL_V4) != PROTOCOL_V4_SHA or sha(PROTOCOL_V5) != PROTOCOL_V5_SHA):
         raise ValueError('Independently reviewed prospective protocol bytes differ')
     if sha(first.SELECTION) != SELECTION_SHA or sha(first.MASKS) != MASKS_SHA:
         raise ValueError('Frozen FIT selection or mask bytes differ')
@@ -195,9 +200,11 @@ def preflight_cpu() -> tuple[dict, dict]:
     from transformers import AutoProcessor
     import transformers.models.llama.modeling_llama as modeling_llama
     records = _selected_records()
-    if not base.validate_transformers_source():
+    transformers_sources = base.validate_transformers_source()
+    if not transformers_sources:
         raise ValueError('Installed Voxtral source validation absent')
-    if sha(Path(modeling_llama.__file__)) != prior.SOURCE_SHAS['modeling_llama']:
+    llama_sha = sha(Path(modeling_llama.__file__))
+    if llama_sha != prior.SOURCE_SHAS['modeling_llama']:
         raise ValueError('Installed Llama source bytes differ')
     snapshot = base.validate_snapshot(json.loads(first.INDEX.read_text()))
     processor = AutoProcessor.from_pretrained(str(base.SNAPSHOT), local_files_only=True)
@@ -235,9 +242,13 @@ def preflight_cpu() -> tuple[dict, dict]:
     receipt = {'schema':'voxtral_fp32_nonbeaver_cpu_preflight_v1',
                'status':'verified_source_only_before_model_load',
                'protocol_v2_sha256':PROTOCOL_V2_SHA, 'protocol_v3_sha256':PROTOCOL_V3_SHA,
+               'protocol_v4_sha256':PROTOCOL_V4_SHA,
+               'protocol_v5_sha256':PROTOCOL_V5_SHA,
                'selection_sha256':SELECTION_SHA, 'masks_sha256':MASKS_SHA,
                'snapshot':snapshot,
                'installed_sources':{name:sha(path) for name,path in SOURCE_DEPENDENCIES.items()},
+               'transformers_sources':transformers_sources,
+               'modeling_llama_sha256':llama_sha,
                'basis_seed':BASIS_SEED, 'basis_sha256':BASIS_SHA,
                'torch_version':torch.__version__, 'numpy_version':np.__version__,
                'prompt':base.PROMPT, 'prompt_input_ids':batches[('piper','silver')]['input_ids'][0].tolist(),
@@ -331,8 +342,19 @@ def trace_forward(model: Any, batch: dict[str, torch.Tensor], *, site: str | Non
             leaf = value.detach().clone().requires_grad_(mode == 'G1')
             source_leaf.append(leaf)
             selected = leaf[0, rows] if site == 'encoder31' else leaf[rows]
-            edit = prior.realized_edit(selected, direction_device, float(alpha), torch.float32)
             patched = leaf.clone()
+            if alpha == 0.0:
+                # Arithmetic zero can flip a source -0.0 to +0.0. Preserve
+                # every raw bit while retaining the same leaf/replace graph.
+                edited = selected.clone()
+                edit = {'edited': edited,
+                        'effective': torch.zeros_like(selected),
+                        'effective_norm': 0.0,
+                        'mean_fidelity_ratio': 0.0,
+                        'row_nonuniformity_ratio': 0.0,
+                        'unchanged_fraction': 1.0}
+            else:
+                edit = prior.realized_edit(selected, direction_device, float(alpha), torch.float32)
             if site == 'encoder31':
                 patched[0, rows] = edit['edited']
             else:
@@ -386,14 +408,24 @@ def trace_forward(model: Any, batch: dict[str, torch.Tensor], *, site: str | Non
         raise ValueError('Projector/LM-input/LM0 handoff differs')
     logits=checked_tensor(output.logits[0,-1],(LOGIT_WIDTH,),torch.float32,'first-answer logits')
     if site is None:
+        if len(flags)!=1 or flags[0] != {'lm0_grad_enabled':False,
+                                          'lm0_input_requires_grad':False,
+                                          'lm_input_requires_grad':False}:
+            raise ValueError('Passive N0 runtime flags differ')
         save={'kind':'donor','mode':'N0','encoder31_full':_cpu(passive_encoder[0]),
               'projector_full':_cpu(projector[0]),'lm_input_full':_cpu(lm_input[0]),
               'lm_terminal':{key:_cpu(values[0]) for key,values in hits.items()},
               'first_answer_logits':_cpu(logits), 'audio_positions':positions,
-              'runtime_flags':{'grad_enabled':False,'lm0_grad_enabled':False,
-                               'lm_input_requires_grad':bool(lm_input[0].requires_grad)}}
+              'runtime_flags':{'grad_enabled':False,
+                               'lm0_grad_enabled':flags[0]['lm0_grad_enabled'],
+                               'lm_input_requires_grad':flags[0]['lm_input_requires_grad']}}
         return save,None,None
-    if len(flags)!=2 or flags[0] != {'grad_enabled':mode=='G1','leaf_requires_grad':mode=='G1'} or flags[1]['lm0_grad_enabled']!=(mode=='G1'):
+    expected_grad=mode=='G1'
+    if (len(flags)!=2 or
+            flags[0] != {'grad_enabled':expected_grad,'leaf_requires_grad':expected_grad} or
+            flags[1] != {'lm0_grad_enabled':expected_grad,
+                         'lm0_input_requires_grad':expected_grad,
+                         'lm_input_requires_grad':expected_grad}):
         raise ValueError('Runtime grad/leaf flags differ from mode')
     pre=source_pre[0]; post=source_post[0]; edit=edit_info[0]
     selected_pre=pre[0,rows] if site=='encoder31' else pre[rows]
@@ -432,26 +464,37 @@ def exact_tensor_payload_estimate(engine: str) -> dict[str,int]:
         raise ValueError('Unknown engine')
     nenc,nproj=(60,15) if engine=='piper' else (73,18)
     enc=1500*1280*4; proj=375*3072*4; lm=396*3072*4; logits=LOGIT_WIDTH*4
+    rowbytes=nenc*1280*4+nproj*3072*4
     zero=24*(2*enc+proj+lm+logits)+24*(3*proj+lm+logits)
     references=2*(2*enc+proj+lm+logits)+2*(3*proj+lm+logits)
     donor=enc+2*proj+lm+logits
-    edited=24*3*(nenc*1280*4+nproj*3072*4)+48*logits
+    recipient_passive=enc+proj+lm+logits+3*TARGET_WIDTH*4
+    zero_rows=24*3*rowbytes
+    clean_rows=2*3*rowbytes
+    edited=24*3*rowbytes+48*logits
     terminal=96*3*3072*4
+    clean_donor_terminal=(4+1)*3*TARGET_WIDTH*4
     gradients=4*(nenc*1280+nproj*3072)*4
     batches=2*(396*8*2+128*3000*4)
-    total=zero+references+donor+edited+terminal+gradients+batches
+    basis_and_deltas=TARGET_WIDTH*4*8+(1280+TARGET_WIDTH)*4
+    total=(zero+references+donor+recipient_passive+zero_rows+clean_rows+edited+
+           terminal+clean_donor_terminal+gradients+batches+basis_and_deltas)
     if total>=MAX_WORKER_BYTES:
         raise ValueError('Pre-run tensor payload estimate exceeds worker cap')
     return {'zero_full':zero,'clean_references':references,'donor':donor,
-            'edited_rows_logits':edited,'lm_terminal':terminal,'gradients':gradients,
-            'batch_tensors':batches,'estimated_tensor_payload_bytes':total,
+            'recipient_passive':recipient_passive,'zero_selected_rows':zero_rows,
+            'clean_selected_rows':clean_rows,'edited_rows_logits':edited,
+            'patched_lm_terminal':terminal,'clean_donor_lm_terminal':clean_donor_terminal,
+            'gradients':gradients,'batch_tensors':batches,
+            'basis_and_deltas':basis_and_deltas,'estimated_tensor_payload_bytes':total,
             'worker_cap_bytes':MAX_WORKER_BYTES,'headroom_bytes':MAX_WORKER_BYTES-total}
 
 
 STATUS = 'completed_fp32_nonbeaver_local_linearity_raw_only'
 SCOPE = 'old_fit_color05_fp32_local_linearity_numerical_only'
 COUNTS = {'patch_forwards':96,'vjps':8,'g1_clean_graphs':2,
-          'n0_clean_references':2,'donor_captures':1,'natural_generations':2}
+          'n0_clean_references':2,'donor_captures':1,
+          'recipient_passive_captures':1,'natural_generations':2}
 
 
 def _full_parity(left: dict, right: dict) -> dict[str,bool]:
@@ -461,6 +504,17 @@ def _full_parity(left: dict, right: dict) -> dict[str,bool]:
     result={key:bitwise_equal(left[key],right[key]) for key in keys}
     result['lm29']=bitwise_equal(left['lm_terminal']['lm29'],right['lm_terminal']['lm29'])
     return result
+
+
+def _zero_identity_checks(record: dict) -> dict[str,bool]:
+    expected_metrics={'effective_norm':0.0,'mean_fidelity_ratio':0.0,
+                      'row_nonuniformity_ratio':0.0,'unchanged_fraction':1.0}
+    return {'zero_source_bitwise':record['alpha']==0.0 and
+            record['runtime_checks']['zero_source_bitwise'] and
+            bitwise_equal(record['source_pre_full'],record['source_post_full']),
+            'zero_effective_all_zero':bool(torch.count_nonzero(record['effective_rows'])==0),
+            'zero_metrics_exact':record['edit_metrics']==expected_metrics,
+            'runtime_selected_edit':record['runtime_checks']['selected_edit_bitwise']}
 
 
 def _record_problem(problems: list[dict], *, stage: str, descriptor: dict, checks: dict) -> None:
@@ -535,6 +589,7 @@ def run_context(index: int, attempt_id: str, freeze_sha256: str, *,
                                       'recipient':recipient,'donor':donor_word},
               'attempt_id':attempt_id,'freeze_sha256':freeze_sha256,
               'protocol_v2_sha256':PROTOCOL_V2_SHA,'protocol_v3_sha256':PROTOCOL_V3_SHA,
+              'protocol_v4_sha256':PROTOCOL_V4_SHA,'protocol_v5_sha256':PROTOCOL_V5_SHA,
               'runner_sha256':sha(Path(__file__)),
               'preflight_receipt_sha256':sha(PREFLIGHT_RECEIPT),
               'source_dependencies':{key:sha(path) for key,path in SOURCE_DEPENDENCIES.items()},
@@ -592,31 +647,49 @@ def run_context(index: int, attempt_id: str, freeze_sha256: str, *,
                                       archive_full=True,device=device)
         counts['donor_captures']+=1
         mark('donor_capture')
+        recipient_passive,_,_=trace_forward(model,batch,site=None,rows=None,
+                                            direction=None,alpha=None,mode='N0',
+                                            archive_full=True,device=device)
+        recipient_passive['kind']='recipient'
+        counts['recipient_passive_captures']+=1
+        mark('recipient_passive_capture')
         sites={}
         delta={}
         problems=[]
         for site in (SITES if engine=='piper' else tuple(reversed(SITES))):
             selected_rows=rows[site]
             width=EXPECTED_SHAPES[site][-1]
-            zero_direction=torch.zeros(width,dtype=torch.float32)
-            n0_clean,_,_=trace_forward(model,batch,site=site,rows=selected_rows,
-                                       direction=zero_direction,alpha=0.0,mode='N0',
-                                       archive_full=True,device=device)
-            counts['n0_clean_references']+=1
-            mark(f'n0_clean_{site}')
             donor_source=(donor_trace['encoder31_full'] if site=='encoder31'
                           else donor_trace['projector_full'])
+            recipient_source=(recipient_passive['encoder31_full'] if site=='encoder31'
+                              else recipient_passive['projector_full'])
             donor_rows=(donor_source[0,selected_rows] if site=='encoder31'
                         else donor_source[selected_rows])
-            recipient_rows=_selected_state(n0_clean,site,selected_rows)
+            recipient_rows=(recipient_source[0,selected_rows] if site=='encoder31'
+                            else recipient_source[selected_rows])
             direction=(donor_rows.float().mean(0)-recipient_rows.float().mean(0)).contiguous()
             if not bool(torch.isfinite(direction).all()) or float(torch.linalg.vector_norm(direction))<=0:
                 raise ValueError(f'{site} donor-recipient direction is zero or nonfinite')
             delta[site]=direction
+            n0_clean,_,_=trace_forward(model,batch,site=site,rows=selected_rows,
+                                       direction=direction,alpha=0.0,mode='N0',
+                                       archive_full=True,device=device)
+            counts['n0_clean_references']+=1
+            _record_problem(problems,stage='site_clean_zero_identity',
+                            descriptor={'site':site,'mode':'N0'},
+                            checks=_zero_identity_checks(n0_clean))
+            _record_problem(problems,stage='passive_recipient_to_n0_clean',
+                            descriptor={'site':site},
+                            checks={'full_prepatch_source_bitwise':bitwise_equal(
+                                recipient_source,n0_clean['source_pre_full'])})
+            mark(f'n0_clean_{site}')
             g1_clean,source_leaf,target=trace_forward(model,batch,site=site,
                     rows=selected_rows,direction=direction,alpha=0.0,mode='G1',
                     archive_full=True,device=device)
             counts['g1_clean_graphs']+=1
+            _record_problem(problems,stage='site_clean_zero_identity',
+                            descriptor={'site':site,'mode':'G1'},
+                            checks=_zero_identity_checks(g1_clean))
             mark(f'g1_clean_{site}_before_vjp')
             if source_leaf is None or target is None or not target.requires_grad:
                 raise ValueError('G1 clean source-to-LM29 graph disconnected')
@@ -636,9 +709,12 @@ def run_context(index: int, attempt_id: str, freeze_sha256: str, *,
         forwards=[]
         for ordinal,(site,mode,cycle,alpha,label_kind) in enumerate(patched_schedule(engine)):
             edit_alpha=0.0 if label_kind=='zero' else alpha
-            trace,_,_=trace_forward(model,batch,site=site,rows=rows[site],
+            trace,unused_leaf,unused_target=trace_forward(model,batch,site=site,rows=rows[site],
                                     direction=delta[site],alpha=edit_alpha,mode=mode,
                                     archive_full=label_kind=='zero',device=device)
+            # A G1 forward returns a live graph even when this cell takes no VJP.
+            # Release it before the next forward to keep the 30 GiB cap meaningful.
+            del unused_leaf,unused_target
             descriptor={'ordinal':ordinal,'site':site,'mode':mode,'cycle':cycle,
                         'alpha':alpha,'label':label_kind}
             forwards.append({**descriptor,'trace':trace})
@@ -649,12 +725,19 @@ def run_context(index: int, attempt_id: str, freeze_sha256: str, *,
                     'runtime_selected_edit':trace['runtime_checks']['selected_edit_bitwise']}
             if label_kind=='zero':
                 checks.update(_full_parity(ref,trace))
-                checks['zero_source_bitwise']=trace['runtime_checks']['zero_source_bitwise']
+                checks.update(_zero_identity_checks(trace))
             else:
+                preceding=forwards[-2]
+                if (preceding['ordinal']!=ordinal-1 or preceding['label']!='zero' or
+                        preceding['site']!=site or preceding['mode']!=mode or
+                        preceding['cycle']!=cycle or preceding['alpha']!=alpha):
+                    raise ValueError('Paired zero immediately before edit changed')
                 checks.update({'realized_norm':math.isfinite(trace['edit_metrics']['effective_norm']) and
                                trace['edit_metrics']['effective_norm']>0,
                                'mean_fidelity':trace['edit_metrics']['mean_fidelity_ratio']<=.1,
-                               'row_uniformity':trace['edit_metrics']['row_nonuniformity_ratio']<=.1})
+                               'row_uniformity':trace['edit_metrics']['row_nonuniformity_ratio']<=.1,
+                               'paired_prepatch_selected_rows_bitwise':bitwise_equal(
+                                   trace['source_pre_rows'],preceding['trace']['source_pre_rows'])})
             _record_problem(problems,stage='paired_forward',descriptor=descriptor,checks=checks)
             mark(f'patched_{ordinal:02d}_{site}_{mode}_{cycle}_{label_kind}_{alpha}')
         if counts!=COUNTS or len(forwards)!=96:
@@ -663,7 +746,8 @@ def run_context(index: int, attempt_id: str, freeze_sha256: str, *,
         payload={'schema':'voxtral_fp32_nonbeaver_linearity_tensors_v1',
                  'context':meta['context'],'basis':basis,
                  'batches':{'recipient':batch,'donor':donor_batch},
-                 'rows':rows,'delta':delta,'donor':donor_trace,'sites':sites,
+                 'rows':rows,'delta':delta,'donor':donor_trace,
+                 'recipient_passive':recipient_passive,'sites':sites,
                  'forwards':forwards,'generations':{
                      'recipient':generations[recipient], 'donor':generations[donor_word]}}
         remaining=MAX_WORKER_BYTES-sidecars.directory_bytes(output)-1_048_576
@@ -679,6 +763,7 @@ def run_context(index: int, attempt_id: str, freeze_sha256: str, *,
         result={'status':STATUS,'scope':SCOPE,'context':meta['context'],
                 'attempt_id':attempt_id,'freeze_sha256':freeze_sha256,
                 'protocol_v2_sha256':PROTOCOL_V2_SHA,'protocol_v3_sha256':PROTOCOL_V3_SHA,
+                'protocol_v4_sha256':PROTOCOL_V4_SHA,'protocol_v5_sha256':PROTOCOL_V5_SHA,
                 'preflight_receipt_sha256':sha(PREFLIGHT_RECEIPT),
                 'meta_sha256':sha(output/'meta.json'),
                 'progress_sha256':sha(progress),

@@ -1,0 +1,35 @@
+{
+  "schema": "voxtral_fp32_nonbeaver_byte_budget_v1",
+  "status": "verified_source_only_serialized_byte_budget",
+  "protocol_v4_sha256": "edff669ab0c611a50160896b5b4b75e7621dde743c4e769a7b10af08f92a9d94",
+  "protocol_v5_sha256": "99de95003190de6b5fb55c5ba8bed446dfea7cdd8cf53c0569d304bcb942b49b",
+  "runner_sha256": "91e622f7fd8f4d9dac00ca7a0baaf02d74faf9326109d10674ebf5673310bc04",
+  "torch_version": "2.15.0",
+  "max_output_bytes_per_context": 2147483648,
+  "max_worker_bytes_per_context": 2122317824,
+  "max_campaign_bytes": 8589934592,
+  "contexts_per_engine": 2,
+  "measurements": [
+    {
+      "engine": "piper",
+      "context_index": 0,
+      "tensor_bytes": 1302066560,
+      "estimated_tensor_payload_bytes": 1306674560,
+      "serialized_bytes": 1302437429,
+      "serialization_overhead_bytes": 370869,
+      "worker_headroom_after_sidecar_bytes": 819880395
+    },
+    {
+      "engine": "kokoro",
+      "context_index": 2,
+      "tensor_bytes": 1317993856,
+      "estimated_tensor_payload_bytes": 1322601856,
+      "serialized_bytes": 1318364789,
+      "serialization_overhead_bytes": 370933,
+      "worker_headroom_after_sidecar_bytes": 803953035
+    }
+  ],
+  "max_serialized_bytes": 1318364789,
+  "four_context_sidecar_bytes": 5241604436,
+  "campaign_headroom_after_sidecars_bytes": 3348330156
+}
