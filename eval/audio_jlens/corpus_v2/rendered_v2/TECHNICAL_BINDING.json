@@ -1,0 +1,16 @@
+{
+  "status": "cpu_wav_technical_audit_passed_intelligibility_pending_no_model_output",
+  "manifest_sha256": "15395c7d132eb3f1c1a6b2b7d555146faa83be4ee2b77fba4f481cf70f26761d",
+  "freeze_receipt_sha256": "ca90162648f41c56997452a30c9c95791530929c231306ea7529dc2268071410",
+  "auditor_sha256": "24d7d4a5ff3b36b3c53657ced10189f4551366fde007d9393eae4796035ead5e",
+  "matched_records": 240,
+  "wavs": 480,
+  "raw_fragments": 264,
+  "processed_fragments": 264,
+  "min_duration_seconds": 4.942125,
+  "max_duration_seconds": 6.69,
+  "min_peak_int16": 17150,
+  "intelligibility": "pending_independent_asr_and_listening_review",
+  "model_inference_authorized": false,
+  "limits": "PCM and provenance integrity only; no ASR, intelligibility, Qwen answer, or security claim"
+}
