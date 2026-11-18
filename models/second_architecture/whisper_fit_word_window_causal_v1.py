@@ -359,8 +359,6 @@ def run_model(model: Any, processor: Any, batch: Any, *, hook: Any = None, hook_
     finally:
         if hook is not None:
             hook.remove()
-    if hook_count is not None and hook_count[0] != 1:
-        raise ValueError(f"patch hook fired {hook_count[0]} times, expected once")
     ids = generation.sequences[0].detach().cpu().tolist()
     transcript = processor.batch_decode(generation.sequences, skip_special_tokens=True)[0].strip()
     eos_id = model.generation_config.eos_token_id
@@ -458,8 +456,7 @@ def execute(expected_preflight: Path, output: Path) -> None:
             finally:
                 for handle in handles:
                     handle.remove()
-            if any(count != 1 for count in counts.values()) or set(captures) != set(CAPTURE_SITES):
-                raise ValueError(f"capture hooks did not fire exactly once: {counts}")
+            capture_complete = all(count == 1 for count in counts.values()) and set(captures) == set(CAPTURE_SITES)
             other_word = WORDS[1 - WORDS.index(case.word)]
             eligible = (normalized_words(result["transcript"]).count(case.word) == 1
                         and other_word not in normalized_words(result["transcript"])
@@ -475,7 +472,9 @@ def execute(expected_preflight: Path, output: Path) -> None:
                 np.save(tensor_path, tensor.numpy(), allow_pickle=False)
                 hashes[site] = file_sha(tensor_path)
             capture_hashes[case.key] = hashes
-            append_record(output / "records.jsonl", {"type": "baseline", "case": case.key, "result": result, "capture_sha256": hashes, "eligible": eligible, "capture_hook_counts": counts})
+            append_record(output / "records.jsonl", {"type": "baseline", "case": case.key, "result": result, "capture_sha256": hashes, "eligible": eligible, "capture_complete": capture_complete, "capture_hook_counts": counts})
+            if not capture_complete:
+                raise ValueError(f"capture hooks did not fire exactly once: {counts}")
             if not eligible:
                 raise ValueError(f"baseline target-word eligibility failed: {case.key}")
             check_budget()
@@ -531,7 +530,7 @@ def execute(expected_preflight: Path, output: Path) -> None:
                         count = [0]
                         handle = install_patch_hook(model, site, source, window, "self" if condition == "self" else "donor", None, count)
                         result = run_model(model, processor, batches[recipient], hook=handle, hook_count=count)
-                        control_pass = None if condition != "self" else result["token_ids"] == baselines[recipient]["token_ids"]
+                        control_pass = None if condition != "self" else count[0] == 1 and result["token_ids"] == baselines[recipient]["token_ids"]
                         outcome = transcript_outcome(result["transcript"], recipient_word, donor_word, baselines[recipient]["transcript"])
                         outcome["target_replacement"] = outcome["target_replacement"] and not result["censored"]
                         outcome["token_difference_count"] = sum(a != b for a, b in zip(result["token_ids"], baselines[recipient]["token_ids"])) + abs(len(result["token_ids"]) - len(baselines[recipient]["token_ids"]))
@@ -539,12 +538,15 @@ def execute(expected_preflight: Path, output: Path) -> None:
                             "type": "intervention", "recipient": recipient, "donor": donor, "site": site,
                             "condition": condition, "window": list(window), "result": result,
                             "hook_count": count[0],
+                            "valid_hook": count[0] == 1,
                             "state_shape": [1, 1500, 384], "state_dtype": "float32", "finite_checked": True,
                             "recipient_state_sha256": capture_hashes[recipient][site],
                             "source_state_sha256": capture_hashes[recipient if condition == "self" else donor][site],
                             "control_pass": control_pass,
                             "outcome": outcome,
                         })
+                        if count[0] != 1:
+                            raise ValueError(f"patch hook fired {count[0]} times: {recipient}/{site}/{condition}")
                         if control_pass is False:
                             raise ValueError(f"self patch changed tokens: {recipient}/{site}")
                         check_budget()
@@ -554,7 +556,7 @@ def execute(expected_preflight: Path, output: Path) -> None:
                     patch_audit: dict[str, Any] = {}
                     handle = install_patch_hook(model, "post_norm", states[donor]["post_norm"], window, condition, seed, count, patch_audit)
                     result = run_model(model, processor, batches[recipient], hook=handle, hook_count=count)
-                    control_pass = None if condition != "full_donor" else result["token_ids"] == baselines[donor]["token_ids"]
+                    control_pass = None if condition != "full_donor" else count[0] == 1 and result["token_ids"] == baselines[donor]["token_ids"]
                     outcome = transcript_outcome(result["transcript"], recipient_word, donor_word, baselines[recipient]["transcript"])
                     outcome["target_replacement"] = outcome["target_replacement"] and not result["censored"]
                     outcome["token_difference_count"] = sum(a != b for a, b in zip(result["token_ids"], baselines[recipient]["token_ids"])) + abs(len(result["token_ids"]) - len(baselines[recipient]["token_ids"]))
@@ -562,12 +564,15 @@ def execute(expected_preflight: Path, output: Path) -> None:
                         "type": "intervention", "recipient": recipient, "donor": donor, "site": "post_norm",
                         "condition": condition, "seed": seed, "window": list(window), "result": result,
                         "hook_count": count[0], "patch_audit": patch_audit,
+                        "valid_hook": count[0] == 1,
                         "state_shape": [1, 1500, 384], "state_dtype": "float32", "finite_checked": True,
                         "recipient_state_sha256": capture_hashes[recipient]["post_norm"],
                         "source_state_sha256": capture_hashes[donor]["post_norm"],
                         "control_pass": control_pass,
                         "outcome": outcome,
                     })
+                    if count[0] != 1:
+                        raise ValueError(f"patch hook fired {count[0]} times: {recipient}/post_norm/{condition}")
                     if control_pass is False:
                         raise ValueError(f"full-donor implementation control failed: {recipient}")
                     check_budget()

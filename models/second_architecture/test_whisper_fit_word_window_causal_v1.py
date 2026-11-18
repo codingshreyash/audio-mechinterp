@@ -97,6 +97,24 @@ class WhisperFitWordWindowTest(unittest.TestCase):
         self.assertTrue(bad["donor_once_recipient_absent"])
         self.assertGreater(bad["wer_to_recipient"], good["wer_to_recipient"])
 
+    def test_zero_hook_count_keeps_completed_decode_available(self) -> None:
+        class Model:
+            generation_config = SimpleNamespace(eos_token_id=2)
+
+            def generate(self, **_kwargs):
+                return SimpleNamespace(sequences=torch.tensor([[1, 2]]), scores=[torch.tensor([[0.0, 1.0, 2.0]])])
+
+        class Processor:
+            tokenizer = SimpleNamespace(encode=lambda *_args, **_kwargs: [1])
+
+            def batch_decode(self, *_args, **_kwargs):
+                return ["silver"]
+
+        decoded = assay.run_model(Model(), Processor(), {}, hook_count=[0])
+        self.assertEqual(decoded["token_ids"], [1, 2])
+        self.assertEqual(decoded["hook_count"], 0)
+        self.assertTrue(decoded["eos_seen"])
+
 
 if __name__ == "__main__":
     unittest.main()
