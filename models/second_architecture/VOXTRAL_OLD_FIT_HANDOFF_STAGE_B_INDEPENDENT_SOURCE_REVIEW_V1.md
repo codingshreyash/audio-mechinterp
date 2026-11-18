@@ -1,0 +1,16 @@
+# Independent Stage-B replay source review, 18 November 2026
+
+**Verdict: HOLD for live replay and source freeze.** I reviewed committed source `a43098ae58d1533096c27db5019872b2c8271e8a` against the amended old-FIT protocol `87721f4` and its independent plan rereview `9d0eb7d`. This review is of source and CPU fake-model behavior only. No Voxtral model was loaded or run.
+
+The reviewed replay source SHA-256 is `3e49077207986b3bba1c5a47753fe4a06b75c3c59e3be5f6a11e20a7dacae2e3`; the test SHA-256 is `8544411d86164fd3c7a2d9d96e54930dd4383704b2941fb86d09e30698744cab`. The source pins the final protocol SHA-256 `61a67ac87a4e4e17cb0b1f7ad972f25fda4e0d90e0b70798e7144b3fd6f2484b`. I ran `.venv/bin/python -m unittest -v test_voxtral_old_fit_handoff_replay_stage_b_v1` in `models/second_architecture`: **8/8 pass** in the shared workspace.
+
+The frozen cycle-zero plan is represented as 12 ordered source pairs, six signed steps at each of encoder31 and projector. The scalar target plan counts 36 encoder and 32 projector VJPs, including four old raw LM29 coordinates. The fake model exercises full BF16 source substitution into FP32, direct language-model input replay, full-model input override, exact stage/logit parity, and connected source gradients. The loader requires a supplied exact audit-file hash and successful Stage-A audit status, then binds the Stage-A result and its meta, layout, probes, details, and progress bytes. These are useful source-level checks. The future driver must pin the expected audit hash in a reviewed external freeze; a caller-supplied hash by itself does not authenticate the auditor.
+
+Two fail-closed hook checks are missing from the committed source:
+
+1. In `source_replay_forward`, `source_hook` checks the output tensor shape but neither its FP32 dtype nor its invocation count. The downstream projector and LM hooks being called once does not prove the encoder source hook was called once. A second invocation could be silently replaced by the same full tensor and alter the graph being interpreted. Require exactly one source invocation with FP32 output, and test wrong-dtype and duplicate-invocation fake models.
+2. In `full_model_lm_override`, the prehook checks the original language input's shape but not its FP32 dtype before replacing it with the supplied FP32 tensor. Require the original `inputs_embeds` to be FP32 and add a wrong-dtype rejection test, so the full-model parity check cannot silently mask a changed upstream arithmetic mode.
+
+The committed Stage-B tests also import `voxtral_old_fit_handoff_native_stage_a_v1` and its `FakeModel` test, which were still untracked while this review ran. Thus **8/8 is a shared-workspace result**, not proof that a clean checkout of `a43098a` runs. The Stage-A source, tests, schema, and independent audit must be committed and pinned before Stage-B's freeze or reproducibility claim. A separate Stage-B live driver, independent CPU auditor, resource receipts and launch freeze do not yet exist.
+
+After the hook checks and dependency binding are fixed, rerun the CPU tests and obtain an independent source rereview. Even a source GO would not establish real Voxtral direct-LM parity, a stagewise result, a reusable lens, audio specificity, or a security finding; those depend on separately bounded live work and independent result audit.
