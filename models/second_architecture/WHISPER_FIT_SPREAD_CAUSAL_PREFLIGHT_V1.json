@@ -1,0 +1,525 @@
+{
+  "asset_sha256": {
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d"
+  },
+  "capture_sites": [
+    "post_conv_pos",
+    "post_block0",
+    "post_block1",
+    "post_block2",
+    "post_block3",
+    "post_norm"
+  ],
+  "cases": [
+    {
+      "file_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e",
+      "frames": 91840,
+      "key": "color_05_kokoro_silver",
+      "pcm_sha256": "96bff0e029bd9f033b76e84258bc8ea75fe0f8c23bf965fbfe8f68a673f16386"
+    },
+    {
+      "file_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365",
+      "frames": 91840,
+      "key": "color_05_kokoro_teal",
+      "pcm_sha256": "84e07ded47cb6410b0840e7d502f10810018319b5d55b50fe22aaed890848006"
+    },
+    {
+      "file_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9",
+      "frames": 86876,
+      "key": "color_05_piper_silver",
+      "pcm_sha256": "79fc004685c31d196182f02deee103ec73b031917e88111338db853739e6cdc6"
+    },
+    {
+      "file_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9",
+      "frames": 86876,
+      "key": "color_05_piper_teal",
+      "pcm_sha256": "dde8bdd8bb927aab4c4cc60925ba9a518e59d0d18d3995e36bffb6b8f331dd85"
+    },
+    {
+      "file_sha256": "c94cac1885730ce36238a9e8a7b736bc469daa96e711c956fabadd206222766a",
+      "frames": 89040,
+      "key": "object_02_kokoro_cup",
+      "pcm_sha256": "60acca534e9453f9c48b91028a155dbac5ac12c7cda400caaf84ebdd082b39f4"
+    },
+    {
+      "file_sha256": "2fbb5182032f95dc70bb57545f9c94aa245ed73371edb2281f51eceb56fd24db",
+      "frames": 89040,
+      "key": "object_02_kokoro_plate",
+      "pcm_sha256": "86fb91e4622267279e3d5515374c9702f4f971687d91424cf6863b6f5dbde96e"
+    },
+    {
+      "file_sha256": "12537b7770110e07b9e4f7764051df268096ed60cd993ae98ba4fa37e6c0cd0d",
+      "frames": 79817,
+      "key": "object_02_piper_cup",
+      "pcm_sha256": "5712f0829c59432816c20284638232c619c7dfc3b5f6b515d50c1cb3b3255d8e"
+    },
+    {
+      "file_sha256": "42d0d964d124001db5d0eebc214f4dc8efeeee38f81850b22ae12d4bf0155a92",
+      "frames": 79817,
+      "key": "object_02_piper_plate",
+      "pcm_sha256": "7aa1d0e13f984f4157930d28b7a10e81e25a47c36e062f565fa435892ed7043c"
+    }
+  ],
+  "checkpoint_sha256": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+  "config_sha256": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+  "device": "cpu",
+  "generation": {
+    "do_sample": false,
+    "max_new_tokens": 128,
+    "num_beams": 1,
+    "output_scores": true,
+    "return_dict_in_generate": true
+  },
+  "intervention_sites": [
+    "post_block0",
+    "post_norm"
+  ],
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "model_id": "openai/whisper-tiny.en",
+  "model_revision": "87c7102498dcde7456f24cfd30239ca606ed9063",
+  "prior_asr_screen_sha256": "41da6ee4dd67a2f7b06ece24354fdb0ca6911f7017ec514e170f55f61d38a5e7",
+  "python_version": "3.12.13",
+  "random_arm_seeds": [
+    {
+      "arm_seed": 4342511259466011742,
+      "base_seed": 20261118,
+      "donor_word": "teal",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 3638953826865284762,
+      "base_seed": 20261119,
+      "donor_word": "teal",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 7674911867597559282,
+      "base_seed": 20261118,
+      "donor_word": "teal",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 8130392568399483579,
+      "base_seed": 20261119,
+      "donor_word": "teal",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 1791230913368824825,
+      "base_seed": 20261118,
+      "donor_word": "silver",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 4210798434884596224,
+      "base_seed": 20261119,
+      "donor_word": "silver",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 4493839689106463289,
+      "base_seed": 20261118,
+      "donor_word": "silver",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 6164864472932201844,
+      "base_seed": 20261119,
+      "donor_word": "silver",
+      "engine": "piper",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 2891053127924269616,
+      "base_seed": 20261118,
+      "donor_word": "teal",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 5598276176485256103,
+      "base_seed": 20261119,
+      "donor_word": "teal",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 3194665884510865383,
+      "base_seed": 20261118,
+      "donor_word": "teal",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 459581417833520569,
+      "base_seed": 20261119,
+      "donor_word": "teal",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "silver",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 6383957599340032650,
+      "base_seed": 20261118,
+      "donor_word": "silver",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 7729039975379917527,
+      "base_seed": 20261119,
+      "donor_word": "silver",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 8667503989926990410,
+      "base_seed": 20261118,
+      "donor_word": "silver",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 1151246668411514967,
+      "base_seed": 20261119,
+      "donor_word": "silver",
+      "engine": "kokoro",
+      "pair_id": "color_05",
+      "recipient_word": "teal",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 7798723863846301773,
+      "base_seed": 20261118,
+      "donor_word": "cup",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 7713167842576914138,
+      "base_seed": 20261119,
+      "donor_word": "cup",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 1577670338513680147,
+      "base_seed": 20261118,
+      "donor_word": "cup",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 6183244371938293302,
+      "base_seed": 20261119,
+      "donor_word": "cup",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 984125120402925899,
+      "base_seed": 20261118,
+      "donor_word": "plate",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 404381532612773685,
+      "base_seed": 20261119,
+      "donor_word": "plate",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 5309755822640367891,
+      "base_seed": 20261118,
+      "donor_word": "plate",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 5452068731138430534,
+      "base_seed": 20261119,
+      "donor_word": "plate",
+      "engine": "piper",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 4391311078377277536,
+      "base_seed": 20261118,
+      "donor_word": "cup",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 4230486856536651342,
+      "base_seed": 20261119,
+      "donor_word": "cup",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 8668239151523777957,
+      "base_seed": 20261118,
+      "donor_word": "cup",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 8059191256247615259,
+      "base_seed": 20261119,
+      "donor_word": "cup",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "plate",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 5270591371945483982,
+      "base_seed": 20261118,
+      "donor_word": "plate",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 8461135939178244431,
+      "base_seed": 20261119,
+      "donor_word": "plate",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_block0"
+    },
+    {
+      "arm_seed": 7921463553330261209,
+      "base_seed": 20261118,
+      "donor_word": "plate",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_norm"
+    },
+    {
+      "arm_seed": 4542848370147370325,
+      "base_seed": 20261119,
+      "donor_word": "plate",
+      "engine": "kokoro",
+      "pair_id": "object_02",
+      "recipient_word": "cup",
+      "site": "post_norm"
+    }
+  ],
+  "regions": {
+    "color_05": {
+      "kokoro": {
+        "C": [
+          [
+            0,
+            101
+          ],
+          [
+            184,
+            287
+          ]
+        ],
+        "N": 287,
+        "P": [
+          10,
+          93
+        ],
+        "Q": [
+          194,
+          277
+        ],
+        "W": [
+          101,
+          184
+        ],
+        "slot_samples": [
+          33920,
+          57120
+        ]
+      },
+      "piper": {
+        "C": [
+          [
+            0,
+            90
+          ],
+          [
+            161,
+            272
+          ]
+        ],
+        "N": 272,
+        "P": [
+          10,
+          81
+        ],
+        "Q": [
+          171,
+          242
+        ],
+        "W": [
+          90,
+          161
+        ],
+        "slot_samples": [
+          30527,
+          49847
+        ]
+      }
+    },
+    "object_02": {
+      "kokoro": {
+        "C": [
+          [
+            0,
+            101
+          ],
+          [
+            175,
+            279
+          ]
+        ],
+        "N": 279,
+        "P": [
+          10,
+          84
+        ],
+        "Q": [
+          185,
+          259
+        ],
+        "W": [
+          101,
+          175
+        ],
+        "slot_samples": [
+          33920,
+          54320
+        ]
+      },
+      "piper": {
+        "C": [
+          [
+            0,
+            90
+          ],
+          [
+            139,
+            250
+          ]
+        ],
+        "N": 250,
+        "P": [
+          10,
+          59
+        ],
+        "Q": [
+          149,
+          198
+        ],
+        "W": [
+          90,
+          139
+        ],
+        "slot_samples": [
+          30527,
+          42788
+        ]
+      }
+    }
+  },
+  "schema": "whisper_fit_spread_causal_preflight_v1",
+  "script_sha256": "ae0d3d9b280e6ff995f87300a02e561aceb8ea44e5ae1ca388b1ea0d760e315b",
+  "script_source_git_commit": "3ea1dad65a300361d75ec733b534b30ded37f10c",
+  "snapshot_files_sha256": {
+    "added_tokens.json": "560be47bea388757f8d4cc185c5d82067426cbb6361e38016dd90ddc01ab203a",
+    "config.json": "b5366317df280f79e6cc366f259f379674f81a8721d458acf2e00680ccb10b1d",
+    "generation_config.json": "38744c19d5cede6ff4dab5079c6d6ddc02ca726960bbef208fb602ad5a030eab",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "model.safetensors": "db59695928ded6043adaef491a53ef4e12da9611184d77c53baa691a60b958ad",
+    "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "special_tokens_map.json": "014f8f802366ed818919550be0ad9e35907327cb9e142e8aaa102420f460bda8",
+    "tokenizer.json": "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0",
+    "tokenizer_config.json": "14f84bdf4b9ecdbd4738ddc81c17a1baedfc02bb93c6e049c951e15a1b40b70d",
+    "vocab.json": "3ba3c3109ff33976c4bd966589c11ee14fcaa1f4c9e5e154c2ed7f99d80709e7"
+  },
+  "soundfile_version": "0.14.0",
+  "source_hashes": {
+    "transformers.models.whisper.feature_extraction_whisper": "34a6d8aad9f7f274819622929e4ff74be2a136fcd61f80ec968f9e05c45c7f3a",
+    "transformers.models.whisper.generation_whisper": "f1977185be107a5a184b88f30c56a3bfaef75a34908bc52bbbf596e13186476f",
+    "transformers.models.whisper.modeling_whisper": "a9065b02eae60ad0b47ec2e72379971d974238ee412842dd0f8ad58766f48e5d",
+    "transformers.models.whisper.processing_whisper": "940603025729c0ed1f0ddfb33be37320286476c20ed5482abd806e639a0230d6",
+    "transformers.models.whisper.tokenization_whisper": "c89b322886fa13312b2ec948338a4001b66b6a33614575e96d1a692df211aaf2"
+  },
+  "threads": 4,
+  "torch_version": "2.15.0",
+  "transformers_version": "5.12.1"
+}
