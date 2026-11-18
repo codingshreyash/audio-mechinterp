@@ -485,6 +485,35 @@ def committed_same(path: Path) -> None:
             f"source is not identical to committed HEAD: {path.name}")
 
 
+def expected_progress_phases() -> list[str]:
+    """Exact receipt chronology of one completed Stage-A process."""
+    phases = ["attempt_started", "preflight_and_probes_frozen", "before_model_load",
+              "model_loaded", "before_pure_prompt", "after_pure_prompt",
+              "after_passive_prompt"]
+    for site in SITES:
+        for mode in ("self", "zero"):
+            phases.append(f"after_parity_{site}_{mode}")
+    phases.extend(("after_natural_generation", "after_passive_generation"))
+    for site in SITES:
+        for mode in ("self", "zero"):
+            phases.append(f"after_generation_{site}_{mode}")
+    phases.extend(("donor_capture", "clean_shared_graph", "after_44_vjps"))
+    for site in SITES:
+        for cycle, order in enumerate(ORDERS):
+            for alpha in order:
+                for label in ("zero", "edited"):
+                    phases.extend((f"before_{site}_{cycle}_{label}_{alpha}",
+                                   f"after_{site}_{cycle}_{label}_{alpha}"))
+    for site in SITES:
+        for cycle, order in enumerate(ORDERS):
+            for alpha in order:
+                if alpha in (.025, -.025, .1, -.1):
+                    phases.extend((f"lm0_control_{site}_{cycle}_{alpha}_zero",
+                                   f"lm0_control_{site}_{cycle}_{alpha}_edited"))
+    phases.extend(("lm0_control_self", "details_saved"))
+    return phases
+
+
 def validate_progress(path: Path, arm: str) -> dict:
     lines = [json.loads(line, parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
              for line in path.read_text().splitlines()]
@@ -495,39 +524,13 @@ def validate_progress(path: Path, arm: str) -> dict:
     require(elapsed and all(math.isfinite(v) and 0 <= v < MAX_SECONDS[arm] for v in elapsed) and
             elapsed == sorted(elapsed), "progress elapsed time invalid")
     phases = [row["phase"] for row in lines]
-    require(phases.count("before_model_load") == 1 and phases.count("model_loaded") == 1 and
-            phases.count("after_44_vjps") == 1 and phases.count("details_saved") == 1 and
-            phases.count("after_natural_generation") == 1 and
-            phases.count("after_passive_generation") == 1 and
-            phases.count("lm0_control_self") == 1,
-            "progress fixed phases missing")
-    patch_before = [row for row in lines if row["phase"].startswith("before_encoder31_") or
-                    row["phase"].startswith("before_projector_")]
+    require(phases == expected_progress_phases(),
+            "progress chronology differs from exact paired-forward sequence")
     patch_after = [row for row in lines if row["phase"].startswith("after_encoder31_") or
                    row["phase"].startswith("after_projector_")]
-    expected_before = []
-    expected_after = []
-    for site in SITES:
-        for cycle, order in enumerate(ORDERS):
-            for alpha in order:
-                for label in ("zero", "edited"):
-                    expected_before.append(f"before_{site}_{cycle}_{label}_{alpha}")
-                    expected_after.append(f"after_{site}_{cycle}_{label}_{alpha}")
-    require(len(patch_before) == len(patch_after) == 72 and
-            [row["phase"] for row in patch_before] == expected_before and
-            [row["phase"] for row in patch_after] == expected_after and
+    require(len(patch_after) == 72 and
             [row.get("patch_count") for row in patch_after] == list(range(1, 73)),
             "progress 72 patch forwards not receipted")
-    lm0_phases = [row["phase"] for row in lines if row["phase"].startswith("lm0_control_") and
-                  row["phase"] != "lm0_control_self"]
-    expected_lm0 = []
-    for site in SITES:
-        for cycle, order in enumerate(ORDERS):
-            for alpha in order:
-                if alpha in (.025, -.025, .1, -.1):
-                    expected_lm0.extend((f"lm0_control_{site}_{cycle}_{alpha}_zero",
-                                         f"lm0_control_{site}_{cycle}_{alpha}_edited"))
-    require(lm0_phases == expected_lm0, "progress LM0 control order/count differs")
     require(all(int(row.get("peak_driver_bytes", 0)) < MAX_DRIVER for row in lines),
             "progress observed MPS driver cap reached")
     return {"progress_lines": len(lines), "patch_receipts": 72,

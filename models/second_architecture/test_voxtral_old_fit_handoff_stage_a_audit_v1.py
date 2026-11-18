@@ -123,6 +123,48 @@ class AuditTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "start/end"):
                 audit.validate_progress(path, "bf16")
 
+    def test_progress_requires_immediate_paired_receipts(self):
+        expected = audit.expected_progress_phases()
+        self.assertEqual(len(expected), 214)
+
+        def write_log(path: Path, phases: list[str]) -> None:
+            patch_count = 0
+            lines = []
+            for index, phase in enumerate(phases):
+                row = {"phase": phase, "elapsed_seconds": index / 1000,
+                       "peak_driver_bytes": 1}
+                if index == 0:
+                    row["arm"] = "bf16"
+                if phase.startswith(("after_encoder31_", "after_projector_")):
+                    patch_count += 1
+                    row["patch_count"] = patch_count
+                lines.append(json.dumps(row))
+            path.write_text("\n".join(lines) + "\n")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "progress.jsonl"
+            write_log(path, expected)
+            self.assertEqual(audit.validate_progress(path, "bf16")["patch_receipts"], 72)
+
+            first = expected.index("before_encoder31_0_zero_0.00625")
+            last = expected.index("lm0_control_encoder31_0_0.025_zero")
+            patch_phases = expected[first:last]
+            reordered = (expected[:first] +
+                         [phase for phase in patch_phases if phase.startswith("before_")] +
+                         [phase for phase in patch_phases if phase.startswith("after_")] +
+                         expected[last:])
+            write_log(path, reordered)
+            with self.assertRaisesRegex(ValueError, "chronology"):
+                audit.validate_progress(path, "bf16")
+
+            lm0_swapped = expected.copy()
+            control = expected.index("lm0_control_encoder31_0_0.025_zero")
+            lm0_swapped[control], lm0_swapped[control + 2] = (
+                lm0_swapped[control + 2], lm0_swapped[control])
+            write_log(path, lm0_swapped)
+            with self.assertRaisesRegex(ValueError, "chronology"):
+                audit.validate_progress(path, "bf16")
+
 
 if __name__ == "__main__":
     unittest.main()
