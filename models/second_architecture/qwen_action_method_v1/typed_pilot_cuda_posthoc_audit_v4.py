@@ -28,8 +28,8 @@ def verify_resource_samples(result: dict, samples: list[dict],
                     and all(sample["elapsed_seconds"] >= 0 for sample in samples)
                     and all(a["elapsed_seconds"] < b["elapsed_seconds"]
                             for a, b in zip(samples, samples[1:]))
-                    and samples[-1]["elapsed_seconds"]
-                        <= result["worker_elapsed_seconds"]
+                    and 0 <= (result["worker_elapsed_seconds"]
+                              - samples[-1]["elapsed_seconds"]) <= 1.0
                     and result["worker_returncode"] == 0
                     and result["worker_stop_reason"] == "normal_exit"
                     and 0 < result["worker_peak_tree_rss_bytes"]

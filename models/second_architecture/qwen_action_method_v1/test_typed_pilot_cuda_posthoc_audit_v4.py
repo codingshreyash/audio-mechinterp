@@ -53,14 +53,19 @@ class PilotPosthocResourceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "sampled resource log invalid"):
             self._check()
 
-    def test_nonterminal_zero_and_nonclean_exit_rejected(self) -> None:
+    def test_nonterminal_zero_rejected(self) -> None:
         self.samples[-1]["tree_rss_bytes"] = 100
         self._save()
         with self.assertRaisesRegex(ValueError, "sampled resource log invalid"):
             self._check()
-        self.samples[-1]["tree_rss_bytes"] = 0
+
+    def test_trailing_zero_too_early_before_worker_exit_rejected(self) -> None:
+        self.result["worker_elapsed_seconds"] = 23.0
+        with self.assertRaisesRegex(ValueError, "sampled resource log invalid"):
+            self._check()
+
+    def test_nonclean_exit_rejected(self) -> None:
         self.result["worker_returncode"] = 1
-        self._save()
         with self.assertRaisesRegex(ValueError, "sampled resource log invalid"):
             self._check()
 
