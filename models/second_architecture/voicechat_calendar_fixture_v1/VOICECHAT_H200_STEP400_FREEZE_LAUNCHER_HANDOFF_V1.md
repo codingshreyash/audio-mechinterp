@@ -16,7 +16,9 @@ resource caps, build-time ready/preload receipts, and an independently derived
 expected worker identity. The worker identity's prompt hashes are calculated
 from the pinned official example's literal defaults and rendered template
 without importing the model. The unsigned freeze is written outside the
-unused attempt directory and is bounded to 256 KiB.
+unused attempt directory and is bounded to 256 KiB. Build mode rejects an
+inherited `VOICECHAT_STEP400_REVIEW_KEY_HEX` before the V5 pip and Nano
+preflight subprocesses can start.
 
 `launch` requires a separate, canonical external review record with an HMAC
 over that exact freeze, source digest, reviewer ID, and timestamp. The review
@@ -36,9 +38,9 @@ claim next to the attempt directory before it starts the bounded parent.
 The claim survives a missing or removed attempt directory. Same-UID actors
 who can delete that external claim remain outside this source-only guarantee.
 
-The ten no-model tests check exact command shape and package origin,
+The twelve no-model tests check exact command shape and package origin,
 untracked initializer rejection, freeze-specific signature, unsigned build,
-missing-review denial before host/child, valid-review handoff and replay
+build-mode key rejection in both API and CLI paths, missing-review denial before host/child, valid-review handoff and replay
 denial, preflight key removal, and duplicate/noncanonical/changed JSON denial:
 
 ```sh

@@ -289,6 +289,10 @@ def launch_preload(nemo_dir: Path, checkpoint_dir: Path,
 
 def build(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
           output_dir: Path, freeze_path: Path, review_path: Path) -> dict[str, Any]:
+    # Build has no reason to possess a review key. V5's pip/Nano preflight
+    # subprocesses inherit os.environ, so fail before invoking either one.
+    need(KEY_ENV not in os.environ,
+         "external review key must be absent during freeze build")
     check_paths(nemo_dir=nemo_dir, checkpoint_dir=checkpoint_dir,
                 nano_home=nano_home, output_dir=output_dir,
                 freeze_path=freeze_path, review_path=review_path)

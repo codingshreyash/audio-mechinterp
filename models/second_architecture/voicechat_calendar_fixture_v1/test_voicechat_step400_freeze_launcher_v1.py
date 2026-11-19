@@ -116,6 +116,38 @@ class FreezeLauncherTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     gate.build(**dirs)
 
+    def test_build_rejects_inherited_review_key_before_any_subprocess(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            kwargs = dict(nemo_dir=root / "nemo", checkpoint_dir=root / "weights",
+                          nano_home=root / "nano", output_dir=root / "diag-001",
+                          freeze_path=root / "freeze.json", review_path=root / "review.json")
+            with patch.dict(os.environ, {gate.KEY_ENV: "f" * 64}), patch.object(
+                gate, "check_paths") as paths, patch.object(
+                gate.sample, "sample_ready_preload") as preflight, patch.object(
+                gate, "expected") as host, patch.object(
+                gate.subprocess, "run") as process:
+                with self.assertRaisesRegex(ValueError, "key must be absent"):
+                    gate.build(**kwargs)
+                paths.assert_not_called()
+                preflight.assert_not_called()
+                host.assert_not_called()
+                process.assert_not_called()
+
+    def test_cli_build_rejects_key_before_any_subprocess(self) -> None:
+        argv = ["diagnostic-gate", "build", "--nemo-dir", "/nemo",
+                "--checkpoint-dir", "/weights", "--nano-home", "/nano",
+                "--output-dir", "/out/diag-001", "--freeze-path", "/out/freeze.json",
+                "--review-path", "/out/review.json"]
+        with patch.dict(os.environ, {gate.KEY_ENV: "f" * 64}), patch.object(
+            gate.sys, "argv", argv), patch.object(
+            gate.sample, "sample_ready_preload") as preflight, patch.object(
+            gate.subprocess, "run") as process:
+            with self.assertRaisesRegex(ValueError, "key must be absent"):
+                gate.main()
+            preflight.assert_not_called()
+            process.assert_not_called()
+
     def test_launch_rejects_missing_review_before_host_or_child(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
