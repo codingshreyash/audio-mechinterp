@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whisper non-speech causal record · audited attempt 002</title>
+<style>
+:root { color-scheme: dark; --bg:#0c1220; --panel:#172235; --line:#33465e; --text:#e8eef5; --muted:#b6c5d7; --cyan:#76d9e9; --gold:#ffd28a; --red:#ffa89f; --green:#a9e5bb }
+* { box-sizing:border-box } body { margin:0; background:var(--bg); color:var(--text); font:15px/1.48 system-ui,sans-serif } main { max-width:1280px; margin:auto; padding:24px }
+h1,h2,h3 { line-height:1.2 } h1 { font-size:clamp(1.6rem,3vw,2.5rem); margin:.2em 0 } h2 { font-size:1.35rem } h3 { font-size:1.05rem }
+p { max-width:100ch } a { color:var(--cyan) } a:focus-visible,button:focus-visible,select:focus-visible { outline:3px solid var(--gold); outline-offset:2px }
+.eyebrow { color:var(--cyan); font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700 }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; margin:18px 0 }
+.warning { border-left:5px solid var(--gold); background:#332919 } .danger { border-left:5px solid var(--red); background:#322226 }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px } .stat { padding:14px; border:1px solid var(--line); border-radius:8px; background:#101a2a } .stat strong { display:block; font-size:1.45rem; color:var(--cyan) }
+.controls { display:flex; flex-wrap:wrap; gap:12px; align-items:end } label { display:block; color:var(--muted); font-size:.85rem; font-weight:600 } select { display:block; margin-top:4px; padding:8px; background:#0b1626; border:1px solid var(--line); color:var(--text); border-radius:6px; min-width:170px }
+.scroll { overflow-x:auto } table { width:100%; border-collapse:collapse; font-size:.88rem } th,td { padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top } th { color:var(--muted); white-space:nowrap } tbody tr:hover { background:#21324b } tbody tr.selected { background:#214353 } button { color:var(--cyan); background:none; border:0; padding:0; font:inherit; text-decoration:underline; cursor:pointer; text-align:left }
+.tag { display:inline-block; border-radius:4px; padding:2px 6px; font-size:.75rem; font-weight:700; white-space:nowrap } .tag.info { background:#164a50; color:#b8f3f5 } .tag.censor { background:#60352b; color:#ffddca } .tag.same { background:#224632; color:#c9f2cf } .tag.change { background:#554021; color:#ffe0aa }
+.mono { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; overflow-wrap:anywhere } .small { font-size:.82rem } .muted { color:var(--muted) } .pair { display:flex; flex-wrap:wrap; gap:18px } audio { display:block; width:min(100%,360px); margin-top:5px } pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#0a1423; border:1px solid var(--line); padding:10px; border-radius:6px; max-height:180px; overflow:auto }
+details { margin:4px 0 } summary { cursor:pointer; color:var(--cyan) } .caption { color:var(--muted); font-size:.88rem } .space { margin-top:20px }
+</style>
+</head>
+<body><main>
+<div class="eyebrow">Offline evidence explorer · independently audited saved run</div>
+<h1>What changed when Whisper saw a silence donor’s internal state?</h1>
+<p>This page exposes all 18 non-speech recipients and every saved intervention arm in <span class="mono">attempt_002</span>. Stage A edits the final encoder state; Stage B edits the state before encoder block 0. The donor is always a same-duration silence clip. Select a case to inspect saved outputs, token paths, termination, intervention support, and source/donor comparisons.</p>
+<div class="panel danger"><strong>No security finding.</strong> This is a white-box intervention on an engineered non-speech corpus in <span class="mono">openai/whisper-tiny</span>, an ASR model. It does not show an attacker-reachable audio exploit, a tool action, or a mechanism that transfers to speech-to-speech models.</div>
+<div class="grid" id="stats"></div>
+<section class="panel warning"><h2>Read these limits before the table</h2>
+<ul>
+<li>Only four beep cases had a baseline output different from matched silence. The other 14 donor matches have no baseline contrast and cannot count as induced output changes.</li>
+<li>Of four informative donor transfers, three changed only <span class="mono"> You</span> to <span class="mono"> you</span>. One changed <span class="mono"> Fuck</span> to <span class="mono"> you</span>.</li>
+<li>A Stage A random edit also exactly matched the donor in one of eight informative random arms; one of those eight was length-censored. Random edits can alter output.</li>
+<li>Stage B active replacement spans the <strong>whole nominal sound interval</strong>: rows 0–99 (2 s) or 0–399 (8 s). It does not locate a beep or circuit.</li>
+<li>Nominal padding is not a clean null: all four beep clips differ from silence in every padded mel frame, and in every padded pre-block-0 encoder row. This run does not establish padding’s causal contribution.</li>
+<li>Five arms hit the 128-token cap without EOS. They remain visible and in every denominator. A censored output is not a negative result.</li>
+</ul></section>
+<section class="panel"><h2>All 18 recipients</h2><div class="controls">
+<label>Duration<select id="duration"><option value="all">All</option><option value="d02">2 seconds</option><option value="d08">8 seconds</option></select></label>
+<label>Sound<select id="family"><option value="all">All</option><option value="beep_train">Beep train</option><option value="band_noise">Band noise</option><option value="click_train">Click train</option><option value="dither">Dither</option><option value="steady_tone">Steady tone</option></select></label>
+<label>Baseline contrast<select id="contrast"><option value="all">All</option><option value="informative">Different from silence</option><option value="same">Same as silence</option></select></label>
+</div><div class="scroll"><table><thead><tr><th>Case</th><th>Own baseline</th><th>Matched silence</th><th>Contrast</th><th>Stage A donor transcribe</th><th>Stage B active</th><th>Any censor</th></tr></thead><tbody id="case-rows"></tbody></table></div></section>
+<section class="panel" id="detail" aria-live="polite"><h2>Case detail</h2><p>Select a case.</p></section>
+<section class="panel"><h2>How to interpret the phases</h2><p>Detection-only donor replacement made all 18 saved 99-language logit maps exactly equal their silence donor maps, while the chosen language stayed English and the complete transcript stayed unchanged. Its first transcription raw-logit vector stayed equal to the recipient’s no-hook vector. Transcription-only donor replacement made that first raw vector equal the donor’s. A hidden effect can therefore be real without changing the final answer.</p><p>All 36 full-donor arms matched the silence donor’s complete token sequence and saved per-step raw logits. Read-only and self-patch controls preserved their baselines. The independent checker found zero parity failures; the run still has five censored arms. The per-arm <span class="mono">parity</span> fields under “Inspect saved fields” are comparison flags: a false recipient/donor match is expected when an intervention changes that output, and is not a checker failure.</p>
+<div id="counts" class="scroll"></div></section>
+<section class="panel small"><h2>Provenance</h2><p>Model revision <span class="mono" id="revision"></span>. Evidence here is a compact rendering of frozen records. Audio bytes are embedded from the frozen WAV manifest. The builder refuses changed records, independent summary, audit memo, manifest, or WAV hashes. It never loads model weights or runs inference.</p>
+<p>Local source: <a href="../INDEPENDENT_CAUSAL_ATTEMPT_002_RESULT_REVIEW_20261119.md">independent audit memo</a> · <a href="../runs/causal_whisper_v1/attempt_002_independent_summary.json">independent audit summary</a> · <a href="../runs/causal_whisper_v1/attempt_002/worker_output/records.jsonl">full 328-call record</a> · <a href="descriptive_v1.html">descriptive viewer</a></p>
+<div id="hashes" class="mono small"></div></section>
+</main>
+<script id="causal-data" type="application/json">__EMBEDDED_CAUSAL_JSON__</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById('causal-data').textContent);
+const ids = Object.keys(D.cases).sort();
+let selected = ids[0];
+const $ = id => document.getElementById(id);
+function el(tag, text, className) { const x=document.createElement(tag); if(text!==undefined) x.textContent=String(text); if(className) x.className=className; return x; }
+function same(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
+function word(s) { return JSON.stringify(s); }
+function rowCells(tr, values) { values.forEach(v => tr.appendChild(el('td',v))); }
+function donor(c) { return D.donors[c.donor_id].no_hook; }
+function label(c, r, stage) {
+  if(r.censored) return 'CENSORED';
+  if(same(r.sequence_ids, donor(c).sequence_ids) && c.informative) return 'donor match';
+  if(!same(r.sequence_ids,c.stages[stage].no_hook.sequence_ids)) return 'changed';
+  return 'same';
+}
+function renderStats() {
+  [['328','saved forward calls'],['18','non-silence recipients'],['4','informative beep cases'],['5','length-censored arms'],['0','parity failures']].forEach(([n,t])=>{const box=el('div',undefined,'stat');box.append(el('strong',n),el('span',t));$('stats').append(box)});
+  $('revision').textContent=D.revision;
+  Object.entries(D.hashes).forEach(([k,v])=>{const p=el('p',`${k}: ${v}`);$('hashes').append(p)});
+  const wrap=$('counts'); const table=el('table'); const head=el('thead'); const hr=el('tr'); ['Stage','Arm','Changed sequences /18','Exact donor matches /18','Censored /18'].forEach(x=>hr.append(el('th',x)));head.append(hr);table.append(head);const body=el('tbody');
+  for(const stage of ['A','B']) for(const [arm,n] of Object.entries(D.counts[stage])) {const tr=el('tr');rowCells(tr,[stage,arm,n.changed_full_sequence,n.matched_donor,n.censored]);body.append(tr)}
+  table.append(body);wrap.append(table);
+}
+function visibleIds() {
+  return ids.filter(id=>{const c=D.cases[id];return ($('duration').value==='all'||id.startsWith($('duration').value))&&($('family').value==='all'||id.includes('_'+$('family').value))&&($('contrast').value==='all'||c.informative===($('contrast').value==='informative'))});
+}
+function renderTable() {
+  const shown=visibleIds(); if(!shown.includes(selected)) selected=shown[0]||null;
+  const body=$('case-rows');body.replaceChildren();
+  if(!shown.length){const tr=el('tr');const td=el('td','No cases match these filters.');td.colSpan=7;tr.append(td);body.append(tr);renderDetail();return;}
+  for(const id of shown){const c=D.cases[id],a=c.stages.A,b=c.stages.B,d=donor(c);const tr=el('tr');if(id===selected)tr.className='selected';
+    const first=el('td');const button=el('button',id);button.type='button';button.addEventListener('click',()=>{selected=id;renderTable()});first.append(button);tr.append(first);
+    rowCells(tr,[word(a.no_hook.transcript),word(d.transcript),c.informative?'different':'same',label(c,a.donor_transcribe,'A'),label(c,b.active_both,'B'),[...Object.values(a),...Object.values(b)].filter(x=>x.censored).length]);body.append(tr);
+  } renderDetail();
+}
+function addAudio(parent,title,src,hash) {const box=el('div');box.append(el('strong',title),el('div','WAV SHA-256: '+hash,'mono small'));const audio=el('audio');audio.controls=true;audio.preload='none';audio.src=src;box.append(audio);parent.append(box)}
+function outputRow(table,c,stage,arm,r) {
+ const tr=el('tr');const name=el('td',arm);name.append(el('div','#'+r.call_index+' · '+r.site,'muted small'));tr.append(name);
+ const out=el('td');out.append(el('div',word(r.transcript),'mono'));out.append(el('div',label(c,r,stage),'small muted'));tr.append(out);
+ const token=el('td',JSON.stringify(r.generated_ids),'mono small');tr.append(token);
+ const termination=el('td',(r.censored?'CENSORED · 128-token cap':r.termination)+' · EOS '+r.eos_seen+' · '+r.steps+' steps',r.censored?'small':'small');tr.append(termination);
+ const detail=el('td');const fold=el('details');fold.append(el('summary','Inspect saved fields'));
+ const obj={call_name:r.call_name,prefix_ids:r.prefix_ids,sequence_ids:r.sequence_ids,text_with_special_tokens:r.text_with_special_tokens,chosen_language_ids:r.chosen_language_ids,language_logits_sha256:r.language_logits_sha256,first_raw_logits_sha256:r.first_raw_logits_sha256,parity:r.parity,hooks:r.hooks};
+ fold.append(el('pre',JSON.stringify(obj,null,2),'mono small'));detail.append(fold);tr.append(detail);table.append(tr);
+}
+function renderDetail() {
+ const root=$('detail');root.replaceChildren();root.append(el('h2',selected||'Case detail'));
+ if(!selected){root.append(el('p','No cases match these filters.'));return;}
+ const c=D.cases[selected],d=donor(c),audio=el('div',undefined,'pair');addAudio(audio,'Recipient',c.audio,c.wav_sha256);const da=D.audio_donors[c.donor_id];addAudio(audio,'Same-duration silence donor',da.audio,da.wav_sha256);root.append(audio);
+ root.append(el('p',`Baseline ${word(c.stages.A.no_hook.transcript)}; silence ${word(d.transcript)}. ${c.informative?'Distinctive baseline contrast: this case can test donor-output transfer.':'No baseline contrast: a donor match is not an induced output change.'}`));
+ root.append(el('p',`Detection-only max absolute language-logit shift versus recipient: ${c.detect_shift.maxabs.toFixed(3)}. Chosen language and complete transcript stayed the same.`));
+ root.append(el('p',`Nominal padded mel frames differing from silence: ${c.mel_padding.padded_frames_with_difference_gt_1e_6}/${c.mel_padding.padded_mel_frames}. ${c.encoder_padding?'Padded pre-block-0 encoder rows differing: '+c.encoder_padding.padded_encoder_rows_with_difference_gt_1e_6+'/'+c.encoder_padding.padded_encoder_rows+'.':''}`));
+ for(const stage of ['A','B']) {root.append(el('h3',stage==='A'?'Stage A · final encoder state':'Stage B · pre-block-0 state'));const wrap=el('div',undefined,'scroll');const table=el('table');const head=el('thead');const tr=el('tr');['Arm','Transcript (partial if censored)','Generated token IDs','Termination','Full path and controls'].forEach(x=>tr.append(el('th',x)));head.append(tr);table.append(head);const body=el('tbody');for(const [arm,r] of Object.entries(c.stages[stage]))outputRow(body,c,stage,arm,r);table.append(body);wrap.append(table);root.append(wrap)}
+}
+['duration','family','contrast'].forEach(id=>$(id).addEventListener('change',renderTable));
+renderStats();renderTable();
+</script></body></html>
