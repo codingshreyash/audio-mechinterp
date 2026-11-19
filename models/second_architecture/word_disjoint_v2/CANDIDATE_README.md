@@ -1,0 +1,17 @@
+# Track B candidate ASR assays: source stage
+
+The [prospective V2 plan](../WORD_DISJOINT_TIME_STATE_VALIDATION_PLAN_V2.md) fixes 32 synthetic English clips from Piper Amy and macOS Samantha. The [rendered manifest](rendered_v2/manifest.json) and [technical binding](rendered_v2/TECHNICAL_BINDING.json) fix the exact bytes. The Wav2Vec2 and Whisper Tiny runners use two model sites, six internal patch arms, and complete decoded outputs. They do not connect to a speech assistant or any tool. A state patch is not an input waveform an attacker can necessarily supply.
+
+The `prepare` commands validate fixture hashes, pair geometry, case counts, source pins, and output budgets **without loading model weights or authorizing inference**. They must be run only after these source files are committed. They may be rerun while human listening is pending:
+
+```sh
+PYTHONPATH=models/second_architecture reproductions/audio_prior/.venv/bin/python -m models.second_architecture.word_disjoint_v2.run_wav2vec2 prepare
+PYTHONPATH=models/second_architecture reproductions/audio_prior/.venv/bin/python -m models.second_architecture.word_disjoint_v2.run_whisper prepare
+PYTHONPATH=models/second_architecture reproductions/audio_prior/.venv/bin/python -m unittest models.second_architecture.word_disjoint_v2.test_candidate_source -v
+```
+
+`preflight` and `run` fail closed until `QA_HUMAN_AUDIT_V1.json`, `QA_GO.json`, and `QA_GO_INDEPENDENT_REVIEW.md` establish **32/32** independently checked human-quality clips and bind the raw reviewer exports. The candidate preflight also needs an independent review of each runner/auditor and a committed freeze receipt binding its exact source, preflight and QA bytes. The missing receipt is an intentional current gate. The reviewers must not see [the private case map](rendered_v2/QA_PRIVATE_CASES.json) while listening.
+
+Expected complete matrices: Wav2Vec2 64 directed S/C cells × two sites × six arms = **768 patches**, plus 64 clean forwards. Whisper 32 directed cells × two sites × six arms = **384 complete decodes**, plus 32 clean decodes. All planned cases remain in the denominator even when baseline ASR is incorrect. A stricter intended-word denominator requires both clean complete transcripts to match the exact reference template; it is reported separately. Self and full-donor controls must pass for an interpreted site/case. The separate auditors reconstruct every patch and complete saved output; neither auditor loads model weights. Runs are CPU float32 with four Torch threads, 30-minute, 4-GiB RSS and 512-MiB output caps.
+
+The Wav2Vec2 `prepare` storage bound is derived from maximum WAV length, 64 clean input/state/logit sets, 768 patched logit tensors, NPY headers and fixed metadata reserves. The Whisper bound retains 32 mel inputs and two clean states each, with generated ID sequences and complete transcripts in bounded JSONL; no step-by-vocabulary score matrices are saved. These caps must be rechecked against actual source/manifest bytes before model inference.
