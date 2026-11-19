@@ -44,6 +44,10 @@ SOURCE_NAMES = (
     "runs/whisper_time_translation_v1/source_v1/manifest.json",
     "whisper_tail_causal_host_v1.py",
     "whisper_tail_causal_worker_v3.py",
+    "whisper_tail_causal_saved_audit_v3.py",
+    "whisper_tail_causal_parent_v3.py",
+    "whisper_tail_causal_plan_v1.py",
+    "whisper_tail_causal_plan_v3.py",
     "natural_tail_runner_v4.py",
     "causal_parent_v2.py",
 )

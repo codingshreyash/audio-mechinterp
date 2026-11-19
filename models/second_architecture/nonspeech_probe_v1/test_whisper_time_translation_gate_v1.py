@@ -40,6 +40,10 @@ class GateTests(unittest.TestCase):
         required = {"whisper_time_translation_worker_v1.py",
                     "whisper_time_translation_parent_v1.py",
                     "whisper_time_translation_saved_audit_v1.py",
+                    "whisper_tail_causal_saved_audit_v3.py",
+                    "whisper_tail_causal_parent_v3.py",
+                    "whisper_tail_causal_plan_v1.py",
+                    "whisper_tail_causal_plan_v3.py",
                     "WHISPER_TIME_TRANSLATION_PLAN_V1.json",
                     "runs/whisper_time_translation_v1/source_v1/manifest.json"}
         self.assertTrue(required.issubset(gate.SOURCE_NAMES))
