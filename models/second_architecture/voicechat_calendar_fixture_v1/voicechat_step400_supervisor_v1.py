@@ -274,38 +274,40 @@ def supervise_candidate(
          "less than 30 GiB free after staging")
     need(not any(key.endswith("KEY_HEX") for key in environment),
          "review/controller secret in child environment")
-    output_dir.mkdir(parents=True, exist_ok=False)
+    # Claim the parent-reserved failure path before creating the attempt. All
+    # subsequent startup operations, including os.pipe(), are inside try.
+    receipt_fd = os.open(external_receipt_path,
+                         os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
     stdout_path, stderr_path = output_dir / "stdout.log", output_dir / "stderr.log"
-    _write_once(stdout_path, b"")
-    _write_once(stderr_path, b"")
     poll_path = output_dir / "gpu_poll.jsonl"
-    _write_once(poll_path, b"")
-    read_fd, write_fd = os.pipe()
-    os.set_blocking(read_fd, False)
-    child_env = dict(environment)
-    child_env["VOICECHAT_DIAG_HEARTBEAT_FD"] = str(write_fd)
-    selector = selectors.DefaultSelector()
+    read_fd = write_fd = -1
+    selector: selectors.BaseSelector | None = None
     process: subprocess.Popen[bytes] | None = None
-    started = clock()
+    started = 0.0
     peak_device = 0
     peak_process = 0
     model_pid_seen = False
     previous_sample: float | None = None
     sample_count = 0
     largest_gap = 0.0
-    heartbeat = {"last": started, "count": 0}
+    heartbeat = {"last": 0.0, "count": 0}
     log_sizes = {"stdout": 0, "stderr": 0}
     reason: str | None = None
     owned_sampler: NvmlGpuSampler | None = None
-    poll_stream = poll_path.open("ab")
-    receipt_fd = -1
+    poll_stream = None
     try:
-        # Reserve the predictable sibling before launching the child. The
-        # worker remains trusted code: a hostile same-UID child could unlink
-        # this inode, which the terminal check then fails closed.
-        receipt_fd = os.open(external_receipt_path,
-                             os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
-                             0o600)
+        output_dir.mkdir(parents=True, exist_ok=False)
+        _write_once(stdout_path, b"")
+        _write_once(stderr_path, b"")
+        _write_once(poll_path, b"")
+        read_fd, write_fd = os.pipe()
+        os.set_blocking(read_fd, False)
+        child_env = dict(environment)
+        child_env["VOICECHAT_DIAG_HEARTBEAT_FD"] = str(write_fd)
+        selector = selectors.DefaultSelector()
+        poll_stream = poll_path.open("ab")
+        started = clock()
+        heartbeat["last"] = started
         if gpu_sample is None:
             owned_sampler = NvmlGpuSampler()
             gpu_sample = owned_sampler
@@ -481,11 +483,11 @@ def supervise_candidate(
             failure["external_receipt_status"] = "missing_or_unverified"
         return failure
     finally:
-        if receipt_fd >= 0:
-            os.close(receipt_fd)
-        if not poll_stream.closed:
+        os.close(receipt_fd)
+        if poll_stream is not None and not poll_stream.closed:
             poll_stream.close()
-        selector.close()
+        if selector is not None:
+            selector.close()
         try:
             if process is not None:
                 # Even if the leader exited, descendants can remain in its session.

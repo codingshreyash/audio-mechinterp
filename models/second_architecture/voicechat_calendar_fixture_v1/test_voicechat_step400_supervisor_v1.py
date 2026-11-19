@@ -269,6 +269,27 @@ time.sleep(5)
             self.assertTrue(result["child_group_stop_confirmed"])
             self.assertNotIn("private path", raw)
 
+    def test_pipe_setup_failure_leaves_terminal_no_go_receipt(self):
+        with tempfile.TemporaryDirectory() as name, \
+                patch.object(parent.os, "pipe", side_effect=OSError("private pipe detail")):
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", CHILD, "0.01", "0"],
+                environment=os.environ.copy(), output_dir=root / "attempt",
+                staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            raw = (root / "attempt.parent_failure.json").read_text()
+            self.assertEqual(result["reason"], "parent_exception")
+            self.assertEqual(result["exception_type"], "OSError")
+            self.assertTrue(result["child_group_stop_confirmed"])
+            self.assertEqual(result["external_receipt_status"],
+                             "parent_reserved_inode_verified")
+            self.assertNotIn("private pipe detail", raw)
+            self.assertTrue((root / "attempt").is_dir())
+
     def test_thirty_three_child_files_get_bounded_failure_receipt(self):
         script = """import os,time
 os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')
