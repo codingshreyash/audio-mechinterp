@@ -1,0 +1,15 @@
+# Independent source review: VoiceChat timing bundle V1
+
+19 November 2026. **HOLD for human annotation or stage-2 assembly.** I reviewed commit `91ce155` against the independently audited 12-source manifest and the stage-2 `voicechat_acoustic_intervals_v1` validator. No human mark, noise variant, VoiceChat model load, or candidate answer was produced.
+
+Exact reviewed SHA-256: `timing_bundle.py` `5f4a8dc66ea9e24df7385f768e30fdeae947832bbb0fa7837c0a4d70f8bcc3ea`; `timing_form.html` `d5eac51cb53bd76c33deed5e4d91237445825fded8286ef3e4b8c0c05cf72efe`; `test_timing_bundle.py` `83cc87bcc4bf96a448d4981cf29db827105370169c782c063bf1af87235bd84b`; handoff `4457770375c26482f7142fc838618c7304991ef754fb76595802e6b7f9e7cae7`. The rendered local bundle has 15 regular files, with queue SHA-256 `7bae82a5e42c7fcb7db99829c753adf19c47bc979d5e1daacab68a3935e01260` and form SHA-256 `e14d06b95440b8ae4ee9dcba41e3269bbf994d431dfcd7494d76e5c8f65385d6`.
+
+## Blocking rendered-form integrity gap
+
+`assemble()` verifies the exact queue data and all 12 copied WAV hashes, but never reads or authenticates `TIMING_FORM.html`. In an isolated temporary directory, I built a real 12-clip bundle, replaced `TIMING_FORM.html` with `<script>/* altered page */</script>`, supplied two explicitly fake structurally valid reviewer exports, and `assemble()` still returned `assembled_human_intervals_not_qa_go` with 12 records. The fake records demonstrate source behavior only; they are not human QA. A modified form could show misleading instructions or fill fields while the assembly still presents the exports as originating from the reviewed bundle. Reconstruct or pin the exact rendered HTML bytes from the reviewed template and queue in the assembler, reject missing/altered form, and reject unexpected files in the listener bundle. Add a negative test for form tampering before the bundle is used by people.
+
+## Checks that passed and limits
+
+The builder rechecks the separately admitted source run and every clean WAV before copying. I confirmed the rendered page displays clip 1/12, the target phrase, four frame inputs, the 160 ms gap instruction, and the correct 117,215-frame content bound for A1. The browser audit used an isolated session; I cleared its local storage and closed it without submitting a review. Inline JavaScript syntax passed `node --check`. The five fake-export `unittest` cases passed, including WAV and queue tamper rejection and agreement/disagreement assembly accepted by the existing stage-2 annotation validator.
+
+The form stores each submitted record in browser local storage and exports only after 12 records. The assembler enforces exact source order, same-width nonoverlapping intervals, two distinct reviewer IDs, and a third marked record for disagreements. It cannot prove that IDs identify different people, that a person listened, or that a selected interval actually covers speech. The coordinator must establish those facts separately. This review is a source-only HOLD, not an acoustic or security result.
