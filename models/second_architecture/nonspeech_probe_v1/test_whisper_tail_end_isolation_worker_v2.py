@@ -25,11 +25,8 @@ class WorkerTests(unittest.TestCase):
             self.assertEqual(len(calls), maximum)
             self.assertEqual(skipped, [])
 
-    def test_original_failure_and_one_layout_failure_keep_baselines(self) -> None:
+    def test_one_translated_layout_failure_keeps_all_baselines(self) -> None:
         frozen = json.loads(plan.PLAN.read_text())
-        calls, skipped = worker.planned_calls("original", frozen, {"original": False})
-        self.assertEqual(len(calls), 2)
-        self.assertEqual(skipped, [1, 2, 3, 4, 5])
         calls, skipped = worker.planned_calls("offset_8000", frozen,
                                               {"prepend": False, "append": True})
         self.assertEqual(len(calls), 14)

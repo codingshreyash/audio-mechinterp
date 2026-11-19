@@ -14,6 +14,10 @@ class PlanTests(unittest.TestCase):
         self.assertEqual([frozen["stages"][stage]["max_calls"] for stage in plan.STAGES],
                          [7, 24, 24])
         self.assertEqual(frozen["nonzero_delta_l2"], 0.001)
+        self.assertEqual(frozen["original_replay_failure"],
+                         "attempt_invalid_blocks_later_stages")
+        self.assertEqual(frozen["original_control_failure"],
+                         "later_stages_descriptive_only")
 
     def test_both_offsets_and_competing_new_end_control(self) -> None:
         for stage, shift in (("offset_8000", 25), ("offset_16000", 50)):

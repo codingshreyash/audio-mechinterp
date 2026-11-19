@@ -51,7 +51,7 @@ class ParentTests(unittest.TestCase):
             self.assertEqual(result["worker_stop_reason"], "rss_limit")
             self.assertNotEqual(result["worker_returncode"], 0)
 
-    def test_original_clean_failure_can_skip_all_five_arms(self):
+    def test_original_requires_all_five_arms_after_replay(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             write_rows(root / "progress.jsonl", [
@@ -63,7 +63,7 @@ class ParentTests(unittest.TestCase):
                          "executed_calls": 2, "planned_max_calls": 7,
                          "skipped_arms": list(range(1, 6))})
             write_rows(root / "records.jsonl", rows)
-            self.assertTrue(parent.complete_worker_output(root, "original"))
+            self.assertFalse(parent.complete_worker_output(root, "original"))
             progress = [{"type": kind, "index": i}
                         for i in range(1, 8)
                         for kind in ("attempt", "complete")]

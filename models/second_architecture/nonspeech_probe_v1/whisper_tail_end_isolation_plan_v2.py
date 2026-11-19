@@ -100,8 +100,9 @@ def build() -> dict:
                                "baseline_calls": 2 if stage == "original" else 4,
                                "max_calls": 7 if stage == "original" else 24}
                        for stage in STAGES},
-            "stop_rule": "baseline_no_complete_contrast_skips_that_pair_arms",
-            "original_failure": "translated_stages_descriptive_only",
+            "stop_rule": "translated_no_complete_contrast_skips_layout_arms",
+            "original_replay_failure": "attempt_invalid_blocks_later_stages",
+            "original_control_failure": "later_stages_descriptive_only",
             "censored_baseline": "record_ineligible_and_skip_layout_arms",
             "censored_arm": "record_failed_complete_answer_control",
             "security_claim_authorized": False}

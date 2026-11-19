@@ -98,6 +98,9 @@ def run(stage: str, attempt: Path, admission: Path, go: Path,
     eligibility = {layout: pair_eligibility(
         baselines[(layout, "zero")], baselines[(layout, "noise")], sidecars)
         for layout in layouts}
+    if stage == "original":
+        need(eligibility["original"]["eligible"],
+             "original replay lost complete clean contrast")
     mel_shift = mel_shift_receipt(stage, baselines, sidecars, frozen)
     calls, skipped = planned_calls(stage, frozen,
         {layout: item["eligible"] for layout, item in eligibility.items()})

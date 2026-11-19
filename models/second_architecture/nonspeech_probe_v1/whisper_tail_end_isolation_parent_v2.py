@@ -145,7 +145,7 @@ def complete_worker_output(attempt: Path, stage: str) -> bool:
                 or type(end["skipped_arms"]) is not list
                 or len(end["skipped_arms"]) != max_calls - end["executed_calls"]):
             return False
-        if stage == "original" and end["executed_calls"] < 2:
+        if stage == "original" and end["executed_calls"] != max_calls:
             return False
         if stage != "original" and end["executed_calls"] < 4:
             return False
