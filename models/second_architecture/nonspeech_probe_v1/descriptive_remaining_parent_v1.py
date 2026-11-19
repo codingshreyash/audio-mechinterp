@@ -21,19 +21,20 @@ V1_GO = HERE / "INDEPENDENT_DESCRIPTIVE_SOURCE_GO_V2.json"
 MODEL_PATHS = {
     "whisper_english": {
         "attempt": HERE / "runs/descriptive_whisper_english_20261119_v1",
-        "receipt": HERE / "runs/descriptive_remaining_preflight_v1/whisper_english.json",
-        "review": HERE / "INDEPENDENT_DESCRIPTIVE_WHISPER_ENGLISH_GO_V1.json",
+        "receipt": HERE / "runs/descriptive_remaining_preflight_v2/whisper_english.json",
+        "review": HERE / "INDEPENDENT_DESCRIPTIVE_WHISPER_ENGLISH_GO_V2.json",
     },
     "wav2vec2": {
         "attempt": HERE / "runs/descriptive_wav2vec2_20261119_v1",
-        "receipt": HERE / "runs/descriptive_remaining_preflight_v1/wav2vec2.json",
-        "review": HERE / "INDEPENDENT_DESCRIPTIVE_WAV2VEC2_GO_V1.json",
+        "receipt": HERE / "runs/descriptive_remaining_preflight_v2/wav2vec2.json",
+        "review": HERE / "INDEPENDENT_DESCRIPTIVE_WAV2VEC2_GO_V2.json",
     },
 }
 SOURCE_NAMES = (
     "descriptive_remaining_parent_v1.py", "descriptive_remaining_audit_v1.py",
     "test_descriptive_remaining_v1.py", "DESCRIPTIVE_REMAINING_HOST_TIMING_PROSPECTIVE_V1.md",
     "descriptive_parent_v2.py", "descriptive_parent_v1.py", "descriptive_worker_v1.py",
+    "descriptive_audit_v2.py", "descriptive_audit_v1.py",
 )
 
 
@@ -51,11 +52,15 @@ def preflight_receipt(model: str) -> dict:
     model_paths = paths(model)
     worker.require_independent_go(V1_RECEIPT, V1_GO)
     old = worker.preflight_receipt()  # hashes assets and source; no weight load
-    return {"schema": "nonspeech_descriptive_remaining_preflight_v1",
+    identity = source_identity()
+    return {"schema": "nonspeech_descriptive_remaining_preflight_v2",
             "status": "source_only_no_model_load", "model": model,
             "attempt_path": str(model_paths["attempt"].resolve()),
             "review_path": str(model_paths["review"].resolve()),
-            "source_identity": source_identity(),
+            "source_identity": identity,
+            "timing_dependency": {
+                "descriptive_parent_v2.py": identity["descriptive_parent_v2.py"],
+                "descriptive_audit_v2.py": identity["descriptive_audit_v2.py"]},
             "v1_source_identity": old["source_identity"],
             "v1_receipt_sha256": worker.sha_file(V1_RECEIPT),
             "v1_go_sha256": worker.sha_file(V1_GO),
@@ -79,12 +84,13 @@ def preflight_only(model: str) -> dict:
 def validate_review_fields(model: str, review: dict, receipt: dict,
                            receipt_sha256: str) -> None:
     model_paths = paths(model)
-    worker.require(review.get("schema") == "nonspeech_descriptive_remaining_model_review_v1"
+    worker.require(review.get("schema") == "nonspeech_descriptive_remaining_model_review_v2"
                    and review.get("status") == "GO"
                    and review.get("model") == model
                    and review.get("attempt_path") == str(model_paths["attempt"].resolve())
                    and review.get("preflight_sha256") == receipt_sha256
-                   and review.get("source_identity") == receipt["source_identity"],
+                   and review.get("source_identity") == receipt["source_identity"]
+                   and review.get("timing_dependency") == receipt["timing_dependency"],
                    "model-specific independent GO does not bind this arm")
 
 

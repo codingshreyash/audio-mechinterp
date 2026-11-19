@@ -28,6 +28,12 @@ class RemainingSourceTests(unittest.TestCase):
                             wav["model_assets"]["revision"])
         self.assertEqual(english["status"], "source_only_no_model_load")
         self.assertEqual(wav["status"], "source_only_no_model_load")
+        self.assertEqual(english["schema"], "nonspeech_descriptive_remaining_preflight_v2")
+        self.assertEqual(english["timing_dependency"], wav["timing_dependency"])
+        self.assertEqual(english["timing_dependency"], {
+            "descriptive_parent_v2.py": english["source_identity"]["descriptive_parent_v2.py"],
+            "descriptive_audit_v2.py": english["source_identity"]["descriptive_audit_v2.py"]})
+        self.assertIn("descriptive_audit_v1.py", english["source_identity"])
         self.assertNotIn(english["attempt_path"],
                          (str(timing.V1_ATTEMPT), str(timing.V2_ATTEMPT)))
         self.assertNotIn(wav["attempt_path"],
@@ -36,16 +42,21 @@ class RemainingSourceTests(unittest.TestCase):
     def test_review_for_one_model_cannot_authorize_the_other(self) -> None:
         english = parent.preflight_receipt("whisper_english")
         wav = parent.preflight_receipt("wav2vec2")
-        review = {"schema": "nonspeech_descriptive_remaining_model_review_v1",
+        review = {"schema": "nonspeech_descriptive_remaining_model_review_v2",
                   "status": "GO", "model": "whisper_english",
                   "attempt_path": english["attempt_path"],
                   "preflight_sha256": "a" * 64,
-                  "source_identity": english["source_identity"]}
+                  "source_identity": english["source_identity"],
+                  "timing_dependency": english["timing_dependency"]}
         parent.validate_review_fields("whisper_english", review, english, "a" * 64)
         with self.assertRaisesRegex(ValueError, "does not bind this arm"):
             parent.validate_review_fields("wav2vec2", review, wav, "b" * 64)
         changed = copy.deepcopy(review)
         changed["attempt_path"] = wav["attempt_path"]
+        with self.assertRaisesRegex(ValueError, "does not bind this arm"):
+            parent.validate_review_fields("whisper_english", changed, english, "a" * 64)
+        changed = copy.deepcopy(review)
+        changed["timing_dependency"]["descriptive_audit_v2.py"] = "0" * 64
         with self.assertRaisesRegex(ValueError, "does not bind this arm"):
             parent.validate_review_fields("whisper_english", changed, english, "a" * 64)
 
