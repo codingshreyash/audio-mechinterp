@@ -1,0 +1,1658 @@
+{
+  "status": "synthetic_stimuli_only_no_candidate_model_answers",
+  "renderer_sha256": "f6524f30f2655c9f62fdc4898be5e480c20c5e0ba84c5e19427ad437656d044c",
+  "plan_sha256": "a2065c2bf74b9acb56c511f89142e86aa653e3b2a910215ab42a1c478034d9e6",
+  "freeze_receipt_sha256": "5787446078ff1cecf0737a9963db16e8b52d5c6ac3b2704ccd8aa9b477a0c432",
+  "source_tts_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "source_tts_helper_sha256": "bbbd7931dd93121d32b32a9c7898d0a14a3e884f7a421a01d4ecdfd3bd3d063c",
+  "piper_checkpoint_sha256": "cf9ccdec59f05adee47173f6fb4d89e8b0c5f30c178748d2572fe4efd1d2724c",
+  "piper_config_sha256": "27490c2197e3e7b566b051fc0b1dae21200e72b44c209731419effdbbe0789e5",
+  "piper_package": "piper-tts==1.8.0",
+  "piper_synthesis": {
+    "speaker_id": null,
+    "length_scale": 1.0,
+    "noise_scale": 0.0,
+    "noise_w_scale": 0.0,
+    "normalize_audio": false,
+    "volume": 1.0
+  },
+  "samantha_command_identity": {
+    "os_build": "25G241",
+    "say_path": "/usr/bin/say",
+    "say_sha256": "b9f92936d6bb411e891f4136ae714b85a8876585ba449ea3c8d5e557765ebe8f",
+    "say_voice": "Samantha",
+    "say_language": "en_US",
+    "afconvert_path": "/usr/bin/afconvert",
+    "afconvert_sha256": "e44647ce9ba5520019abb814e78ab5da5c56cffa170bb465ee2a7ef10df1333c",
+    "afconvert_help_sha256": "7a74fbf7fab03e2c7617c3fa4c64cea3f690b8da7c62e9eb4bed2c7fc0c38ff0",
+    "afconvert_argv_template": [
+      "/usr/bin/afconvert",
+      "-f",
+      "WAVE",
+      "-d",
+      "LEI16@16000",
+      "-c",
+      "1",
+      "RAW",
+      "CONVERTED"
+    ]
+  },
+  "python": "3.12.13",
+  "platform": "macOS-26.7.1-arm64-arm-64bit",
+  "metadata_sha256": {
+    "v1_spec": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+    "v1_manifest": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+    "v2_manifest": "15395c7d132eb3f1c1a6b2b7d555146faa83be4ee2b77fba4f481cf70f26761d"
+  },
+  "sample_rate": 16000,
+  "subtype": "PCM_16",
+  "gap_samples": 1920,
+  "prefix": "I said",
+  "suffix": "and then stopped.",
+  "fragments": [
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/prefix.wav",
+        "sha256": "b225519f5a4e045a44bd95659e1482690a57b44d1b2ab195555a983ce86ebbd4"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/prefix.wav",
+        "sha256": "adbd9b0d3d57fa6325db93e660be2b9c3f10bbe72c7f0db08d236e624861b6ab",
+        "pcm_sha256": "312b25a5a214a7403e1011df9e9ca81d4bacffb359d01d69e70d173eee8bbb42",
+        "frames": 17462
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/prefix.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/prefix.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "prefix",
+      "text": "I said",
+      "text_sha256": "1dacc662a91c6252bd2ffdd00bf822833bb7b3fac40b6ade696cb1b9e5e17d93",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/suffix.wav",
+        "sha256": "82b53a2b3234316c89806dff67108a4ddfad326537ac42748cc118015b86f973"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/suffix.wav",
+        "sha256": "93e45f2bd87b8881b6373ea6681881ad431e6e6d82a0648aa72b8e5bbef46028",
+        "pcm_sha256": "19846e3ef23a1b505cfd777a4a790c763129056f2f4b4539c593f13e408ad9de",
+        "frames": 25449
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/suffix.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/suffix.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "suffix",
+      "text": "and then stopped.",
+      "text_sha256": "37769dda4486a5c32f1758129bb0ff483df1cb4b87c91c242b5e2d6b138d06b4",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_00_banana.wav",
+        "sha256": "dc853b3057e58c51fb563bd072b704788ac34c72ee73b808991d709f08bf172d"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_00_banana.wav",
+        "sha256": "8219d418aa31c5bdbe362be4a727a2b2dfa3d453088fcf345a6c5bb1496ba1c5",
+        "pcm_sha256": "5268651cf7e705e6a9c0795c29463d3a77dab7add5eb69f2043f983b05f8e6ab",
+        "frames": 16719
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_00_banana.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_00_banana.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_00_banana",
+      "text": "banana",
+      "text_sha256": "b493d48364afe44d11c0165cf470a4164d1e2609911ef998be868d46ade3de4e",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_00_tomato.wav",
+        "sha256": "5c587fa5887b337585543424b7ee57d58d9db485b07d7e3d92a711114344a237"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_00_tomato.wav",
+        "sha256": "925028e5db34b72862a395207f0c00041ed4c017ef9a1977d5285f9cb41f09bc",
+        "pcm_sha256": "68feee839c683dd4a7802e164edd7ea6b3bf45187967907455ac55ce473b426c",
+        "frames": 17647
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_00_tomato.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_00_tomato.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_00_tomato",
+      "text": "tomato",
+      "text_sha256": "5ed728c2fa5d767bc6c1ec6a732db1e37c343be46913e6498d340f7782691f14",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_01_carrot.wav",
+        "sha256": "a0a5eb675a98166a236b104ddeafc01e88855e7308400e0f29222efb0ace93eb"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_01_carrot.wav",
+        "sha256": "a55002282a78e0678e4f392fd9ea7e9a9d81c0cb3fd7918a356f46627a4e39c7",
+        "pcm_sha256": "0bceae50eec40d41822e55aed22651aa62c29609a7b11ebf0dff687e3862cf65",
+        "frames": 13932
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_01_carrot.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_01_carrot.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_01_carrot",
+      "text": "carrot",
+      "text_sha256": "b96482290a873ee9875236c0b4455988a10a7ec28bba60419d449429d0ced0e0",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_01_cookie.wav",
+        "sha256": "3e9a9c3312e8128f29985f9e9732910bae00b5e4bee4a2b22b73a0b11eb773df"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_01_cookie.wav",
+        "sha256": "1e7728f400fb87e080cdb1d774c00d3262af89fbaa22571839b8338b7bba5f04",
+        "pcm_sha256": "01fb31b85276c999df5c5e90c694863fb625ddef0a34343c530e71cd7fa781dc",
+        "frames": 15604
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_01_cookie.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_01_cookie.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_01_cookie",
+      "text": "cookie",
+      "text_sha256": "d7e83e28a04b537e64424546b14caf9b67bad2f28dabce68116e0d372319fa00",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_02_train.wav",
+        "sha256": "640baaf883600c5bbba17543431b69d669b4a7adecd1203873e4380a525766d7"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_02_train.wav",
+        "sha256": "5eb0fe3ffec89c32ee2e0dc9a23df70e8864906075dde81bb73fe9266f709b8f",
+        "pcm_sha256": "76c5f69c1ac54ebbbfc63aedd432efaf615b42f9aefbd1ac50c5f5fa7459a99e",
+        "frames": 15604
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_02_train.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_02_train.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_02_train",
+      "text": "train",
+      "text_sha256": "116f54c41d0405dbb10e7b04ebc31e262a5b8c85c1233fcf36eaee344d91ae58",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_02_plane.wav",
+        "sha256": "1edbfe72f71a1119cfdb7f1bfdf726e4955d8306e0014ee2e5dd6d28c53d7bae"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_02_plane.wav",
+        "sha256": "ab67115c2d0655c516f2a033db45e1a1700f6d4ffa144e9260832ba294f3ea63",
+        "pcm_sha256": "f8198411e8cdaed976abceda1531ce8965b456a12d6d09ebe0a08fcf2586f4b7",
+        "frames": 14304
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_02_plane.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_02_plane.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_02_plane",
+      "text": "plane",
+      "text_sha256": "fad900280ce54a04da3b698f1a7783717b466fedd3ded41fe5fc5a3686f1b180",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_03_ferry.wav",
+        "sha256": "cd7ea4491b7455d5cbc5ef71ce43f78f7c0ef78e598d431d2814ed2e16295ffc"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_03_ferry.wav",
+        "sha256": "3c56540e98a9e38df1d72fcfab0b51554cdf0cb02756114eece6499fa234dd1b",
+        "pcm_sha256": "d701212b6d92c6ec7b5cc35a2c4240a73e8111d27f32694b7e4e1c00b360b1fb",
+        "frames": 16347
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_03_ferry.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_03_ferry.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_03_ferry",
+      "text": "ferry",
+      "text_sha256": "e9087d0b20d80d3e12bc8530d883d7ad9c1eb3ebc5cb61824a2b460816503797",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_03_taxi.wav",
+        "sha256": "f4ef98c30ebdde4deecaf9265014ff1ef24fb992c2b138430c2b8695a297a96e"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_03_taxi.wav",
+        "sha256": "09d34e4f94f2a470afc66927554cd168adf9d3149bcc719797f32ba30fc33382",
+        "pcm_sha256": "99b34bd4af883aac597afcaeab5f156aa086c06cd0e70f4fdb018ed88aed5f68",
+        "frames": 15604
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_03_taxi.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_03_taxi.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_03_taxi",
+      "text": "taxi",
+      "text_sha256": "12796d3d5f4e132385f8af8e281efa211cdb2a05b8450039f037a6573e0bcb3f",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_04_guitar.wav",
+        "sha256": "06742c924a13694133f30488308a72de7f32bf4c18f4c1ab92c6c0405cb1c196"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_04_guitar.wav",
+        "sha256": "8a153ab40d6ce4777b575a286f16b9f5c05d20ab2cf39361b95e8c21f6a263a3",
+        "pcm_sha256": "9f0444ca659b2e74a5bbf9e9327b25885145d69757d36e90aba61d6a8e6059b6",
+        "frames": 17276
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_04_guitar.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_04_guitar.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_04_guitar",
+      "text": "guitar",
+      "text_sha256": "d081f5e402980b267f1f87cb6b74fc3eb249de26e670a9db55dec67da7864de4",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_04_piano.wav",
+        "sha256": "c710810fba64250bd686c525e2ec783414250bde2a7da4d77d4c819948ea17fe"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_04_piano.wav",
+        "sha256": "1b2a37cd0182d9aef346861386f8e75def5314f5b96f65a605e9f15b4e10261a",
+        "pcm_sha256": "d8dfe722aefd89831ad7f8e699028f1ce0893600a6a8255e18d544274fa03baf",
+        "frames": 16347
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_04_piano.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_04_piano.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_04_piano",
+      "text": "piano",
+      "text_sha256": "1d78e018e405ef26b7f7581336a2a4c556c3783eaa763978cbd7d2ddd0adb3ad",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_05_violin.wav",
+        "sha256": "6f938ef960937883b7ef3d7e2b21879a589342d5a8f335728c0362bcbd424bac"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_05_violin.wav",
+        "sha256": "1bb2a1e0a64d59b36a74bd35a2baf08d57141ee9b293b3e2619597e80084c947",
+        "pcm_sha256": "9662454c5e58e6fe519b69bd9af6d94a61ff48b311afc6520f071b45182acc8e",
+        "frames": 17833
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_05_violin.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_05_violin.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_05_violin",
+      "text": "violin",
+      "text_sha256": "00e3e584e242f926ff6b26bdd0cd26aac15b7ae023a7306c81a7d5708ce8459a",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_05_trumpet.wav",
+        "sha256": "92bcabf0d6883f79e82835dc8240a8ac4468186f93b8b57f538e4ef5bbe56f96"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_05_trumpet.wav",
+        "sha256": "13e38e57846dbb3eb11cf7754d07ac1c0fa0c8b2b1abec4be13384e3c6b5de25",
+        "pcm_sha256": "a593abd98043ce3ca8eb4db13568a22346d3064757de265ac2850373c674a53d",
+        "frames": 14675
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_05_trumpet.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_05_trumpet.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_05_trumpet",
+      "text": "trumpet",
+      "text_sha256": "b7dfa266adb6db500f72b90657c0d379939ea1b17ad72459455d617569622e4c",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_06_broom.wav",
+        "sha256": "9340df4f00be8f0eeb1e275dfea8e8b41a4e4f5fe6a9dca5fd9d15ab1c70a244"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_06_broom.wav",
+        "sha256": "e70f5d392c04f3b5794b04b70bf358da728049ffec7fa30468f44408d5fd1d7b",
+        "pcm_sha256": "e041bedd3f89c90ab01da1c28899e470ef1901221a070e766ecca4648ffb6ea4",
+        "frames": 13561
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_06_broom.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_06_broom.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_06_broom",
+      "text": "broom",
+      "text_sha256": "100a07d1e4368153d76b4b078ebabb41a7b313ec1453851324582440c38473a1",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_06_brush.wav",
+        "sha256": "4d603e916b98d6c3c9cbe50afef3edd5578671cb3d2057919af485ab36c22a12"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_06_brush.wav",
+        "sha256": "c74b32e4679c2c8a6e41044218e1c2fa673de051e1be1ade602a028f36a16e33",
+        "pcm_sha256": "24683c137881dddf0ce16d36caa4fb6e61903877643438245e264bb94223da95",
+        "frames": 15047
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_06_brush.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_06_brush.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_06_brush",
+      "text": "brush",
+      "text_sha256": "029f33c2a6a1143cf125d495f861e073528ebf1e261e88201d0cc58d22d05987",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_07_button.wav",
+        "sha256": "16674cf0682bd1bbb38a68142d03fea981a8dec78ca9d411bb5249e265908caa"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_07_button.wav",
+        "sha256": "ad0b88ece142cba0f553e8f76026b4eba9d5b0805bfcd677420861eb2b5b78bd",
+        "pcm_sha256": "abe9fae0be72d474638f017563f785cdc5f23f16b9c26ef638f8dcc922e020b8",
+        "frames": 14861
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_07_button.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_07_button.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_07_button",
+      "text": "button",
+      "text_sha256": "c3e2d78f3ff335724b4029f06505b511e4f8f01e258828de29849b36b40b55d0",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_07_ribbon.wav",
+        "sha256": "acb46f9e7db76e5232be32f771c207c34949b207960ef9af57ba0eeb030aba83"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_07_ribbon.wav",
+        "sha256": "37053013b38942928ade0b0fb5270f4277c19a821707b8c348ea0b2133daf905",
+        "pcm_sha256": "b9703ab649b7ab0f069f8418d374ea54dbd477c9abc4d8261487e62b7947eee2",
+        "frames": 15418
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/piper/word_07_ribbon.wav",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/piper/word_07_ribbon.wav"
+      ],
+      "engine": "piper",
+      "fragment_id": "word_07_ribbon",
+      "text": "ribbon",
+      "text_sha256": "affc35bd6c6352aa5960f8db7845839953f83096b390b0bacb2f861440b5ed44",
+      "voice": "en_US-amy-medium"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/prefix.aiff",
+        "sha256": "a54548b30c965254d8fae1c291e320ebf551e85c27c77498da61abefccd424db"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/prefix.wav",
+        "sha256": "672cbaedc6fc3901628839e9522c1eff4ede94a0854787b68a92d012747d982d",
+        "pcm_sha256": "a4ca179367dba17dcd051ad398491ed73e015bdb128405c10844b9aecb4b6bb5",
+        "frames": 9044
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/prefix.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/prefix.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "prefix",
+      "text": "I said",
+      "text_sha256": "1dacc662a91c6252bd2ffdd00bf822833bb7b3fac40b6ade696cb1b9e5e17d93",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/suffix.aiff",
+        "sha256": "4fcf8e389978374534540d21785abeefc0bb3b1c0ca1508218538a77ff34ee4a"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/suffix.wav",
+        "sha256": "69074de7a5a713b07fd38fbd47794818c8f7b957ed4bb3b29d47a1a2a8beb464",
+        "pcm_sha256": "6b6e8f9fb6d798b20b29555ea0dd533e038d8bdcebb8d475769edac80e7542fb",
+        "frames": 14064
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/suffix.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/suffix.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "suffix",
+      "text": "and then stopped.",
+      "text_sha256": "37769dda4486a5c32f1758129bb0ff483df1cb4b87c91c242b5e2d6b138d06b4",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_00_banana.aiff",
+        "sha256": "962d888a178f7f1e4cc6fafeb22a74e0fca42bee6fff116cd95d6158b1ea1821"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_00_banana.wav",
+        "sha256": "876f55c2882a7b0a4152cc5a3f1dc11391fc688c6ada8171c08e79022e86ec0c",
+        "pcm_sha256": "c2500dd8bcebfcde12ac830fc1fb6dbc90ad11ddc20a76f9a01e3f8ec121cf6a",
+        "frames": 8056
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_00_banana.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_00_banana.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_00_banana",
+      "text": "banana",
+      "text_sha256": "b493d48364afe44d11c0165cf470a4164d1e2609911ef998be868d46ade3de4e",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_00_tomato.aiff",
+        "sha256": "6eebcb83fad4e431fccb1f9c8ceb83fb5ff4daef277872c80eba7fce23c3b1d7"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_00_tomato.wav",
+        "sha256": "d0fd238bf4a6d87fec3fdfed0d3853bb889df033a221ee401aa067cc875204bd",
+        "pcm_sha256": "ca854ba8ff3e1aad812d9b5cabe24b04bb1e3bad3c1fb91f26ef21e836f668f2",
+        "frames": 9658
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_00_tomato.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_00_tomato.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_00_tomato",
+      "text": "tomato",
+      "text_sha256": "5ed728c2fa5d767bc6c1ec6a732db1e37c343be46913e6498d340f7782691f14",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_01_carrot.aiff",
+        "sha256": "eff66b3a47fb3d951114e7c5236a0f99b5b03ddde22a43aaca448ce46213edc7"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_01_carrot.wav",
+        "sha256": "50cb7a47c9424015e7bcea7d673c80f462f2d9c20c889094d87d8d61bd8a6bf3",
+        "pcm_sha256": "ba23e95070e5a40d3446856a525e58b39cab59c3aa2c921037b8b4ec95f5ceb7",
+        "frames": 7771
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_01_carrot.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_01_carrot.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_01_carrot",
+      "text": "carrot",
+      "text_sha256": "b96482290a873ee9875236c0b4455988a10a7ec28bba60419d449429d0ced0e0",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_01_cookie.aiff",
+        "sha256": "dc694b202ebf85cd43da84c492667f5ec69e919de972938e39642241e5c7f5ca"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_01_cookie.wav",
+        "sha256": "9971beda77f8b7e845747ee02638b465a405b3fb9633a2cd0732f8fce8dd6469",
+        "pcm_sha256": "6935aee1fea8e24786bdae6279654ee866d0c4482af28dc937e76e18c10ffe07",
+        "frames": 7214
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_01_cookie.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_01_cookie.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_01_cookie",
+      "text": "cookie",
+      "text_sha256": "d7e83e28a04b537e64424546b14caf9b67bad2f28dabce68116e0d372319fa00",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_02_train.aiff",
+        "sha256": "a7f619c49ef99a55aa7cb15c15198ea0b6622713a53a054d99f92ef88059c18f"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_02_train.wav",
+        "sha256": "c9529a34c63163b0052256310588a587c4c6c7402328278cc52da3bc6fc5b8d0",
+        "pcm_sha256": "c5d474043a302df24644134159325d12d7f95251ff6f5c28d6b65b76ccdc6919",
+        "frames": 7113
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_02_train.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_02_train.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_02_train",
+      "text": "train",
+      "text_sha256": "116f54c41d0405dbb10e7b04ebc31e262a5b8c85c1233fcf36eaee344d91ae58",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_02_plane.aiff",
+        "sha256": "aea4c550df390e691177759a95b2bb12e2f10021e448c8c85391509db3bb3c50"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_02_plane.wav",
+        "sha256": "11d975ac77bd367b3edcf45834617dee72b00b3f32be553563e441cef092387e",
+        "pcm_sha256": "b1dc2b86a8d2bdf7d55f3a75b963dd852ea26af30e8d9883029758cfdfc50ade",
+        "frames": 6842
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_02_plane.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_02_plane.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_02_plane",
+      "text": "plane",
+      "text_sha256": "fad900280ce54a04da3b698f1a7783717b466fedd3ded41fe5fc5a3686f1b180",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_03_ferry.aiff",
+        "sha256": "b099eac6a7c53c841691fe69a5bfbcdaabea8d4db0682dbb566175733c77a11b"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_03_ferry.wav",
+        "sha256": "e048f99fcd1369d9db7b100403a31657b78183ce3d3c64733a3ccd02809f39f2",
+        "pcm_sha256": "9b5937fb66acb4ffa8a89b0c49db7fab43fb9a7e8984846f67fa74e26ee20f82",
+        "frames": 7454
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_03_ferry.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_03_ferry.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_03_ferry",
+      "text": "ferry",
+      "text_sha256": "e9087d0b20d80d3e12bc8530d883d7ad9c1eb3ebc5cb61824a2b460816503797",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_03_taxi.aiff",
+        "sha256": "6b3fa4594b29d3d11cd4f82f72e65a0d3148096289bece4588543e5f6016e4de"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_03_taxi.wav",
+        "sha256": "2114cd85ef5f4dc649f134bfce3e94ec9267c036f729f70512c7b3bb2507b4c3",
+        "pcm_sha256": "0274457a88f845272da7734da03800eca9c1b54535b211bd96b12e9696e0fa02",
+        "frames": 8915
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_03_taxi.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_03_taxi.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_03_taxi",
+      "text": "taxi",
+      "text_sha256": "12796d3d5f4e132385f8af8e281efa211cdb2a05b8450039f037a6573e0bcb3f",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_04_guitar.aiff",
+        "sha256": "9abd5679e086ed48f667d20fc739704a4fa5adc916db70dbd63b70dcea82ec6b"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_04_guitar.wav",
+        "sha256": "5bd647c1ac5abb3df77285d8558d270e54a4b4686d804f1a026770e5cbb8ad72",
+        "pcm_sha256": "4edab4c9ed10a5c18a1c7c6470cdf3a0800c45e3d16c6819964a2f332067104b",
+        "frames": 8111
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_04_guitar.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_04_guitar.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_04_guitar",
+      "text": "guitar",
+      "text_sha256": "d081f5e402980b267f1f87cb6b74fc3eb249de26e670a9db55dec67da7864de4",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_04_piano.aiff",
+        "sha256": "c82ce0645210795ce3089a3451268bb15501cb498147e3f276c8c5a8bfcf260e"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_04_piano.wav",
+        "sha256": "667e8fd1602ac4a9afd94c1007502394ff54eeca84ded96ca712fbfe207e27d0",
+        "pcm_sha256": "c08b2aef0fd8bcef72245e93c35fdd19adc7b318e5ad97c59a1fdfeb6f3df63d",
+        "frames": 9629
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_04_piano.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_04_piano.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_04_piano",
+      "text": "piano",
+      "text_sha256": "1d78e018e405ef26b7f7581336a2a4c556c3783eaa763978cbd7d2ddd0adb3ad",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_05_violin.aiff",
+        "sha256": "f2b65c1616eca9f7e6639f8550de6b0e2461ce8ba5109e7485781ee12a02ac6d"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_05_violin.wav",
+        "sha256": "e375db53e6acf1e240dcb5048b08ea7e622699a57066038aac991e5226db3b64",
+        "pcm_sha256": "ca4869ab18a29dc955193550e6dd0ee37a821fc97b91f6163fa55b8c7016365e",
+        "frames": 10473
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_05_violin.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_05_violin.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_05_violin",
+      "text": "violin",
+      "text_sha256": "00e3e584e242f926ff6b26bdd0cd26aac15b7ae023a7306c81a7d5708ce8459a",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_05_trumpet.aiff",
+        "sha256": "06ecd1e3f3967436cf2849b6735cab83be5febd07fe5c0a75b0e29cd4462573a"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_05_trumpet.wav",
+        "sha256": "f089dcd23a10abe5844065c7ca2eb2dc0bea0b1ac8e7e287d658d450e1b94fa8",
+        "pcm_sha256": "e3ef246c3698466aaf4c5fe6ae198ec64c9598cf71511f027dd00d97f7930792",
+        "frames": 8549
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_05_trumpet.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_05_trumpet.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_05_trumpet",
+      "text": "trumpet",
+      "text_sha256": "b7dfa266adb6db500f72b90657c0d379939ea1b17ad72459455d617569622e4c",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_06_broom.aiff",
+        "sha256": "7c3fb8bf30c7209f053881743976e12875e78a26c245e4c608e255f3218484c8"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_06_broom.wav",
+        "sha256": "2430a93e7ac5ef68af795770188c4ee653bc515b451296a2e1e0e7f99b98dbab",
+        "pcm_sha256": "6155f87c5066df573ff241e132ae854d6a77129c6108249f427707d791c29710",
+        "frames": 6872
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_06_broom.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_06_broom.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_06_broom",
+      "text": "broom",
+      "text_sha256": "100a07d1e4368153d76b4b078ebabb41a7b313ec1453851324582440c38473a1",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_06_brush.aiff",
+        "sha256": "5498fc113790499d70f3eeefe59f3f1f1cd6fa186aa13790c47f39d66e8388bf"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_06_brush.wav",
+        "sha256": "f0a380f9f22dcd2b96bec5c59357454959fddda65aa24f3fabc4f43a93a3088c",
+        "pcm_sha256": "01d04372c2689d4358a647231322b5e3a36eb8052f4b0b682428473d0da5abcf",
+        "frames": 7801
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_06_brush.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_06_brush.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_06_brush",
+      "text": "brush",
+      "text_sha256": "029f33c2a6a1143cf125d495f861e073528ebf1e261e88201d0cc58d22d05987",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_07_button.aiff",
+        "sha256": "6e83add08fd96b2009e364b04a8b66d34ed3719b3f4cb54a3b12ce93c015a480"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_07_button.wav",
+        "sha256": "4d1222ef2854c834c6d661acf3f81567b575dd1287a909b4b577aaac86a1dfc2",
+        "pcm_sha256": "6dbed7ee2833a72d7e713f53d683fff206c9741e5bac6d6c533acef4bcdf1090",
+        "frames": 7127
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_07_button.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_07_button.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_07_button",
+      "text": "button",
+      "text_sha256": "c3e2d78f3ff335724b4029f06505b511e4f8f01e258828de29849b36b40b55d0",
+      "voice": "Samantha"
+    },
+    {
+      "raw": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_07_ribbon.aiff",
+        "sha256": "03d1071aa48dd1ede366141178836f6e3ee006f66d8f06f58964092b7ac2831c"
+      },
+      "processed": {
+        "path": "models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_07_ribbon.wav",
+        "sha256": "7126602e18ae778da56c618aeeb53723044d6f1328afad5a3a961514bc82fbf5",
+        "pcm_sha256": "afbe6d2ef1c1540e25d415da137088803a7e189a2556340fc19f941a28307df1",
+        "frames": 6801
+      },
+      "conversion_argv": [
+        "/usr/bin/afconvert",
+        "-f",
+        "WAVE",
+        "-d",
+        "LEI16@16000",
+        "-c",
+        "1",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/raw/samantha/word_07_ribbon.aiff",
+        "/Users/shrranjan/audio-mechinterp/models/second_architecture/word_disjoint_v2/rendered_v2/processed/samantha/word_07_ribbon.wav"
+      ],
+      "engine": "samantha",
+      "fragment_id": "word_07_ribbon",
+      "text": "ribbon",
+      "text_sha256": "affc35bd6c6352aa5960f8db7845839953f83096b390b0bacb2f861440b5ed44",
+      "voice": "Samantha"
+    }
+  ],
+  "pairs": [
+    {
+      "pair_id": "pair_00",
+      "words": [
+        "banana",
+        "tomato"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 37029,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "banana": "word_00_banana",
+        "tomato": "word_00_tomato"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "banana": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_00_banana.wav",
+          "file_sha256": "242a41dd7f88f9ed3326e6accb1420b1959401916b5aa8ced14509a6bdf9ece0",
+          "pcm_int16_sha256": "83fe671f9e1415160f56c2df7a7a1403d48b942a8ae0d97533cd170b69633754",
+          "frames": 64398,
+          "word_fragment_frames": 16719,
+          "spoken_script": "I said banana and then stopped."
+        },
+        "tomato": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_00_tomato.wav",
+          "file_sha256": "fcf682f202d1c571cde3457e8f935dd38d8aa2b2e17294cad66b7c5a12e4493d",
+          "pcm_int16_sha256": "9990f443ef188aeaa2c9af6eef9f1b84c3792d03d7bb71628e91c93143413a91",
+          "frames": 64398,
+          "word_fragment_frames": 17647,
+          "spoken_script": "I said tomato and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_00",
+      "words": [
+        "banana",
+        "tomato"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 20622,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "banana": "word_00_banana",
+        "tomato": "word_00_tomato"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "banana": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_00_banana.wav",
+          "file_sha256": "51b3328c7baf79bd6b079e270ba11ba950631759e36c21fcc31265b5cba7b88e",
+          "pcm_int16_sha256": "095a42390eecf6355858d06ebadf72e571a052ee798ac0f38dd5bbb1e1a8eb6d",
+          "frames": 36606,
+          "word_fragment_frames": 8056,
+          "spoken_script": "I said banana and then stopped."
+        },
+        "tomato": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_00_tomato.wav",
+          "file_sha256": "cc1e04eab07e7ac8c82e3b3bf2bfa65bddc791165e7512d42776d2af7c07d9c3",
+          "pcm_int16_sha256": "d58b1c95e9884036f4df091517b1b9b43dcc36c0316d3bc1ce3ccd7524d6ae08",
+          "frames": 36606,
+          "word_fragment_frames": 9658,
+          "spoken_script": "I said tomato and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_01",
+      "words": [
+        "carrot",
+        "cookie"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 34986,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "carrot": "word_01_carrot",
+        "cookie": "word_01_cookie"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "carrot": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_01_carrot.wav",
+          "file_sha256": "0a1d0535d8b46fd88d665bcc3473f6806fd842008b4bdd70e450c1d786fffef3",
+          "pcm_int16_sha256": "a852df42154c5d5f9947a71c88e0c6d45f4cc40d2b2463d0ff7d25eeb17e52da",
+          "frames": 62355,
+          "word_fragment_frames": 13932,
+          "spoken_script": "I said carrot and then stopped."
+        },
+        "cookie": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_01_cookie.wav",
+          "file_sha256": "79fed2f865bbf91b68cb2c68c6afbfeb65f1d44f33ba7bb4d275d1d1d97e64ba",
+          "pcm_int16_sha256": "3b5129e58c3c1f1cdde637e4486488efbe8802375e1fad5b2de50e45ee03545e",
+          "frames": 62355,
+          "word_fragment_frames": 15604,
+          "spoken_script": "I said cookie and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_01",
+      "words": [
+        "carrot",
+        "cookie"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 18735,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "carrot": "word_01_carrot",
+        "cookie": "word_01_cookie"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "carrot": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_01_carrot.wav",
+          "file_sha256": "fb181323f74c9160514b077dfe0746e4a40421b8dda54b84faa0a2a27f1b3c60",
+          "pcm_int16_sha256": "60e21f6c1d0b95da23b51539bbc53846810d1d37fb816c6e1dbbf11c7e657236",
+          "frames": 34719,
+          "word_fragment_frames": 7771,
+          "spoken_script": "I said carrot and then stopped."
+        },
+        "cookie": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_01_cookie.wav",
+          "file_sha256": "087a9db681cca7a834396c6a50e85ecf72436d712512b66ec7fccab6ad9ea6ce",
+          "pcm_int16_sha256": "16c8c508b64e9cafed8c02201436c5f6162308a2fc295a03357c66eafa6c1948",
+          "frames": 34719,
+          "word_fragment_frames": 7214,
+          "spoken_script": "I said cookie and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_02",
+      "words": [
+        "train",
+        "plane"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 34986,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "train": "word_02_train",
+        "plane": "word_02_plane"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "train": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_02_train.wav",
+          "file_sha256": "c5d32efb010ef4fdb34aa3a6675c0aeb07b06e84ab8b1b9333c315752d431fb1",
+          "pcm_int16_sha256": "0bec938158cbb8e0e6b44e81e0acc427b38beba349781a7dc5a2667ff26da2bd",
+          "frames": 62355,
+          "word_fragment_frames": 15604,
+          "spoken_script": "I said train and then stopped."
+        },
+        "plane": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_02_plane.wav",
+          "file_sha256": "d9b7eb20d0b8b0db8d0a26e79cbdb6617a64abcac42791ff0871e993846945f5",
+          "pcm_int16_sha256": "2570dd442361370e20002beab22a6502b5a7c73e9589a6f76584131b92efe3ae",
+          "frames": 62355,
+          "word_fragment_frames": 14304,
+          "spoken_script": "I said plane and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_02",
+      "words": [
+        "train",
+        "plane"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 18077,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "train": "word_02_train",
+        "plane": "word_02_plane"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "train": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_02_train.wav",
+          "file_sha256": "cb28d07d2bdbad5e302d3bb0006dd0a4d96a53535c647540e4ee3b263c010445",
+          "pcm_int16_sha256": "6bfae525b63e4f2891c81d5b9b786fcfbf483d2cc40c54f7baf10c829f0dce6c",
+          "frames": 34061,
+          "word_fragment_frames": 7113,
+          "spoken_script": "I said train and then stopped."
+        },
+        "plane": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_02_plane.wav",
+          "file_sha256": "dc792492b3fab8222e46d507a78787cbbc966907a7d89649bc65298ecff9386b",
+          "pcm_int16_sha256": "76fc4edffe985056c0d20b831a127b00ab588b973058daa9901cb2c212f65497",
+          "frames": 34061,
+          "word_fragment_frames": 6842,
+          "spoken_script": "I said plane and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_03",
+      "words": [
+        "ferry",
+        "taxi"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 35729,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "ferry": "word_03_ferry",
+        "taxi": "word_03_taxi"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "ferry": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_03_ferry.wav",
+          "file_sha256": "6e12a7b710819d2aacf7cdd031adc9250189c3ae76f56788af9f37b51c7db0b8",
+          "pcm_int16_sha256": "30486ae34a22ebe3b06b438fd705957af45d98f2f2419111f3abe97e44696c87",
+          "frames": 63098,
+          "word_fragment_frames": 16347,
+          "spoken_script": "I said ferry and then stopped."
+        },
+        "taxi": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_03_taxi.wav",
+          "file_sha256": "8ce912d770e684141740163b1f0d1a52dff4c21e8c0f116c3d9d33022fe44102",
+          "pcm_int16_sha256": "b3f5832a05546a64a81a251ea81411d9d87f00cab32dfd06176ec76768a81d7c",
+          "frames": 63098,
+          "word_fragment_frames": 15604,
+          "spoken_script": "I said taxi and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_03",
+      "words": [
+        "ferry",
+        "taxi"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 19879,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "ferry": "word_03_ferry",
+        "taxi": "word_03_taxi"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "ferry": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_03_ferry.wav",
+          "file_sha256": "5e48b873fe15729d8e52b55ebb862be80ae105a9588695f310c88a378803f3a1",
+          "pcm_int16_sha256": "5553b11c0ef59cb314085dd51b2b073b84b29b2fcaf3377cf1366c48acea63e1",
+          "frames": 35863,
+          "word_fragment_frames": 7454,
+          "spoken_script": "I said ferry and then stopped."
+        },
+        "taxi": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_03_taxi.wav",
+          "file_sha256": "80c55429e8c2aa15dff09948349af7fe1a1fd0ddac695a972c2872c48d8497b7",
+          "pcm_int16_sha256": "90553474a2b606986dad62b026b5ffb220e414e851d098ace2f04539b200b344",
+          "frames": 35863,
+          "word_fragment_frames": 8915,
+          "spoken_script": "I said taxi and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_04",
+      "words": [
+        "guitar",
+        "piano"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 36658,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "guitar": "word_04_guitar",
+        "piano": "word_04_piano"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "guitar": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_04_guitar.wav",
+          "file_sha256": "bf435a57d13d9323eb41aea4239e584cdc9e62e68808712f682e877e56680d90",
+          "pcm_int16_sha256": "f7390e7f95cf9876e98970ac5b9bf38e3d12178358faf833f7e738a0d3eb81f9",
+          "frames": 64027,
+          "word_fragment_frames": 17276,
+          "spoken_script": "I said guitar and then stopped."
+        },
+        "piano": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_04_piano.wav",
+          "file_sha256": "a3ae4d9574f6b767a3158b3f42f3a5da40932aa23f5ffde7358ac69a658c71d0",
+          "pcm_int16_sha256": "274b2a49bc2daa6c09b0d21011d5db2f8ac6cc702071d0c6ef1c0890598c3adc",
+          "frames": 64027,
+          "word_fragment_frames": 16347,
+          "spoken_script": "I said piano and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_04",
+      "words": [
+        "guitar",
+        "piano"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 20593,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "guitar": "word_04_guitar",
+        "piano": "word_04_piano"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "guitar": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_04_guitar.wav",
+          "file_sha256": "c4a79f6b7123a3415474c5651cc6941877cdad11e637c6f19f528442b15df874",
+          "pcm_int16_sha256": "72941282b22ada716da231a66cb268ea5965dbe06f1acdd5a07502e192860df6",
+          "frames": 36577,
+          "word_fragment_frames": 8111,
+          "spoken_script": "I said guitar and then stopped."
+        },
+        "piano": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_04_piano.wav",
+          "file_sha256": "f457acb4e526b710adaa408abffb80e730db6fdd392fb7065a0a5713e15ac2d3",
+          "pcm_int16_sha256": "ad56db808eeca44a20c994cb7d731d1e9cb6d77d0435b0ac706a5f28c856e2a7",
+          "frames": 36577,
+          "word_fragment_frames": 9629,
+          "spoken_script": "I said piano and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_05",
+      "words": [
+        "violin",
+        "trumpet"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 37215,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "violin": "word_05_violin",
+        "trumpet": "word_05_trumpet"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "violin": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_05_violin.wav",
+          "file_sha256": "08caa2a13b2eaa5ceabd66985e84d428fd62483ae081d961982bd814ef33762b",
+          "pcm_int16_sha256": "35485a70d8b55deaf3e5d2e1b61669b42f7d47eb5cb40fd7cae6ae401b415c3b",
+          "frames": 64584,
+          "word_fragment_frames": 17833,
+          "spoken_script": "I said violin and then stopped."
+        },
+        "trumpet": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_05_trumpet.wav",
+          "file_sha256": "08495f1820dda9afe6709f483ccfd6f8050b0293bc9d3e565365ea0855e9f789",
+          "pcm_int16_sha256": "f4dcae431dbcbf369122b2ed6ac62c62dd84a04b10c4adad9d29ba20c4736d55",
+          "frames": 64584,
+          "word_fragment_frames": 14675,
+          "spoken_script": "I said trumpet and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_05",
+      "words": [
+        "violin",
+        "trumpet"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 21437,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "violin": "word_05_violin",
+        "trumpet": "word_05_trumpet"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "violin": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_05_violin.wav",
+          "file_sha256": "bbcbbb324bbc1ae736bd3bf35609e96e9e32e36436bf4fbf5880cd21f08faee9",
+          "pcm_int16_sha256": "6953d8f72faeabbeda9f9e4b031d5ede3f49f6d4b1becbc3d10b598ccbd1ca7f",
+          "frames": 37421,
+          "word_fragment_frames": 10473,
+          "spoken_script": "I said violin and then stopped."
+        },
+        "trumpet": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_05_trumpet.wav",
+          "file_sha256": "6f3ea9590cd7f5e9dd7bfb9effb8ecf5751f6a3fc634577767b59ef30b67fb78",
+          "pcm_int16_sha256": "491537682a2da0f9e02060dfe33ce0a2afbd67c37ec7c0a658874cf86ff0a178",
+          "frames": 37421,
+          "word_fragment_frames": 8549,
+          "spoken_script": "I said trumpet and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_06",
+      "words": [
+        "broom",
+        "brush"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 34429,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "broom": "word_06_broom",
+        "brush": "word_06_brush"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "broom": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_06_broom.wav",
+          "file_sha256": "7961e3d434a512edc4db92c4af48c95d3e17ad405b56e8e601b6827346403ba5",
+          "pcm_int16_sha256": "101c76b569a72c1d38dd4243a853b1975d65a15ff81f801ea2a2c7ce43690ef0",
+          "frames": 61798,
+          "word_fragment_frames": 13561,
+          "spoken_script": "I said broom and then stopped."
+        },
+        "brush": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_06_brush.wav",
+          "file_sha256": "8b936f6de65ba32ee75881db9a3f206a0c0634ae09b7a1d3203acea7e5e801fd",
+          "pcm_int16_sha256": "e7686ecf7c89b1b69157eeaec479171ebd68be4072634335756ab12ebe939e48",
+          "frames": 61798,
+          "word_fragment_frames": 15047,
+          "spoken_script": "I said brush and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_06",
+      "words": [
+        "broom",
+        "brush"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 18765,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "broom": "word_06_broom",
+        "brush": "word_06_brush"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "broom": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_06_broom.wav",
+          "file_sha256": "13ba7f69814039e8b1405b526642cfdcc95082a257924c474e90592567bff20f",
+          "pcm_int16_sha256": "8810dd2866fc938cafa100ba8285d1ec5121c4359aeefad4a287cda77be4fbf0",
+          "frames": 34749,
+          "word_fragment_frames": 6872,
+          "spoken_script": "I said broom and then stopped."
+        },
+        "brush": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_06_brush.wav",
+          "file_sha256": "dc8e6345f54a23b7b0f72104d3245dec1a085c0685c5e2d887412891ace638de",
+          "pcm_int16_sha256": "707ca4886af1faa67c9e9bc0724954d9e78b0068e68c20b781d9c465e330acac",
+          "frames": 34749,
+          "word_fragment_frames": 7801,
+          "spoken_script": "I said brush and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_07",
+      "words": [
+        "button",
+        "ribbon"
+      ],
+      "engine": "piper",
+      "voice": "en_US-amy-medium",
+      "word_slot_start_sample": 19382,
+      "word_slot_end_sample_exclusive": 34800,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "button": "word_07_button",
+        "ribbon": "word_07_ribbon"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "button": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_07_button.wav",
+          "file_sha256": "84d142e23e1736c791f6301de4025e6a66ad843a2ca4da3ab76ecf0e010d3eaf",
+          "pcm_int16_sha256": "5c7b723bd2e61e1602dd5b8e636f07a81f6f87992c9bb37432cf21cd9c93b5fb",
+          "frames": 62169,
+          "word_fragment_frames": 14861,
+          "spoken_script": "I said button and then stopped."
+        },
+        "ribbon": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_07_ribbon.wav",
+          "file_sha256": "fddd5056b078c480b19c50ab04c90e293c63c190459b0402895cf6b7bcd9b018",
+          "pcm_int16_sha256": "922f92bfb3f76f6eddaf4ca72f2072014b1dd448ef820839944fa76bf87021fa",
+          "frames": 62169,
+          "word_fragment_frames": 15418,
+          "spoken_script": "I said ribbon and then stopped."
+        }
+      }
+    },
+    {
+      "pair_id": "pair_07",
+      "words": [
+        "button",
+        "ribbon"
+      ],
+      "engine": "samantha",
+      "voice": "Samantha",
+      "word_slot_start_sample": 10964,
+      "word_slot_end_sample_exclusive": 18091,
+      "prefix_fragment_id": "prefix",
+      "suffix_fragment_id": "suffix",
+      "word_fragment_ids": {
+        "button": "word_07_button",
+        "ribbon": "word_07_ribbon"
+      },
+      "outside_slot_pcm_identical": true,
+      "inside_slot_pcm_differs": true,
+      "outputs": {
+        "button": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_07_button.wav",
+          "file_sha256": "3c6c8ac9f787fff6eab4a6bff11d4b678a78db9dab60373f9743d44222dc126e",
+          "pcm_int16_sha256": "a8b4c2678ccafe5d72f14b26bd393bcbd46feb24085206a89fdd68a837c52e1e",
+          "frames": 34075,
+          "word_fragment_frames": 7127,
+          "spoken_script": "I said button and then stopped."
+        },
+        "ribbon": {
+          "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_07_ribbon.wav",
+          "file_sha256": "99bdd8f96bf2f0487241e1397d2a04867a44c3656a1d513960aeed296040b0ec",
+          "pcm_int16_sha256": "f714c9f8d9c248161274a06c69073a3d57639fee5a91e8cea83faa6279ef1ca2",
+          "frames": 34075,
+          "word_fragment_frames": 6801,
+          "spoken_script": "I said ribbon and then stopped."
+        }
+      }
+    }
+  ],
+  "matched_pairs": 16,
+  "wavs": 32
+}

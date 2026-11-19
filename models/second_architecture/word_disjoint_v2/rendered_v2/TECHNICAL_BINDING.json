@@ -1,0 +1,155 @@
+{
+  "status": "cpu_wav_technical_audit_passed_listening_pending",
+  "matched_pairs": 16,
+  "wavs": 32,
+  "all_outside_word_pcm_equal": true,
+  "candidate_model_inference_authorized": false,
+  "pairs": [
+    {
+      "pair_id": "pair_00",
+      "engine": "piper",
+      "frames": 64398,
+      "word_slot": [
+        19382,
+        37029
+      ]
+    },
+    {
+      "pair_id": "pair_00",
+      "engine": "samantha",
+      "frames": 36606,
+      "word_slot": [
+        10964,
+        20622
+      ]
+    },
+    {
+      "pair_id": "pair_01",
+      "engine": "piper",
+      "frames": 62355,
+      "word_slot": [
+        19382,
+        34986
+      ]
+    },
+    {
+      "pair_id": "pair_01",
+      "engine": "samantha",
+      "frames": 34719,
+      "word_slot": [
+        10964,
+        18735
+      ]
+    },
+    {
+      "pair_id": "pair_02",
+      "engine": "piper",
+      "frames": 62355,
+      "word_slot": [
+        19382,
+        34986
+      ]
+    },
+    {
+      "pair_id": "pair_02",
+      "engine": "samantha",
+      "frames": 34061,
+      "word_slot": [
+        10964,
+        18077
+      ]
+    },
+    {
+      "pair_id": "pair_03",
+      "engine": "piper",
+      "frames": 63098,
+      "word_slot": [
+        19382,
+        35729
+      ]
+    },
+    {
+      "pair_id": "pair_03",
+      "engine": "samantha",
+      "frames": 35863,
+      "word_slot": [
+        10964,
+        19879
+      ]
+    },
+    {
+      "pair_id": "pair_04",
+      "engine": "piper",
+      "frames": 64027,
+      "word_slot": [
+        19382,
+        36658
+      ]
+    },
+    {
+      "pair_id": "pair_04",
+      "engine": "samantha",
+      "frames": 36577,
+      "word_slot": [
+        10964,
+        20593
+      ]
+    },
+    {
+      "pair_id": "pair_05",
+      "engine": "piper",
+      "frames": 64584,
+      "word_slot": [
+        19382,
+        37215
+      ]
+    },
+    {
+      "pair_id": "pair_05",
+      "engine": "samantha",
+      "frames": 37421,
+      "word_slot": [
+        10964,
+        21437
+      ]
+    },
+    {
+      "pair_id": "pair_06",
+      "engine": "piper",
+      "frames": 61798,
+      "word_slot": [
+        19382,
+        34429
+      ]
+    },
+    {
+      "pair_id": "pair_06",
+      "engine": "samantha",
+      "frames": 34749,
+      "word_slot": [
+        10964,
+        18765
+      ]
+    },
+    {
+      "pair_id": "pair_07",
+      "engine": "piper",
+      "frames": 62169,
+      "word_slot": [
+        19382,
+        34800
+      ]
+    },
+    {
+      "pair_id": "pair_07",
+      "engine": "samantha",
+      "frames": 34075,
+      "word_slot": [
+        10964,
+        18091
+      ]
+    }
+  ],
+  "manifest_sha256": "f8fd1f43f38877d6d08c47597c8db9f494e1377a69f0a2451c2f99fbcda71ea2",
+  "auditor_sha256": "6411c2961ba31700f3c3e099124644c80c38e52c925c4ef02cb9d01173cd831f"
+}

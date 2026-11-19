@@ -1,0 +1,337 @@
+{
+  "all_final_pcm_reconstructs": true,
+  "all_inside_slot_pcm_different": true,
+  "all_outside_slot_pcm_equal": true,
+  "anonymous_queue_no_reference_fields": true,
+  "candidate_model_inference_authorized": false,
+  "final_wav_count": 32,
+  "final_wavs": [
+    {
+      "engine": "piper",
+      "frames": 64398,
+      "opaque_id": "84986f8c2b39a0e22cfc",
+      "pair_id": "pair_00",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_00_banana.wav",
+      "pcm_sha256": "83fe671f9e1415160f56c2df7a7a1403d48b942a8ae0d97533cd170b69633754",
+      "sha256": "242a41dd7f88f9ed3326e6accb1420b1959401916b5aa8ced14509a6bdf9ece0",
+      "word": "banana"
+    },
+    {
+      "engine": "piper",
+      "frames": 64398,
+      "opaque_id": "d3173c2a56d5dd6d6dae",
+      "pair_id": "pair_00",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_00_tomato.wav",
+      "pcm_sha256": "9990f443ef188aeaa2c9af6eef9f1b84c3792d03d7bb71628e91c93143413a91",
+      "sha256": "fcf682f202d1c571cde3457e8f935dd38d8aa2b2e17294cad66b7c5a12e4493d",
+      "word": "tomato"
+    },
+    {
+      "engine": "samantha",
+      "frames": 36606,
+      "opaque_id": "fcc989da478d2deab8ae",
+      "pair_id": "pair_00",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_00_banana.wav",
+      "pcm_sha256": "095a42390eecf6355858d06ebadf72e571a052ee798ac0f38dd5bbb1e1a8eb6d",
+      "sha256": "51b3328c7baf79bd6b079e270ba11ba950631759e36c21fcc31265b5cba7b88e",
+      "word": "banana"
+    },
+    {
+      "engine": "samantha",
+      "frames": 36606,
+      "opaque_id": "f5b56f070a3bbdd921a6",
+      "pair_id": "pair_00",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_00_tomato.wav",
+      "pcm_sha256": "d58b1c95e9884036f4df091517b1b9b43dcc36c0316d3bc1ce3ccd7524d6ae08",
+      "sha256": "cc1e04eab07e7ac8c82e3b3bf2bfa65bddc791165e7512d42776d2af7c07d9c3",
+      "word": "tomato"
+    },
+    {
+      "engine": "piper",
+      "frames": 62355,
+      "opaque_id": "54810afec08f993d2055",
+      "pair_id": "pair_01",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_01_carrot.wav",
+      "pcm_sha256": "a852df42154c5d5f9947a71c88e0c6d45f4cc40d2b2463d0ff7d25eeb17e52da",
+      "sha256": "0a1d0535d8b46fd88d665bcc3473f6806fd842008b4bdd70e450c1d786fffef3",
+      "word": "carrot"
+    },
+    {
+      "engine": "piper",
+      "frames": 62355,
+      "opaque_id": "941dcc110fb2c62fa542",
+      "pair_id": "pair_01",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_01_cookie.wav",
+      "pcm_sha256": "3b5129e58c3c1f1cdde637e4486488efbe8802375e1fad5b2de50e45ee03545e",
+      "sha256": "79fed2f865bbf91b68cb2c68c6afbfeb65f1d44f33ba7bb4d275d1d1d97e64ba",
+      "word": "cookie"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34719,
+      "opaque_id": "9bd7cf07589cb7fc5a02",
+      "pair_id": "pair_01",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_01_carrot.wav",
+      "pcm_sha256": "60e21f6c1d0b95da23b51539bbc53846810d1d37fb816c6e1dbbf11c7e657236",
+      "sha256": "fb181323f74c9160514b077dfe0746e4a40421b8dda54b84faa0a2a27f1b3c60",
+      "word": "carrot"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34719,
+      "opaque_id": "98f9094d61833fca00cd",
+      "pair_id": "pair_01",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_01_cookie.wav",
+      "pcm_sha256": "16c8c508b64e9cafed8c02201436c5f6162308a2fc295a03357c66eafa6c1948",
+      "sha256": "087a9db681cca7a834396c6a50e85ecf72436d712512b66ec7fccab6ad9ea6ce",
+      "word": "cookie"
+    },
+    {
+      "engine": "piper",
+      "frames": 62355,
+      "opaque_id": "85e54b84394e4d8de2f5",
+      "pair_id": "pair_02",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_02_train.wav",
+      "pcm_sha256": "0bec938158cbb8e0e6b44e81e0acc427b38beba349781a7dc5a2667ff26da2bd",
+      "sha256": "c5d32efb010ef4fdb34aa3a6675c0aeb07b06e84ab8b1b9333c315752d431fb1",
+      "word": "train"
+    },
+    {
+      "engine": "piper",
+      "frames": 62355,
+      "opaque_id": "9c23e9c9fc76d8fd5801",
+      "pair_id": "pair_02",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_02_plane.wav",
+      "pcm_sha256": "2570dd442361370e20002beab22a6502b5a7c73e9589a6f76584131b92efe3ae",
+      "sha256": "d9b7eb20d0b8b0db8d0a26e79cbdb6617a64abcac42791ff0871e993846945f5",
+      "word": "plane"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34061,
+      "opaque_id": "fce6febd955130f5b14b",
+      "pair_id": "pair_02",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_02_train.wav",
+      "pcm_sha256": "6bfae525b63e4f2891c81d5b9b786fcfbf483d2cc40c54f7baf10c829f0dce6c",
+      "sha256": "cb28d07d2bdbad5e302d3bb0006dd0a4d96a53535c647540e4ee3b263c010445",
+      "word": "train"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34061,
+      "opaque_id": "de1d51abb0997f395f82",
+      "pair_id": "pair_02",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_02_plane.wav",
+      "pcm_sha256": "76fc4edffe985056c0d20b831a127b00ab588b973058daa9901cb2c212f65497",
+      "sha256": "dc792492b3fab8222e46d507a78787cbbc966907a7d89649bc65298ecff9386b",
+      "word": "plane"
+    },
+    {
+      "engine": "piper",
+      "frames": 63098,
+      "opaque_id": "38721eb53817bfc07f6b",
+      "pair_id": "pair_03",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_03_ferry.wav",
+      "pcm_sha256": "30486ae34a22ebe3b06b438fd705957af45d98f2f2419111f3abe97e44696c87",
+      "sha256": "6e12a7b710819d2aacf7cdd031adc9250189c3ae76f56788af9f37b51c7db0b8",
+      "word": "ferry"
+    },
+    {
+      "engine": "piper",
+      "frames": 63098,
+      "opaque_id": "74d77930c1400d181ae7",
+      "pair_id": "pair_03",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_03_taxi.wav",
+      "pcm_sha256": "b3f5832a05546a64a81a251ea81411d9d87f00cab32dfd06176ec76768a81d7c",
+      "sha256": "8ce912d770e684141740163b1f0d1a52dff4c21e8c0f116c3d9d33022fe44102",
+      "word": "taxi"
+    },
+    {
+      "engine": "samantha",
+      "frames": 35863,
+      "opaque_id": "2a88b8461e14099598d7",
+      "pair_id": "pair_03",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_03_ferry.wav",
+      "pcm_sha256": "5553b11c0ef59cb314085dd51b2b073b84b29b2fcaf3377cf1366c48acea63e1",
+      "sha256": "5e48b873fe15729d8e52b55ebb862be80ae105a9588695f310c88a378803f3a1",
+      "word": "ferry"
+    },
+    {
+      "engine": "samantha",
+      "frames": 35863,
+      "opaque_id": "7c16f249ace5e1e1e41f",
+      "pair_id": "pair_03",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_03_taxi.wav",
+      "pcm_sha256": "90553474a2b606986dad62b026b5ffb220e414e851d098ace2f04539b200b344",
+      "sha256": "80c55429e8c2aa15dff09948349af7fe1a1fd0ddac695a972c2872c48d8497b7",
+      "word": "taxi"
+    },
+    {
+      "engine": "piper",
+      "frames": 64027,
+      "opaque_id": "b0478e7b3a66a988902b",
+      "pair_id": "pair_04",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_04_guitar.wav",
+      "pcm_sha256": "f7390e7f95cf9876e98970ac5b9bf38e3d12178358faf833f7e738a0d3eb81f9",
+      "sha256": "bf435a57d13d9323eb41aea4239e584cdc9e62e68808712f682e877e56680d90",
+      "word": "guitar"
+    },
+    {
+      "engine": "piper",
+      "frames": 64027,
+      "opaque_id": "86edddbdc86879e765ed",
+      "pair_id": "pair_04",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_04_piano.wav",
+      "pcm_sha256": "274b2a49bc2daa6c09b0d21011d5db2f8ac6cc702071d0c6ef1c0890598c3adc",
+      "sha256": "a3ae4d9574f6b767a3158b3f42f3a5da40932aa23f5ffde7358ac69a658c71d0",
+      "word": "piano"
+    },
+    {
+      "engine": "samantha",
+      "frames": 36577,
+      "opaque_id": "07b26ef0552733b1ae39",
+      "pair_id": "pair_04",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_04_guitar.wav",
+      "pcm_sha256": "72941282b22ada716da231a66cb268ea5965dbe06f1acdd5a07502e192860df6",
+      "sha256": "c4a79f6b7123a3415474c5651cc6941877cdad11e637c6f19f528442b15df874",
+      "word": "guitar"
+    },
+    {
+      "engine": "samantha",
+      "frames": 36577,
+      "opaque_id": "47e71d51dfb1916f1017",
+      "pair_id": "pair_04",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_04_piano.wav",
+      "pcm_sha256": "ad56db808eeca44a20c994cb7d731d1e9cb6d77d0435b0ac706a5f28c856e2a7",
+      "sha256": "f457acb4e526b710adaa408abffb80e730db6fdd392fb7065a0a5713e15ac2d3",
+      "word": "piano"
+    },
+    {
+      "engine": "piper",
+      "frames": 64584,
+      "opaque_id": "eaec36a87bb71f91fad8",
+      "pair_id": "pair_05",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_05_violin.wav",
+      "pcm_sha256": "35485a70d8b55deaf3e5d2e1b61669b42f7d47eb5cb40fd7cae6ae401b415c3b",
+      "sha256": "08caa2a13b2eaa5ceabd66985e84d428fd62483ae081d961982bd814ef33762b",
+      "word": "violin"
+    },
+    {
+      "engine": "piper",
+      "frames": 64584,
+      "opaque_id": "6c82025e14c05fef94d1",
+      "pair_id": "pair_05",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_05_trumpet.wav",
+      "pcm_sha256": "f4dcae431dbcbf369122b2ed6ac62c62dd84a04b10c4adad9d29ba20c4736d55",
+      "sha256": "08495f1820dda9afe6709f483ccfd6f8050b0293bc9d3e565365ea0855e9f789",
+      "word": "trumpet"
+    },
+    {
+      "engine": "samantha",
+      "frames": 37421,
+      "opaque_id": "ee4ab94e70a11337af94",
+      "pair_id": "pair_05",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_05_violin.wav",
+      "pcm_sha256": "6953d8f72faeabbeda9f9e4b031d5ede3f49f6d4b1becbc3d10b598ccbd1ca7f",
+      "sha256": "bbcbbb324bbc1ae736bd3bf35609e96e9e32e36436bf4fbf5880cd21f08faee9",
+      "word": "violin"
+    },
+    {
+      "engine": "samantha",
+      "frames": 37421,
+      "opaque_id": "c473b12cf993167a21d2",
+      "pair_id": "pair_05",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_05_trumpet.wav",
+      "pcm_sha256": "491537682a2da0f9e02060dfe33ce0a2afbd67c37ec7c0a658874cf86ff0a178",
+      "sha256": "6f3ea9590cd7f5e9dd7bfb9effb8ecf5751f6a3fc634577767b59ef30b67fb78",
+      "word": "trumpet"
+    },
+    {
+      "engine": "piper",
+      "frames": 61798,
+      "opaque_id": "499b71484b8707f7920a",
+      "pair_id": "pair_06",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_06_broom.wav",
+      "pcm_sha256": "101c76b569a72c1d38dd4243a853b1975d65a15ff81f801ea2a2c7ce43690ef0",
+      "sha256": "7961e3d434a512edc4db92c4af48c95d3e17ad405b56e8e601b6827346403ba5",
+      "word": "broom"
+    },
+    {
+      "engine": "piper",
+      "frames": 61798,
+      "opaque_id": "2bda82e2144b9ae8ba5c",
+      "pair_id": "pair_06",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_06_brush.wav",
+      "pcm_sha256": "e7686ecf7c89b1b69157eeaec479171ebd68be4072634335756ab12ebe939e48",
+      "sha256": "8b936f6de65ba32ee75881db9a3f206a0c0634ae09b7a1d3203acea7e5e801fd",
+      "word": "brush"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34749,
+      "opaque_id": "7c2a7979242035230308",
+      "pair_id": "pair_06",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_06_broom.wav",
+      "pcm_sha256": "8810dd2866fc938cafa100ba8285d1ec5121c4359aeefad4a287cda77be4fbf0",
+      "sha256": "13ba7f69814039e8b1405b526642cfdcc95082a257924c474e90592567bff20f",
+      "word": "broom"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34749,
+      "opaque_id": "5b724fdbe294bb4369fa",
+      "pair_id": "pair_06",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_06_brush.wav",
+      "pcm_sha256": "707ca4886af1faa67c9e9bc0724954d9e78b0068e68c20b781d9c465e330acac",
+      "sha256": "dc8e6345f54a23b7b0f72104d3245dec1a085c0685c5e2d887412891ace638de",
+      "word": "brush"
+    },
+    {
+      "engine": "piper",
+      "frames": 62169,
+      "opaque_id": "db357df05e56bb3145f6",
+      "pair_id": "pair_07",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_07_button.wav",
+      "pcm_sha256": "5c7b723bd2e61e1602dd5b8e636f07a81f6f87992c9bb37432cf21cd9c93b5fb",
+      "sha256": "84d142e23e1736c791f6301de4025e6a66ad843a2ca4da3ab76ecf0e010d3eaf",
+      "word": "button"
+    },
+    {
+      "engine": "piper",
+      "frames": 62169,
+      "opaque_id": "3de5bf4f80df2486462d",
+      "pair_id": "pair_07",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/piper_07_ribbon.wav",
+      "pcm_sha256": "922f92bfb3f76f6eddaf4ca72f2072014b1dd448ef820839944fa76bf87021fa",
+      "sha256": "fddd5056b078c480b19c50ab04c90e293c63c190459b0402895cf6b7bcd9b018",
+      "word": "ribbon"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34075,
+      "opaque_id": "a02a908b81c29841b41f",
+      "pair_id": "pair_07",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_07_button.wav",
+      "pcm_sha256": "a8b4c2678ccafe5d72f14b26bd393bcbd46feb24085206a89fdd68a837c52e1e",
+      "sha256": "3c6c8ac9f787fff6eab4a6bff11d4b678a78db9dab60373f9743d44222dc126e",
+      "word": "button"
+    },
+    {
+      "engine": "samantha",
+      "frames": 34075,
+      "opaque_id": "09ac2121c1b0a9be4441",
+      "pair_id": "pair_07",
+      "path": "models/second_architecture/word_disjoint_v2/rendered_v2/clips/samantha_07_ribbon.wav",
+      "pcm_sha256": "f714c9f8d9c248161274a06c69073a3d57639fee5a91e8cea83faa6279ef1ca2",
+      "sha256": "99bdd8f96bf2f0487241e1397d2a04867a44c3656a1d513960aeed296040b0ec",
+      "word": "ribbon"
+    }
+  ],
+  "freeze_sha256": "5787446078ff1cecf0737a9963db16e8b52d5c6ac3b2704ccd8aa9b477a0c432",
+  "listening_copy_count": 32,
+  "manifest_sha256": "f8fd1f43f38877d6d08c47597c8db9f494e1377a69f0a2451c2f99fbcda71ea2",
+  "pair_voice_count": 16,
+  "raw_and_processed_fragment_files": 72,
+  "schema": "word_disjoint_render_independent_inventory_v1",
+  "technical_binding_sha256": "027763d4fa758dac95c552c2f2aef60683f1c780b0c034d82327be8bd59e93b9"
+}

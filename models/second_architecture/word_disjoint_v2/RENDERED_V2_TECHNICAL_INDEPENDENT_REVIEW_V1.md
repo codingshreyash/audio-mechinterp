@@ -1,0 +1,18 @@
+# Independent technical review: word-disjoint V2 rendered audio
+
+19 November 2026. **Decision: GO for the saved 32-WAV synthetic corpus as a technically valid paired audio fixture and blinded listening queue. HOLD for candidate-model inference until the separate 32/32 human listening gate, candidate-runner review, and frozen preflight pass.** I did not listen to these clips, run ASR or an assistant model, or open any locked-test WAV.
+
+I independently parsed and hashed the saved files, read the mono 16-kHz PCM16 samples, and reconstructed each final WAV from its saved converted prefix, word, gap, and suffix fragments. This check did not call the renderer's assembly function or use its technical auditor as the only evidence. I also compared the manifest's source and command identities with the current files and macOS tools.
+
+| Check | Independently observed |
+| --- | --- |
+| Population | 8 fixed word pairs × Piper Amy and macOS Samantha = **16 pair/voice cells, 32 final WAVs**; 36 fragment identities, 72 raw/processed fragment files, and 32 blinded copies. |
+| Paired PCM | All **16/16** pairs have equal frame counts, exactly equal samples before and after the half-open word slot, and at least one unequal sample inside the slot. Every final PCM stream matches `prefix + 1,920 zero samples + padded word + 1,920 zero samples + suffix`. |
+| File integrity | All 72 raw/processed fragment file hashes and PCM metadata, all **32 final WAV file and raw PCM hashes**, and all 32 blinded-copy hashes match. The [inventory](RENDERED_V2_FINAL_WAV_INVENTORY_V1.json) records each final file SHA-256, PCM SHA-256, frame count and opaque ID. |
+| Source identity | Manifest SHA-256 `f8fd1f43f38877d6d08c47597c8db9f494e1377a69f0a2451c2f99fbcda71ea2`; technical binding SHA-256 `027763d4fa758dac95c552c2f2aef60683f1c780b0c034d82327be8bd59e93b9`; freeze SHA-256 `5787446078ff1cecf0737a9963db16e8b52d5c6ac3b2704ccd8aa9b477a0c432`. The manifest binds the reviewed renderer, V2 plan, freeze, Piper checkpoint/config pins, source TTS plan/helper, and three prior corpus metadata hashes. The installed `piper-tts` version is 1.8.0. |
+| macOS TTS identity | The saved OS build, `/usr/bin/say` and `/usr/bin/afconvert` binary hashes, `afconvert -h` hash and conversion argv match the current host. `say -v ?` lists Samantha `en_US`. The final WAV hashes, rather than this changeable OS voice name, identify the stimuli. |
+| Blinded queue | `QUEUE.json` contains 32 unique opaque IDs in a fixed shuffled order; adjacent IDs do not come from the same pair/voice. The listening directory has only 32 hex-named WAVs and the queue file. Its JSON has no reference-word values, pair or voice labels, reference-script field, or source-path field. The private ID-to-word map remains a separate uncommitted local file. |
+
+I compared the complete recomputed 16-row technical report with [TECHNICAL_BINDING.json](rendered_v2/TECHNICAL_BINDING.json), verified the binding's manifest and auditor hashes, and checked that its `candidate_model_inference_authorized` field is `false`. I also confirmed the output contains exactly the 140 expected files: 72 fragment files, 32 final WAVs, 32 blinded copies, manifest, technical binding, private map and public queue. The [independent final-WAV inventory](RENDERED_V2_FINAL_WAV_INVENTORY_V1.json) SHA-256 is `6fa29354f488dea5a999818f192a24a99d7c7a6fe07d40ada52de79c9eaf2f8c`.
+
+This review establishes the paired-waveform construction and artifact provenance. It does **not** establish that either voice says an intelligible intended word, that human listeners hear the complete sentence, that any ASR model transcribes it correctly, or that an assistant makes a wrong decision. No security finding follows from these technical checks.
