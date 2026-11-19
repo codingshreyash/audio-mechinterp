@@ -160,6 +160,115 @@ time.sleep(5)
             self.assertNotIn(secret_name.encode(), receipt.read_bytes())
             self.assertNotIn(b"untouched", receipt.read_bytes())
 
+    def test_child_cannot_exclusively_create_parent_reserved_receipt(self):
+        script = """import os,time
+os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')
+try:
+    open('../attempt.parent_failure.json','xb')
+except FileExistsError:
+    print('reservation held',flush=True)
+os.symlink('outside','invalid.link')
+time.sleep(5)
+"""
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            output = root / "attempt"
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=output, staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            receipt = json.loads((root / "attempt.parent_failure.json").read_text())
+            self.assertEqual(result["external_receipt_status"],
+                             "parent_reserved_inode_verified")
+            self.assertEqual(receipt["external_receipt_status"],
+                             "parent_reserved_inode_verified")
+            self.assertEqual(receipt["reason"], "unsealed_child_evidence")
+            self.assertIn("reservation held", (output / "stdout.log").read_text())
+
+    def test_replaced_parent_reservation_is_not_accepted_as_receipt(self):
+        script = """import os,time
+os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')
+os.unlink('../attempt.parent_failure.json')
+open('../attempt.parent_failure.json','w').write('child-controlled')
+os.symlink('outside','invalid.link')
+time.sleep(5)
+"""
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            output = root / "attempt"
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=output, staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            self.assertTrue(result["no_go"])
+            self.assertEqual(result["external_receipt_status"],
+                             "path_replaced_or_missing_no_authentic_receipt")
+            self.assertEqual((root / "attempt.parent_failure.json").read_text(),
+                             "child-controlled")
+
+    def test_in_place_write_to_reservation_is_not_accepted_as_receipt(self):
+        script = """import os,time
+os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')
+open('../attempt.parent_failure.json','w').write('child-controlled')
+os.symlink('outside','invalid.link')
+time.sleep(5)
+"""
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            output = root / "attempt"
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=output, staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            self.assertEqual(result["external_receipt_status"],
+                             "path_replaced_or_missing_no_authentic_receipt")
+            self.assertEqual((root / "attempt.parent_failure.json").read_text(),
+                             "child-controlled")
+
+    def test_nvml_startup_failure_leaves_terminal_no_go_receipt(self):
+        with tempfile.TemporaryDirectory() as name, \
+                patch.object(parent, "NvmlGpuSampler", side_effect=RuntimeError("private text")):
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", CHILD, "0.01", "0"],
+                environment=os.environ.copy(), output_dir=root / "attempt",
+                staged_checkpoint_dir=staged,
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            raw = (root / "attempt.parent_failure.json").read_text()
+            self.assertEqual(result["reason"], "parent_exception")
+            self.assertEqual(result["exception_type"], "RuntimeError")
+            self.assertNotIn("private text", raw)
+            self.assertFalse((root / "attempt" / "parent_result.json").exists())
+
+    def test_process_spawn_failure_leaves_terminal_no_go_receipt(self):
+        with tempfile.TemporaryDirectory() as name, \
+                patch.object(parent.subprocess, "Popen", side_effect=OSError("private path")):
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", CHILD, "0.01", "0"],
+                environment=os.environ.copy(), output_dir=root / "attempt",
+                staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            raw = (root / "attempt.parent_failure.json").read_text()
+            self.assertEqual(result["reason"], "parent_exception")
+            self.assertEqual(result["exception_type"], "OSError")
+            self.assertTrue(result["child_group_stop_confirmed"])
+            self.assertNotIn("private path", raw)
+
     def test_thirty_three_child_files_get_bounded_failure_receipt(self):
         script = """import os,time
 os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')

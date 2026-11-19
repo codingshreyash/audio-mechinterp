@@ -46,6 +46,30 @@ def _write_once(path: Path, data: bytes) -> None:
         os.fsync(stream.fileno())
 
 
+def _reserved_receipt_matches(path: Path, fd: int, expected_size: int = 0) -> bool:
+    """Reject a sibling receipt replaced while the child held the same UID."""
+    try:
+        held, named = os.fstat(fd), path.lstat()
+    except FileNotFoundError:
+        return False
+    return (stat.S_ISREG(named.st_mode) and held.st_dev == named.st_dev
+            and held.st_ino == named.st_ino and held.st_nlink == 1
+            and held.st_size == named.st_size == expected_size)
+
+
+def _finish_reserved_receipt(path: Path, fd: int, data: bytes) -> bool:
+    """Write only to the parent's reserved inode; never overwrite child text."""
+    if not _reserved_receipt_matches(path, fd):
+        return False
+    expected_size = len(data)
+    while data:
+        written = os.write(fd, data)
+        need(written > 0, "reserved receipt short write")
+        data = data[written:]
+    os.fsync(fd)
+    return _reserved_receipt_matches(path, fd, expected_size)
+
+
 def _json_bytes(value: dict) -> bytes:
     return (json.dumps(value, sort_keys=True, separators=(",", ":"),
                        allow_nan=False) + "\n").encode()
@@ -274,7 +298,14 @@ def supervise_candidate(
     reason: str | None = None
     owned_sampler: NvmlGpuSampler | None = None
     poll_stream = poll_path.open("ab")
+    receipt_fd = -1
     try:
+        # Reserve the predictable sibling before launching the child. The
+        # worker remains trusted code: a hostile same-UID child could unlink
+        # this inode, which the terminal check then fails closed.
+        receipt_fd = os.open(external_receipt_path,
+                             os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                             0o600)
         if gpu_sample is None:
             owned_sampler = NvmlGpuSampler()
             gpu_sample = owned_sampler
@@ -379,9 +410,11 @@ def supervise_candidate(
                        "last_valid_checkpoint_unverified": True,
                        "no_go": True,
                        "output_dir": str(output_dir)}
+            failure["external_receipt_status"] = "parent_reserved_inode_verified"
             data = _json_bytes(failure)
             need(len(data) <= TERMINAL_RESERVE_BYTES, "external receipt size exceeded")
-            _write_once(external_receipt_path, data)
+            if not _finish_reserved_receipt(external_receipt_path, receipt_fd, data):
+                failure["external_receipt_status"] = "path_replaced_or_missing_no_authentic_receipt"
             return failure
         if truncations:
             reason = reason or "evidence_cap_after_stop"
@@ -404,12 +437,52 @@ def supervise_candidate(
                   "truncated_evidence": truncations,
                   "evidence_inventory_before_parent_receipt": hashed_inventory,
                   "output_dir": str(output_dir)}
+        if not _reserved_receipt_matches(external_receipt_path, receipt_fd):
+            result["status"] = "invalid_or_partial"
+            result["reason"] = "external_receipt_reservation_lost"
+            result["no_go"] = True
         data = _json_bytes(result)
         need(final_bytes + len(data) <= MAX_EVIDENCE_BYTES,
              "no room for parent terminal receipt")
         _write_once(output_dir / "parent_result.json", data)
+        if _reserved_receipt_matches(external_receipt_path, receipt_fd):
+            external_receipt_path.unlink()
         return result
+    except Exception as error:
+        # NVML initialization and process spawn occur after attempt creation.
+        # They must leave a bounded no-go receipt rather than an unexplained
+        # consumed directory. Do not serialize exception text or child names.
+        stop_confirmed = process is None
+        if process is not None:
+            try:
+                _kill_group(process)
+                stop_confirmed = True
+            except Exception:
+                stop_confirmed = False
+        failure = {"schema": "voicechat_step400_external_parent_failure_v1",
+                   "status": "invalid_or_partial", "reason": "parent_exception",
+                   "exception_type": type(error).__name__,
+                   "child_group_stop_confirmed": stop_confirmed,
+                   "cap_policy_status": "failed_no_64mib_proof",
+                   "last_valid_checkpoint_unverified": True, "no_go": True,
+                   "output_dir": str(output_dir),
+                   "external_receipt_status": "parent_reserved_inode_verified"}
+        data = _json_bytes(failure)
+        receipt_written = False
+        if len(data) <= TERMINAL_RESERVE_BYTES and receipt_fd >= 0:
+            try:
+                receipt_written = _finish_reserved_receipt(
+                    external_receipt_path, receipt_fd, data)
+            except OSError:
+                receipt_written = False
+        if receipt_written:
+            failure["external_receipt_status"] = "parent_reserved_inode_verified"
+        else:
+            failure["external_receipt_status"] = "missing_or_unverified"
+        return failure
     finally:
+        if receipt_fd >= 0:
+            os.close(receipt_fd)
         if not poll_stream.closed:
             poll_stream.close()
         selector.close()
