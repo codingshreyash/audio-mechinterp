@@ -34,6 +34,26 @@ MAX_RSS_BYTES = 4 * 1024**3
 MAX_OUTPUT_BYTES = 128 * 1024**2
 
 
+def _check_total_output_cap(pre_result_bytes: int, result_bytes: int) -> None:
+    """Count the immutable result file as well as prior evidence."""
+    if (type(pre_result_bytes) is not int or type(result_bytes) is not int
+            or pre_result_bytes < 0 or result_bytes <= 0
+            or pre_result_bytes + result_bytes > MAX_OUTPUT_BYTES):
+        raise ValueError("causal total output including result exceeds 128 MiB")
+
+
+def _check_worker_start_containment(result: dict[str, Any],
+                                    start_row: dict[str, Any]) -> None:
+    epoch = start_row.get("start_utc")
+    if (start_row.get("type") != "start"
+            or type(epoch) not in (int, float) or not math.isfinite(epoch)):
+        raise ValueError("causal worker start time invalid")
+    lower = datetime.fromisoformat(result["start_utc"]).timestamp()
+    upper = datetime.fromisoformat(result["end_utc"]).timestamp()
+    if not lower <= epoch <= upper:
+        raise ValueError("causal worker start outside parent UTC interval")
+
+
 def source_binding() -> dict[str, Any]:
     paths = {
         "parent": Path(__file__), "worker": Path(worker.__file__),
@@ -100,6 +120,12 @@ def audit_worker_output(output: Path) -> dict[str, Any]:
     from transformers import Wav2Vec2Processor
     import wav2vec2_fit_baseline_stage_capture_v1 as source
 
+    if not output.is_dir() or output.is_symlink():
+        raise ValueError("causal worker output directory invalid")
+    files = list(output.iterdir())
+    if (any(p.is_symlink() or not p.is_file() for p in files)
+            or sum(p.stat().st_size for p in files) > MAX_OUTPUT_BYTES):
+        raise ValueError("causal worker output exceeds cap or has invalid file")
     records = output / "records.jsonl"
     if not records.is_file() or records.is_symlink():
         raise ValueError("causal worker records absent")
@@ -298,9 +324,8 @@ def execute(attempt: Path = ATTEMPT) -> dict[str, Any]:
             "parent_go_sha256": pilot.sha_file(PARENT_GO),
             "evidence_sha256": inventory,
         }
-        if total + len(pilot.canonical(result).encode()) > MAX_OUTPUT_BYTES:
-            result["errors"].append("total_output_including_result_over_128MiB")
-            result["status"] = "invalid_or_partial"
+        result_bytes = len((pilot.canonical(result) + "\n").encode("utf-8"))
+        _check_total_output_cap(total, result_bytes)
         base.write_once(attempt / "launch_result.json", result)
     return result
 
@@ -327,6 +352,10 @@ def audit_saved_attempt(attempt: Path = ATTEMPT) -> dict[str, Any]:
     if (type(result.get("total_output_bytes_before_result")) is not int
             or total != result["total_output_bytes_before_result"]):
         raise ValueError("causal saved output byte count differs")
+    canonical_result = (pilot.canonical(result) + "\n").encode("utf-8")
+    if result_path.read_bytes() != canonical_result:
+        raise ValueError("causal saved result bytes are not canonical")
+    _check_total_output_cap(total, result_path.stat().st_size)
     if result.get("status") != "complete":
         return {"status": "bound_invalid_or_partial",
                 "result_sha256": pilot.sha_file(result_path)}
@@ -337,8 +366,16 @@ def audit_saved_attempt(attempt: Path = ATTEMPT) -> dict[str, Any]:
             or result["worker_returncode"] != 0
             or result.get("worker_timed_out") is not False
             or type(result.get("worker_elapsed_seconds")) not in (int, float)
-            or not 0 < result["worker_elapsed_seconds"] <= MAX_SECONDS):
+            or not 0 < result["worker_elapsed_seconds"] <= MAX_SECONDS
+            or type(result.get("monotonic_seconds")) not in (int, float)
+            or not math.isfinite(result["monotonic_seconds"])
+            or result["worker_elapsed_seconds"] > result["monotonic_seconds"]):
         raise ValueError("causal saved worker outcome invalid")
+    required = {"launch_start.json", "pre_host.json", "pre_power_log.txt.gz",
+                "post_host.json", "post_power_log.txt.gz", "worker_stdout.txt",
+                "worker_stderr.txt", "worker_output/records.jsonl"}
+    if not required.issubset(inventory):
+        raise ValueError("causal complete parent evidence files missing")
     start = json.loads((attempt / "launch_start.json").read_text())
     if (start.get("schema") != "acoustic_fit_noise_causal_parent_start_v1"
             or start.get("attempt_path") != result["attempt_path"]
@@ -372,6 +409,8 @@ def audit_saved_attempt(attempt: Path = ATTEMPT) -> dict[str, Any]:
     audited = audit_worker_output(attempt / "worker_output")
     if audited != result.get("worker_audit"):
         raise ValueError("causal saved worker audit differs")
+    with (attempt / "worker_output/records.jsonl").open(encoding="utf-8") as stream:
+        _check_worker_start_containment(result, json.loads(stream.readline()))
     return {"schema": "acoustic_fit_noise_causal_parent_saved_audit_v1",
             "status": "complete_evidence_pass",
             "result_sha256": pilot.sha_file(result_path),
