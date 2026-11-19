@@ -1,0 +1,51 @@
+{
+  "schema": "qwen_action_method_readout_freeze_v2",
+  "status": "source_only_hold_for_candidate_inference",
+  "v1_spec_sha256": "a6ddd9b007649173d23e38996883920467ef861f15b4491acde3cdd096e4ef18",
+  "model_revision": "f75b40e3da2003cdd6e1829b1f420ca70797c34e",
+  "transformers_revision": "e7e568dc7673ac99a87660c7c50e84830268285c",
+  "tokenizer_files_sha256": {
+    "tokenizer.json": "8441917e39ae0244e06d704b95b3124795cec478e297f9afac39ba670d7e9d99",
+    "tokenizer_config.json": "569aa7a9171e36dfff80f0a7550ab0c9c09e46ac840fea5030641417394fb0d2",
+    "special_tokens_map.json": "dc241604d085780a33f760f69c47e6622451104c20eee3cd3a12b6e884b43f44"
+  },
+  "canonical_label_ids": {"LIST": 22852, "ASK": 7384, "CANCEL": 88493},
+  "eos_token_id": 151645,
+  "target": "sum_log_probability_of_one_label_token_then_eos_under_teacher_forcing",
+  "source_sites": ["text.residual.17", "text.residual.34"],
+  "position": "final_prompt_token_before_generation",
+  "cross_suffix_prompt_state_maxabs_tolerance": 1e-05,
+  "fit_split": "fit_text",
+  "fit_contexts": 18,
+  "target_dimension": 3,
+  "readout": "affine_mean_target_vjp",
+  "readout_numerics": "float64_fit_from_saved_float32_activations_vjps_and_scores",
+  "ridge_baseline_lambda": "trace(centered_gram)/18; centered_gram=X_Xtranspose/2048",
+  "zero_baseline": "fit_mean_score_per_class",
+  "development_gate": {
+    "typed_complete_correct_min_of_6": 5,
+    "audio_complete_correct_min_of_6": 5,
+    "typed_vjp_expected_top1_min_of_6": 5,
+    "audio_vjp_expected_top1_min_of_6": 4,
+    "typed_canonical_full_path_min_of_6": 5,
+    "audio_canonical_full_path_min_of_6": 5,
+    "vjp_must_exceed_constant_in_both_modalities": true,
+    "vjp_to_constant_score_mae_max_in_both_modalities": 0.9
+  },
+  "directional_intervention": {
+    "site": "text.residual.34",
+    "position": "final_prompt_token_in_prefill_only",
+    "target_rotation": {"LIST": "ASK", "ASK": "CANCEL", "CANCEL": "LIST"},
+    "alpha_times_recipient_state_l2": 0.03,
+    "controls": ["zero_edit", "random_orthogonal_1", "random_orthogonal_2"],
+    "random_seed_basis": "sha256(qwen_action_method_v2|case_id|target_label|control_index) first 16 hex as uint64 PCG64"
+  },
+  "resource_pilot": {
+    "one_text_fit_context_three_teacher_forced_targets": true,
+    "mps_driver_allocation_limit_gib": 24,
+    "process_tree_rss_limit_gib": 30,
+    "wall_limit_seconds": 300,
+    "fit_job_wall_limit_seconds": 3600,
+    "requires_ac_open_lid_no_thermal_event": true
+  }
+}
