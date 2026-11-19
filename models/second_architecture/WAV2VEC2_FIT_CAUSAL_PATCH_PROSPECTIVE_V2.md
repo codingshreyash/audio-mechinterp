@@ -1,0 +1,9 @@
+# Wav2Vec2 FIT causal patch: topology correction before freeze
+
+18 November 2026. This prospective amendment corrects the hook topology in [V1](WAV2VEC2_FIT_CAUSAL_PATCH_PROSPECTIVE_V1.md) after independent review and **before any causal model inference**. V1 remains in the record with a HOLD. All corpus, S/C modes, 16 directions, seven arms at two sites, windows, seeds, full-transcript outcomes, controls and resource limits remain as specified in V1.
+
+The pinned `facebook/wav2vec2-base-960h` checkpoint has `do_stable_layer_norm=false`. The installed pinned `transformers.models.wav2vec2.modeling_wav2vec2.Wav2Vec2Encoder.forward` adds the positional convolution and applies its `layer_norm` **before** encoder block 0. The standard encoder returns the output of block 11 directly; it has **no final encoder LayerNorm**. Thus V1's phrase that the post-block11 hook is “before the encoder's final layer norm” is wrong. Replace it with: “the first tensor of encoder block 11's output tuple, shape `[1,T,768]`, **after the last encoder block and before the CTC dropout and linear head**.”
+
+At the other site, `Wav2Vec2Model.forward` takes the **first** member of the feature-projection output tuple as `hidden_states`, applies `_mask_hidden_states` (inactive in the frozen eval path), then sends it to the positional convolution, encoder input LayerNorm, and blocks. Its second tuple member is the returned unprojected feature representation and must remain unchanged by the hook. The runner and auditor must bind to this actual dataflow. Full-donor equivalence is a required empirical control at both sites; a failed exact-logit control blocks interpretation rather than being attributed to a nonexistent final norm.
+
+No other V1 claim or gate is relaxed by this correction. Freeze requires independent V2 source review, runner and auditor review, and a no-weight preflight receipt before real-model patch inference.
