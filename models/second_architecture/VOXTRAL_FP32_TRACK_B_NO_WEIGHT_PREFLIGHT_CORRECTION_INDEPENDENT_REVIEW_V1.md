@@ -1,0 +1,9 @@
+# Independent correction review: Track B no-weight preflight
+
+18 November 2026. Reviewed correction commit `6ed6151` against independent V1 source review `217ca8f`. **GO for the corrected no-weight preflight source as a HOLD-only preparation tool. HOLD for freezing its handoff as a pilot or Track B admission gate.** I loaded no candidate model and ran no model inference.
+
+The corrected source binds exact SHA-256 hashes for V5 (`70d24e5d4ba341e1aaa918608d57f1ed237fd56742b0d956816f4ce636ac3115`), V6 (`6a341f316e4056c6bc81c6e191deea3f90dcddcd81050a39c734a257d4f02b9c`), and the independent V6 design GO (`28341f87e9eb7ba8a7827460f2872d01ea17adcab3f3a36b649d4542eacae0b1`). I independently rehashed each file. The new test changes each expected hash in turn and confirms that static-anchor verification fails closed. The source now records the corrected V5+V6 design GO and removes the obsolete pending-design-review HOLD reasons.
+
+All **11/11 CPU tests passed**, and both source and test files compiled. A fresh full processor-only preflight produced `HOLD_no_candidate_model_inference`, 16 selected WAVs, unchanged alias-table and V6-zero PCM hashes, `candidate_weights_loaded=false`, and `candidate_forward_count=0`. The receipt retains the missing 32/32 human QA, uncertified MPS peak, unmeasured pilot/post-pilot GO, unreviewed runner/external freeze, and unchecked live host as explicit HOLD reasons. This review did not run the optional host probe.
+
+**Handoff wording blocker:** the handoff says the measured V6 pilot and independent post-pilot GO are required *before any Track B weight load*. The measured pilot itself requires a candidate weight load. State instead that applicable QA, executable, host and resource admission gates precede the pilot weight load, while the measured pilot and independent post-pilot GO precede Track B answer/score runs. The current wording gives the wrong order of operations and must be fixed before the handoff is frozen.
