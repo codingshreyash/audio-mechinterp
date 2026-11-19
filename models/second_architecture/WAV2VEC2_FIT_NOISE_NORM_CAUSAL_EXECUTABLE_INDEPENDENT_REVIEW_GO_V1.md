@@ -1,0 +1,13 @@
+# FIT normalization executable: independent review GO
+
+19 November 2026. I independently rereviewed the exact committed source through `f0fcc0a` against HOLD `da55a5e`, the 88-forward amendment, and the frozen study protocol. **GO for no-weight admission and the separately bound one-shot CPU run gate.** This is source approval only. No pinned model was loaded or run in this review.
+
+The worker and auditor retain the exact 88-name schedule: 24 Stage I stock/read-only controls for 12 unique waveforms, 32 Stage I scored cells, 16 Stage II shared-input controls, and 16 Stage II scored cells. The Stage II raw convolution, per-channel GroupNorm donors, natural-diagonal tolerance, exact CTC paths, and auditor reconstruction remain as reviewed in the earlier HOLD memo. `git diff --check f0fcc0a^ f0fcc0a` passed. The targeted no-weight `unittest` suite now passes **19 tests**, including a complete fake 88-forward attempt and saved audit.
+
+The memory HOLD is repaired in `6c5b47a`: the parent samples the worker process-tree RSS at a 0.10-second polling interval, logs each sample, and kills the process group when a sample reaches 4 GiB. The saved auditor verifies the logged peak, sample count, hash, limit and successful-run stop reason. This is a **sampled** limit, not a guarantee about sub-poll transients. A fake child test exercises the kill path.
+
+The call-census HOLD is repaired in `6c5b47a` and `f0fcc0a`: a durable ordered progress file records attempt and completion for each named call; a worker failure row names the failed attempted call and every later censored call; the parent reconstructs the same census after its own kill. A mid-pair fake failure and a setup failure after output creation both preserve the correct censors. Plan derivation now precedes one-shot directory creation in both worker and parent, and the start record is within the worker failure-census try block. Plan-failure tests confirm no one-shot directory is consumed.
+
+Admission must hash the committed source and pinned local checkpoint without constructing a candidate model. A later, separately committed GO JSON must bind the admission SHA-256 and exact source-binding object; the real parent and worker both reject missing or changed receipts. The run is authorized only if the parent AC/open-lid and ten-minute host-log gates pass and the fixed attempt directory is absent. A complete parent run still needs the separate saved-data audit before any result interpretation.
+
+The study remains a selected, synthetic, English ASR normalization intervention. It cannot establish a new security vulnerability, attacker-reachable audio exploit, or transfer to other words, speakers, checkpoints, or action paths.
