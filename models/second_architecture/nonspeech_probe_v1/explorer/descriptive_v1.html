@@ -102,13 +102,20 @@ for (const [name,key] of [['Multilingual Whisper Tiny','multilingual'],['English
   card.append(node('strong',`${s.different_from_silence}/18 differ from silence`),node('span',`${name} · ${s.nonempty}/20 nonempty outputs`)); $('stats').append(card);
 }
 function makeAudio(id) { const a=node('audio'); a.controls=true; a.preload='none'; a.src=EVIDENCE.cases[id].asset.audio; a.setAttribute('aria-label',`Listen to ${id}`); return a; }
-function renderRows() {
-  const body=$('rows'); body.replaceChildren();
-  for(const id of ids) {
+function visibleIds() {
+  return ids.filter(id => {
     const duration=EVIDENCE.cases[id].asset.duration_s, family=id.slice(4).replace(/_(high|low)$/,'');
-    if($('duration').value!=='all' && Number($('duration').value)!==duration) continue;
-    if($('family').value!=='all' && $('family').value!==family) continue;
-    if($('changed').checked && !['multilingual','english','ctc'].some(m=>changed(id,m))) continue;
+    if($('duration').value!=='all' && Number($('duration').value)!==duration) return false;
+    if($('family').value!=='all' && $('family').value!==family) return false;
+    if($('changed').checked && !['multilingual','english','ctc'].some(m=>changed(id,m))) return false;
+    return true;
+  });
+}
+function renderRows() {
+  const body=$('rows'), visible=visibleIds(); body.replaceChildren();
+  if(!visible.includes(selected)) selected=visible[0] || null;
+  if(!visible.length) { const tr=node('tr'), td=node('td','No cases match these filters.'); td.colSpan=5; tr.append(td); body.append(tr); return; }
+  for(const id of visible) {
     const tr=node('tr'); if(id===selected) tr.className='selected';
     const td0=node('td'), b=node('button',id); b.addEventListener('click',()=>{selected=id;renderRows();renderDetail();$('detail').scrollIntoView({behavior:'smooth',block:'start'});}); td0.append(b); tr.append(td0);
     const audioTd=node('td'); audioTd.append(makeAudio(id)); tr.append(audioTd);
@@ -118,7 +125,9 @@ function renderRows() {
 }
 function entry(dl,term,value) { dl.append(node('dt',term),node('dd',String(value))); }
 function renderDetail() {
-  const box=$('detail'); box.replaceChildren(); const c=EVIDENCE.cases[selected], base=EVIDENCE.cases[silenceId(selected)];
+  const box=$('detail'); box.replaceChildren();
+  if(!selected) { box.append(node('h2','Case detail'),node('p','No cases match these filters. Change the filters to inspect a case.')); return; }
+  const c=EVIDENCE.cases[selected], base=EVIDENCE.cases[silenceId(selected)];
   box.append(node('h2',selected));
   const p=node('p'); p.append('Input: ',makeAudio(selected),'  Same-duration silence: ',makeAudio(silenceId(selected))); box.append(p);
   box.append(node('p',`Input ${c.asset.duration_s}s · 16-kHz mono PCM16 · RMS ${c.asset.rms.toPrecision(5)} · peak ${c.asset.peak.toPrecision(5)}`,'muted'));
@@ -154,7 +163,7 @@ function renderDetail() {
   const hashes=node('p',undefined,'hash'); hashes.textContent=`WAV SHA-256 ${c.asset.wav_sha256} · PCM SHA-256 ${c.asset.pcm_sha256}`; box.append(hashes);
   box.append(node('p','The mel active/padded boundary is the saved processor mask and a nominal encoder time map. It does not prove the padded representation is unchanged by the sound.','muted'));
 }
-for(const id of ['duration','family','changed']) $(id).addEventListener('change',renderRows);
+for(const id of ['duration','family','changed']) $(id).addEventListener('change',()=>{renderRows();renderDetail();});
 for(const [rel,digest] of Object.entries(EVIDENCE.hashes)) $('hashes').append(node('div',`${rel}  ${digest}`));
 renderRows(); renderDetail();
 </script>

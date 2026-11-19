@@ -10,6 +10,7 @@ Rebuild from the frozen saved evidence:
 python3 models/second_architecture/nonspeech_probe_v1/explorer/build_descriptive_v1.py
 python3 models/second_architecture/nonspeech_probe_v1/explorer/build_descriptive_v1.py --check
 python3 -m unittest discover -s models/second_architecture/nonspeech_probe_v1/explorer -p 'test_build_descriptive_v1.py'
+bash models/second_architecture/nonspeech_probe_v1/explorer/test_viewer_browser_v1.sh
 ```
 
 The builder refuses a changed manifest, record file, case WAV hash, inventory,
@@ -18,3 +19,7 @@ does not modify any raw evidence. `descriptive_v1_template.html` contains the
 handwritten interface; `build_descriptive_v1.py` pins and extracts only the
 fields displayed. The generated HTML is a standalone review artifact, not a
 source of new causal evidence or a security finding.
+
+The optional browser test requires `agent-browser` and Chrome. It checks that
+the selected detail follows the Duration → Sound → Δ-only filters, a row click,
+an empty filter result, and recovery from that empty result.
