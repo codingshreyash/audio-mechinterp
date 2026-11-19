@@ -21,6 +21,9 @@ CONTROLS = (
     "random_padding_1", "random_padding_2",
 )
 PHASE_SPLITS = ("padding_detect_only", "padding_transcribe_only")
+ARM_ORDER = ("RR", "read_only", "RD", "DR", "DD", "self",
+             "random_active_1", "random_active_2", "random_padding_1",
+             "random_padding_2", *PHASE_SPLITS)
 MAX_NEW_TOKENS = 128
 VOCAB_SIZE = 51865
 DECODER_WIDTH = 384
@@ -109,7 +112,7 @@ def schedule() -> tuple[dict, ...]:
             common = {"site": site, "case_id": case_id,
                       "donor_id": donor_for(case_id),
                       "geometry": geometry(case_id, site)}
-            for arm in CELLS + CONTROLS + PHASE_SPLITS:
+            for arm in ARM_ORDER:
                 policy = "none" if arm == "RR" else (
                     "capture_both_sites_both_phases" if arm == "read_only" else "edit")
                 row = {**common, "arm": arm, "hook_policy": policy}
@@ -119,7 +122,35 @@ def schedule() -> tuple[dict, ...]:
                 rows.append(row)
     if len(rows) != 436:
         raise ValueError("padding-channel arm count changed")
+    validate_capture_dependencies(rows)
     return tuple(rows)
+
+
+def validate_capture_dependencies(rows: list[dict] | tuple[dict, ...]) -> None:
+    donor_baselines: set[str] = set()
+    captured_donors: set[str] = set()
+    recipient_baselines: set[tuple[str, str]] = set()
+    captured_recipients: set[tuple[str, str]] = set()
+    for row in rows:
+        arm = row["arm"]
+        key = (row["site"], row["case_id"])
+        if arm == "no_hook":
+            donor_baselines.add(row["case_id"])
+        elif arm == "read_only_donor_capture":
+            if row["case_id"] not in donor_baselines:
+                raise ValueError("donor capture precedes its no-hook baseline")
+            captured_donors.add(row["case_id"])
+        elif arm == "RR":
+            if row["donor_id"] not in captured_donors:
+                raise ValueError("recipient baseline precedes donor capture")
+            recipient_baselines.add(key)
+        elif arm == "read_only":
+            if row["donor_id"] not in captured_donors or key not in recipient_baselines:
+                raise ValueError("recipient capture precedes donor capture or baseline")
+            captured_recipients.add(key)
+        elif row["hook_policy"] == "edit":
+            if row["donor_id"] not in captured_donors or key not in captured_recipients:
+                raise ValueError("edit precedes its donor or recipient capture")
 
 
 def worst_case_core_evidence_bytes() -> int:
@@ -155,7 +186,7 @@ def schedule_sha256() -> str:
 
 
 if __name__ == "__main__":
-    print(json.dumps({"schema": "nonspeech_padding_channel_plan_v2",
+    print(json.dumps({"schema": "nonspeech_padding_channel_plan_v3",
                       "non_silence_cases": 18, "silence_baselines": 2,
                       "donor_read_only_capture_calls": 2,
                       "per_case_site_arms": 12, "total_calls": len(schedule()),

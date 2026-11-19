@@ -1,5 +1,7 @@
 # Amendment V2: donor capture, no-hook controls, and execution gates
 
+**Amended by [V3](WHISPER_PADDING_CHANNEL_PROSPECTIVE_V3.md): the 436-call count is unchanged, but each recipient read-only capture now precedes every edit and the schedule hash has changed.**
+
 19 November 2026. **Prospective source-only correction. No candidate model was loaded or run.** This amendment supersedes the 434-call count, donor-state source, and nonspecific evidence requirements in [V1](WHISPER_PADDING_CHANNEL_PROSPECTIVE_V1.md). It resolves the [independent design HOLD](WHISPER_PADDING_CHANNEL_INDEPENDENT_DESIGN_REVIEW_V1.md) for a **design rereview**. It does not authorize candidate inference: the worker, fake-model hook tests, admission and independent executable GO remain required.
 
 ## Self-contained donor and recipient state provenance

@@ -35,6 +35,9 @@ class PaddingChannelPlanTests(unittest.TestCase):
                           if row["site"] == site and row["case_id"] == case_id}
                 self.assertEqual(actual,
                                  set(plan.CELLS + plan.CONTROLS + plan.PHASE_SPLITS))
+                ordered = [row["arm"] for row in rows
+                           if row["site"] == site and row["case_id"] == case_id]
+                self.assertEqual(ordered, list(plan.ARM_ORDER))
                 self.assertIn(plan.donor_for(case_id), plan.SILENCE)
                 rr = next(row for row in rows if row["site"] == site
                           and row["case_id"] == case_id and row["arm"] == "RR")
@@ -44,6 +47,15 @@ class PaddingChannelPlanTests(unittest.TestCase):
                 self.assertEqual(rr["hook_policy"], "none")
                 self.assertEqual(read_only["hook_policy"],
                                  "capture_both_sites_both_phases")
+
+    def test_capture_must_precede_every_edit(self) -> None:
+        rows = list(plan.schedule())
+        first_rr = next(i for i, row in enumerate(rows) if row["arm"] == "RR")
+        self.assertEqual([row["arm"] for row in rows[first_rr:first_rr + 5]],
+                         ["RR", "read_only", "RD", "DR", "DD"])
+        rows[first_rr + 1], rows[first_rr + 2] = rows[first_rr + 2], rows[first_rr + 1]
+        with self.assertRaisesRegex(ValueError, "edit precedes"):
+            plan.validate_capture_dependencies(rows)
 
 
     def test_fixed_geometry_and_boundary_partition(self) -> None:
