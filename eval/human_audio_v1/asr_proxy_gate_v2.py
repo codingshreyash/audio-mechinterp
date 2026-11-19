@@ -115,10 +115,13 @@ def validate_go() -> dict:
     review_commit = _last_asof(REVIEW, go_commit)
     need(review_commit != go_commit and _ancestor(review_commit, go_commit),
          "review must precede GO")
-    for path in [worker.ADMISSION, ADMISSION_V2, *source_paths()]:
+    admit_commit = _last_asof(ADMISSION_V2, go_commit)
+    need(admit_commit != review_commit and _ancestor(admit_commit, review_commit),
+         "V2 admission must precede independent review")
+    for path in [worker.ADMISSION, *source_paths()]:
         prior = _last_asof(path, go_commit)
-        need(prior != review_commit and _ancestor(prior, review_commit),
-             f"source/admission must precede independent review: {path.name}")
+        need(prior != admit_commit and _ancestor(prior, admit_commit),
+             f"source/V1 admission must precede V2 admission: {path.name}")
     need(_last_asof(GO, go_commit) == go_commit, "GO commit identity invalid")
     return {"schema": "human_asr_proxy_go_validation_v2", "status": "GO_VALID",
             "go_sha256": sha(GO), "go_commit": go_commit,

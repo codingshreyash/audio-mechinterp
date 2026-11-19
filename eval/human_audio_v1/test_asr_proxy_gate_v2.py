@@ -49,7 +49,8 @@ class GateFaultTests(unittest.TestCase):
                 return snapshot
             if argv[0] == "log":
                 return ("g" if str(gate.GO.name) in argv[-1] else
-                        "r" if str(gate.REVIEW.name) in argv[-1] else "s").encode() * 40
+                        "r" if str(gate.REVIEW.name) in argv[-1] else
+                        "a" if str(gate.ADMISSION_V2.name) in argv[-1] else "s").encode() * 40
             raise AssertionError(argv)
 
         with mock.patch.object(gate, "tracked_clean"), \
@@ -65,7 +66,10 @@ class GateFaultTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "review must precede GO"):
                     gate.validate_go()
             with mock.patch.object(gate, "_ancestor", side_effect=[True, False]):
-                with self.assertRaisesRegex(ValueError, "source/admission must precede"):
+                with self.assertRaisesRegex(ValueError, "V2 admission must precede"):
+                    gate.validate_go()
+            with mock.patch.object(gate, "_ancestor", side_effect=[True, True, False]):
+                with self.assertRaisesRegex(ValueError, "source/V1 admission must precede"):
                     gate.validate_go()
             expected["source_identity"] = {"asr_proxy_worker_v2.py": "changed"}
             with self.assertRaisesRegex(ValueError, "GO fields invalid"):
