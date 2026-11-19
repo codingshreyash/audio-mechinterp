@@ -31,7 +31,7 @@ def main() -> None:
         raise ValueError("sample output path already consumed")
     if args.freeze.exists() or args.freeze.is_symlink():
         raise ValueError("freeze path already consumed")
-    review_sha, _ = sample.hash_file(args.source_review, cap=sample.MAX_FREEZE_BYTES)
+    review_sha, _ = sample.hash_file(args.source_review, cap=sample.MAX_EXECUTABLE_FREEZE_BYTES)
     review = json.loads(args.source_review.read_text())
     expected = sample.expected_freeze_fields(
         args.nemo_dir, args.checkpoint_dir, args.nano_hf_home,
@@ -50,7 +50,7 @@ def main() -> None:
         "source_review": {"path": str(args.source_review), "sha256": review_sha},
     }
     raw = sample.canonical(freeze)
-    if len(raw) > sample.MAX_FREEZE_BYTES:
+    if len(raw) > sample.MAX_EXECUTABLE_FREEZE_BYTES:
         raise ValueError(f"freeze exceeds reviewed cap: {len(raw)} bytes")
     args.freeze.parent.mkdir(parents=True, exist_ok=True)
     with args.freeze.open("xb") as stream:
