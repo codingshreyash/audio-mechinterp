@@ -1,5 +1,7 @@
 # Independent review: VoiceChat public-sample H100 execution packet
 
+**Correction (2026-11-19):** The live H100 provisioned a 120 GiB disk. The proposed `--type ... --min-disk 256` command did not request 256 GiB because the explicit type bypassed the disk-sizing search path in Brev CLI v0.6.328. The cloud execution route is now **HOLD**; see the [disk failure amendment](VOICECHAT_PUBLIC_SAMPLE_H100_DISK_FAILURE_AMENDMENT_20261119.md). The source-only runner review below is unchanged.
+
 19 November 2026. **PASS as a source-only execution packet; HOLD for instance creation, checkpoint staging, and inference until the packet's live host checks and separately authenticated freeze review are completed.** I did not create, start, stop, or delete an instance; download weights; or run a model.
 
 I reviewed the committed [packet](VOICECHAT_PUBLIC_SAMPLE_H100_EXECUTION_PACKET_20261119.md) at `33df02b` against the unchanged [sample runner](public_sample_smoke_v1.py), [shared preflight](../voicechat_h100_local_preflight.py), [independent source GO](VOICECHAT_PUBLIC_SAMPLE_SMOKE_INDEPENDENT_SOURCE_REREVIEW_GO_V2.md), and the machine-readable [source-review binding](VOICECHAT_PUBLIC_SAMPLE_SOURCE_REVIEW_GO_V1.json). The runner, test, handoff, and preflight SHA-256 values in the packet match current files and the GO record. The remaining amendment and conceptual-review hashes also match the source-review binding. The local no-model sample suite passed **16/16**; `git diff --check 33df02b^ 33df02b` passed.
