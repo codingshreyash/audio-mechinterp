@@ -80,6 +80,7 @@ def audit_ledger(path: Path, receipt: Mapping[str, Any]) -> dict:
     require(len(rows) == 2 * len(ORDER), 'Pilot ledger is not 88 started/completed pairs')
     by_class: dict[str, list[float]] = {key: [] for key in COUNTS}
     peaks = []
+    forced_clean_source_sha = None
     for idx, label in enumerate(ORDER, start=1):
         started, done = rows[2 * idx - 2:2 * idx]
         require(started == {'ordinal': idx, 'class': label, 'phase': 'started'},
@@ -95,7 +96,11 @@ def audit_ledger(path: Path, receipt: Mapping[str, Any]) -> dict:
         peaks.append(peak)
         pre = done.get('projector_pre_sha256')
         require(isinstance(pre, str) and len(pre) == 64, f'Call {idx} source hash missing')
+        if label == 'forced_clean':
+            forced_clean_source_sha = pre
         if label.startswith('score_'):
+            require(forced_clean_source_sha is not None and pre == forced_clean_source_sha,
+                    f'Call {idx} score prepatch source differs from forced clean capture')
             require(done.get('score_finite') is True and
                     isinstance(done.get('score_sha256'), str) and
                     len(done['score_sha256']) == 64,
@@ -163,7 +168,10 @@ def audit_saved(directory: Path, *, admission: Path, qa: Path, qa_review: Path,
     claim_text = binding.get('campaign_claim_path')
     require(isinstance(claim_text, str) and Path(claim_text).is_absolute(),
             'Campaign claim path missing')
-    claim = read_json(Path(claim_text))
+    claim_path = Path(claim_text)
+    require(not claim_path.resolve().is_relative_to(directory.resolve()),
+            'Campaign claim must be outside pilot output directory')
+    claim = read_json(claim_path)
     require(claim.get('schema') == 'voxtral_track_b_v6_campaign_claim_v1' and
             claim.get('campaign_attempt_id') == binding.get('campaign_attempt_id') and
             claim.get('output_dir') == str(directory.resolve()) and
@@ -197,7 +205,9 @@ def audit_saved(directory: Path, *, admission: Path, qa: Path, qa_review: Path,
             'Forced synthetic suffix length receipt differs')
     files = list(directory.rglob('*'))
     require(all(not p.is_symlink() for p in files), 'Symlink in immutable pilot output')
-    output_bytes = sum(p.stat().st_size for p in files if p.is_file())
+    pilot_output_bytes = sum(p.stat().st_size for p in files if p.is_file())
+    claim_bytes = claim_path.stat().st_size
+    output_bytes = pilot_output_bytes + claim_bytes
     require(output_bytes <= MAX_OUTPUT_BYTES and
             isinstance(free_disk_bytes, int) and free_disk_bytes >= MIN_FREE_BYTES,
             'Output size or current free-disk cap failed')
@@ -258,7 +268,8 @@ def audit_saved(directory: Path, *, admission: Path, qa: Path, qa_review: Path,
             'calls_sha256': sha(directory / 'calls.jsonl'),
             'admission_sha256': sha(admission), 'ledger': ledger,
             'host_raw': host, 'clock_gap_seconds': gap,
-            'output_bytes': output_bytes, 'free_disk_bytes': free_disk_bytes,
+            'output_bytes': output_bytes, 'pilot_output_bytes': pilot_output_bytes,
+            'campaign_claim_bytes': claim_bytes, 'free_disk_bytes': free_disk_bytes,
             'timing_recomputed': {'t_g': tg, 't_s': ts, 't_b': tb, 'P': p,
                                   'per_context_1p2_W': 1.2 * w,
                                   'campaign_1p2_P_plus_16W': 1.2 * (p + 16 * w)},

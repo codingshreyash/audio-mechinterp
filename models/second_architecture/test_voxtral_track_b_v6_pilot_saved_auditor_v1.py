@@ -7,6 +7,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from models.second_architecture import voxtral_track_b_v6_pilot_saved_auditor_v1 as audit
 
@@ -182,6 +183,33 @@ class SavedAuditTests(unittest.TestCase):
             write_json(directory / 'pilot_failure.json', {'status': 'failed_no_retry'})
             with self.assertRaisesRegex(ValueError, 'failure artifact'):
                 audit.audit_saved(directory, **args)
+
+    def test_rejects_rehashed_score_source_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory, args = make_fixture(Path(tmp))
+            calls = directory / 'calls.jsonl'
+            rows = [json.loads(line) for line in calls.read_text().splitlines()]
+            score_done = next(row for row in rows if row['phase'] == 'completed'
+                              and row['class'] == 'score_nograd')
+            score_done['projector_pre_sha256'] = '0' * 64
+            calls.write_text(''.join(json.dumps(row, sort_keys=True) + '\n' for row in rows))
+            measurement = directory / 'pilot_measurement.json'
+            receipt = audit.read_json(measurement)
+            receipt['calls_sha256'] = audit.sha(calls)
+            write_json(measurement, receipt)
+            args['expected_measurement_sha256'] = audit.sha(measurement)
+            with self.assertRaisesRegex(ValueError, 'score prepatch source'):
+                audit.audit_saved(directory, **args)
+
+    def test_full_attempt_output_cap_includes_external_claim(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory, args = make_fixture(Path(tmp))
+            pilot_bytes = sum(p.stat().st_size for p in directory.iterdir() if p.is_file())
+            claim_path = Path(audit.read_json(args['admission'])['bindings']['campaign_claim_path'])
+            self.assertGreater(claim_path.stat().st_size, 0)
+            with patch.object(audit, 'MAX_OUTPUT_BYTES', pilot_bytes):
+                with self.assertRaisesRegex(ValueError, 'Output size'):
+                    audit.audit_saved(directory, **args)
 
 
 if __name__ == '__main__':
