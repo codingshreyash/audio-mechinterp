@@ -48,9 +48,71 @@ def fake_host(post: bool):
 
 
 class PilotSourceTests(unittest.TestCase):
+    def test_externally_pinned_admission_and_worker_hashes(self):
+        def write_json(path, value):
+            path.write_text(json.dumps(value, sort_keys=True))
+            return pilot.sha_file(path)
+
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            qa = directory / 'qa.json'
+            qa_sha = write_json(qa, {
+                'schema': 'word_disjoint_human_qa_audit_v1',
+                'status': 'human_qa_32_of_32_pass', 'human_quality_gate_passed': True,
+                'planned_clips': 32, 'passed_clips': 32})
+            qa_review = directory / 'qa_review.md'
+            qa_review.write_text(f'Decision: GO\nExact QA SHA: {qa_sha}\n')
+            geometry = {
+                'longest_alias': {'token_ids_with_eos': list(pilot.LONGEST_ALIAS)},
+                'input_features_shape': [1, 128, 3000],
+                'audio_placeholder_count': 375,
+                'attention_mask_length': 405,
+                'projector_rows_implied': 375,
+            }
+            preflight = directory / 'preflight.json'
+            preflight_sha = write_json(preflight, {'v6_synthetic_zero_geometry': geometry})
+            runner = directory / 'runner.py'
+            runner.write_text('# fake frozen runner source\n')
+            auditor = directory / 'auditor.py'
+            auditor.write_text('# fake frozen auditor source\n')
+            worker_sha = pilot.sha_file(Path(pilot.__file__))
+            registry = directory / 'registry'
+            registry.mkdir()
+            bindings = {
+                'protocol_sha256': pilot.PROTOCOL_SHAS,
+                'qa_sha256': qa_sha,
+                'qa_review_sha256': pilot.sha_file(qa_review),
+                'preflight_sha256': preflight_sha,
+                'study_runner_sha256': pilot.sha_file(runner),
+                'pilot_auditor_sha256': pilot.sha_file(auditor),
+                'pilot_worker_sha256': worker_sha,
+                'synthetic_geometry_sha256': pilot.sha_bytes(json.dumps(
+                    geometry, sort_keys=True, separators=(',', ':')).encode()),
+                'synthetic_processor_geometry': {
+                    'input_features_shape': [1, 128, 3000],
+                    'audio_placeholder_count': 375, 'attention_mask_length': 405},
+                'checkpoint_tree_sha256': 'a' * 64,
+                'transformers_source_sha256': 'b' * 64,
+                'synthetic_batch_sha256': 'c' * 64,
+                'old_fit_batch_sha256': 'd' * 64,
+                'campaign_attempt_id': 'frozen_fake_attempt',
+                'campaign_claim_path': str(registry / 'attempt.json'),
+            }
+            admission = directory / 'admission.json'
+            admission_sha = write_json(admission, {
+                'schema': 'voxtral_track_b_v6_external_pilot_admission_v1',
+                'status': 'pilot_go', 'bindings': bindings})
+            files = pilot.AdmissionFiles(admission, qa, qa_review, preflight, runner, auditor)
+            self.assertEqual(pilot.verify_admission(files, admission_sha, worker_sha)['bindings'], bindings)
+            with self.assertRaisesRegex(ValueError, 'Worker bytes differ'):
+                pilot.verify_admission(files, admission_sha, '0' * 64)
+            with self.assertRaisesRegex(ValueError, 'admission bytes differ'):
+                pilot.verify_admission(files, '0' * 64, worker_sha)
+            self.assertFalse((registry / 'attempt.json').exists())
+
     def test_public_entry_refuses_before_model_loader(self):
         calls = []
-        with self.assertRaisesRegex(ValueError, 'No independently reviewed'):
+        with self.assertRaisesRegex(ValueError, 'Public pilot worker disabled'):
             pilot.run_pilot(files=pilot.AdmissionFiles(*(Path('/missing') for _ in range(6))),
                             load_model=lambda: calls.append('loaded'),
                             old_fit_batch={}, synthetic_batch={}, pad=0,
@@ -74,6 +136,10 @@ class PilotSourceTests(unittest.TestCase):
                     'pilot_worker_sha256': 'd' * 64}
         with tempfile.TemporaryDirectory() as temp, patch.object(pilot, 'LONGEST_ALIAS', (7, 9, 8, 2)):
             dest = Path(temp) / 'pilot'
+            registry = Path(temp) / 'registry'
+            registry.mkdir()
+            bindings.update(campaign_attempt_id='fake_campaign_1',
+                            campaign_claim_path=str(registry / 'attempt.json'))
             def loader():
                 loader_calls.append(1)
                 return FakePilotModel()
@@ -110,8 +176,13 @@ class PilotSourceTests(unittest.TestCase):
             self.assertTrue(all(row['hook_calls'] == 1 for row in finishes))
             self.assertEqual(len([r for r in finishes if r['class'] == 'score_grad']), 12)
             self.assertTrue((dest / 'host_pre.raw').is_file() and (dest / 'host_post.raw').is_file())
+            claim = json.loads((registry / 'attempt.json').read_text())
+            self.assertEqual(claim['campaign_attempt_id'], 'fake_campaign_1')
             with self.assertRaises(FileExistsError):
                 pilot._execute_after_admission(**kwargs)
+            with self.assertRaises(FileExistsError):
+                pilot._execute_after_admission(**{**kwargs, 'output_dir': Path(temp) / 'alternate'})
+            self.assertFalse((Path(temp) / 'alternate').exists())
 
     def test_host_gate_fails_before_loader_and_retains_no_retry_receipt(self):
         _model, batch, _source, _donor = fixture()
@@ -124,6 +195,10 @@ class PilotSourceTests(unittest.TestCase):
                     'longest_alias_ids_with_eos': [7, 9, 8, 2]}
         with tempfile.TemporaryDirectory() as temp, patch.object(pilot, 'LONGEST_ALIAS', (7, 9, 8, 2)):
             dest = Path(temp) / 'pilot'
+            registry = Path(temp) / 'registry'
+            registry.mkdir()
+            bindings.update(campaign_attempt_id='fake_campaign_2',
+                            campaign_claim_path=str(registry / 'attempt.json'))
             with self.assertRaisesRegex(ValueError, 'Host AC'):
                 pilot._execute_after_admission(
                     load_model=lambda: called.append(1), old_fit_batch=batch,
@@ -146,6 +221,10 @@ class PilotSourceTests(unittest.TestCase):
                     'longest_alias_ids_with_eos': [7, 9, 8, 2]}
         with tempfile.TemporaryDirectory() as temp, patch.object(pilot, 'LONGEST_ALIAS', (7, 9, 8, 2)):
             dest = Path(temp) / 'pilot'
+            registry = Path(temp) / 'registry'
+            registry.mkdir()
+            bindings.update(campaign_attempt_id='fake_campaign_3',
+                            campaign_claim_path=str(registry / 'attempt.json'))
             with self.assertRaisesRegex(RuntimeError, 'fake interrupted'):
                 pilot._execute_after_admission(
                     load_model=FailingPilotModel, old_fit_batch=batch,

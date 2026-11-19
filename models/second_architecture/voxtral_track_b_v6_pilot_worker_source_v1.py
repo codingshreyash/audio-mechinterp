@@ -1,9 +1,10 @@
 """V6 measured resource-pilot source; hard HOLD until external admission freeze.
 
 No CLI, model factory, checkpoint path, or candidate-audio reader is provided.
-`run_pilot` cannot invoke a loader until an independently reviewed admission
-SHA is inserted in a later source freeze. Fake tests exercise only the private
-post-admission schedule with an in-memory toy model.
+`run_pilot` never invokes a loader. A future independently reviewed launcher
+must pin both this immutable worker SHA and the external admission SHA, verify
+them, then call the private post-admission schedule. Fake tests use only an
+in-memory toy model.
 """
 
 from __future__ import annotations
@@ -32,7 +33,6 @@ MIN_FREE_BYTES = 12 * 1024**3
 NO_GRAD_CALLS = 72
 GRAD_CALLS = 12
 LONGEST_ALIAS = (1353, 11135, 3313, 1079, core.EOS)
-FROZEN_ADMISSION_SHA256: str | None = None  # reviewed future freeze must pin this
 PROTOCOL_SHAS = {
     'v3': 'f3716897cfff30b26a4bb66d882222fc2137b0911266d76ea0a0c4319854ce0b',
     'v4': '87ef41b3c854ed23fc4cfb3f67a23f2b6cd595958a1f941bc9726288ea0d923c',
@@ -89,14 +89,17 @@ class AdmissionFiles:
     pilot_auditor: Path
 
 
-def verify_admission(files: AdmissionFiles) -> dict[str, Any]:
-    """Fail closed before *calling* a model loader; no self-issued GO accepted."""
-    if FROZEN_ADMISSION_SHA256 is None:
-        raise ValueError('No independently reviewed pre-pilot admission SHA pinned in source')
+def verify_admission(files: AdmissionFiles, expected_admission_sha: str,
+                     expected_worker_sha: str) -> dict[str, Any]:
+    """Validate two externally pinned hashes without a worker/admission cycle."""
+    _sha256_field(expected_admission_sha, 'expected_admission_sha')
+    _sha256_field(expected_worker_sha, 'expected_worker_sha')
+    if sha_file(Path(__file__)) != expected_worker_sha:
+        raise ValueError('Worker bytes differ from external launcher pin')
     for name, path in PROTOCOL_FILES.items():
         if not path.is_file() or sha_file(path) != PROTOCOL_SHAS[name]:
             raise ValueError(f'Pinned {name} protocol bytes differ')
-    gate = _read_bound(files.admission, FROZEN_ADMISSION_SHA256, 'independent pilot admission')
+    gate = _read_bound(files.admission, expected_admission_sha, 'independent pilot admission')
     if gate.get('schema') != 'voxtral_track_b_v6_external_pilot_admission_v1' or gate.get('status') != 'pilot_go':
         raise ValueError('External admission is not pilot_go')
     bindings = gate.get('bindings')
@@ -109,8 +112,14 @@ def verify_admission(files: AdmissionFiles) -> dict[str, Any]:
     for key, path in fixed.items():
         if not path.is_file() or sha_file(path) != _sha256_field(bindings.get(key), key):
             raise ValueError(f'{key} binding differs')
-    if sha_file(Path(__file__)) != _sha256_field(bindings.get('pilot_worker_sha256'), 'pilot_worker_sha256'):
+    if expected_worker_sha != _sha256_field(bindings.get('pilot_worker_sha256'), 'pilot_worker_sha256'):
         raise ValueError('Pilot worker source differs from independent admission')
+    attempt_id = bindings.get('campaign_attempt_id')
+    claim_path = bindings.get('campaign_claim_path')
+    if (not isinstance(attempt_id, str) or not attempt_id or len(attempt_id) > 128 or
+            not all(c.isalnum() or c in '_-' for c in attempt_id) or
+            not isinstance(claim_path, str) or not Path(claim_path).is_absolute()):
+        raise ValueError('Externally bound campaign attempt identity/claim path absent')
     qa = _read_bound(files.qa, bindings['qa_sha256'], '32/32 QA')
     if (qa.get('schema') != 'word_disjoint_human_qa_audit_v1' or
             qa.get('status') != 'human_qa_32_of_32_pass' or
@@ -282,8 +291,24 @@ def _execute_after_admission(*, load_model: Callable[[], Any],
             _batch_sha(synthetic_batch) != bindings['synthetic_batch_sha256'] or
             tuple(bindings['longest_alias_ids_with_eos']) != LONGEST_ALIAS):
         raise ValueError('Frozen pilot geometry, batch, or alias binding differs')
+    attempt_id = bindings.get('campaign_attempt_id')
+    claim_text = bindings.get('campaign_claim_path')
+    if (not isinstance(attempt_id, str) or not attempt_id or len(attempt_id) > 128 or
+            not all(c.isalnum() or c in '_-' for c in attempt_id) or
+            not isinstance(claim_text, str) or not Path(claim_text).is_absolute()):
+        raise ValueError('Campaign attempt identity/claim path missing')
+    claim = Path(claim_text)
+    if (not claim.parent.is_dir() or claim.is_symlink() or
+            claim.resolve().is_relative_to(output_dir.resolve())):
+        raise ValueError('Campaign claim parent absent, claim symlink, or claim inside output')
     if output_dir.exists():
         raise FileExistsError('V6 pilot attempt already exists; no retry')
+    _exclusive_json(claim, {'schema': 'voxtral_track_b_v6_campaign_claim_v1',
+                            'campaign_attempt_id': attempt_id,
+                            'output_dir': str(output_dir.resolve()),
+                            'bindings_sha256': sha_bytes(json.dumps(
+                                dict(bindings), sort_keys=True,
+                                separators=(',', ':')).encode())})
     output_dir.mkdir(parents=True, exist_ok=False)
     calls = output_dir / 'calls.jsonl'
     with calls.open('x') as f:
@@ -362,7 +387,7 @@ def _execute_after_admission(*, load_model: Callable[[], Any],
             raise
 
     try:
-        model = load_model()  # only after public verify_admission succeeds
+        model = load_model()  # only a future independently reviewed launcher may reach this
         if int(memory_probe()) > MAX_DRIVER_BYTES:
             raise MemoryError('Pilot model load exceeded 30-GiB MPS driver cap')
         old_clean = timed('old_fit_clean', lambda: _capture_generation(
@@ -459,12 +484,5 @@ def run_pilot(*, files: AdmissionFiles, load_model: Callable[[], Any],
               output_dir: Path, host_probe: Callable[[bool], Mapping[str, Any]],
               memory_probe: Callable[[], int], free_bytes: Callable[[Path], int],
               sync: Callable[[], None]) -> dict[str, Any]:
-    """Public entry remains a hard HOLD until a later reviewed admission pin."""
-    gate = verify_admission(files)  # must precede load_model()
-    bindings = gate['bindings']
-    return _execute_after_admission(load_model=load_model,
-                                    old_fit_batch=old_fit_batch,
-                                    synthetic_batch=synthetic_batch, pad=pad,
-                                    output_dir=output_dir, bindings=bindings,
-                                    host_probe=host_probe, memory_probe=memory_probe,
-                                    free_bytes=free_bytes, sync=sync)
+    """Public entry remains hard HOLD; future launcher must pin both hashes."""
+    raise ValueError('Public pilot worker disabled: independently reviewed launcher required')
