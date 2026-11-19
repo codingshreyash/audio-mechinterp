@@ -1,4 +1,4 @@
-# A spoken-word state swap across 12 new words: exploratory Wav2Vec2 development result
+# A spoken-word state swap across 12 word pairs: exploratory Wav2Vec2 development result
 
 19 November 2026. This case study interprets the [independently reviewed saved run](WAV2VEC2_DEV_WORD_DISJOINT_RESULT_INDEPENDENT_REVIEW_V1.md). It adds no model inference or new effect estimate. The corpus-v1 development set was already inspected in earlier work, and its Piper and Kokoro voices are the same engines as FIT. This is an exploratory cross-word check, not a fresh held-out or independent-voice result.
 
