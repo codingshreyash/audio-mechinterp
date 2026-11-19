@@ -44,6 +44,7 @@ AMENDMENT_SHA256 = "9e4fe95f0f3828c8bedfb6d36705a5824feffcb34854371ba6450e0ddb9b
 MAX_WALL_SECONDS = 1_800
 MAX_VRAM_MIB = 75_000
 H200_MAX_VRAM_MIB = 130_000
+H200_MIN_FREE_DISK_GIB = 30
 MAX_EVIDENCE_BYTES = 1 << 30
 MIN_EVIDENCE_BYTES = 65_536
 TERMINAL_RESERVE_BYTES = 16_384
@@ -621,8 +622,8 @@ def check_h200_sample_runtime(checkpoint_dir: Path) -> dict[str, Any]:
     require("H200" in name and int(memory) >= H200_MAX_VRAM_MIB,
             f"H200 >= {H200_MAX_VRAM_MIB:,} MiB required; got {gpu[0]}")
     free_bytes = shutil.disk_usage(checkpoint_dir).free
-    require(free_bytes >= 60 * 1024**3,
-            "less than 60 GiB disk free after checkpoint staging")
+    require(free_bytes >= H200_MIN_FREE_DISK_GIB * 1024**3,
+            f"less than {H200_MIN_FREE_DISK_GIB} GiB disk free after checkpoint staging")
     return {"weight_bytes": pinned.WEIGHT_BYTES,
             "weight_sha256": pinned.WEIGHT_SHA256,
             "gpu_policy": "h200-141gb", "gpu": name,

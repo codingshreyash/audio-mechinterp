@@ -414,8 +414,11 @@ class SampleSmokeTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, message):
                         smoke.check_h200_sample_runtime(self.checkpoint)
             smi.return_value = SimpleNamespace(stdout="NVIDIA H200, 141000\n")
-            disk.return_value = SimpleNamespace(free=59 * 1024**3)
-            with self.assertRaisesRegex(ValueError, "less than 60 GiB"):
+            disk.return_value = SimpleNamespace(free=30 * 1024**3)
+            self.assertEqual(smoke.check_h200_sample_runtime(self.checkpoint)[
+                "disk_free_gib"], 30.0)
+            disk.return_value = SimpleNamespace(free=30 * 1024**3 - 1)
+            with self.assertRaisesRegex(ValueError, "less than 30 GiB"):
                 smoke.check_h200_sample_runtime(self.checkpoint)
 
     def test_h200_ready_preload_uses_sample_only_runtime_not_shared_gpu_policy(self):
