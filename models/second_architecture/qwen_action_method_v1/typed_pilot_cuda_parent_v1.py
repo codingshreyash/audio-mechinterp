@@ -225,6 +225,7 @@ def launch(stage: str) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-preflight", action="store_true")
+    parser.add_argument("--capture-admission", action="store_true")
     parser.add_argument("--run-stage", choices=("load", "pilot"))
     args = parser.parse_args()
     if args.source_preflight:
@@ -233,6 +234,11 @@ def main() -> None:
             "pilot_attempt_exists": backend.PILOT_ATTEMPT.exists(),
             "load_go_exists": backend.LOAD_GO.exists(),
             "pilot_go_exists": backend.PILOT_GO.exists()}, sort_keys=True))
+    elif args.capture_admission:
+        print(json.dumps({"schema": "qwen_action_cuda_admission_candidate_v1",
+            "source_identity": backend.source_identity(),
+            "runtime_identity": backend.runtime_identity(),
+            "baseline_gpu_used_bytes": _gpu_used_bytes()}, sort_keys=True))
     elif args.run_stage:
         result = launch(args.run_stage)
         print(json.dumps({"status": result["status"],
@@ -240,7 +246,7 @@ def main() -> None:
         if result["status"] != "candidate_saved_pending_audit":
             raise SystemExit(2)
     else:
-        parser.error("choose --source-preflight or --run-stage")
+        parser.error("choose --source-preflight, --capture-admission, or --run-stage")
 
 
 if __name__ == "__main__":
