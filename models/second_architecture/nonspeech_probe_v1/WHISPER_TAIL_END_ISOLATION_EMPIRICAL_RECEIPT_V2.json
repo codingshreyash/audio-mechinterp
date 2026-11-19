@@ -1,0 +1,54 @@
+{
+  "attempts": {
+    "offset_16000": {
+      "admission_sha256": "7b55d90caccfb167d802a1665caacee5a4cd4633901fe9fbc0c6e4d161c19829",
+      "go_sha256": "8896e93244fe2c0f5c64dff6eebc45b28c2ffd0814f5312799ba162062d3e177",
+      "parent_result_sha256": "b9424d0d3b42f43b97f4f8977dd8c07cfa2dcc8d338f3f965616722a11fec948",
+      "path": "/Users/shrranjan/audio-mechinterp/models/second_architecture/nonspeech_probe_v1/runs/whisper_tail_end_isolation_v2/offset_16000_attempt_001",
+      "progress_sha256": "9f191a8ba0f90b13e5b31cf9a5f2192f772e1462492b9ebb26606bee198229cc",
+      "records_sha256": "8a66a2b335cdd26a44375265d772848a2aca2a3fe498b9f61c4cbdee289d19eb"
+    },
+    "offset_8000": {
+      "admission_sha256": "ddaf62816d1bbaf2bc58be92aadb7819a3b460427e927493679102ef725e3c45",
+      "go_sha256": "a9acc0ccffbd560471aac5bbb12716d4aa7a003bc032c94481b65decca421be7",
+      "parent_result_sha256": "2dc959119574ce2ed76adcb40926b482d40dd8926b52635efd44fc450f66678d",
+      "path": "/Users/shrranjan/audio-mechinterp/models/second_architecture/nonspeech_probe_v1/runs/whisper_tail_end_isolation_v2/offset_8000_attempt_001",
+      "progress_sha256": "9f191a8ba0f90b13e5b31cf9a5f2192f772e1462492b9ebb26606bee198229cc",
+      "records_sha256": "f42f13094df4daf3606a63aaa03b3623a573673f5ba8b1e122f20c06285e6d67"
+    },
+    "original": {
+      "admission_sha256": "c3d637a541cd36a41df3b54e531a818d337f20ad6dc6975ac331df39b24dd7f1",
+      "go_sha256": "987efb22b51e074d401015fb109ba0fd82bd7dabb23291449d78dc1eeefb4aa0",
+      "parent_result_sha256": "a2ef522d36a2dbd5d990d7c417d18fcb0b19712c595d7d90892037d98f639ecb",
+      "path": "/Users/shrranjan/audio-mechinterp/models/second_architecture/nonspeech_probe_v1/runs/whisper_tail_end_isolation_v2/original_attempt_001",
+      "progress_sha256": "c9304d197dec4fc4f7de5f9edc104baeaccd1ff4d427a681d6ec7abeba01708d",
+      "records_sha256": "3792bc5f2d729bb729f9b1492bbc6012504c2d68a96d3ddff82437071f56969d"
+    }
+  },
+  "joint_decision": {
+    "confirmatory_within_pair_boundary_timing": false,
+    "interpretation_limit": "One engineered beep/noise pair at a pre-attention coordinate; this cannot isolate local acoustics from positional context or establish a security problem.",
+    "schema": "whisper_tail_end_isolation_joint_decision_v2",
+    "status": "THREE_RAW_AUDITS_JOINED",
+    "strict_count_out_of_2": 0,
+    "strict_isolated_old_tail_end_offsets": [
+      {
+        "append_new_end_native_below_threshold": true,
+        "original_qualified": true,
+        "secondary_opposite_direct_preserved_recipient": false,
+        "stage": "offset_8000",
+        "strict_isolated_old_tail_end_crossover": false,
+        "translated_strict": false
+      },
+      {
+        "append_new_end_native_below_threshold": true,
+        "original_qualified": true,
+        "secondary_opposite_direct_preserved_recipient": false,
+        "stage": "offset_16000",
+        "strict_isolated_old_tail_end_crossover": false,
+        "translated_strict": false
+      }
+    ]
+  },
+  "schema": "whisper_tail_end_isolation_empirical_receipt_v2"
+}
