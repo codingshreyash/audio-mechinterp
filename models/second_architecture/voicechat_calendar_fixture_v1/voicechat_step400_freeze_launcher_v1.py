@@ -38,6 +38,11 @@ SOURCE_NAMES = (
     "voicechat_step400_probe_core_v1.py",
     "voicechat_step400_supervisor_v1.py",
     "voicechat_step400_saved_auditor_v1.py",
+    "test_voicechat_step400_freeze_launcher_v1.py",
+    "test_voicechat_step400_worker_v1.py",
+    "test_voicechat_step400_probe_core_v1.py",
+    "test_voicechat_step400_supervisor_v1.py",
+    "test_voicechat_step400_saved_auditor_v1.py",
 )
 CAPS = {"wall_seconds": 1_800, "gpu_mib": 130_000,
         "evidence_bytes": 64 * 1024**2, "post_staging_disk_bytes": 30 * 1024**3,

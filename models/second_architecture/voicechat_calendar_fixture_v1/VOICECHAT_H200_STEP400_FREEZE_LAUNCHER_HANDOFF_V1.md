@@ -9,8 +9,8 @@ experiment.
 `voicechat_step400_freeze_launcher_v1.py` has two explicit modes. `build`
 requires a new attempt ID and absent freeze/review files. It invokes the
 existing V5 H200 source, checkpoint, package, native FFmpeg, Nano-cache,
-offline-resolution, and actual disk/GPU checks. It freezes the exact five
-local diagnostic source files, project commit, pinned NeMo source, public WAV,
+offline-resolution, and actual disk/GPU checks. It freezes the five local
+diagnostic source files and five matching tests, project commit, pinned NeMo source, public WAV,
 response JSON, VoiceChat checkpoint, Nano metadata, command, environment,
 resource caps, build-time ready/preload receipts, and an independently derived
 expected worker identity. The worker identity's prompt hashes are calculated
