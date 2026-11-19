@@ -39,7 +39,9 @@ actual reviewer and coordinator records before any later model admission.
 
 `--inspect-first` remains a read-only way to see whether a sparse third review
 is required. `--make-third` is allowed only for flagged cases, and the third
-reviewer must have a distinct ID. A third record documents disagreement but
+reviewer must have a distinct ID. V2 uses a new fixed `third_review_002`
+directory so a V1 third bundle can never be mistaken for V2 evidence. A third
+record documents disagreement but
 does not rescue a failed first pair. The final audit requires `--attestation`
 along with both first exports, optional required third export, and a new
 absolute `--output`. It retains the full 18-case denominator and sets
@@ -53,7 +55,7 @@ eval/tts/.venv/bin/python -m unittest models.second_architecture.qwen_action_met
 eval/tts/.venv/bin/python -m py_compile models/second_architecture/qwen_action_method_v1/human_qa_v2.py
 ```
 
-The six V2 synthetic tests cover the exact 2099 first/third counterexamples,
+The seven V2 synthetic tests cover the exact 2099 first/third counterexamples,
 the 300-second boundary, changed binding, required coordinator claims and a
 non-authorizing final receipt. These tests supply synthetic dictionaries only;
 they do not stand in for actual listening.

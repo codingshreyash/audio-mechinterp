@@ -23,7 +23,7 @@ from .endpoint import load_spec
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE / "runs/source_render_v2/attempt_001"
 BUNDLE = HERE / "runs/source_render_v2/review_bundle_001"
-THIRD = HERE / "runs/source_render_v2/third_review_001"
+THIRD = HERE / "runs/source_render_v2/third_review_002"
 INTENTS = {"LIST": "list_only", "ASK": "ask_before_change",
            "CANCEL": "confirm_now"}
 MEANINGS = set(INTENTS.values()) | {"unclear"}

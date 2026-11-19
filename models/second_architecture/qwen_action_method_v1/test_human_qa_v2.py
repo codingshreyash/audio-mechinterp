@@ -17,6 +17,9 @@ NOW = datetime(2026, 11, 19, 12, 2, tzinfo=timezone.utc)
 
 
 class HumanQAV2Tests(unittest.TestCase):
+    def test_sparse_third_directory_is_versioned(self) -> None:
+        self.assertEqual(qa.THIRD.name, "third_review_002")
+
     def test_first_export_in_2099_rejected_before_reference_compare(self) -> None:
         mapping, a, b, expected = fixture()
         a["locked_utc"] = b["locked_utc"] = "2099-01-01T00:00:00.000Z"
