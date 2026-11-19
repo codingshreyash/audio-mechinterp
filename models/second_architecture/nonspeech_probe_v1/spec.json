@@ -1,0 +1,21 @@
+{
+  "schema": "nonspeech_probe_source_spec_v1",
+  "sample_rate_hz": 16000,
+  "durations_seconds": [2, 8],
+  "families": ["steady_tone", "beep_train", "click_train", "band_noise"],
+  "rms_levels": [0.005, 0.05],
+  "tone_hz": 700,
+  "beep_hz": 1000,
+  "beep_period_samples": 8000,
+  "beep_on_samples": 3200,
+  "click_period_samples": 6400,
+  "click_width_samples": 128,
+  "band_noise_low_hz": 300,
+  "band_noise_high_hz": 3400,
+  "seed_band_noise_2s": 9102,
+  "seed_band_noise_8s": 9108,
+  "seed_dither_2s": 9202,
+  "seed_dither_8s": 9208,
+  "pcm_peak_ceiling": 0.8,
+  "output_cases": 20
+}

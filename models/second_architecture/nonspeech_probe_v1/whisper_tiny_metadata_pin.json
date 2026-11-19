@@ -1,0 +1,29 @@
+{
+  "schema": "whisper_tiny_multilingual_metadata_pin_v1",
+  "repo": "openai/whisper-tiny",
+  "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+  "provenance": "Hugging Face revision API and raw resolve URLs, checked 2026-11-19; no candidate weights fetched",
+  "files_sha256": {
+    "config.json": "ffdccec4f3211f4c63310f2b7098f309fe70f3952cedc5e4d11e43f5b2379b98",
+    "generation_config.json": "a5d5325911f16e74001a72fa13d6e208eee51548f994646de1f4b4cc8b35b512",
+    "preprocessor_config.json": "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666",
+    "tokenizer_config.json": "2a4c4281cf9f51ac6ccc406fdc711a087afe6530f671fa7b80953edc498275ce",
+    "tokenizer.json": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566",
+    "vocab.json": "8f680bba319e01a653d2e8a5dbc17a9157179e0576e6ce74ce0c06356c6e24f9",
+    "merges.txt": "2df2990a395e35e8dfbc7511e08c12d56018d8d04691e0133e5d63b21e154dc6",
+    "normalizer.json": "bf1c507dc8724ca9cf9903640dacfb69dae2f00edee4f21ceba106a7392f26dd",
+    "special_tokens_map.json": "e67ae3a0aaa99abcd9f187138e12db1f65c16a14761c50ef10eef2c174a7a691",
+    "added_tokens.json": "9715fd2243b6f06a5858b5e32950d2853f73dd5bc201aafcf76f5082a2d8acd1"
+  },
+  "observed_generation_config": {
+    "is_multilingual": true,
+    "forced_decoder_ids": [[1, null], [2, 50359]],
+    "task_to_id": {"transcribe": 50359, "translate": 50358},
+    "decoder_start_token_id": 50258,
+    "no_timestamps_token_id": 50363,
+    "language_token_count": 99,
+    "language_token_examples": {"en": 50259, "ru": 50263, "hi": 50276}
+  },
+  "observed_config_forced_decoder_ids": [[1, 50259], [2, 50359], [3, 50363]],
+  "interpretation": "Generation config appears to leave the language slot open, while config.json carries an English prefix. The resolved installed-code path must be inspected and tested before inference; this metadata pin alone does not establish actual auto-language behavior."
+}
