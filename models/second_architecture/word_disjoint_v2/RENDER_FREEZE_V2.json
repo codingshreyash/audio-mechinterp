@@ -1,0 +1,20 @@
+{
+  "plan_review_sha256": "2d96fc8104a81bcd3dda4dfdc9f84e5a773eca7481415bfdfd6492f2c747d4cd",
+  "plan_sha256": "a2065c2bf74b9acb56c511f89142e86aa653e3b2a910215ab42a1c478034d9e6",
+  "reviewed_source_commit": "8c65d8ebdc18fde10e21774721bb65f4d790f4b1",
+  "scope": "32 synthetic stimuli and technical audit only; candidate inference requires blinded human QA and separate runner freeze",
+  "source_go_review_commit": "758fd8cff21e1bf569dff1b0bf6da6b9cb00c695",
+  "source_go_review_sha256": "3732726d885e61dbdfdb472210b5d0baff19a8bdee8b8e4042c20ee150155cab",
+  "source_sha256": {
+    "README.md": "4025fdaf0fd0ab9107eaaa17e0cfdc5b8253b5b53ed5a5a7996f9354971e6a24",
+    "__init__.py": "46050500ba491a71951c429e0bd5e69eadb4136118974c5b8475fc04b43aee6c",
+    "audit.py": "6411c2961ba31700f3c3e099124644c80c38e52c925c4ef02cb9d01173cd831f",
+    "queue.py": "1744be6270352f86fb1990f9ef7223734514dd05a9ec14b717876c8b28d15e3c",
+    "render.py": "f6524f30f2655c9f62fdc4898be5e480c20c5e0ba84c5e19427ad437656d044c",
+    "test_fixture_source.py": "1228f0c60b6ccb1154739eab376546ce74a50564d05c9e29357880d917f578e2"
+  },
+  "source_tts_helper_sha256": "bbbd7931dd93121d32b32a9c7898d0a14a3e884f7a421a01d4ecdfd3bd3d063c",
+  "source_tts_plan_sha256": "13cea31e2e4843d70a6ab26b060812f43691147435c1e10ea9ebaaa0b24efc78",
+  "source_tts_renderer_sha256": "c3f4f9f71d9c7db8db3af414dbde72ebe7e0a9bc1a0c354ed0d86b8dbe3d9783",
+  "status": "independently_reviewed_renderer_frozen"
+}
