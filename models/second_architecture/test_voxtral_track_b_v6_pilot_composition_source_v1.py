@@ -95,6 +95,24 @@ class PilotCompositionSourceTests(unittest.TestCase):
                         free_bytes=lambda _: 100 * 1024**3, sync=lambda: None)
             self.assertEqual(calls, [])
 
+    def test_replayed_pre_host_timestamp_cannot_be_post_host_go(self):
+        _model, batch, _source, _donor = fixture()
+        with tempfile.TemporaryDirectory() as temp, patch.object(
+                worker, 'LONGEST_ALIAS', (7, 9, 8, 2)):
+            root = Path(temp)
+            f = fake_case(root, batch)
+            with patch.object(admission_launcher, '_actual_qa', return_value=f.qa), patch.object(
+                    admission_launcher, '_fresh_no_weight_preflight', return_value=f.frozen):
+                with self.assertRaisesRegex(ValueError, 'strictly later'):
+                    composition._execute_fake_testable_composition(
+                        files=f.files, review_path=f.review_path, pins=f.pins,
+                        output_dir=root / 'pilot', batch_provider=lambda: (batch, batch, 0),
+                        load_model=FakePilotModel, host_probe=fake_host,
+                        post_host=lambda: f.frozen['host'], memory_probe=lambda: 1024,
+                        free_bytes=lambda _: 100 * 1024**3, sync=lambda: None)
+            self.assertTrue((root / 'pilot/pilot_measurement.json').is_file())
+            self.assertFalse((root / 'pilot.composition.json').exists())
+
     def test_top_level_child_operation_pickleable_but_holds_before_loader(self):
         with tempfile.TemporaryDirectory() as temp:
             f = Fixture(Path(temp))

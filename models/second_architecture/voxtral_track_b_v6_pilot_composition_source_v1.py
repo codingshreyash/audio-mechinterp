@@ -96,9 +96,9 @@ def _execute_fake_testable_composition(*, files: worker.AdmissionFiles,
         raise ValueError('Worker schedule did not finish as resource-unverified')
     after = post_host()
     admission_launcher._verify_fresh_host(after)
-    if (datetime.fromisoformat(after['collected_utc']) <
+    if (datetime.fromisoformat(after['collected_utc']) <=
             datetime.fromisoformat(proof['fresh_host_collected_utc'])):
-        raise ValueError('Post-run host probe predates pre-run probe')
+        raise ValueError('Post-run host probe must be strictly later than pre-run probe')
     raw = gzip.decompress(base64.b64decode(after['power_log_gzip_base64'], validate=True))
     sidecar = output_dir.with_name(output_dir.name + '.composition.json')
     worker._exclusive_json(sidecar, {
