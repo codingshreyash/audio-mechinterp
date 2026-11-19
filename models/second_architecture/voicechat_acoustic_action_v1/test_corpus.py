@@ -37,6 +37,48 @@ def filled_fake_annotations(template: dict) -> dict:
     return filled
 
 
+def forge_fake_source_identity(source: Path, *, change_script: bool) -> Path:
+    """Adversarial local edit used only to test production admission rejection."""
+    manifest_path = source / "source_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    pins = corpus._spec()["tts"]
+    identity = {
+        "piper_package_version": "1.8.0", "kokoro_package_version": "0.6.1",
+        "onnxruntime_version": "fake", "piper_voice": pins["piper"]["voice"],
+        "kokoro_voice": pins["kokoro"]["voice"],
+        "samantha_voice_line": pins["samantha"]["voice_line"],
+        "piper_model_sha256": pins["piper"]["model_sha256"],
+        "piper_config_sha256": pins["piper"]["config_sha256"],
+        "kokoro_model_sha256": pins["kokoro"]["model_sha256"],
+        "kokoro_voices_sha256": pins["kokoro"]["voices_sha256"],
+        "say_sha256": pins["samantha"]["command_sha256"],
+        "os_build": pins["samantha"]["os_build"],
+    }
+    manifest["renderer_identity"] = identity
+    if change_script:
+        manifest["rows"][0]["script"] = "A totally unrelated sentence."
+    else:
+        for row in manifest["rows"]:
+            text = row["script"]
+            raw = source / row["raw_path"]
+            if row["voice_id"] == "piper_amy_en_us":
+                command = ["PiperVoice.synthesize_wav", pins["piper"]["voice"], text]
+            elif row["voice_id"] == "kokoro_bella_en_us":
+                command = ["Kokoro.create", pins["kokoro"]["voice"], text]
+            else:
+                command = [pins["samantha"]["command"], "-v", "Samantha", "-o", str(raw), text]
+            row["render_command"] = command
+    manifest_path.write_text(json.dumps(manifest))
+    started = dict(manifest)
+    started["status"] = "started_no_model_inference"
+    started["rows"] = []
+    (source / "started.json").write_text(json.dumps(started))
+    template = corpus.annotation_template(manifest, corpus._sha_file(manifest_path))
+    annotations = source / "forged_annotations.json"
+    annotations.write_text(json.dumps(filled_fake_annotations(template)))
+    return annotations
+
+
 class CorpusSourceTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
@@ -151,9 +193,43 @@ class CorpusSourceTests(unittest.TestCase):
         data["records"][0]["annotator_b"]["decision"] = [1201, 2001]
         data["records"][0]["adjudication"]["by"] = "fake_a"
         path.write_text(json.dumps(data))
-        with self.assertRaisesRegex(ValueError, "separate adjudicator"):
+        with self.assertRaisesRegex(ValueError, "distinct third adjudicator"):
             corpus.make_variants(source, path, self.root / "failed_disagreement",
                                  allow_synthetic_test_only=True)
+
+    def test_agreed_proposals_cannot_drift_to_coordinator_window(self) -> None:
+        source = self.render()
+        path = self.annotations(source)
+        data = json.loads(path.read_text())
+        record = data["records"][0]
+        record["adjudication"]["decision"] = [3000, 3800]
+        record["adjudication"]["displaced"] = [7000, 7800]
+        path.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, "distinct third adjudicator"):
+            corpus.make_variants(source, path, self.root / "failed_consensus_drift",
+                                 allow_synthetic_test_only=True)
+        record["third_annotation"] = {"reviewer_id": "fake_third",
+                                      "decision": [3000, 3800], "displaced": [7000, 7800]}
+        record["adjudication"]["by"] = "fake_third"
+        path.write_text(json.dumps(data))
+        result = corpus.make_variants(source, path, self.root / "third_ok",
+                                      allow_synthetic_test_only=True)
+        self.assertEqual(len(result["rows"]), 48)
+
+    def test_changed_a1_script_and_fake_identity_cannot_self_repin(self) -> None:
+        source = self.render()
+        annotations = forge_fake_source_identity(source, change_script=True)
+        with self.assertRaisesRegex(ValueError, "frozen script"):
+            corpus.make_variants(source, annotations, self.root / "forged_script")
+        self.assertFalse((self.root / "forged_script" / "variant_manifest.json").exists())
+
+        other = self.root / "other_source"
+        corpus.render_sources(other, renderer=fake_renderer,
+                              renderer_identity={"synthetic_test_only": True})
+        annotations = forge_fake_source_identity(other, change_script=False)
+        with self.assertRaisesRegex(ValueError, "Independent admission file absent"):
+            corpus.make_variants(other, annotations, self.root / "forged_identity")
+        self.assertFalse((self.root / "forged_identity" / "variant_manifest.json").exists())
 
 
 if __name__ == "__main__":

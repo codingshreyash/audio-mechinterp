@@ -20,13 +20,13 @@ Give two independent, English-fluent annotators the 12 `*.clean.wav` files and t
 - `decision`: the listed phrase, including the authorization wording.
 - `displaced`: an equally wide speech interval elsewhere in the same utterance, separated from `decision` by at least 2,560 frames (160 ms).
 
-Only content frames before the five-second zero tail are valid. Each annotator enters a distinct `reviewer_id` and their own proposed `decision` and `displaced` arrays. The coordinator then enters the final intervals in `adjudication`, with an `adjudication.by` ID and nonempty `note`. If the proposals differ, a third person must adjudicate. Preserve both initial proposals. This JSON file is a provenance record, but the program cannot prove identities or that humans listened; the coordinator must attest independence. **Do not auto-align, infer, or fill intervals from a transcript or model output.**
+Only content frames before the five-second zero tail are valid. Each annotator enters a distinct `reviewer_id` and their own proposed `decision` and `displaced` arrays. The coordinator then enters the final intervals in `adjudication`, with an `adjudication.by` ID and nonempty `note`. If both initial proposals agree, the final intervals must equal them. If the proposals disagree **or** the final differs from either proposal, a distinct third person records an independent `third_annotation` timing proposal and adjudicates. The final must equal one of the three recorded proposals. Preserve all initial proposals and the reason. This JSON file is a provenance record, but the program cannot prove identities or that humans listened; the coordinator must attest independence. **Do not auto-align, infer, or fill intervals from a transcript or model output.**
 
 Make a copy of the blank template; do not edit the renderer's original template. The exact `source_manifest_sha256`, `clean_wav_sha256`, `clean_wav_path`, `decision_phrase` and `content_frames` fields must stay intact. If a source lacks a valid displaced interval, this version stops before creating a completed corpus. A later revised design needs its own review.
 
 ## Stage 2: make the 48 fixed acoustic arms
 
-After the independent annotations are complete, run:
+After the independent annotations are complete, an independent source byte audit must first commit both `SOURCE_RENDERED_INDEPENDENT_REVIEW_GO_V1.md` and `SOURCE_RENDERED_INDEPENDENT_ADMISSION_GO_V1.json`. The exact receipt schema and checks are in [the admission handoff](SOURCE_ADMISSION_HANDOFF_V2.md). These files do not exist yet; production stage 2 currently stops. After that audit, run:
 
 ```sh
 eval/tts/.venv/bin/python -m models.second_architecture.voicechat_acoustic_action_v1.corpus \
@@ -37,7 +37,7 @@ eval/tts/.venv/bin/python -m models.second_architecture.voicechat_acoustic_actio
 
 For each source, this writes clean, full-content noise, decision-window noise, and displaced-window noise. All three noisy arms use the same source-indexed Gaussian vector, globally standardized over the content interval and scaled to nominal 20-dB SNR. The terminal zero tail stays unchanged; the builder rejects any PCM16 clipping. `variant_manifest.json` records every file/PCM hash, noise seed, exact mask and realized SNR. A missing or invalid annotation leaves `failure.json` and no completed manifest. All 48 WAVs still require blinded two-listener wording/intelligibility review before any candidate VoiceChat inference.
 
-Fake tests use a tone renderer in temporary directories and mark the source `synthetic_test_only`. The public stage-2 command rejects that source identity. Run them with:
+Fake tests use a tone renderer in temporary directories and mark the source `synthetic_test_only`. The public stage-2 command rejects that source identity. Stage 2 also checks the stage-1 start receipt, all 12 frozen scripts/voices/commands, raw-to-converted-to-clean PCM reconstruction, and the committed independent manifest pin. Run fake tests with:
 
 ```sh
 eval/tts/.venv/bin/python -m unittest \

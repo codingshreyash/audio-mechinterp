@@ -35,6 +35,8 @@ SPEC_SHA256 = "3325f4f693461cf48cf994bfda486e81b2bc6535d0c855a3ac838601644d414d"
 ROOT = HERE.parents[2]
 V1 = ROOT / "models/second_architecture/VOICECHAT_ACOUSTIC_ACTION_PROSPECTIVE_V1.md"
 V2 = ROOT / "models/second_architecture/VOICECHAT_ACOUSTIC_ACTION_PROSPECTIVE_V2.md"
+SOURCE_ADMISSION_GO = HERE / "SOURCE_RENDERED_INDEPENDENT_ADMISSION_GO_V1.json"
+SOURCE_REVIEW_GO = HERE / "SOURCE_RENDERED_INDEPENDENT_REVIEW_GO_V1.md"
 SAMPLE_RATE = 16000
 TAIL_FRAMES = 80000
 ARMS = ("clean", "full_noise", "decision_noise", "displaced_noise")
@@ -143,7 +145,8 @@ def _raw_float_wav(path: Path, samples: np.ndarray, sample_rate: int) -> None:
         sink.write(header + data)
 
 
-def _convert_raw(raw: Path, converted: Path, clean: Path) -> dict[str, Any]:
+def _compute_converted(raw: Path) -> tuple[np.ndarray, dict[str, Any]]:
+    """Reconstruct conversion from raw bytes without writing a WAV."""
     samples, source_rate = sf.read(raw, dtype="float64", always_2d=True)
     _require(samples.ndim == 2 and samples.shape[1] == 1 and source_rate > 0
              and len(samples) >= source_rate // 2
@@ -165,18 +168,23 @@ def _convert_raw(raw: Path, converted: Path, clean: Path) -> dict[str, Any]:
     _require(bool(np.all((quantized >= -32768) & (quantized <= 32767))),
              "TTS conversion would clip; preserve failed source")
     pcm = quantized.astype("<i2")
+    return pcm, {"raw_sample_rate_hz": source_rate, "raw_frames": len(samples),
+                 "resample_up": up, "resample_down": down,
+                 "converted_frames": len(pcm), "clean_frames": len(pcm) + TAIL_FRAMES,
+                 "pre_gain_rms": before_rms, "pre_gain_peak": before_peak,
+                 "level_match_gain": gain,
+                 "post_gain_peak": float(np.max(np.abs(resampled))),
+                 "raw_pcm_float64_sha256": _sha_bytes(np.asarray(samples[:, 0], dtype="<f8").tobytes()),
+                 "converted_pcm_sha256": _sha_bytes(pcm.tobytes())}
+
+
+def _convert_raw(raw: Path, converted: Path, clean: Path) -> dict[str, Any]:
+    pcm, numeric = _compute_converted(raw)
     _write_pcm(converted, pcm)
     _write_pcm(clean, np.concatenate((pcm, np.zeros(TAIL_FRAMES, dtype="<i2"))))
-    return {"raw_sample_rate_hz": source_rate, "raw_frames": len(samples),
-            "resample_up": up, "resample_down": down,
-            "converted_frames": len(pcm), "clean_frames": len(pcm) + TAIL_FRAMES,
-            "pre_gain_rms": before_rms, "pre_gain_peak": before_peak,
-            "level_match_gain": gain,
-            "post_gain_peak": float(np.max(np.abs(resampled))),
-            "raw_sha256": _sha_file(raw), "converted_sha256": _sha_file(converted),
+    return {**numeric, "raw_sha256": _sha_file(raw),
+            "converted_sha256": _sha_file(converted),
             "clean_sha256": _sha_file(clean),
-            "raw_pcm_float64_sha256": _sha_bytes(np.asarray(samples[:, 0], dtype="<f8").tobytes()),
-            "converted_pcm_sha256": _sha_bytes(pcm.tobytes()),
             "clean_pcm_sha256": _sha_bytes(_read_pcm(clean).tobytes())}
 
 
@@ -263,6 +271,146 @@ def _source_id(row: dict[str, str]) -> str:
     return f"{row['script_id']}__{row['voice_id']}"
 
 
+def _committed_exact(path: Path) -> None:
+    """Reject a local, uncommitted source-admission self-repin."""
+    _require(path.is_file() and not path.is_symlink(),
+             f"Independent admission file absent: {path.name}")
+    relative = str(path.relative_to(ROOT))
+    listed = subprocess.run(["git", "-C", str(ROOT), "ls-files", "--error-unmatch",
+                             "--", relative], capture_output=True)
+    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain",
+                            "--", relative], capture_output=True, text=True, check=True)
+    committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{relative}"],
+                               capture_output=True)
+    _require(listed.returncode == 0 and not dirty.stdout.strip()
+             and committed.returncode == 0 and committed.stdout == path.read_bytes(),
+             f"Independent admission is not exact committed bytes: {path.name}")
+
+
+def _external_source_admission(source_dir: Path, manifest_path: Path,
+                               started_path: Path) -> dict[str, Any]:
+    """Require a separately committed reviewer pin for production stage 2."""
+    _committed_exact(SOURCE_REVIEW_GO)
+    _committed_exact(SOURCE_ADMISSION_GO)
+    receipt = json.loads(SOURCE_ADMISSION_GO.read_text(encoding="ascii"))
+    manifest_sha = _sha_file(manifest_path)
+    started_sha = _sha_file(started_path)
+    review_text = SOURCE_REVIEW_GO.read_text(encoding="utf-8")
+    _require(receipt.get("schema") == "voicechat_acoustic_source_admission_go_v1"
+             and receipt.get("status") == "independent_source_byte_audit_go"
+             and receipt.get("source_dir") == str(source_dir.resolve())
+             and receipt.get("source_manifest_sha256") == manifest_sha
+             and receipt.get("started_sha256") == started_sha
+             and receipt.get("source_spec_sha256") == _sha_file(SPEC_PATH)
+             and receipt.get("source_builder_sha256") == _sha_file(Path(__file__))
+             and receipt.get("review_sha256") == _sha_file(SOURCE_REVIEW_GO)
+             and "**Decision: GO" in review_text
+             and manifest_sha in review_text and started_sha in review_text,
+             "Externally reviewed exact stage-1 source manifest pin absent or different")
+    return receipt
+
+
+def _checked_source_provenance(source_dir: Path, spec: dict[str, Any],
+                               manifest_path: Path, manifest: dict[str, Any],
+                               *, allow_synthetic_test_only: bool) -> tuple[bool, dict[str, Any] | None]:
+    started_path = source_dir / "started.json"
+    _require(source_dir.is_dir() and not source_dir.is_symlink()
+             and started_path.is_file() and not started_path.is_symlink(),
+             "Stage-1 source directory or immutable start receipt absent")
+    started = json.loads(started_path.read_text(encoding="ascii"))
+    expected_start = dict(manifest)
+    expected_start["status"] = "started_no_model_inference"
+    expected_start["rows"] = []
+    _require(started == expected_start,
+             "Stage-1 start and completion identity/provenance differ")
+    _require(manifest.get("schema") == "voicechat_acoustic_action_sources_v1"
+             and manifest.get("status") == "complete_sources_no_human_intervals"
+             and manifest.get("spec_sha256") == _sha_file(SPEC_PATH)
+             and manifest.get("builder_sha256") == _sha_file(Path(__file__))
+             and manifest.get("protocol_v1_sha256") == _sha_file(V1)
+             and manifest.get("protocol_v2_sha256") == _sha_file(V2)
+             and manifest.get("planned_sources") == 12
+             and manifest.get("candidate_inference_authorized") is False
+             and isinstance(manifest.get("rows"), list)
+             and len(manifest["rows"]) == 12,
+             "Stage-1 source identity or population invalid")
+    identity = manifest.get("renderer_identity")
+    _require(isinstance(identity, dict), "Stage-1 renderer identity absent")
+    synthetic = identity.get("synthetic_test_only") is True
+    if synthetic:
+        _require(allow_synthetic_test_only,
+                 "Synthetic test renderer cannot enter the production variant path")
+        admission = None
+    else:
+        pins = spec["tts"]
+        _require(identity == {
+            "piper_package_version": "1.8.0",
+            "kokoro_package_version": "0.6.1",
+            "onnxruntime_version": identity.get("onnxruntime_version"),
+            "piper_voice": pins["piper"]["voice"],
+            "kokoro_voice": pins["kokoro"]["voice"],
+            "samantha_voice_line": pins["samantha"]["voice_line"],
+            "piper_model_sha256": pins["piper"]["model_sha256"],
+            "piper_config_sha256": pins["piper"]["config_sha256"],
+            "kokoro_model_sha256": pins["kokoro"]["model_sha256"],
+            "kokoro_voices_sha256": pins["kokoro"]["voices_sha256"],
+            "say_sha256": pins["samantha"]["command_sha256"],
+            "os_build": pins["samantha"]["os_build"],
+        } and isinstance(identity.get("onnxruntime_version"), str)
+                 and bool(identity["onnxruntime_version"]),
+                 "Pinned production TTS identity differs")
+        admission = None
+    _require([_source_id(row) for row in spec["source_plan"]]
+             == [row.get("source_id") for row in manifest["rows"]],
+             "Stage-1 source order or IDs differ from frozen plan")
+    for planned, row in zip(spec["source_plan"], manifest["rows"], strict=True):
+        source_id = _source_id(planned)
+        text = spec["scripts"][planned["script_id"]]
+        phrase = spec["decision_phrases"][planned["script_id"]]
+        raw_suffix = "aiff" if planned["voice_id"] == "apple_samantha_en_us" else "wav"
+        _require(all(row.get(key) == value for key, value in planned.items())
+                 and row.get("script") == text
+                 and row.get("script_sha256") == _sha_bytes(text.encode("ascii"))
+                 and row.get("decision_phrase") == phrase
+                 and row.get("raw_path") == f"{source_id}.raw.{raw_suffix}"
+                 and row.get("converted_path") == f"{source_id}.converted.wav"
+                 and row.get("clean_path") == f"{source_id}.clean.wav",
+                 f"Stage-1 frozen script/voice/phrase/path differs: {source_id}")
+        raw = source_dir / row["raw_path"]
+        converted = source_dir / row["converted_path"]
+        clean = source_dir / row["clean_path"]
+        _require(all(path.is_file() and not path.is_symlink() for path in (raw, converted, clean))
+                 and row.get("raw_sha256") == _sha_file(raw)
+                 and row.get("converted_sha256") == _sha_file(converted)
+                 and row.get("clean_sha256") == _sha_file(clean),
+                 f"Stage-1 source file hash differs: {source_id}")
+        if not synthetic:
+            if planned["voice_id"] == "piper_amy_en_us":
+                command = ["PiperVoice.synthesize_wav", pins["piper"]["voice"], text]
+            elif planned["voice_id"] == "kokoro_bella_en_us":
+                command = ["Kokoro.create", pins["kokoro"]["voice"], text]
+            else:
+                command = [pins["samantha"]["command"], "-v", "Samantha",
+                           "-o", str(raw), text]
+            _require(row.get("render_command") == command,
+                     f"Stage-1 engine command differs: {source_id}")
+        reconstructed, numeric = _compute_converted(raw)
+        _require(all(row.get(key) == value for key, value in numeric.items())
+                 and row.get("raw_frames") == numeric["raw_frames"]
+                 and row.get("converted_frames") == len(reconstructed)
+                 and row.get("clean_frames") == len(reconstructed) + TAIL_FRAMES
+                 and row.get("converted_pcm_sha256") == _sha_bytes(reconstructed.tobytes()),
+                 f"Stage-1 conversion metadata differs: {source_id}")
+        expected_clean = np.concatenate((reconstructed, np.zeros(TAIL_FRAMES, dtype="<i2")))
+        _require(np.array_equal(_read_pcm(converted), reconstructed)
+                 and np.array_equal(_read_pcm(clean), expected_clean)
+                 and row.get("clean_pcm_sha256") == _sha_bytes(expected_clean.tobytes()),
+                 f"Stage-1 raw-to-converted-to-clean reconstruction differs: {source_id}")
+    if not synthetic:
+        admission = _external_source_admission(source_dir, manifest_path, started_path)
+    return synthetic, admission
+
+
 def render_sources(output_dir: Path, *, renderer: Callable[[str, str, Path], list[str]] | None = None,
                    renderer_identity: dict[str, Any] | None = None) -> dict[str, Any]:
     """Render the 12 frozen sources; injected renderer is for fake tests only."""
@@ -334,6 +482,7 @@ def annotation_template(manifest: dict[str, Any], manifest_sha256: str) -> dict[
                          "content_frames": row["converted_frames"],
                          "annotator_a": {"reviewer_id": None, "decision": None, "displaced": None},
                          "annotator_b": {"reviewer_id": None, "decision": None, "displaced": None},
+                         "third_annotation": None,
                          "adjudication": {"by": None, "decision": None, "displaced": None, "note": None}}
                         for row in manifest["rows"]]}
 
@@ -393,10 +542,24 @@ def _checked_annotations(source_dir: Path, spec: dict[str, Any],
                  and isinstance(adjudication.get("note"), str)
                  and bool(adjudication["note"].strip()),
                  "Final interval adjudication absent")
-        _window_pair(adjudication, content, spec["min_interval_gap_frames"], "adjudication")
-        if proposed[0][1] != proposed[1][1]:
-            _require(adjudication["by"] not in {proposed[0][0], proposed[1][0]},
-                     "Disagreeing intervals require separate adjudicator")
+        final_pair = _window_pair(adjudication, content,
+                                  spec["min_interval_gap_frames"], "adjudication")
+        disagreement = proposed[0][1] != proposed[1][1]
+        drift = final_pair != proposed[0][1] or final_pair != proposed[1][1]
+        third = record.get("third_annotation")
+        if disagreement or drift:
+            _require(isinstance(third, dict)
+                     and isinstance(third.get("reviewer_id"), str)
+                     and len(third["reviewer_id"].strip()) >= 2
+                     and third["reviewer_id"] not in {proposed[0][0], proposed[1][0]}
+                     and adjudication["by"] == third["reviewer_id"],
+                     "Disagreement or final drift requires distinct third adjudicator")
+            third_pair = _window_pair(third, content,
+                                      spec["min_interval_gap_frames"], "third_annotation")
+            _require(final_pair in (proposed[0][1], proposed[1][1], third_pair),
+                     "Final intervals must follow a recorded proposal")
+        else:
+            _require(third is None, "Unneeded third annotation changes agreed result")
     return data
 
 
@@ -443,14 +606,9 @@ def make_variants(source_dir: Path, annotation_path: Path,
         _require(manifest_path.is_file() and not manifest_path.is_symlink(),
                  "Complete source manifest absent")
         manifest = json.loads(manifest_path.read_text(encoding="ascii"))
-        _require(manifest.get("schema") == "voicechat_acoustic_action_sources_v1"
-                 and manifest.get("status") == "complete_sources_no_human_intervals"
-                 and manifest.get("spec_sha256") == _sha_file(SPEC_PATH)
-                 and len(manifest.get("rows", [])) == 12,
-                 "Source render is not complete or spec drifted")
-        synthetic_source = manifest.get("renderer_identity", {}).get("synthetic_test_only") is True
-        _require(not synthetic_source or allow_synthetic_test_only,
-                 "Synthetic test renderer cannot enter the production variant path")
+        synthetic_source, source_admission = _checked_source_provenance(
+            source_dir, spec, manifest_path, manifest,
+            allow_synthetic_test_only=allow_synthetic_test_only)
         _require(annotation_path.is_file() and not annotation_path.is_symlink(),
                  "Two-person annotation file absent")
         annotations = _checked_annotations(source_dir, spec, manifest, annotation_path)
@@ -513,6 +671,9 @@ def make_variants(source_dir: Path, annotation_path: Path,
                   "status": "complete_48_wavs_no_human_qa_or_model_inference",
                   "created_utc": _utc(), "spec_sha256": _sha_file(SPEC_PATH),
                   "source_manifest_sha256": _sha_file(manifest_path),
+                  "started_sha256": _sha_file(source_dir / "started.json"),
+                  "source_admission_sha256": _sha_file(SOURCE_ADMISSION_GO)
+                  if source_admission is not None else None,
                   "annotation_sha256": _sha_file(annotation_path),
                   "builder_sha256": _sha_file(Path(__file__)),
                   "synthetic_test_only": synthetic_source,
