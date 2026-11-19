@@ -1,0 +1,7 @@
+# Independent correction review: Track B campaign supervisor
+
+18 November 2026. Reviewed correction `0376d3b` against prior independent HOLD `bb2dc80`. **GO for the corrected source-only, fake-tested supervisor skeleton; HOLD for live campaign or candidate model load.** I loaded no model and ran no candidate inference.
+
+The post-record failure is fixed. If a resource gate fails after an exclusive context record is written, the supervisor keeps that original record and marks its final row `failed_after_record` with its existing SHA-256. Finalization verifies the file hash rather than reopening the path for creation, writes the remaining context records, and emits one `failed_no_retry` campaign result. It separately counts `completed`, `failed`, `partial` and `missing` contexts. The external claim still prevents reuse of the campaign attempt.
+
+All **4/4 fake CPU tests passed**. I also independently reran the disk-drop case, capturing the first context record and both gradient-sidecar SHA-256 values at the moment free disk falls below the gate. The final result had 0 completed, 0 failed, **1 partial and 15 missing** contexts; all 16 context JSON files, both original sidecars, the unchanged record/sidecar hashes, the external claim and `campaign_result.json` were present. The public entry still cannot invoke the loader. Live work remains gated on the real post-pilot GO, reviewed launcher, hard watchdog, MPS high-water, independent host/resource checks and saved-data audit.
