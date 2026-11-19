@@ -147,16 +147,16 @@ class CausalLiveSourceOnlyTest(unittest.TestCase):
             candidate = root / "attempt"
             missing_worker_go = root / "missing_worker_go.json"
             missing_parent_go = root / "missing_parent_go.json"
-            with (mock.patch.object(worker, "WORKER_GO", missing_worker_go),
-                  mock.patch.object(parent, "PARENT_GO", missing_parent_go),
-                  mock.patch.object(parent, "ATTEMPT", candidate)):
+            with mock.patch.object(parent, "ATTEMPT", candidate):
                 with self.assertRaisesRegex(ValueError, "worker HOLD"):
-                    worker.verify_worker_go()
-                with self.assertRaisesRegex(ValueError, "worker HOLD"):
-                    parent.execute(candidate)
+                    worker.verify_worker_go(review=missing_worker_go)
+                with mock.patch.object(worker, "verify_worker_go",
+                                       side_effect=ValueError("worker HOLD")):
+                    with self.assertRaisesRegex(ValueError, "worker HOLD"):
+                        parent.execute(candidate)
                 with mock.patch.object(worker, "verify_worker_go", return_value={}):
                     with self.assertRaisesRegex(ValueError, "parent HOLD"):
-                        parent.verify_parent_go()
+                        parent.verify_parent_go(path=missing_parent_go)
             self.assertFalse(candidate.exists())
 
     def test_fake_matrix_and_saved_audit_with_mutation(self):
