@@ -13,9 +13,12 @@ class CausalPlanTests(unittest.TestCase):
         self.assertEqual(len(names), 20)
         self.assertEqual(len([name for name in names if name not in plan.DONORS]), 18)
         rows = plan.schedule()
-        self.assertEqual(len(rows), 326)
+        self.assertEqual(len(rows), 328)
         self.assertEqual(collections.Counter(row["stage"] for row in rows),
-                         {"donor": 2, "A": 180, "B": 144})
+                         {"donor": 4, "A": 180, "B": 144})
+        self.assertEqual([(row["case_id"], row["arm"]) for row in rows[:4]],
+                         [(plan.DONORS[0], "no_hook"), (plan.DONORS[0], "read_only"),
+                          (plan.DONORS[1], "no_hook"), (plan.DONORS[1], "read_only")])
         self.assertEqual(len({(row["stage"], row["case_id"], row["arm"])
                               for row in rows}), len(rows))
         for case in names:
@@ -53,7 +56,8 @@ class CausalPlanTests(unittest.TestCase):
         full = [row for row in rows if row["save_full_raw_logits_each_step"]]
         self.assertEqual(len(full), 38)  # two silence donors and 36 full-donor arms
         self.assertEqual(sum(row["stage"] == "donor" for row in full), 2)
-        self.assertTrue(all(row["stage"] == "donor" or row["arm"] == "donor_both"
+        self.assertTrue(all((row["stage"] == "donor" and row["arm"] == "no_hook")
+                            or row["arm"] == "donor_both"
                             for row in full))
         self.assertLessEqual(plan.worst_case_core_evidence_bytes()
                              + plan.METADATA_ALLOWANCE_BYTES

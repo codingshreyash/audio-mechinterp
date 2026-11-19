@@ -78,9 +78,9 @@ def schedule() -> tuple[dict, ...]:
         raise ValueError("non-silence population changed")
     rows: list[dict] = [
         {"stage": "donor", "case_id": name, "donor_id": name,
-         "site": "none", "arm": "no_hook", "active_rows": encoder_active_rows(name),
-         "save_full_raw_logits_each_step": True}
-        for name in DONORS
+         "site": "none", "arm": arm, "active_rows": encoder_active_rows(name),
+         "save_full_raw_logits_each_step": arm == "no_hook"}
+        for name in DONORS for arm in ("no_hook", "read_only")
     ]
     for stage, site, arms in (
         ("A", "final_encoder", STAGE_A_ARMS),
@@ -98,7 +98,7 @@ def schedule() -> tuple[dict, ...]:
                     row["seeds"] = {phase: random_seed(name, stage, arm, phase)
                                     for phase in ("detect", "transcribe")}
                 rows.append(row)
-    if len(rows) != 326:
+    if len(rows) != 328:
         raise ValueError("causal arm count changed")
     return tuple(rows)
 
@@ -117,7 +117,7 @@ def main() -> None:
     rows = schedule()
     payload = json.dumps(rows, sort_keys=True, separators=(",", ":")).encode()
     print(json.dumps({"schema": "nonspeech_whisper_causal_plan_v1",
-                      "population": 18, "donor_baselines": 2,
+                      "population": 18, "donor_calls": 4,
                       "stage_a": 180, "stage_b": 144, "total": len(rows),
                       "worst_core_evidence_bytes": worst_case_core_evidence_bytes(),
                       "max_evidence_bytes": MAX_EVIDENCE_BYTES,

@@ -1,5 +1,7 @@
 # Prospective causal test of engineered non-speech responses in multilingual Whisper Tiny
 
+**Current execution count and schedule:** the [pre-inference V2 amendment](WHISPER_NONSPEECH_CAUSAL_DESIGN_AMENDMENT_V2.md) supersedes this document's original 326-call donor schedule with 328 calls and a new schedule hash. All other design details remain subject to that amendment and independent rereview.
+
 19 November 2026. **Design and no-weight schedule only. HOLD for an independently reviewed executable, admission, and one-shot run.** The [pre-inference control and storage amendment](WHISPER_NONSPEECH_CAUSAL_DESIGN_AMENDMENT_V1.md) resolves random-arm support, donor-logit evidence, and the evidence cap. This is a follow-up to the independently audited [V2 descriptive result](INDEPENDENT_MULTILINGUAL_DESCRIPTIVE_V2_RESULT_REVIEW_20261119.md), whose valid 20-case record SHA-256 is `588165986eadcfc7df04f6a8869de78ccd656f5b9be578fe41b3e1395abeec42`. The earlier V1 attempt remains invalid and excluded. This design was written **after** seeing that silence produced ` you` and only four beep clips differed from matched silence. Its all-case intervention is a post-descriptive mechanistic case study, not held-out discovery or a security test.
 
 ## Question and population
