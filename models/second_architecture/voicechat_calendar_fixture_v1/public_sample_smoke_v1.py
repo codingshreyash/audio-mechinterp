@@ -19,6 +19,7 @@ import re
 import resource
 import selectors
 import signal
+import stat
 import subprocess
 import sys
 import time
@@ -192,11 +193,15 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
     package_lines = [line for line in spec_lines if line and not line.startswith("#")
                      and line != "@EXPLICIT"]
     require(0 < len(package_lines) <= 512 and all(
-        re.fullmatch(r"https://[^\s#]+(?:\.conda|\.tar\.bz2)#(?:[0-9a-fA-F]{32}|[0-9a-fA-F]{64}|sha256=[0-9a-fA-F]{64})", line)
+        re.fullmatch(r"https://conda\.anaconda\.org/conda-forge/(?:linux-64|noarch)/[A-Za-z0-9_%+.!-]+(?:\.conda|\.tar\.bz2)#(?:[0-9a-fA-F]{32}|[0-9a-fA-F]{64}|sha256=[0-9a-fA-F]{64})", line)
         is not None for line in package_lines),
-        "Conda explicit spec lacks hashed package URLs")
+        "Conda explicit spec lacks official conda-forge hashed package URLs")
     url_digest_by_name = {
         unquote(line.rsplit("/", 1)[1].split("#", 1)[0]): line.rsplit("#", 1)[1]
+        for line in package_lines
+    }
+    url_by_name = {
+        unquote(line.rsplit("/", 1)[1].split("#", 1)[0]): line.split("#", 1)[0]
         for line in package_lines
     }
     expected_archives = set(url_digest_by_name)
@@ -206,9 +211,14 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
     require(metadata_dir.is_dir() and not metadata_dir.is_symlink(),
             "Conda package metadata directory missing")
     metadata_paths = sorted(metadata_dir.iterdir(), key=lambda item: item.name)
+    expected_metadata_names = {
+        name.removesuffix(".conda").removesuffix(".tar.bz2") + ".json"
+        for name in expected_archives
+    }
     require(0 < len(metadata_paths) <= 512
-            and any(item.name.endswith(".json") for item in metadata_paths),
-            "Conda package metadata count invalid")
+            and {item.name for item in metadata_paths} in
+            (expected_metadata_names, expected_metadata_names | {"history"}),
+            "Conda package metadata inventory differs from explicit spec")
     metadata: list[dict[str, Any]] = []
     for item in metadata_paths:
         require(item.is_file() and not item.is_symlink(),
@@ -263,6 +273,16 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
         metadata_value, _ = _read_json(metadata_path, cap=1 << 20)
         require(metadata_value.get("sha256") == archive_sha,
                 "Conda package archive does not match installed metadata SHA-256")
+        stem = metadata_name.removesuffix(".json")
+        identity = stem.rsplit("-", 2)
+        require(len(identity) == 3 and all(identity)
+                and metadata_value.get("url") == url_by_name[name]
+                and metadata_value.get("fn") == name
+                and metadata_value.get("name") == identity[0]
+                and metadata_value.get("version") == identity[1]
+                and metadata_value.get("build") == identity[2]
+                and metadata_value.get("channel") == "conda-forge",
+                "Conda package metadata identity differs from explicit spec")
         archive_hashes.append({"path": item["path"], "sha256": archive_sha,
                                "bytes": archive_size})
     require(seen_archives == expected_archives, "Conda package archives incomplete")
@@ -292,6 +312,52 @@ def _torchcodec_core_path() -> Path:
     return path
 
 
+def _recursive_lib_tree_receipt(libdir: Path) -> dict[str, Any]:
+    """Hash every file and link in the isolated lib tree without following links."""
+    records: list[dict[str, Any]] = []
+    pending = [libdir]
+    regular_count = 0
+    symlink_count = 0
+    regular_bytes = 0
+    while pending:
+        directory = pending.pop()
+        for entry in directory.iterdir():
+            require(len(records) < 8192, "Isolated FFmpeg lib tree has too many entries")
+            relative = str(entry.relative_to(libdir))
+            mode = entry.lstat().st_mode
+            if stat.S_ISDIR(mode):
+                records.append({"path": relative, "kind": "directory"})
+                pending.append(entry)
+            elif stat.S_ISREG(mode):
+                digest, size = hash_file(entry)
+                records.append({"path": relative, "kind": "regular",
+                                "sha256": digest, "bytes": size})
+                regular_count += 1
+                regular_bytes += size
+            elif stat.S_ISLNK(mode):
+                try:
+                    target = entry.resolve(strict=True)
+                except (OSError, RuntimeError) as error:
+                    raise ValueError("Dangling or cyclic FFmpeg lib symlink") from error
+                require(target.is_relative_to(libdir)
+                        and (target.is_file() or target.is_dir()),
+                        "FFmpeg lib symlink escapes isolated directory or has invalid target")
+                records.append({"path": relative, "kind": "symlink",
+                                "link_text": os.readlink(entry),
+                                "resolved_target": str(target.relative_to(libdir)),
+                                "target_kind": "directory" if target.is_dir() else "regular"})
+                symlink_count += 1
+            else:
+                raise ValueError("Unexpected FFmpeg lib tree file type")
+    require(regular_count > 0, "Isolated FFmpeg lib tree contains no regular files")
+    records.sort(key=lambda record: record["path"])
+    return {"schema": "voicechat_recursive_lib_tree_v1",
+            "entry_count": len(records), "regular_file_count": regular_count,
+            "symlink_count": symlink_count,
+            "total_regular_file_bytes": regular_bytes,
+            "sorted_records_sha256": sha(canonical(records))}
+
+
 def native_ffmpeg_runtime(nemo_dir: Path) -> dict[str, Any]:
     """Bind a task-local Conda FFmpeg prefix, its source manifest, and native bytes."""
     value = os.environ.get("LD_LIBRARY_PATH", "")
@@ -310,6 +376,7 @@ def native_ffmpeg_runtime(nemo_dir: Path) -> dict[str, Any]:
             "FFmpeg runtime requires Linux x86_64")
     release = _os_release_identity()
     source = _conda_source_receipt(root)
+    recursive_tree = _recursive_lib_tree_receipt(libdir)
 
     entries = sorted((item for item in libdir.iterdir() if ".so" in item.name),
                      key=lambda item: item.name)
@@ -351,6 +418,7 @@ def native_ffmpeg_runtime(nemo_dir: Path) -> dict[str, Any]:
             "ld_library_path": value,
             "required_sonames": FFMPEG_REQUIRED_SONAMES,
             "source": source,
+            "recursive_lib_tree": recursive_tree,
             "library_aliases": aliases, "library_targets": target_hashes,
             "torchcodec_core": {"path": str(core_path), "sha256": core_sha,
                                 "bytes": core_size},

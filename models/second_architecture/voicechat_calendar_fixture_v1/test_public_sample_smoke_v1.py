@@ -540,7 +540,10 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         archive_dir.mkdir()
         (archive_dir / archive_name).write_bytes(archive_bytes)
         (self.metadata / "ffmpeg-7.0.0-h123_0.json").write_bytes(smoke.canonical({
-            "name": "ffmpeg", "sha256": smoke.sha(archive_bytes)}))
+            "name": "ffmpeg", "version": "7.0.0", "build": "h123_0",
+            "channel": "conda-forge", "fn": archive_name,
+            "url": f"https://conda.anaconda.org/conda-forge/linux-64/{archive_name}",
+            "sha256": smoke.sha(archive_bytes)}))
         spec = ("@EXPLICIT\nhttps://conda.anaconda.org/conda-forge/linux-64/"
                 f"ffmpeg-7.0.0-h123_0.conda#{hashlib.md5(archive_bytes).hexdigest()}\n").encode()
         (self.root / "conda-explicit.txt").write_bytes(spec)
@@ -614,7 +617,9 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
             smoke.native_ffmpeg_runtime(self.base)
         archive.write_bytes(b"synthetic conda package archive")
         metadata = self.metadata / "ffmpeg-7.0.0-h123_0.json"
-        metadata.write_bytes(smoke.canonical({"name": "ffmpeg", "sha256": "0" * 64}))
+        changed_metadata = json.loads(metadata.read_text())
+        changed_metadata["sha256"] = "0" * 64
+        metadata.write_bytes(smoke.canonical(changed_metadata))
         with self.assertRaisesRegex(ValueError, "does not match installed metadata"):
             smoke.native_ffmpeg_runtime(self.base)
 
@@ -628,7 +633,11 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         payload = b"synthetic x264 archive"
         (self.root / "package-archives" / name).write_bytes(payload)
         (self.metadata / "x264-1!164-h123_0.json").write_bytes(smoke.canonical({
-            "name": "x264", "sha256": smoke.sha(payload)}))
+            "name": "x264", "version": "1!164", "build": "h123_0",
+            "channel": "conda-forge", "fn": name,
+            "url": "https://conda.anaconda.org/conda-forge/linux-64/"
+                   "x264-1%21164-h123_0.conda",
+            "sha256": smoke.sha(payload)}))
         spec_path = self.root / "conda-explicit.txt"
         spec = spec_path.read_bytes() + (
             "https://conda.anaconda.org/conda-forge/linux-64/"
@@ -656,6 +665,67 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         manifest["explicit_spec"]["bytes"] = len(spec.encode())
         manifest_path.write_bytes(smoke.canonical(manifest))
         with self.assertRaisesRegex(ValueError, "explicit URL MD5 differs"):
+            smoke.native_ffmpeg_runtime(self.base)
+
+    def test_metadata_identity_fields_and_official_host_are_required(self):
+        metadata_path = self.metadata / "ffmpeg-7.0.0-h123_0.json"
+        original = json.loads(metadata_path.read_text())
+        for field, value in [("name", "other"), ("version", "8.0.0"),
+                             ("build", "different"), ("channel", "other"),
+                             ("fn", "other.conda"), ("url", "https://example.org/a.conda")]:
+            with self.subTest(field=field):
+                changed = dict(original)
+                changed[field] = value
+                metadata_path.write_bytes(smoke.canonical(changed))
+                with self.assertRaisesRegex(ValueError, "metadata identity differs"):
+                    smoke.native_ffmpeg_runtime(self.base)
+        metadata_path.write_bytes(smoke.canonical(original))
+        spec_path = self.root / "conda-explicit.txt"
+        spec = spec_path.read_text().replace("conda.anaconda.org", "example.org")
+        spec_path.write_text(spec)
+        manifest_path = self.root / "native-source-manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["explicit_spec"]["sha256"] = smoke.sha(spec.encode())
+        manifest["explicit_spec"]["bytes"] = len(spec.encode())
+        manifest_path.write_bytes(smoke.canonical(manifest))
+        with self.assertRaisesRegex(ValueError, "official conda-forge"):
+            smoke.native_ffmpeg_runtime(self.base)
+
+    def test_extra_installed_metadata_rejects(self):
+        (self.metadata / "other-1-build.json").write_text("{}")
+        with self.assertRaisesRegex(ValueError, "metadata inventory differs"):
+            smoke.native_ffmpeg_runtime(self.base)
+
+    def test_recursive_lib_tree_binds_nested_regular_bytes_and_links(self):
+        nested = self.libdir / "nested"
+        nested.mkdir()
+        (nested / "data.bin").write_bytes(b"first")
+        (nested / "alias.bin").symlink_to("data.bin")
+        first = smoke.native_ffmpeg_runtime(self.base)["recursive_lib_tree"]
+        self.assertEqual(first["regular_file_count"], 6)
+        self.assertEqual(first["symlink_count"], 2)
+        (nested / "data.bin").write_bytes(b"second")
+        second = smoke.native_ffmpeg_runtime(self.base)["recursive_lib_tree"]
+        self.assertNotEqual(first["sorted_records_sha256"], second["sorted_records_sha256"])
+        (nested / "extra.bin").write_bytes(b"extra")
+        third = smoke.native_ffmpeg_runtime(self.base)["recursive_lib_tree"]
+        self.assertNotEqual(second["sorted_records_sha256"], third["sorted_records_sha256"])
+
+    def test_recursive_lib_tree_rejects_nested_escape_dangling_and_fifo(self):
+        nested = self.libdir / "nested"
+        nested.mkdir()
+        bad = nested / "link"
+        bad.symlink_to(self.core)
+        with self.assertRaisesRegex(ValueError, "symlink escapes"):
+            smoke.native_ffmpeg_runtime(self.base)
+        bad.unlink()
+        bad.symlink_to("missing")
+        with self.assertRaisesRegex(ValueError, "Dangling or cyclic"):
+            smoke.native_ffmpeg_runtime(self.base)
+        bad.unlink()
+        fifo = nested / "unexpected.fifo"
+        os.mkfifo(fifo)
+        with self.assertRaisesRegex(ValueError, "Unexpected FFmpeg lib tree file type"):
             smoke.native_ffmpeg_runtime(self.base)
 
 
