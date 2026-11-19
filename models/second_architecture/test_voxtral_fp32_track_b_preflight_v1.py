@@ -48,6 +48,15 @@ class SourcePreflightTests(unittest.TestCase):
         with patch.object(target, "SOURCE_HASHES", changed), self.assertRaisesRegex(ValueError, "Frozen anchor"):
             target.verify_static_anchors()
 
+    def test_corrected_design_and_review_are_pinned(self):
+        for path in (target.V5, target.V6, target.V6_DESIGN_GO):
+            self.assertIn(path, target.SOURCE_HASHES)
+            changed = dict(target.SOURCE_HASHES)
+            changed[path] = "0" * 64
+            with self.subTest(path=path.name), patch.object(target, "SOURCE_HASHES", changed):
+                with self.assertRaisesRegex(ValueError, "Frozen anchor"):
+                    target.verify_static_anchors()
+
     def test_selected_wav_or_inventory_tamper_fails(self):
         changed = [dataclasses.replace(c, wav_sha256="0" * 64) if c.key ==
                    "pair_00_piper_banana" else c for c in self.cases]

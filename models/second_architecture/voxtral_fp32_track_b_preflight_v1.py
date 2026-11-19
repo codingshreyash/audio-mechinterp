@@ -32,8 +32,9 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 V3 = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V3.md"
 V4 = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V4_ERRATUM.md"
-V5_DRAFT = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V5_SEQUENTIAL_ALIAS_AMENDMENT.md"
-V6_DRAFT = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V6_RESOURCE_PILOT_AMENDMENT.md"
+V5 = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V5_SEQUENTIAL_ALIAS_AMENDMENT.md"
+V6 = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V6_RESOURCE_PILOT_AMENDMENT.md"
+V6_DESIGN_GO = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V6_INDEPENDENT_REVIEW_GO.md"
 DESIGN_GO = HERE / "VOXTRAL_FP32_TRACK_B_ANSWER_LINK_PROSPECTIVE_V3_PLUS_V4_INDEPENDENT_GO.md"
 TRACK = HERE / "word_disjoint_v2"
 MANIFEST = TRACK / "rendered_v2/manifest.json"
@@ -53,6 +54,9 @@ MIN_FREE_DISK_BYTES = 12 * 1024**3
 SOURCE_HASHES = {
     V3: "f3716897cfff30b26a4bb66d882222fc2137b0911266d76ea0a0c4319854ce0b",
     V4: "87ef41b3c854ed23fc4cfb3f67a23f2b6cd595958a1f941bc9726288ea0d923c",
+    V5: "70d24e5d4ba341e1aaa918608d57f1ed237fd56742b0d956816f4ce636ac3115",
+    V6: "6a341f316e4056c6bc81c6e191deea3f90dcddcd81050a39c734a257d4f02b9c",
+    V6_DESIGN_GO: "28341f87e9eb7ba8a7827460f2872d01ea17adcab3f3a36b649d4542eacae0b1",
     DESIGN_GO: "bd5340733522c4609b4136ba9263dd734f64ff6cfe753c40bb1c9f803314d95f",
     MANIFEST: "f8fd1f43f38877d6d08c47597c8db9f494e1377a69f0a2451c2f99fbcda71ea2",
     BINDING: "027763d4fa758dac95c552c2f2aef60683f1c780b0c034d82327be8bd59e93b9",
@@ -158,6 +162,8 @@ def verify_static_anchors() -> dict[str, str]:
     for path, expected in SOURCE_HASHES.items():
         require(actual[str(path.relative_to(ROOT))] == expected, f"Frozen anchor changed: {path.name}")
     require("GO for the prospective design only" in DESIGN_GO.read_text(), "Independent V3+V4 GO absent")
+    require("Decision: GO for the corrected V6 prospective resource-admission design only" in
+            V6_DESIGN_GO.read_text(), "Independent corrected V5+V6 design GO absent")
     return actual
 
 
@@ -527,8 +533,7 @@ def run(*, check_host: bool = False) -> dict:
         holds.append("human_qa_32_of_32_independent_go_absent")
     if not resource["can_certify_mps_peak_without_model"]:
         holds.append("fp32_backward_mps_peak_uncertified")
-    holds.append("v5_sequential_alias_amendment_pending_independent_review_and_freeze")
-    holds.append("v6_max_geometry_resource_pilot_pending_independent_review_and_measured_go")
+    holds.append("v6_measured_resource_pilot_and_independent_postpilot_go_absent")
     holds.append("independently_reviewed_runner_and_external_admission_freeze_absent")
     if not check_host:
         holds.append("live_host_eligibility_not_checked")
@@ -539,8 +544,7 @@ def run(*, check_host: bool = False) -> dict:
             "selected_wavs": wavs, "processor": prepared, "resource": resource,
             "v6_synthetic_zero_geometry": geometry,
             "human_qa": qa, "host": host, "hold_reasons": holds,
-            "v5_draft_sha256_unpinned": file_sha(V5_DRAFT) if V5_DRAFT.exists() else None,
-            "v6_draft_sha256_unpinned": file_sha(V6_DRAFT) if V6_DRAFT.exists() else None,
+            "design_review_status": "corrected_v5_plus_v6_prospective_design_go",
             "candidate_weights_loaded": False, "candidate_forward_count": 0}
 
 
