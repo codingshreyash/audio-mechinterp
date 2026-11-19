@@ -1,0 +1,76 @@
+{
+  "status": "posthoc_saved_tensor_formula_reconstruction",
+  "records_sha256": "c9865f4ec306e57baf7dbfc7bd05037ec769034d95db70440972904fcab2507c",
+  "checkpoint_sha256": "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a",
+  "scope": "Four synthetic FIT pair/voice cells, common-normalized input. Algebraic first-GroupNorm reconstruction only; no downstream model run or security claim.",
+  "rows": [
+    {
+      "pair_id": "color_05",
+      "engine": "kokoro",
+      "words": [
+        "silver",
+        "teal"
+      ],
+      "raw_frames": 18367,
+      "overlap_frames": 4641,
+      "raw_outside_max_abs_difference": 0.0,
+      "saved_groupnorm_outside_max_abs_difference": 2.7117156982421875,
+      "formula_max_abs_error_by_word": [
+        1.1444091796875e-05,
+        1.1444091796875e-05
+      ],
+      "shared_outside_stat_counterfactual_max_abs_difference": 0.0
+    },
+    {
+      "pair_id": "color_05",
+      "engine": "piper",
+      "words": [
+        "silver",
+        "teal"
+      ],
+      "raw_frames": 17374,
+      "overlap_frames": 3866,
+      "raw_outside_max_abs_difference": 0.0,
+      "saved_groupnorm_outside_max_abs_difference": 2.1520462036132812,
+      "formula_max_abs_error_by_word": [
+        1.1444091796875e-05,
+        7.62939453125e-06
+      ],
+      "shared_outside_stat_counterfactual_max_abs_difference": 0.0
+    },
+    {
+      "pair_id": "object_02",
+      "engine": "kokoro",
+      "words": [
+        "cup",
+        "plate"
+      ],
+      "raw_frames": 17807,
+      "overlap_frames": 4081,
+      "raw_outside_max_abs_difference": 0.0,
+      "saved_groupnorm_outside_max_abs_difference": 2.5044631958007812,
+      "formula_max_abs_error_by_word": [
+        1.1444091796875e-05,
+        7.62939453125e-06
+      ],
+      "shared_outside_stat_counterfactual_max_abs_difference": 0.0
+    },
+    {
+      "pair_id": "object_02",
+      "engine": "piper",
+      "words": [
+        "cup",
+        "plate"
+      ],
+      "raw_frames": 15962,
+      "overlap_frames": 2454,
+      "raw_outside_max_abs_difference": 0.0,
+      "saved_groupnorm_outside_max_abs_difference": 4.797819137573242,
+      "formula_max_abs_error_by_word": [
+        7.62939453125e-06,
+        7.62939453125e-06
+      ],
+      "shared_outside_stat_counterfactual_max_abs_difference": 0.0
+    }
+  ]
+}
