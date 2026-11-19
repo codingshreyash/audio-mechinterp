@@ -1,0 +1,759 @@
+{
+  "arms": [
+    "W",
+    "P",
+    "Q",
+    "self_W",
+    "full_donor",
+    "R1",
+    "R2"
+  ],
+  "auditor_sha256": "c62c54cb1ea117353befd63407865bd638c40056450d2147a6e96ca69695609d",
+  "auditor_source_git_commit": "6ff10202207f23678da17947646dcb6e6770501b",
+  "base_preflight": {
+    "cases": [
+      {
+        "engine": "piper",
+        "frames": 86876,
+        "key": "color_05_piper_silver",
+        "pair_id": "color_05",
+        "pcm_sha256": "79fc004685c31d196182f02deee103ec73b031917e88111338db853739e6cdc6",
+        "slot_samples": [
+          30527,
+          49847
+        ],
+        "wav_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9",
+        "word": "silver"
+      },
+      {
+        "engine": "piper",
+        "frames": 86876,
+        "key": "color_05_piper_teal",
+        "pair_id": "color_05",
+        "pcm_sha256": "dde8bdd8bb927aab4c4cc60925ba9a518e59d0d18d3995e36bffb6b8f331dd85",
+        "slot_samples": [
+          30527,
+          49847
+        ],
+        "wav_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9",
+        "word": "teal"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 91840,
+        "key": "color_05_kokoro_silver",
+        "pair_id": "color_05",
+        "pcm_sha256": "96bff0e029bd9f033b76e84258bc8ea75fe0f8c23bf965fbfe8f68a673f16386",
+        "slot_samples": [
+          33920,
+          57120
+        ],
+        "wav_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e",
+        "word": "silver"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 91840,
+        "key": "color_05_kokoro_teal",
+        "pair_id": "color_05",
+        "pcm_sha256": "84e07ded47cb6410b0840e7d502f10810018319b5d55b50fe22aaed890848006",
+        "slot_samples": [
+          33920,
+          57120
+        ],
+        "wav_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365",
+        "word": "teal"
+      },
+      {
+        "engine": "piper",
+        "frames": 79817,
+        "key": "object_02_piper_plate",
+        "pair_id": "object_02",
+        "pcm_sha256": "7aa1d0e13f984f4157930d28b7a10e81e25a47c36e062f565fa435892ed7043c",
+        "slot_samples": [
+          30527,
+          42788
+        ],
+        "wav_sha256": "42d0d964d124001db5d0eebc214f4dc8efeeee38f81850b22ae12d4bf0155a92",
+        "word": "plate"
+      },
+      {
+        "engine": "piper",
+        "frames": 79817,
+        "key": "object_02_piper_cup",
+        "pair_id": "object_02",
+        "pcm_sha256": "5712f0829c59432816c20284638232c619c7dfc3b5f6b515d50c1cb3b3255d8e",
+        "slot_samples": [
+          30527,
+          42788
+        ],
+        "wav_sha256": "12537b7770110e07b9e4f7764051df268096ed60cd993ae98ba4fa37e6c0cd0d",
+        "word": "cup"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 89040,
+        "key": "object_02_kokoro_plate",
+        "pair_id": "object_02",
+        "pcm_sha256": "86fb91e4622267279e3d5515374c9702f4f971687d91424cf6863b6f5dbde96e",
+        "slot_samples": [
+          33920,
+          54320
+        ],
+        "wav_sha256": "2fbb5182032f95dc70bb57545f9c94aa245ed73371edb2281f51eceb56fd24db",
+        "word": "plate"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 89040,
+        "key": "object_02_kokoro_cup",
+        "pair_id": "object_02",
+        "pcm_sha256": "60acca534e9453f9c48b91028a155dbac5ac12c7cda400caaf84ebdd082b39f4",
+        "slot_samples": [
+          33920,
+          54320
+        ],
+        "wav_sha256": "c94cac1885730ce36238a9e8a7b736bc469daa96e711c956fabadd206222766a",
+        "word": "cup"
+      }
+    ],
+    "checkpoint_sha256": "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a",
+    "device": "cpu",
+    "expected_success_rows": 26,
+    "limits": {
+      "budget_check_limit": "operator-level forward peak is verified after return, not interruptible within one forward",
+      "max_output_bytes": 2147483648,
+      "max_rss_bytes": 4294967296,
+      "max_seconds": 1800,
+      "preforward_output_reserve": 134217728,
+      "preforward_rss_reserve": 1073741824
+    },
+    "locality_preflight_sha256": "15074ffee8bde339810b4be667e3ce40bd6a45e234739ea37c614497b6eba4a2",
+    "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+    "masking_load_note": {
+      "checkpoint_key_absent": true,
+      "expected_missing_key": "wav2vec2.masked_spec_embed",
+      "inactive_condition": "eval mode; mask_time_indices=None; mask_feature_prob=0.0",
+      "loading_info_gate": "exactly this missing key; no unexpected/mismatched/error keys"
+    },
+    "model_id": "facebook/wav2vec2-base-960h",
+    "model_revision": "22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
+    "modes": [
+      "S",
+      "C"
+    ],
+    "normalization": {
+      "C": "float32 (pcm/32768 - shared outside-slot mean) / sqrt(shared outside-slot variance + 1e-7)",
+      "S": "stock Wav2Vec2Processor; unpadded; per-utterance mean/variance; no attention mask",
+      "common_stats": {
+        "color_05_kokoro": {
+          "mean": -0.00034492244594730437,
+          "variance": 0.004016207531094551
+        },
+        "color_05_piper": {
+          "mean": -2.8228172595845535e-05,
+          "variance": 0.008134594187140465
+        },
+        "object_02_kokoro": {
+          "mean": -0.00034492244594730437,
+          "variance": 0.004016207531094551
+        },
+        "object_02_piper": {
+          "mean": -2.8228172595845535e-05,
+          "variance": 0.008134594187140465
+        }
+      }
+    },
+    "python_version": "3.12.13",
+    "run_schema": "wav2vec2_fit_baseline_run_v1",
+    "runner_sha256": "89497c216aea0437b8e5076dfdb76fa002c69800daf7a8ae231b8457b15486d2",
+    "runner_source_git_commit": "fe75bea4531faa5fe362bfa743dfeabdea6ab4fb",
+    "schema": "wav2vec2_fit_baseline_preflight_v1",
+    "snapshot_files_sha256": {
+      "config.json": "d3ec255c063d9f95057b553b19c20135b259875834a4fe9deb218a6be25b4cf3",
+      "model.safetensors": "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a",
+      "preprocessor_config.json": "b225d617c025463b9e157e06afea8b90dc7078fc70b013c533328423e0486b4a",
+      "special_tokens_map.json": "bb7068de1150661a10b55f9e4b12a0e77af8bf91f5e45e1b58afaf1d0e17f675",
+      "tokenizer_config.json": "dc790594f5bc351a4311c6624f40acd95850d4aaf2a5cb3c656c9b610720b608",
+      "vocab.json": "19727f8944fe6459fc3f240ae2c198395b740f6a029bd23e06656266b83bcf64"
+    },
+    "soundfile_version": "0.14.0",
+    "source_hashes": {
+      "transformers.models.wav2vec2.feature_extraction_wav2vec2": "e5e9a0baf70716fee503f4f66a7a61312a132be989b2d7e2649e057ccbefa2cc",
+      "transformers.models.wav2vec2.modeling_wav2vec2": "c404982e3a063a5f68ee85809356c8a5ed29ad24c8441eea1d56346a57b5da0c",
+      "transformers.models.wav2vec2.processing_wav2vec2": "95adaf4e8398ca3d72570eba32925dcd964ed3b0027ef9abff1fd2454a96d559",
+      "transformers.models.wav2vec2.tokenization_wav2vec2": "b4f8f80838e462bc5d77b3998aa500879bdcce951779223c94ce126f7ffa68f2"
+    },
+    "stage_names": [
+      "input_values",
+      "first_conv_raw",
+      "first_conv_norm",
+      "final_feature_conv",
+      "feature_projection",
+      "encoder_pre_block0",
+      "post_block0",
+      "post_block5",
+      "post_block11",
+      "logits"
+    ],
+    "threads": 4,
+    "torch_version": "2.15.0",
+    "transformers_version": "5.12.1"
+  },
+  "baseline_audit_sha256": "c84c17cdefbebe1007f106cb955f910e7a4ce0431745e59a4528fc2aae41bc49",
+  "baseline_manifest_sha256": "2f0484205d21b596795fbfbf30c1e65a63451dafc8740e5860c95be20ace2b53",
+  "baseline_records_sha256": "c9865f4ec306e57baf7dbfc7bd05037ec769034d95db70440972904fcab2507c",
+  "directions": [
+    {
+      "direction_index": 0,
+      "donor_key": "color_05_piper_teal",
+      "engine": "piper",
+      "frames": 86876,
+      "mode": "S",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_piper_silver",
+      "slot_samples": [
+        30527,
+        49847
+      ]
+    },
+    {
+      "direction_index": 1,
+      "donor_key": "color_05_piper_teal",
+      "engine": "piper",
+      "frames": 86876,
+      "mode": "C",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_piper_silver",
+      "slot_samples": [
+        30527,
+        49847
+      ]
+    },
+    {
+      "direction_index": 2,
+      "donor_key": "color_05_piper_silver",
+      "engine": "piper",
+      "frames": 86876,
+      "mode": "S",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_piper_teal",
+      "slot_samples": [
+        30527,
+        49847
+      ]
+    },
+    {
+      "direction_index": 3,
+      "donor_key": "color_05_piper_silver",
+      "engine": "piper",
+      "frames": 86876,
+      "mode": "C",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_piper_teal",
+      "slot_samples": [
+        30527,
+        49847
+      ]
+    },
+    {
+      "direction_index": 4,
+      "donor_key": "color_05_kokoro_teal",
+      "engine": "kokoro",
+      "frames": 91840,
+      "mode": "S",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_kokoro_silver",
+      "slot_samples": [
+        33920,
+        57120
+      ]
+    },
+    {
+      "direction_index": 5,
+      "donor_key": "color_05_kokoro_teal",
+      "engine": "kokoro",
+      "frames": 91840,
+      "mode": "C",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_kokoro_silver",
+      "slot_samples": [
+        33920,
+        57120
+      ]
+    },
+    {
+      "direction_index": 6,
+      "donor_key": "color_05_kokoro_silver",
+      "engine": "kokoro",
+      "frames": 91840,
+      "mode": "S",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_kokoro_teal",
+      "slot_samples": [
+        33920,
+        57120
+      ]
+    },
+    {
+      "direction_index": 7,
+      "donor_key": "color_05_kokoro_silver",
+      "engine": "kokoro",
+      "frames": 91840,
+      "mode": "C",
+      "pair_id": "color_05",
+      "recipient_key": "color_05_kokoro_teal",
+      "slot_samples": [
+        33920,
+        57120
+      ]
+    },
+    {
+      "direction_index": 8,
+      "donor_key": "object_02_piper_cup",
+      "engine": "piper",
+      "frames": 79817,
+      "mode": "S",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_piper_plate",
+      "slot_samples": [
+        30527,
+        42788
+      ]
+    },
+    {
+      "direction_index": 9,
+      "donor_key": "object_02_piper_cup",
+      "engine": "piper",
+      "frames": 79817,
+      "mode": "C",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_piper_plate",
+      "slot_samples": [
+        30527,
+        42788
+      ]
+    },
+    {
+      "direction_index": 10,
+      "donor_key": "object_02_piper_plate",
+      "engine": "piper",
+      "frames": 79817,
+      "mode": "S",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_piper_cup",
+      "slot_samples": [
+        30527,
+        42788
+      ]
+    },
+    {
+      "direction_index": 11,
+      "donor_key": "object_02_piper_plate",
+      "engine": "piper",
+      "frames": 79817,
+      "mode": "C",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_piper_cup",
+      "slot_samples": [
+        30527,
+        42788
+      ]
+    },
+    {
+      "direction_index": 12,
+      "donor_key": "object_02_kokoro_cup",
+      "engine": "kokoro",
+      "frames": 89040,
+      "mode": "S",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_kokoro_plate",
+      "slot_samples": [
+        33920,
+        54320
+      ]
+    },
+    {
+      "direction_index": 13,
+      "donor_key": "object_02_kokoro_cup",
+      "engine": "kokoro",
+      "frames": 89040,
+      "mode": "C",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_kokoro_plate",
+      "slot_samples": [
+        33920,
+        54320
+      ]
+    },
+    {
+      "direction_index": 14,
+      "donor_key": "object_02_kokoro_plate",
+      "engine": "kokoro",
+      "frames": 89040,
+      "mode": "S",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_kokoro_cup",
+      "slot_samples": [
+        33920,
+        54320
+      ]
+    },
+    {
+      "direction_index": 15,
+      "donor_key": "object_02_kokoro_plate",
+      "engine": "kokoro",
+      "frames": 89040,
+      "mode": "C",
+      "pair_id": "object_02",
+      "recipient_key": "object_02_kokoro_cup",
+      "slot_samples": [
+        33920,
+        54320
+      ]
+    }
+  ],
+  "eligibility": {
+    "0": {
+      "donor_clean": false,
+      "primary_target_word_eligible": false,
+      "recipient_clean": true,
+      "t": 271,
+      "windows": {
+        "P": [
+          34,
+          95
+        ],
+        "Q": [
+          156,
+          217
+        ],
+        "W": [
+          95,
+          156
+        ]
+      }
+    },
+    "1": {
+      "donor_clean": false,
+      "primary_target_word_eligible": false,
+      "recipient_clean": true,
+      "t": 271,
+      "windows": {
+        "P": [
+          34,
+          95
+        ],
+        "Q": [
+          156,
+          217
+        ],
+        "W": [
+          95,
+          156
+        ]
+      }
+    },
+    "10": {
+      "donor_clean": true,
+      "primary_target_word_eligible": true,
+      "recipient_clean": true,
+      "t": 249,
+      "windows": {
+        "P": [
+          56,
+          95
+        ],
+        "Q": [
+          134,
+          173
+        ],
+        "W": [
+          95,
+          134
+        ]
+      }
+    },
+    "11": {
+      "donor_clean": true,
+      "primary_target_word_eligible": true,
+      "recipient_clean": true,
+      "t": 249,
+      "windows": {
+        "P": [
+          56,
+          95
+        ],
+        "Q": [
+          134,
+          173
+        ],
+        "W": [
+          95,
+          134
+        ]
+      }
+    },
+    "12": {
+      "donor_clean": false,
+      "primary_target_word_eligible": false,
+      "recipient_clean": true,
+      "t": 278,
+      "windows": {
+        "P": [
+          40,
+          105
+        ],
+        "Q": [
+          170,
+          235
+        ],
+        "W": [
+          105,
+          170
+        ]
+      }
+    },
+    "13": {
+      "donor_clean": false,
+      "primary_target_word_eligible": false,
+      "recipient_clean": true,
+      "t": 278,
+      "windows": {
+        "P": [
+          40,
+          105
+        ],
+        "Q": [
+          170,
+          235
+        ],
+        "W": [
+          105,
+          170
+        ]
+      }
+    },
+    "14": {
+      "donor_clean": true,
+      "primary_target_word_eligible": false,
+      "recipient_clean": false,
+      "t": 278,
+      "windows": {
+        "P": [
+          40,
+          105
+        ],
+        "Q": [
+          170,
+          235
+        ],
+        "W": [
+          105,
+          170
+        ]
+      }
+    },
+    "15": {
+      "donor_clean": true,
+      "primary_target_word_eligible": false,
+      "recipient_clean": false,
+      "t": 278,
+      "windows": {
+        "P": [
+          40,
+          105
+        ],
+        "Q": [
+          170,
+          235
+        ],
+        "W": [
+          105,
+          170
+        ]
+      }
+    },
+    "2": {
+      "donor_clean": true,
+      "primary_target_word_eligible": false,
+      "recipient_clean": false,
+      "t": 271,
+      "windows": {
+        "P": [
+          34,
+          95
+        ],
+        "Q": [
+          156,
+          217
+        ],
+        "W": [
+          95,
+          156
+        ]
+      }
+    },
+    "3": {
+      "donor_clean": true,
+      "primary_target_word_eligible": false,
+      "recipient_clean": false,
+      "t": 271,
+      "windows": {
+        "P": [
+          34,
+          95
+        ],
+        "Q": [
+          156,
+          217
+        ],
+        "W": [
+          95,
+          156
+        ]
+      }
+    },
+    "4": {
+      "donor_clean": false,
+      "primary_target_word_eligible": false,
+      "recipient_clean": true,
+      "t": 286,
+      "windows": {
+        "P": [
+          31,
+          105
+        ],
+        "Q": [
+          179,
+          253
+        ],
+        "W": [
+          105,
+          179
+        ]
+      }
+    },
+    "5": {
+      "donor_clean": false,
+      "primary_target_word_eligible": false,
+      "recipient_clean": true,
+      "t": 286,
+      "windows": {
+        "P": [
+          31,
+          105
+        ],
+        "Q": [
+          179,
+          253
+        ],
+        "W": [
+          105,
+          179
+        ]
+      }
+    },
+    "6": {
+      "donor_clean": true,
+      "primary_target_word_eligible": false,
+      "recipient_clean": false,
+      "t": 286,
+      "windows": {
+        "P": [
+          31,
+          105
+        ],
+        "Q": [
+          179,
+          253
+        ],
+        "W": [
+          105,
+          179
+        ]
+      }
+    },
+    "7": {
+      "donor_clean": true,
+      "primary_target_word_eligible": false,
+      "recipient_clean": false,
+      "t": 286,
+      "windows": {
+        "P": [
+          31,
+          105
+        ],
+        "Q": [
+          179,
+          253
+        ],
+        "W": [
+          105,
+          179
+        ]
+      }
+    },
+    "8": {
+      "donor_clean": true,
+      "primary_target_word_eligible": true,
+      "recipient_clean": true,
+      "t": 249,
+      "windows": {
+        "P": [
+          56,
+          95
+        ],
+        "Q": [
+          134,
+          173
+        ],
+        "W": [
+          95,
+          134
+        ]
+      }
+    },
+    "9": {
+      "donor_clean": true,
+      "primary_target_word_eligible": true,
+      "recipient_clean": true,
+      "t": 249,
+      "windows": {
+        "P": [
+          56,
+          95
+        ],
+        "Q": [
+          134,
+          173
+        ],
+        "W": [
+          95,
+          134
+        ]
+      }
+    }
+  },
+  "expected_patch_rows": 224,
+  "limits": {
+    "max_output_bytes": 536870912,
+    "max_rss_bytes": 4294967296,
+    "max_seconds": 1800,
+    "output_reserve_bytes": 33554432,
+    "rss_reserve_bytes": 1073741824
+  },
+  "plan_v1_sha256": "23a4303d03cf9c6483985555ac2abc1e6768059bb024527dbc3dfa7d170c5dcd",
+  "plan_v2_sha256": "d936f8728ae89715982bcf9c9dc06e7efc6a876a6ace894306af4e84aa21c977",
+  "python_version": "3.12.13",
+  "runner_sha256": "f3970acf4749db1442b865d2d6fb37fbf5b295054454bb72dbbf70cef67f68d0",
+  "runner_source_git_commit": "6ff10202207f23678da17947646dcb6e6770501b",
+  "schema": "wav2vec2_fit_causal_preflight_v1",
+  "seed_rule": "971103 + 4*direction_index + 2*site_index + random_index",
+  "sites": [
+    "feature_projection",
+    "post_block11"
+  ],
+  "torch_version": "2.15.0",
+  "transformers_version": "5.12.1"
+}
