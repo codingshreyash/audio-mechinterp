@@ -198,9 +198,13 @@ def evaluate(ctx: dict[str, Any], documents: dict[str, dict[str, Any]],
             }
             for stage, record in records.items()
         }
-        disagreement = any(
-            answers["primary"][key] != answers["secondary"][key]
-            for key in ("full_tokens", "middle_tokens", "clear")
+        # The prospective plan escalates any disagreement in the verbatim
+        # answer, middle-word field, or clarity. Correctness is scored with
+        # normalized tokens below, but escalation compares the raw answers.
+        disagreement = (
+            a["verbatim_transcript"] != b["verbatim_transcript"]
+            or a["middle_word"] != b["middle_word"]
+            or a["clear_or_unclear"] != b["clear_or_unclear"]
         )
         third_required = disagreement
         if third_required and "tertiary" not in records:

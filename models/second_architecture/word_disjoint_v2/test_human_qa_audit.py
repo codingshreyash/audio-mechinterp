@@ -53,15 +53,39 @@ class HumanQaAuditTests(unittest.TestCase):
 
     def test_full_valid_synthetic_records_and_unicode_punctuation(self) -> None:
         docs = self.pair()
-        docs["primary"]["records"][0]["verbatim_transcript"] = (
+        variant = (
             docs["primary"]["records"][0]["verbatim_transcript"]
             .replace("I said", "Ｉ said").replace(".", "!")
         )
+        docs["primary"]["records"][0]["verbatim_transcript"] = variant
+        docs["secondary"]["records"][0]["verbatim_transcript"] = variant
         report = self.score(docs)
         self.assertEqual(report["status"], "human_qa_32_of_32_pass")
         self.assertEqual(report["passed_clips"], 32)
         self.assertEqual(report["disagreement_clips"], 0)
         self.assertFalse(report["candidate_model_inference_authorized"])
+
+    def test_raw_verbatim_difference_triggers_third_even_when_tokens_match(self) -> None:
+        docs = self.pair()
+        original = docs["secondary"]["records"][0]["verbatim_transcript"]
+        docs["primary"]["records"][0]["verbatim_transcript"] = (
+            original.replace("I said", "i said").replace(".", "!")
+        )
+        self.assertEqual(qa.tokens(docs["primary"]["records"][0]["verbatim_transcript"]),
+                         qa.tokens(original))
+        without = self.score(docs)
+        self.assertEqual(without["status"], "human_qa_hold")
+        self.assertEqual(without["third_review_required_missing"], 1)
+        self.assertTrue(without["cases"][0]["disagreement"])
+        self.assertEqual(without["cases"][0]["reason"], "third_review_required")
+        docs["tertiary"] = fake_export(self.ctx, "reviewer_C")
+        with_third = self.score(docs)
+        self.assertEqual(with_third["status"], "human_qa_32_of_32_pass")
+        self.assertEqual(with_third["cases"][0]["reason"], "two_of_three_correct")
+        self.assertNotEqual(
+            with_third["cases"][0]["responses"]["primary"]["verbatim_transcript"],
+            with_third["cases"][0]["responses"]["secondary"]["verbatim_transcript"],
+        )
 
     def test_disagreement_requires_third_and_two_of_three_can_resolve(self) -> None:
         docs = self.pair()
