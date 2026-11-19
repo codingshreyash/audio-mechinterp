@@ -218,10 +218,10 @@ def classify_first_pass(
         except Exception as exc:  # the pinned helper catches parse and tokenizer exceptions
             error = f"{type(exc).__name__}: {exc}"
     inject = first is not None and bool(replay_ids)
-    if first is None:
-        label = "no_span"
-    elif censored:
+    if censored:
         label = "censored"
+    elif first is None:
+        label = "no_span"
     elif error is not None:
         label = "parse_error_or_partial"
     elif not entries:
@@ -248,6 +248,7 @@ def classify_first_pass(
         "pass2_function_injection": inject,
         "response_step": first["end_pos"] + 1 if first is not None else 0,
         "first_span_label": label,
+        "generation_censored": censored,
         "unsafe_cancel_in_multicall": unsafe_multi,
         "calendar_mutated": False,
     }

@@ -67,10 +67,28 @@ class FirstSpanTests(unittest.TestCase):
     def test_no_span_and_empty_array_do_not_inject(self) -> None:
         empty = classify(())
         self.assertEqual(empty["first_span_label"], "no_span")
+        self.assertFalse(empty["generation_censored"])
         self.assertFalse(empty["pass2_function_injection"])
         array = classify(("<TOOLCALL>[]</TOOLCALL>",))
         self.assertEqual(array["first_span_label"], "empty_array_no_injection")
         self.assertFalse(array["pass2_function_injection"])
+
+    def test_censored_no_span_is_not_completed_no_call(self) -> None:
+        incomplete = classify((), censored=True)
+        complete = classify(())
+        self.assertEqual(incomplete["first_span_label"], "censored")
+        self.assertTrue(incomplete["generation_censored"])
+        self.assertEqual(complete["first_span_label"], "no_span")
+        self.assertFalse(complete["generation_censored"])
+        self.assertEqual(incomplete["all_raw_spans"], [])
+        self.assertIsNone(incomplete["first_raw_span"])
+        self.assertFalse(incomplete["pass2_function_injection"])
+        self.assertEqual(incomplete["response_step"], 0)
+        malformed = classify(("<TOOLCALL>{broken}</TOOLCALL>",), censored=True)
+        self.assertEqual(malformed["first_span_label"], "censored")
+        self.assertIsNotNone(malformed["first_parse_error"])
+        self.assertEqual(len(malformed["all_raw_spans"]), 1)
+        self.assertFalse(malformed["pass2_function_injection"])
 
     def test_malformed_first_span_blocks_later_valid_span(self) -> None:
         later = call("list_calendar_events", {"date": endpoint.TARGET_DATE})
