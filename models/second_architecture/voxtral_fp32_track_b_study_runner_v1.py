@@ -302,14 +302,31 @@ def score_class_singletons(model: Any, batch: Mapping[str, torch.Tensor],
         if grad:
             require(got["gradient"] is not None and
                     got["gradient"].shape == source.shape and
-                    len(got["per_alias_selected_gradients"]) == 1,
+                    len(got["per_alias_selected_gradients"]) == 1 and
+                    len(got["per_alias_selected_gradient_l2"]) == 1 and
+                    len(got["per_alias_gradient_finite"]) == 1 and
+                    len(got["per_alias_full_gradient_l2"]) == 1 and
+                    len(got["per_alias_full_gradient_finite"]) == 1,
                     "Singleton gradient evidence missing")
             gradients.append(got["gradient"].detach())
-        entries.append({"ordinal": ordinal, "token_ids_with_eos": list(alias),
+        entry = {"ordinal": ordinal, "token_ids_with_eos": list(alias),
                         "token_logprobs_including_eos": got["token_logprobs_including_eos"][0],
                         "q": q, "hook": got["hooks"][0],
                         "selected_gradient": got["per_alias_selected_gradients"][0]
-                        if grad else None})
+                        if grad else None}
+        if grad:
+            entry.update({
+                "selected_gradient_l2": got["per_alias_selected_gradient_l2"][0],
+                "selected_gradient_finite": got["per_alias_gradient_finite"][0],
+                "full_gradient_l2": got["per_alias_full_gradient_l2"][0],
+                "full_gradient_finite": got["per_alias_full_gradient_finite"][0],
+            })
+            require(entry["selected_gradient_finite"] is True and
+                    entry["full_gradient_finite"] is True and
+                    math.isfinite(entry["selected_gradient_l2"]) and
+                    math.isfinite(entry["full_gradient_l2"]),
+                    "Nonfinite per-alias gradient receipt")
+        entries.append(entry)
     v = torch.tensor(values, dtype=torch.float64)
     mass = torch.logsumexp(v, dim=0)
     weights = torch.softmax(v, dim=0)
@@ -321,7 +338,8 @@ def score_class_singletons(model: Any, batch: Mapping[str, torch.Tensor],
     return {"log_mass": float(mass), "entries": entries,
             "alias_weights": weights.tolist(), "gradient": aggregate,
             "forward_count": len(entries), "gradient_accumulation_dtype":
-            str(aggregate.dtype) if aggregate is not None else None}
+            str(aggregate.dtype) if aggregate is not None else None,
+            "alias_weight_dtype": str(weights.dtype)}
 
 
 def _class_parity(grad: dict, clean: dict, zero: dict) -> list[str]:
@@ -398,6 +416,7 @@ def _score_evidence(value: dict) -> dict:
     return {"log_mass": value["log_mass"], "alias_weights": value["alias_weights"],
             "forward_count": value["forward_count"],
             "gradient_accumulation_dtype": value["gradient_accumulation_dtype"],
+            "alias_weight_dtype": value["alias_weight_dtype"],
             "entries": [{k: v for k, v in item.items() if k != "selected_gradient"}
                         | ({"selected_gradient_sha256": core.tensor_sha(item["selected_gradient"]),
                             "selected_gradient_shape": list(item["selected_gradient"].shape)}

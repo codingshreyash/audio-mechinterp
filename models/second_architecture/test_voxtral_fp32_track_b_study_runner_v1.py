@@ -62,6 +62,19 @@ class LedgerTests(unittest.TestCase):
                           "grad_singleton_score_forwards": 2})
         self.assertEqual(set(selected), {"recipient_0", "donor_0"})
         self.assertEqual(evidence["decision"]["parity_failures"], [])
+        for word in ("recipient", "donor"):
+            saved = evidence["grad_scores"][word]
+            self.assertEqual(saved["alias_weight_dtype"], "torch.float64")
+            self.assertEqual(saved["gradient_accumulation_dtype"], "torch.float32")
+            entry = saved["entries"][0]
+            self.assertTrue(entry["selected_gradient_finite"])
+            self.assertTrue(entry["full_gradient_finite"])
+            self.assertEqual(entry["selected_gradient_shape"], [1, study.core.PROJECTOR_WIDTH])
+            self.assertEqual(entry["selected_gradient_sha256"],
+                             study.core.tensor_sha(selected[f"{word}_0"]))
+            self.assertAlmostEqual(entry["selected_gradient_l2"],
+                                   float(torch.linalg.vector_norm(selected[f"{word}_0"])))
+            self.assertGreaterEqual(entry["full_gradient_l2"], entry["selected_gradient_l2"])
         self.assertEqual(evidence["generations"]["clean"]["suffix_ids"],
                          evidence["generations"]["zero"]["suffix_ids"])
 
