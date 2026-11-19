@@ -28,6 +28,8 @@ DESCRIPTIVE_RECEIPT = HERE / "runs/descriptive_source_preflight_v2/preflight.jso
 DESCRIPTIVE_GO = HERE / "INDEPENDENT_DESCRIPTIVE_SOURCE_GO_V2.json"
 DESCRIPTIVE_V2_RECORDS = HERE / "runs/descriptive_whisper_multilingual_20261119_v2/records.jsonl"
 DESCRIPTIVE_V2_RECORDS_SHA = "588165986eadcfc7df04f6a8869de78ccd656f5b9be578fe41b3e1395abeec42"
+AMENDED_DESIGN_GO = HERE / "WHISPER_NONSPEECH_CAUSAL_V2_V3_INDEPENDENT_DESIGN_REVIEW_V1.md"
+AMENDED_DESIGN_GO_SHA = "9d1046a467c8b9d20ab06d58d363a3f11d49316e6136b3dc20ae087b68346aa2"
 MAX_SECONDS = 1800
 MAX_RSS_BYTES = 4 * 1024**3
 MAX_EVIDENCE_BYTES = plan.MAX_EVIDENCE_BYTES
@@ -40,6 +42,8 @@ SOURCE_NAMES = (
     "WHISPER_NONSPEECH_CAUSAL_DESIGN_AMENDMENT_V1.md",
     "WHISPER_NONSPEECH_CAUSAL_DESIGN_AMENDMENT_V2.md",
     "WHISPER_NONSPEECH_CAUSAL_DESIGN_AMENDMENT_V3.md",
+    "WHISPER_NONSPEECH_CAUSAL_DESIGN_INDEPENDENT_REVIEW_V1.md",
+    "WHISPER_NONSPEECH_CAUSAL_V2_V3_INDEPENDENT_DESIGN_REVIEW_V1.md",
     "descriptive_worker_v1.py", "descriptive_pins_v1.json",
     "whisper_tiny_metadata_pin.json", "spec.json", "render.py",
 )
@@ -111,6 +115,8 @@ def committed_sources() -> dict[str, str]:
 def preflight_receipt() -> dict:
     """No-weight frozen source, asset and 328-schedule admission."""
     old.require_independent_go(DESCRIPTIVE_RECEIPT, DESCRIPTIVE_GO)
+    require(sha_file(AMENDED_DESIGN_GO) == AMENDED_DESIGN_GO_SHA,
+            "independently reviewed amended causal design changed")
     require(sha_file(DESCRIPTIVE_V2_RECORDS) == DESCRIPTIVE_V2_RECORDS_SHA,
             "audited descriptive evidence changed")
     old_receipt = old.preflight_receipt()
@@ -127,6 +133,7 @@ def preflight_receipt() -> dict:
     return {"schema": "nonspeech_whisper_causal_admission_v1",
             "status": "source_only_no_model_load", "sources": committed_sources(),
             "descriptive_go_sha256": sha_file(DESCRIPTIVE_GO),
+            "amended_design_go_sha256": AMENDED_DESIGN_GO_SHA,
             "descriptive_valid_records_sha256": DESCRIPTIVE_V2_RECORDS_SHA,
             "snapshot": old_receipt["models"]["whisper_multilingual"],
             "installed": old_receipt["installed"],
