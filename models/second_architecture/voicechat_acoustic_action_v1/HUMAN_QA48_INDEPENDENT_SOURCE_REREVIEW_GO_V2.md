@@ -1,0 +1,19 @@
+# Independent rereview: VoiceChat 48-WAV human QA source
+
+19 November 2026. **GO for the corrected source-only fake QA workflow; HOLD for production human QA, candidate inference, and any security claim.** I independently reviewed correction `0d4a9fb` against the prior [HOLD](HUMAN_QA48_INDEPENDENT_SOURCE_REVIEW_HOLD_V1.md), the prospective acoustic-action V1/V2 protocol, and the exact current source. I did not edit the implementation, create real 48-WAV variants, collect human judgments, or load VoiceChat.
+
+Current SHA-256: `human_qa48.py` `efa2822a0b3cb2b7ad8e7242e8495e1f712d819e704233a41ef91f95f6d21736`; first JS `d3b2bdf25a849430a4f4775f115db97b94759a4b9926e60f30a964e1b6909fb8`; comparison JS `097487e31d998eece5e35a778e6b8d108534850f8a95f8b67ae62db098e201cd`; first template `f90ce03c1f8973a724c21a930ad92ca8dd30cf58c3c2c140c70b013eb881edd2`; comparison template `b2ef80c88e064be09c1471ffaea819619da32c0a0a8b4eedde4d4cd4240abd09`; Python tests `bf7a7c1ba80f3d119669871e2ec90f6445d3c7c48a49d8cf23b67dd6d69729fb`; fake DOM tests `ce9ea702bf13a4ee18cc1052601c3d00799f3c7ec6c3b51b9dde762458bb7ac0`; correction handoff `771e079319740fff8d17ffcb1e0b2822efb49e172d4359c48e92b2f9231b4389`.
+
+## Former chronology HOLD resolved
+
+The auditor now takes the later of the **two complete first-export** timestamps as a barrier for every primary and secondary reference-comparison mark. Each comparison export includes a completion timestamp no earlier than its last mark. A sparse third review cannot start until **both comparison exports** are complete. I independently reran the prior fake counterexample: primary comparison at 07:01 with secondary first export at 08:00 is rejected with `comparison preceded both locked first exports`; moving both comparison marks to 08:01 yields a 48-arm, 12-source accepted fake report. The separate fake third review at 06:00 before both comparison exports at 08:00 is rejected with `third review preceded completed disagreement stage`; an 08:30 third review then passes with one flagged arm. These are ordering checks on saved browser timestamps, not proof of an honest wall clock or separate human reviewers.
+
+## Former comparison replay HOLD resolved
+
+The comparison page now keys browser storage on the embedded canonical-template digest as well as first-export digest and reviewer ID. On resume, it checks every immutable row field, including the reference script, source, arm, initial words, and clean comparison basis. The three fake DOM checks pass: unchanged-template resume succeeds; changed reference with the same digest rejects stale rows; changed digest uses a different storage key. The page's embedded digest is supplied by source rendering; the future production builder must still reconstruct and authenticate the rendered page and reviewer exports against admitted bytes. This source slice does not supply that production attestation.
+
+## Verification and scope
+
+All **9/9** fake Python tests passed, both JavaScript files passed `node --check`, and **3/3** fake comparison DOM checks passed. `py_compile` and `git diff --check` passed. The source-only validator still rejects production variant admission, preserves the planned 48 arms and 12 four-arm sources, keeps first-pass forms reference-free, requires a sparse third review for critical disagreement, treats both ASR streams as diagnostic only, and always records `candidate_inference_authorized=false` in synthetic reports.
+
+The source-only GO does not authenticate human identity, actual listening, browser clocks, future noise variants, or production form bytes. Production use needs a separately reviewed entry point and exact 48-WAV byte admission, rendered first and comparison form checks, complete human exports, a later independent audit, and the separate VoiceChat model gates.
