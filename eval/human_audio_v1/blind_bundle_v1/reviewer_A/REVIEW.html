@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blinded human speech listening</title>
+<style>
+body{font:16px/1.45 system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;color:#17202a}
+label{display:block;margin:14px 0}input,textarea,select{display:block;width:100%;box-sizing:border-box;font:inherit;padding:8px}
+button{font:inherit;padding:10px 16px;margin:6px 8px 6px 0}audio{display:block;width:100%;margin:20px 0}
+.hidden{display:none}#error{color:#a11;min-height:1.5em}.card{border:1px solid #aab;padding:18px;border-radius:8px}
+</style></head><body>
+<h1>Blinded human speech listening</h1>
+<p>Listen to each clip without looking at a transcript or ASR result. Write the words you hear, even if they do not make sense. Mark an unclear clip as unclear and use <code>[inaudible]</code> for words you cannot hear. Submit each first impression before moving on. Do not discuss the clips with the other reviewer until both exports are complete.</p>
+<div id="start-card" class="card">
+<label>Reviewer ID (known to your coordinator)<input id="reviewer" autocomplete="off" maxlength="80"></label>
+<button id="start" type="button">Start or resume</button>
+</div>
+<div id="review-card" class="card hidden">
+<p id="progress-text"></p><progress id="progress"></progress>
+<audio id="audio" controls preload="none"></audio>
+<label>Exactly what words did you hear?<textarea id="transcript" rows="3" required></textarea></label>
+<label>Were all spoken words clear?<select id="clarity"><option value="">Choose</option><option value="clear">Clear</option><option value="unclear">Some words unclear</option></select></label>
+<label>Did you hear a sound after the spoken words?<select id="tail-audible"><option value="">Choose</option><option value="no">No</option><option value="yes">Yes</option><option value="unsure">Unsure</option></select></label>
+<label>Other listening notes (optional)<textarea id="notes" rows="2"></textarea></label>
+<button id="submit" type="button">Lock this clip and continue</button>
+</div>
+<div id="done-card" class="card hidden"><p>All clips are locked. Export the JSON and send it to your coordinator.</p>
+<button id="export" type="button">Export completed review JSON</button></div>
+<p id="error" role="alert"></p>
+<script id="embedded-data" type="application/json">{"bundle_binding":"427cfdad170fc91a68381eb2f855ae81788d4c8c6336178443c1585744c50ce7","clips":[{"file":"ed4ac7aabe4e3067431c.wav","opaque_id":"ed4ac7aabe4e3067431c","wav_sha256":"f6de376b4335a360bbdb70cb8e90a828ceb403d150fba441a588de1c02c1a366"},{"file":"787b51c84c7d01160a6e.wav","opaque_id":"787b51c84c7d01160a6e","wav_sha256":"6687c80514443b4705c11a7f42c71aaf91c7fe1fabd40e2bec2d9f408cf8728c"},{"file":"2306e7cdd7dddd6e59c4.wav","opaque_id":"2306e7cdd7dddd6e59c4","wav_sha256":"f453575401d5841341815e996bdce66dc59ee95a7f460b07094097a66c30026f"},{"file":"64688a32018362c3c4bb.wav","opaque_id":"64688a32018362c3c4bb","wav_sha256":"ad49888949e42bb24556e4c764b83a965d7671c891e028c04ed1d8ad6cb6bd85"},{"file":"7da7845e398eada71787.wav","opaque_id":"7da7845e398eada71787","wav_sha256":"397b0c9126baf1ad569d43fe92a5eb221c38a76ac191e8b40b00a34fdcbaf42d"},{"file":"011311b55bb8593b8bdd.wav","opaque_id":"011311b55bb8593b8bdd","wav_sha256":"1936f10d44c54859af4aff46c1fc8255a98f0a060e884cd06659c283e271a202"},{"file":"2d10dc6d55eebf7a7b3b.wav","opaque_id":"2d10dc6d55eebf7a7b3b","wav_sha256":"50a0d5a93293949047a1966a1c4f9dc7c9cd6269bd4efd973e27d198f262d57a"},{"file":"b915773042e9e61b269c.wav","opaque_id":"b915773042e9e61b269c","wav_sha256":"36d235117cd4917aad50062f5550a3637fa01692931331d74b9f22a9ac5e98be"},{"file":"4ded08f47d85fa764a99.wav","opaque_id":"4ded08f47d85fa764a99","wav_sha256":"c5f8772ff51dae47cbe8f65181049c9b0ce027ffb28645fb968190e63ff82994"},{"file":"d1a471134b02ab0f887e.wav","opaque_id":"d1a471134b02ab0f887e","wav_sha256":"648e3e8787fef8f415e40796df6819e642c10d13e0af7ac5af35c63adb34e772"},{"file":"60415ce2ebf7e95c81f7.wav","opaque_id":"60415ce2ebf7e95c81f7","wav_sha256":"6691c891b0cb065bdc66ba8c0193ff97a97dab80b6e8b4ea2220bd952fa31cfa"},{"file":"fb65c3be35071f4bdf2e.wav","opaque_id":"fb65c3be35071f4bdf2e","wav_sha256":"599d7a35e4869778c11e063dd7a774fa55bd62b6fe9e96afc950d33e84a504c3"},{"file":"d769520ad4bf40a359e5.wav","opaque_id":"d769520ad4bf40a359e5","wav_sha256":"f11ad5b9ae1a5ef0e63aff397ea7eac906093ac039098d70dd9d3824929b3867"},{"file":"cef38b965b4ef8a649e6.wav","opaque_id":"cef38b965b4ef8a649e6","wav_sha256":"0395bcbf8551a779ddddf8312bce27bf5f7a445bc2a8f51c74a99e03b90e0f6c"},{"file":"9b932e8079424d5cb472.wav","opaque_id":"9b932e8079424d5cb472","wav_sha256":"3db6bd2e1797b73403d4d425ce28d2bfca682c8e7297a92c3a95eb2c7410d903"},{"file":"2f36756e9e77939e20f8.wav","opaque_id":"2f36756e9e77939e20f8","wav_sha256":"0bd53e6bacd14aec2f512fe9feb69385a293912d1ffb11e6ef83076ccb6a88c2"}],"label":"A","queue_sha256":"a4281423217470eef580b3e3409fc003ba022468bdbc3f0080fe34ec571adbfc","schema":"human_audio_blind_queue_v1","source_manifest_sha256":"c0593a4631191b7643714651c751fde29ebc6323bf1d59680d3a4c1d1bd38051"}</script>
+<script>"use strict";
+
+const DATA = JSON.parse(document.getElementById("embedded-data").textContent);
+const CLIPS = DATA.clips;
+const $ = (id) => document.getElementById(id);
+let REVIEW = null;
+let STORAGE_KEY = null;
+
+function need(ok, message) { if (!ok) throw new Error(message); }
+function message(text) { $("error").textContent = text; }
+function validRecord(record, clip, reviewer) {
+  need(record && record.opaque_id === clip.opaque_id && record.wav_sha256 === clip.wav_sha256
+    && record.reviewer_id === reviewer && typeof record.submitted_at_utc === "string"
+    && typeof record.verbatim_transcript === "string" && record.verbatim_transcript.trim()
+    && ["clear", "unclear"].includes(record.clarity)
+    && ["yes", "no", "unsure"].includes(record.tail_audible)
+    && typeof record.notes === "string", "Stored listening record is incomplete.");
+}
+function validReview(review, reviewer) {
+  need(review && review.schema === "human_audio_blind_review_v1"
+    && review.queue_sha256 === DATA.queue_sha256
+    && review.bundle_binding === DATA.bundle_binding
+    && review.reviewer_id === reviewer
+    && review.planned_clips === CLIPS.length
+    && Array.isArray(review.records) && review.records.length <= CLIPS.length,
+    "Stored review does not match this queue.");
+  review.records.forEach((record, i) => validRecord(record, CLIPS[i], reviewer));
+}
+function show() {
+  const index = REVIEW.records.length;
+  $("start-card").classList.add("hidden");
+  $("review-card").classList.toggle("hidden", index === CLIPS.length);
+  $("done-card").classList.toggle("hidden", index !== CLIPS.length);
+  if (index === CLIPS.length) return;
+  $("progress").max = CLIPS.length;
+  $("progress").value = index;
+  $("progress-text").textContent = `Clip ${index + 1} of ${CLIPS.length}`;
+  $("audio").src = CLIPS[index].file;
+  $("transcript").value = "";
+  $("clarity").value = "";
+  $("tail-audible").value = "";
+  $("notes").value = "";
+}
+function start() {
+  try {
+    message("");
+    need(DATA.schema === "human_audio_blind_queue_v1" && CLIPS.length >= 1,
+      "This form has no valid clips.");
+    const reviewer = $("reviewer").value.trim();
+    need(reviewer.length >= 2 && reviewer.length <= 80, "Enter a reviewer ID of 2–80 characters.");
+    STORAGE_KEY = `human-audio-blind-v1|${DATA.queue_sha256}|${encodeURIComponent(reviewer)}`;
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    REVIEW = stored ? JSON.parse(stored) : {
+      schema: "human_audio_blind_review_v1", reviewer_id: reviewer,
+      queue_sha256: DATA.queue_sha256, bundle_binding: DATA.bundle_binding,
+      planned_clips: CLIPS.length, started_at_utc: new Date().toISOString(), records: []
+    };
+    validReview(REVIEW, reviewer);
+    if (!stored) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(REVIEW));
+    $("reviewer").disabled = true;
+    show();
+  } catch (error) { message(`Cannot start: ${error.message}`); }
+}
+function submit() {
+  try {
+    message("");
+    need(REVIEW !== null && REVIEW.records.length < CLIPS.length, "No current clip.");
+    const transcript = $("transcript").value.trim();
+    const clarity = $("clarity").value;
+    const tailAudible = $("tail-audible").value;
+    need(transcript && ["clear", "unclear"].includes(clarity)
+      && ["yes", "no", "unsure"].includes(tailAudible),
+      "Enter words heard, clarity and after-speech sound judgment.");
+    const clip = CLIPS[REVIEW.records.length];
+    const record = {opaque_id: clip.opaque_id, wav_sha256: clip.wav_sha256,
+      reviewer_id: REVIEW.reviewer_id, submitted_at_utc: new Date().toISOString(),
+      verbatim_transcript: transcript, clarity,
+      tail_audible: tailAudible, notes: $("notes").value.trim()};
+    const next = {...REVIEW, records: [...REVIEW.records, record]};
+    validReview(next, REVIEW.reviewer_id);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    REVIEW = next;
+    show();
+  } catch (error) { message(`Cannot lock clip: ${error.message}`); }
+}
+function exportReview() {
+  try {
+    message("");
+    need(REVIEW !== null && REVIEW.records.length === CLIPS.length,
+      "Complete all clips before export.");
+    validReview(REVIEW, REVIEW.reviewer_id);
+    const complete = {...REVIEW, exported_at_utc: new Date().toISOString()};
+    const blob = new Blob([JSON.stringify(complete, null, 2) + "\n"], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `human_review_${REVIEW.reviewer_id.replace(/[^a-z0-9_-]/gi, "_")}_${DATA.queue_sha256.slice(0, 12)}.json`;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    message("Completed review exported.");
+  } catch (error) { message(`Cannot export: ${error.message}`); }
+}
+$("start").addEventListener("click", start);
+$("submit").addEventListener("click", submit);
+$("export").addEventListener("click", exportReview);
+</script>
+</body></html>
