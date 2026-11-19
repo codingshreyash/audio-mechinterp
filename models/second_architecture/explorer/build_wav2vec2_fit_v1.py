@@ -20,10 +20,13 @@ MODEL_DIR = HERE.parent
 ROOT = MODEL_DIR.parents[1]
 BASELINE = MODEL_DIR / "runs/wav2vec2_fit_baseline_stage_capture_v1/20261118T2352Z"
 CAUSAL = MODEL_DIR / "runs/wav2vec2_fit_causal_patch_v1/20261119T0013Z"
+COMPLEMENT = MODEL_DIR / "runs/wav2vec2_fit_complement_patch_v1/20261119T0035Z"
 CORPUS = ROOT / "eval/audio_jlens/corpus_v1/rendered/manifest.json"
 BASELINE_INVENTORY = MODEL_DIR / "WAV2VEC2_FIT_BASELINE_V2_SIDECAR_MANIFEST_V1.json"
 CAUSAL_INVENTORY = MODEL_DIR / "WAV2VEC2_FIT_CAUSAL_SIDECAR_MANIFEST_V1.json"
 CAUSAL_REVIEW = MODEL_DIR / "WAV2VEC2_FIT_CAUSAL_RESULT_INDEPENDENT_REVIEW_V1.md"
+COMPLEMENT_INVENTORY = MODEL_DIR / "WAV2VEC2_FIT_COMPLEMENT_SIDECAR_MANIFEST_V1.json"
+COMPLEMENT_REVIEW = MODEL_DIR / "WAV2VEC2_FIT_COMPLEMENT_RESULT_INDEPENDENT_REVIEW_V1.md"
 TEMPLATE = HERE / "wav2vec2_fit_v1_template.html"
 APP = HERE / "wav2vec2_fit_v1.js"
 OUTPUT = HERE / "wav2vec2_fit_v1.html"
@@ -36,6 +39,10 @@ EXPECTED_SHA = {
     "causal_audit": "fcfa865d56e0ebb1b719e8a890edd77fdb5aa39f2ae08aef782ff1b0d6eeb052",
     "causal_inventory": "1785a336a1016e7ec689c9a670532238b29f117e074e54bd45d0078ef8c570b6",
     "causal_review": "fbfbef6a201a0e9978ea86e9c41be6300f04ebcadc36b8190e80a181c8df5d11",
+    "complement_records": "3eff05935744803e5eb3022a7417a4c3304e2465c148ad84613df53ba0392766",
+    "complement_audit": "606ef0aae4af76b7903dcac72a8d51b8be7bd58e99bdf7b0481d22dcd91a4dbe",
+    "complement_inventory": "92dc6d42ca718b98764d9bfba38c98ac71d2b7fe903d18325c34e0d95da0db6a",
+    "complement_review": "5a37977c6e84a9b93afffe5f41951c18f3b63e4b99955973e930729e48f45e06",
 }
 STAGES = ("input_values", "first_conv_raw", "first_conv_norm",
           "feature_projection", "post_block11")
@@ -80,7 +87,58 @@ def verified_file(path: Path, expected: str) -> None:
             f"missing or changed source file: {path}")
 
 
+def verified_complement() -> list[dict]:
+    for key, path in (
+        ("complement_records", COMPLEMENT / "records.jsonl"),
+        ("complement_audit", COMPLEMENT / "audit.json"),
+        ("complement_inventory", COMPLEMENT_INVENTORY),
+        ("complement_review", COMPLEMENT_REVIEW),
+    ):
+        verified_file(path, EXPECTED_SHA[key])
+    require("Decision: GO" in COMPLEMENT_REVIEW.read_text(),
+            "independent complement result review lacks GO")
+    audit = json.loads((COMPLEMENT / "audit.json").read_text())
+    require(audit["status"] == "independent_saved_data_audit_pass"
+            and audit["control_gate_pass"] is True
+            and audit["records_sha256"] == EXPECTED_SHA["complement_records"]
+            and audit["patch_rows"] == 192 and audit["sidecar_count"] == 384,
+            "complement audit is not complete")
+    rows = read_jsonl(COMPLEMENT / "records.jsonl")
+    require(len(rows) == 194 and rows[0]["type"] == "preflight"
+            and rows[-1]["type"] == "complete", "complement bookends differ")
+    patches = [row for row in rows if row["type"] == "patch"]
+    require(len(patches) == 192
+            and len({(r["direction_index"], r["site"], r["arm"]) for r in patches}) == 192
+            and {r["site"] for r in patches} == set(SITES)
+            and {r["arm"] for r in patches} == {"W", "C", "self_C", "full_donor", "R1_C", "R2_C"},
+            "complement patch matrix differs")
+    manifest = json.loads(COMPLEMENT_INVENTORY.read_text())
+    require(manifest["records_sha256"] == EXPECTED_SHA["complement_records"]
+            and manifest["audit_sha256"] == EXPECTED_SHA["complement_audit"]
+            and len(manifest["files"]) == 384,
+            "complement sidecar inventory differs")
+    by_path = {item["path"]: item for item in manifest["files"]}
+    require(len(by_path) == 384, "complement sidecar path duplicated")
+    expected = set()
+    for row in patches:
+        for kind in ("patch", "logits"):
+            rel = row[f"{kind}_path"]
+            require(rel.startswith("captures/") and ".." not in Path(rel).parts
+                    and rel not in expected and rel in by_path,
+                    "complement sidecar path invalid or duplicated")
+            expected.add(rel)
+            item = by_path[rel]
+            require(item["sha256"] == row[f"{kind}_sha256"]
+                    and (COMPLEMENT / rel).stat().st_size == item["size_bytes"],
+                    "complement sidecar metadata differs")
+            verified_file(COMPLEMENT / rel, item["sha256"])
+    actual = {p.relative_to(COMPLEMENT).as_posix() for p in COMPLEMENT.rglob("*.npy")}
+    require(actual == expected == set(by_path), "complement sidecar population differs")
+    return patches
+
+
 def load_verified() -> dict:
+    complement_patches = verified_complement()
     for key, path in (
         ("baseline_records", BASELINE / "records.jsonl"),
         ("baseline_audit", BASELINE / "audit.json"),
@@ -222,6 +280,19 @@ def load_verified() -> dict:
             "target_only_transfer", "control_pass", "windows", "delta_l2",
             "changed_frames_vs_recipient", "logits_l2_vs_recipient",
             "logits_l2_vs_donor", "seed")})
+    causal_by_key = {(r["direction_index"], r["site"], r["arm"]): r for r in patches}
+    compact_complement = []
+    for row in complement_patches:
+        reference = causal_by_key[(row["direction_index"], row["site"], "W")]
+        require(all(row[key] == reference[key] for key in
+                    ("pair_id", "engine", "mode", "recipient_key", "donor_key", "site"))
+                and (row["arm"] != "W" or row["transcript"] == reference["transcript"]),
+                "complement and prior causal cohort differ")
+        compact_complement.append({k: row[k] for k in (
+            "direction_index", "pair_id", "engine", "mode", "recipient_key",
+            "donor_key", "site", "arm", "transcript", "primary_eligible",
+            "target_only_transfer", "control_pass", "delta_l2",
+            "natural_c_l2", "natural_w_l2")})
     baselines = []
     for row in base_rows:
         if row["type"] == "baseline":
@@ -233,13 +304,16 @@ def load_verified() -> dict:
         "model": base_rows[0]["receipt"]["model_id"],
         "revision": base_rows[0]["receipt"]["model_revision"],
         "clips": clips, "traces": traces, "baselines": baselines,
-        "patches": compact_patches,
+        "patches": compact_patches, "complement_patches": compact_complement,
         "provenance": {"baseline_records_sha256": EXPECTED_SHA["baseline_records"],
                        "causal_records_sha256": EXPECTED_SHA["causal_records"],
                        "baseline_audit_sha256": EXPECTED_SHA["baseline_audit"],
                        "causal_audit_sha256": EXPECTED_SHA["causal_audit"],
                        "causal_sidecar_manifest_sha256": EXPECTED_SHA["causal_inventory"],
                        "causal_review_sha256": EXPECTED_SHA["causal_review"],
+                       "complement_records_sha256": EXPECTED_SHA["complement_records"],
+                       "complement_audit_sha256": EXPECTED_SHA["complement_audit"],
+                       "complement_review_sha256": EXPECTED_SHA["complement_review"],
                        "baseline_sidecars": 320, "causal_sidecars": 448,
                        "planned_patch_rows": 224, "primary_directions_per_site": 4},
     }

@@ -160,6 +160,34 @@ function table(rows, recipientText, donorText) {
   }
 }
 
+function factorial(rows, recipientText, donorText) {
+  const body = $("factorial-rows"); body.replaceChildren();
+  const arms = [
+    ["self_C", "Recipient", "Recipient"],
+    ["W", "Donor", "Recipient"],
+    ["C", "Recipient", "Donor"],
+    ["full_donor", "Donor", "Donor"]
+  ];
+  for (const [arm, word, outside] of arms) {
+    const row = rows.find((r) => r.arm === arm);
+    if (!row) throw new Error(`Missing factorial arm ${arm}`);
+    const tr = document.createElement("tr");
+    const relation = row.transcript === donorText ? "Matches donor transcript"
+      : row.transcript === recipientText ? "Matches recipient transcript" : "Different transcript";
+    for (const value of [word, outside, row.transcript, relation, fixed(row.delta_l2, 2)]) {
+      const td = document.createElement("td"); td.textContent = value; tr.append(td);
+    }
+    body.append(tr);
+  }
+  const outside = rows.find((r) => r.arm === "C");
+  const word = rows.find((r) => r.arm === "W");
+  const random = rows.filter((r) => r.arm === "R1_C" || r.arm === "R2_C");
+  if (random.length !== 2 || random.some((r) => r.transcript !== recipientText)) {
+    throw new Error("Factorial random-outside controls differ from reviewed result");
+  }
+  $("factorial-note").textContent = `The two random outside-region edits kept the recipient transcript in this selected cell. Natural W edit L2 ${fixed(word.natural_w_l2, 2)}; natural O edit L2 ${fixed(outside.natural_c_l2, 2)}. The W and O edits have different sizes. Outside-only failure shows lack of sufficiency under this patch, not absence of word information outside W.`;
+}
+
 function render() {
   const pair = $("pair").value, engine = $("engine").value,
     recipient = $("recipient").value, mode = $("mode").value,
@@ -183,6 +211,10 @@ function render() {
   $("patch-context").textContent = `Recipient clean transcription: “${rb.transcript}” Paired donor clean transcription: “${db.transcript}” The patch changes an internal state, while the recipient waveform stays fixed.`;
   chart(pair, engine, stage);
   table(rows, rb.transcript, db.transcript);
+  const complementRows = DATA.complement_patches.filter((r) => r.pair_id === pair
+    && r.engine === engine && r.mode === mode && r.recipient_key === key && r.site === site);
+  if (complementRows.length !== 6) throw new Error("Selected factorial matrix incomplete");
+  factorial(complementRows, rb.transcript, db.transcript);
 }
 
 populate(); summary(); render();

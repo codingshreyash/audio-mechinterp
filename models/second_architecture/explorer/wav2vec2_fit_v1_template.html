@@ -61,7 +61,7 @@
 <main>
   <div class="eyebrow">Audited audio-model states · FIT split</div>
   <h1>Where a spoken word spreads, and which state changes transcription</h1>
-  <p class="intro">Compare two paired recordings across preprocessing, convolution, and encoder states. Then inspect every complete CTC transcript from internal word-window, off-word, self, full-donor, and random patches.</p>
+  <p class="intro">Compare two paired recordings across preprocessing, convolution, and encoder states. Inspect complete CTC transcripts from internal word-window, off-word, self, full-donor, and random patches, then compare the four word/outside state combinations.</p>
   <div class="scope" id="scope"></div>
   <section class="cards" id="cards" aria-label="Study summary"></section>
 
@@ -97,7 +97,14 @@
     <p class="small" style="margin-top:12px">W is the nominal word window; P and Q are equal-width windows before and after it. Random R1/R2 use unique seeded Gaussian edits with the donor W-delta norm. Equal width does not imply equal edit magnitude. “Frames with changed logits” counts a frame when any of its 32 logit values differs, even if its selected CTC token and transcript stay the same. The primary intended-word test needs both clean transcripts to contain the correct word and differ only there; other directions remain visible as descriptive evidence.</p>
   </section>
 
-  <section class="panel" aria-labelledby="prov-title"><h2 id="prov-title">Provenance and limits</h2><dl class="prov" id="provenance"></dl><p class="small" style="margin-top:15px">Source data: <a href="../runs/wav2vec2_fit_baseline_stage_capture_v1/20261118T2352Z/records.jsonl">baseline records</a>, <a href="../runs/wav2vec2_fit_causal_patch_v1/20261119T0013Z/records.jsonl">causal records</a>, <a href="../runs/wav2vec2_fit_causal_patch_v1/20261119T0013Z/audit.json">saved-data audit</a>, and <a href="../WAV2VEC2_FIT_CAUSAL_RESULT_INDEPENDENT_REVIEW_V1.md">independent result review</a>. This browser embeds only data whose local source hashes passed the builder.</p></section>
+  <section class="panel" aria-labelledby="factorial-title">
+    <h2 id="factorial-title">Which region is sufficient in the saved 2 × 2 state swap?</h2>
+    <p class="small">The recipient waveform stays fixed. The four rows below combine the recipient or donor state in the nominal word window W and all other active rows O. This is the same FIT cohort and two sites as above, with a separate audited follow-up run; it is not an independent word or voice replication.</p>
+    <div class="table-wrap"><table><thead><tr><th>Word rows W</th><th>Other rows O</th><th>Complete CTC transcript</th><th>Relation to clean outputs</th><th>Edited-state L2</th></tr></thead><tbody id="factorial-rows"></tbody></table></div>
+    <p id="factorial-note" class="small" style="margin-top:12px"></p>
+  </section>
+
+  <section class="panel" aria-labelledby="prov-title"><h2 id="prov-title">Provenance and limits</h2><dl class="prov" id="provenance"></dl><p class="small" style="margin-top:15px">Source data: <a href="../runs/wav2vec2_fit_baseline_stage_capture_v1/20261118T2352Z/records.jsonl">baseline records</a>, <a href="../runs/wav2vec2_fit_causal_patch_v1/20261119T0013Z/records.jsonl">word-window records</a>, <a href="../runs/wav2vec2_fit_complement_patch_v1/20261119T0035Z/records.jsonl">word/outside factorial records</a>, <a href="../WAV2VEC2_FIT_CAUSAL_RESULT_INDEPENDENT_REVIEW_V1.md">word-window review</a>, and <a href="../WAV2VEC2_FIT_COMPLEMENT_RESULT_INDEPENDENT_REVIEW_V1.md">factorial review</a>. This browser embeds only data whose local source hashes passed the builder.</p></section>
   <p class="foot">All data are from one English ASR checkpoint, two synthetic voices, and already-open FIT word pairs. Internal activation patches are not playable audio edits. There is no assistant action or security finding here.</p>
 </main>
 <script type="application/json" id="embedded-data">__EMBEDDED_JSON__</script>

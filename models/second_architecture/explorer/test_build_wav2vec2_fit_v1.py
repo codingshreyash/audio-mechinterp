@@ -38,6 +38,14 @@ class Wav2Vec2ViewerTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "missing or changed source file"):
                     viewer.load_verified()
 
+    def test_changed_complement_records_rejected_before_display(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "records.jsonl").write_text('{"type":"complete"}\n')
+            with patch.object(viewer, "COMPLEMENT", root):
+                with self.assertRaisesRegex(ValueError, "missing or changed source file"):
+                    viewer.load_verified()
+
     def test_verified_frozen_population(self) -> None:
         if not viewer.EXPECTED_SHA["causal_review"]:
             self.skipTest("Independent result review not yet committed")
@@ -46,6 +54,13 @@ class Wav2Vec2ViewerTests(unittest.TestCase):
         self.assertEqual(len(data["traces"]), 8)
         self.assertEqual(len(data["baselines"]), 16)
         self.assertEqual(len(data["patches"]), 224)
+        self.assertEqual(len(data["complement_patches"]), 192)
+        for site in viewer.SITES:
+            rows = [r for r in data["complement_patches"] if r["site"] == site]
+            self.assertEqual(sum(r["arm"] == "W" for r in rows), 16)
+            self.assertEqual(sum(r["arm"] == "C" for r in rows), 16)
+            self.assertEqual(sum(r["arm"] == "W" and r["target_only_transfer"] for r in rows), 4)
+            self.assertEqual(sum(r["arm"] == "C" and r["target_only_transfer"] for r in rows), 0)
         self.assertEqual(sum(r["primary_eligible"] and r["arm"] == "W"
                              for r in data["patches"]), 8)
         self.assertEqual(sum(r["target_only_transfer"] and r["primary_eligible"]
