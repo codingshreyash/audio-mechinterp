@@ -27,11 +27,22 @@ sample has begin/end monotonic timestamps and the gap since the preceding
 completed sample, including launch-to-first-sample. The parent aims for 0.1 s
 polls and rejects **any observed gap above 0.2 s**, including a slow NVML call.
 The JSONL poll ledger, bounded logs, terminal receipt, and SHA-256 file census
-are retained. After a killed child, an aggregate evidence overflow causes
-bounded prefixes to be retained with each truncation declared in the receipt.
-The terminal sealer removes child-created links, special files, directories,
-reserved receipt names and excess files without following links; it records
-the count and first 32 removals. Log writes use `O_NOFOLLOW`.
+are retained. For an otherwise valid flat inventory, an aggregate evidence
+overflow causes bounded prefixes to be retained with each truncation's
+**filename hash**, original size, and retained size declared in the receipt.
+The receipt hashes every retained filename and content; it does not print
+child-selected names. Log writes use `O_NOFOLLOW`.
+
+If the child creates a symlink, special file, directory, long name, or too
+many files, the parent stops its session and writes a small **external sibling
+failure receipt**, such as `attempt_001.parent_failure.json`. It leaves the
+entire child output directory unchanged, including unsafe entries, so an
+independent reviewer can inspect it without the parent following a link or
+deleting evidence. The external receipt contains no child-selected names or
+content. Its `cap_policy_status=failed_no_64mib_proof`, `no_go=true`, and
+`last_valid_checkpoint_unverified=true` mean the attempt cannot support a
+memory conclusion or a cap-compliant result. This exceptional path is a bounded
+failure record, not a successful seal of the child evidence.
 The receipt status is only `bounded_child_complete_pending_saved_audit`; it
 does not attest to six checkpoints or a model response.
 
@@ -39,7 +50,8 @@ Ten no-model tests in
 [`test_voicechat_step400_supervisor_v1.py`](test_voicechat_step400_supervisor_v1.py)
 passed on the local CPU: a fake child and poll ledger, slow telemetry gap,
 GPU cap stop, missing heartbeat, child nonzero, log limit, evidence overflow,
-disk floor, consumed attempt rejection, symlink and 33-file failure sealing,
+disk floor, consumed attempt rejection, symlink and 33-file external failure
+receipts without raw secret filenames,
 and cleanup of a surviving session descendant. Command:
 
 `python3 -W error::ResourceWarning -m unittest models.second_architecture.voicechat_calendar_fixture_v1.test_voicechat_step400_supervisor_v1 -q`
@@ -64,7 +76,7 @@ fake-model test result is unchanged by this constituent.
    live H200 can sustain 0.2 s coverage under model load. A failed or missing
    poll ledger is a coverage failure, never evidence of an in-cap trajectory.
    Unexpected child-created links, special files, directories, or excess files
-   are treated as invalid evidence and removed to make a bounded terminal
+   are treated as invalid evidence and preserved unsealed with an external
    receipt; the admitted child must not create them. An NVML initialization or
    process-spawn exception before the monitor loop can still leave a consumed
    attempt without a terminal receipt and needs a separate prelaunch failure

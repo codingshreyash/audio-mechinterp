@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import sys
 import tempfile
@@ -51,7 +52,8 @@ class SupervisorFakeTests(unittest.TestCase):
         self.assertTrue(all(rows[i]["sample_end_monotonic"] -
                             rows[i-1]["sample_end_monotonic"] <= 0.2
                             for i in range(1, len(rows))))
-        self.assertEqual(result["evidence_inventory_before_parent_receipt"]["stdout.log"]["bytes"],
+        stdout_hash = hashlib.sha256(b"stdout.log").hexdigest()
+        self.assertEqual(result["evidence_inventory_before_parent_receipt"][stdout_hash]["bytes"],
                          len(b"fake only\n"))
         with self.assertRaisesRegex(ValueError, "consumed diagnostic attempt"):
             parent.supervise_candidate(command=[sys.executable], environment=os.environ.copy(),
@@ -137,20 +139,24 @@ time.sleep(5)
             staged.mkdir()
             target = root / "outside.txt"
             target.write_text("untouched")
+            secret_name = "PRIVATE_user_prompt_calendar_name.link"
             script = ("import os,time; "
                       "os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01'); "
-                      f"os.symlink({str(target)!r},'junk.link'); time.sleep(5)")
+                      f"os.symlink({str(target)!r},{secret_name!r}); time.sleep(5)")
             output = root / "attempt"
             result = parent.supervise_candidate(
                 command=[sys.executable, "-c", script], environment=os.environ.copy(),
                 output_dir=output, staged_checkpoint_dir=staged,
                 gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
                 disk_free_bytes=lambda _path: 31 * 1024**3)
-            self.assertTrue((output / "parent_result.json").is_file())
-            self.assertFalse((output / "junk.link").exists())
+            receipt = root / "attempt.parent_failure.json"
+            self.assertTrue(receipt.is_file())
+            self.assertTrue((output / secret_name).is_symlink())
             self.assertEqual(target.read_text(), "untouched")
             self.assertEqual(result["status"], "invalid_or_partial")
-            self.assertEqual(result["sanitization"]["removed_count"], 1)
+            self.assertEqual(result["reason"], "unsealed_child_evidence")
+            self.assertNotIn(secret_name.encode(), receipt.read_bytes())
+            self.assertNotIn(b"untouched", receipt.read_bytes())
 
     def test_thirty_three_child_files_get_bounded_failure_receipt(self):
         script = """import os,time
@@ -169,10 +175,10 @@ time.sleep(5)
                 output_dir=output, staged_checkpoint_dir=staged,
                 gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
                 disk_free_bytes=lambda _path: 31 * 1024**3)
-            self.assertTrue((output / "parent_result.json").is_file())
+            self.assertTrue((root / "attempt.parent_failure.json").is_file())
             self.assertEqual(result["status"], "invalid_or_partial")
-            self.assertGreaterEqual(result["sanitization"]["removed_count"], 5)
-            self.assertLessEqual(len(list(output.iterdir())), 32)
+            self.assertEqual(result["reason"], "unsealed_child_evidence")
+            self.assertEqual(len(list(output.iterdir())), 36)
 
     def test_exited_child_cannot_leave_session_descendant_running(self):
         with tempfile.TemporaryDirectory() as name:

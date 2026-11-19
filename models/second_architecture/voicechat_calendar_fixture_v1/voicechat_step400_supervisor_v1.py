@@ -5,8 +5,10 @@ reviewed launcher must bind the exact command, environment, and host freeze.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import re
 import resource
 import selectors
 import shutil
@@ -72,50 +74,8 @@ def _evidence_priority(name: str) -> tuple[int, str]:
             2 if name in {"stdout.log", "stderr.log"} else 3, name)
 
 
-def _sanitize_evidence(root: Path) -> dict[str, object]:
-    """After the child stops, remove unsafe entries without following links.
-
-    The step-400 worker's evidence is flat. Child-created directories and
-    special entries are out of scope and cannot be opened by the sealer.
-    """
-    import hashlib
-
-    removed: list[dict[str, str]] = []
-    removed_count = 0
-
-    def note(name: str, kind: str) -> None:
-        nonlocal removed_count
-        removed_count += 1
-        if len(removed) < 32:
-            removed.append({"name_prefix": name[:128], "name_sha256":
-                            hashlib.sha256(name.encode("utf-8", "surrogateescape")).hexdigest(),
-                            "kind": kind})
-
-    regular: list[str] = []
-    with os.scandir(root) as entries:
-        for entry in entries:
-            mode = entry.stat(follow_symlinks=False).st_mode
-            if stat.S_ISLNK(mode):
-                os.unlink(entry.path)
-                note(entry.name, "symlink_removed")
-            elif stat.S_ISDIR(mode):
-                # rmtree does not traverse directory symlinks; the child is
-                # already stopped, so this tree cannot be mutated by it.
-                shutil.rmtree(entry.path)
-                note(entry.name, "directory_removed")
-            elif not stat.S_ISREG(mode):
-                os.unlink(entry.path)
-                note(entry.name, "special_entry_removed")
-            elif len(entry.name) > 128 or entry.name == "parent_result.json":
-                os.unlink(entry.path)
-                note(entry.name, "reserved_or_long_name_removed")
-            else:
-                regular.append(entry.name)
-    # Leave one inventory slot for the parent's terminal receipt.
-    for name in sorted(regular, key=_evidence_priority)[31:]:
-        os.unlink(root / name)
-        note(name, "excess_file_removed")
-    return {"removed_count": removed_count, "removed_entries_first_32": removed}
+def _name_hash(name: str) -> str:
+    return hashlib.sha256(name.encode("utf-8", "surrogateescape")).hexdigest()
 
 
 def _retain_within_budget(root: Path, budget: int) -> list[dict[str, int | str]]:
@@ -134,7 +94,7 @@ def _retain_within_budget(root: Path, budget: int) -> list[dict[str, int | str]]
                 stream.truncate(allowed)
                 stream.flush()
                 os.fsync(stream.fileno())
-            truncations.append({"path": name, "original_bytes": before,
+            truncations.append({"path_sha256": _name_hash(name), "original_bytes": before,
                                 "retained_bytes": allowed})
         retained += allowed
     need(retained <= budget, "failed to retain within evidence budget")
@@ -142,16 +102,15 @@ def _retain_within_budget(root: Path, budget: int) -> list[dict[str, int | str]]
 
 
 def _hash_inventory(root: Path) -> dict[str, dict]:
-    import hashlib
-
     rows, _ = _inventory(root)
-    for name in rows:
+    hashed: dict[str, dict] = {}
+    for name, info in rows.items():
         digest = hashlib.sha256()
         with (root / name).open("rb") as stream:
             for block in iter(lambda: stream.read(1 << 20), b""):
                 digest.update(block)
-        rows[name]["sha256"] = digest.hexdigest()
-    return rows
+        hashed[_name_hash(name)] = {"bytes": info["bytes"], "sha256": digest.hexdigest()}
+    return hashed
 
 
 def _limit_file_size() -> None:
@@ -276,8 +235,12 @@ def supervise_candidate(
     and stops the entire child session on any resource/telemetry failure.
     """
     need(os.name == "posix" and command and all(type(x) is str and x for x in command)
-         and type(environment) is dict and not output_dir.exists(),
+         and type(environment) is dict and not output_dir.exists()
+         and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{3,63}", output_dir.name),
          "invalid or consumed diagnostic attempt")
+    external_receipt_path = output_dir.parent / f"{output_dir.name}.parent_failure.json"
+    need(not external_receipt_path.exists() and not external_receipt_path.is_symlink(),
+         "external failure receipt path consumed")
     need(staged_checkpoint_dir.is_dir() and not staged_checkpoint_dir.is_symlink(),
          "staged checkpoint directory missing or linked")
     need(output_dir.parent.is_dir() and not output_dir.parent.is_symlink()
@@ -391,12 +354,35 @@ def supervise_candidate(
         poll_stream.flush()
         os.fsync(poll_stream.fileno())
         poll_stream.close()
-        sanitization = _sanitize_evidence(output_dir)
-        truncations = _retain_within_budget(
-            output_dir, MAX_EVIDENCE_BYTES - TERMINAL_RESERVE_BYTES)
-        _, final_bytes = _inventory(output_dir)
-        if sanitization["removed_count"]:
-            reason = reason or "unexpected_evidence_removed"
+        try:
+            truncations = _retain_within_budget(
+                output_dir, MAX_EVIDENCE_BYTES - TERMINAL_RESERVE_BYTES)
+            _, final_bytes = _inventory(output_dir)
+            hashed_inventory = _hash_inventory(output_dir)
+            need(len(hashed_inventory) <= 31, "no terminal inventory slot")
+        except (ValueError, OSError) as error:
+            # Preserve the exact invalid child tree. Do not traverse links,
+            # read arbitrary filenames, or delete evidence to make it sealable.
+            failure = {"schema": "voicechat_step400_external_parent_failure_v1",
+                       "status": "invalid_or_partial",
+                       "reason": "unsealed_child_evidence",
+                       "inventory_error_type": type(error).__name__,
+                       "prior_stop_reason": reason,
+                       "returncode": returncode,
+                       "sample_count": sample_count,
+                       "largest_sample_gap_seconds": largest_gap,
+                       "peak_device_mib": peak_device,
+                       "peak_process_mib": peak_process,
+                       "heartbeat_count": heartbeat["count"],
+                       "child_tree_preserved_unmodified": True,
+                       "cap_policy_status": "failed_no_64mib_proof",
+                       "last_valid_checkpoint_unverified": True,
+                       "no_go": True,
+                       "output_dir": str(output_dir)}
+            data = _json_bytes(failure)
+            need(len(data) <= TERMINAL_RESERVE_BYTES, "external receipt size exceeded")
+            _write_once(external_receipt_path, data)
+            return failure
         if truncations:
             reason = reason or "evidence_cap_after_stop"
         if not model_pid_seen:
@@ -415,9 +401,8 @@ def supervise_candidate(
                   "model_pid_seen": model_pid_seen,
                   "heartbeat_count": heartbeat["count"],
                   "retained_evidence_bytes_before_parent_receipt": final_bytes,
-                  "sanitization": sanitization,
                   "truncated_evidence": truncations,
-                  "evidence_inventory_before_parent_receipt": _hash_inventory(output_dir),
+                  "evidence_inventory_before_parent_receipt": hashed_inventory,
                   "output_dir": str(output_dir)}
         data = _json_bytes(result)
         need(final_bytes + len(data) <= MAX_EVIDENCE_BYTES,
