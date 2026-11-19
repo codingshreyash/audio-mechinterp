@@ -141,6 +141,7 @@ def audit() -> dict:
                     == validate_audio_batch(fresh, processor,
                         wav_sha256=digest, case_id=plan.CASE_ID),
                  "saved processor record differs from frozen WAV")
+    plan.verify_geometry(payload["processor_record"])
     gate.require(set(payload.get("batch_sidecars", {})) == set(fresh),
                  "processor tensor census invalid")
     for key, tensor in fresh.items():

@@ -25,6 +25,13 @@ EVIDENCE_BYTES = 64 * 1024**2
 MAX_NEW_TOKENS = 12
 FIRST_LOGIT_TOLERANCE = 1e-5
 SYSTEM_PROMPT = "Respond briefly to the user's audio."
+EXPECTED_BATCH_SHAPES = {"input_ids": [1, 423], "attention_mask": [1, 423],
+                         "input_features": [1, 128, 30000],
+                         "feature_attention_mask": [1, 30000]}
+EXPECTED_MEL_FRAMES = 1600
+EXPECTED_ENCODER_ROWS = 800
+EXPECTED_PROJECTED_ROWS = 400
+EXPECTED_AUDIO_POSITIONS = list(range(17, 417))
 
 
 def sha(path: Path) -> str:
@@ -59,3 +66,13 @@ def verify_wav() -> dict:
     return {"case_id": CASE_ID, "source_sha256": SOURCE_SHA256,
             "wav_sha256": WAV_SHA256, "sample_rate": 16000,
             "pcm_samples": 256000, "duration_seconds": 16}
+
+
+def verify_geometry(record: dict) -> None:
+    """Freeze processor-only sizing observed before target inference."""
+    if (record.get("batch_shapes") != EXPECTED_BATCH_SHAPES
+            or record.get("mel_frames") != EXPECTED_MEL_FRAMES
+            or record.get("encoder_row_count") != EXPECTED_ENCODER_ROWS
+            or record.get("projected_row_count") != EXPECTED_PROJECTED_ROWS
+            or record.get("audio_placeholder_positions") != EXPECTED_AUDIO_POSITIONS):
+        raise ValueError("non-study 16-second processor geometry changed")

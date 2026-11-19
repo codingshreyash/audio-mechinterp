@@ -181,6 +181,7 @@ def run(attempt: Path) -> None:
     gate.require(digest == plan.WAV_SHA256, "processor audio bytes changed")
     record = validate_audio_batch(batch_cpu, processor, wav_sha256=digest,
                                   case_id=plan.CASE_ID)
+    plan.verify_geometry(record)
     sidecars = {key: save_array(folder, f"batch_{key}", value.cpu().numpy())
                 for key, value in batch_cpu.items()}
     model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(

@@ -26,6 +26,15 @@ class PilotSourceTests(unittest.TestCase):
         self.assertEqual(plan.WAV.parent, plan.HERE)
         self.assertFalse(plan.CASE_ID.startswith(("D_", "H_")))
 
+    def test_predeclared_processor_geometry(self) -> None:
+        row = {"batch_shapes": plan.EXPECTED_BATCH_SHAPES,
+               "mel_frames": 1600, "encoder_row_count": 800,
+               "projected_row_count": 400,
+               "audio_placeholder_positions": list(range(17, 417))}
+        plan.verify_geometry(row)
+        with self.assertRaises(ValueError):
+            plan.verify_geometry({**row, "mel_frames": 550})
+
     def test_direct_worker_refuses_before_model_import(self) -> None:
         cmd = [sys.executable, "-m",
             "models.second_architecture.qwen_action_method_v1.audio_resource_pilot_v1.worker",
