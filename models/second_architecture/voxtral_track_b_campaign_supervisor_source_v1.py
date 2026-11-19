@@ -305,7 +305,15 @@ def _execute_fake_schedule(*, plan: list[dict], output_dir: Path,
                 check()
             except BaseException as exc:
                 failed_call(cid, exc)
-                state[cid] = {'status': 'failed', 'reason': f'context:{type(exc).__name__}:{exc}'}
+                existing = output_dir / f'context_{p["index"]:02d}.json'
+                if existing.is_file():
+                    state[cid] = {'status': 'failed_after_record',
+                                  'reason': f'context:{type(exc).__name__}:{exc}',
+                                  'record_path': existing.name,
+                                  'record_sha256': sha(existing)}
+                else:
+                    state[cid] = {'status': 'failed',
+                                  'reason': f'context:{type(exc).__name__}:{exc}'}
                 raise
     except BaseException as exc:
         failure = f'{type(exc).__name__}:{exc}'
@@ -320,8 +328,14 @@ def _execute_fake_schedule(*, plan: list[dict], output_dir: Path,
     rows = [{'index': p['index'], 'context_id': p['context_id'], **state[p['context_id']]}
             for p in plan]
     for row in rows:
-        if row['status'] != 'completed':
-            record_path = output_dir / f"context_{row['index']:02d}.json"
+        record_path = output_dir / f"context_{row['index']:02d}.json"
+        if record_path.is_file():
+            _need(row['status'] in ('completed', 'failed_after_record'),
+                  'Context record exists without a recorded completion/failure boundary')
+            _need(row.get('record_sha256') == sha(record_path),
+                  'Existing immutable context record hash changed')
+        else:
+            _need(row['status'] != 'completed', 'Completed context record missing')
             _write_json(record_path, {'schema': SCHEMA + '_context', **row,
                                       'attempt_id': attempt_id,
                                       'calls_sha256_at_finalization': sha(log)})
@@ -347,6 +361,7 @@ def _execute_fake_schedule(*, plan: list[dict], output_dir: Path,
               'plan_sha256': _digest(plan), 'contexts': rows,
               'planned_contexts': 16, 'completed_contexts': completed,
               'failed_contexts': sum(r['status'] == 'failed' for r in rows),
+              'partial_contexts': sum(r['status'] == 'failed_after_record' for r in rows),
               'missing_contexts': sum(r['status'] in ('missing', 'captured') for r in rows),
               'calls_sha256': sha(log), 'call_events': len(log.read_text().splitlines()),
               'model_work_seconds': sum(work_seconds.values()),

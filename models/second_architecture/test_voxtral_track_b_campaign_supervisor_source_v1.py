@@ -112,6 +112,29 @@ class CampaignTests(unittest.TestCase):
             events = [json.loads(x)['event'] for x in (base / 'failed/calls.jsonl').read_text().splitlines()]
             self.assertEqual(events, ['started', 'failed'])
 
+    def test_disk_drop_after_record_keeps_original_and_final_receipt(self):
+        with tempfile.TemporaryDirectory() as root:
+            base = Path(root)
+            output = base / 'after_record'
+            def free_bytes(_path):
+                return 0 if (output / 'context_00.json').is_file() else 100 * 1024**3
+            result = sup._execute_fake_schedule(
+                plan=plan(), output_dir=output, attempt_id='disk_drop',
+                claim_path=base / 'stable.claim', clean=clean, complete=complete,
+                host_probe=lambda: {'ac_power': True, 'lid_open': True,
+                                    'clean_pmset_10min': True, 'no_transition': True},
+                mps_bytes=lambda: 0, free_bytes=free_bytes)
+            self.assertEqual(result['status'], 'failed_no_retry')
+            self.assertEqual((result['completed_contexts'], result['failed_contexts'],
+                              result['partial_contexts'], result['missing_contexts']),
+                             (0, 0, 1, 15))
+            original = output / 'context_00.json'
+            self.assertIn('gradient_sidecars', json.loads(original.read_text()))
+            self.assertEqual(result['contexts'][0]['record_sha256'], sup.sha(original))
+            self.assertEqual(json.loads((output / 'campaign_result.json').read_text()), result)
+            self.assertTrue(all((output / f'context_{i:02d}.json').is_file()
+                                for i in range(16)))
+
     def test_public_loader_never_called_without_or_with_bound_fake_go(self):
         invoked = []
         with self.assertRaises(TypeError):
