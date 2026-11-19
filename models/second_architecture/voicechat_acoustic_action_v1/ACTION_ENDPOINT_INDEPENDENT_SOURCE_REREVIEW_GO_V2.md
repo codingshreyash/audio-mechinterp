@@ -1,0 +1,13 @@
+# Independent rereview: VoiceChat acoustic first-span endpoint
+
+19 November 2026. **GO for the corrected source-only endpoint slice in `8648d6e`; HOLD for live candidate use.** I rereviewed the exact correction against [the V1 HOLD](ACTION_ENDPOINT_INDEPENDENT_SOURCE_REVIEW_HOLD_V1.md), the [V2 prospective endpoint](../VOICECHAT_ACOUSTIC_ACTION_PROSPECTIVE_V2.md), and the pinned NeMo helper. I did not edit the classifier, load VoiceChat, use candidate audio, or execute a calendar action.
+
+Reviewed SHA-256 values: `action_endpoint.py` `f125df5b7727546024af4d1dbcaefa06ca557b4be47f449a33038ab20c10589f`; `test_action_endpoint.py` `5e2bfd2a5e37ebb3510be9e482b30f14eb5e07239b939e1de3e136a7c326763a`; [correction handoff](ACTION_ENDPOINT_CENSOR_CORRECTION_V2.md) `5f6f297df1aee031c64ebe367b76664bb150863054a61431990a7cf5359e7f9a`; V2 protocol `ec6aebece37dbf2f8ca744581dc9920bb7069d02ec1ce2fe5f0c2b9ace2db374`; pinned helper `ebde701baec12a014443eac36262a6af7a7a62b3e052f1c4a387db6aaad8da44`.
+
+## Former HOLD resolved
+
+`censored` now takes precedence over `no_span`. My independent direct check returned `censored` for an incomplete empty extraction and `no_span` for a completed empty extraction. Both retain zero raw spans, no pass-2 function injection and response step zero. For a censored malformed first span, the new label is `censored` while the parse error and raw span remain in evidence. A censored partially parsed array also retains its successfully appended entry and replay-token decision. The source records the caller's censor Boolean separately as `generation_censored`. Its caller still must provide a trustworthy stop/timeout status and the complete original function-token stream in a live capture.
+
+I ran **11/11** fake `unittest` cases and `py_compile`; all passed. The existing tests still cover malformed first span followed by a valid later span, complete and partial JSON arrays, replay-token preparation/injection, per-entry inert verdicts, exact C test grant binding, A/B cancellation rejection regardless of model `confirmed`, and multi-batch rejection. I additionally checked censored empty, completed empty, censored/uncensored malformed, and censored partial-array cases without changing code. No regression appeared in this source-only slice.
+
+This GO verifies the parser and inert authorization logic on synthetic extracted spans. It does **not** authenticate a WAV, human-QA receipt, controller key, live tokenizer, stock helper parity, full function-token stream, or actual censor reason. Those checks and the separate resource/human gates remain mandatory before any VoiceChat action or security conclusion.
