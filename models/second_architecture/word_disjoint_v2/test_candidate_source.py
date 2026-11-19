@@ -6,6 +6,8 @@ import types
 import unittest
 import copy
 import json
+import subprocess
+import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -36,6 +38,78 @@ class CandidateSourceTests(unittest.TestCase):
             changed[role]["commit"] = "b" * 40
             with self.assertRaisesRegex(ValueError, "exact reviewed sources"):
                 common.require_source_go_text(text, changed)
+        sixth = "local:models/second_architecture/wav2vec2_fit_baseline_stage_capture_v1.py"
+        reviewed[sixth] = {"path": sixth.removeprefix("local:"),
+                           "sha256": "a" * 64, "commit": "a" * 40}
+        text = ("Decision: GO\n```json\n" + json.dumps({
+            "schema": "word_disjoint_source_go_v1", "decision": "GO",
+            "source_bindings": reviewed}) + "\n```\n")
+        changed = copy.deepcopy(reviewed)
+        changed[sixth]["sha256"] = "b" * 64
+        changed[sixth]["commit"] = "b" * 40
+        with self.assertRaisesRegex(ValueError, "exact reviewed sources"):
+            common.require_source_go_text(text, changed)
+
+    def test_local_import_closure_covers_transitive_candidate_helpers(self) -> None:
+        local = common.ROOT / "models" / "second_architecture"
+        common_source = common.HERE / "candidate_common.py"
+        w2v = common.local_import_closure([
+            common.HERE / "run_wav2vec2.py", common.HERE / "audit_wav2vec2.py",
+            common_source])
+        whisper = common.local_import_closure([
+            common.HERE / "run_whisper.py", common.HERE / "audit_whisper.py",
+            common_source])
+        for closure in (w2v, whisper):
+            names = {path.name for path in closure}
+            self.assertTrue({"audit.py", "render.py", "__init__.py",
+                             "wav2vec2_fit_baseline_stage_capture_v1.py",
+                             "wav2vec2_dev_word_disjoint_v1.py",
+                             "wav2vec2_dev_word_disjoint_audit_v1.py"} <= names)
+            self.assertTrue(all(path.is_relative_to(local) for path in closure))
+        self.assertIn(local / "wav2vec2_fit_complement_patch_v1.py", whisper)
+        self.assertIn(local / "whisper_fit_word_window_causal_v1.py", whisper)
+
+    def test_old_go_cannot_freeze_post_review_sixth_helper_commit(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            local = root / "models" / "second_architecture"
+            local.mkdir(parents=True)
+
+            def git(*args: str) -> str:
+                return subprocess.check_output(["git", "-C", str(root), *args],
+                                               text=True, stderr=subprocess.DEVNULL).strip()
+
+            def commit(message: str) -> None:
+                git("add", ".")
+                git("-c", "user.name=Test", "-c", "user.email=test@example.org",
+                    "commit", "-qm", message)
+
+            git("init", "-q")
+            paths = {role: local / f"{role}.py" for role in
+                     ("runner", "auditor", "common", "helper", "test")}
+            sixth = "local:models/second_architecture/transitive.py"
+            paths[sixth] = local / "transitive.py"
+            for path in paths.values():
+                path.write_text("VALUE = 1\n")
+            commit("source")
+            with patch.object(common, "ROOT", root):
+                reviewed = common.source_bindings(paths)
+                preflight = root / "preflight.json"
+                preflight.write_text("{}\n")
+                commit("preflight")
+                review = root / "review.md"
+                review.write_text("Decision: GO\n```json\n" + json.dumps({
+                    "schema": "word_disjoint_source_go_v1", "decision": "GO",
+                    "source_bindings": reviewed}) + "\n```\n")
+                commit("independent GO")
+                paths[sixth].write_text("VALUE = 2\n")
+                commit("post GO helper change")
+                freeze = root / "freeze.json"
+                freeze.write_text("{}\n")
+                commit("freeze")
+                changed = common.source_bindings(paths)
+                with self.assertRaisesRegex(ValueError, "exact reviewed sources"):
+                    common.reviewed_freeze_paths(preflight, freeze, review, changed)
 
     def test_whisper_patch_mask_identity_with_unchanged_mel(self) -> None:
         import torch

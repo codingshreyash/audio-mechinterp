@@ -8,6 +8,7 @@ clip and an independently reviewed QA receipt exist.
 from __future__ import annotations
 
 import hashlib
+import ast
 import json
 import re
 import subprocess
@@ -74,10 +75,58 @@ def committed_clean(path: Path) -> str:
     return commit
 
 
+def local_import_closure(seed_paths: list[Path]) -> list[Path]:
+    """Find the finite repo-local import closure under the assay source tree."""
+    local_root = ROOT / "models" / "second_architecture"
+    pending = list(seed_paths)
+    visited: set[Path] = set()
+    while pending:
+        path = pending.pop().resolve()
+        require(path.is_relative_to(local_root) and path.suffix == ".py"
+                and path.is_file() and not path.is_symlink(),
+                "candidate local source import invalid")
+        if path in visited:
+            continue
+        visited.add(path)
+        package_init = path.parent / "__init__.py"
+        if package_init.is_file() and package_init != path:
+            pending.append(package_init)
+        tree = ast.parse(path.read_text(), filename=str(path))
+        for node in ast.walk(tree):
+            modules: list[str] = []
+            if isinstance(node, ast.Import):
+                modules = [alias.name for alias in node.names]
+                base = local_root
+            elif isinstance(node, ast.ImportFrom):
+                base = path.parent if node.level else local_root
+                if node.module:
+                    modules = [node.module] + [node.module + "." + alias.name
+                                               for alias in node.names if alias.name != "*"]
+                elif node.level:
+                    modules = [alias.name for alias in node.names]
+            else:
+                continue
+            for module in modules:
+                parts = module.split(".")
+                candidates = [base.joinpath(*parts).with_suffix(".py"),
+                              base.joinpath(*parts, "__init__.py")]
+                for found in candidates:
+                    if found.is_file() and found.resolve().is_relative_to(local_root):
+                        pending.append(found)
+    return sorted(visited)
+
+
 def source_bindings(paths: dict[str, Path]) -> dict[str, dict[str, str]]:
-    """Bind every executable or review-test source to its committed bytes."""
+    """Bind every named source and its repo-local transitive imports."""
+    closure = local_import_closure([path for role, path in paths.items()
+                                    if role != "test"])
+    named = {path.resolve() for path in paths.values()}
+    all_paths = dict(paths)
+    for path in closure:
+        if path not in named:
+            all_paths["local:" + str(path.relative_to(ROOT))] = path
     result = {}
-    for role, path in paths.items():
+    for role, path in sorted(all_paths.items()):
         result[role] = {"path": str(path.resolve().relative_to(ROOT)),
                         "sha256": sha(path), "commit": committed_clean(path)}
     return result
