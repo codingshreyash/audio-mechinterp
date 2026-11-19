@@ -124,8 +124,9 @@ def audit(attempt: Path, admission: Path, go: Path, model: str) -> dict:
              "sidecar inventory differs")
         mel = load_sidecar(attempt,refs["mel"],(80,3000),"float32")
         mask = load_sidecar(attempt,refs["mask"],(3000,),"int64")
-        raw = load_sidecar(attempt,refs["first_raw_logits"],(51865,),"float32")
-        scores = load_sidecar(attempt,refs["first_processed_scores"],(51865,),"float32")
+        vocab = 51865 if model == "whisper_multilingual" else 51864
+        raw = load_sidecar(attempt,refs["first_raw_logits"],(vocab,),"float32")
+        scores = load_sidecar(attempt,refs["first_processed_scores"],(vocab,),"float32")
         load_sidecar(attempt,refs["first_decoder_state"],
                      (1,4 if model == "whisper_multilingual" else 2,384),"float32")
         must(np.isfinite(mel).all() and np.isfinite(raw).all()

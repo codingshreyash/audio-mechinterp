@@ -132,7 +132,7 @@ class NaturalTailRunnerTests(unittest.TestCase):
                 self.kwargs=kwargs
                 prefix=[50258,50259,50359,50363] if self.multilingual else [50257,50362]
                 eos=50257 if self.multilingual else 50256
-                raw=torch.zeros((1,51865),dtype=torch.float32)
+                raw=torch.zeros((1,51865 if self.multilingual else 51864),dtype=torch.float32)
                 raw[0,eos]=10
                 return SimpleNamespace(
                     sequences=torch.tensor([prefix+[eos]],dtype=torch.int64),
@@ -153,6 +153,8 @@ class NaturalTailRunnerTests(unittest.TestCase):
                     self.assertEqual(set(record["sidecars"]),
                         {"mel","mask","first_raw_logits","first_processed_scores",
                          "first_decoder_state"})
+                    self.assertEqual(record["sidecars"]["first_raw_logits"]["shape"],
+                                     [51865 if multilingual else 51864])
                     self.assertEqual("task" in model.kwargs,multilingual)
                     self.assertEqual("language" in model.kwargs,multilingual)
 
