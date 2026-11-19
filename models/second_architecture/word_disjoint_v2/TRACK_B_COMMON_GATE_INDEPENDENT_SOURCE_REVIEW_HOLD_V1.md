@@ -1,0 +1,20 @@
+# Independent source review: Track B shared candidate admission
+
+18 November 2026. Reviewed committed source `b604ebd` and `9b79ae9`, chiefly `candidate_common.py`, against the [frozen V2 plan](../WORD_DISJOINT_TIME_STATE_VALIDATION_PLAN_V2.md), [human-QA auditor GO rereview](HUMAN_QA_AUDITOR_SOURCE_INDEPENDENT_REREVIEW_GO_V2.md), and [render technical GO](RENDERED_V2_TECHNICAL_INDEPENDENT_REVIEW_V1.md). I loaded no candidate weights, created no human listening records, and opened no locked-test WAVs.
+
+**Decision: HOLD for candidate inference.** The no-weight fixture, reviewer-record and absent-QA checks pass. The source-review/freeze ordering rule does not establish that the independent GO review covered every source file that a later model run would execute.
+
+## Checks that pass
+
+- The pinned manifest, technical binding and anonymous queue hashes matched. `fixture_cases()` re-audited the 32 rendered WAVs and returned 16 distinct words, 16 pair/voice cells and unique opaque IDs. Direction enumeration returned 64 Wav2Vec2 S/C cells and 32 Whisper stock cells. The V2 NFKC/casefold/`[\W_]+` parser preserves the fixed full-template criterion.
+- Seven candidate no-weight tests passed. Both `prepare` commands completed without admitting inference: Wav2Vec2 reported 768 planned patches and a 217,901,056-byte upper bound; Whisper reported 384 planned patches and a 278,863,872-byte upper bound, each under 512 MiB. Both receipts said `admitted_for_candidate_inference: false`.
+- With the real 32 cases and no QA files, `qa_gate()` raised `32/32 human listening QA receipt and independent review absent`. In-memory synthetic probes of `evaluate_human_reviews()` showed that a raw transcript disagreement requires a third reviewer even when normalized words agree; a third correct record can adjudicate it. A changed WAV hash, duplicate reviewer ID and missing record were rejected. These probes were never saved as human evidence.
+- The proposed QA gate binds manifest, technical and queue hashes, all 32 clip hashes, stage-ordered export hashes, reviewer IDs, the human audit's raw exports and source hash, a separately committed QA receipt and later GO review. It cannot authenticate actual human identity or listening, which the human auditor correctly discloses.
+
+## Source-review ordering gap
+
+`candidate_common.reviewed_freeze_paths(preflight, freeze, review, runner_source_commit)` checks that **only the runner's** last source commit is an ancestor of the source-review commit. Both `run_wav2vec2.verify_freeze()` and `run_whisper.verify_freeze()` pass only `current["runner_commit"]`. They also bind the current auditor, shared `candidate_common.py`, and FIT hook-helper hashes in the freeze, but do not prove that those current bytes existed when the independent source GO review was written. A later committed change to any of those files could be accepted with the old GO review: make a new no-weight preflight and later freeze containing the new hash, while the unchanged runner commit remains older than the GO review. This is a logical counterexample visible from the function signature and both call sites; no candidate execution or repository mutation was needed to demonstrate it.
+
+**Required before GO:** Bind the exact current runner, auditor, shared admission code, and model hook-helper source hashes/commits to each independent source GO review, and check every reviewed blob existed at or before that review commit. Include the fake-model test source used for the review. The freeze must bind that same review and those exact hashes. A post-review edit to any reviewed source must require a new review; add a no-weight regression test for a changed auditor/common/helper under an old GO. Keep the QA and preflight admission gates closed until actual 32/32 blinded listening and independent result review are complete.
+
+This HOLD concerns provenance of a future candidate run. It does not invalidate the independently audited audio bytes, the prior exploratory Wav2Vec2 result, or the seven passing source tests.
