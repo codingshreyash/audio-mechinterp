@@ -15,13 +15,20 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(len(plan.arms_for("original")), 26)
         for stage in ("offset_8000", "offset_16000"):
             arms = plan.arms_for(stage)
-            self.assertEqual(len(arms), 52)
+            self.assertEqual(len(arms), 58)
             for layout in ("prepend", "append"):
-                self.assertEqual(sum(a["layout"] == layout for a in arms), 26)
+                self.assertEqual(sum(a["layout"] == layout for a in arms), 29)
         for stage in ("original", "offset_8000", "offset_16000"):
             for arm in plan.arms_for(stage):
                 if arm["kind"] == "full_donor":
                     self.assertEqual(arm["target_rows"], list(range(1500)))
+                    continue
+                if arm["kind"] == "relocated_correct_delta":
+                    self.assertEqual(arm["source_rows"], [])
+                    self.assertEqual(len(arm["target_rows"]),
+                                     len(arm["delta_source_rows"]))
+                    self.assertFalse(set(arm["target_rows"]) &
+                                     set(arm["delta_source_rows"]))
                     continue
                 self.assertEqual(len(arm["target_rows"]), len(arm["source_rows"]))
                 self.assertFalse(set(arm["target_rows"]) & set(arm["source_rows"]))

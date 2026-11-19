@@ -48,12 +48,22 @@ def arm(*, stage: str, offset_samples: int, layout: str,
         site: str, window: str, location: str, kind: str) -> dict:
     shift = offset_samples // 320 if location == "translated" else 0
     target = list(range(1500)) if kind == "full_donor" else rows(window, shift)
-    return {"stage": stage, "offset_samples": offset_samples, "layout": layout,
-            "site": site, "region": window, "location": location,
-            "recipient": "noise", "donor": "zero", "kind": kind,
-            "target_rows": target,
-            "source_rows": [] if kind == "full_donor" else displaced_rows(window),
-            "phase": "generate_only"}
+    result = {"stage": stage, "offset_samples": offset_samples, "layout": layout,
+              "site": site, "region": window, "location": location,
+              "recipient": "noise", "donor": "zero", "kind": kind,
+              "target_rows": target,
+              "source_rows": [] if kind in ("full_donor", "relocated_correct_delta")
+              else displaced_rows(window),
+              "phase": "generate_only"}
+    if kind == "relocated_correct_delta":
+        correct = "translated" if layout == "prepend" else "fixed"
+        require(location != correct, "relocation must target competing window")
+        result["delta_source_rows"] = rows(window, offset_samples // 320
+                                           if correct == "translated" else 0)
+        require(len(result["delta_source_rows"]) == len(target)
+                and not set(result["delta_source_rows"]) & set(target),
+                "relocation rows overlap or differ in count")
+    return result
 
 
 def arms_for(stage: str) -> list[dict]:
@@ -76,10 +86,14 @@ def arms_for(stage: str) -> list[dict]:
                 for kind in KINDS:
                     result.append(arm(stage=stage, offset_samples=offset, layout=layout,
                                       site=site, window=window, location=location, kind=kind))
+            competing = "fixed" if layout == "prepend" else "translated"
+            result.append(arm(stage=stage, offset_samples=offset, layout=layout,
+                              site=site, window=window, location=competing,
+                              kind="relocated_correct_delta"))
         for site in SITES:
             result.append(arm(stage=stage, offset_samples=offset, layout=layout,
                               site=site, window="all", location="fixed", kind="full_donor"))
-    require(len(result) == 52, "translated arm census changed")
+    require(len(result) == 58, "translated arm census changed")
     return result
 
 
@@ -116,7 +130,7 @@ def build() -> dict:
               "sites": list(SITES), "windows": BASE,
               "stages": {stage: {"arms": arms_for(stage),
                                  "baseline_calls": 2 if stage == "original" else 4,
-                                 "max_calls": 28 if stage == "original" else 56}
+                                 "max_calls": 28 if stage == "original" else 62}
                          for stage in ("original", "offset_8000", "offset_16000")},
               "stop_rule": "baseline_no_complete_contrast_skips_that_pair_arms",
               "security_claim_authorized": False}
