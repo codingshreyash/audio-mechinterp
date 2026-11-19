@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import os
 import platform
@@ -84,11 +85,21 @@ def source_identity() -> dict:
     pinned = json.loads(TTS_SPEC.read_text())
     require(tts._sha_file(TTS_SPEC) == tts.SPEC_SHA256,
             "reused TTS specification changed")
+    versions = {"numpy": np.__version__, "scipy": tts.scipy.__version__,
+                "soundfile": tts.sf.__version__,
+                "piper-tts": importlib.metadata.version("piper-tts"),
+                "kokoro-onnx": importlib.metadata.version("kokoro-onnx"),
+                "onnxruntime": importlib.metadata.version("onnxruntime")}
+    require(versions == {"numpy": "2.5.5", "scipy": "1.18.1",
+                         "soundfile": "0.14.0", "piper-tts": "1.8.0",
+                         "kokoro-onnx": "0.6.1", "onnxruntime": "1.32.0"},
+            "pinned source conversion dependency version changed")
     return {"qwen_spec_sha256": sha(SPEC_PATH),
             "qwen_source_plan_sha256": sha(PLAN_SOURCE),
             "render_source_sha256": sha(Path(__file__)),
             "voicechat_tts_spec_sha256": sha(TTS_SPEC),
             "voicechat_tts_source_sha256": sha(TTS_SOURCE),
+            "conversion_versions": versions,
             "tts_pins": pinned["tts"], "rate": RATE, "frames": FRAMES,
             "wall_limit_seconds": WALL_LIMIT_SECONDS,
             "evidence_limit_bytes": EVIDENCE_LIMIT_BYTES}
