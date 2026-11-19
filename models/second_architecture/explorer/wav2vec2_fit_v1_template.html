@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wav2Vec2 FIT audio-state explorer</title>
+  <style>
+    :root { color-scheme:dark; --bg:#0c151d; --panel:#15232d; --line:#304552; --text:#eef5f6; --muted:#aac0c9; --cyan:#68d8d6; --orange:#f5b76f; --green:#9ae0aa; --red:#f3a9a0; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.48 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1250px; margin:auto; padding:30px 20px 70px; }
+    h1 { font-size:clamp(1.7rem,3vw,2.5rem); line-height:1.15; margin:6px 0 10px; }
+    h2 { font-size:1.22rem; margin:0 0 14px; }
+    h3 { font-size:1rem; margin:0 0 10px; }
+    p { margin:0 0 12px; }
+    a { color:var(--cyan); }
+    .eyebrow { text-transform:uppercase; letter-spacing:.16em; font-weight:800; font-size:.72rem; color:var(--cyan); }
+    .intro { max-width:92ch; color:var(--muted); }
+    .scope { margin:22px 0; border-left:4px solid var(--orange); background:#352b22; color:#ffe8cd; padding:13px 16px; border-radius:4px 9px 9px 4px; }
+    .cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:11px; margin:22px 0; }
+    .card, .panel { background:var(--panel); border:1px solid var(--line); border-radius:11px; }
+    .card { padding:16px; }
+    .card strong { display:block; font-size:1.5rem; font-variant-numeric:tabular-nums; line-height:1.1; margin:6px 0; }
+    .panel { padding:20px; margin-top:16px; }
+    .label { color:var(--muted); font-size:.74rem; font-weight:700; letter-spacing:.075em; text-transform:uppercase; }
+    .small { color:var(--muted); font-size:.84rem; }
+    .controls { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+    label { font-size:.8rem; font-weight:700; color:var(--muted); }
+    select { display:block; width:100%; margin-top:5px; padding:9px; color:var(--text); background:#0b1a23; border:1px solid #5a7380; border-radius:7px; font:inherit; }
+    .audio-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:15px; }
+    .audio-box { border:1px solid var(--line); border-radius:9px; padding:12px; background:#10202a; }
+    audio { display:block; width:100%; margin:8px 0; }
+    .audio-box strong { display:block; }
+    .transcript { margin-top:6px; font-weight:650; }
+    .badge { display:inline-block; font-size:.73rem; font-weight:800; letter-spacing:.03em; border-radius:999px; padding:3px 8px; }
+    .good { background:#20402f; color:var(--green); }
+    .warn { background:#453425; color:#fbd09a; }
+    .neutral { background:#233541; color:#cbdde3; }
+    .trace-head { display:flex; align-items:center; justify-content:space-between; gap:15px; flex-wrap:wrap; }
+    .trace-head label { min-width:260px; }
+    .plot { width:100%; min-height:240px; display:block; background:#0e1b24; border:1px solid var(--line); border-radius:8px; }
+    .legend { display:flex; gap:20px; flex-wrap:wrap; margin:10px 0; font-size:.86rem; }
+    .legend b { display:inline-block; width:13px; height:4px; vertical-align:middle; margin-right:6px; border-radius:4px; }
+    .trace-meta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .trace-meta > div { background:#0f1e27; border:1px solid var(--line); border-radius:8px; padding:11px; }
+    .table-wrap { overflow:auto; }
+    table { width:100%; border-collapse:collapse; min-width:900px; font-size:.87rem; }
+    th,td { padding:9px 10px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); text-transform:uppercase; letter-spacing:.055em; font-size:.74rem; white-space:nowrap; }
+    td.output { min-width:300px; max-width:420px; overflow-wrap:anywhere; }
+    .mono,code { font: .83rem/1.45 ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .prov { display:grid; grid-template-columns:210px minmax(0,1fr); gap:7px 14px; margin:0; }
+    .prov dt { color:var(--muted); }
+    .prov dd { margin:0; overflow-wrap:anywhere; }
+    .foot { color:var(--muted); font-size:.83rem; margin-top:20px; }
+    @media(max-width:850px) { .cards { grid-template-columns:repeat(2,1fr); } .controls { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:600px) { main { padding:20px 12px 50px; } .cards,.controls,.audio-grid,.trace-meta { grid-template-columns:1fr; } .prov { grid-template-columns:1fr; } .prov dt { margin-top:8px; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Audited audio-model states · FIT split</div>
+  <h1>Where a spoken word spreads, and which state changes transcription</h1>
+  <p class="intro">Compare two paired recordings across preprocessing, convolution, and encoder states. Then inspect every complete CTC transcript from internal word-window, off-word, self, full-donor, and random patches.</p>
+  <div class="scope" id="scope"></div>
+  <section class="cards" id="cards" aria-label="Study summary"></section>
+
+  <section class="panel" aria-labelledby="select-title">
+    <h2 id="select-title">Select a paired recording and patch site</h2>
+    <div class="controls">
+      <label>Word pair<select id="pair"></select></label>
+      <label>Synthetic voice<select id="engine"></select></label>
+      <label>Recipient word<select id="recipient"></select></label>
+      <label>Inference input mode<select id="mode"><option value="S">S: stock per-utterance normalization</option><option value="C">C: shared outside-word statistics</option></select></label>
+      <label>Patch site<select id="site"><option value="feature_projection">Feature projection</option><option value="post_block11">After encoder block 11</option></select></label>
+    </div>
+    <p id="selection-summary" class="small" style="margin-top:14px"></p>
+    <div class="audio-grid">
+      <div class="audio-box"><strong>Recipient recording</strong><audio id="recipient-audio" controls preload="metadata"></audio><span id="recipient-word" class="small"></span><p id="recipient-text" class="transcript"></p></div>
+      <div class="audio-box"><strong>Paired donor recording</strong><audio id="donor-audio" controls preload="metadata"></audio><span id="donor-word" class="small"></span><p id="donor-text" class="transcript"></p></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="trace-title">
+    <div class="trace-head"><h2 id="trace-title">When does the difference spread?</h2><label>Model stage<select id="stage"><option value="input_values">Processor input</option><option value="first_conv_raw">First convolution before GroupNorm</option><option value="first_conv_norm">First convolution after GroupNorm</option><option value="feature_projection">Feature projection</option><option value="post_block11">After encoder block 11</option></select></label></div>
+    <p class="small">Lines show the maximum absolute donor–recipient difference at each time bin. Each of 480 display bins keeps its maximum; exact first-nonzero and outside-word values are below. S and C use the same vertical scale within this stage.</p>
+    <svg id="trace-plot" class="plot" viewBox="0 0 900 260" role="img" aria-label="Two-mode time-difference trace"></svg>
+    <div class="legend"><span><b style="background:var(--orange)"></b>Stock S</span><span><b style="background:var(--cyan)"></b>Shared-stat C</span><span><b style="background:#506a78;width:20px;height:11px"></b>Nominal acoustic word window</span></div>
+    <div class="trace-meta" id="trace-meta"></div>
+    <p class="small" style="margin-top:12px">The highlighted window is the direct receptive-field overlap of the edited PCM slot. It is a fixed nominal support, not a learned CTC alignment. GroupNorm is applied over time in this checkpoint; seeing a difference outside the window does not show that those positions control the final word.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="patch-title">
+    <h2 id="patch-title">What did each internal patch make the model transcribe?</h2>
+    <p id="patch-context" class="small"></p>
+    <div class="table-wrap"><table><thead><tr><th>Patch</th><th>Complete CTC transcript</th><th>Relation to clean outputs</th><th>Target-only intended word</th><th>Control</th><th>Edited rows / L2</th><th>Frames with changed logits</th></tr></thead><tbody id="patch-rows"></tbody></table></div>
+    <p class="small" style="margin-top:12px">W is the nominal word window; P and Q are equal-width windows before and after it. Random R1/R2 use unique seeded Gaussian edits with the donor W-delta norm. Equal width does not imply equal edit magnitude. “Frames with changed logits” counts a frame when any of its 32 logit values differs, even if its selected CTC token and transcript stay the same. The primary intended-word test needs both clean transcripts to contain the correct word and differ only there; other directions remain visible as descriptive evidence.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="prov-title"><h2 id="prov-title">Provenance and limits</h2><dl class="prov" id="provenance"></dl><p class="small" style="margin-top:15px">Source data: <a href="../runs/wav2vec2_fit_baseline_stage_capture_v1/20261118T2352Z/records.jsonl">baseline records</a>, <a href="../runs/wav2vec2_fit_causal_patch_v1/20261119T0013Z/records.jsonl">causal records</a>, <a href="../runs/wav2vec2_fit_causal_patch_v1/20261119T0013Z/audit.json">saved-data audit</a>, and <a href="../WAV2VEC2_FIT_CAUSAL_RESULT_INDEPENDENT_REVIEW_V1.md">independent result review</a>. This browser embeds only data whose local source hashes passed the builder.</p></section>
+  <p class="foot">All data are from one English ASR checkpoint, two synthetic voices, and already-open FIT word pairs. Internal activation patches are not playable audio edits. There is no assistant action or security finding here.</p>
+</main>
+<script type="application/json" id="embedded-data">__EMBEDDED_JSON__</script>
+<script>__APP_JS__</script>
+</body>
+</html>
