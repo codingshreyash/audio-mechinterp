@@ -1,0 +1,28 @@
+{
+  "approved_attempt": "/Users/shrranjan/audio-mechinterp/models/second_architecture/qwen_action_method_v1/runs/source_render_v2/attempt_001",
+  "decision": "one bounded TTS source render only; no Qwen inference",
+  "review_sha256": "598a26e4db641ac9ff82bb3bb87a7dcb14958ef935b5af40307278b0dcbc7411",
+  "reviewed_source_commits": [
+    "d22361c",
+    "9a56e8b",
+    "c496523"
+  ],
+  "schema": "qwen_action_speech_render_go_v2",
+  "sources": {
+    "models/second_architecture/qwen_action_method_v1/SPEECH_SOURCE_RENDER_HANDOFF_V2.md": "ad4a6244c679afe03e029e5e54fac00916a443e872746bf08380ebb530d2c615",
+    "models/second_architecture/qwen_action_method_v1/audit_sources.py": "5ccb87b8ea94dd997f1f9b1765bd30bcf8f28d09fb6fa5bed40d7371aecd816a",
+    "models/second_architecture/qwen_action_method_v1/audit_sources_v2.py": "4071aca745bc4a2dab8042ba23b05c78819c4ceda07ca36af2db4d293cd7ce74",
+    "models/second_architecture/qwen_action_method_v1/endpoint.py": "c20beb589f78a8d0a91f291f3c33da6cae2370093581119b4732662711076fce",
+    "models/second_architecture/qwen_action_method_v1/frozen_spec_v1.json": "a6ddd9b007649173d23e38996883920467ef861f15b4491acde3cdd096e4ef18",
+    "models/second_architecture/qwen_action_method_v1/listening_bundle.py": "40f3b8d5f2a7655b28123155466e400d41988b4e98c6bf62eab4f69ba286941f",
+    "models/second_architecture/qwen_action_method_v1/listening_bundle_v2.py": "6baf128d97b5dbb18110382e49571116e864ca11c11632c164a0ba6ebdf94091",
+    "models/second_architecture/qwen_action_method_v1/plan.py": "ffd1bb80e078060783fd57387a6e0376b88c4369c5382ea9a2f0a75d3212e41e",
+    "models/second_architecture/qwen_action_method_v1/render_sources.py": "15348933d58ec61988da15d8d7cf71c167c9ec9c89402e9be56337b0969df9c1",
+    "models/second_architecture/qwen_action_method_v1/render_sources_v2.py": "be5966600a813bc7787bdc534fcf6be1a5e0ecd426cb430d6c1d75b8b940ccce",
+    "models/second_architecture/qwen_action_method_v1/test_render_sources_v2.py": "503189117d5e34fbfb822c9c53d985d4c15f7eed94bbddfd648e990f67d239ab",
+    "models/second_architecture/voicechat_acoustic_action_v1/corpus.py": "2697b223dc9e6f4d4a8c85cfd0f1b04f86a3d045e119c27e9e9a902f8aa5fca2",
+    "models/second_architecture/voicechat_acoustic_action_v1/spec.json": "3325f4f693461cf48cf994bfda486e81b2bc6535d0c855a3ac838601644d414d",
+    "models/second_architecture/wav2vec2_fit_noise_norm_causal_host_v1.py": "b59f3998dcd36340d9fa0a9b5ceaa85179295899943dcabb1c6325f6635ce21f"
+  },
+  "status": "independent_executable_go"
+}
