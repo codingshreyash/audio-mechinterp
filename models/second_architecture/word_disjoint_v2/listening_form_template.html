@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blinded audio listening review</title>
+  <style>
+    :root { color-scheme:light; font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { margin:0; background:#f2f5f7; color:#17232c; }
+    main { max-width:760px; margin:34px auto; padding:0 18px 42px; }
+    h1 { line-height:1.15; }
+    .card { background:#fff; border:1px solid #cbd5da; border-radius:12px; padding:21px; margin-top:20px; box-shadow:0 2px 10px #1232; }
+    .muted { color:#50616b; }
+    label { display:block; margin:15px 0 5px; font-weight:650; }
+    input,textarea,select,button { font:inherit; }
+    input,textarea,select { width:100%; border:1px solid #788d99; border-radius:7px; padding:10px; }
+    textarea { min-height:90px; resize:vertical; }
+    button { border:0; border-radius:7px; padding:10px 16px; background:#145a7a; color:#fff; font-weight:700; cursor:pointer; margin-top:15px; }
+    button:disabled { background:#9cabb2; cursor:not-allowed; }
+    audio { display:block; width:100%; margin:16px 0; }
+    .id { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere; }
+    .error { color:#9f2525; font-weight:650; min-height:1.4em; }
+    .hidden { display:none; }
+    progress { width:100%; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Blinded listening review</h1>
+  <p class="muted">Listen to all 32 anonymous clips on headphones. Write what you hear before discussing it or viewing any reference script. Do not open other files in the parent directory. Submit each first impression once. The page stores submissions in this browser profile until you export them; use a separate browser profile for each reviewer.</p>
+  <p class="muted">The form does not check whether a person listened and does not certify audio quality. Send the exported JSON to the study coordinator. A separate audit compares two independent reviewers and requests a third only when needed.</p>
+
+  <section class="card" id="start-card">
+    <h2>Reviewer</h2>
+    <label for="reviewer">Your reviewer ID</label>
+    <input id="reviewer" autocomplete="off" maxlength="80" placeholder="A name or unique code">
+    <button id="start">Start or resume</button>
+  </section>
+
+  <section class="card hidden" id="review-card">
+    <p id="progress-text"></p><progress id="progress" max="32" value="0"></progress>
+    <h2>Clip <span id="clip-number"></span></h2>
+    <p class="id" id="clip-id"></p>
+    <audio id="audio" controls preload="metadata"></audio>
+    <label for="transcript">Full verbatim transcript</label>
+    <textarea id="transcript" placeholder="Write every word you heard, or [inaudible] if you could not understand it."></textarea>
+    <label for="middle-word">Middle word you heard</label>
+    <input id="middle-word" autocomplete="off" placeholder="One word, or [inaudible]">
+    <label for="clarity">Was the clip clear?</label>
+    <select id="clarity"><option value="">Select one</option><option value="clear">Clear</option><option value="unclear">Unclear</option></select>
+    <label for="confidence">Confidence in your transcription</label>
+    <select id="confidence"><option value="">Select 1–5</option><option value="1">1 — very low</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 — very high</option></select>
+    <button id="submit">Lock first impression and continue</button>
+  </section>
+
+  <section class="card hidden" id="done-card">
+    <h2>All 32 clips submitted</h2>
+    <p>Export your first-impression record now. Keep this browser profile until the coordinator confirms receipt.</p>
+    <button id="export">Download review JSON</button>
+  </section>
+  <p id="error" class="error" role="alert"></p>
+</main>
+<script type="application/json" id="embedded-data">__EMBEDDED_DATA__</script>
+<script>__APP_JS__</script>
+</body>
+</html>
