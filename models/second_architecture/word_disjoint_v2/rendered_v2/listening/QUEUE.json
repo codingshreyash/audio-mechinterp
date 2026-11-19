@@ -1,0 +1,53 @@
+{
+  "status": "blinded_listening_queue_no_results",
+  "scope": "Listen to every opaque WAV; do not view private references",
+  "provenance": {
+    "manifest_sha256": "f8fd1f43f38877d6d08c47597c8db9f494e1377a69f0a2451c2f99fbcda71ea2",
+    "technical_binding_sha256": "027763d4fa758dac95c552c2f2aef60683f1c780b0c034d82327be8bd59e93b9",
+    "auditor_sha256": "6411c2961ba31700f3c3e099124644c80c38e52c925c4ef02cb9d01173cd831f",
+    "queue_builder_sha256": "1744be6270352f86fb1990f9ef7223734514dd05a9ec14b717876c8b28d15e3c"
+  },
+  "planned_clips": 32,
+  "opaque_ids_in_order": [
+    "5b724fdbe294bb4369fa",
+    "fcc989da478d2deab8ae",
+    "ee4ab94e70a11337af94",
+    "2bda82e2144b9ae8ba5c",
+    "54810afec08f993d2055",
+    "f5b56f070a3bbdd921a6",
+    "de1d51abb0997f395f82",
+    "a02a908b81c29841b41f",
+    "499b71484b8707f7920a",
+    "fce6febd955130f5b14b",
+    "941dcc110fb2c62fa542",
+    "9c23e9c9fc76d8fd5801",
+    "2a88b8461e14099598d7",
+    "85e54b84394e4d8de2f5",
+    "47e71d51dfb1916f1017",
+    "7c2a7979242035230308",
+    "09ac2121c1b0a9be4441",
+    "7c16f249ace5e1e1e41f",
+    "3de5bf4f80df2486462d",
+    "38721eb53817bfc07f6b",
+    "98f9094d61833fca00cd",
+    "74d77930c1400d181ae7",
+    "84986f8c2b39a0e22cfc",
+    "86edddbdc86879e765ed",
+    "d3173c2a56d5dd6d6dae",
+    "07b26ef0552733b1ae39",
+    "6c82025e14c05fef94d1",
+    "b0478e7b3a66a988902b",
+    "eaec36a87bb71f91fad8",
+    "c473b12cf993167a21d2",
+    "db357df05e56bb3145f6",
+    "9bd7cf07589cb7fc5a02"
+  ],
+  "review_form_fields": [
+    "opaque_id",
+    "reviewer_id",
+    "verbatim_transcript",
+    "middle_word",
+    "clear_or_unclear",
+    "confidence"
+  ]
+}

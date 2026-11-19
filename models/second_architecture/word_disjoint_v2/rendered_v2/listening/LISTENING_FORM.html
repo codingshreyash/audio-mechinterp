@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blinded audio listening review</title>
+  <style>
+    :root { color-scheme:light; font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { margin:0; background:#f2f5f7; color:#17232c; }
+    main { max-width:760px; margin:34px auto; padding:0 18px 42px; }
+    h1 { line-height:1.15; }
+    .card { background:#fff; border:1px solid #cbd5da; border-radius:12px; padding:21px; margin-top:20px; box-shadow:0 2px 10px #1232; }
+    .muted { color:#50616b; }
+    label { display:block; margin:15px 0 5px; font-weight:650; }
+    input,textarea,select,button { font:inherit; }
+    input,textarea,select { width:100%; border:1px solid #788d99; border-radius:7px; padding:10px; }
+    textarea { min-height:90px; resize:vertical; }
+    button { border:0; border-radius:7px; padding:10px 16px; background:#145a7a; color:#fff; font-weight:700; cursor:pointer; margin-top:15px; }
+    button:disabled { background:#9cabb2; cursor:not-allowed; }
+    audio { display:block; width:100%; margin:16px 0; }
+    .id { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere; }
+    .error { color:#9f2525; font-weight:650; min-height:1.4em; }
+    .hidden { display:none; }
+    progress { width:100%; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Blinded listening review</h1>
+  <p class="muted">Listen to all 32 anonymous clips on headphones. Write what you hear before discussing it or viewing any reference script. Do not open other files in the parent directory. Submit each first impression once. The page stores submissions in this browser profile until you export them; use a separate browser profile for each reviewer.</p>
+  <p class="muted">The form does not check whether a person listened and does not certify audio quality. Send the exported JSON to the study coordinator. A separate audit compares two independent reviewers and requests a third only when needed.</p>
+
+  <section class="card" id="start-card">
+    <h2>Reviewer</h2>
+    <label for="reviewer">Your reviewer ID</label>
+    <input id="reviewer" autocomplete="off" maxlength="80" placeholder="A name or unique code">
+    <button id="start">Start or resume</button>
+  </section>
+
+  <section class="card hidden" id="review-card">
+    <p id="progress-text"></p><progress id="progress" max="32" value="0"></progress>
+    <h2>Clip <span id="clip-number"></span></h2>
+    <p class="id" id="clip-id"></p>
+    <audio id="audio" controls preload="metadata"></audio>
+    <label for="transcript">Full verbatim transcript</label>
+    <textarea id="transcript" placeholder="Write every word you heard, or [inaudible] if you could not understand it."></textarea>
+    <label for="middle-word">Middle word you heard</label>
+    <input id="middle-word" autocomplete="off" placeholder="One word, or [inaudible]">
+    <label for="clarity">Was the clip clear?</label>
+    <select id="clarity"><option value="">Select one</option><option value="clear">Clear</option><option value="unclear">Unclear</option></select>
+    <label for="confidence">Confidence in your transcription</label>
+    <select id="confidence"><option value="">Select 1–5</option><option value="1">1 — very low</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 — very high</option></select>
+    <button id="submit">Lock first impression and continue</button>
+  </section>
+
+  <section class="card hidden" id="done-card">
+    <h2>All 32 clips submitted</h2>
+    <p>Export your first-impression record now. Keep this browser profile until the coordinator confirms receipt.</p>
+    <button id="export">Download review JSON</button>
+  </section>
+  <p id="error" class="error" role="alert"></p>
+</main>
+<script type="application/json" id="embedded-data">{"schema":"word_disjoint_blind_form_v1","queue_sha256":"9a4113618f23b25d9aaca6846f57f014fbe0bc7d074d0c8f807ff01b32e4dc2c","planned_clips":32,"clips":[{"opaque_id":"5b724fdbe294bb4369fa","file":"5b724fdbe294bb4369fa.wav","wav_sha256":"dc8e6345f54a23b7b0f72104d3245dec1a085c0685c5e2d887412891ace638de"},{"opaque_id":"fcc989da478d2deab8ae","file":"fcc989da478d2deab8ae.wav","wav_sha256":"51b3328c7baf79bd6b079e270ba11ba950631759e36c21fcc31265b5cba7b88e"},{"opaque_id":"ee4ab94e70a11337af94","file":"ee4ab94e70a11337af94.wav","wav_sha256":"bbcbbb324bbc1ae736bd3bf35609e96e9e32e36436bf4fbf5880cd21f08faee9"},{"opaque_id":"2bda82e2144b9ae8ba5c","file":"2bda82e2144b9ae8ba5c.wav","wav_sha256":"8b936f6de65ba32ee75881db9a3f206a0c0634ae09b7a1d3203acea7e5e801fd"},{"opaque_id":"54810afec08f993d2055","file":"54810afec08f993d2055.wav","wav_sha256":"0a1d0535d8b46fd88d665bcc3473f6806fd842008b4bdd70e450c1d786fffef3"},{"opaque_id":"f5b56f070a3bbdd921a6","file":"f5b56f070a3bbdd921a6.wav","wav_sha256":"cc1e04eab07e7ac8c82e3b3bf2bfa65bddc791165e7512d42776d2af7c07d9c3"},{"opaque_id":"de1d51abb0997f395f82","file":"de1d51abb0997f395f82.wav","wav_sha256":"dc792492b3fab8222e46d507a78787cbbc966907a7d89649bc65298ecff9386b"},{"opaque_id":"a02a908b81c29841b41f","file":"a02a908b81c29841b41f.wav","wav_sha256":"3c6c8ac9f787fff6eab4a6bff11d4b678a78db9dab60373f9743d44222dc126e"},{"opaque_id":"499b71484b8707f7920a","file":"499b71484b8707f7920a.wav","wav_sha256":"7961e3d434a512edc4db92c4af48c95d3e17ad405b56e8e601b6827346403ba5"},{"opaque_id":"fce6febd955130f5b14b","file":"fce6febd955130f5b14b.wav","wav_sha256":"cb28d07d2bdbad5e302d3bb0006dd0a4d96a53535c647540e4ee3b263c010445"},{"opaque_id":"941dcc110fb2c62fa542","file":"941dcc110fb2c62fa542.wav","wav_sha256":"79fed2f865bbf91b68cb2c68c6afbfeb65f1d44f33ba7bb4d275d1d1d97e64ba"},{"opaque_id":"9c23e9c9fc76d8fd5801","file":"9c23e9c9fc76d8fd5801.wav","wav_sha256":"d9b7eb20d0b8b0db8d0a26e79cbdb6617a64abcac42791ff0871e993846945f5"},{"opaque_id":"2a88b8461e14099598d7","file":"2a88b8461e14099598d7.wav","wav_sha256":"5e48b873fe15729d8e52b55ebb862be80ae105a9588695f310c88a378803f3a1"},{"opaque_id":"85e54b84394e4d8de2f5","file":"85e54b84394e4d8de2f5.wav","wav_sha256":"c5d32efb010ef4fdb34aa3a6675c0aeb07b06e84ab8b1b9333c315752d431fb1"},{"opaque_id":"47e71d51dfb1916f1017","file":"47e71d51dfb1916f1017.wav","wav_sha256":"f457acb4e526b710adaa408abffb80e730db6fdd392fb7065a0a5713e15ac2d3"},{"opaque_id":"7c2a7979242035230308","file":"7c2a7979242035230308.wav","wav_sha256":"13ba7f69814039e8b1405b526642cfdcc95082a257924c474e90592567bff20f"},{"opaque_id":"09ac2121c1b0a9be4441","file":"09ac2121c1b0a9be4441.wav","wav_sha256":"99bdd8f96bf2f0487241e1397d2a04867a44c3656a1d513960aeed296040b0ec"},{"opaque_id":"7c16f249ace5e1e1e41f","file":"7c16f249ace5e1e1e41f.wav","wav_sha256":"80c55429e8c2aa15dff09948349af7fe1a1fd0ddac695a972c2872c48d8497b7"},{"opaque_id":"3de5bf4f80df2486462d","file":"3de5bf4f80df2486462d.wav","wav_sha256":"fddd5056b078c480b19c50ab04c90e293c63c190459b0402895cf6b7bcd9b018"},{"opaque_id":"38721eb53817bfc07f6b","file":"38721eb53817bfc07f6b.wav","wav_sha256":"6e12a7b710819d2aacf7cdd031adc9250189c3ae76f56788af9f37b51c7db0b8"},{"opaque_id":"98f9094d61833fca00cd","file":"98f9094d61833fca00cd.wav","wav_sha256":"087a9db681cca7a834396c6a50e85ecf72436d712512b66ec7fccab6ad9ea6ce"},{"opaque_id":"74d77930c1400d181ae7","file":"74d77930c1400d181ae7.wav","wav_sha256":"8ce912d770e684141740163b1f0d1a52dff4c21e8c0f116c3d9d33022fe44102"},{"opaque_id":"84986f8c2b39a0e22cfc","file":"84986f8c2b39a0e22cfc.wav","wav_sha256":"242a41dd7f88f9ed3326e6accb1420b1959401916b5aa8ced14509a6bdf9ece0"},{"opaque_id":"86edddbdc86879e765ed","file":"86edddbdc86879e765ed.wav","wav_sha256":"a3ae4d9574f6b767a3158b3f42f3a5da40932aa23f5ffde7358ac69a658c71d0"},{"opaque_id":"d3173c2a56d5dd6d6dae","file":"d3173c2a56d5dd6d6dae.wav","wav_sha256":"fcf682f202d1c571cde3457e8f935dd38d8aa2b2e17294cad66b7c5a12e4493d"},{"opaque_id":"07b26ef0552733b1ae39","file":"07b26ef0552733b1ae39.wav","wav_sha256":"c4a79f6b7123a3415474c5651cc6941877cdad11e637c6f19f528442b15df874"},{"opaque_id":"6c82025e14c05fef94d1","file":"6c82025e14c05fef94d1.wav","wav_sha256":"08495f1820dda9afe6709f483ccfd6f8050b0293bc9d3e565365ea0855e9f789"},{"opaque_id":"b0478e7b3a66a988902b","file":"b0478e7b3a66a988902b.wav","wav_sha256":"bf435a57d13d9323eb41aea4239e584cdc9e62e68808712f682e877e56680d90"},{"opaque_id":"eaec36a87bb71f91fad8","file":"eaec36a87bb71f91fad8.wav","wav_sha256":"08caa2a13b2eaa5ceabd66985e84d428fd62483ae081d961982bd814ef33762b"},{"opaque_id":"c473b12cf993167a21d2","file":"c473b12cf993167a21d2.wav","wav_sha256":"6f3ea9590cd7f5e9dd7bfb9effb8ecf5751f6a3fc634577767b59ef30b67fb78"},{"opaque_id":"db357df05e56bb3145f6","file":"db357df05e56bb3145f6.wav","wav_sha256":"84d142e23e1736c791f6301de4025e6a66ad843a2ca4da3ab76ecf0e010d3eaf"},{"opaque_id":"9bd7cf07589cb7fc5a02","file":"9bd7cf07589cb7fc5a02.wav","wav_sha256":"fb181323f74c9160514b077dfe0746e4a40421b8dda54b84faa0a2a27f1b3c60"}]}</script>
+<script>"use strict";
+
+const DATA = JSON.parse(document.getElementById("embedded-data").textContent);
+const $ = (id) => document.getElementById(id);
+const CLIPS = DATA.clips;
+let review = null;
+let storageKey = null;
+
+function error(message) { $("error").textContent = message; }
+function require(ok, message) { if (!ok) throw new Error(message); }
+function validReview(saved, reviewerId) {
+  require(saved && saved.schema === "word_disjoint_blind_review_v1"
+    && saved.reviewer_id === reviewerId
+    && saved.queue_sha256 === DATA.queue_sha256
+    && saved.planned_clips === 32
+    && JSON.stringify(saved.opaque_ids_in_order) === JSON.stringify(CLIPS.map((c) => c.opaque_id))
+    && Array.isArray(saved.records) && saved.records.length <= 32,
+    "Saved review does not match this queue and reviewer.");
+  saved.records.forEach((record, index) => {
+    const clip = CLIPS[index];
+    require(record.reviewer_id === reviewerId && record.opaque_id === clip.opaque_id
+      && record.wav_sha256 === clip.wav_sha256
+      && typeof record.submitted_at_utc === "string"
+      && typeof record.verbatim_transcript === "string" && record.verbatim_transcript.trim()
+      && typeof record.middle_word === "string" && record.middle_word.trim()
+      && ["clear", "unclear"].includes(record.clear_or_unclear)
+      && Number.isInteger(record.confidence) && record.confidence >= 1
+      && record.confidence <= 5, "Saved first-impression record is incomplete or out of order.");
+  });
+}
+function showCurrent() {
+  const index = review.records.length;
+  $("start-card").classList.add("hidden");
+  $("review-card").classList.toggle("hidden", index === 32);
+  $("done-card").classList.toggle("hidden", index !== 32);
+  $("progress").value = index;
+  $("progress-text").textContent = `${index} of 32 first impressions locked`;
+  if (index === 32) return;
+  const clip = CLIPS[index];
+  $("clip-number").textContent = `${index + 1} of 32`;
+  $("clip-id").textContent = clip.opaque_id;
+  $("audio").src = clip.file;
+  $("transcript").value = "";
+  $("middle-word").value = "";
+  $("clarity").value = "";
+  $("confidence").value = "";
+}
+function start() {
+  try {
+    error("");
+    require(DATA.schema === "word_disjoint_blind_form_v1"
+      && DATA.planned_clips === 32 && CLIPS.length === 32,
+      "Form has an invalid clip population.");
+    const reviewerId = $("reviewer").value.trim();
+    require(reviewerId.length >= 2 && reviewerId.length <= 80,
+      "Enter a unique reviewer ID with 2–80 characters.");
+    storageKey = `word-disjoint-blind-v1|${DATA.queue_sha256}|${encodeURIComponent(reviewerId)}`;
+    const stored = window.localStorage.getItem(storageKey);
+    review = stored ? JSON.parse(stored) : {
+      schema: "word_disjoint_blind_review_v1",
+      reviewer_id: reviewerId,
+      queue_sha256: DATA.queue_sha256,
+      planned_clips: 32,
+      opaque_ids_in_order: CLIPS.map((c) => c.opaque_id),
+      started_at_utc: new Date().toISOString(),
+      records: []
+    };
+    validReview(review, reviewerId);
+    if (!stored) window.localStorage.setItem(storageKey, JSON.stringify(review));
+    $("reviewer").disabled = true;
+    showCurrent();
+  } catch (exc) { error(`Could not start or resume: ${exc.message}`); }
+}
+function submit() {
+  try {
+    error("");
+    require(review !== null && review.records.length < 32, "No current clip.");
+    const transcript = $("transcript").value.trim();
+    const middle = $("middle-word").value.trim();
+    const clarity = $("clarity").value;
+    const confidence = Number($("confidence").value);
+    require(transcript && middle && ["clear", "unclear"].includes(clarity)
+      && Number.isInteger(confidence) && confidence >= 1 && confidence <= 5,
+      "Enter a full transcript, middle word, clarity, and confidence. Use [inaudible] when needed.");
+    const clip = CLIPS[review.records.length];
+    const entry = {
+      opaque_id: clip.opaque_id, reviewer_id: review.reviewer_id,
+      wav_sha256: clip.wav_sha256, submitted_at_utc: new Date().toISOString(),
+      verbatim_transcript: transcript, middle_word: middle,
+      clear_or_unclear: clarity, confidence
+    };
+    const next = {...review, records: [...review.records, entry]};
+    validReview(next, review.reviewer_id);
+    window.localStorage.setItem(storageKey, JSON.stringify(next));
+    review = next;
+    showCurrent();
+  } catch (exc) { error(`Submission was not stored: ${exc.message}`); }
+}
+function exportReview() {
+  try {
+    error("");
+    require(review !== null && review.records.length === 32,
+      "Complete all 32 first impressions before exporting.");
+    validReview(review, review.reviewer_id);
+    const documentData = {...review, exported_at_utc: new Date().toISOString()};
+    const blob = new Blob([JSON.stringify(documentData, null, 2) + "\n"],
+      {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    const safeId = review.reviewer_id.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 60);
+    anchor.href = url;
+    anchor.download = `blind_review_${safeId}_${DATA.queue_sha256.slice(0, 12)}.json`;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (exc) { error(`Export failed: ${exc.message}`); }
+}
+
+$("start").addEventListener("click", start);
+$("submit").addEventListener("click", submit);
+$("export").addEventListener("click", exportReview);
+</script>
+</body>
+</html>
