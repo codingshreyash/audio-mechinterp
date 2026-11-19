@@ -182,6 +182,32 @@ time.sleep(5)
             self.assertEqual(result["reason"], "unsealed_child_evidence")
             self.assertEqual(len(list(output.iterdir())), 36)
 
+    def test_nested_child_evidence_is_preserved_with_external_no_go_receipt(self):
+        script = """import os,pathlib,time
+os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')
+pathlib.Path('private_nested_dir').mkdir()
+pathlib.Path('private_nested_dir/secret_prompt.txt').write_text('secret content')
+time.sleep(5)
+"""
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            output = root / "attempt"
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=output, staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            receipt = root / "attempt.parent_failure.json"
+            self.assertTrue(receipt.is_file())
+            self.assertEqual(result["reason"], "unsealed_child_evidence")
+            self.assertIs(result["no_go"], True)
+            self.assertEqual((output / "private_nested_dir/secret_prompt.txt").read_text(),
+                             "secret content")
+            self.assertNotIn(b"secret_prompt", receipt.read_bytes())
+            self.assertNotIn(b"secret content", receipt.read_bytes())
+
     def test_exited_child_cannot_leave_session_descendant_running(self):
         with tempfile.TemporaryDirectory() as name:
             root = Path(name)

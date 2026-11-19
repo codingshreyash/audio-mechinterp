@@ -57,7 +57,7 @@ def _inventory(root: Path) -> tuple[dict[str, dict], int]:
     for path in sorted(root.rglob("*")):
         need(not path.is_symlink(), "evidence symlink rejected")
         if path.is_dir():
-            continue
+            raise ValueError("nested evidence directory rejected")
         need(path.is_file(), "nonregular evidence entry")
         rel = str(path.relative_to(root))
         need(len(rel) <= 128, "evidence path too long")
