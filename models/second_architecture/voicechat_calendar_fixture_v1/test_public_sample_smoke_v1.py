@@ -261,12 +261,37 @@ class SampleSmokeTests(unittest.TestCase):
             smoke.check_sample(self.nemo)
         ref = (self.nano / "hub" / smoke.pinned.NANO_CACHE_REPO / "refs" / "main")
         ref.parent.mkdir(parents=True)
-        ref.write_bytes(smoke.pinned.NANO_COMMIT.encode())
+        ref.write_bytes((smoke.pinned.NANO_COMMIT + "\n").encode())
         with self.assertRaisesRegex(ValueError, "exact bytes differ"):
             smoke.check_exact_nano_ref(self.nano)
-        ref.write_bytes((smoke.pinned.NANO_COMMIT + "\n").encode())
+        ref.write_bytes(smoke.pinned.NANO_COMMIT.encode())
         self.assertEqual(smoke.check_exact_nano_ref(self.nano),
                          smoke.sha(ref.read_bytes()))
+
+    def test_nano_ref_resolves_with_huggingface_hub(self):
+        try:
+            from huggingface_hub import try_to_load_from_cache
+        except ImportError:
+            self.skipTest("huggingface-hub is unavailable in this no-model test environment")
+        self.nano_ref.stop()
+        repo = self.nano / "hub" / smoke.pinned.NANO_CACHE_REPO
+        ref = repo / "refs" / "main"
+        snapshot = repo / "snapshots" / smoke.pinned.NANO_COMMIT
+        snapshot.mkdir(parents=True)
+        ref.parent.mkdir(parents=True)
+        config = snapshot / "config.json"
+        config.write_text("{}")
+        ref.write_bytes(smoke.pinned.NANO_COMMIT.encode("ascii"))
+        self.assertEqual(
+            try_to_load_from_cache(smoke.pinned.NANO_REPO_ID, "config.json",
+                                   cache_dir=str(self.nano / "hub"), revision="main"),
+            str(config))
+        ref.write_bytes((smoke.pinned.NANO_COMMIT + "\n").encode("ascii"))
+        self.assertIsNone(
+            try_to_load_from_cache(smoke.pinned.NANO_REPO_ID, "config.json",
+                                   cache_dir=str(self.nano / "hub"), revision="main"))
+        with self.assertRaisesRegex(ValueError, "exact bytes differ"):
+            smoke.check_exact_nano_ref(self.nano)
 
     def test_command_and_environment_are_freeze_bound(self):
         self.freeze()

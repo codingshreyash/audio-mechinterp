@@ -54,7 +54,7 @@ for filename in files:
                     cache_dir=str(home / 'hub'))
 ref = home / 'hub' / 'models--nvidia--NVIDIA-Nemotron-Nano-9B-v2' / 'refs' / 'main'
 ref.parent.mkdir(parents=True, exist_ok=True)
-ref.write_text(revision + '\n')
+ref.write_text(revision)  # exactly 40 ASCII bytes; Hugging Face does not strip a newline
 PY
 ```
 

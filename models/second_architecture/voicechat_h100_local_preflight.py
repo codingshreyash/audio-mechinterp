@@ -229,7 +229,7 @@ def check_nano_cache(hf_home: Path, *, expected_files: dict[str, str] | None = N
     main_ref = refs / "main"
     require(refs.is_dir() and {p.name for p in refs.iterdir()} == {"main"} and
             main_ref.is_file() and not main_ref.is_symlink() and
-            main_ref.read_text().strip() == revision,
+            main_ref.read_bytes() == revision.encode("ascii"),
             "Nano refs/main does not select the pinned revision")
     expected = NANO_FILES_SHA256 if expected_files is None else expected_files
     require({p.name for p in snapshot.iterdir()} == set(expected),
@@ -605,7 +605,7 @@ def self_test() -> dict:
         nano_ref.parent.mkdir(parents=True)
         nano_snapshot.mkdir(parents=True)
         (nano_repo / "blobs").mkdir()
-        nano_ref.write_text(NANO_COMMIT + "\n")
+        nano_ref.write_text(NANO_COMMIT)
         synthetic_hashes = {}
         for filename in NANO_FILES_SHA256:
             artifact = nano_snapshot / filename
@@ -630,9 +630,11 @@ def self_test() -> dict:
         extra_root_dir.mkdir()
         expect_nano_failure("Nano repository root directory")
         extra_root_dir.rmdir()
-        nano_ref.write_text("0" * 40 + "\n")
+        nano_ref.write_text("0" * 40)
         expect_nano_failure("wrong refs/main")
         nano_ref.write_text(NANO_COMMIT + "\n")
+        expect_nano_failure("newline in refs/main")
+        nano_ref.write_text(NANO_COMMIT)
         token_config = nano_snapshot / "tokenizer_config.json"
         token_config_bytes = token_config.read_bytes()
         token_config.unlink()

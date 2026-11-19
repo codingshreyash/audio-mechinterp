@@ -2,6 +2,8 @@
 
 **Status: source and dry-run only.** No denvr instance was created and no VoiceChat model was loaded or run for this packet. This route is for the unchanged NVIDIA random-number public sample in the [reviewed runner](public_sample_smoke_v1.py). It admits no calendar WAV or calendar result. The earlier [H100 attempts](VOICECHAT_PUBLIC_SAMPLE_H100_ATTEMPT_RECORD_20261119.md) ended before packages, weights, or inference; both task-created workspaces were deleted.
 
+The original six-role source GO predates the [Nano `refs/main` repair](VOICECHAT_NANO_REF_REPAIR_V1.md); this packet is not a current executable GO. Re-review the repaired source and create a new host-specific freeze before any sample run.
+
 ## Exact candidate and cost boundary
 
 On 2026-11-19, Brev CLI `search --gpu-name A100 --min-disk 2125 --json` returned `denvr_A100_sxm4_80G`: one A100 80GB, 24 vCPUs, 116 GiB RAM, fixed `target_disk_gb=2125`, $1.80/hour, `stoppable=false`. A read-only one-candidate JSON dry run printed `denvr_A100_sxm4_80G (2125GB disk)`. Search inventory and rate can change. Use the exact filter below immediately before creation and abort on zero/multiple candidates or any changed field. The JSON path matters: the installed Brev CLI ignores `--min-disk` as a capacity request when paired with literal `--type`, which produced the earlier 120 GiB H100 guest disk. The dry run proves the **client request**, not delivered guest capacity.

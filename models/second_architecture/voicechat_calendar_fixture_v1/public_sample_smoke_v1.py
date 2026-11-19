@@ -147,8 +147,8 @@ def check_sample(nemo_dir: Path) -> dict[str, str]:
 def check_exact_nano_ref(nano_home: Path) -> str:
     path = (nano_home / "hub" / pinned.NANO_CACHE_REPO / "refs" / "main")
     digest, size = hash_file(path, cap=41)
-    expected = sha((pinned.NANO_COMMIT + "\n").encode("ascii"))
-    require(size == 41 and digest == expected,
+    expected = sha(pinned.NANO_COMMIT.encode("ascii"))
+    require(size == 40 and digest == expected,
             "Nano refs/main exact bytes differ")
     return digest
 
@@ -170,7 +170,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
     require(gpu_policy in ("h100", "a100-80gb"), "GPU policy invalid")
     require(hash_file(SOURCE_FILES["amendment"])[0] == AMENDMENT_SHA256,
             "Sample-only amendment changed")
-    require(hash_file(SOURCE_FILES["preflight"])[0] == "874d0e7347546c9210815503a57cd0ed5a16f5e16b7862c7ba8f61951dd85757",
+    require(hash_file(SOURCE_FILES["preflight"])[0] == "6233cc01b6bbd69b71aa978f3b2dabc0210bf6175faf4f34bf73eb44ead586a0",
             "Shared pinned preflight changed")
     source_hashes = {name: hash_file(path)[0] for name, path in SOURCE_FILES.items()}
     return {
@@ -191,7 +191,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
             "nano_revision": pinned.NANO_COMMIT,
             "nano_repo_id": pinned.NANO_REPO_ID,
             "nano_metadata_sha256": pinned.NANO_FILES_SHA256,
-            "nano_ref_sha256": sha((pinned.NANO_COMMIT + "\n").encode("ascii")),
+            "nano_ref_sha256": sha(pinned.NANO_COMMIT.encode("ascii")),
             "pinned_packages": pinned.PINNED_PACKAGES,
         },
         "child_environment": child_environment(),
