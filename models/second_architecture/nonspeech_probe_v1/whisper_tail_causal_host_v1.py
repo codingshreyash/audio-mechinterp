@@ -48,7 +48,10 @@ def parse(outputs: dict[str, str], *, initial: bool) -> dict[str, Any]:
     require(battery.get("AtCriticalLevel") is False
             and lid.get("AppleClamshellState") is False,
             "critical battery or closed lid")
-    pmset_external = "'AC Power'" in outputs["power"]
+    sources=[name for name in ("AC Power","Battery Power")
+             if f"Now drawing from '{name}'" in outputs["power"]]
+    require(len(sources)==1,"host power source unknown")
+    pmset_external = sources[0]=="AC Power"
     require(pmset_external == (battery.get("ExternalConnected") is True)
             and battery.get("ExternalConnected") in (True, False),
             "external power readings disagree or unavailable")
@@ -96,9 +99,12 @@ def validate_saved_text(sample:dict)->None:
     power_text=sample.get("power_text")
     thermal_text=sample.get("thermal_text")
     match=re.search(r"\b(\d{1,3})%;",power_text) if isinstance(power_text,str) else None
-    require(bool(match) and int(match.group(1))==sample.get("pmset_percent")
+    sources=[name for name in ("AC Power","Battery Power")
+             if isinstance(power_text,str) and f"Now drawing from '{name}'" in power_text]
+    require(len(sources)==1 and bool(match)
+            and int(match.group(1))==sample.get("pmset_percent")
             and abs(sample["battery_percent"]-sample["pmset_percent"])<=2
-            and sample.get("external_connected") is ("'AC Power'" in power_text)
+            and sample.get("external_connected") is (sources[0]=="AC Power")
             and isinstance(thermal_text,str)
             and "No thermal warning level has been recorded" in thermal_text
             and "No performance warning level has been recorded" in thermal_text,
