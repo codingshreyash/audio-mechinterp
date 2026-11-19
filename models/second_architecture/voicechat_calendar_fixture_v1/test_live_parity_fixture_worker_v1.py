@@ -8,12 +8,15 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import torch
 
-from .live_parity_fixture_worker_v1 import run_fixture_arm
+from .live_parity_fixture_worker_v1 import (
+    run_fixture_arm, run_production_adapter_once,
+)
 from .live_parity_saved_capture_v1 import load_capture
-from .live_parity_source_plan_v1 import CASE_ID, NO_CALL_BYTES, VOICE_ID
+from .live_parity_source_plan_v1 import CASE_ID, NO_CALL_BYTES, VOICE_ID, canonical_bytes
 
 
 class FakeRecorder:
@@ -228,6 +231,47 @@ class FixtureWorkerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "expected response hash"):
             self._run()
         self.assertEqual(self.events, ["gate", "qa"])
+
+    def test_production_wrapper_checks_admission_before_one_arm_and_posthash(self):
+        plan_path = self.root / "source_plan.json"
+        plan = {"seed": 17, "input_hashes": self.request["input_hashes"],
+                "controller_id": "synthetic-test"}
+        plan_path.write_bytes(canonical_bytes(plan))
+        output = self.root / "run_root"
+        output.mkdir()
+        paths = {name: self.root / name for name in
+                 ("nemo", "checkpoint", "nano", "qa_manifest", "qa_ledger",
+                  "qa_receipt", "wav")}
+        paths["output"] = output
+        admission = {"status": "fixture_admitted_for_fresh_process_source_only",
+                     "seed": 17, "input_hashes": plan["input_hashes"],
+                     "source_plan_sha256": "a" * 64, "freeze_sha256": "b" * 64,
+                     "official_sample_receipt_sha256": "d" * 64,
+                     "source_sha256": {"synthetic": "c" * 64},
+                     "caps": {"arm_output_bytes": 100000}}
+        def admit(**_kwargs):
+            self.events.append("admit")
+            return admission
+        def arm_run(request, *, arm_dir, admission_gate):
+            self.events.append("arm")
+            self.assertEqual(request["arm"], "adapter")
+            self.assertEqual(request["source_plan_sha256"], "a" * 64)
+            self.assertEqual(admission_gate(request), admission)
+            self.assertTrue(arm_dir.is_dir())
+            return {"status": admission["status"]}
+        def rehash(_plan, _paths):
+            self.events.append("rehash")
+            return plan["input_hashes"]
+        with patch("models.second_architecture.voicechat_calendar_fixture_v1.live_parity_fixture_worker_v1.resource.setrlimit"):
+            result = run_production_adapter_once(
+                plan_path=plan_path, freeze_path=self.root / "freeze",
+                review_path=self.root / "review", paths=paths,
+                freeze_review_key=b"k" * 32, controller_key=b"c" * 32,
+                admit=admit, sample_verify=lambda _admission: "d" * 64,
+                arm_run=arm_run, rehash=rehash,
+                source_digest=lambda: admission["source_sha256"])
+        self.assertEqual(result["status"], admission["status"])
+        self.assertEqual(self.events, ["admit", "arm", "rehash"])
 
 
 if __name__ == "__main__":
