@@ -1,0 +1,24 @@
+# Source-only human speech intake, version 1
+
+19 November 2026. This plan is fixed before target-model inference. Its purpose is to test whether the internal audio-state effect found with engineered non-speech tails survives authentic human speech. It does not test a calendar tool, authorization, or a security property.
+
+## Source and attribution
+
+Use the **official LibriSpeech `dev-clean`** archive at `https://openslr.elda.org/resources/12/dev-clean.tar.gz`. The [OpenSLR SLR12 page](https://openslr.elda.org/12/) identifies it as segmented, aligned, 16 kHz English read speech derived from LibriVox audiobooks and gives the license as Creative Commons Attribution 4.0. The archive's own `LICENSE.TXT` says the same. The [official checksum list](https://openslr.elda.org/resources/12/md5sum.txt) gives `42e2234ba48799c1f50f24a7926300a1` for `dev-clean.tar.gz`; the archive downloaded for this project also has SHA-256 `76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3`. Preserve the archive outside Git. Include attribution to Vassil Panayotov and LibriSpeech in any distributed derivative.
+
+These are real read-audiobook voices, not conversational requests. LibriSpeech's alignment and transcript are metadata, not a human listening verdict for our transformed clips. Do not infer demographics, identity, accent, or consent beyond the published dataset terms.
+
+## Frozen source selection
+
+Read speaker IDs from `LibriSpeech/dev-clean/*` in the authenticated archive. Sort them by SHA-256 of UTF-8 `human-audio-v1:speaker:<ID>`, breaking ties by numeric ID, and take the first four IDs. The first two are development speakers; the next two are sealed test speakers for any target-model method. For each selected speaker, inspect transcript entries in lexical utterance-ID order and choose the first whose reference has 5–16 whitespace-delimited words and whose corresponding FLAC decodes as mono 16 kHz PCM with duration 2–12 seconds. This selection uses source metadata and audio geometry only. Do not change it after looking at target-model outputs. Retain selected IDs, source FLAC bytes and transcripts in a manifest. Any missing or invalid asset fails the render.
+
+Render each selected FLAC to a canonical mono PCM16 WAV without resampling. For every selected source, make four conditions: unchanged `base`; identical active PCM followed by 32,000 zero samples (`z32000`); and identical active PCM followed by two deterministic quiet-noise tails (`n32000_s0`, `n32000_s1`). Each noise sample is an integer in `[-32,32]`, derived from SHAKE-256 of `human-audio-v1:<utterance-id>:<seed>`; no source-region sample is altered. The two noise seeds are distinct by construction. This creates **16 WAVs**, four source recordings × four conditions. Save FLAC, WAV and PCM SHA-256 hashes, geometry, exact transcript and speaker split. Use opaque random-looking IDs in later listening forms so filenames do not reveal condition.
+
+## Quality and mechanism gates
+
+1. A byte-level audit must verify the official archive checksum, FLAC/source identities, WAV geometry, exact active-PCM equality across conditions, exact zero tail and the deterministic noise samples. This is technical QA only.
+2. Before target-model inference, two independent English-fluent listeners must hear all 16 blinded WAVs and submit the words they heard, any unintelligible span, and whether noise or playback defects are audible. A third reviewer resolves disagreements. The criterion for a paired perception-invariant request is that both final human transcripts match the reference after a predeclared orthographic normalization, with no unintelligible span. Do not self-label this from ASR or source metadata.
+3. Run a separately pinned, independent ASR proxy on the same 16 final WAVs. Record its full raw outputs. Require normalized zero/noise transcript equality as a supporting screen, while retaining ASR disagreements as flags rather than calling them human unintelligibility.
+4. Freeze target-model version, decoding, whole-answer/EOS endpoint, layer/time mapping, patch sizes, displaced/equal-norm controls, and all 16-waveform denominator before opening any target output. Development speakers may guide a later versioned method; test-speaker target outputs remain sealed until that method is fixed. Report failures and all selected clips. A target output divergence without a human listening receipt is exploratory only.
+
+The immediate target comparison is equal-duration zero versus noise tail, matching the non-speech experiment without changing spoken PCM or the attention-mask duration. If no complete-answer difference occurs, report the negative screen. An internal patch is meaningful only after a separately reviewed, fixed causal protocol and a full-answer change with qualified controls. Even a reproduced ASR answer change does not by itself show an audio-language action or security vulnerability.
