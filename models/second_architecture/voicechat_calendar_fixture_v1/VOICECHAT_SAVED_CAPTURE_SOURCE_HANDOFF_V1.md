@@ -1,0 +1,13 @@
+# VoiceChat saved capture source handoff
+
+19 November 2026. `live_parity_saved_capture_v1.py` is a **source-only saved-data boundary** for the prospective VoiceChat parity pilot. It imports neither NeMo nor a model, runs no inference, accepts no QA grant, and cannot authorize live use. Its companion tests use CPU tensors and synthetic values only; they create no human, controller or anchor records.
+
+The writer saves nested pass/result/argument/code structures as a JSON tree plus individually named `.npy` numeric tensors, with exact dtype, shape and SHA-256 for each tensor. It preserves text, finite scalar values, byte strings, list/tuple distinction and dictionary insertion order. Torch tensors are detached and copied to CPU; bfloat16 is stored as its exact 16-bit representation. The reader rejects extra/missing files, symlinks, changed hashes, shape/dtype changes and oversized files before loading them. No pickle is used. A fake no-call stock/adapter set was serialized, then its in-memory audio was changed; the actual `compare_stock_adapter` still passed on **reloaded saved artifacts**, showing that comparison can be based on the saved bytes rather than the worker's mutable objects. Six no-model codec tests pass.
+
+**Still required:** The production worker must run the real 12/12 QA and external anchor/grant checks **before** any NeMo import or checkpoint load, then use a fresh process for the unchanged official sample and each of four fixture arms. The high-level `run_live_case_from_audited_wav` currently accepts an already loaded model and does not expose an `inference_runner` hook, so it cannot alone prove pre-load admission or attach `PassiveDualHeadRecorder`. The stock wrapper changes a module-global inference reference and must be isolated/serialized. The current synthetic supervisor precreates each arm directory, while the high-level adapter requires an exclusive new output directory; a production worker must use a new child path and bind its contents, not bypass either guard. Per-step TTS-code capture does not establish identity of a final trimmed local `gen_codes` tensor. Exact parser `.get` semantics, pass-2 counterfactual proposals, and the inert calendar boundary remain required. The official sample, four fresh processes, real resource telemetry, external executable freeze and independent source/freeze/saved-result reviews are unimplemented; this codec is **not experiment readiness**.
+
+Review and rerun:
+
+```sh
+reproductions/audio_prior/.venv/bin/python -m unittest models.second_architecture.voicechat_calendar_fixture_v1.test_live_parity_saved_capture_v1 -v
+```
