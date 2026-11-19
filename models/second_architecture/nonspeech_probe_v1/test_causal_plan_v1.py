@@ -34,13 +34,31 @@ class CausalPlanTests(unittest.TestCase):
             self.assertLessEqual(2 * expected, 1500)
 
     def test_random_seeds_unique_by_case_arm_and_phase(self) -> None:
+        rows = plan.schedule()
         pairs = [(row["case_id"], row["stage"], row["arm"], phase, seed)
-                 for row in plan.schedule() if "seeds" in row
+                 for row in rows if "seeds" in row
                  for phase, seed in row["seeds"].items()]
         self.assertEqual(len(pairs), 144)
         self.assertEqual(len({seed for *_, seed in pairs}), len(pairs))
         for case, stage, arm, phase, seed in pairs:
             self.assertEqual(seed, plan.random_seed(case, stage, arm, phase))
+        for row in rows:
+            if "seeds" in row:
+                self.assertEqual(row["random_support_rows"], [0, 1500])
+                self.assertEqual(row["random_norm_reference"],
+                                 "full_donor_minus_recipient_l2_same_site_phase")
+
+    def test_full_donor_logits_and_worst_case_binary_budget(self) -> None:
+        rows = plan.schedule()
+        full = [row for row in rows if row["save_full_raw_logits_each_step"]]
+        self.assertEqual(len(full), 38)  # two silence donors and 36 full-donor arms
+        self.assertEqual(sum(row["stage"] == "donor" for row in full), 2)
+        self.assertTrue(all(row["stage"] == "donor" or row["arm"] == "donor_both"
+                            for row in full))
+        self.assertLessEqual(plan.worst_case_core_evidence_bytes()
+                             + plan.METADATA_ALLOWANCE_BYTES
+                             + plan.EVIDENCE_RESERVE_BYTES,
+                             plan.MAX_EVIDENCE_BYTES)
 
 
 if __name__ == "__main__":
