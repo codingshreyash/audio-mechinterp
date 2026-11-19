@@ -153,6 +153,17 @@ def audit(output:Path,preflight_path:Path,freeze_path:Path)->dict[str,Any]:
                 and row.get("eligible") is (words==refs[case.key]),
                 "clean CTC/full-template result differs")
         clean[(case.key,mode)]=(row,captures)
+    grouped:dict[tuple[str,str],list[runner.base.Case]]={}
+    for case in cases:
+        grouped.setdefault((case.pair_id,case.engine),[]).append(case)
+    for pair in grouped.values():
+        require(len(pair)==2,"paired case coverage invalid")
+        first=clean[(pair[0].key,"C")][1]["input"][0]
+        second=clean[(pair[1].key,"C")][1]["input"][0]
+        s,e=pair[0].slot
+        require(np.array_equal(first[:s],second[:s])
+                and np.array_equal(first[e:],second[e:]),
+                "common-normalized inputs differ outside word slot")
     patch_rows=rows[97:-1]
     expected_patch=[(d["index"],arm) for d in current["directions"] for arm in runner.ARMS]
     require([(r.get("direction"),r.get("arm")) for r in patch_rows]==expected_patch,
@@ -209,7 +220,7 @@ def audit(output:Path,preflight_path:Path,freeze_path:Path)->dict[str,Any]:
     require(set(counts)==set(runner.ARMS) and all(counts[arm]==96 for arm in runner.ARMS),
             "arm population differs")
     actual={str(p.relative_to(output)) for p in output.rglob("*") if p.is_file()}
-    require(actual in (expected_files,expected_files|{"audit.json"}),"extra/missing output files")
+    require(actual==expected_files,"extra/missing output files before audit")
     bytes_used=sum((output/p).stat().st_size for p in actual)
     require(bytes_used<=runner.MAX_OUTPUT_BYTES,"actual output cap exceeded")
     return {"schema":runner.SCHEMA+"_audit","status":"independent_saved_data_audit_pass",
