@@ -1,0 +1,7 @@
+# Independent case-study review: Wav2Vec2 development W/O V1
+
+19 November 2026. Reviewed case-study commit `9e7719e` against the [independent saved-result review](WAV2VEC2_DEV_WORD_DISJOINT_RESULT_INDEPENDENT_REVIEW_V1.md), the committed 674-row records and audit. I loaded no model weights, opened no locked WAVs, and ran no candidate inference.
+
+**Decision: HOLD on the case-study title; the body counts and limits otherwise pass.** The title says “across 12 new words.” The saved clean records contain **12 development pairs and 24 distinct words**. Change the title to “across 12 word pairs” (or “24 words”) before citing this case study. This is an editorial counting error, not a challenge to the audited model result.
+
+I independently counted 96 clean inputs with 74 exact full-template matches, 96 directed cells per arm with 56 strict eligible, W donor-model transcripts 96/96 and intended-word-only transfer 56/56 eligible, O recipient transcripts 96/96, random W recipient/other transcripts 83/13 and no donor transfer, and random O recipient transcripts 96/96. The 192 self/full controls and 864 saved tensor sidecars match the independent result review. All seven local links in the case study resolve. The discussion correctly calls the result exploratory, notes the same Piper/Kokoro engines as FIT, the late post-block-11 site, correlated S/C modes, ASR clean misses, unequal W/O edit norms, and the absence of an attacker-reachable or speech-assistant security finding.
