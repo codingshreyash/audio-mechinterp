@@ -151,8 +151,8 @@ def run_bounded(command: list[str], attempt: Path, *, nonce: str,
                                 bounded.kill_group(process)
                                 break
                             # A closed heartbeat pipe can race process teardown.
-                            # A zero/None RSS sample at that boundary proves no
-                            # positive allocation; only a later clean exit plus
+                            # A zero/None RSS reading at that boundary is an
+                            # observation gap. Only a later clean exit plus
                             # complete saved output can classify the race normal.
                             if rss is not None and rss > 0:
                                 samples += 1
