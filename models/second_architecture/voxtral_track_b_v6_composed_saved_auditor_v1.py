@@ -16,7 +16,7 @@ from models.second_architecture import voxtral_track_b_v6_pilot_saved_auditor_v1
 
 
 HERE = Path(__file__).resolve().parent
-COMPOSITION_SOURCE_SHA = '487385e17dd629a045f0ef5eb2bf796afd16a2a1e059bf94848f0c8834c10c80'
+COMPOSITION_SOURCE_SHA = 'da6ee3f5600f7cb9c32af2eb0ce3fe347257bd451032bd5e2136aa9cf57ea02a'
 SCHEMA = 'voxtral_track_b_v6_composition_source_only_v1'
 STATUS = 'worker_complete_post_host_checked_not_pilot_go'
 

@@ -118,6 +118,18 @@ class Fixture:
 
 
 class PrePilotContractTests(unittest.TestCase):
+    def test_fresh_host_rejects_compressed_expansion_over_bound(self):
+        raw = b'x' * 65
+        packed = gzip.compress(raw, mtime=0)
+        host = fresh_host()
+        host.update(power_log_gzip_base64=base64.b64encode(packed).decode(),
+                    power_log_gzip_sha256=worker.sha_bytes(packed),
+                    power_log_raw_bytes=len(raw),
+                    output_sha256={'power_log': worker.sha_bytes(raw)})
+        with patch.object(launcher, 'MAX_HOST_RAW_BYTES', 64):
+            with self.assertRaisesRegex(ValueError, 'exceeds 128 MiB'):
+                launcher._verify_fresh_host(host)
+
     def test_external_chain_qa_processor_and_fresh_host(self):
         with tempfile.TemporaryDirectory() as temp:
             f = Fixture(Path(temp))

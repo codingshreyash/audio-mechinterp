@@ -2,13 +2,12 @@
 
 The acyclic artifact order is worker W, external admission A, independent
 review R, then reviewed launcher L pinning W/A/R. This file is not L: no A/R
-exists, and exact old-FIT/synthetic batch construction is not yet reviewed.
+exists. A source-only batch adapter exists separately but is not yet reviewed
+and wired into this composition's live child path.
 """
 
 from __future__ import annotations
 
-import base64
-import gzip
 import os
 from dataclasses import dataclass
 from datetime import datetime
@@ -96,11 +95,10 @@ def _execute_fake_testable_composition(*, files: worker.AdmissionFiles,
     if result.get('status') != 'schedule_complete_resource_unverified':
         raise ValueError('Worker schedule did not finish as resource-unverified')
     after = post_host()
-    admission_launcher._verify_fresh_host(after)
+    raw = admission_launcher._verify_fresh_host(after)
     if (datetime.fromisoformat(after['collected_utc']) <=
             datetime.fromisoformat(proof['fresh_host_collected_utc'])):
         raise ValueError('Post-run host probe must be strictly later than pre-run probe')
-    raw = gzip.decompress(base64.b64decode(after['power_log_gzip_base64'], validate=True))
     sidecar = output_dir.with_name(output_dir.name + '.composition.json')
     raw_path = output_dir.with_name(output_dir.name + '.post_host.raw')
     if not raw or len(raw) > 128 * 1024**2:

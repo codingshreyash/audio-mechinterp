@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import base64
+import gzip
 import json
 import pickle
 import tempfile
@@ -138,6 +140,35 @@ class PilotCompositionSourceTests(unittest.TestCase):
             self.assertTrue((root / 'pilot/pilot_measurement.json').is_file())
             self.assertTrue((root / 'pilot.composition.json').is_file())
             self.assertTrue((root / 'pilot.post_host.raw').is_file())
+
+    def test_post_host_compressed_bomb_rejected_before_sidecars(self):
+        _model, batch, _source, _donor = fixture()
+        with tempfile.TemporaryDirectory() as temp, patch.object(
+                worker, 'LONGEST_ALIAS', (7, 9, 8, 2)):
+            root = Path(temp)
+            f = fake_case(root, batch)
+            def bomb():
+                raw = b'x' * 65
+                packed = gzip.compress(raw, mtime=0)
+                value = fresh_host()
+                value.update(power_log_gzip_base64=base64.b64encode(packed).decode(),
+                             power_log_gzip_sha256=worker.sha_bytes(packed),
+                             power_log_raw_bytes=len(raw),
+                             output_sha256={'power_log': worker.sha_bytes(raw)})
+                return value
+            with patch.object(admission_launcher, '_actual_qa', return_value=f.qa), patch.object(
+                    admission_launcher, '_fresh_no_weight_preflight', return_value=f.frozen), patch.object(
+                    admission_launcher, 'MAX_HOST_RAW_BYTES', 64):
+                with self.assertRaisesRegex(ValueError, 'exceeds 128 MiB'):
+                    composition._execute_fake_testable_composition(
+                        files=f.files, review_path=f.review_path, pins=f.pins,
+                        output_dir=root / 'pilot', batch_provider=lambda: (batch, batch, 0),
+                        load_model=FakePilotModel, host_probe=fake_host,
+                        post_host=bomb, memory_probe=lambda: 1024,
+                        free_bytes=lambda _: 100 * 1024**3, sync=lambda: None)
+            self.assertTrue((root / 'pilot/pilot_measurement.json').is_file())
+            self.assertFalse((root / 'pilot.composition.json').exists())
+            self.assertFalse((root / 'pilot.post_host.raw').exists())
 
     def test_top_level_child_operation_pickleable_but_holds_before_loader(self):
         with tempfile.TemporaryDirectory() as temp:

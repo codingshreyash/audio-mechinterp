@@ -8,9 +8,9 @@ and measured MPS high-water, then delegate to the worker private schedule.
 from __future__ import annotations
 
 import base64
-import gzip
 import json
 import sys
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -21,6 +21,8 @@ from models.second_architecture import voxtral_track_b_v6_pre_pilot_admission_co
 
 FROZEN_PINS: contract.ExternalPins | None = None  # no externally reviewed A/R exists
 FRESH_HOST_MAX_SECONDS = 60
+MAX_HOST_RAW_BYTES = 128 * 1024**2
+MAX_HOST_GZIP_BYTES = MAX_HOST_RAW_BYTES + 1024**2
 STABLE_PREFLIGHT_FIELDS = (
     'source_sha256', 'anchors', 'installed_source_sha256', 'snapshot',
     'fixture', 'selected_wavs', 'processor', 'v6_synthetic_zero_geometry',
@@ -47,23 +49,44 @@ def _fresh_no_weight_preflight() -> dict[str, Any]:
         sys.path.remove(source_dir)
 
 
-def _verify_fresh_host(host: Any) -> None:
+def _bounded_host_raw(packed: bytes) -> bytes:
+    """Decode one complete gzip member, capped before large expansion."""
+    if not packed or len(packed) > MAX_HOST_GZIP_BYTES:
+        raise ValueError('Fresh host compressed log absent or oversized')
+    try:
+        decoder = zlib.decompressobj(16 + zlib.MAX_WBITS)
+        raw = decoder.decompress(packed, MAX_HOST_RAW_BYTES + 1)
+        if len(raw) > MAX_HOST_RAW_BYTES or decoder.unconsumed_tail:
+            raise ValueError('Fresh host raw log exceeds 128 MiB')
+        raw += decoder.flush(MAX_HOST_RAW_BYTES - len(raw) + 1)
+    except zlib.error as exc:
+        raise ValueError('Fresh host gzip stream invalid') from exc
+    if not raw or len(raw) > MAX_HOST_RAW_BYTES or not decoder.eof or decoder.unused_data:
+        raise ValueError('Fresh host gzip stream incomplete, trailing, or oversized')
+    return raw
+
+
+def _verify_fresh_host(host: Any) -> bytes:
     if not isinstance(host, dict) or host.get('eligible_at_collection') is not True:
         raise ValueError('Fresh host eligibility absent')
     try:
         collected = datetime.fromisoformat(host['collected_utc'])
         age = (datetime.now(timezone.utc) - collected).total_seconds()
-        packed = base64.b64decode(host['power_log_gzip_base64'], validate=True)
-        raw = gzip.decompress(packed)
+        encoded = host['power_log_gzip_base64']
+        if not isinstance(encoded, str) or len(encoded) > 4 * ((MAX_HOST_GZIP_BYTES + 2) // 3):
+            raise ValueError('Fresh host encoded log oversized')
+        packed = base64.b64decode(encoded, validate=True)
         hashes = host['output_sha256']
     except (KeyError, TypeError, ValueError, OSError) as exc:
         raise ValueError('Fresh host evidence malformed') from exc
+    raw = _bounded_host_raw(packed)
     if (not isinstance(hashes, dict) or collected.tzinfo is None or
             not 0 <= age <= FRESH_HOST_MAX_SECONDS or
             worker.sha_bytes(packed) != host.get('power_log_gzip_sha256') or
             worker.sha_bytes(raw) != hashes.get('power_log') or
             len(raw) != host.get('power_log_raw_bytes')):
         raise ValueError('Fresh host timestamp or raw log binding differs')
+    return raw
 
 
 def _verify_admission_fingerprints(receipt: dict[str, Any],
