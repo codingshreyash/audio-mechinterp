@@ -46,16 +46,41 @@ def _write_exclusive(path: Path, data: bytes) -> None:
         stream.write(data)
 
 
-def _artifact_hashes(directory: Path) -> tuple[dict[str, str], int]:
-    """Hash regular files in one arm, rejecting links and nested paths."""
+def _evidence_bytes(root: Path, ceiling: int) -> int:
+    """Stat all run files before any content read; fail on excess or links."""
+    total = 0
+    for path in root.rglob("*"):
+        _require(not path.is_symlink(), "Evidence link is not allowed")
+        if path.is_dir():
+            continue
+        _require(path.is_file(), "Evidence path is not a regular file")
+        total += path.stat().st_size
+        _require(total <= ceiling, "Total evidence cap exceeded")
+    return total
+
+
+def _write_bounded(root: Path, path: Path, data: bytes, ceiling: int) -> None:
+    _require(len(data) <= ceiling, "Serialized evidence exceeds total cap")
+    _require(_evidence_bytes(root, ceiling) + len(data) <= ceiling,
+             "Total evidence cap exceeded before write")
+    _write_exclusive(path, data)
+
+
+def _artifact_hashes(directory: Path, ceiling: int) -> tuple[dict[str, str], int]:
+    """Stat before reading, then stream-hash regular files in one arm."""
     result: dict[str, str] = {}
     total = 0
     for path in sorted(directory.iterdir()):
         _require(path.is_file() and not path.is_symlink(),
                  "Arm artifact is not a regular file")
-        data = path.read_bytes()
-        result[path.name] = _sha(data)
-        total += len(data)
+        size = path.stat().st_size
+        total += size
+        _require(total <= ceiling, "Arm artifact exceeds output cap before read")
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            for block in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(block)
+        result[path.name] = digest.hexdigest()
     return result, total
 
 
@@ -104,18 +129,26 @@ def run_synthetic_protocol(
     plan_bytes = _validate_synthetic_plan(plan)
     frozen_plan = json.loads(plan_bytes)
     expected_hashes = frozen_plan["input_hashes"]
-    _require(set(caps) == {"wall_seconds", "vram_bytes", "output_bytes"}
+    _require(set(caps) == {"wall_seconds", "vram_bytes", "output_bytes",
+                           "total_output_bytes"}
              and all(type(value) is int and value > 0 for value in caps.values()),
-             "Prospective per-process caps invalid")
+             "Prospective per-arm or total caps invalid")
+    total_cap = caps["total_output_bytes"]
+    _require(len(plan_bytes) <= total_cap,
+             "Serialized source plan exceeds total evidence cap")
     _require(rehash_inputs() == expected_hashes, "Bound input changed before sample")
-    output_dir.mkdir(parents=True, exist_ok=False)
-    plan_path = output_dir / "source_plan_exact.json"
-    _write_exclusive(plan_path, plan_bytes)
-    _write_exclusive(output_dir / "synthetic_scope.json", canonical_bytes({
+    scope_bytes = canonical_bytes({
         "status": "synthetic_test_only_no_model_work",
         "source_plan_sha256": _sha(plan_bytes), "caps": caps,
         "arm_order": list(ORDER), "created_utc": _now(),
-    }))
+    })
+    _require(len(plan_bytes) + len(scope_bytes) <= total_cap,
+             "Source plan and scope exceed total evidence cap")
+    output_dir.mkdir(parents=True, exist_ok=False)
+    plan_path = output_dir / "source_plan_exact.json"
+    _write_bounded(output_dir, plan_path, plan_bytes, total_cap)
+    _write_bounded(output_dir, output_dir / "synthetic_scope.json",
+                   scope_bytes, total_cap)
     response_path = output_dir / "api_response.json"
     response_sha: str | None = None
     no_call: bool | None = None
@@ -135,11 +168,11 @@ def run_synthetic_protocol(
         arm_dir.mkdir(exist_ok=False)
         started = _now()
         start = time.monotonic()
-        _write_exclusive(arm_dir / "started.json", canonical_bytes({
+        _write_bounded(output_dir, arm_dir / "started.json", canonical_bytes({
             "arm": arm, "started_utc": started,
             "source_plan_sha256": _sha(plan_bytes),
             "response_sha256": response_sha if arm.startswith("stock_") else None,
-        }))
+        }), total_cap)
         try:
             result = worker(arm, arm_dir, response_path if arm.startswith("stock_") else None)
             elapsed = time.monotonic() - start
@@ -173,7 +206,8 @@ def run_synthetic_protocol(
                 if arm.startswith("stock_"):
                     _require(provenance.get("response_sha256") == response_sha,
                              f"{arm} injected response differs")
-            hashes, output_bytes = _artifact_hashes(arm_dir)
+            _evidence_bytes(output_dir, total_cap)
+            hashes, output_bytes = _artifact_hashes(arm_dir, caps["output_bytes"])
             required = ({"sample_raw.bin"} if arm == "official_sample"
                         else REQUIRED_FIXTURE_ARTIFACTS)
             _require(required <= hashes.keys(), f"{arm} raw artifact missing")
@@ -189,7 +223,7 @@ def run_synthetic_protocol(
                              for phase in ("pass1", "pass2")),
                          "Adapter pass capture missing")
                 response_bytes, no_call = fixed_response_bytes(trace, calls)
-                _write_exclusive(response_path, response_bytes)
+                _write_bounded(output_dir, response_path, response_bytes, total_cap)
                 response_sha = _sha(response_bytes)
             elif arm.startswith("stock_"):
                 stock = capture.get("stock")
@@ -218,15 +252,21 @@ def run_synthetic_protocol(
                              "peak_vram_bytes": result["peak_vram_bytes"],
                              "artifact_sha256": hashes,
                              "response_sha256": provenance.get("response_sha256")}
-            _write_exclusive(arm_dir / "complete.json", canonical_bytes(receipts[arm]))
-            _, final_bytes = _artifact_hashes(arm_dir)
+            _write_bounded(output_dir, arm_dir / "complete.json",
+                           canonical_bytes(receipts[arm]), total_cap)
+            _, final_bytes = _artifact_hashes(arm_dir, caps["output_bytes"])
             _require(final_bytes <= caps["output_bytes"],
                      f"{arm} output cap exceeded after receipt")
         except BaseException as error:
-            _write_exclusive(arm_dir / "failure.json", canonical_bytes({
-                "arm": arm, "status": "synthetic_arm_failed_no_retry",
-                "reason": str(error), "finished_utc": _now(),
-            }))
+            try:
+                _write_bounded(output_dir, arm_dir / "failure.json", canonical_bytes({
+                    "arm": arm, "status": "synthetic_arm_failed_no_retry",
+                    "reason": str(error), "finished_utc": _now(),
+                }), total_cap)
+            except (ValueError, FileExistsError):
+                # A worker may already have filled the cap. Its exclusive arm
+                # directory and partial bytes still consume this run ID.
+                pass
             raise
     _require(rehash_inputs() == expected_hashes,
              "Bound input changed before comparison")
@@ -247,5 +287,6 @@ def run_synthetic_protocol(
                "arm_order": list(ORDER), "arm_receipts": receipts,
                "comparison": comparison,
                "external_tool_execution": False}
-    _write_exclusive(output_dir / "synthetic_comparison.json", canonical_bytes(summary))
+    _write_bounded(output_dir, output_dir / "synthetic_comparison.json",
+                   canonical_bytes(summary), total_cap)
     return summary

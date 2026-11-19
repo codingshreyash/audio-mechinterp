@@ -6,6 +6,7 @@ import hashlib
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from . import live_parity_launcher_v1 as launch
 
@@ -36,7 +37,7 @@ class LauncherTests(unittest.TestCase):
                                      "raw_unspliced_pcm_max_abs": 1e-4},
         }
         self.caps = {"wall_seconds": 5, "vram_bytes": 1024,
-                     "output_bytes": 8192}
+                     "output_bytes": 8192, "total_output_bytes": 65536}
         self.seen: list[str] = []
 
     def _worker(self, arm: str, directory: Path, response_path: Path | None):
@@ -203,6 +204,70 @@ class LauncherTests(unittest.TestCase):
         self.assertEqual((self.root / "run/api_response.json").read_bytes(),
                          b'{"tool_name": "list_calendar_events", "response": '
                          b'{"status": "ok", "events": [], "executed": false}}\n')
+
+    def test_oversized_parsed_response_rejected_before_file_write(self):
+        def worker(arm, directory, response_path):
+            result = self._worker(arm, directory, response_path)
+            if arm == "adapter":
+                result["capture"]["trace"]["replay"] = {
+                    "response_selector": {
+                        "tool_name": "list_calendar_events",
+                        "response": {"message": "x" * 20000}}}
+                result["capture"]["calls"][1].update({
+                    field: [1] for field in launch.INJECTION_FIELDS})
+            return result
+        caps = {**self.caps, "total_output_bytes": 8192}
+        with self.assertRaisesRegex(ValueError, "Serialized evidence exceeds total cap"):
+            self._run(worker=worker, caps=caps)
+        self.assertEqual(self.seen, ["official_sample", "adapter"])
+        self.assertFalse((self.root / "run/api_response.json").exists())
+        self.assertTrue((self.root / "run/adapter").is_dir())
+
+    def test_oversized_source_plan_rejected_before_run_dir(self):
+        self.plan["test_only_padding"] = "x" * 20000
+        caps = {**self.caps, "total_output_bytes": 8192}
+        with self.assertRaisesRegex(ValueError, "source plan exceeds total evidence cap"):
+            self._run(caps=caps)
+        self.assertFalse((self.root / "run").exists())
+        self.assertEqual(self.seen, [])
+
+    def test_oversized_comparison_rejected_before_file_write(self):
+        def large_comparison(*_args, **_kwargs):
+            return {"status": "source_comparison_passed_pending_live_provenance_review",
+                    "test_only_padding": "x" * 20000}
+        caps = {**self.caps, "total_output_bytes": 8192}
+        with self.assertRaisesRegex(ValueError, "Serialized evidence exceeds total cap"):
+            self._run(compare=large_comparison, caps=caps)
+        self.assertEqual(self.seen, list(launch.ORDER))
+        self.assertFalse((self.root / "run/synthetic_comparison.json").exists())
+
+    def test_total_cap_counts_all_small_files_together(self):
+        self._run()
+        run_dir = self.root / "run"
+        total = sum(path.stat().st_size for path in run_dir.rglob("*")
+                    if path.is_file())
+        self.assertLess(total, self.caps["total_output_bytes"])
+        import shutil
+        shutil.rmtree(run_dir)
+        self.seen.clear()
+        caps = {**self.caps, "total_output_bytes": total - 512}
+        with self.assertRaisesRegex(ValueError, "Total evidence cap exceeded"):
+            self._run(caps=caps)
+        self.assertFalse((run_dir / "synthetic_comparison.json").exists())
+
+    def test_large_artifact_rejected_by_stat_before_read(self):
+        arm = self.root / "arm"
+        arm.mkdir()
+        large = arm / "large.bin"
+        large.write_bytes(b"x" * 9000)
+        original = Path.open
+        def forbid_read(path, mode="r", *args, **kwargs):
+            if path == large and mode == "rb":
+                raise AssertionError("Oversized artifact was opened for reading")
+            return original(path, mode, *args, **kwargs)
+        with patch.object(Path, "open", forbid_read):
+            with self.assertRaisesRegex(ValueError, "before read"):
+                launch._artifact_hashes(arm, 8192)
 
     def test_process_seed_prompt_and_output_caps(self):
         for kind, pattern in (("seed", "source/checkpoint/seed"),
