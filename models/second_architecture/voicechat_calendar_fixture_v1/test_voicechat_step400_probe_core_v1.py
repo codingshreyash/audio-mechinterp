@@ -93,6 +93,18 @@ class ProbeCoreTests(unittest.TestCase):
         self.assertEqual(result["unknown_count"], 1)
         self.assertEqual(result["families"]["tts"]["tensor_count"], 0)
 
+    def test_dict_keys_never_enter_serialized_tensor_paths(self) -> None:
+        secret_prompt = "SECRET_PROMPT_and_output_token_12345"
+        result = inventory_carried_state(
+            {secret_prompt: torch.ones(2), 12345: {secret_prompt: torch.ones(1)}},
+            {secret_prompt: torch.zeros(1)})
+        serialized = json.dumps(result, sort_keys=True)
+        self.assertTrue(result["complete"])
+        self.assertNotIn(secret_prompt, serialized)
+        self.assertNotIn("12345", serialized)
+        self.assertTrue(all("[entry:" in row["path"]
+                            for row in result["tensor_rows"]))
+
     def test_dynamic_cache_shape_is_metadata_only(self) -> None:
         class DynamicLayer:
             def __init__(self):

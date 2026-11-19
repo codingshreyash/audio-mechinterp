@@ -175,14 +175,16 @@ def inventory_carried_state(stt_state: Any, tts_cache: Any) -> dict[str, Any]:
             if len(value) > MAX_NODES:
                 unknown_node(path, value)
                 return
-            for key in sorted(value, key=lambda item: str(item)):
+            # Keys can be prompts, decoded model output, or token IDs. Keep
+            # only an ordinal path, never their string form or repr.
+            for index, (key, item) in enumerate(value.items()):
                 if nodes >= MAX_NODES:
                     unknown_node(path, value)
                     break
                 if not isinstance(key, (str, int)):
                     unknown_node(path, value)
                     continue
-                walk(value[key], family, f"{path}.{key}", depth + 1)
+                walk(item, family, f"{path}[entry:{index}]", depth + 1)
         elif type(value) in (list, tuple):
             if len(value) > MAX_NODES:
                 unknown_node(path, value)
