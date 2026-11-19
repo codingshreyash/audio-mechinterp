@@ -74,14 +74,58 @@ def committed_clean(path: Path) -> str:
     return commit
 
 
+def source_bindings(paths: dict[str, Path]) -> dict[str, dict[str, str]]:
+    """Bind every executable or review-test source to its committed bytes."""
+    result = {}
+    for role, path in paths.items():
+        result[role] = {"path": str(path.resolve().relative_to(ROOT)),
+                        "sha256": sha(path), "commit": committed_clean(path)}
+    return result
+
+
+def require_source_go_text(text: str, bindings: dict[str, dict[str, str]]) -> None:
+    """Reject an old GO when any reviewed source binding changes."""
+    blocks = re.findall(r"```json\s*\n(.*?)\n```", text, flags=re.S)
+    bound = []
+    for block in blocks:
+        try:
+            value = json.loads(block)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, dict) and value.get("schema") == "word_disjoint_source_go_v1":
+            bound.append(value)
+    require(len(bound) == 1 and bound[0].get("decision") == "GO"
+            and "Decision: GO" in text
+            and bound[0].get("source_bindings") == bindings,
+            "source GO does not bind exact reviewed sources")
+
+
 def reviewed_freeze_paths(preflight: Path, freeze: Path, review: Path,
-                          runner_source_commit: str) -> None:
-    """Require a separately committed source GO and later frozen receipt."""
+                          bindings: dict[str, dict[str, str]]) -> None:
+    """Require exact source blobs to predate a separate GO and frozen receipt."""
     preflight_commit = committed_clean(preflight)
     review_commit = committed_clean(review)
     freeze_commit = committed_clean(freeze)
-    for earlier, later in ((runner_source_commit, review_commit),
-                           (preflight_commit, freeze_commit),
+    require_source_go_text(review.read_text(), bindings)
+    for role, item in bindings.items():
+        path = ROOT / item["path"]
+        require(path.resolve().is_relative_to(ROOT) and path.is_file()
+                and not path.is_symlink() and sha(path) == item["sha256"]
+                and committed_clean(path) == item["commit"],
+                f"{role} reviewed source changed")
+        snapshot = subprocess.run(["git", "-C", str(ROOT), "show",
+                                   f"{review_commit}:{item['path']}"],
+                                  capture_output=True)
+        require(snapshot.returncode == 0
+                and hashlib.sha256(snapshot.stdout).hexdigest() == item["sha256"],
+                f"{role} source blob absent from independent GO commit")
+    for earlier, later in (((item["commit"], review_commit)
+                            for item in bindings.values())):
+        require(earlier != later and subprocess.run(
+            ["git", "-C", str(ROOT), "merge-base", "--is-ancestor", earlier, later],
+            capture_output=True).returncode == 0,
+            "reviewed source commit does not predate independent GO")
+    for earlier, later in ((preflight_commit, freeze_commit),
                            (review_commit, freeze_commit)):
         require(earlier != later and subprocess.run(
             ["git", "-C", str(ROOT), "merge-base", "--is-ancestor", earlier, later],

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import types
 import unittest
+import copy
+import json
 from pathlib import Path
 from unittest.mock import patch
 
@@ -20,6 +22,34 @@ from . import run_whisper
 
 
 class CandidateSourceTests(unittest.TestCase):
+    def test_old_source_go_rejects_post_review_auditor_common_helper_edits(self) -> None:
+        reviewed = {role: {"path": f"{role}.py", "sha256": role * 8,
+                           "commit": "a" * 40}
+                    for role in ("runner", "auditor", "common", "helper", "test")}
+        text = ("Decision: GO\n```json\n" + json.dumps({
+            "schema": "word_disjoint_source_go_v1", "decision": "GO",
+            "source_bindings": reviewed}) + "\n```\n")
+        common.require_source_go_text(text, reviewed)
+        for role in ("auditor", "common", "helper"):
+            changed = copy.deepcopy(reviewed)
+            changed[role]["sha256"] = "f" * 64
+            changed[role]["commit"] = "b" * 40
+            with self.assertRaisesRegex(ValueError, "exact reviewed sources"):
+                common.require_source_go_text(text, changed)
+
+    def test_whisper_patch_mask_identity_with_unchanged_mel(self) -> None:
+        import torch
+        mel = np.zeros((1, 80, 3000), dtype=np.float32)
+        mask = np.ones((1, 3000), dtype=np.int64)
+        clean = {"attention_mask_shape": list(mask.shape),
+                 "attention_mask_sha256": dev.tensor_sha(mask)}
+        batch = {"input_features": torch.from_numpy(mel.copy()),
+                 "attention_mask": torch.from_numpy(mask.copy())}
+        run_whisper.require_recipient_input(batch, mel, clean)
+        batch["attention_mask"][0, 0] = 0
+        with self.assertRaisesRegex(ValueError, "attention mask differs"):
+            run_whisper.require_recipient_input(batch, mel, clean)
+
     def test_human_review_raw_disagreement_requires_full_third_queue(self) -> None:
         cases = [types.SimpleNamespace(opaque_id=f"clip-{i:02d}",
                  wav_sha256=f"hash-{i:02d}", word="banana") for i in range(32)]

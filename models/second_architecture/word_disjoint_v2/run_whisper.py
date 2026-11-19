@@ -83,6 +83,11 @@ def preflight(*, human_qa: bool) -> dict[str, Any]:
             "common_commit": dev.source_commit(Path(common.__file__)),
             "fit_helper_sha256": common.sha(Path(fit_whisper.__file__)),
             "fit_helper_commit": dev.source_commit(Path(fit_whisper.__file__)),
+            "source_bindings": common.source_bindings({
+                "runner": Path(__file__), "auditor": AUDITOR,
+                "common": Path(common.__file__),
+                "helper": Path(fit_whisper.__file__),
+                "test": common.HERE / "test_candidate_source.py"}),
             "plan_sha256": common.sha(common.PLAN),
             "plan_review_sha256": common.sha(common.PLAN_REVIEW),
             "python": sys.version.split()[0], "torch": torch.__version__,
@@ -115,6 +120,7 @@ def verify_freeze(preflight_path: Path, freeze_path: Path, current: dict) -> str
                 "auditor_sha256": current["auditor_sha256"],
                 "common_sha256": current["common_sha256"],
                 "fit_helper_sha256": current["fit_helper_sha256"],
+                "source_bindings": current["source_bindings"],
                 "plan_sha256": current["plan_sha256"],
                 "plan_review_sha256": current["plan_review_sha256"],
                 "qa_receipt_sha256": current["qa"]["qa_receipt_sha256"],
@@ -128,7 +134,7 @@ def verify_freeze(preflight_path: Path, freeze_path: Path, current: dict) -> str
                    and frozen.get("source_review_sha256") == common.sha(SOURCE_REVIEW),
                    "Whisper source GO not bound")
     common.reviewed_freeze_paths(preflight_path, freeze_path, SOURCE_REVIEW,
-                                 current["runner_commit"])
+                                 current["source_bindings"])
     return common.sha(freeze_path)
 
 
@@ -141,6 +147,17 @@ def check_budget(start: float, output: Path, before_forward: bool = False) -> No
         common.require(rss + 1024**3 <= MAX_RSS_BYTES
                        and written + 32*1024**2 <= MAX_OUTPUT_BYTES,
                        "Whisper forward headroom exhausted")
+
+
+def require_recipient_input(batch: dict, mel: np.ndarray, clean_row: dict) -> None:
+    """Guard both processor channels against a clean-to-patch input change."""
+    common.require("attention_mask" in batch
+                   and np.array_equal(batch["input_features"].detach().cpu().numpy(), mel),
+                   "Whisper live mel differs from saved clean input")
+    mask = batch["attention_mask"].detach().cpu().contiguous().numpy()
+    common.require(list(mask.shape) == clean_row["attention_mask_shape"]
+                   and dev.tensor_sha(mask) == clean_row["attention_mask_sha256"],
+                   "Whisper live attention mask differs from saved clean input")
 
 
 def patch_state(recipient: np.ndarray, donor: np.ndarray, n: int,
@@ -320,8 +337,6 @@ def execute(preflight_path: Path, freeze_path: Path, output: Path) -> None:
             samples = pcm.astype(np.float32) / np.float32(32768)
             batch = processor(samples, sampling_rate=16000,
                               return_tensors="pt", return_attention_mask=True)
-            common.require(np.array_equal(batch["input_features"].numpy(), mel),
-                           "Whisper live mel differs from saved clean input")
             for site_index, site in enumerate(common.SITES_WHISPER):
                 rstate = np.load(output / recipient["paths"][site], allow_pickle=False)
                 dstate = np.load(output / donor["paths"][site], allow_pickle=False)
@@ -329,6 +344,7 @@ def execute(preflight_path: Path, freeze_path: Path, output: Path) -> None:
                     in_progress = {"phase": "patch", "direction": d,
                                    "site": site, "arm": arm}
                     check_budget(started, output, before_forward=True)
+                    require_recipient_input(batch, mel, recipient)
                     seed = (SEED_BASE + 4*d + 2*site_index
                             + (0 if arm == "random_W" else 1)
                             if arm in ("random_W", "random_O") else None)

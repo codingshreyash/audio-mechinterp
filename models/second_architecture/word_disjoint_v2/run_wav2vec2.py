@@ -93,6 +93,11 @@ def preflight(*, human_qa: bool) -> dict[str, Any]:
                "common_commit": dev.source_commit(Path(common.__file__)),
                "fit_hook_sha256": common.sha(Path(fit.__file__)),
                "fit_hook_commit": dev.source_commit(Path(fit.__file__)),
+               "source_bindings": common.source_bindings({
+                   "runner": Path(__file__), "auditor": AUDITOR,
+                   "common": Path(common.__file__),
+                   "helper": Path(fit.__file__),
+                   "test": common.HERE / "test_candidate_source.py"}),
                "plan_sha256": common.sha(common.PLAN),
                "plan_review_sha256": common.sha(common.PLAN_REVIEW),
                "python": sys.version.split()[0], "torch": torch.__version__,
@@ -121,6 +126,7 @@ def verify_freeze(preflight_path: Path, freeze_path: Path, current: dict) -> str
                 "auditor_sha256": current["auditor_sha256"],
                 "common_sha256": current["common_sha256"],
                 "fit_hook_sha256": current["fit_hook_sha256"],
+                "source_bindings": current["source_bindings"],
                 "plan_sha256": current["plan_sha256"],
                 "plan_review_sha256": current["plan_review_sha256"],
                 "qa_receipt_sha256": current["qa"]["qa_receipt_sha256"],
@@ -134,7 +140,7 @@ def verify_freeze(preflight_path: Path, freeze_path: Path, current: dict) -> str
                    and frozen.get("source_review_sha256") == common.sha(SOURCE_REVIEW),
                    "Wav2Vec2 source GO not bound")
     common.reviewed_freeze_paths(preflight_path, freeze_path, SOURCE_REVIEW,
-                                 current["runner_commit"])
+                                 current["source_bindings"])
     return common.sha(freeze_path)
 
 
