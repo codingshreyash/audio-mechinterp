@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blinded human speech listening</title>
+<style>
+body{font:16px/1.45 system-ui,sans-serif;max-width:760px;margin:24px auto;padding:0 16px;color:#17202a}
+label{display:block;margin:14px 0}input,textarea,select{display:block;width:100%;box-sizing:border-box;font:inherit;padding:8px}
+button{font:inherit;padding:10px 16px;margin:6px 8px 6px 0}audio{display:block;width:100%;margin:20px 0}
+.hidden{display:none}#error{color:#a11;min-height:1.5em}.card{border:1px solid #aab;padding:18px;border-radius:8px}
+</style></head><body>
+<h1>Blinded human speech listening</h1>
+<p>Listen to each clip without looking at a transcript or ASR result. Write the words you hear, even if they do not make sense. Mark an unclear clip as unclear and use <code>[inaudible]</code> for words you cannot hear. Submit each first impression before moving on. Do not discuss the clips with the other reviewer until both exports are complete.</p>
+<div id="start-card" class="card">
+<label>Reviewer ID (known to your coordinator)<input id="reviewer" autocomplete="off" maxlength="80"></label>
+<button id="start" type="button">Start or resume</button>
+</div>
+<div id="review-card" class="card hidden">
+<p id="progress-text"></p><progress id="progress"></progress>
+<audio id="audio" controls preload="none"></audio>
+<label>Exactly what words did you hear?<textarea id="transcript" rows="3" required></textarea></label>
+<label>Were all spoken words clear?<select id="clarity"><option value="">Choose</option><option value="clear">Clear</option><option value="unclear">Some words unclear</option></select></label>
+<label>Did you hear a sound after the spoken words?<select id="tail-audible"><option value="">Choose</option><option value="no">No</option><option value="yes">Yes</option><option value="unsure">Unsure</option></select></label>
+<label>Other listening notes (optional)<textarea id="notes" rows="2"></textarea></label>
+<button id="submit" type="button">Lock this clip and continue</button>
+</div>
+<div id="done-card" class="card hidden"><p>All clips are locked. Export the JSON and send it to your coordinator.</p>
+<button id="export" type="button">Export completed review JSON</button></div>
+<p id="error" role="alert"></p>
+<script id="embedded-data" type="application/json">__EMBEDDED_DATA__</script>
+<script>__APP_JS__</script>
+</body></html>
