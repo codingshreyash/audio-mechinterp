@@ -20,6 +20,45 @@ from . import run_whisper
 
 
 class CandidateSourceTests(unittest.TestCase):
+    def test_human_review_raw_disagreement_requires_full_third_queue(self) -> None:
+        cases = [types.SimpleNamespace(opaque_id=f"clip-{i:02d}",
+                 wav_sha256=f"hash-{i:02d}", word="banana") for i in range(32)]
+        order = [case.opaque_id for case in cases]
+        queue = {"opaque_ids_in_order": order}
+
+        def export(reviewer: str) -> dict:
+            return {
+                "schema": "word_disjoint_blind_review_v1",
+                "reviewer_id": reviewer,
+                "queue_sha256": common.QUEUE_SHA,
+                "planned_clips": 32,
+                "opaque_ids_in_order": order,
+                "records": [{
+                    "opaque_id": case.opaque_id,
+                    "reviewer_id": reviewer,
+                    "wav_sha256": case.wav_sha256,
+                    "submitted_at_utc": "2026-11-18T12:00:00Z",
+                    "verbatim_transcript": "I said banana and then stopped.",
+                    "middle_word": "banana",
+                    "clear_or_unclear": "clear",
+                    "confidence": 5,
+                } for case in cases],
+            }
+
+        primary, secondary, tertiary = export("a"), export("b"), export("c")
+        secondary["records"][0]["verbatim_transcript"] = \
+            "I said banana and then stopped!"
+        with self.assertRaisesRegex(ValueError, "third review coverage"):
+            common.evaluate_human_reviews([primary, secondary], cases, queue)
+        tertiary["records"] = tertiary["records"][:1]
+        with self.assertRaisesRegex(ValueError, "exact 32-clip queue"):
+            common.evaluate_human_reviews([primary, secondary, tertiary], cases, queue)
+        tertiary = export("c")
+        result = common.evaluate_human_reviews(
+            [primary, secondary, tertiary], cases, queue)
+        self.assertEqual(result["quality_confirmed"], 32)
+        self.assertEqual(result["disagreement_count"], 1)
+
     def test_exact_parser_and_full_reference(self) -> None:
         expected = ["i", "said", "banana", "and", "then", "stopped"]
         self.assertEqual(common.reference_tokens("banana"), expected)

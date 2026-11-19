@@ -206,19 +206,15 @@ def evaluate_human_reviews(exports: list[dict], cases: list[Case], queue: dict) 
                 and export.get("opaque_ids_in_order") == order,
                 "review export provenance/order differs")
         rows = export.get("records")
-        require(isinstance(rows, list), "review records absent")
-        if n < 2:
-            require(len(rows) == 32 and [r.get("opaque_id") for r in rows] == order,
-                    "primary reviewer did not complete exact queue")
-        else:
-            require(len(rows) <= 32 and len({r.get("opaque_id") for r in rows}) == len(rows)
-                    and set(r.get("opaque_id") for r in rows) <= set(order),
-                    "third reviewer record set invalid")
+        require(isinstance(rows, list) and len(rows) == 32
+                and [r.get("opaque_id") for r in rows] == order,
+                "reviewer did not complete exact 32-clip queue")
         answers = {}
         for row in rows:
             ident = row["opaque_id"]
             case = by_id[ident]
             require(row.get("wav_sha256") == case.wav_sha256
+                    and row.get("reviewer_id") == reviewer_ids[n]
                     and isinstance(row.get("submitted_at_utc"), str)
                     and row["submitted_at_utc"].strip()
                     and isinstance(row.get("verbatim_transcript"), str)
@@ -231,22 +227,24 @@ def evaluate_human_reviews(exports: list[dict], cases: list[Case], queue: dict) 
                 "tokens": tokens(row["verbatim_transcript"]),
                 "middle": tokens(row["middle_word"]),
                 "clear": row["clear_or_unclear"] == "clear",
+                "raw_transcript": row["verbatim_transcript"],
+                "raw_middle": row["middle_word"],
             }
         answer_sets.append(answers)
-    # A third review is mandatory for any difference in full words or clarity.
+    # The prospective QA auditor escalates raw answer/clarity disagreements,
+    # even if punctuation normalization later yields the same score.
     disagreements = {ident for ident in order
-                     if answer_sets[0][ident] != answer_sets[1][ident]}
-    require((not disagreements and len(exports) == 2)
-            or (disagreements and len(exports) == 3
-                and set(answer_sets[2]) == disagreements),
+                     if any(answer_sets[0][ident][k] != answer_sets[1][ident][k]
+                            for k in ("raw_transcript", "raw_middle", "clear"))}
+    require(not disagreements or len(exports) == 3,
             "third review coverage differs from disagreements")
     failures = []
     for ident in order:
         case = by_id[ident]
-        accepted = sum(answer.get(ident) == {
-            "tokens": reference_tokens(case.word),
-            "middle": [case.word], "clear": True,
-        } for answer in answer_sets)
+        accepted = sum(answer[ident]["tokens"] == reference_tokens(case.word)
+                       and answer[ident]["middle"] == [case.word]
+                       and answer[ident]["clear"]
+                       for answer in answer_sets)
         if accepted < 2:
             failures.append(ident)
     return {"quality_confirmed": 32 - len(failures),
@@ -282,6 +280,9 @@ def qa_gate(cases: list[Case]) -> dict[str, Any]:
     listed = receipt.get("review_exports")
     require(isinstance(listed, list) and len(listed) in (2, 3),
             "human review export inventory incomplete")
+    stages = ("primary", "secondary", "tertiary")[:len(listed)]
+    require([item.get("stage") for item in listed] == list(stages),
+            "human review export stages/order differ")
     for item in listed:
         relative = item.get("path")
         require(isinstance(relative, str), "human review export path absent")
@@ -294,6 +295,9 @@ def qa_gate(cases: list[Case]) -> dict[str, Any]:
     result = evaluate_human_reviews(exports, cases, queue)
     require(result["quality_confirmed"] == 32
             and receipt.get("reviewer_ids") == result["reviewer_ids"]
+            and human_audit.get("reviewer_ids") ==
+            dict(zip(stages, result["reviewer_ids"]))
+            and human_audit.get("raw_exports") == dict(zip(stages, exports))
             and receipt.get("clip_sha256_by_id") ==
             {c.opaque_id: c.wav_sha256 for c in cases},
             "32/32 blinded human judgments not established")
@@ -308,8 +312,8 @@ def qa_gate(cases: list[Case]) -> dict[str, Any]:
             and human_audit.get("auditor_source_sha256") == audit_item.get("sha256")
             and PRIVATE_CASE_MAP.is_file()
             and human_audit.get("private_case_map_sha256") == sha(PRIVATE_CASE_MAP)
-            and sorted(human_audit.get("review_export_sha256", {}).values()) ==
-            sorted(item["sha256"] for item in listed),
+            and human_audit.get("review_export_sha256") ==
+            dict(zip(stages, (item["sha256"] for item in listed))),
             "QA auditor source changed")
     review = QA_REVIEW.read_text()
     receipt_commit = committed_clean(QA_RECEIPT)
