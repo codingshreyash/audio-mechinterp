@@ -1,0 +1,24 @@
+{
+  "auditor_sha256": "c62c54cb1ea117353befd63407865bd638c40056450d2147a6e96ca69695609d",
+  "auditor_source_review": {
+    "path": "models/second_architecture/WAV2VEC2_FIT_CAUSAL_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md",
+    "sha256": "e7ad01f0c64f7696fb051e63dd66fa6c0b2bc072b2fe9d1df3b8d3b78f4512b1"
+  },
+  "expected_patch_rows": 224,
+  "plan_review": {
+    "path": "models/second_architecture/WAV2VEC2_FIT_CAUSAL_PATCH_PLAN_V2_INDEPENDENT_REVIEW_V1.md",
+    "sha256": "10b5fdbbaedcc84116d98072d86a082d48f7d9dc16905bb1b0211e6461135e15"
+  },
+  "plan_v1_sha256": "23a4303d03cf9c6483985555ac2abc1e6768059bb024527dbc3dfa7d170c5dcd",
+  "plan_v2_sha256": "d936f8728ae89715982bcf9c9dc06e7efc6a876a6ace894306af4e84aa21c977",
+  "preflight_sha256": "937402845fd5d3fed464d54bd6d374b5edd17456b9446eb36524c0f55efcbb03",
+  "primary_eligible_directions_per_site": 4,
+  "runner_sha256": "f3970acf4749db1442b865d2d6fb37fbf5b295054454bb72dbbf70cef67f68d0",
+  "runner_source_review": {
+    "path": "models/second_architecture/WAV2VEC2_FIT_CAUSAL_RUNNER_INDEPENDENT_SOURCE_REVIEW_V1.md",
+    "sha256": "a048a6bb31fa5cc672f039bdbfdc5c89a955e7be7989ebb9333140b6d4f8e767"
+  },
+  "schema": "wav2vec2_fit_causal_freeze_v1",
+  "scope": "FIT-only CPU Wav2Vec2 internal activation patches; no security claim",
+  "status": "independently_reviewed_causal_patch_frozen"
+}
