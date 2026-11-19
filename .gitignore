@@ -29,6 +29,8 @@ models/second_architecture/runs/wav2vec2_fit_baseline_stage_capture_v1/*/capture
 models/second_architecture/runs/wav2vec2_fit_baseline_stage_capture_v1/*/traces/*.npy
 # Large, locally retained Wav2Vec2 causal tensors are bound by the run receipts.
 models/second_architecture/runs/wav2vec2_fit_causal_patch_v1/*/captures/*.npy
+# Large, locally retained Wav2Vec2 complement tensors are bound by run receipts.
+models/second_architecture/runs/wav2vec2_fit_complement_patch_v1/*/captures/*.npy
 
 # Cloned upstream repositories are pinned in reproduction manifests
 reproductions/anthropic_jlens/jacobian-lens/
