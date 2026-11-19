@@ -1,0 +1,26 @@
+[transformers] Model config: tts_text_start_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151860. This may result in unexpected behavior.
+[transformers] Model config: tts_text_end_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151861. This may result in unexpected behavior.
+[transformers] Model config: tts_text_pad_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151859. This may result in unexpected behavior.
+[transformers] Model config: vision_start_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151652. This may result in unexpected behavior.
+[transformers] Model config: vision_end_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151653. This may result in unexpected behavior.
+[transformers] Model config: audio_start_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151647. This may result in unexpected behavior.
+[transformers] Model config: audio_end_token_id must be `None` or an integer within the vocabulary (between 0 and 8447), got 151648. This may result in unexpected behavior.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/ubuntu/audio-mechinterp/models/second_architecture/qwen_action_method_v1/typed_pilot_cuda_backend_v2.py", line 638, in <module>
+    main()
+  File "/home/ubuntu/audio-mechinterp/models/second_architecture/qwen_action_method_v1/typed_pilot_cuda_backend_v2.py", line 634, in main
+    run_worker(args.attempt, args.stage)
+  File "/home/ubuntu/audio-mechinterp/models/second_architecture/qwen_action_method_v1/typed_pilot_cuda_backend_v2.py", line 568, in run_worker
+    processor = Qwen2_5OmniProcessor.from_pretrained(str(snapshot), local_files_only=True)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/qwen-py312/lib/python3.12/site-packages/transformers/processing_utils.py", line 1855, in from_pretrained
+    args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, processor_dict, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/qwen-py312/lib/python3.12/site-packages/transformers/processing_utils.py", line 1995, in _get_arguments_from_pretrained
+    sub_processor = auto_processor_class.from_pretrained(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/qwen-py312/lib/python3.12/site-packages/transformers/models/auto/image_processing_auto.py", line 720, in from_pretrained
+    raise ValueError(_format_unavailable_image_processor_error(pretrained_model_name_or_path, mapping))
+ValueError: Could not load any image processor class for /ephemeral/cache/huggingface/hub/models--Qwen--Qwen2.5-Omni-3B/snapshots/f75b40e3da2003cdd6e1829b1f420ca70797c34e. The model configuration resolves to the following image processor classes: pil: Qwen2VLImageProcessorPil, torchvision: Qwen2VLImageProcessor. None of these classes could be imported. Missing optional dependencies: torchvision, Pillow. Please install the missing dependencies or select a backend that is available in your environment.
