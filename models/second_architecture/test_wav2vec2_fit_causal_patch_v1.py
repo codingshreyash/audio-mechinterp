@@ -121,6 +121,13 @@ class CausalNoWeightTests(unittest.TestCase):
                                                      ["choose", "cup", "tomorrow"]))
         self.assertFalse(auditor.independent_target_only(recipient, donor,
                                                           ["choose", "cub", "today"]))
+        with self.assertRaisesRegex(ValueError, "target-word outcome"):
+            auditor.verify_target_receipt(
+                {"primary_eligible": True, "target_only_transfer": True},
+                recipient, donor, ["choose", "cub", "today"])
+        self.assertTrue(auditor.verify_target_receipt(
+            {"primary_eligible": True, "target_only_transfer": False},
+            recipient, donor, ["choose", "cub", "today"]))
 
     def test_saved_data_reader_rejects_partial_and_duplicate(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

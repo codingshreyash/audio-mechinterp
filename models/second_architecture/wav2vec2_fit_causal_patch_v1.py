@@ -100,7 +100,7 @@ def read_baseline() -> tuple[dict[tuple[str, str], dict[str, Any]], dict[str, st
         key = (row["mode"], row["case_key"])
         require(key not in index, "duplicate baseline row")
         index[key] = row
-        for stage in (*SITES, "logits"):
+        for stage in ("input_values", *SITES, "logits"):
             relative = f"captures/{row['mode']}_{row['case_key']}_{stage}.npy"
             path = BASELINE_DIR / relative
             require(path.is_file() and not path.is_symlink()
@@ -393,6 +393,7 @@ def execute(expected_preflight: Path, freeze: Path, output: Path) -> None:
                             "freeze_sha256": freeze_sha})
     start = time.monotonic()
     in_progress: dict[str, Any] | None = None
+    control_failures: list[dict[str, Any]] = []
     try:
         check_budget(start, output, before_forward=True)
         torch.set_num_threads(4)
@@ -495,13 +496,16 @@ def execute(expected_preflight: Path, freeze: Path, output: Path) -> None:
                         "rss_bytes": current_rss_bytes(),
                     })
                     if control_pass is False:
-                        raise RuntimeError(f"saved {arm} control failed at direction {d}/{site}")
+                        control_failures.append({"direction_index": d,
+                                                 "site": site, "arm": arm})
                     in_progress = None
                     check_budget(start, output)
         append_record(records, {"type": "complete", "schema": SCHEMA,
                                 "patch_rows": 224, "elapsed_seconds": time.monotonic() - start,
                                 "rss_bytes": current_rss_bytes(),
                                 "output_bytes": output_bytes(output),
+                                "control_gate_pass": not control_failures,
+                                "control_failures": control_failures,
                                 "load_info": {
                                     "missing_keys": sorted(loading_info["missing_keys"]),
                                     "unexpected_keys": sorted(loading_info["unexpected_keys"]),

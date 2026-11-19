@@ -116,6 +116,16 @@ def independent_target_only(recipient: dict[str, Any], donor: dict[str, Any],
     return modified == dwords == actual
 
 
+def verify_target_receipt(row: dict[str, Any], recipient: dict[str, Any],
+                          donor: dict[str, Any], actual_words: list[str]) -> bool:
+    eligible = independent_target_only(recipient, donor, donor["normalized_words"])
+    target = independent_target_only(recipient, donor, actual_words)
+    require(row.get("primary_eligible") is eligible
+            and row.get("target_only_transfer") is target,
+            "target-word outcome/eligibility differs")
+    return eligible
+
+
 def audit(output: Path, expected_preflight: Path, freeze: Path) -> dict[str, Any]:
     from transformers import Wav2Vec2Processor
 
@@ -148,6 +158,7 @@ def audit(output: Path, expected_preflight: Path, freeze: Path) -> dict[str, Any
     require(actual_keys == expected_keys, "patch row order/coverage differs")
     counts: Counter[tuple[str, str, str]] = Counter()
     expected_files = {"records.jsonl"}
+    control_failures: list[dict[str, Any]] = []
     for row in rows[1:-1]:
         require(row.get("type") == "patch" and row.get("schema") == runner.SCHEMA,
                 "non-patch matrix row")
@@ -210,11 +221,8 @@ def audit(output: Path, expected_preflight: Path, freeze: Path) -> dict[str, Any
         require(row.get("argmax_ids") == ids and row.get("transcript") == transcript
                 and row.get("normalized_words") == words,
                 "complete CTC decode differs")
-        eligible = independent_target_only(recipient, donor, donor["normalized_words"])
+        eligible = verify_target_receipt(row, recipient, donor, words)
         target = independent_target_only(recipient, donor, words)
-        require(row.get("primary_eligible") is eligible
-                and row.get("target_only_transfer") is target,
-                "target-word outcome/eligibility differs")
         changed = int(np.count_nonzero(np.any(logits[0] != rlogits[0], axis=-1)))
         rdist = float(np.linalg.norm(logits.astype(np.float64)
                                      - rlogits.astype(np.float64)))
@@ -231,9 +239,10 @@ def audit(output: Path, expected_preflight: Path, freeze: Path) -> dict[str, Any
             control_pass = np.array_equal(logits, rlogits) and ids == recipient["argmax_ids"]
         elif arm == "full_donor":
             control_pass = np.array_equal(logits, dlogits) and ids == donor["argmax_ids"]
-        require(row.get("control_pass") is control_pass
-                and control_pass is not False,
-                "self/full-donor control failed or was misreported")
+        require(row.get("control_pass") is control_pass,
+                "self/full-donor control outcome was misreported")
+        if control_pass is False:
+            control_failures.append({"direction_index": d, "site": site, "arm": arm})
         require(row.get("hook_count") == 1
                 and type(row.get("rss_bytes")) is int
                 and 0 < row["rss_bytes"] <= runner.MAX_RSS_BYTES
@@ -245,6 +254,9 @@ def audit(output: Path, expected_preflight: Path, freeze: Path) -> dict[str, Any
                  for path in output.rglob("*") if path.is_file()}
     require(set(inventory) == expected_files, "sidecar inventory differs")
     complete = rows[-1]
+    require(complete.get("control_gate_pass") is (not control_failures)
+            and complete.get("control_failures") == control_failures,
+            "completion control gate differs")
     load = complete.get("load_info", {})
     require(load.get("missing_keys") == ["wav2vec2.masked_spec_embed"]
             and load.get("unexpected_keys") == []
@@ -260,11 +272,14 @@ def audit(output: Path, expected_preflight: Path, freeze: Path) -> dict[str, Any
             and complete["output_bytes"] == sum(inventory.values()) - last_line_bytes
             and sum(inventory.values()) <= runner.MAX_OUTPUT_BYTES,
             "output byte receipt/cap differs")
-    return {"status": "independent_saved_data_audit_pass",
+    return {"status": ("independent_saved_data_audit_pass" if not control_failures
+                        else "saved_data_verified_controls_hold"),
             "records_sha256": sha(output / "records.jsonl"),
             "preflight_sha256": sha(expected_preflight),
             "freeze_sha256": freeze_sha,
             "patch_rows": 224,
+            "control_gate_pass": not control_failures,
+            "control_failures": control_failures,
             "primary_directions": sum(
                 bool(item["primary_target_word_eligible"])
                 for item in receipt["eligibility"].values()),
