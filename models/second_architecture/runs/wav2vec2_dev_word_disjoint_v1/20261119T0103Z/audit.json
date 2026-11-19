@@ -1,0 +1,19 @@
+{
+  "arm_counts": {
+    "O": 96,
+    "W": 96,
+    "full": 96,
+    "random_O": 96,
+    "random_W": 96,
+    "self": 96
+  },
+  "byte_ledger_bound": 259676160,
+  "clean_rows": 96,
+  "control_failures": [],
+  "mechanism_gate_pass": true,
+  "output_bytes": 149862467,
+  "patch_rows": 576,
+  "records_sha256": "66496f541c8a0c2f8bee1b96b58cdc50721cc415020071b5b517ed702f3df8e1",
+  "schema": "wav2vec2_dev_word_disjoint_v1_audit",
+  "status": "independent_saved_data_audit_pass"
+}
