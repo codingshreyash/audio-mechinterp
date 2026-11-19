@@ -45,7 +45,8 @@ MAX_VRAM_MIB = 75_000
 MAX_EVIDENCE_BYTES = 1 << 30
 MIN_EVIDENCE_BYTES = 65_536
 TERMINAL_RESERVE_BYTES = 16_384
-MAX_FREEZE_BYTES = 65_536
+MAX_SMALL_JSON_BYTES = 65_536
+MAX_EXECUTABLE_FREEZE_BYTES = 262_144
 RUNNER_PACKAGE_PINS = {"numpy": "1.26.4", "pyarrow": "25.0.1", "datasets": "5.0.1"}
 MAMBA_DEPENDENCY_SPECS = {"tilelang": "==0.1.8", "apache-tvm-ffi": "<=0.1.9",
                           "quack-kernels": ">=0.3.4"}
@@ -288,7 +289,7 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
     require(seen_archives == expected_archives, "Conda package archives incomplete")
     require({item.name for item in archive_dir.iterdir()} == seen_archives,
             "Conda package archive directory has unexpected files")
-    manifest_sha, manifest_size = hash_file(manifest_path, cap=MAX_FREEZE_BYTES)
+    manifest_sha, manifest_size = hash_file(manifest_path, cap=MAX_SMALL_JSON_BYTES)
     return {"kind": "conda_explicit", "manifest_path": str(manifest_path),
             "manifest_sha256": manifest_sha, "manifest_bytes": manifest_size,
             "explicit_spec": {"path": str(spec_path), "sha256": digest,
@@ -451,7 +452,7 @@ def hash_file(path: Path, *, cap: int | None = None) -> tuple[str, int]:
     return digest.hexdigest(), before
 
 
-def _read_json(path: Path, cap: int = MAX_FREEZE_BYTES) -> tuple[dict[str, Any], bytes]:
+def _read_json(path: Path, cap: int = MAX_SMALL_JSON_BYTES) -> tuple[dict[str, Any], bytes]:
     digest, size = hash_file(path, cap=cap)
     with path.open("rb") as stream:
         data = stream.read(cap + 1)
@@ -542,7 +543,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
 def validate_freeze(freeze_path: Path, review_path: Path,
                     expected: dict[str, Any], key: bytes) -> tuple[dict[str, Any], dict[str, Any], str]:
     require(len(key) >= 32, "External freeze-review key missing or short")
-    freeze, raw = _read_json(freeze_path)
+    freeze, raw = _read_json(freeze_path, cap=MAX_EXECUTABLE_FREEZE_BYTES)
     require(set(freeze) == {"schema", "status", "run_id", "expected", "caps", "source_review"}
             and freeze["schema"] == "voicechat_public_sample_smoke_freeze_v1"
             and freeze["status"] == "externally_frozen_sample_only"
@@ -562,9 +563,10 @@ def validate_freeze(freeze_path: Path, review_path: Path,
             "Independent source review absent")
     source_review_path = Path(source_review["path"])
     require(source_review_path.is_absolute()
-            and hash_file(source_review_path, cap=MAX_FREEZE_BYTES)[0] == source_review["sha256"],
+            and hash_file(source_review_path, cap=MAX_EXECUTABLE_FREEZE_BYTES)[0] == source_review["sha256"],
             "Independent source review changed")
-    source_review_record, _ = _read_json(source_review_path)
+    source_review_record, _ = _read_json(source_review_path,
+                                         cap=MAX_EXECUTABLE_FREEZE_BYTES)
     require(set(source_review_record) == {"schema", "decision", "source_sha256",
                                           "reviewer_id", "reviewed_utc"}
             and source_review_record["schema"] == "voicechat_public_sample_source_review_v1"

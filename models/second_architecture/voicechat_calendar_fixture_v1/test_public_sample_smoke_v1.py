@@ -343,6 +343,29 @@ class SampleSmokeTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
         self.assertTrue((self.out / "failure.json").is_file())
 
+    def test_large_v4_freeze_round_trip_and_above_cap_reject(self):
+        receipt = self.native_receipt_mock.return_value
+        receipt["synthetic_large_library_inventory"] = ""
+        self.freeze(cap=1 << 20)
+        target_size = 142_562
+        padding = target_size - self.freeze_path.stat().st_size
+        self.assertGreater(padding, 0)
+        receipt["synthetic_large_library_inventory"] = "x" * padding
+        self.freeze(cap=1 << 20)
+        self.assertEqual(self.freeze_path.stat().st_size, target_size)
+        self.run_fake()
+        self.assertEqual(len(self.calls), 1)
+
+        self.out = self.root / "run0002"
+        receipt["synthetic_large_library_inventory"] = "x" * (
+            smoke.MAX_EXECUTABLE_FREEZE_BYTES + 1)
+        self.freeze(cap=1 << 20)
+        self.assertGreater(self.freeze_path.stat().st_size,
+                           smoke.MAX_EXECUTABLE_FREEZE_BYTES)
+        with self.assertRaisesRegex(ValueError, "File exceeds cap"):
+            self.run_fake()
+        self.assertFalse(self.out.exists())
+
     def test_native_ffmpeg_drift_rejected_before_output_and_after_preload(self):
         self.freeze()
         original = copy.deepcopy(self.native_receipt_mock.return_value)
