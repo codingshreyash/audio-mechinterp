@@ -130,6 +130,13 @@ class SampleSmokeTests(unittest.TestCase):
         self.assertIn("official_outputs/sample_fc.txt", result["artifact_sha256"])
         self.assertTrue((self.out / "scope.json").is_file())
         self.assertTrue((self.out / "result.json").is_file())
+        final_manifest = json.loads((self.out / "final_manifest.json").read_text())
+        result_row = next(row for row in final_manifest["entries"]
+                          if row["path"] == "result.json")
+        self.assertEqual(result_row["retained_sha256"],
+                         smoke.hash_file(self.out / "result.json")[0])
+        self.assertEqual((self.out / "final_manifest.sha256").read_bytes(),
+                         smoke._root_digest((self.out / "final_manifest.json").read_bytes()))
 
     def test_missing_review_and_bad_mac_reject_before_attempt(self):
         self.freeze()
@@ -163,10 +170,10 @@ class SampleSmokeTests(unittest.TestCase):
         with self.assertRaises(FileExistsError): self.run_fake()
 
     def test_output_cap_and_missing_artifact_fail_closed(self):
-        self.freeze(cap=8192)
+        self.freeze(cap=65536)
         def oversized(command, output_dir, caps, environment):
             (output_dir / "official_outputs").mkdir()
-            (output_dir / "official_outputs" / "large.bin").write_bytes(b"x" * 9000)
+            (output_dir / "official_outputs" / "large.bin").write_bytes(b"x" * 70000)
             return {"returncode": 0, "process_id": 100,
                     "elapsed_monotonic_seconds": .1, "peak_vram_mib": 10,
                     "cap_reason": None, "logs_complete": True}
@@ -174,6 +181,19 @@ class SampleSmokeTests(unittest.TestCase):
             self.run_fake(executor=oversized)
         self.assertTrue(self.out.is_dir())
         self.assertFalse((self.out / "result.json").exists())
+        self.assertTrue((self.out / "failure.json").is_file())
+        self.assertTrue((self.out / "final_manifest.json").is_file())
+        self.assertEqual(smoke._root_digest((self.out / "final_manifest.json").read_bytes()),
+                         (self.out / "final_manifest.sha256").read_bytes())
+        manifest = json.loads((self.out / "final_manifest.json").read_text())
+        large = next(row for row in manifest["entries"]
+                     if row["path"] == "official_outputs/large.bin")
+        self.assertEqual(large["original_bytes"], 70000)
+        self.assertEqual(large["original_sha256"], hashlib.sha256(b"x" * 70000).hexdigest())
+        self.assertTrue(large["truncated"])
+        self.assertEqual(large["retained_sha256"],
+                         smoke.hash_file(self.out / large["path"])[0])
+        self.assertLessEqual(smoke.evidence_bytes(self.out, 65536), 65536)
 
     def test_missing_transport_artifact_fails_closed(self):
         self.freeze()
@@ -186,6 +206,46 @@ class SampleSmokeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "no transport artifact"):
             self.run_fake(executor=no_output)
         self.assertTrue((self.out / "failure.json").is_file())
+
+    def test_two_artifact_aggregate_overrun_is_sealed_with_partial_hashes(self):
+        self.freeze(cap=65536)
+        def two_outputs(command, output_dir, caps, environment):
+            folder = output_dir / "official_outputs"
+            folder.mkdir()
+            (folder / "one.bin").write_bytes(b"a" * 40000)
+            (folder / "two.bin").write_bytes(b"b" * 40000)
+            (output_dir / "stdout.log").write_text("synthetic")
+            (output_dir / "stderr.log").write_text("")
+            return {"returncode": 0, "process_id": 100,
+                    "elapsed_monotonic_seconds": .1, "peak_vram_mib": 10,
+                    "cap_reason": None, "logs_complete": True}
+        with self.assertRaisesRegex(ValueError, "cap exceeded"):
+            self.run_fake(executor=two_outputs)
+        failure = json.loads((self.out / "failure.json").read_text())
+        self.assertGreater(failure["observed_bytes_before_preservation"], 65536)
+        self.assertTrue(failure["partial_preservation"])
+        manifest = json.loads((self.out / "final_manifest.json").read_text())
+        rows = {row["path"]: row for row in manifest["entries"]}
+        self.assertEqual(rows["official_outputs/one.bin"]["original_sha256"],
+                         hashlib.sha256(b"a" * 40000).hexdigest())
+        self.assertEqual(rows["official_outputs/two.bin"]["original_sha256"],
+                         hashlib.sha256(b"b" * 40000).hexdigest())
+        self.assertTrue(any(rows[name]["truncated"] for name in
+                            ("official_outputs/one.bin", "official_outputs/two.bin")))
+        self.assertLessEqual(smoke.evidence_bytes(self.out, 65536), 65536)
+
+    def test_review_key_does_not_enter_official_child_environment(self):
+        os.environ["VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX"] = self.key.hex()
+        os.environ["VOICECHAT_CONTROLLER_KEY_HEX"] = "c" * 64
+        self.addCleanup(os.environ.pop, "VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX", None)
+        self.addCleanup(os.environ.pop, "VOICECHAT_CONTROLLER_KEY_HEX", None)
+        self.freeze()
+        def inspect_env(command, output_dir, caps, environment):
+            self.assertNotIn("VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX", environment)
+            self.assertNotIn("VOICECHAT_CONTROLLER_KEY_HEX", environment)
+            self.assertNotIn("VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX", os.environ)
+            return self.fake_executor(command, output_dir, caps, environment)
+        self.run_fake(executor=inspect_env)
 
     def test_sample_and_nano_ref_exact_bytes(self):
         # Override only these two functions; check the real byte validators.
@@ -225,6 +285,25 @@ class SampleSmokeTests(unittest.TestCase):
         link.symlink_to(self.root / "freeze.json")
         with self.assertRaisesRegex(ValueError, "link rejected"):
             smoke.evidence_inventory(self.out, 65536)
+
+    def test_worker_symlink_failure_keeps_hashed_partial_manifest(self):
+        self.freeze()
+        def linked_output(command, output_dir, caps, environment):
+            folder = output_dir / "official_outputs"
+            folder.mkdir()
+            (folder / "sample_fc.txt").write_text("partial")
+            (folder / "link").symlink_to(self.freeze_path)
+            (output_dir / "stdout.log").write_text("partial log")
+            (output_dir / "stderr.log").write_text("")
+            return {"returncode": 0, "process_id": 100,
+                    "elapsed_monotonic_seconds": .1, "peak_vram_mib": 10,
+                    "cap_reason": None, "logs_complete": True}
+        with self.assertRaisesRegex(ValueError, "link rejected"):
+            self.run_fake(executor=linked_output)
+        manifest = json.loads((self.out / "final_manifest.json").read_text())
+        self.assertEqual(manifest["removed_nonfiles"][0]["kind"], "symlink_removed")
+        self.assertIn("failure.json", {row["path"] for row in manifest["entries"]})
+        self.assertLessEqual(smoke.evidence_bytes(self.out, 65536), 65536)
 
     def test_real_supervisor_loop_with_fake_subprocess_drains_logs(self):
         self.out.mkdir()
@@ -282,6 +361,50 @@ class SampleSmokeTests(unittest.TestCase):
         self.assertFalse(result["logs_complete"])
         killed.assert_called_once()
         self.assertLessEqual(smoke.evidence_bytes(self.out, 4096), 4096)
+
+    def test_abnormal_telemetry_kills_fake_process_and_seals_failure(self):
+        self.freeze()
+        def telemetry_failure(command, output_dir, caps, environment):
+            (output_dir / "process_start.json").write_text('{"process_id":123}')
+            (output_dir / "stdout.log").write_text("partial log")
+            (output_dir / "official_outputs").mkdir()
+            (output_dir / "official_outputs" / "sample_fc.txt").write_text("partial")
+            raise RuntimeError("synthetic telemetry unavailable")
+        with self.assertRaisesRegex(RuntimeError, "telemetry unavailable"):
+            self.run_fake(executor=telemetry_failure)
+        manifest = json.loads((self.out / "final_manifest.json").read_text())
+        names = {row["path"] for row in manifest["entries"]}
+        self.assertIn("process_start.json", names)
+        self.assertIn("stdout.log", names)
+        self.assertIn("official_outputs/sample_fc.txt", names)
+        self.assertIn("failure.json", names)
+
+    def test_supervisor_telemetry_exception_kills_fake_process(self):
+        self.out.mkdir()
+        class FakeProcess:
+            def __init__(self, command, **kwargs):
+                self.pid = 999_993
+                self.stdout = self._pipe()
+                self.stderr = self._pipe()
+            @staticmethod
+            def _pipe():
+                read, write = os.pipe()
+                os.close(write)
+                return os.fdopen(read, "rb", buffering=0)
+            def poll(self): return None
+            def wait(self, timeout=None): return 1
+        def broken_telemetry(pid):
+            raise RuntimeError("synthetic nvidia-smi failure")
+        caps = {"wall_seconds": 10, "vram_mib": 1000,
+                "total_evidence_bytes": 65536}
+        with patch.object(smoke.subprocess, "Popen", FakeProcess), \
+             patch.object(smoke, "_kill_tree") as killed:
+            with self.assertRaisesRegex(RuntimeError, "nvidia-smi failure"):
+                smoke.execute_official(["fake"], self.out, caps, {},
+                                       telemetry=broken_telemetry)
+        killed.assert_called_once()
+        self.assertEqual(json.loads((self.out / "process_start.json").read_text())
+                         ["process_id"], 999_993)
 
 
 if __name__ == "__main__":

@@ -39,7 +39,19 @@ AMENDMENT_SHA256 = "9e4fe95f0f3828c8bedfb6d36705a5824feffcb34854371ba6450e0ddb9b
 MAX_WALL_SECONDS = 1_800
 MAX_VRAM_MIB = 75_000
 MAX_EVIDENCE_BYTES = 1 << 30
+MIN_EVIDENCE_BYTES = 65_536
+TERMINAL_RESERVE_BYTES = 16_384
 MAX_FREEZE_BYTES = 65_536
+CHILD_ENV_KEYS = (
+    "PATH", "HOME", "LANG", "LC_ALL", "LC_CTYPE", "TZ", "TMPDIR",
+    "VIRTUAL_ENV", "LD_LIBRARY_PATH", "PYTHONPATH", "PYTHONHASHSEED",
+    "HF_HOME", "HF_HUB_CACHE", "HF_MODULES_CACHE", "HF_HUB_OFFLINE",
+    "TRANSFORMERS_OFFLINE", "HF_HUB_DISABLE_TELEMETRY",
+    "PYTHONDONTWRITEBYTECODE", "CUDA_VISIBLE_DEVICES", "CUDA_DEVICE_ORDER",
+    "CUDA_LAUNCH_BLOCKING", "CUBLAS_WORKSPACE_CONFIG", "TORCH_DETERMINISTIC",
+    "OMP_NUM_THREADS", "MKL_NUM_THREADS", "NVIDIA_VISIBLE_DEVICES",
+    "NVIDIA_DRIVER_CAPABILITIES",
+)
 SOURCE_FILES = {
     "runner": HERE / "public_sample_smoke_v1.py",
     "tests": HERE / "test_public_sample_smoke_v1.py",
@@ -66,6 +78,15 @@ def sha(data: bytes) -> str:
 
 def utc() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def child_environment() -> dict[str, str]:
+    """Freeze and pass only variables needed by the pinned offline example."""
+    result = {key: os.environ[key] for key in CHILD_ENV_KEYS if key in os.environ}
+    require("VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX" not in result
+            and "VOICECHAT_CONTROLLER_KEY_HEX" not in result,
+            "Review/controller key reached child environment")
+    return result
 
 
 def _utc_record(value: Any) -> bool:
@@ -173,13 +194,8 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
             "nano_ref_sha256": sha((pinned.NANO_COMMIT + "\n").encode("ascii")),
             "pinned_packages": pinned.PINNED_PACKAGES,
         },
-        "environment": {
-            key: os.environ.get(key) for key in (
-                "HF_HOME", "HF_HUB_CACHE", "HF_MODULES_CACHE", "HF_HUB_OFFLINE",
-                "TRANSFORMERS_OFFLINE", "PYTHONDONTWRITEBYTECODE", "PYTHONPATH",
-                "CUBLAS_WORKSPACE_CONFIG", "CUDA_LAUNCH_BLOCKING",
-                "TORCH_DETERMINISTIC", "PYTHONHASHSEED")},
-        "full_environment_sha256": sha(canonical(dict(os.environ))),
+        "child_environment": child_environment(),
+        "child_environment_sha256": sha(canonical(child_environment())),
     }
 
 
@@ -199,7 +215,7 @@ def validate_freeze(freeze_path: Path, review_path: Path,
             and all(type(value) is int and value > 0 for value in caps.values())
             and caps["wall_seconds"] <= MAX_WALL_SECONDS
             and caps["vram_mib"] <= MAX_VRAM_MIB
-            and 4096 <= caps["total_evidence_bytes"] <= MAX_EVIDENCE_BYTES,
+            and MIN_EVIDENCE_BYTES <= caps["total_evidence_bytes"] <= MAX_EVIDENCE_BYTES,
             "Sample-only caps invalid or relaxed")
     source_review = freeze["source_review"]
     require(type(source_review) is dict and set(source_review) == {"path", "sha256"},
@@ -305,11 +321,135 @@ def evidence_bytes(root: Path, cap: int) -> int:
     return total
 
 
+def terminal_reserve(cap: int) -> int:
+    return min(1 << 20, max(1024, cap // 4))
+
+
 def _write_evidence(root: Path, name: str, data: bytes, cap: int) -> None:
     _, used = evidence_inventory(root, cap)
     require(used + len(data) <= cap, "Sample evidence cap exceeded before write")
     with (root / name).open("xb") as stream:
         stream.write(data)
+
+
+def _root_digest(data: bytes) -> bytes:
+    return f"{sha(data)}  final_manifest.json\n".encode("ascii")
+
+
+def _final_manifest(status: str, entries: list[dict[str, Any]],
+                    observed_bytes: int,
+                    removed_nonfiles: list[dict[str, str]] | None = None) -> bytes:
+    return canonical({"schema": "voicechat_public_sample_final_inventory_v1",
+                      "status": status, "observed_bytes_before_seal": observed_bytes,
+                      "entries": entries,
+                      "removed_nonfiles": removed_nonfiles or [],
+                      "self_reference_boundary": "final_manifest.sha256 hashes this manifest; it cannot hash itself"})
+
+
+def _file_entries(root: Path, original: dict[str, dict[str, Any]] | None = None,
+                  target: int | None = None) -> tuple[list[dict[str, Any]], int,
+                                                      dict[str, dict[str, Any]],
+                                                      list[dict[str, str]]]:
+    """Snapshot original bytes, then retain bounded prefixes after a failure."""
+    removed_nonfiles: list[dict[str, str]] = []
+    for path in sorted(root.rglob("*")):
+        if path.is_symlink():
+            removed_nonfiles.append({"path": str(path.relative_to(root)),
+                                     "kind": "symlink_removed",
+                                     "target_sha256": sha(os.readlink(path).encode())})
+            path.unlink()
+        elif not path.is_file() and not path.is_dir():
+            removed_nonfiles.append({"path": str(path.relative_to(root)),
+                                     "kind": "special_file_removed"})
+            path.unlink()
+    paths = sorted(path for path in root.rglob("*") if path.is_file())
+    require(len(paths) <= 512, "Too many sample artifacts to seal")
+    observed = sum(path.stat().st_size for path in paths)
+    records = {} if original is None else original
+    for path in paths:
+        name = str(path.relative_to(root))
+        if name not in records:
+            size = path.stat().st_size
+            digest = hash_file(path, cap=MAX_EVIDENCE_BYTES)[0] if size <= MAX_EVIDENCE_BYTES else None
+            records[name] = {"original_bytes": size, "original_sha256": digest,
+                             "original_hash_status": ("complete" if digest is not None
+                                                      else "omitted_over_1GiB_read_ceiling")}
+    if target is not None:
+        protected = {"scope.json", "admission.json", "process_start.json", "result.json"}
+        ordered = sorted(paths, key=lambda p: (str(p.relative_to(root)) not in protected,
+                                             str(p.relative_to(root))))
+        remaining = target
+        for path in ordered:
+            size = path.stat().st_size
+            name = str(path.relative_to(root))
+            keep = min(size, max(0, remaining))
+            require(name not in protected or keep == size,
+                    "Protected receipt consumed terminal reserve")
+            if keep != size:
+                with path.open("r+b") as stream:
+                    stream.truncate(keep)
+            remaining -= keep
+    entries = []
+    for path in paths:
+        name = str(path.relative_to(root))
+        digest, size = hash_file(path, cap=MAX_EVIDENCE_BYTES)
+        entries.append({"path": name, "original_bytes": records[name]["original_bytes"],
+                        "original_sha256": records[name]["original_sha256"],
+                        "original_hash_status": records[name]["original_hash_status"],
+                        "retained_bytes": size, "retained_sha256": digest,
+                        "truncated": size != records[name]["original_bytes"]})
+    return entries, observed, records, removed_nonfiles
+
+
+def _seal_success(root: Path, cap: int, result: dict[str, Any]) -> None:
+    """Write result plus terminal manifest/hash with a prospective size check."""
+    entries, observed, _, removed = _file_entries(root)
+    require(not removed, "Non-file appeared during success seal")
+    result_bytes = canonical(result)
+    entries.append({"path": "result.json", "original_bytes": len(result_bytes),
+                    "original_sha256": sha(result_bytes),
+                    "retained_bytes": len(result_bytes),
+                    "retained_sha256": sha(result_bytes), "truncated": False})
+    manifest = _final_manifest("environment_smoke_only", entries,
+                               observed + len(result_bytes))
+    digest_file = _root_digest(manifest)
+    require(observed + len(result_bytes) + len(manifest) + len(digest_file) <= cap,
+            "Terminal success evidence exceeds total cap")
+    _write_evidence(root, "result.json", result_bytes, cap)
+    _write_evidence(root, "final_manifest.json", manifest, cap)
+    _write_evidence(root, "final_manifest.sha256", digest_file, cap)
+
+
+def _seal_failure(root: Path, cap: int, failure: dict[str, Any]) -> None:
+    """Retain hashed prefixes and original-size/hash receipts within the cap."""
+    target = cap - terminal_reserve(cap)
+    for name in ("final_manifest.json", "final_manifest.sha256"):
+        path = root / name
+        if path.exists():
+            path.unlink()
+    entries, observed, original, removed = _file_entries(root, target=target)
+    failure["observed_bytes_before_preservation"] = observed
+    failure["partial_preservation"] = bool(removed) or any(row["truncated"] for row in entries)
+    for _ in range(3):
+        failure_bytes = canonical(failure)
+        manifest_entries = [*entries, {
+            "path": "failure.json", "original_bytes": len(failure_bytes),
+            "original_sha256": sha(failure_bytes), "retained_bytes": len(failure_bytes),
+            "retained_sha256": sha(failure_bytes), "truncated": False}]
+        manifest = _final_manifest("failed_or_incomplete_environment_smoke",
+                                   manifest_entries, observed, removed)
+        digest_file = _root_digest(manifest)
+        current = sum(row["retained_bytes"] for row in entries)
+        excess = current + len(failure_bytes) + len(manifest) + len(digest_file) - cap
+        if excess <= 0:
+            _write_evidence(root, "failure.json", failure_bytes, cap)
+            _write_evidence(root, "final_manifest.json", manifest, cap)
+            _write_evidence(root, "final_manifest.sha256", digest_file, cap)
+            return
+        entries, _, _, _ = _file_entries(root, original=original,
+                                        target=max(0, current - excess))
+        failure["partial_preservation"] = True
+    raise ValueError("Failure evidence cannot be sealed within total cap")
 
 
 def _process_tree(root_pid: int) -> set[int]:
@@ -379,13 +519,15 @@ def execute_official(command: list[str], output_dir: Path, cap: dict[str, int],
         process = subprocess.Popen(command, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, env=environment,
                                    start_new_session=True, cwd=str(output_dir),
-                                   preexec_fn=lambda: _limit_file_size(cap["total_evidence_bytes"]))
+                                   preexec_fn=lambda: _limit_file_size(
+                                       cap["total_evidence_bytes"] -
+                                       terminal_reserve(cap["total_evidence_bytes"])))
         assert process.stdout is not None and process.stderr is not None
         try:
             _write_evidence(output_dir, "process_start.json", canonical({
                 "process_id": process.pid, "started_utc": started_utc,
                 "command": command, "environment_sha256": sha(canonical(environment)),
-            }), cap["total_evidence_bytes"])
+            }), cap["total_evidence_bytes"] - terminal_reserve(cap["total_evidence_bytes"]))
             selector.register(process.stdout, selectors.EVENT_READ, stdout)
             selector.register(process.stderr, selectors.EVENT_READ, stderr)
             while selector.get_map() or process.poll() is None:
@@ -396,15 +538,16 @@ def execute_official(command: list[str], output_dir: Path, cap: dict[str, int],
                 if peak > cap["vram_mib"]:
                     reason = "gpu_memory_cap"
                     break
-                evidence_bytes(output_dir, cap["total_evidence_bytes"])
+                effective_cap = cap["total_evidence_bytes"] - terminal_reserve(cap["total_evidence_bytes"])
+                evidence_bytes(output_dir, effective_cap)
                 for key, _ in selector.select(timeout=0.2):
                     data = os.read(key.fileobj.fileno(), 65536)
                     if not data:
                         selector.unregister(key.fileobj)
                         key.fileobj.close()
                         continue
-                    used = evidence_bytes(output_dir, cap["total_evidence_bytes"])
-                    if used + len(data) > cap["total_evidence_bytes"]:
+                    used = evidence_bytes(output_dir, effective_cap)
+                    if used + len(data) > effective_cap:
                         reason = "log_evidence_cap"
                         break
                     key.data.write(data)
@@ -433,21 +576,25 @@ def run_sample(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
                checks: Any = pinned,
                executor: Callable[..., dict[str, Any]] = execute_official) -> dict[str, Any]:
     """One attempt; injected checks/executor are only used in no-model tests."""
+    # The HMAC credential is parent-only, including for the offline metadata
+    # resolver that shared preflight starts before model inference.
+    os.environ.pop("VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX", None)
+    os.environ.pop("VOICECHAT_CONTROLLER_KEY_HEX", None)
     expected = expected_freeze_fields(nemo_dir, checkpoint_dir, nano_home,
                                       output_dir, gpu_policy)
     freeze, _review, freeze_sha = validate_freeze(freeze_path, review_path,
                                                   expected, review_key)
     caps = dict(freeze["caps"])
     output_dir.mkdir(parents=True, exist_ok=False)
-    _write_evidence(output_dir, "scope.json", canonical({
-        "schema": "voicechat_public_sample_smoke_scope_v1", "status": "attempt_consumed",
-        "run_id": freeze["run_id"],
-        "freeze_sha256": freeze_sha, "review_sha256": hash_file(review_path)[0],
-        "started_utc": utc(), "command": expected["command"],
-        "environment": expected["environment"], "caps": caps,
-    }), caps["total_evidence_bytes"])
     run: dict[str, Any] | None = None
     try:
+        _write_evidence(output_dir, "scope.json", canonical({
+            "schema": "voicechat_public_sample_smoke_scope_v1", "status": "attempt_consumed",
+            "run_id": freeze["run_id"],
+            "freeze_sha256": freeze_sha, "review_sha256": hash_file(review_path)[0],
+            "started_utc": utc(), "command": expected["command"],
+            "child_environment": expected["child_environment"], "caps": caps,
+        }), caps["total_evidence_bytes"] - terminal_reserve(caps["total_evidence_bytes"]))
         admission = sample_ready_preload(nemo_dir, checkpoint_dir, nano_home,
                                          gpu_policy, checks)
         require(expected_freeze_fields(nemo_dir, checkpoint_dir, nano_home,
@@ -458,12 +605,15 @@ def run_sample(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
                 admission["receipts"][1]["nano_ref_sha256"],
                 "Pinned sample or Nano ref changed before process start")
         _write_evidence(output_dir, "admission.json", canonical(admission),
-                        caps["total_evidence_bytes"])
+                        caps["total_evidence_bytes"] - terminal_reserve(caps["total_evidence_bytes"]))
         command = fixed_command(nemo_dir, checkpoint_dir, output_dir)
         require(command == expected["command"], "Official sample command changed")
-        environment = os.environ.copy()
+        environment = child_environment()
+        require(environment == expected["child_environment"],
+                "Frozen child environment changed before process start")
         run = executor(command, output_dir, caps, environment)
-        files, total = evidence_inventory(output_dir, caps["total_evidence_bytes"])
+        files, total = evidence_inventory(
+            output_dir, caps["total_evidence_bytes"] - terminal_reserve(caps["total_evidence_bytes"]))
         require(run.get("returncode") == 0 and run.get("cap_reason") is None
                 and run.get("logs_complete") is True,
                 "Official sample process failed or exceeded a cap")
@@ -478,18 +628,14 @@ def run_sample(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
                   "returncode": 0, "run": run, "artifact_sha256": files,
                   "total_evidence_bytes_before_result": total,
                   "finished_utc": utc(), "no_calendar_or_parity_claim": True}
-        _write_evidence(output_dir, "result.json", canonical(result),
-                        caps["total_evidence_bytes"])
+        _seal_success(output_dir, caps["total_evidence_bytes"], result)
         return result
     except BaseException as error:
         failure = {"status": "failed_or_incomplete_environment_smoke",
                    "freeze_sha256": freeze_sha, "error_type": type(error).__name__,
-                   "error": str(error), "finished_utc": utc(), "run": run}
-        try:
-            _write_evidence(output_dir, "failure.json", canonical(failure),
-                            caps["total_evidence_bytes"])
-        except (ValueError, FileExistsError):
-            pass
+                   "error": str(error)[:512], "error_truncated": len(str(error)) > 512,
+                   "finished_utc": utc(), "run": run}
+        _seal_failure(output_dir, caps["total_evidence_bytes"], failure)
         raise
 
 
