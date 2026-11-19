@@ -1,0 +1,14 @@
+# Independent claim review: phase-separated non-speech case study
+
+19 November 2026. **GO for the bounded case-study summary in `NONSPEECH_PHASE_CAUSAL_CASE_STUDY_V1.md`; HOLD for a localized padding mechanism or security finding.** This is a read-only cross-check of the committed summary against the three independent saved-result reviews, `attempt_002_independent_summary.json`, the pinned installed Whisper source, and the prior-art memo. I made no model calls and did not alter run evidence.
+
+The descriptive table matches the audited counts: multilingual Whisper Tiny 20/20 one-token English outputs and four beep cases differing from duration-matched silence; English Whisper Tiny 20/20 ` you` and 0/18 non-silence changes; Wav2Vec2 3/20 nonempty, all beeps. The causal summary correctly retains all 328 calls and five length-censored arms. The independent result review supports 4/4 exact donor-sequence transfers for final-encoder transcription-only and pre-block-0 nominal-active edits, and 0/4 for detection-only. It also supports exact donor language-logit maps in detection-only without a changed selected English token or complete transcript. All 36 two-phase full-donor arms had complete donor and raw-logit parity; this does not imply that every local or random edit had donor parity.
+
+The padding interpretation is appropriately bounded. I rechecked the pinned feature extractor and encoder source hashes (`dcce2e78…` and `bf4f022d…`): the log-mel floor uses the spectrogram-wide maximum, the encoder ignores its input attention mask, and decoder cross-attention receives no encoder mask. The independent audit found differences in every nominal padded mel frame and every nominal padded pre-block-0 row for the four informative beep pairs. A read-only comparison of their saved transcribe-phase pre-block-0 arrays also found differences above `1e-6` in all 1,500 rows per pair. These observations establish exposure and state differences, **not causal use of the padded rows**. The summary says this correctly.
+
+Two precision edits are advisable before reusing the text outside the repo:
+
+1. State beside the Stage A random `1/8` donor matches that `1/8` was length-censored; Stage B random was `0/8` donor matches with `1/8` censored. The current summary mentions five censored arms elsewhere, but the local control comparison is easier to read with these denominators adjacent.
+2. Describe the displaced informative arm as `0/3` donor transfers among EOS-complete outputs, with its fourth arm length-censored. This avoids interpreting the censored arm as a negative result.
+
+Neither point changes the GO decision. The exact engineered beep/checkpoint result is a local causal case study, not a novel audio security finding; the [prior-art memo](NONSPEECH_MECHANISM_PRIOR_ART_20261119.md) documents earlier non-speech hallucination, audio patching, and activation-steering work.
