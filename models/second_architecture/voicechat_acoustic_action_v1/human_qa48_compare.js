@@ -1,22 +1,27 @@
 "use strict";
-const TEMPLATE = JSON.parse(document.getElementById("embedded-data").textContent);
+const EMBEDDED = JSON.parse(document.getElementById("embedded-data").textContent);
+const TEMPLATE = EMBEDDED.template;
 const $ = (id) => document.getElementById(id);
 const FIELDS = ["date_match", "event_match", "authorization_match",
                 "same_critical_meaning_as_clean"];
 const IDS = ["date", "event", "authorization", "same"];
-const KEY = `voicechat-qa48-compare|${TEMPLATE.first_export_sha256}|${TEMPLATE.reviewer_id}`;
+const KEY = `voicechat-qa48-compare|${EMBEDDED.template_sha256}|${TEMPLATE.first_export_sha256}|${TEMPLATE.reviewer_id}`;
 let saved = [];
 function require(ok, message) { if (!ok) throw new Error(message); }
 function error(message) { $("error").textContent = message; }
 function check() {
   require(TEMPLATE.schema === "voicechat_acoustic_qa48_compare_v1"
+    && /^[0-9a-f]{64}$/.test(EMBEDDED.template_sha256)
     && Array.isArray(TEMPLATE.records) && TEMPLATE.records.length > 0,
     "Invalid comparison template.");
   require(Array.isArray(saved) && saved.length <= TEMPLATE.records.length,
     "Saved comparison population differs.");
   saved.forEach((row, index) => {
     const original = TEMPLATE.records[index];
-    require(row.opaque_id === original.opaque_id
+    const immutable = ["opaque_id", "reference_script", "source_id", "arm",
+      "initial_verbatim", "clean_initial_verbatim", "clean_comparison_basis"];
+    require(Object.keys(row).sort().join("|") === Object.keys(original).sort().join("|")
+      && immutable.every((name) => row[name] === original[name])
       && FIELDS.every((name) => ["yes", "no", "unclear"].includes(row[name]))
       && typeof row.compared_at_utc === "string",
       "Saved comparison differs from template.");
@@ -57,7 +62,8 @@ function exportReview() {
   try {
     error("");
     require(saved.length === TEMPLATE.records.length, "Complete every comparison first.");
-    const documentData = {...TEMPLATE, records:saved};
+    const documentData = {...TEMPLATE, records:saved,
+      exported_at_utc:new Date().toISOString()};
     const blob = new Blob([JSON.stringify(documentData, null, 2) + "\n"],
       {type:"application/json"});
     const url = URL.createObjectURL(blob);

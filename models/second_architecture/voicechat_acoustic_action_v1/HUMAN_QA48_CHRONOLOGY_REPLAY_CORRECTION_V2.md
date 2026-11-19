@@ -1,0 +1,9 @@
+# QA48 source correction: blind chronology and comparison resume
+
+19 November 2026. **Source-only correction; production listener use and VoiceChat inference remain HOLD.** This responds to the [independent V1 HOLD](HUMAN_QA48_INDEPENDENT_SOURCE_REVIEW_HOLD_V1.md). It changes no corpus, human marks or model result.
+
+The auditor now requires every primary and secondary post-reference comparison mark to occur at or after the **later** of the two complete initial-export times. Each comparison export carries a completion timestamp after its last mark. A sparse third review cannot start until both comparison exports are complete, because only then is its flagged population fixed. The third comparison follows its own locked first export. The timestamp checks enforce the stated order on saved files; they cannot prove that a browser clock was honest or that two reviewer IDs are two humans.
+
+The comparison page embeds a digest of its exact immutable template and includes that digest in its local-storage key. Its resume validator checks the full field set and every immutable row field, including reference script, source, arm, first words and clean comparison basis. A changed template therefore starts a different session; a stale saved row cannot silently acquire a changed reference. A later production entry point still must reconstruct and authenticate the rendered comparison page itself.
+
+Nine fake Python tests pass, including the former 07:01 primary comparison before the 08:00 secondary first export, and a third first review before 08:00 comparison completion. Three fake DOM checks pass: valid resume, changed reference with the same digest rejected, and changed digest isolated from prior browser storage. Both JS files pass node syntax checks; Python compilation and git diff whitespace checks pass. No production 48-WAV corpus exists.

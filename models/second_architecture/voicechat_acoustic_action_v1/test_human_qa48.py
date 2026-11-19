@@ -10,6 +10,8 @@ from pathlib import Path
 from . import human_qa48 as qa
 
 STAMP = "2026-11-19T07:00:00Z"
+LATE = "2026-11-19T08:00:00Z"
+LATER = "2026-11-19T08:30:00Z"
 
 
 def fake_variants(root: Path) -> dict:
@@ -58,6 +60,7 @@ def comparison(private: dict, queue: dict, first: dict) -> dict:
                     "same_critical_meaning_as_clean"):
             record[key] = "yes"
         record["compared_at_utc"] = STAMP
+    result["exported_at_utc"] = STAMP
     return result
 
 
@@ -201,6 +204,64 @@ class HumanQA48Tests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "two raw ASR"):
             qa.evaluate(self.private, self.queues, self.first, self.compare,
                         diagnostics)
+
+    def test_both_first_exports_must_precede_any_reference_comparison(self) -> None:
+        secondary = self.first["secondary"]
+        secondary["started_at_utc"] = LATE
+        secondary["exported_at_utc"] = LATE
+        for record in secondary["records"]:
+            record["submitted_at_utc"] = LATE
+        self.compare["secondary"] = comparison(
+            self.private, self.queues["secondary"], secondary)
+        for record in self.compare["secondary"]["records"]:
+            record["compared_at_utc"] = LATE
+        self.compare["secondary"]["exported_at_utc"] = LATE
+        with self.assertRaisesRegex(ValueError, "preceded both locked first exports"):
+            qa.evaluate(self.private, self.queues, self.first, self.compare,
+                        asr(self.private))
+        for record in self.compare["primary"]["records"]:
+            record["compared_at_utc"] = LATE
+        self.compare["primary"]["exported_at_utc"] = LATE
+        report = qa.evaluate(self.private, self.queues, self.first, self.compare,
+                             asr(self.private))
+        self.assertEqual(report["reviewed_arms"], 48)
+
+    def test_sparse_third_cannot_start_before_flags_are_final(self) -> None:
+        ident = self.private["cases"][0]["opaque_id"]
+        for record in self.first["secondary"]["records"]:
+            if record["opaque_id"] == ident:
+                record["clarity"] = "unclear"
+        self.compare["secondary"] = comparison(
+            self.private, self.queues["secondary"], self.first["secondary"])
+        for role in ("primary", "secondary"):
+            for record in self.compare[role]["records"]:
+                record["compared_at_utc"] = LATE
+            self.compare[role]["exported_at_utc"] = LATE
+        third_queue = qa.third_queue_for_flags(self.private, [ident])
+        third = first_export(third_queue, "person_third")
+        third_compare = comparison(self.private, third_queue, third)
+        with self.assertRaisesRegex(ValueError, "third review preceded"):
+            qa.evaluate(self.private, self.queues, self.first, self.compare,
+                        asr(self.private), tertiary_first=third,
+                        tertiary_compare=third_compare)
+        third["started_at_utc"] = LATER
+        third["exported_at_utc"] = LATER
+        for record in third["records"]:
+            record["submitted_at_utc"] = LATER
+        third_compare = comparison(self.private, third_queue, third)
+        for record in third_compare["records"]:
+            record["compared_at_utc"] = LATER
+        third_compare["exported_at_utc"] = LATER
+        report = qa.evaluate(self.private, self.queues, self.first, self.compare,
+                             asr(self.private), tertiary_first=third,
+                             tertiary_compare=third_compare)
+        self.assertTrue(report["third_reviewed"])
+
+    def test_comparison_export_cannot_precede_last_mark(self) -> None:
+        self.compare["primary"]["records"][-1]["compared_at_utc"] = LATE
+        with self.assertRaisesRegex(ValueError, "export precedes"):
+            qa.evaluate(self.private, self.queues, self.first, self.compare,
+                        asr(self.private))
 
 
 if __name__ == "__main__":

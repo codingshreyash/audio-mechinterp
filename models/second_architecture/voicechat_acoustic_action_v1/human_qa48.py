@@ -303,6 +303,7 @@ def comparison_template(private: dict[str, Any], queue: dict[str, Any],
             "queue_sha256": digest(canonical(queue)),
             "first_export_sha256": digest(canonical(first)),
             "first_exported_at_utc": first["exported_at_utc"],
+            "exported_at_utc": None,
             "records": [
                 {"opaque_id": rec["opaque_id"],
                  "reference_script": cases[rec["opaque_id"]]["reference_script"],
@@ -323,13 +324,18 @@ def comparison_template(private: dict[str, Any], queue: dict[str, Any],
                 for rec in first["records"]]}
 
 
-def validate_comparison(document: Any, template: dict[str, Any]) -> None:
+def validate_comparison(document: Any, template: dict[str, Any],
+                        *, not_before: datetime | None = None) -> datetime:
     require(isinstance(document, dict) and set(document) == set(template)
-            and all(document[k] == template[k] for k in template if k != "records"),
+            and all(document[k] == template[k] for k in template
+                    if k not in {"records", "exported_at_utc"}),
             "comparison header/first-export binding differs")
     records = document["records"]
     require(isinstance(records, list) and len(records) == len(template["records"]),
             "comparison population incomplete")
+    barrier = max(utc(template["first_exported_at_utc"]),
+                  not_before or utc(template["first_exported_at_utc"]))
+    last = barrier
     for record, expected in zip(records, template["records"]):
         require(isinstance(record, dict) and set(record) == set(expected)
                 and all(record[k] == expected[k] for k in expected
@@ -339,8 +345,35 @@ def validate_comparison(document: Any, template: dict[str, Any]) -> None:
                         ("date_match", "event_match", "authorization_match",
                          "same_critical_meaning_as_clean")),
                 "comparison reference or critical marks differ")
-        require(utc(record["compared_at_utc"]) >= utc(template["first_exported_at_utc"]),
-                "comparison preceded locked first export")
+        moment = utc(record["compared_at_utc"])
+        require(moment >= barrier, "comparison preceded both locked first exports")
+        last = max(last, moment)
+    exported = utc(document["exported_at_utc"])
+    require(exported >= last, "comparison export precedes its last locked record")
+    return exported
+
+
+def _validate_initial_review_order(
+    private: dict[str, Any], queues: dict[str, dict[str, Any]],
+    first: dict[str, dict[str, Any]],
+    comparisons: dict[str, dict[str, Any]],
+) -> tuple[dict[str, str], datetime]:
+    require(set(first) == set(comparisons) == {"primary", "secondary"},
+            "both complete initial and post-reference reviews required")
+    validate_private_queues(private, queues)
+    reviewers = {role: validate_first_export(first[role], queues[role])
+                 for role in ("primary", "secondary")}
+    require(reviewers["primary"] != reviewers["secondary"],
+            "reviewers not independent IDs")
+    both_first_locked = max(utc(first[role]["exported_at_utc"])
+                            for role in ("primary", "secondary"))
+    comparison_exports = []
+    for role in ("primary", "secondary"):
+        comparison_exports.append(validate_comparison(
+            comparisons[role],
+            comparison_template(private, queues[role], first[role]),
+            not_before=both_first_locked))
+    return reviewers, max(comparison_exports)
 
 
 def validate_asr_diagnostics(asr: Any, private: dict[str, Any]) -> str:
@@ -373,16 +406,9 @@ def evaluate(private: dict[str, Any], queues: dict[str, dict[str, Any]],
              *, tertiary_first: dict[str, Any] | None = None,
              tertiary_compare: dict[str, Any] | None = None) -> dict[str, Any]:
     """Pure 48-arm audit; never authorizes candidate model inference."""
-    require(set(first) == set(comparisons) == {"primary", "secondary"},
-            "both complete initial and post-reference reviews required")
-    validate_private_queues(private, queues)
+    reviewers, third_not_before = _validate_initial_review_order(
+        private, queues, first, comparisons)
     asr_sha = validate_asr_diagnostics(asr_diagnostics, private)
-    reviewers = {}
-    for role in ("primary", "secondary"):
-        reviewers[role] = validate_first_export(first[role], queues[role])
-        validate_comparison(comparisons[role],
-                            comparison_template(private, queues[role], first[role]))
-    require(reviewers["primary"] != reviewers["secondary"], "reviewers not independent IDs")
     cases = private["cases"]
     by_id = {c["opaque_id"]: c for c in cases}
     role_rows = {}
@@ -424,8 +450,11 @@ def evaluate(private: dict[str, Any], queues: dict[str, dict[str, Any]],
         third_queue = third_queue_for_flags(private, flags)
         third_id = validate_first_export(tertiary_first, third_queue)
         require(third_id not in reviewers.values(), "third reviewer ID reused")
+        require(utc(tertiary_first["started_at_utc"]) >= third_not_before,
+                "third review preceded completed disagreement stage")
         validate_comparison(tertiary_compare,
-                            comparison_template(private, third_queue, tertiary_first))
+                            comparison_template(private, third_queue, tertiary_first),
+                            not_before=third_not_before)
         third_reviewed = True
     else:
         require(tertiary_first is None and tertiary_compare is None,
@@ -489,14 +518,9 @@ def critical_disagreement_ids(private: dict[str, Any],
                               first: dict[str, dict[str, Any]],
                               comparisons: dict[str, dict[str, Any]]) -> list[str]:
     """Determine the sparse third-listener population after both comparisons."""
-    validate_private_queues(private, queues)
-    require(set(first) == set(comparisons) == {"primary", "secondary"},
-            "two completed review/comparison pairs required")
+    _validate_initial_review_order(private, queues, first, comparisons)
     seen = {}
     for role in ("primary", "secondary"):
-        validate_first_export(first[role], queues[role])
-        validate_comparison(comparisons[role],
-                            comparison_template(private, queues[role], first[role]))
         seen[role] = ({r["opaque_id"]: r for r in first[role]["records"]},
                       {r["opaque_id"]: r for r in comparisons[role]["records"]})
     require(first["primary"]["reviewer_id"] != first["secondary"]["reviewer_id"],
@@ -638,7 +662,8 @@ def render_compare_form(template: dict[str, Any]) -> bytes:
             and (count == 48 if template.get("role") != "tertiary"
                  else 1 <= count <= 48),
             "comparison form template invalid")
-    return _render(COMPARE_TEMPLATE, COMPARE_JS, template)
+    return _render(COMPARE_TEMPLATE, COMPARE_JS,
+                   {"template": template, "template_sha256": digest(canonical(template))})
 
 
 def build_post_blind_forms(private: dict[str, Any],
