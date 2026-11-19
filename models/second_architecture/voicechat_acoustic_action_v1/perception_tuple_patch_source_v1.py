@@ -83,7 +83,9 @@ def patch(
     """Return a complete perception tuple for one pre-generation intervention.
 
     ``rows`` index preprompt perception frames.  A local intervention changes
-    *both* projected frames and the separate encoder-frame route.  The caller
+    both projected frames and the retained encoder-frame tensor.  This does
+    not imply the encoder-frame tensor is active in the pinned pass-1 action.
+    The caller
     must freeze an acoustic-to-frame mapping independently before outputs.
     Same-length clean/noise WAVs must have identical encoded length and shape.
     A live wrapper must apply this only to the intended pass and verify full

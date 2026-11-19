@@ -30,7 +30,7 @@ class PerceptionTuplePatchSourceTests(unittest.TestCase):
         self.assertTrue(all(torch.equal(a, b) for a, b in zip(got, self.donor)))
         self.assertTrue(torch.equal(self.rec[0], torch.arange(20).reshape(1, 5, 4)))
 
-    def test_local_patch_covers_both_audio_routes_only_inside_rows(self):
+    def test_local_patch_covers_both_retained_tensors_only_inside_rows(self):
         got = patcher.patch(self.rec, self.donor, mode="rows_donor", rows=(1, 3))
         for i in range(5):
             expected = self.donor if i in (1, 2) else self.rec
