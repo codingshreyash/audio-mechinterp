@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VoiceChat timing annotation</title>
+<style>
+  body{font:16px/1.45 system-ui,sans-serif;max-width:840px;margin:2rem auto;padding:0 1rem;color:#17212b}
+  .muted{color:#4b5563}.card{border:1px solid #cbd5e1;border-radius:10px;padding:1rem;margin:1rem 0}
+  label{display:block;margin:.55rem 0;font-weight:600}input[type=number],input[type=text],textarea{font:inherit;padding:.35rem;width:100%;box-sizing:border-box}
+  button{font:inherit;padding:.45rem .7rem;margin:.2rem .2rem .2rem 0;cursor:pointer}
+  audio{width:100%;margin:.6rem 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .error{color:#9b1c1c;font-weight:700}.success{color:#166534;font-weight:700}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+<h1>Mark spoken time windows</h1>
+<p>Listen on headphones. Mark the stated phrase and an equally long stretch of <em>speech</em> elsewhere. Keep at least 160 ms between them. Times are recorded as 16,000-sample-per-second frame indices. The five-second silence at the end is excluded.</p>
+<p class="muted">Work independently in a separate browser profile. Submit each first impression once. Do not inspect model output or discuss marks before exporting. This form cannot verify that a person listened or that distinct IDs belong to distinct people.</p>
+<div class="card" id="startCard"><label>Reviewer ID<input id="reviewer" type="text" maxlength="80" placeholder="Your name or unique code"></label><button id="start">Start or resume</button></div>
+<div class="card" id="work" hidden>
+  <h2 id="progress"></h2><p id="source"></p><p><strong>Mark this phrase:</strong> <span id="phrase"></span></p>
+  <audio id="audio" controls preload="metadata"></audio>
+  <p class="muted" id="clock"></p>
+  <div class="grid">
+    <section><h3>Decision phrase</h3><label>Start frame<input id="ds" type="number" min="0" step="1"></label><button data-mark="ds">Use current player time</button><label>End frame<input id="de" type="number" min="0" step="1"></label><button data-mark="de">Use current player time</button></section>
+    <section><h3>Other speech interval</h3><label>Start frame<input id="ps" type="number" min="0" step="1"></label><button data-mark="ps">Use current player time</button><label>End frame<input id="pe" type="number" min="0" step="1"></label><button data-mark="pe">Use current player time</button></section>
+  </div>
+  <p><button id="playDecision">Play marked phrase</button><button id="playOther">Play other interval</button></p>
+  <label>Optional note<textarea id="note" rows="2" placeholder="Uncertain boundary or reason you cannot mark it"></textarea></label>
+  <button id="submit">Lock these intervals and continue</button><button id="cannot">Cannot mark reliably</button>
+</div>
+<div class="card" id="done" hidden><h2>All 12 clips reviewed</h2><p>Download your original review JSON. Send it to the coordinator without editing it.</p><button id="export">Download review JSON</button></div>
+<p id="message" role="status"></p>
+<script id="queue" type="application/json">__EMBEDDED_QUEUE__</script>
+<script>
+"use strict";
+const QUEUE=JSON.parse(document.getElementById("queue").textContent);
+const QUEUE_SHA="__QUEUE_SHA256__";
+const $=id=>document.getElementById(id);
+let review=null,storageKey=null;
+function fail(message){$("message").className="error";$("message").textContent=message;throw Error(message)}
+function require(ok,message){if(!ok)fail(message)}
+function save(next){try{localStorage.setItem(storageKey,JSON.stringify(next));require(localStorage.getItem(storageKey)===JSON.stringify(next),"Browser storage did not retain the review")}
+catch(e){fail("Browser storage unavailable: "+e.message)}review=next;render()}
+function validReview(value,id){
+  require(value&&value.schema==="voicechat_timing_independent_review_v1"&&value.reviewer_id===id&&value.queue_sha256===QUEUE_SHA&&value.source_manifest_sha256===QUEUE.source_manifest_sha256&&Array.isArray(value.records)&&value.records.length<=QUEUE.rows.length,"Saved review does not match this queue");
+  for(let i=0;i<value.records.length;i++){let r=value.records[i],s=QUEUE.rows[i];require(r.source_id===s.source_id&&r.clean_wav_sha256===s.clean_wav_sha256&&["marked","unmarkable"].includes(r.status),"Saved review row differs")}
+}
+function current(){return QUEUE.rows[review.records.length]}
+function render(){
+  $("startCard").hidden=true;$("work").hidden=review.records.length===QUEUE.rows.length;$("done").hidden=review.records.length!==QUEUE.rows.length;
+  if($("work").hidden)return;
+  const s=current();$("progress").textContent=`Clip ${review.records.length+1} of ${QUEUE.rows.length}`;$("source").textContent=s.source_id;$("phrase").textContent=s.decision_phrase;
+  $("audio").src=s.clean_wav_path;$("clock").textContent=`Speech ends at frame ${s.content_frames} (${(s.content_frames/16000).toFixed(3)} s).`;
+  for(const id of ["ds","de","ps","pe"])$(id).value="";$("note").value="";$("message").textContent="";
+}
+function start(){const id=$("reviewer").value.trim();require(id.length>=2&&id.length<=80,"Enter a unique reviewer ID (2–80 characters)");
+  storageKey=`voicechat-timing-v1|${QUEUE_SHA}|${encodeURIComponent(id)}`;
+  let prior=null;try{prior=localStorage.getItem(storageKey)}catch(e){fail("Browser storage unavailable: "+e.message)}
+  const value=prior?JSON.parse(prior):{schema:"voicechat_timing_independent_review_v1",reviewer_id:id,queue_sha256:QUEUE_SHA,source_manifest_sha256:QUEUE.source_manifest_sha256,started_at_utc:new Date().toISOString(),records:[]};
+  validReview(value,id);save(value);$("reviewer").disabled=true;
+}
+function values(){const s=current(),a=["ds","de","ps","pe"].map(id=>Number($(id).value));
+  require(["ds","de","ps","pe"].every(id=>$(id).value.trim()!=="")&&a.every(Number.isInteger),"Enter all four integer frame indices");
+  const [ds,de,ps,pe]=a;require(0<=ds&&ds<de&&de<=s.content_frames&&0<=ps&&ps<pe&&pe<=s.content_frames,"Windows must be inside spoken content");
+  require(de-ds===pe-ps,"Other speech interval must have the same width");
+  require(de+QUEUE.min_gap_frames<=ps||pe+QUEUE.min_gap_frames<=ds,"Keep at least 160 ms between intervals");
+  return{decision:[ds,de],displaced:[ps,pe]};
+}
+function submit(status){require(review&&review.records.length<QUEUE.rows.length,"Review already complete");const s=current();
+  const intervals=status==="marked"?values():{decision:null,displaced:null};let note=$("note").value.trim();
+  if(status==="unmarkable")require(note.length>0,"Explain why this source cannot be marked");
+  const record={source_id:s.source_id,clean_wav_sha256:s.clean_wav_sha256,status,...intervals,note,submitted_at_utc:new Date().toISOString()};
+  save({...review,records:[...review.records,record]});
+}
+function play(startId,endId){const s=current(),start=Number($(startId).value),end=Number($(endId).value);
+  require($(startId).value!==""&&$(endId).value!==""&&Number.isInteger(start)&&Number.isInteger(end)&&0<=start&&start<end&&end<=s.content_frames,"Enter a valid marked window first");
+  const audio=$("audio");audio.currentTime=start/16000;audio.play();const stop=()=>{if(audio.currentTime>=end/16000){audio.pause();audio.removeEventListener("timeupdate",stop)}};audio.addEventListener("timeupdate",stop);
+}
+$("start").addEventListener("click",()=>{try{start()}catch(e){}});
+$("submit").addEventListener("click",()=>{try{submit("marked")}catch(e){}});
+$("cannot").addEventListener("click",()=>{try{submit("unmarkable")}catch(e){}});
+for(const button of document.querySelectorAll("[data-mark]"))button.addEventListener("click",()=>{$(button.dataset.mark).value=Math.round($("audio").currentTime*16000)});
+$("playDecision").addEventListener("click",()=>{try{play("ds","de")}catch(e){}});
+$("playOther").addEventListener("click",()=>{try{play("ps","pe")}catch(e){}});
+$("export").addEventListener("click",()=>{try{require(review&&review.records.length===QUEUE.rows.length,"Complete all 12 clips first");validReview(review,review.reviewer_id);
+  const blob=new Blob([JSON.stringify({...review,exported_at_utc:new Date().toISOString()},null,2)+"\n"],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=`voicechat-timing-${review.reviewer_id.replace(/[^a-z0-9_-]+/gi,"_").slice(0,60)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)
+}catch(e){}});
+</script>
+</html>
