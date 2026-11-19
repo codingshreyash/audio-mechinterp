@@ -1,0 +1,10 @@
+# VoiceChat public-sample H100 capacity attempts, 19 November 2026
+
+Both attempts stopped **before package installation, checkpoint download, model import, or inference**. The unchanged sample runner and calendar cohort were never launched. This is an infrastructure result, not model evidence.
+
+| Attempt | Requested | Observed | Outcome |
+| --- | --- | --- | --- |
+| `voicechat-public-sample-h100` (`4l2urj2zc`) | `gpu-h100-sxm.1gpu-16vcpu-200gb`, explicit `--type`, `--min-disk 256`, `--stoppable` | NVIDIA H100 80GB HBM3; Python 3.12.3; root disk 128,849,018,880 bytes, 104,487,313,408 bytes free. | Failed the frozen setup gate of at least 160 GiB free before staging. `--min-disk` was a search filter, not a disk-size request. No weights or packages were staged. Stop by name returned HTTP 500 while the workspace was building; stop by ID was accepted, then status moved through `STOPPING` to `STOPPED`. Deletion was requested for this empty task-created workspace; it disappeared from `brev ls`. |
+| `voicechat-public-sample-h100-v2` (`9yvogsj1p`) | One exact JSON-piped candidate with `target_disk_gb=256`; dry run printed `gpu-h100-sxm.1gpu-16vcpu-200gb (256GB disk)` | Brev reported `Success! Created instance`, then `Internal Server Error`; `brev ls` showed `FAILURE`, no ready shell. | No host checks or downloads were possible. Deletion was requested for this failed task-created workspace; it disappeared from `brev ls`. |
+
+The [independent disk failure amendment](VOICECHAT_PUBLIC_SAMPLE_H100_DISK_FAILURE_AMENDMENT_20261119.md) traces the CLI `--min-disk` semantics and the exact JSON-piped candidate. The second provider failure does not establish whether Nebius could have supplied a 256 GB H100 in another attempt. The live Brev listing at 16:20 UTC showed only the two pre-existing **STOPPED** workspaces, `qwen-audio-mechinterp-a100` and `garak-overlap-rerun`. The listed H100 rate was $5.40 per active hour; exact provider billing for these short attempts has not been inspected. Do not interpret an accepted stop/delete command as terminal without checking the live workspace listing.
