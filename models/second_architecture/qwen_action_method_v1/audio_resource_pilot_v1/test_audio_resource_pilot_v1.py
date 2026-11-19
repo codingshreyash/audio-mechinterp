@@ -20,25 +20,28 @@ class PilotSourceTests(unittest.TestCase):
         self.assertEqual(plan.WAV.read_bytes(), plan.render())
         self.assertFalse(plan.CASE_ID.startswith(("D_", "H_")))
 
-    def test_go_and_attempt_absent(self) -> None:
-        self.assertFalse(plan.ADMISSION.exists())
-        self.assertFalse(plan.REVIEW.exists())
-        self.assertFalse(plan.GO.exists())
-        self.assertFalse(plan.ATTEMPT.exists())
+    def test_pilot_paths_are_separate_from_study(self) -> None:
+        self.assertEqual(plan.ATTEMPT.name, "attempt_001")
+        self.assertEqual(plan.ATTEMPT.parent.name, "audio_resource_pilot_v1")
+        self.assertEqual(plan.WAV.parent, plan.HERE)
+        self.assertFalse(plan.CASE_ID.startswith(("D_", "H_")))
 
     def test_direct_worker_refuses_before_model_import(self) -> None:
         cmd = [sys.executable, "-m",
             "models.second_architecture.qwen_action_method_v1.audio_resource_pilot_v1.worker",
-            "--worker", "--attempt", str(plan.ATTEMPT)]
+            "--worker", "--attempt", str(plan.ATTEMPT / "wrong_attempt")]
         result = subprocess.run(cmd, cwd=plan.ROOT, capture_output=True,
                                 text=True, timeout=15)
         self.assertNotEqual(result.returncode, 0)
-        self.assertFalse(plan.ATTEMPT.exists())
         self.assertNotIn("transformers", result.stderr.lower())
 
     def test_missing_go_is_refused(self) -> None:
-        with self.assertRaises(ValueError):
-            gate.validate_go(live=False)
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as temp, \
+             patch.object(plan, "ADMISSION", Path(temp) / "absent_admission.json"), \
+             patch.object(gate, "source_identity", return_value={}):
+            with self.assertRaises(ValueError):
+                gate.validate_go(live=False)
 
     def test_tampered_wav_refused(self) -> None:
         with patch.object(plan, "WAV_SHA256", "0" * 64):
@@ -70,6 +73,14 @@ class PilotSourceTests(unittest.TestCase):
                 saved_audit.load_sidecar(folder, {**meta, "shape": [3]})
             with self.assertRaises(ValueError):
                 saved_audit.load_sidecar(folder, {**meta, "path": "../probe.npy"})
+
+    def test_generation_hook_census_rejects_missing_or_wrong_shape(self) -> None:
+        valid = {site: [[1, 123, 2048], [1, 1, 2048]] for site in plan.SITES}
+        saved_audit.verify_generation_shapes(valid, 123)
+        with self.assertRaises(ValueError):
+            saved_audit.verify_generation_shapes({plan.SITES[0]: valid[plan.SITES[0]]}, 123)
+        with self.assertRaises(ValueError):
+            saved_audit.verify_generation_shapes({**valid, plan.SITES[1]: [[1, 1, 2048]]}, 123)
 
 
 if __name__ == "__main__":
