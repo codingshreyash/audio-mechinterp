@@ -1,0 +1,19 @@
+# Independent V6 one-shot launcher correction rereview
+
+19 November 2026. **Decision: HOLD for a live pilot and for a complete saved receipt.** I independently rereviewed correction `f9a1e78` against the two defects in [HOLD V1](VOXTRAL_TRACK_B_V6_ONE_SHOT_LAUNCHER_INDEPENDENT_SOURCE_REVIEW_HOLD_V1.md). No candidate weights or Track B audio were loaded. A/R remain `None`, so the public launch still fails before a child starts.
+
+Exact reviewed SHA-256: launcher `14de1226c1747a8df316f7d2536023602574ab8323c9522313518ed5fe6b74bc`; launcher fake tests `d62f8e887dcb136d1ba2d53329c18ba1c958fc255b3114897e4a4a43ff418f8e`; composed saved auditor `26a1fed4bf71d11e4e4bce33ac430db7b7cc1414e67b1b797155cded07997dce`; its tests `39c62c65a7959de1b24c219dd2ca47b5a01cac818c94e40d277ba194c7f14332`; correction handoff `549966ccf23e63f97c66f6fa7fdc5b9d7f868c5831c9939c960251815604e1b0`.
+
+## Original defects corrected in source
+
+The launcher serializes and sizes post-host raw plus sidecar bytes before opening either file. It inventories the worker directory, campaign claim, and parent watchdog claim, reserves one MiB for the pending watchdog result, rejects symlinks and insufficient free disk, then checks exact written hashes and sizes. The formerly failing **150-byte cap** fake now raises before either external file exists. The sidecar records the launcher L as its producer and older C as a schema/reference source. The composed auditor hashes actual L against a supplied final-L digest and checks both provenance fields. This digest is caller supplied; only a later external executable freeze and independent review can authenticate it. The corrections do not themselves permit a live run.
+
+## Remaining full-attempt accounting defect
+
+`voxtral_track_b_v6_composed_saved_auditor_v1.py` lines 100–103 computes `full_bytes = worker_audit['output_bytes'] + sidecar_size + raw_size`. The underlying worker audit's `output_bytes` includes the worker directory and campaign claim **but excludes** the parent watchdog claim and its result. The composed auditor then returns this incomplete number under `full_attempt_output_bytes` at line 123. The launcher separately calls `freeze.audit_composition_sidecars`, which *does* include both watchdog files in `total_attempt_bytes`, but passes only its sidecar hash to the composed auditor and does not retain its complete count in the returned saved receipt. Thus the live launch path has a separate cap check, yet the saved receipt underreports a value labelled full attempt.
+
+I reproduced this with the existing fake `composed_fixture`: adding a 73-byte `.watchdog` and a 91-byte `.watchdog.result.json` left `audit_composed_saved(...)["full_attempt_output_bytes"]` unchanged at **42,058**, while the actual inventory was **42,222** bytes. The **164-byte** difference is exactly the omitted watchdog files. This is a fake saved-data counterexample, not a candidate run. A correction should independently inventory both watchdog files in the composed saved auditor, validate their expected path/regular-file status and identity, include them in the cap and returned total, and test that changing their sizes changes the reported total. The existing `freeze.audit_composition_sidecars` result may be cross-checked, but its caller result alone is not the composed auditor's saved evidence.
+
+## Verification and limits
+
+Four no-weight fake pytest suites passed **24/24** using the project Python and an isolated `/tmp` pytest installation; the composed saved-auditor unittest passed **5/5**. `py_compile` and `git diff --check` passed. The source-only 150-byte cap fix and L/C role distinction are sound as tested. The full-attempt receipt needs a new correction and independent rereview before live pilot use, along with real 32/32 human listening QA, externally bound A/R and final L hash, and the later measured-pilot and post-pilot review gates.
