@@ -171,6 +171,10 @@ def run(attempt: Path) -> None:
         "case_id": plan.CASE_ID, "parent_start_sha256": plan.sha(attempt / "start.json"),
         "go_sha256": plan.sha(plan.GO), "parent_pid": start["parent_pid"]})
     snapshot = Path(gate.read(plan.ADMISSION)["processor_preflight"]["snapshot"]["snapshot_path"])
+    from .. import typed_pilot_cuda_admission_v3
+    gate.require(typed_pilot_cuda_admission_v3.verify_snapshot(snapshot)
+                 == gate.read(plan.ADMISSION)["processor_preflight"]["snapshot"],
+                 "worker cached checkpoint bytes differ from admission")
     processor = Qwen2_5OmniProcessor.from_pretrained(str(snapshot), local_files_only=True)
     batch_cpu, digest = prepare_audio_batch(processor, plan.WAV,
                                             system_prompt=plan.SYSTEM_PROMPT)

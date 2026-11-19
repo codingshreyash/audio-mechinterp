@@ -210,6 +210,11 @@ def validate_go(*, live: bool = True) -> dict[str, Any]:
                     ("gpu_uuid", "gpu_name", "gpu_memory_mib", "mig_mode",
                      "compute_processes", "idle_gpu_limit_bytes")),
                 "live GPU differs from GO")
+        from .. import typed_pilot_cuda_admission_v3
+        snapshot = Path(admission["processor_preflight"]["snapshot"]["snapshot_path"])
+        require(typed_pilot_cuda_admission_v3.preflight(snapshot) ==
+                admission["processor_preflight"],
+                "live cached snapshot/processor/wheel differs from admission")
     return go
 
 

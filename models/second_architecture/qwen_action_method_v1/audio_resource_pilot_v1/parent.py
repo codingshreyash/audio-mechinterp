@@ -103,6 +103,8 @@ def _monitor(deadline: float, nonce: bytes) -> dict:
                     rss = process_tree_rss_bytes(process.pid)
                     gpu = gpu_used_bytes()
                     evidence = output_bytes(plan.ATTEMPT)
+                    if rss is None and process.poll() is not None:
+                        break  # Clean exit may race a final ps sample.
                     gate.require(rss is not None, "worker RSS unavailable")
                 except BaseException as exc:
                     reason, error = "monitor_error", repr(exc)
