@@ -147,6 +147,9 @@ def run_fixture_arm(
                  and admission.get("caps", {}).get("arm_output_bytes") ==
                  request["capture_byte_cap"],
                  "Production admission differs from reviewed freeze")
+        _require("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX" not in os.environ
+                 and "VOICECHAT_CONTROLLER_KEY_HEX" not in os.environ,
+                 "Admission secrets remain in model process environment")
     qa_binding = qa_precheck(request)
     _require(isinstance(qa_binding, dict)
              and all(isinstance(qa_binding.get(key), str) and
@@ -257,18 +260,27 @@ def run_production_adapter_once(
 ) -> dict[str, Any]:
     """One fresh case-B adapter process. Production CLI exposes no injection."""
     from .live_parity_production_admission_v1 import (
-        admit_fixture, read_record, rehash_bound_inputs, source_hashes,
+        admit_fixture, child_public_environment, read_record,
+        rehash_bound_inputs, source_hashes,
     )
     admit = admit_fixture if admit is None else admit
     rehash = rehash_bound_inputs if rehash is None else rehash
     source_digest = source_hashes if source_digest is None else source_digest
-    admission = admit(plan_path=plan_path, freeze_path=freeze_path,
-                      review_path=review_path, paths=paths,
-                      freeze_review_key=freeze_review_key,
-                      controller_key=controller_key)
+    try:
+        admission = admit(plan_path=plan_path, freeze_path=freeze_path,
+                          review_path=review_path, paths=paths,
+                          freeze_review_key=freeze_review_key,
+                          controller_key=controller_key)
+    finally:
+        # The pinned preflight needs the controller key during admission.
+        # Neither admission key may remain visible to imported model code.
+        os.environ.pop("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX", None)
+        os.environ.pop("VOICECHAT_CONTROLLER_KEY_HEX", None)
     _require(admission.get("status") ==
              "fixture_admitted_for_fresh_process_source_only",
              "Production adapter admission incomplete")
+    _require(child_public_environment() == admission.get("child_public_environment"),
+             "Frozen public model environment changed after key scrub")
     sample_sha = sample_verify(admission)
     _require(isinstance(sample_sha, str)
              and sample_sha == admission.get("official_sample_receipt_sha256"),
@@ -316,7 +328,8 @@ def run_production_adapter_once(
                          admission_gate=lambda _request: admission)
     finally:
         _require(rehash(plan, paths) == admission["input_hashes"]
-                 and source_digest() == admission["source_sha256"],
+                 and source_digest() == admission["source_sha256"]
+                 and child_public_environment() == admission["child_public_environment"],
                  "Fixture source/input changed during adapter process")
     return result
 

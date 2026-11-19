@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -88,7 +89,10 @@ class AdmissionTests(unittest.TestCase):
                     "input_hashes": self.hashes, "source_sha256": sources,
                     "paths": {key: str(value) for key, value in self.paths.items()},
                     "seed": 17, "arm_order": ["official_sample", *ARMS],
-                    "external_anchor_audit_id": "synthetic-code-path-only"}
+                    "external_anchor_audit_id": "synthetic-code-path-only",
+                    "child_public_environment": gate.child_public_environment(),
+                    "child_public_environment_sha256": hashlib.sha256(
+                        canonical_bytes(gate.child_public_environment())).hexdigest()}
         freeze = {"schema": "voicechat_fixture_executable_freeze_v1",
                   "status": "externally_frozen_fixture", "run_id": "run_test",
                   "created_utc": "2026-11-18T00:00:05Z",
@@ -172,6 +176,13 @@ class AdmissionTests(unittest.TestCase):
     def test_nonexistent_source_commit_cannot_bind_reviewed_bytes(self):
         with self.assertRaisesRegex(ValueError, "lacks exact admission bytes"):
             gate.verify_source_commit("0" * 40, gate.source_hashes())
+
+    def test_public_child_environment_excludes_unreviewed_parent_values(self):
+        with patch.dict(os.environ, {"UNRELATED_INJECTION": "secret-data",
+                                  "VOICECHAT_CONTROLLER_KEY_HEX": "c" * 64}):
+            child = gate.child_public_environment()
+        self.assertNotIn("UNRELATED_INJECTION", child)
+        self.assertNotIn("VOICECHAT_CONTROLLER_KEY_HEX", child)
 
     def test_full_map_rehash_rejects_tools_change(self):
         fixture = self.root / "local_fixture"

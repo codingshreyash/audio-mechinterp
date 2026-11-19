@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import os
 import re
 import subprocess
 from datetime import datetime
@@ -22,6 +23,7 @@ from .live_parity_source_plan_v1 import (
     PHASE_IDENTITY_FIELDS,
 )
 from .two_pass_adapter import read_bound_qa_receipt
+from .public_sample_smoke_v1 import CHILD_ENV_KEYS
 
 HERE = Path(__file__).resolve().parent
 SOURCE_FILES = {
@@ -168,6 +170,11 @@ def source_hashes() -> dict[str, str]:
     return {role: file_hash(path) for role, path in SOURCE_FILES.items()}
 
 
+def child_public_environment() -> dict[str, str]:
+    """Exact nonsecret allowlist for the pinned offline model child."""
+    return {key: os.environ[key] for key in CHILD_ENV_KEYS if key in os.environ}
+
+
 def verify_source_commit(commit: str, expected: dict[str, str]) -> None:
     """Require every reviewed role to exist with identical bytes in one commit."""
     require(re.fullmatch(r"[0-9a-f]{40}", commit) is not None,
@@ -233,7 +240,10 @@ def admit_fixture(
                 "source_sha256": current_source,
                 "paths": {key: str(path) for key, path in paths.items()},
                 "seed": plan["seed"], "arm_order": ["official_sample", *ARMS],
-                "external_anchor_audit_id": anchor_id}
+                "external_anchor_audit_id": anchor_id,
+                "child_public_environment": child_public_environment(),
+                "child_public_environment_sha256": hashlib.sha256(
+                    canonical_bytes(child_public_environment())).hexdigest()}
     require(freeze.get("schema") == "voicechat_fixture_executable_freeze_v1"
             and freeze.get("status") == "externally_frozen_fixture"
             and isinstance(freeze.get("run_id"), str)
@@ -291,7 +301,8 @@ def admit_fixture(
                 for field in PHASE_IDENTITY_FIELDS),
             "Current preflight differs from planned source/checkpoint/runtime")
     require(rehash(plan, paths) == plan["input_hashes"]
-            and source_digest() == current_source,
+            and source_digest() == current_source
+            and child_public_environment() == expected["child_public_environment"],
             "Fixture bytes changed during admission")
     return {"status": "fixture_admitted_for_fresh_process_source_only",
             "source_plan_sha256": expected["source_plan_sha256"],
@@ -300,4 +311,5 @@ def admit_fixture(
             "source_sha256": current_source,
             "input_hashes": plan["input_hashes"],
             "seed": plan["seed"], "caps": dict(freeze["caps"]),
+            "child_public_environment": expected["child_public_environment"],
             "paths": paths, "ready": ready, "preload": preload}

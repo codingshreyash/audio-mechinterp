@@ -8,13 +8,13 @@ only after parent admission; the child repeats admission before model load.
 from __future__ import annotations
 
 import hashlib
-import os
 import sys
 from pathlib import Path
 from typing import Any, Callable
 
 from .live_parity_production_admission_v1 import (
-    admit_fixture, file_hash, read_record, rehash_bound_inputs, source_hashes,
+    admit_fixture, child_public_environment, file_hash, read_record,
+    rehash_bound_inputs, source_hashes,
 )
 from .live_parity_saved_capture_v1 import load_capture
 from .live_parity_source_plan_v1 import canonical_bytes, fixed_response_bytes
@@ -89,10 +89,17 @@ def launch_adapter_once(
     (output / "scope.json").write_bytes(scope_bytes)
     try:
         require(rehash(read_record(plan_path)[0], paths) == admission["input_hashes"]
-                and source_digest() == admission["source_sha256"],
+                and source_digest() == admission["source_sha256"]
+                and child_public_environment() == admission["child_public_environment"],
                 "Fixture changed before child process")
         command = fixed_command(plan_path, freeze_path, review_path, paths)
-        environment = os.environ.copy()
+        environment = dict(admission["child_public_environment"])
+        require(environment == child_public_environment()
+                and "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX" not in environment
+                and "VOICECHAT_CONTROLLER_KEY_HEX" not in environment,
+                "Frozen public child environment differs or carries secrets")
+        environment["VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX"] = freeze_review_key.hex()
+        environment["VOICECHAT_CONTROLLER_KEY_HEX"] = controller_key.hex()
         child_caps = {"wall_seconds": caps["wall_seconds"],
                       "vram_mib": caps["vram_bytes"] // (1024 * 1024),
                       "total_evidence_bytes": caps["total_output_bytes"]}
@@ -140,7 +147,8 @@ def launch_adapter_once(
         require(file_hash(response_path, cap=caps["total_output_bytes"]) == response_sha,
                 "Frozen stock response changed")
         require(rehash(read_record(plan_path)[0], paths) == admission["input_hashes"]
-                and source_digest() == admission["source_sha256"],
+                and source_digest() == admission["source_sha256"]
+                and child_public_environment() == admission["child_public_environment"],
                 "Fixture changed after child process")
         inventory, _ = evidence_inventory(output, caps["total_output_bytes"])
         receipt = {"status": "adapter_capture_only_no_parity_claim",

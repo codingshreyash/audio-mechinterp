@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import torch
 
 from .live_parity_saved_capture_v1 import save_capture
+from .live_parity_production_admission_v1 import CHILD_ENV_KEYS, child_public_environment
 from .live_parity_single_process_supervisor_v1 import launch_adapter_once
 from .live_parity_source_plan_v1 import NO_CALL_BYTES, canonical_bytes
 
@@ -35,6 +38,7 @@ class OneProcessSupervisorTests(unittest.TestCase):
             "freeze_sha256": "2" * 64, "seed": 17,
             "official_sample_receipt_sha256": "3" * 64,
             "input_hashes": self.hashes, "source_sha256": self.sources,
+            "child_public_environment": child_public_environment(),
             "caps": {"wall_seconds": 60, "vram_bytes": 1024 * 1024 * 100,
                      "arm_output_bytes": 50000,
                      "total_output_bytes": 100000},
@@ -62,6 +66,11 @@ class OneProcessSupervisorTests(unittest.TestCase):
         self.assertIn("live_parity_fixture_worker_v1 import main; main()", command[2])
         self.assertEqual(caps["wall_seconds"], 60)
         self.assertIn("PATH", environment)
+        self.assertEqual(set(environment) - set(CHILD_ENV_KEYS),
+                         {"VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX",
+                          "VOICECHAT_CONTROLLER_KEY_HEX"})
+        self.assertEqual(environment["VOICECHAT_CONTROLLER_KEY_HEX"], "63" * 32)
+        self.assertNotIn("UNRELATED_PARENT_SECRET", environment)
         arm = output / "adapter"
         arm.mkdir()
         first = {"tokens_text": torch.tensor([[1]])}
@@ -106,7 +115,8 @@ class OneProcessSupervisorTests(unittest.TestCase):
         self.assertFalse(self.paths["output"].exists())
 
     def test_one_child_persists_raw_capture_and_derived_response(self):
-        result = self._run()
+        with patch.dict(os.environ, {"UNRELATED_PARENT_SECRET": "do-not-forward"}):
+            result = self._run()
         self.assertEqual(result["status"], "adapter_capture_only_no_parity_claim")
         self.assertEqual(result["response_sha256"],
                          hashlib.sha256(NO_CALL_BYTES).hexdigest())

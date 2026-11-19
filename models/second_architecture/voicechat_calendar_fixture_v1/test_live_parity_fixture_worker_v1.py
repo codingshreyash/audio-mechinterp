@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -17,6 +18,7 @@ from .live_parity_fixture_worker_v1 import (
 )
 from .live_parity_saved_capture_v1 import load_capture
 from .live_parity_source_plan_v1 import CASE_ID, NO_CALL_BYTES, VOICE_ID, canonical_bytes
+from .live_parity_production_admission_v1 import child_public_environment
 
 
 class FakeRecorder:
@@ -248,12 +250,16 @@ class FixtureWorkerTests(unittest.TestCase):
                      "source_plan_sha256": "a" * 64, "freeze_sha256": "b" * 64,
                      "official_sample_receipt_sha256": "d" * 64,
                      "source_sha256": {"synthetic": "c" * 64},
+                     "child_public_environment": child_public_environment(),
                      "caps": {"arm_output_bytes": 100000}}
         def admit(**_kwargs):
             self.events.append("admit")
+            self.assertIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
             return admission
         def arm_run(request, *, arm_dir, admission_gate):
             self.events.append("arm")
+            self.assertNotIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
+            self.assertNotIn("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX", os.environ)
             self.assertEqual(request["arm"], "adapter")
             self.assertEqual(request["source_plan_sha256"], "a" * 64)
             self.assertEqual(admission_gate(request), admission)
@@ -262,16 +268,34 @@ class FixtureWorkerTests(unittest.TestCase):
         def rehash(_plan, _paths):
             self.events.append("rehash")
             return plan["input_hashes"]
-        with patch("models.second_architecture.voicechat_calendar_fixture_v1.live_parity_fixture_worker_v1.resource.setrlimit"):
-            result = run_production_adapter_once(
-                plan_path=plan_path, freeze_path=self.root / "freeze",
-                review_path=self.root / "review", paths=paths,
-                freeze_review_key=b"k" * 32, controller_key=b"c" * 32,
-                admit=admit, sample_verify=lambda _admission: "d" * 64,
-                arm_run=arm_run, rehash=rehash,
-                source_digest=lambda: admission["source_sha256"])
+        with patch.dict(os.environ, {"VOICECHAT_CONTROLLER_KEY_HEX": "c" * 64,
+                                  "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX": "k" * 64}):
+            with patch("models.second_architecture.voicechat_calendar_fixture_v1.live_parity_fixture_worker_v1.resource.setrlimit"):
+                result = run_production_adapter_once(
+                    plan_path=plan_path, freeze_path=self.root / "freeze",
+                    review_path=self.root / "review", paths=paths,
+                    freeze_review_key=b"k" * 32, controller_key=b"c" * 32,
+                    admit=admit, sample_verify=lambda _admission: "d" * 64,
+                    arm_run=arm_run, rehash=rehash,
+                    source_digest=lambda: admission["source_sha256"])
         self.assertEqual(result["status"], admission["status"])
         self.assertEqual(self.events, ["admit", "arm", "rehash"])
+
+    def test_production_wrapper_scrubs_keys_even_if_admission_fails(self):
+        def fail(**_kwargs):
+            self.assertIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
+            raise ValueError("synthetic admission failure")
+        with patch.dict(os.environ, {"VOICECHAT_CONTROLLER_KEY_HEX": "c" * 64,
+                                  "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX": "k" * 64}):
+            with self.assertRaisesRegex(ValueError, "synthetic admission failure"):
+                run_production_adapter_once(
+                    plan_path=self.root / "absent-plan",
+                    freeze_path=self.root / "absent-freeze",
+                    review_path=self.root / "absent-review", paths={},
+                    freeze_review_key=b"k" * 32, controller_key=b"c" * 32,
+                    admit=fail)
+            self.assertNotIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
+            self.assertNotIn("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX", os.environ)
 
 
 if __name__ == "__main__":

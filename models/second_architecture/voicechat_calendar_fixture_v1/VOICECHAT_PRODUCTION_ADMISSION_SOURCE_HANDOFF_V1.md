@@ -15,6 +15,11 @@ source commit, verifies a keyed freeze-review HMAC, reruns `ready` then
 `preload`, and hashes
 all inputs and source roles again before returning. The external attestation
 hook is closed by default; this module cannot admit a live run on its own.
+The freeze binds the exact nonsecret child-environment allowlist and its hash.
+The supervisor adds only the two admission keys to that allowlist while
+starting the worker; it does not forward arbitrary parent variables. The
+worker removes both keys from `os.environ` immediately after admission and
+checks the remaining public environment before model creation and after use.
 
 `live_parity_single_process_supervisor_v1.py` adds one fresh adapter-child
 boundary. Its default official-sample verifier is also closed. After real
@@ -45,6 +50,10 @@ record, and none is shipped as run evidence.
 - Connect the external attestation hook to a real read-only controller source.
   Keep default admission closed until the actual 12/12 human QA, grants and
   pre-inference anchor exist and pass review.
+- Independently verify the child environment policy and controller key custody.
+  The reviewed child still receives the two keys for its own pre-load QA and
+  freeze checks; the pinned preflight subprocess executes during that
+  admission. The keys must be gone before any NeMo import or model factory.
 - Bind a fresh-process supervisor and official sample result to this
   admission. The present supervisor covers one adapter process only and its
   default reviewed-sample verifier raises. Authenticate the official sample
