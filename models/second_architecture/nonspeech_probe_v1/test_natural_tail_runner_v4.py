@@ -64,14 +64,16 @@ class NaturalTailV4NoWeightTests(unittest.TestCase):
             self.assertFalse(parent.complete_worker_output(attempt,plan))
 
     def _fake_broken_pipe(self, *, code: int, complete: bool,
-                          still_live: bool = False) -> tuple[dict,bool,bool]:
+                          still_live: bool = False,
+                          teardown_zero: bool = False) -> tuple[dict,bool,bool]:
         class FakeProcess:
             pid=12345
             returncode=None
             polls=0
             def poll(self):
                 self.polls += 1
-                if self.polls >= 2 and not still_live and self.returncode is None:
+                exit_poll = 3 if teardown_zero else 2
+                if self.polls >= exit_poll and not still_live and self.returncode is None:
                     self.returncode=code
                 return self.returncode
             def wait(self,timeout):
@@ -84,7 +86,8 @@ class NaturalTailV4NoWeightTests(unittest.TestCase):
             attempt=Path(temp)
             with mock.patch.object(parent.subprocess,"Popen",return_value=process), \
                  mock.patch.object(parent.os,"write",side_effect=write), \
-                 mock.patch.object(parent.bounded,"process_tree_rss_bytes",return_value=123), \
+                 mock.patch.object(parent.bounded,"process_tree_rss_bytes",
+                                   side_effect=[123,0] if teardown_zero else lambda _pid:123), \
                  mock.patch.object(parent,"evidence_bytes",return_value=0), \
                  mock.patch.object(parent,"complete_worker_output",return_value=complete) as output, \
                  mock.patch.object(parent.bounded,"kill_group",
@@ -112,6 +115,14 @@ class NaturalTailV4NoWeightTests(unittest.TestCase):
         self.assertTrue(killed)
         self.assertEqual(result["worker_stop_reason"],"heartbeat_pipe_lost")
         self.assertGreater(result["worker_rss_samples"],1)
+
+    def test_zero_rss_during_teardown_is_not_logged_as_positive_sample(self) -> None:
+        result,checked,killed=self._fake_broken_pipe(
+            code=0,complete=True,teardown_zero=True)
+        self.assertTrue(checked)
+        self.assertFalse(killed)
+        self.assertEqual(result["worker_stop_reason"],"normal_exit")
+        self.assertEqual(result["worker_rss_samples"],1)
 
     def test_direct_worker_without_live_pipe_rejects_before_model(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

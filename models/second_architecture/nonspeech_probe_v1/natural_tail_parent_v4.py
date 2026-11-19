@@ -150,7 +150,11 @@ def run_bounded(command: list[str], attempt: Path, *, nonce: str,
                                 reason,monitor_error = "monitor_error",repr(error)
                                 bounded.kill_group(process)
                                 break
-                            if rss is not None:
+                            # A closed heartbeat pipe can race process teardown.
+                            # A zero/None RSS sample at that boundary proves no
+                            # positive allocation; only a later clean exit plus
+                            # complete saved output can classify the race normal.
+                            if rss is not None and rss > 0:
                                 samples += 1
                                 peak = max(peak,rss)
                                 sample_file.write(worker.canonical({
