@@ -1,0 +1,19 @@
+# Independent result review: Qwen action speech sources V2
+
+19 November 2026. **Decision: GO for technical source bytes and blinded review bundle; human and Qwen inference gates remain closed.** I independently audited the one authorized TTS-only `runs/source_render_v2/attempt_001`, its `attempt_001_audit.json`, and `review_bundle_001`. I loaded no Qwen weights, opened no candidate answers and made no human-intelligibility or semantic judgment.
+
+## Source, host and resource provenance
+
+The committed [source review](INDEPENDENT_SPEECH_RENDER_SOURCE_REVIEW_GO_V2.md) and [bound GO](SPEECH_RENDER_GO_V2.json) still validate against **14 clean tracked source hashes**. The manifest binds that GO, the review memo, the fixed 18-case source plan and the exact TTS conversion versions. Its recorded renderer identity contains the pinned Piper Amy and Kokoro Bella asset hashes, Samantha `say` binary hash and OS build, and package versions. The 18 recorded renderer commands use the intended voices and exact source texts.
+
+The one-shot attempt has a start record, manifest and post-manifest terminal receipt, with no `failure.json`. I independently rehashed the start, manifest and host records against their terminal/manifest references. Start, pre-host, post-host, manifest and terminal timestamps are ordered. The terminal filesystem mtime was about **16.885 seconds** after start, far below the 900-second limit. Both host probes show AC power and an open lid; their archived power logs match the recorded hashes, and I found **zero sleep/wake/thermal events** in the attempt window. The saved RSS log has **44 samples** and a peak process-tree RSS of **1,129.7 MiB**, below the sampled 8-GiB bound. The attempt's file total is **22,572,424 bytes**, below the 200-MiB cap. A sub-0.25-second memory spike could escape the sampler; the claim is a sampled resource pass.
+
+## Independent waveform reconstruction
+
+The saved auditor returned `technical_bytes_pass_human_review_pending` for **18 cases and 54 raw/converted/final audio files**. I separately rehashed all 54 files and reconstructed every converted PCM array directly from its raw WAV or AIFF with independent code using the frozen 16-kHz Kaiser resampling, level rule and PCM16 quantization. Each converted array exactly matched the saved file; each final file contained that array followed only by zero frames to **256,000 mono 16-kHz PCM16 samples** (16.0 seconds). The final PCM hashes matched the manifest. Every source was shorter than 16 seconds: **5.639–8.951 seconds** before the zero tail. The largest absolute quantized sample was **27,853**, below clipping. The 18 sources comprise six each of LIST, ASK and CANCEL scripts, and six each of Piper Amy, Samantha and Kokoro Bella. The 54 audio files total **21,342,174 bytes**. These are technical waveform checks, not proof the intended wording is heard.
+
+## Blinded bundle
+
+The read-only bundle auditor returned `36_copies_and_two_forms_pass_human_pending`. I separately rehashed **36/36** opaque reviewer WAVs against their source final files, checked both reviewer directories contain exactly `q01.wav`–`q18.wav` plus one form, and verified two distinct complete permutations of the 18 cases. Both HTML hashes matched the technical mapping; neither form contains a source case ID or script text. The mapping stays outside the reviewer directories. Both the source and bundle receipts record **`human_reviews: 0`** and `candidate_model_inference_authorized: false`. No reviewer response or timing mark has been supplied.
+
+The technical result is reproducible from the fixed attempt and audit files. The next required step is two independent blinded human listening records for all 18 clips, with a third review for critical disagreement, followed by a separate human QA receipt. The [Qwen method protocol](PROTOCOL_V1.md) and its independent HOLD/amendments govern any later model inference; this source GO does not clear that gate.
