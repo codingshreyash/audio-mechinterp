@@ -1,0 +1,7 @@
+# Post-GO fake-test correction and source check
+
+19 November 2026. After the independent causal worker and parent GO receipts were committed in separate ordered commits (`fcc5ca5`, then `c22a6da`), the fake HOLD test failed because it patched `WORKER_GO` and `PARENT_GO` globals while the Python default arguments of `verify_worker_go()` and `verify_parent_go()` had captured the original paths at function definition. This was a **test-only** defect: the live source and both exact GO gates passed, and no candidate inference ran.
+
+Commit `052aed7` changes that fake test to pass the absent review paths explicitly and inject a worker-HOLD exception into the parent admission path. Its new test SHA-256 is `6a8f844ad72aead512f93dfa7bbb2a0b4e4aa9fa9c49dfd82d074ac17a7f7132`. I reran the complete causal fake suite after both real GO receipts existed: **6/6 passed**. I also reran `worker.verify_worker_go()` and `parent.verify_parent_go()` without model loading; both passed. The worker, parent, helper, protocol, preflight and host/deadline source hashes bound in the GO receipts are unchanged. The test file is not part of the parent runtime `source_binding`, so this test-only correction does not re-pin or change the executed assay.
+
+The single FIT Kokoro/teal causal attempt remains subject to the parent’s one-shot path, AC/open-lid and thermal checks, hard deadline, self/full-donor controls and read-only saved audit. This addendum does not report a candidate result or security finding.
