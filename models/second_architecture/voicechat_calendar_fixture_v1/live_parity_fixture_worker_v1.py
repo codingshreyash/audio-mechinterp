@@ -147,9 +147,9 @@ def run_fixture_arm(
                  and admission.get("caps", {}).get("arm_output_bytes") ==
                  request["capture_byte_cap"],
                  "Production admission differs from reviewed freeze")
-        _require("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX" not in os.environ
-                 and "VOICECHAT_CONTROLLER_KEY_HEX" not in os.environ,
-                 "Admission secrets remain in model process environment")
+        _require(type(admission.get("child_public_environment")) is dict
+                 and dict(os.environ) == admission["child_public_environment"],
+                 "Model process environment differs from frozen allowlist")
     qa_binding = qa_precheck(request)
     _require(isinstance(qa_binding, dict)
              and all(isinstance(qa_binding.get(key), str) and
@@ -174,9 +174,15 @@ def run_fixture_arm(
             byte_cap=request["capture_byte_cap"])
         _require(response_sha == request.get("response_sha256"),
                  "Stock response differs from expected response hash")
+    if status == "fixture_admitted_for_fresh_process_source_only":
+        _require(dict(os.environ) == admission["child_public_environment"],
+                 "Model process environment changed before factory")
 
     # These calls occur only after the admission callback has returned.
     official = official_factory()
+    if status == "fixture_admitted_for_fresh_process_source_only":
+        _require(dict(os.environ) == admission["child_public_environment"],
+                 "NeMo import changed frozen environment before model factory")
     model = model_factory(official, Path(request["checkpoint_dir"]),
                           request.get("device", "cpu"))
     if arm == "adapter":
@@ -266,6 +272,7 @@ def run_production_adapter_once(
     admit = admit_fixture if admit is None else admit
     rehash = rehash_bound_inputs if rehash is None else rehash
     source_digest = source_hashes if source_digest is None else source_digest
+    public_environment = child_public_environment()
     try:
         admission = admit(plan_path=plan_path, freeze_path=freeze_path,
                           review_path=review_path, paths=paths,
@@ -273,13 +280,14 @@ def run_production_adapter_once(
                           controller_key=controller_key)
     finally:
         # The pinned preflight needs the controller key during admission.
-        # Neither admission key may remain visible to imported model code.
-        os.environ.pop("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX", None)
-        os.environ.pop("VOICECHAT_CONTROLLER_KEY_HEX", None)
+        # Restore the complete reviewed public projection, removing keys and
+        # every unrelated parent variable before any model library import.
+        os.environ.clear()
+        os.environ.update(public_environment)
     _require(admission.get("status") ==
              "fixture_admitted_for_fresh_process_source_only",
              "Production adapter admission incomplete")
-    _require(child_public_environment() == admission.get("child_public_environment"),
+    _require(dict(os.environ) == admission.get("child_public_environment"),
              "Frozen public model environment changed after key scrub")
     sample_sha = sample_verify(admission)
     _require(isinstance(sample_sha, str)
@@ -305,6 +313,11 @@ def run_production_adapter_once(
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(plan["seed"])
     torch.use_deterministic_algorithms(True)
+    # Torch may initialize a local compiler-cache variable during import.
+    # It is not part of the reviewed child environment and must not enter
+    # NeMo/model code.
+    os.environ.clear()
+    os.environ.update(public_environment)
     request = {
         "arm": "adapter", "case_id": CASE_ID, "voice_id": VOICE_ID,
         "seed": plan["seed"], "input_hashes": plan["input_hashes"],
@@ -329,7 +342,7 @@ def run_production_adapter_once(
     finally:
         _require(rehash(plan, paths) == admission["input_hashes"]
                  and source_digest() == admission["source_sha256"]
-                 and child_public_environment() == admission["child_public_environment"],
+                 and dict(os.environ) == admission["child_public_environment"],
                  "Fixture source/input changed during adapter process")
     return result
 

@@ -260,6 +260,8 @@ class FixtureWorkerTests(unittest.TestCase):
             self.events.append("arm")
             self.assertNotIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
             self.assertNotIn("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX", os.environ)
+            self.assertNotIn("UNRELATED_PARENT_SECRET", os.environ)
+            self.assertEqual(dict(os.environ), admission["child_public_environment"])
             self.assertEqual(request["arm"], "adapter")
             self.assertEqual(request["source_plan_sha256"], "a" * 64)
             self.assertEqual(admission_gate(request), admission)
@@ -269,7 +271,8 @@ class FixtureWorkerTests(unittest.TestCase):
             self.events.append("rehash")
             return plan["input_hashes"]
         with patch.dict(os.environ, {"VOICECHAT_CONTROLLER_KEY_HEX": "c" * 64,
-                                  "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX": "k" * 64}):
+                                  "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX": "k" * 64,
+                                  "UNRELATED_PARENT_SECRET": "synthetic"}):
             with patch("models.second_architecture.voicechat_calendar_fixture_v1.live_parity_fixture_worker_v1.resource.setrlimit"):
                 result = run_production_adapter_once(
                     plan_path=plan_path, freeze_path=self.root / "freeze",
@@ -286,7 +289,8 @@ class FixtureWorkerTests(unittest.TestCase):
             self.assertIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
             raise ValueError("synthetic admission failure")
         with patch.dict(os.environ, {"VOICECHAT_CONTROLLER_KEY_HEX": "c" * 64,
-                                  "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX": "k" * 64}):
+                                  "VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX": "k" * 64,
+                                  "UNRELATED_PARENT_SECRET": "synthetic"}):
             with self.assertRaisesRegex(ValueError, "synthetic admission failure"):
                 run_production_adapter_once(
                     plan_path=self.root / "absent-plan",
@@ -296,6 +300,25 @@ class FixtureWorkerTests(unittest.TestCase):
                     admit=fail)
             self.assertNotIn("VOICECHAT_CONTROLLER_KEY_HEX", os.environ)
             self.assertNotIn("VOICECHAT_FIXTURE_FREEZE_REVIEW_KEY_HEX", os.environ)
+            self.assertNotIn("UNRELATED_PARENT_SECRET", os.environ)
+
+    def test_direct_production_arm_rejects_unfrozen_parent_environment(self):
+        self.request["source_plan_sha256"] = "a" * 64
+        self.request["freeze_sha256"] = "b" * 64
+        public = child_public_environment()
+        admission = {"status": "fixture_admitted_for_fresh_process_source_only",
+                     "input_hashes": self.request["input_hashes"], "seed": 17,
+                     "source_plan_sha256": "a" * 64, "freeze_sha256": "b" * 64,
+                     "caps": {"arm_output_bytes": 100000},
+                     "child_public_environment": public}
+        with patch.dict(os.environ, {"UNRELATED_PARENT_SECRET": "synthetic"}):
+            with self.assertRaisesRegex(ValueError, "frozen allowlist"):
+                run_fixture_arm(
+                    self.request, arm_dir=self.arm_dir,
+                    admission_gate=lambda _request: admission,
+                    qa_precheck=self._qa,
+                    official_factory=self._official, model_factory=self._model)
+        self.assertEqual(self.events, [])
 
 
 if __name__ == "__main__":

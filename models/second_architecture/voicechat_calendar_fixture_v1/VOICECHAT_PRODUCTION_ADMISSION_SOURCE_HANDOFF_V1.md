@@ -18,8 +18,14 @@ hook is closed by default; this module cannot admit a live run on its own.
 The freeze binds the exact nonsecret child-environment allowlist and its hash.
 The supervisor adds only the two admission keys to that allowlist while
 starting the worker; it does not forward arbitrary parent variables. The
-worker removes both keys from `os.environ` immediately after admission and
-checks the remaining public environment before model creation and after use.
+worker replaces its entire `os.environ` with the frozen public allowlist
+immediately after admission, removing both keys and every unrelated inherited
+variable even if admission fails. It checks full environment equality before
+model creation and after use. Torch can add a local compiler-cache variable
+while it initializes, so the worker restores the frozen allowlist again after
+Torch setup and before the adapter arm. It also checks equality after the
+NeMo helper import and before the model factory. Direct worker calls with
+extra parent variables fail at the model-factory boundary.
 
 `live_parity_single_process_supervisor_v1.py` adds one fresh adapter-child
 boundary. Its default official-sample verifier is also closed. After real
