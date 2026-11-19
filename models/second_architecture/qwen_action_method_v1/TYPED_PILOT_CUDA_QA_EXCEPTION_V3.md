@@ -1,0 +1,3 @@
+# Typed CUDA V3 QA exception
+
+19 November 2026. This is a source-only continuation of the reviewed **typed `F_L1` case only**. The failed V2 `load_001` is consumed and provides no authorization for reuse. After exact processor-dependency preflight, committed source-only admission, and independent V3 review/GO, one fresh `runs/typed_pilot_cuda_v3/load_002` load-only attempt may run. It contains no prompt evaluation. Only if its saved audit passes may a separate independent V3 pilot GO authorize one `runs/typed_pilot_cuda_v3/pilot_002` attempt on the same typed `F_L1` input. Neither GO permits audio cases, development cases, locked cases, or any broader benchmark. A failed or partial V3 attempt is immutable and cannot be retried under this exception.
