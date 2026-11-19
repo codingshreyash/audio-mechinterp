@@ -139,6 +139,9 @@ def preflight_receipt() -> dict:
 
 
 def validate_go(admission_path: Path, go_path: Path) -> dict:
+    require(admission_path.resolve() == ADMISSION.resolve()
+            and go_path.resolve() == GO.resolve(),
+            "fixed admission and executable GO paths required")
     require(admission_path.is_file() and not admission_path.is_symlink()
             and go_path.is_file() and not go_path.is_symlink(),
             "missing admission or independent executable GO")
@@ -150,21 +153,27 @@ def validate_go(admission_path: Path, go_path: Path) -> dict:
             and go.get("admission_sha256") == sha_file(admission_path)
             and go.get("sources") == admission["sources"],
             "independent executable GO not bound to source/admission")
+    for receipt_path in (admission_path, go_path):
+        rel = str(receipt_path.resolve().relative_to(ROOT))
+        require(subprocess.run(("git", "ls-files", "--error-unmatch", "--", rel),
+                               cwd=ROOT, check=False, capture_output=True).returncode == 0,
+                f"untracked receipt: {receipt_path.name}")
+        for flag in ((), ("--cached",)):
+            require(subprocess.run(("git", "diff", *flag, "--quiet", "--", rel),
+                                   cwd=ROOT, check=False).returncode == 0,
+                    f"dirty receipt: {receipt_path.name}")
     rel_go = str(go_path.resolve().relative_to(ROOT))
-    require(subprocess.run(("git", "diff", "--quiet", "--", rel_go),
-                           cwd=ROOT, check=False).returncode == 0,
-            "GO receipt dirty")
     review_commit = subprocess.check_output(("git", "log", "-1", "--format=%H",
                                              "--", rel_go), cwd=ROOT, text=True).strip()
     require(len(review_commit) == 40, "GO receipt uncommitted")
-    for name in SOURCE_NAMES:
-        rel = str((HERE / name).relative_to(ROOT))
+    for path in [admission_path, *(HERE / name for name in SOURCE_NAMES), HOST_SOURCE]:
+        rel = str(path.resolve().relative_to(ROOT))
         source_commit = subprocess.check_output(("git", "log", "-1", "--format=%H",
                                                  "--", rel), cwd=ROOT, text=True).strip()
         require(source_commit != review_commit and subprocess.run(
             ("git", "merge-base", "--is-ancestor", source_commit, review_commit),
             cwd=ROOT, check=False).returncode == 0,
-            f"GO must postdate source: {name}")
+            f"GO must postdate committed evidence: {path.name}")
     return admission
 
 

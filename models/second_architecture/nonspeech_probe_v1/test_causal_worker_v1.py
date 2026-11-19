@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import types
 import json
+import hashlib
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +17,58 @@ from . import causal_worker_v1 as worker
 
 
 class WorkerSourceTests(unittest.TestCase):
+    def test_executable_go_requires_committed_receipts_and_ancestry(self) -> None:
+        """A staged GO or uncommitted admission cannot authorize a model load."""
+        with tempfile.TemporaryDirectory(dir=worker.ROOT) as temp:
+            directory = Path(temp)
+            admission, go = directory / "admission.json", directory / "go.json"
+            admission.write_text('{"sources":{}}')
+            go.write_text(json.dumps({
+                "schema": "nonspeech_whisper_causal_executable_go_v1",
+                "status": "GO",
+                "admission_sha256": hashlib.sha256(admission.read_bytes()).hexdigest(),
+                "sources": {},
+            }))
+            statuses = {"tracked": True, "staged": False, "ancestor": True}
+
+            def fake_run(cmd, **_kwargs):
+                if cmd[1] == "ls-files":
+                    return subprocess.CompletedProcess(cmd, 0 if statuses["tracked"] else 1)
+                if cmd[1] == "diff":
+                    is_staged = "--cached" in cmd
+                    return subprocess.CompletedProcess(
+                        cmd, 1 if is_staged and statuses["staged"] else 0)
+                if cmd[1] == "merge-base":
+                    return subprocess.CompletedProcess(cmd, 0 if statuses["ancestor"] else 1)
+                raise AssertionError(cmd)
+
+            with patch.object(worker, "ADMISSION", admission), \
+                 patch.object(worker, "GO", go), \
+                 patch.object(worker, "preflight_receipt",
+                              return_value={"sources": {}}), \
+                 patch.object(worker.subprocess, "run", side_effect=fake_run), \
+                 patch.object(worker.subprocess, "check_output",
+                              side_effect=lambda *_a, **_k: "a" * 40):
+                # The same commit is never an independent GO.
+                with self.assertRaisesRegex(ValueError, "GO must postdate"):
+                    worker.validate_go(admission, go)
+                with patch.object(worker.subprocess, "check_output",
+                                  side_effect=lambda cmd, **_kw: (
+                                      "b" * 40 if str(go.relative_to(worker.ROOT))
+                                      in cmd else "a" * 40)):
+                    worker.validate_go(admission, go)
+                    statuses["staged"] = True
+                    with self.assertRaisesRegex(ValueError, "dirty receipt"):
+                        worker.validate_go(admission, go)
+                    statuses["staged"] = False
+                    statuses["tracked"] = False
+                    with self.assertRaisesRegex(ValueError, "untracked receipt"):
+                        worker.validate_go(admission, go)
+                    statuses["tracked"] = True
+                    statuses["ancestor"] = False
+                    with self.assertRaisesRegex(ValueError, "GO must postdate"):
+                        worker.validate_go(admission, go)
+
     def test_fixed_328_names_and_no_hook_donors(self) -> None:
         rows = plan.schedule()
         self.assertEqual(len(rows), 328)
