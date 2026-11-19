@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import gzip
+import os
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -101,16 +102,31 @@ def _execute_fake_testable_composition(*, files: worker.AdmissionFiles,
         raise ValueError('Post-run host probe must be strictly later than pre-run probe')
     raw = gzip.decompress(base64.b64decode(after['power_log_gzip_base64'], validate=True))
     sidecar = output_dir.with_name(output_dir.name + '.composition.json')
+    raw_path = output_dir.with_name(output_dir.name + '.post_host.raw')
+    if not raw or len(raw) > 128 * 1024**2:
+        raise ValueError('Post-run raw host log absent or unbounded')
+    with raw_path.open('xb') as f:
+        f.write(raw)
+        f.flush()
+        os.fsync(f.fileno())
     worker._exclusive_json(sidecar, {
         'schema': 'voxtral_track_b_v6_composition_source_only_v1',
         'status': 'worker_complete_post_host_checked_not_pilot_go',
         'pilot_measurement_sha256': result['pilot_measurement_sha256'],
         'post_host_raw_sha256': worker.sha_bytes(raw),
+        'post_host_raw_bytes': len(raw),
+        'pre_host_collected_utc': proof['fresh_host_collected_utc'],
+        'post_host_collected_utc': after['collected_utc'],
         'admission_sha256': pins.admission_sha256,
         'review_sha256': pins.review_sha256,
         'worker_sha256': pins.worker_sha256,
         'campaign_attempt_id': bindings['campaign_attempt_id'],
     })
+    claim = Path(bindings['campaign_claim_path'])
+    attempt_bytes = sum(p.stat().st_size for p in output_dir.rglob('*') if p.is_file())
+    attempt_bytes += claim.stat().st_size + sidecar.stat().st_size + raw_path.stat().st_size
+    if attempt_bytes > worker.MAX_OUTPUT_BYTES or free_bytes(output_dir) < worker.MIN_FREE_BYTES:
+        raise ValueError('Full composition attempt output/free-disk cap exceeded')
     return {'status': 'schedule_complete_resource_unverified',
             'composition_sha256': worker.sha_file(sidecar)}
 
