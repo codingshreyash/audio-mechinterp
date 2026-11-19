@@ -5,7 +5,10 @@ import argparse
 import gzip
 import json
 import math
+import re
 from pathlib import Path
+
+import numpy as np
 
 from . import descriptive_worker_v1 as worker
 
@@ -27,25 +30,77 @@ def finite_nonnegative(value: object) -> bool:
     return type(value) in (int, float) and math.isfinite(value) and value >= 0
 
 
-def check_trace(traces: dict, model: str) -> None:
+HEX64 = re.compile(r"[0-9a-f]{64}\Z")
+
+
+def ctc_length(frames: int) -> int:
+    length = frames
+    for kernel, stride in zip((10, 3, 3, 3, 3, 2, 2),
+                              (5, 2, 2, 2, 2, 2, 2), strict=True):
+        length = (length - kernel) // stride + 1
+    return length
+
+
+def check_geometry(geometry: dict, model: str, frames: int) -> None:
+    worker.require(isinstance(geometry, dict) and geometry.get("pcm_frames") == frames,
+                   "saved input geometry missing or changed")
+    if model.startswith("whisper"):
+        mask = geometry.get("attention_mask")
+        active = (frames + 159) // 160
+        worker.require(geometry.get("mel_frames") == 3000
+                       and isinstance(mask, list) and len(mask) == 3000
+                       and mask == [1] * active + [0] * (3000 - active)
+                       and geometry.get("active_mel_frames") == active
+                       and geometry.get("encoder_frames") == 1500
+                       and geometry.get("nominal_active_encoder_rows") == (active + 1) // 2
+                       and geometry.get("encoder_time_map") ==
+                       "conv1(k3,s1,p1),conv2(k3,s2,p1); nominal row r uses mel centers 2r"
+                       and geometry.get("mask_sha256") == worker.sha_bytes(bytes(mask)),
+                       "Whisper active/padded mask or encoder map invalid")
+    else:
+        length = ctc_length(frames)
+        worker.require(geometry == worker.wav_geometry(frames, length),
+                       "Wav2Vec2 all-active/CTC geometry invalid")
+
+
+def expected_stage_shape(stage: str, model: str, frames: int) -> tuple[list[int], int]:
+    if model.startswith("whisper"):
+        return ([1, 80, 3000], 2) if stage == "mel" else ([1, 1500, 384], 1)
+    first = (frames - 10) // 5 + 1
+    final = ctc_length(frames)
+    if stage == "input_values":
+        return [1, frames], 1
+    if stage in ("first_conv_raw", "first_conv_norm"):
+        return [1, 512, first], 2
+    if stage == "logits":
+        return [1, final, 32], 1
+    return [1, final, 768], 1
+
+
+def check_trace(traces: dict, counts: dict, model: str, frames: int) -> None:
     phases = ("detect", "generate") if model == "whisper_multilingual" else (
         "generate",) if model == "whisper_english" else ("ctc",)
-    worker.require(set(traces) == set(phases), "capture phase coverage changed")
+    worker.require(isinstance(traces, dict) and isinstance(counts, dict)
+                   and set(traces) == set(phases) and set(counts) == set(phases),
+                   "capture phase coverage changed")
     for phase, stages in traces.items():
         expected = set(worker.WHISPER_STAGES)
         if phase == "detect":
             expected.remove("mel")
         elif phase == "ctc":
             expected = set(worker.WAV_STAGES)
-        worker.require(set(stages) == expected, "capture stage coverage changed")
+        worker.require(isinstance(stages, dict) and set(stages) == expected
+                       and counts[phase] == {name: 1 for name in expected},
+                       "capture stage/count coverage changed")
         for name, metric in stages.items():
             shape, curve = metric.get("shape"), metric.get("row_l2")
-            worker.require(metric.get("dtype") == "float32" and isinstance(shape, list)
-                           and all(type(x) is int and x > 0 for x in shape)
-                           and isinstance(curve, list) and len(curve) == shape[metric["time_axis"]]
+            expected_shape, axis = expected_stage_shape(name, model, frames)
+            worker.require(metric.get("dtype") == "float32" and shape == expected_shape
+                           and metric.get("time_axis") == axis
+                           and isinstance(curve, list) and len(curve) == shape[axis]
                            and all(finite_nonnegative(x) for x in curve)
                            and isinstance(metric.get("sha256"), str)
-                           and len(metric["sha256"]) == 64,
+                           and HEX64.fullmatch(metric["sha256"]) is not None,
                            f"trace metric invalid: {phase}/{name}")
 
 
@@ -68,9 +123,35 @@ def check_whisper(output: dict, multilingual: bool) -> None:
                            and math.isfinite(row["selected_logit"])
                            and type(row.get("selected_logprob")) in (int, float)
                            and math.isfinite(row["selected_logprob"])
-                           and isinstance(row.get("logits_sha256"), str)
-                           and len(row["logits_sha256"]) == 64 for row in scores),
+                           and isinstance(row.get("processed_logits_sha256"), str)
+                           and HEX64.fullmatch(row["processed_logits_sha256"]) is not None
+                           and isinstance(row.get("raw_logits_sha256"), str)
+                           and HEX64.fullmatch(row["raw_logits_sha256"]) is not None
+                           and type(row.get("raw_selected_logit")) in (int, float)
+                           and math.isfinite(row["raw_selected_logit"])
+                           and type(row.get("raw_top_id")) is int
+                           and type(row.get("top_id")) is int for row in scores),
                    "Whisper IDs or scores invalid")
+    first_state = output.get("first_decoder_step")
+    raw = output.get("first_raw_logits")
+    vocab_size = 51865 if multilingual else 51864
+    worker.require(isinstance(first_state, dict) and isinstance(raw, dict)
+                   and first_state.get("site") ==
+                   "decoder_hidden_states[0][-1] (final decoder layer, first generation step)"
+                   and first_state.get("shape") == [1, len(prefix), 384]
+                   and raw.get("shape") == [vocab_size],
+                   "first decoder state or raw logit geometry invalid")
+    hidden = np.asarray(first_state.get("values"), dtype=np.float32)
+    raw_values = np.asarray(raw.get("values"), dtype=np.float32)
+    worker.require(list(hidden.shape) == first_state["shape"]
+                   and list(raw_values.shape) == raw["shape"]
+                   and bool(np.isfinite(hidden).all()) and bool(np.isfinite(raw_values).all())
+                   and worker.sha_bytes(hidden.tobytes()) == first_state.get("sha256")
+                   and worker.sha_bytes(raw_values.tobytes()) == raw.get("sha256")
+                   and raw["sha256"] == scores[0]["raw_logits_sha256"]
+                   and float(raw_values[generated[0]]) == scores[0]["raw_selected_logit"]
+                   and int(raw_values.argmax()) == scores[0]["raw_top_id"],
+                   "first decoder state/raw logits hash or value invalid")
     eos_seen = 50257 in generated
     worker.require(output.get("eos_seen") is eos_seen
                    and output.get("censored") is (not eos_seen and steps == worker.MAX_NEW_TOKENS)
@@ -83,15 +164,28 @@ def check_whisper(output: dict, multilingual: bool) -> None:
                    "Whisper full text missing")
     if multilingual:
         detection = output.get("language_detection")
+        config_path = worker._snapshot("whisper_multilingual", json.loads(worker.PINS.read_text())[
+            "models"]["whisper_multilingual"]) / "generation_config.json"
+        language_ids = json.loads(config_path.read_text())["lang_to_id"]
         worker.require(isinstance(detection, dict)
                        and detection.get("candidate_count") == 99
                        and isinstance(detection.get("language_logits"), dict)
-                       and len(detection["language_logits"]) == 99
+                       and set(detection["language_logits"]) == set(language_ids)
+                       and HEX64.fullmatch(detection.get("raw_logits_sha256", "")) is not None
                        and isinstance(detection.get("chosen_language_ids"), list)
                        and len(detection["chosen_language_ids"]) == 1
                        and len(prefix) == 4 and prefix[1] == detection["chosen_language_ids"][0]
                        and prefix[2:] == [50359, 50363],
                        "multilingual detection/prefix evidence invalid")
+        language_scores = detection["language_logits"]
+        worker.require(all(type(x) in (int, float) and math.isfinite(x)
+                           for x in language_scores.values()),
+                       "language detection scores nonfinite")
+        maximum = max(language_scores.values())
+        expected_id = min(language_ids[name] for name, value in language_scores.items()
+                          if value == maximum)
+        worker.require(detection["chosen_language_ids"] == [expected_id],
+                       "detected language is not the argmax of saved logits")
     else:
         worker.require(output.get("language_detection") is None,
                        "English Whisper unexpectedly has language detection")
@@ -140,8 +234,13 @@ def audit_attempt(attempt: Path, receipt_path: Path, review_path: Path) -> dict:
                        and worker.sha_bytes(gzip.decompress(raw_path.read_bytes()))
                        == archive["raw_sha256"], "host log archive changed")
     data = rows(attempt / "records.jsonl")
-    worker.require(len(data) >= 24 and data[0].get("type") == "start"
-                   and data[-1].get("type") == "complete", "worker record book incomplete")
+    types = [row.get("type") for row in data]
+    worker.require(len(data) == 42 and types[0] == "start" and types[-1] == "complete"
+                   and types.count("start") == 1 and types.count("case") == 22
+                   and types.count("silence_difference") == 18
+                   and types.count("complete") == 1
+                   and set(types) == {"start", "case", "silence_difference", "complete"},
+                   "worker record inventory incomplete or contains extra rows")
     header, end = data[0], data[-1]
     worker.require(header.get("schema") == "nonspeech_descriptive_v1"
                    and header.get("model") == model
@@ -166,8 +265,10 @@ def audit_attempt(attempt: Path, receipt_path: Path, review_path: Path) -> dict:
                        and row.get("repeat") is repeated
                        and row.get("wav_sha256") == by_name[name]["wav_sha256"]
                        and row.get("pcm_sha256") == by_name[name]["pcm_sha256"]
-                       and finite_nonnegative(row.get("elapsed_seconds")),
+                       and finite_nonnegative(row.get("elapsed_seconds"))
+                       and row["elapsed_seconds"] <= worker.MAX_SECONDS,
                        "case identity/timing invalid")
+        check_geometry(row.get("input_geometry"), model, by_name[name]["frames"])
         out = row.get("output")
         worker.require(isinstance(out, dict) and isinstance(out.get("transcript"), str)
                        and out.get("lexical_nonempty") is worker.lexical_nonempty(out["transcript"])
@@ -177,11 +278,14 @@ def audit_attempt(attempt: Path, receipt_path: Path, review_path: Path) -> dict:
             check_whisper(out, model == "whisper_multilingual")
         else:
             check_ctc(out, by_name[name]["frames"])
-        check_trace(row.get("traces"), model)
+        check_trace(row.get("traces"), row.get("capture_counts"), model,
+                    by_name[name]["frames"])
     for repeat in case_rows[20:]:
         original = next(row for row in case_rows[:20] if row["case_id"] == repeat["case_id"])
         worker.require(repeat["output"] == original["output"]
-                       and repeat["traces"] == original["traces"],
+                       and repeat["traces"] == original["traces"]
+                       and repeat["capture_counts"] == original["capture_counts"]
+                       and repeat["input_geometry"] == original["input_geometry"],
                        "deterministic silence repeat changed")
     diffs = [row for row in data if row.get("type") == "silence_difference"]
     expected_diffs = [name for name in expected if not name.endswith("_silence")]
@@ -202,8 +306,25 @@ def audit_attempt(attempt: Path, receipt_path: Path, review_path: Path) -> dict:
                 worker.require(finite_nonnegative(difference.get("whole_l2"))
                                and isinstance(difference.get("row_l2"), list)
                                and len(difference["row_l2"]) == len(metric["row_l2"])
-                               and all(finite_nonnegative(x) for x in difference["row_l2"]),
+                               and all(finite_nonnegative(x) for x in difference["row_l2"])
+                               and difference.get("nonzero_rows") == sum(
+                                   x != 0 for x in difference["row_l2"])
+                               and math.isclose(difference["whole_l2"],
+                                                math.sqrt(sum(x * x for x in difference["row_l2"])),
+                                                rel_tol=1e-6, abs_tol=1e-5),
                                "difference curve invalid")
+    # Difference rows must follow both the recipient and the same-duration silence
+    # row. Repeats are last; this forbids fabricated early contrasts.
+    positions = {row["case_id"]: i for i, row in enumerate(data)
+                 if row.get("type") == "case" and not row["repeat"]}
+    first_repeat = min(i for i, row in enumerate(data)
+                       if row.get("type") == "case" and row["repeat"])
+    for index, row in enumerate(data):
+        if row.get("type") == "silence_difference":
+            worker.require(index > positions[row["case_id"]]
+                           and index > positions[row["donor_case_id"]]
+                           and index < first_repeat,
+                           "silence difference record order invalid")
     worker.require(worker._disk_bytes(attempt) <= worker.MAX_EVIDENCE_BYTES,
                    "evidence cap exceeded")
     return {"schema": "nonspeech_descriptive_saved_audit_v1", "status": "PASS_STRUCTURAL",

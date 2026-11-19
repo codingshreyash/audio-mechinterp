@@ -245,16 +245,52 @@ def lexical_nonempty(text: str) -> bool:
     return any(unicodedata.category(char).startswith(("L", "N")) for char in text)
 
 
+def whisper_geometry(mask: Any, pcm_frames: int, mel_frames: int = 3000) -> dict:
+    """Bind processor-emitted mask and the nominal 2:1 encoder time map."""
+    import torch
+    require(torch.is_tensor(mask) and tuple(mask.shape) == (1, mel_frames),
+            "Whisper processor attention-mask geometry changed")
+    values = [int(x) for x in mask[0].tolist()]
+    require(set(values) <= {0, 1}, "Whisper mask is not binary")
+    active = sum(values)
+    expected = (pcm_frames + 159) // 160
+    require(active == expected and values == [1] * active + [0] * (mel_frames - active),
+            "Whisper mask no longer marks exact active mel prefix")
+    return {"pcm_frames": pcm_frames, "mel_frames": mel_frames,
+            "attention_mask": values, "active_mel_frames": active,
+            "encoder_frames": mel_frames // 2,
+            "nominal_active_encoder_rows": (active + 1) // 2,
+            "encoder_time_map": "conv1(k3,s1,p1),conv2(k3,s2,p1); nominal row r uses mel centers 2r",
+            "mask_sha256": sha_bytes(bytes(values))}
+
+
+def wav_geometry(pcm_frames: int, ctc_frames: int) -> dict:
+    length = pcm_frames
+    for kernel, stride in zip((10, 3, 3, 3, 3, 2, 2),
+                              (5, 2, 2, 2, 2, 2, 2), strict=True):
+        length = (length - kernel) // stride + 1
+    require(length == ctc_frames, "Wav2Vec2 CTC frame geometry changed")
+    return {"pcm_frames": pcm_frames, "attention_mask_kind": "implicit_all_active_unpadded",
+            "active_input_samples": pcm_frames, "ctc_frames": ctc_frames,
+            "active_ctc_frames": ctc_frames}
+
+
 def score_whisper(result: Any, tokenizer: Any, detection: dict | None,
                   *, max_new_tokens: int = MAX_NEW_TOKENS) -> dict:
     """Align one score to one actual generation step; never strip trailing pad=eos."""
     import torch
     seq = result.sequences
     scores = result.scores
+    raw_logits = result.logits
+    decoder_states = result.decoder_hidden_states
     require(torch.is_tensor(seq) and seq.ndim == 2 and seq.shape[0] == 1,
             "Whisper output sequence shape changed")
     require(isinstance(scores, (tuple, list)) and 1 <= len(scores) <= max_new_tokens,
             "Whisper score-step count changed")
+    require(isinstance(raw_logits, (tuple, list)) and len(raw_logits) == len(scores)
+            and isinstance(decoder_states, (tuple, list))
+            and len(decoder_states) == len(scores),
+            "Whisper raw-logit or decoder-state step count changed")
     ids = [int(v) for v in seq[0].tolist()]
     steps = len(scores)
     require(len(ids) > steps, "Whisper prefix or generated steps missing")
@@ -262,16 +298,32 @@ def score_whisper(result: Any, tokenizer: Any, detection: dict | None,
     eos = int(tokenizer.eos_token_id)
     require(eos == int(tokenizer.pad_token_id), "Whisper pad/eos identity changed")
     score_rows = []
-    for token, scores_t in zip(generated, scores, strict=True):
+    for token, scores_t, raw_t in zip(generated, scores, raw_logits, strict=True):
         require(torch.is_tensor(scores_t) and scores_t.shape[0] == 1
                 and scores_t.ndim == 2 and token < scores_t.shape[1],
                 "Whisper score tensor changed")
+        require(torch.is_tensor(raw_t) and raw_t.ndim == 2
+                and raw_t.shape == scores_t.shape and raw_t.dtype == torch.float32,
+                "Whisper raw logit tensor changed")
         vec = scores_t[0].detach().to("cpu", dtype=torch.float32)
+        raw_vec = raw_t[0].detach().to("cpu", dtype=torch.float32)
         require(bool(torch.isfinite(vec).any()), "all Whisper logits nonfinite")
+        require(bool(torch.isfinite(raw_vec).all()), "raw Whisper logits nonfinite")
         score_rows.append({"token_id": token, "selected_logit": float(vec[token]),
                            "selected_logprob": float(torch.log_softmax(vec, -1)[token]),
                            "top_id": int(torch.argmax(vec)),
-                           "logits_sha256": sha_bytes(vec.numpy().tobytes())})
+                           "processed_logits_sha256": sha_bytes(vec.numpy().tobytes()),
+                           "raw_selected_logit": float(raw_vec[token]),
+                           "raw_top_id": int(torch.argmax(raw_vec)),
+                           "raw_logits_sha256": sha_bytes(raw_vec.numpy().tobytes())})
+    first_hidden = decoder_states[0][-1]
+    require(torch.is_tensor(first_hidden) and first_hidden.ndim == 3
+            and first_hidden.shape[0] == 1 and first_hidden.shape[1] == len(prefix)
+            and first_hidden.shape[2] == 384
+            and first_hidden.dtype == torch.float32 and bool(torch.isfinite(first_hidden).all()),
+            "Whisper first decoder-step final-layer state changed")
+    first_hidden_array = first_hidden.detach().to("cpu").numpy()
+    first_raw_array = raw_logits[0][0].detach().to("cpu").numpy()
     eos_positions = [i for i, token in enumerate(generated) if token == eos]
     require(not eos_positions or eos_positions[0] == steps - 1,
             "Whisper sequence has tokens after first generated EOS")
@@ -282,6 +334,14 @@ def score_whisper(result: Any, tokenizer: Any, detection: dict | None,
     text = tokenizer.decode(generated, skip_special_tokens=True)
     return {"sequence_ids": ids, "prefix_ids": prefix, "generated_ids": generated,
             "actual_generation_steps": steps, "score_rows": score_rows,
+            "first_decoder_step": {
+                "site": "decoder_hidden_states[0][-1] (final decoder layer, first generation step)",
+                "shape": list(first_hidden_array.shape),
+                "values": first_hidden_array.tolist(),
+                "sha256": sha_bytes(first_hidden_array.tobytes())},
+            "first_raw_logits": {"shape": list(first_raw_array.shape),
+                                 "values": first_raw_array.tolist(),
+                                 "sha256": sha_bytes(first_raw_array.tobytes())},
             "eos_seen": eos_seen, "censored": termination == "length_censored",
             "termination": termination,
             "text_with_special_tokens": raw, "transcript": text,
@@ -418,9 +478,12 @@ def infer_one(model_name: str, processor: Any, model: Any, pcm: Any) -> tuple[di
     try:
         capture.install()
         if model_name.startswith("whisper"):
-            features = processor(audio, sampling_rate=16000, return_tensors="pt").input_features
+            processed = processor(audio, sampling_rate=16000, return_tensors="pt",
+                                  return_attention_mask=True)
+            features = processed.input_features
             require(features.dtype == torch.float32 and tuple(features.shape) == (1, 80, 3000),
                     "Whisper mel geometry changed")
+            geometry = whisper_geometry(processed.attention_mask, len(pcm), features.shape[2])
             capture._record("mel", features)
             if model_name == "whisper_multilingual":
                 # The installed 5.20.2 path must auto-detect exactly once; record
@@ -431,9 +494,11 @@ def infer_one(model_name: str, processor: Any, model: Any, pcm: Any) -> tuple[di
             with torch.inference_mode():
                 result = model.generate(
                     input_features=features, task="transcribe", language=None,
+                    attention_mask=processed.attention_mask,
                     return_timestamps=False, force_unique_generate_call=True,
                     condition_on_prev_tokens=False, do_sample=False, num_beams=1,
                     max_new_tokens=MAX_NEW_TOKENS, output_scores=True,
+                    output_logits=True, output_hidden_states=True,
                     return_dict_in_generate=True)
             output = score_whisper(result, processor.tokenizer, capture.detection)
             require(capture.counts.get("generate") == {
@@ -463,6 +528,7 @@ def infer_one(model_name: str, processor: Any, model: Any, pcm: Any) -> tuple[di
             with torch.inference_mode():
                 result = model(input_values=values, attention_mask=None, return_dict=True)
             output = score_ctc(result.logits, processor)
+            geometry = wav_geometry(len(pcm), len(output["frame_ids"]))
             require(capture.counts.get("ctc") == {name: 1 for name in WAV_STAGES},
                     "Wav2Vec2 capture topology changed")
             require(sha_bytes(_array(result.logits).tobytes())
@@ -470,7 +536,8 @@ def infer_one(model_name: str, processor: Any, model: Any, pcm: Any) -> tuple[di
                     "Wav2Vec2 captured logits differ")
         metrics = {phase: {name: trace_metric(name, value) for name, value in stages.items()}
                    for phase, stages in capture.arrays.items()}
-        return {"output": output, "capture_counts": capture.counts,
+        return {"output": output, "input_geometry": geometry,
+                "capture_counts": capture.counts,
                 "traces": metrics}, capture.arrays
     finally:
         capture.close()
