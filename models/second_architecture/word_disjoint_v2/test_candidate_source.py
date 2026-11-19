@@ -61,13 +61,29 @@ class CandidateSourceTests(unittest.TestCase):
             common_source])
         for closure in (w2v, whisper):
             names = {path.name for path in closure}
-            self.assertTrue({"audit.py", "render.py", "__init__.py",
+            self.assertTrue({"audit.py", "render.py", "queue.py", "__init__.py",
                              "wav2vec2_fit_baseline_stage_capture_v1.py",
                              "wav2vec2_dev_word_disjoint_v1.py",
                              "wav2vec2_dev_word_disjoint_audit_v1.py"} <= names)
             self.assertTrue(all(path.is_relative_to(local) for path in closure))
         self.assertIn(local / "wav2vec2_fit_complement_patch_v1.py", whisper)
         self.assertIn(local / "whisper_fit_word_window_causal_v1.py", whisper)
+
+    def test_relative_import_closure_resolves_parent_and_rejects_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            local = root / "models" / "second_architecture"
+            package = local / "word_disjoint_v2"
+            package.mkdir(parents=True)
+            helper = local / "helper.py"
+            helper.write_text("VALUE = 1\n")
+            module = package / "module.py"
+            module.write_text("from .. import helper\n")
+            with patch.object(common, "ROOT", root):
+                self.assertIn(helper, common.local_import_closure([module]))
+                module.write_text("from ... import helper\n")
+                with self.assertRaisesRegex(ValueError, "escapes local source tree"):
+                    common.local_import_closure([module])
 
     def test_old_go_cannot_freeze_post_review_sixth_helper_commit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

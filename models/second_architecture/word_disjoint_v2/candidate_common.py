@@ -98,7 +98,9 @@ def local_import_closure(seed_paths: list[Path]) -> list[Path]:
                 modules = [alias.name for alias in node.names]
                 base = local_root
             elif isinstance(node, ast.ImportFrom):
-                base = path.parent if node.level else local_root
+                base = path.parents[node.level - 1] if node.level else local_root
+                require(base.is_relative_to(local_root),
+                        "relative candidate import escapes local source tree")
                 if node.module:
                     modules = [node.module] + [node.module + "." + alias.name
                                                for alias in node.names if alias.name != "*"]
