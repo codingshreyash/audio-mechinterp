@@ -169,12 +169,28 @@ def rss_bytes() -> int:
 
 
 class Budget:
-    def __init__(self, output: Path):
+    def __init__(self, output: Path, expected_names: list[str] | None = None,
+                 progress_path: Path | None = None):
         self.output = output
         self.start = time.monotonic()
         self.calls = 0
+        self.expected_names = expected_names
+        self.attempted_names: list[str] = []
+        self.completed_names: list[str] = []
+        self.current_attempt: str | None = None
+        self.progress_path = progress_path
 
-    def check(self, *, before_forward: bool = False) -> None:
+    def progress(self, state: str, call_name: str) -> None:
+        if self.progress_path is None:
+            return
+        require(not self.progress_path.is_symlink(), "call progress path is symlink")
+        with self.progress_path.open("a", encoding="utf-8") as stream:
+            stream.write(canonical({"type": state, "call_index": self.calls,
+                                    "call_name": call_name}) + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+
+    def check(self, *, before_forward: bool = False, call_name: str | None = None) -> None:
         require(time.monotonic() - self.start <= MAX_SECONDS, "worker time budget exhausted")
         rss, disk = rss_bytes(), output_bytes(self.output)
         require(rss <= MAX_RSS and disk <= MAX_OUTPUT, "worker RSS/disk cap exceeded")
@@ -183,7 +199,64 @@ class Budget:
             require(rss + RSS_RESERVE <= MAX_RSS
                     and disk + OUTPUT_RESERVE <= MAX_OUTPUT,
                     "insufficient forward RSS/disk reserve")
+            require(isinstance(call_name, str) and call_name
+                    and self.current_attempt is None, "forward call name/state invalid")
+            if self.expected_names is not None:
+                require(self.calls < len(self.expected_names)
+                        and call_name == self.expected_names[self.calls],
+                        "forward name/order differs from frozen 88-call plan")
+            self.current_attempt = call_name
+            self.attempted_names.append(call_name)
             self.calls += 1  # count attempted forwards, including failures
+            self.progress("attempt", call_name)
+
+    def finish(self, call_name: str) -> None:
+        require(self.current_attempt == call_name, "forward completion order invalid")
+        self.progress("complete", call_name)
+        self.completed_names.append(call_name)
+        self.current_attempt = None
+
+
+def ordered_forward_names(plan: dict) -> list[str]:
+    names: list[str] = []
+    seen: set[tuple[str, str]] = set()
+    for pair in plan["pairs"]:
+        case, noise_arm = pair["case"], pair["noise_arm"]
+        for variant in ("clean", noise_arm):
+            if (case, variant) not in seen:
+                names += [f"I_{case}_{variant}_stock", f"I_{case}_{variant}_readonly"]
+                seen.add((case, variant))
+        names += [f"I_{case}_{noise_arm}_{waveform}_{stat_source}"
+                  for waveform, stat_source in source.INPUT_CELLS]
+    for case in plan["stage_ii_cases"]:
+        for arm in source.SOURCE_ARMS:
+            names += [f"II_{case}_{arm}_stock", f"II_{case}_{arm}_read_only"]
+        names += [f"II_{case}_{waveform}_{stat_source}"
+                  for waveform, stat_source in source.GROUPNORM_CELLS]
+    require(len(names) == MAX_FORWARDS and len(set(names)) == MAX_FORWARDS,
+            "frozen forward name inventory differs")
+    return names
+
+
+def failure_summary(budget: Budget, recorded_forward_names: list[str],
+                    error: BaseException) -> dict:
+    require(budget.expected_names is not None, "failure census requires frozen plan")
+    expected = budget.expected_names
+    require(budget.attempted_names == expected[:budget.calls]
+            and budget.completed_names == expected[:len(budget.completed_names)]
+            and (budget.current_attempt is None
+                 or budget.current_attempt == expected[len(budget.completed_names)]),
+            "failure call ledger inconsistent")
+    return {"type": "failure", "error_type": type(error).__name__,
+            "error": str(error), "attempted_forwards": budget.calls,
+            "completed_forward_names": budget.completed_names,
+            "recorded_forward_names": recorded_forward_names,
+            "completed_without_row_names": [name for name in budget.completed_names
+                                            if name not in set(recorded_forward_names)],
+            "failed_attempted_call_name": budget.current_attempt,
+            "censored_call_names": expected[budget.calls:],
+            "remaining_censored": len(expected)-budget.calls,
+            "elapsed_seconds": time.monotonic()-budget.start}
 
 
 def save_array(output: Path, relative: str, value, budget: Budget) -> dict:
@@ -221,10 +294,10 @@ def decode(logits, processor) -> dict:
 
 def forward(model, input_values, budget: Budget, *, capture: bool = False,
             readonly_input: bool = False, readonly_gn: bool = False,
-            raw_capture: bool = False, gn_stats=None):
+            raw_capture: bool = False, gn_stats=None, call_name: str):
     import torch
 
-    budget.check(before_forward=True)
+    budget.check(before_forward=True, call_name=call_name)
     conv = model.wav2vec2.feature_extractor.conv_layers[0]
     captures, counts, handles = {}, {}, []
 
@@ -280,6 +353,7 @@ def forward(model, input_values, budget: Budget, *, capture: bool = False,
         expected.add("manual_groupnorm")
     require(set(counts) == expected and all(n == 1 for n in counts.values()),
             "hook count/inventory differs")
+    budget.finish(call_name)
     return logits, captures, counts
 
 
@@ -327,15 +401,18 @@ def stage_i_pair(model, processor, clean_pcm, noisy_pcm, pair: dict,
             nohook[arm] = stock_cache[cache_key]
             continue
         tensor = torch.from_numpy(stock[arm][None, :].copy())
-        bare, _, _ = forward(model, tensor, budget)
-        viewed, _, count = forward(model, tensor, budget, readonly_input=True)
+        variant = "clean" if arm == "clean" else pair["noise_arm"]
+        stock_name = f"I_{pair['case']}_{variant}_stock"
+        readonly_name = f"I_{pair['case']}_{variant}_readonly"
+        bare, _, _ = forward(model, tensor, budget, call_name=stock_name)
+        viewed, _, count = forward(model, tensor, budget, readonly_input=True,
+                                   call_name=readonly_name)
         require(torch.equal(bare, viewed), "input read-only hook changed logits")
         nohook[arm] = bare
-        variant = "clean" if arm == "clean" else pair["noise_arm"]
-        stock_row = row(output, f"I_{pair['case']}_{variant}_stock", bare, processor, budget,
+        stock_row = row(output, stock_name, bare, processor, budget,
                         stage="I", pair=pair["case"], kind="stock", waveform=arm,
                         variant=variant)
-        view_row = row(output, f"I_{pair['case']}_{variant}_readonly", viewed, processor, budget,
+        view_row = row(output, readonly_name, viewed, processor, budget,
                        stage="I", pair=pair["case"], kind="read_only", waveform=arm,
                        variant=variant,
                        hook_counts=count)
@@ -353,16 +430,17 @@ def stage_i_pair(model, processor, clean_pcm, noisy_pcm, pair: dict,
                 "stock complete CTC endpoint differs from audited pilot")
     clean_stages = None
     for waveform, stat_source in source.INPUT_CELLS:
+        label = f"I_{name}_{waveform}_{stat_source}"
         normalized = source.normalize_with_statistics(pcm[waveform], *stats[stat_source])
         inp = torch.from_numpy(normalized[None, :].copy())
-        logits, captures, counts = forward(model, inp, budget, capture=True)
+        logits, captures, counts = forward(model, inp, budget, capture=True,
+                                           call_name=label)
         if waveform == stat_source:
             require(torch.equal(logits, nohook[waveform]), "Stage I diagonal logits differ")
         stage_tensors = {"input_values": inp, **captures}
         if clean_stages is None:
             clean_stages = {key: value.clone() for key, value in stage_tensors.items()}
         traces = {key: time_trace(stage_tensors[key], clean_stages[key]) for key in STAGES}
-        label = f"I_{name}_{waveform}_{stat_source}"
         emit(row(output, label, logits, processor, budget,
                         stage="I", pair=name, kind="cell", waveform=waveform,
                         stat_source=stat_source, pcm_sha256=source.sha_bytes(pcm[waveform].tobytes()),
@@ -390,9 +468,11 @@ def stage_ii_pair(model, processor, clean_pcm, noisy_pcm, pair: dict,
     raw, native, natural_logits, stats = {}, {}, {}, {}
     for arm in source.SOURCE_ARMS:
         inp = torch.from_numpy(inputs[arm][None, :].copy())
-        bare, _, _ = forward(model, inp, budget)
+        bare, _, _ = forward(model, inp, budget,
+                             call_name=f"II_{name}_{arm}_stock")
         viewed, captures, counts = forward(model, inp, budget,
-                                           raw_capture=True, readonly_gn=True)
+                                           raw_capture=True, readonly_gn=True,
+                                           call_name=f"II_{name}_{arm}_read_only")
         require(torch.equal(bare, viewed), "Stage II read-only hook changed logits")
         raw[arm], native[arm], natural_logits[arm] = (
             captures["first_conv_raw"], captures["native_groupnorm"], bare)
@@ -419,8 +499,10 @@ def stage_ii_pair(model, processor, clean_pcm, noisy_pcm, pair: dict,
               "beta_sha256": array_sha(beta.detach().cpu().numpy())}
     clean_manual = None
     for waveform, stat_source in source.GROUPNORM_CELLS:
+        cell_name = f"II_{name}_{waveform}_{stat_source}"
         inp = torch.from_numpy(inputs[waveform][None, :].copy())
-        logits, captures, counts = forward(model, inp, budget, gn_stats=stats[stat_source])
+        logits, captures, counts = forward(model, inp, budget,
+                                           gn_stats=stats[stat_source], call_name=cell_name)
         require(torch.equal(captures["first_conv_raw"], raw[waveform]),
                 "Stage II cell raw differs from frozen shared-path donor")
         manual = captures["manual_groupnorm"]
@@ -438,7 +520,7 @@ def stage_ii_pair(model, processor, clean_pcm, noisy_pcm, pair: dict,
             require(torch.equal(clean_manual[:, :, outside], manual[:, :, outside]),
                     "shared clean GN stats did not restore exact outside equality")
         stat_arrays = stats[stat_source]
-        emit(row(output, f"II_{name}_{waveform}_{stat_source}", logits,
+        emit(row(output, cell_name, logits,
                         processor, budget, stage="II", pair=name, kind="cell",
                         waveform=waveform, stat_source=stat_source,
                         shared_input_sha256=array_sha(inputs[waveform]),
@@ -463,7 +545,9 @@ def run(output: Path, admission_path: Path, go_path: Path) -> None:
     validate_go(admission_path, go_path)
     require(not output.exists(), "one-shot output directory already exists")
     output.mkdir(parents=True)
-    budget = Budget(output)
+    plan = execution_plan()
+    budget = Budget(output, expected_names=ordered_forward_names(plan),
+                    progress_path=output / "call_progress.jsonl")
     record_path = output / "records.jsonl"
 
     def record(value: dict) -> None:
@@ -473,7 +557,6 @@ def run(output: Path, admission_path: Path, go_path: Path) -> None:
             os.fsync(stream.fileno())
         budget.check()
 
-    plan = execution_plan()
     record({"type": "start", "admission_sha256": source.sha_file(admission_path),
             "go_sha256": source.sha_file(go_path), "plan_sha256": bytes_sha(canonical(plan).encode()),
             "planned_forwards": MAX_FORWARDS, "utc_seconds": time.time()})
@@ -517,11 +600,18 @@ def run(output: Path, admission_path: Path, go_path: Path) -> None:
                 "rss_bytes": rss_bytes(), "output_bytes": output_bytes(output)})
     except BaseException as error:
         # Preserve the failure even when the budget check itself caused it.
+        recorded_names = []
+        if record_path.exists():
+            for line in record_path.read_text().splitlines():
+                try:
+                    item = json.loads(line)
+                except json.JSONDecodeError:
+                    break
+                if item.get("type") == "forward":
+                    recorded_names.append(item["name"])
+        failure = failure_summary(budget, recorded_names, error)
         with record_path.open("a", encoding="utf-8") as stream:
-            stream.write(canonical({"type": "failure", "error_type": type(error).__name__,
-                                    "error": str(error), "attempted_forwards": budget.calls,
-                                    "elapsed_seconds": time.monotonic() - budget.start,
-                                    "remaining_censored": MAX_FORWARDS-budget.calls}) + "\n")
+            stream.write(canonical(failure) + "\n")
             stream.flush()
             os.fsync(stream.fileno())
         raise

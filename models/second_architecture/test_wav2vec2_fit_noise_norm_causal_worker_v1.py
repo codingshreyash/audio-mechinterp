@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -146,6 +147,75 @@ class FakeExecutionTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "forward ceiling"):
                 budget.check(before_forward=True)
 
+    def test_parent_kills_fake_child_at_sampled_rss_limit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(launcher, "process_tree_rss_bytes",
+                              return_value=worker.MAX_RSS):
+                result = launcher.run_bounded(
+                    ["/usr/bin/env", "python3", "-c", "import time; time.sleep(20)"],
+                    root / "stdout.txt", root / "stderr.txt", root / "rss.jsonl",
+                    seconds=3)
+            self.assertEqual(result["worker_stop_reason"], "rss_limit")
+            self.assertTrue(result["worker_rss_limit_hit"])
+            self.assertEqual(result["worker_peak_tree_rss_bytes"], worker.MAX_RSS)
+            self.assertEqual(result["worker_rss_samples"], 1)
+            self.assertNotEqual(result["worker_returncode"], 0)
+            self.assertEqual(json.loads((root / "rss.jsonl").read_text())["tree_rss_bytes"],
+                             worker.MAX_RSS)
+
+    def test_process_tree_rss_probe_sees_current_process(self):
+        measured = launcher.process_tree_rss_bytes(os.getpid())
+        self.assertIsInstance(measured, int)
+        self.assertGreater(measured, 0)
+
+    def test_mid_pair_failure_names_attempt_and_all_later_censors(self):
+        class CrashModel(FakeModel):
+            def __init__(self):
+                super().__init__()
+                self.calls = 0
+
+            def forward(self, input_values, **kwargs):
+                self.calls += 1
+                if self.calls == 5:
+                    raise RuntimeError("synthetic mid-pair failure")
+                return super().forward(input_values, **kwargs)
+
+        model = CrashModel().eval()
+        processor = FakeProcessor()
+        clean, word, _outside = synthetic_pcm(0)
+        case = "fake0_silver"
+        pair = {"case": case, "noise_arm": "word_noise", "slot": [250, 350],
+                "prior_stock": [prior_item(model, processor, clean, "clean"),
+                                prior_item(model, processor, word, "word_noise")]}
+        model.calls = 0
+        names = [f"I_{case}_clean_stock", f"I_{case}_clean_readonly",
+                 f"I_{case}_word_noise_stock", f"I_{case}_word_noise_readonly"]
+        names += [f"I_{case}_word_noise_{wave}_{stats}"
+                  for wave, stats in source.INPUT_CELLS]
+        names += [f"later_{i}" for i in range(80)]
+        rows = []
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            progress_path = output / "call_progress.jsonl"
+            budget = worker.Budget(output, expected_names=names,
+                                   progress_path=progress_path)
+            with self.assertRaisesRegex(RuntimeError, "mid-pair") as caught:
+                worker.stage_i_pair(model, processor, clean, word, pair,
+                                    output, budget, {}, rows.append)
+            failure = worker.failure_summary(budget, [r["name"] for r in rows],
+                                             caught.exception)
+            parent_census = launcher.progress_census(progress_path, names)
+        self.assertEqual(failure["attempted_forwards"], 5)
+        self.assertEqual(failure["failed_attempted_call_name"], names[4])
+        self.assertEqual(failure["completed_forward_names"], names[:4])
+        self.assertEqual(failure["recorded_forward_names"], names[:4])
+        self.assertEqual(failure["censored_call_names"], names[5:])
+        self.assertEqual(failure["remaining_censored"], 83)
+        self.assertEqual(parent_census["failed_attempted_call_name"], names[4])
+        self.assertEqual(parent_census["completed_call_names"], names[:4])
+        self.assertEqual(parent_census["censored_call_names"], names[5:])
+
     def test_frozen_execution_plan_and_audit_name_order(self):
         plan = worker.execution_plan()  # hashes old source and all frozen FIT PCM
         self.assertEqual(plan["total_forward_ceiling"], 88)
@@ -166,13 +236,30 @@ class FakeExecutionTests(unittest.TestCase):
                 (attempt / f"{name}_power_log.txt.gz").write_bytes(b"fake")
                 return {"collected_utc": "2026-11-19T00:00:00+00:00"}
 
-            def fake_run(_argv, stdout, stderr):
+            def fake_run(_argv, stdout, stderr, rss_log):
                 stdout.write_bytes(b"")
                 stderr.write_bytes(b"")
+                rss_log.write_text(worker.canonical({"sample_index": 1,
+                    "elapsed_seconds": 0.001, "worker_pid": 123,
+                    "tree_rss_bytes": 1024}) + "\n")
                 output = stdout.parent / "worker_output"
                 output.mkdir()
                 (output / "records.jsonl").write_text('{"type":"complete"}\n')
-                return 0, False, 0.01
+                names = worker.ordered_forward_names(worker.execution_plan())
+                (output / "call_progress.jsonl").write_text("".join(
+                    worker.canonical({"type": state, "call_index": index,
+                                      "call_name": name}) + "\n"
+                    for index, name in enumerate(names, start=1)
+                    for state in ("attempt", "complete")))
+                return {"worker_returncode": 0, "worker_timed_out": False,
+                        "worker_elapsed_seconds": 0.01,
+                        "worker_peak_tree_rss_bytes": 1024,
+                        "worker_rss_limit_bytes": worker.MAX_RSS,
+                        "worker_rss_samples": 1,
+                        "worker_rss_sample_log_sha256": source.sha_file(rss_log),
+                        "worker_rss_limit_hit": False,
+                        "worker_stop_reason": "normal_exit",
+                        "worker_rss_monitor_error": None}
 
             with patch.object(launcher, "ATTEMPT", root / "attempt"), \
                  patch.object(worker, "validate_go", return_value={"source_binding": {}}), \
@@ -271,12 +358,32 @@ class FakeExecutionTests(unittest.TestCase):
                             "elapsed_seconds": budget.start and 1.0})
             (output / "records.jsonl").write_text(
                 "".join(worker.canonical(r)+"\n" for r in records))
+            progress_path = output / "call_progress.jsonl"
+            progress_path.write_text("".join(
+                worker.canonical({"type": state, "call_index": index,
+                                  "call_name": name})+"\n"
+                for index, name in enumerate(audit.expected_forward_names(plan), start=1)
+                for state in ("attempt", "complete")))
             launch_ref = {"schema": "fit_norm_causal_launch_v1", "status": "started",
                           "admission_sha256": source.sha_file(admission),
                           "go_sha256": source.sha_file(go)}
             result = {**launch_ref, "status": "completed_pending_saved_audit",
                       "worker_returncode": 0, "worker_timed_out": False,
-                      "worker_elapsed_seconds": 1.0}
+                      "worker_elapsed_seconds": 1.0,
+                      "worker_peak_tree_rss_bytes": 1024,
+                      "worker_rss_limit_bytes": worker.MAX_RSS,
+                      "worker_rss_samples": 1,
+                      "worker_rss_limit_hit": False,
+                      "worker_stop_reason": "normal_exit",
+                      "worker_rss_monitor_error": None}
+            rss_log = attempt / "worker_rss_samples.jsonl"
+            rss_log.write_text(worker.canonical({"sample_index": 1,
+                "elapsed_seconds": 0.5, "worker_pid": 123,
+                "tree_rss_bytes": 1024}) + "\n")
+            result["worker_rss_sample_log_sha256"] = source.sha_file(rss_log)
+            result["worker_call_progress_sha256"] = source.sha_file(progress_path)
+            result["worker_call_census"] = launcher.progress_census(
+                progress_path, audit.expected_forward_names(plan))
             worker.write_once(attempt / "launch_start.json", launch_ref)
             worker.write_once(attempt / "launch_result.json", result)
             for name in ("pre_host.json", "post_host.json", "pre_power_log.txt.gz",
@@ -292,6 +399,21 @@ class FakeExecutionTests(unittest.TestCase):
                 result = audit.audit(attempt, admission, go)
                 self.assertEqual(result["status"], "saved_result_audit_pass")
                 self.assertEqual(result["forwards"], 88)
+                result_path = attempt / "launch_result.json"
+                original_result = result_path.read_bytes()
+                forged = json.loads(original_result)
+                forged["worker_peak_tree_rss_bytes"] = 2048
+                result_path.write_text(worker.canonical(forged)+"\n")
+                with self.assertRaisesRegex(ValueError, "peak RSS differs"):
+                    audit.audit(attempt, admission, go)
+                result_path.write_bytes(original_result)
+                original_rss_log = rss_log.read_bytes()
+                rss_log.write_text(worker.canonical({"sample_index": 1,
+                    "elapsed_seconds": 0.5, "worker_pid": 123,
+                    "tree_rss_bytes": 2048}) + "\n")
+                with self.assertRaisesRegex(ValueError, "RSS sample evidence"):
+                    audit.audit(attempt, admission, go)
+                rss_log.write_bytes(original_rss_log)
                 victim = output / "logits" / records[2]["logits"]["path"].split("/")[-1]
                 victim.write_bytes(b"changed")
                 with self.assertRaisesRegex(ValueError, "changed"):

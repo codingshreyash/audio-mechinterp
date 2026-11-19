@@ -24,8 +24,13 @@ Every unique clean, word-noise, and outside-noise stock waveform gets
 its own no-hook/read-only pair. Clean stock controls are run once per
 source case and shared only across that case's two noise contrasts.
 The worker writes scored rows after each call and stock rows after each
-no-hook/read-only control pair, records attempted
-calls and remaining censors on failure, and never retries. Its fixed
+no-hook/read-only control pair. On failure, it records the exact ordered
+completed names, the attempted failed call if any, completed calls lacking
+a row, and every later never-attempted call name. Each attempted call also
+gets a durable `call_progress.jsonl` start entry before inference and a
+finish entry after it succeeds. If the parent kills the worker, it uses
+that file to distinguish the in-flight call from later censored calls.
+It never retries. Its fixed
 output directory is supplied by the launcher at
 `runs/wav2vec2_fit_noise_norm_causal_v1/attempt_001/worker_output`.
 The parent refuses an existing attempt directory, even if it failed.
@@ -60,7 +65,10 @@ models/second_architecture/.venv/bin/python -m models.second_architecture.wav2ve
 
 The parent checks AC power, open lid, a stable ten-minute prior power
 log, and no sleep/wake/thermal events through the run. It starts one
-CPU worker process group, kills it after 1,200 seconds, and preserves
+CPU worker process group, polls its process-tree RSS during execution,
+records every sample and the sampled peak, and kills the group at 4 GiB
+or after 1,200 seconds. The sampled peak is a bounded observation, not a
+claim that sub-poll transients are impossible. The parent preserves
 the only attempt directory. The worker enforces four Torch threads,
 one pinned checkpoint load, 88 attempted calls, 4-GiB peak RSS,
 2-GiB evidence, and complete logits/CTC paths. The parent records
@@ -74,7 +82,9 @@ parent return. Give it an output path **outside** the attempt directory:
 models/second_architecture/.venv/bin/python -m models.second_architecture.wav2vec2_fit_noise_norm_causal_audit_v1 --attempt models/second_architecture/runs/wav2vec2_fit_noise_norm_causal_v1/attempt_001 --admission models/second_architecture/WAV2VEC2_FIT_NOISE_NORM_CAUSAL_ADMISSION_V1.json --go models/second_architecture/WAV2VEC2_FIT_NOISE_NORM_CAUSAL_EXECUTABLE_GO_V1.json --output models/second_architecture/runs/wav2vec2_fit_noise_norm_causal_v1/attempt_001_audit.json
 ```
 
-The auditor does **no full candidate forward**. It validates all 88
+The auditor checks the complete parent RSS sample log against its recorded
+peak and hard cap, and reconciles the durable call-progress file with the
+parent's census. It does **no full candidate forward**. It validates all 88
 ordered logits files and complete CTC paths, original pilot stock
 endpoints, Stage I input statistics, and Stage II donor provenance. It
 rebuilds the first convolution and GroupNorm from pinned checkpoint
@@ -89,7 +99,8 @@ or a security vulnerability.
 Check source-binding/GO ancestry, the 12 unique Stage I stock controls,
 read-only hook parity, GroupNorm donor capture under common outside-word
 input normalization, exact natural CTC path parity, fixed numerical
-tolerances, error/censor ledger, CPU/host caps, and the saved auditor's
+tolerances, the exact attempted/censored call-name ledger, process-tree RSS
+sample/kill path, CPU/host caps, and the saved auditor's
 independent first-convolution reconstruction. The Stage I
 feature-projection and post-block-0 time traces are only hashed summaries;
 the auditor cannot reconstruct those later tensors without a full model

@@ -12,6 +12,7 @@ from pathlib import Path
 
 from models.second_architecture import wav2vec2_fit_noise_norm_causal_source_v1 as source
 from models.second_architecture import wav2vec2_fit_noise_norm_causal_worker_v1 as worker
+from models.second_architecture import wav2vec2_fit_noise_norm_causal_launcher_v1 as launcher
 from models.second_architecture import wav2vec2_fit_noise_norm_causal_host_v1 as host_gate
 
 
@@ -103,12 +104,51 @@ def audit(attempt: Path, admission_path: Path, go_path: Path) -> dict:
             and launch.get("worker_returncode") == 0
             and launch.get("worker_timed_out") is False
             and 0 < launch.get("worker_elapsed_seconds", 0) <= worker.MAX_SECONDS
+            and launch.get("worker_stop_reason") == "normal_exit"
+            and launch.get("worker_rss_limit_hit") is False
+            and launch.get("worker_rss_monitor_error") is None
+            and launch.get("worker_rss_limit_bytes") == worker.MAX_RSS
+            and type(launch.get("worker_peak_tree_rss_bytes")) is int
+            and 0 < launch["worker_peak_tree_rss_bytes"] < worker.MAX_RSS
+            and type(launch.get("worker_rss_samples")) is int
+            and launch["worker_rss_samples"] > 0
             and launch.get("admission_sha256") == started.get("admission_sha256")
             == source.sha_file(admission_path)
             and launch.get("go_sha256") == started.get("go_sha256")
             == source.sha_file(go_path), "parent launch status/binding invalid")
     require(worker.output_bytes(attempt) <= worker.MAX_OUTPUT, "evidence cap exceeded")
     check_host(attempt, launch)
+    rss_path = attempt / "worker_rss_samples.jsonl"
+    require(rss_path.is_file() and not rss_path.is_symlink()
+            and source.sha_file(rss_path) == launch.get("worker_rss_sample_log_sha256"),
+            "parent RSS sample evidence absent or altered")
+    samples = [json.loads(line) for line in rss_path.read_text().splitlines()]
+    require(len(samples) == launch["worker_rss_samples"], "parent RSS sample count differs")
+    previous_elapsed = -1.0
+    for index, sample in enumerate(samples, start=1):
+        elapsed = sample.get("elapsed_seconds")
+        rss = sample.get("tree_rss_bytes")
+        require(sample.get("sample_index") == index
+                and type(sample.get("worker_pid")) is int and sample["worker_pid"] > 0
+                and type(elapsed) in (int, float)
+                and previous_elapsed <= elapsed <= launch["worker_elapsed_seconds"]
+                and type(rss) is int and 0 < rss < worker.MAX_RSS,
+                "parent RSS sample invalid or out of order")
+        previous_elapsed = elapsed
+    require(max(sample["tree_rss_bytes"] for sample in samples)
+            == launch["worker_peak_tree_rss_bytes"],
+            "parent peak RSS differs from sampled evidence")
+    progress_path = attempt / "worker_output/call_progress.jsonl"
+    require(progress_path.is_file() and not progress_path.is_symlink()
+            and source.sha_file(progress_path) == launch.get("worker_call_progress_sha256"),
+            "durable call progress absent or changed")
+    plan = worker.execution_plan()
+    census = launcher.progress_census(progress_path, expected_forward_names(plan))
+    require(census == launch.get("worker_call_census")
+            and len(census["completed_call_names"]) == 88
+            and census["failed_attempted_call_name"] is None
+            and not census["censored_call_names"],
+            "parent call census differs from durable worker progress")
     records_path = attempt / "worker_output/records.jsonl"
     require(records_path.is_file() and not records_path.is_symlink(), "worker ledger absent")
     records = [json.loads(line) for line in records_path.read_text().splitlines()]
@@ -117,7 +157,6 @@ def audit(attempt: Path, admission_path: Path, go_path: Path) -> dict:
             and records[0]["admission_sha256"] == source.sha_file(admission_path)
             and records[0]["go_sha256"] == source.sha_file(go_path),
             "worker ledger boundary invalid")
-    plan = worker.execution_plan()
     require(records[0]["plan_sha256"] == worker.bytes_sha(worker.canonical(plan).encode()),
             "worker plan changed")
     forwards = [r for r in records if r["type"] == "forward"]
@@ -378,8 +417,10 @@ def audit(attempt: Path, admission_path: Path, go_path: Path) -> dict:
                                  "diagonal_logit_maxabs": diag_errors})
 
     standard = {"launch_start.json", "launch_result.json", "pre_host.json", "post_host.json",
-                "pre_power_log.txt.gz", "post_power_log.txt.gz", "worker_stdout.txt",
-                "worker_stderr.txt", "worker_output/records.jsonl"}
+                "pre_power_log.txt.gz", "post_power_log.txt.gz", "worker_rss_samples.jsonl",
+                "worker_stdout.txt",
+                "worker_stderr.txt", "worker_output/records.jsonl",
+                "worker_output/call_progress.jsonl"}
     inventory = {str(p.relative_to(attempt)) for p in attempt.rglob("*") if p.is_file()}
     require(all(not p.is_symlink() for p in attempt.rglob("*")), "symlink in evidence tree")
     require(inventory == standard | referenced_files, "evidence inventory incomplete or extra")
@@ -391,6 +432,9 @@ def audit(attempt: Path, admission_path: Path, go_path: Path) -> dict:
             "status": "saved_result_audit_pass",
             "scope": "Four synthetic FIT English sources; conditional normalization interventions, not security finding",
             "attempt": str(attempt), "records_sha256": source.sha_file(records_path),
+            "parent_sampled_peak_tree_rss_bytes": launch["worker_peak_tree_rss_bytes"],
+            "parent_rss_limit_bytes": launch["worker_rss_limit_bytes"],
+            "parent_rss_samples": launch["worker_rss_samples"],
             "admission_sha256": source.sha_file(admission_path),
             "go_sha256": source.sha_file(go_path),
             "forwards": len(forwards), "stage_i_pairs": stage_i_results,
