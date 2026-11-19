@@ -1,0 +1,10 @@
+{
+  "schema": "voicechat_acoustic_source_admission_go_v1",
+  "status": "independent_source_byte_audit_go",
+  "source_dir": "/Users/shrranjan/audio-mechinterp/models/second_architecture/voicechat_acoustic_action_v1/runs/sources_20261119_0645Z",
+  "source_manifest_sha256": "3d7714430bfca4c5888b7142be0d6ca575841f3cad0e74163650f02e0d8b1ca5",
+  "started_sha256": "61ca6cdbd4ab98f566d0a47b4a536bfd7701ea482d0b87048bcf843d1c488c62",
+  "source_spec_sha256": "3325f4f693461cf48cf994bfda486e81b2bc6535d0c855a3ac838601644d414d",
+  "source_builder_sha256": "2697b223dc9e6f4d4a8c85cfd0f1b04f86a3d045e119c27e9e9a902f8aa5fca2",
+  "review_sha256": "0e9ed6019226846a7d8a3497b822ae7ce44486865b05c15406e5c2403566ea56"
+}
