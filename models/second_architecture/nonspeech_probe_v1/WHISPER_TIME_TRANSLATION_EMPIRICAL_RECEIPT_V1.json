@@ -1,0 +1,92 @@
+{
+  "attempts": {
+    "offset_16000": {
+      "admission_sha256": "976d9f9495501877fb5f900f141d3d80a360448569546c811df27bd836378bcd",
+      "go_sha256": "f848b87ee58fbf1bc38d7442640b56b5abc51dc5fd7d6bb710ab7ad3d8e05652",
+      "parent_result_sha256": "f2e74c128002c4161bd84f0a7789424f63199b473e829ea6c75c28465d69e4e8",
+      "path": "/Users/shrranjan/audio-mechinterp/models/second_architecture/nonspeech_probe_v1/runs/whisper_time_translation_v1/offset_16000_attempt_001",
+      "progress_sha256": "d7afdb1c63fde00ff1cc7c09f197025dc8543c1cd96b36e24869d70a1dc12ace",
+      "records_sha256": "008153ee812bcea19e35b768ec98fbab8524f34a9936ce9e597ae4ee3e842448"
+    },
+    "offset_8000": {
+      "admission_sha256": "7d303b361076551e69d157b9c76a07aef150258a3b6b67dc6bdee353c89347f7",
+      "go_sha256": "06a2a52e7db6bb35351b6c52776ff9ac3c32642f047cdfd151223836adfc38e1",
+      "parent_result_sha256": "e2a973dbaef5fc7e59a4c64f76680b5e2553b1a029235e87ae164fca7489677a",
+      "path": "/Users/shrranjan/audio-mechinterp/models/second_architecture/nonspeech_probe_v1/runs/whisper_time_translation_v1/offset_8000_attempt_001",
+      "progress_sha256": "d7afdb1c63fde00ff1cc7c09f197025dc8543c1cd96b36e24869d70a1dc12ace",
+      "records_sha256": "b15971c3c80b20a18cbf1f805d86102d7116acfe753e9ec420ff4476eb32167a"
+    },
+    "original": {
+      "admission_sha256": "5864ca0267a55d02896d608bda58396ed6263ae40b4ffda743cfae695a47203b",
+      "go_sha256": "a175688292c37e904f8d352f8a0d31b07d83794e7effb1e6a4cc75819a1f53ca",
+      "parent_result_sha256": "858daaa834ebdd3a49c8d78b000cb4100adc5256d66366015fd7a8056aae0b73",
+      "path": "/Users/shrranjan/audio-mechinterp/models/second_architecture/nonspeech_probe_v1/runs/whisper_time_translation_v1/original_attempt_001",
+      "progress_sha256": "f3fb5a1e779570d5f5e33e86f20f2879d7cfef4b70de67526409c32f5127a36c",
+      "records_sha256": "9b3705fe60332a631f458d61069f2eeef7ecbf8575a0cb22960b81ea905e0cf3"
+    }
+  },
+  "joint_decision": {
+    "interpretation_limit": "Engineered non-speech pair only; qualified timing-linked behavior does not uniquely identify a circuit or establish a security problem.",
+    "isolated_source_tail_cells": [
+      {
+        "joint_qualified": false,
+        "original_viable": false,
+        "region": "source_tail",
+        "site": "post_conv_pos",
+        "stage": "offset_8000",
+        "translated_strict": false
+      },
+      {
+        "joint_qualified": false,
+        "original_viable": false,
+        "region": "source_tail",
+        "site": "post_conv_pos",
+        "stage": "offset_16000",
+        "translated_strict": false
+      }
+    ],
+    "isolated_source_tail_qualified_count_out_of_2": 0,
+    "original_isolated_tail_end_viability": {
+      "post_block0": false,
+      "post_conv_pos": true
+    },
+    "schema": "whisper_time_translation_joint_decision_v1",
+    "status": "THREE_AUDITS_JOINED",
+    "union_combined_boundary_cells": [
+      {
+        "joint_qualified": true,
+        "original_viable": true,
+        "region": "union",
+        "site": "post_conv_pos",
+        "stage": "offset_8000",
+        "translated_strict": true
+      },
+      {
+        "joint_qualified": false,
+        "original_viable": true,
+        "region": "union",
+        "site": "post_block0",
+        "stage": "offset_8000",
+        "translated_strict": false
+      },
+      {
+        "joint_qualified": false,
+        "original_viable": true,
+        "region": "union",
+        "site": "post_conv_pos",
+        "stage": "offset_16000",
+        "translated_strict": false
+      },
+      {
+        "joint_qualified": false,
+        "original_viable": true,
+        "region": "union",
+        "site": "post_block0",
+        "stage": "offset_16000",
+        "translated_strict": false
+      }
+    ],
+    "union_qualified_count_out_of_4": 1
+  },
+  "schema": "whisper_time_translation_empirical_receipt_v1"
+}
