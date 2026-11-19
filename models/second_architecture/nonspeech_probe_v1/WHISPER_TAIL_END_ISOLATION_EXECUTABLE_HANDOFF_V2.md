@@ -1,6 +1,6 @@
 # Isolated Whisper tail/end V2 executable handoff
 
-19 November 2026. **Source-only. No V2 target-model inference, admission, or GO has been performed.** The committed prospective protocol and plan fix one engineered non-speech zero/noise pair, the original attempt and two offsets, the `post_conv_pos` site, five-row tail/end windows, controls, and the `1e-3` native-delta threshold. This handoff does not authorize execution. Independent executable review must precede three new stage-specific admissions and committed GOs.
+19 November 2026. **Source-only. No V2 target-model inference, admission, or GO has been performed.** The committed prospective protocol and plan fix one engineered non-speech zero/noise pair, the original attempt and two offsets, the `post_conv_pos` site, five-row tail/end windows, controls, and the `1e-3` native-delta threshold. This handoff does not authorize execution. Stage-specific source-only admissions precede the independent executable review; committed GOs follow that review.
 
 ## Fixed stages and interpretation
 
