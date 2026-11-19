@@ -28,6 +28,7 @@ ENGINES = ("piper", "kokoro")
 ARMS = ("clean", "clean_repeat", "full_noise", "word_noise", "outside_noise")
 SEED_BASE = 60520261118
 SNR_DB = 20.0
+WAV_MODELING_SHA_520 = "0c5027789d81a622f72f062eab1ee16566bb8dfb200cb6da0a9ffef06543b287"
 MAX_SECONDS = 1800
 MAX_RSS_BYTES = 4 * 1024**3
 MAX_OUTPUT_BYTES = 32 * 1024**2
@@ -158,6 +159,9 @@ def preflight():
         raise ValueError("V2 Wav2Vec2 capture requires Transformers 5.20.2 and Torch 2.15.0")
     whisper_receipt = whisper_source.preflight()
     wav_receipt = wav_source.preflight()
+    if (wav_receipt["source_hashes"].get("transformers.models.wav2vec2.modeling_wav2vec2")
+            != WAV_MODELING_SHA_520):
+        raise ValueError("V2 pinned Wav2Vec2 modeling source changed")
     return {
         "schema": "acoustic_fit_noise_preflight_v2", "protocol_sha256": sha_file(PROTOCOL),
         "runner_sha256": sha_file(Path(__file__)), "runner_commit": source_commit(Path(__file__)),
@@ -172,7 +176,8 @@ def preflight():
                             "wav2vec2": wav_source.MODEL_REVISION},
         "wav2vec2_capture_contract": {
             "feature_projection": "tuple_first_tensor",
-            "post_block0": "tensor", "post_block5": "tensor", "post_block11": "tensor"},
+            "post_block0": "tensor", "post_block5": "tensor", "post_block11": "tensor",
+            "modeling_source_sha256": WAV_MODELING_SHA_520},
         "limits": {"threads": 4, "seconds_per_model": MAX_SECONDS,
                    "rss_bytes": MAX_RSS_BYTES, "output_bytes": MAX_OUTPUT_BYTES},
     }
@@ -271,6 +276,8 @@ def wav2vec2_model_forward_v2(model, input_values, frames):
 
 
 def run_model(model_name: str, receipt_path: Path, review_path: Path, output: Path):
+    if model_name != "wav2vec2":
+        raise ValueError("V2 authorizes only Wav2Vec2 attempt_002")
     import gc
     import numpy as np
     import torch
@@ -406,7 +413,7 @@ def run_model(model_name: str, receipt_path: Path, review_path: Path, output: Pa
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=("validate-only", "preflight", "run"))
-    parser.add_argument("--model", choices=("whisper", "wav2vec2"))
+    parser.add_argument("--model", choices=("wav2vec2",))
     parser.add_argument("--receipt", type=Path)
     parser.add_argument("--review", type=Path)
     parser.add_argument("--output", type=Path)

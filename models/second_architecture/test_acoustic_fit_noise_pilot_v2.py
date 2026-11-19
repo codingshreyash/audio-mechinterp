@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
 
 import torch
 
@@ -34,6 +35,10 @@ class WavCaptureV2Tests(unittest.TestCase):
         self.assertIs(worker.select_wav_capture_v2("logits", "post", hidden), hidden)
         with self.assertRaisesRegex(ValueError, "must return a Tensor"):
             worker.select_wav_capture_v2("logits", "post", (hidden,))
+
+    def test_v2_direct_worker_rejects_whisper_before_preflight(self):
+        with self.assertRaisesRegex(ValueError, "only Wav2Vec2"):
+            worker.run_model("whisper", Path("missing"), Path("missing"), Path("missing"))
 
 
 if __name__ == "__main__":
