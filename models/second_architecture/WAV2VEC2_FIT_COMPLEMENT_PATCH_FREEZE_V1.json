@@ -1,0 +1,24 @@
+{
+  "auditor_sha256": "7e5e483efee51d0c1d7fa40e9c7a6e93dda7b3d29fff0049470b8b6cf10f2859",
+  "auditor_source_review": {
+    "path": "models/second_architecture/WAV2VEC2_FIT_COMPLEMENT_AUDITOR_INDEPENDENT_SOURCE_REVIEW_V1.md",
+    "sha256": "c817421dda0d60b13e47ce22902f2ea05e5401cf77ab0e2cc3cd7d9328cbcfdd"
+  },
+  "expected_patch_rows": 192,
+  "plan_review": {
+    "path": "models/second_architecture/WAV2VEC2_FIT_COMPLEMENT_CAUSAL_PLAN_V2_INDEPENDENT_REVIEW_V1.md",
+    "sha256": "496fa93ef6f626f68a24af2c208a29d2c9734bc8259562b7f9d341ee30e8b56b"
+  },
+  "plan_v1_sha256": "63724fd4237aa0176582e796eb70380ea0bd5120808b90565b0db01600a1c65d",
+  "plan_v2_sha256": "4937d53d061a1e90984037e7d011f39de1108de2c45ba1c1e544089a97746dae",
+  "preflight_sha256": "bfca1e14b586b5c76abd6cc47dce2f63ef10e7c6d5fa8cc391f6082f0c9394fc",
+  "primary_eligible_directions_per_site": 4,
+  "runner_sha256": "79932d09efbadf784b53f28e744bb7397d3908e2da43c41f1dd0240d5c3f9202",
+  "runner_source_review": {
+    "path": "models/second_architecture/WAV2VEC2_FIT_COMPLEMENT_RUNNER_INDEPENDENT_SOURCE_REVIEW_V1.md",
+    "sha256": "3120852de57577cbeeccb55f05ca5452a7a00a75e31788de4afc0627963ac036"
+  },
+  "schema": "wav2vec2_fit_complement_freeze_v1",
+  "scope": "FIT-only CPU Wav2Vec2 outside-word complement patches; no security claim",
+  "status": "independently_reviewed_complement_patch_frozen"
+}
