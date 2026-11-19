@@ -1,6 +1,6 @@
 # VoiceChat public-sample FFmpeg repair plan (source only)
 
-19 November 2026. **HOLD on another model run.** This document proposes a narrowly isolated native-library repair for the official public sample. It does not change the A100, install software, or authorize calendar-audio work.
+19 November 2026. **HOLD on another model run.** This document proposes a narrowly isolated native-library repair for the official public sample. It does not change the A100, install software, or authorize calendar-audio work. **Update:** the Ubuntu archive route below was stopped after extensive transitive dependencies appeared. Use the [task-local conda fallback](VOICECHAT_CONDA_FFMPEG7_FALLBACK_20261119.md) for any next repair attempt.
 
 ## Evidence and diagnosis
 
