@@ -1,6 +1,6 @@
 # Prospective test of Whisper's nominal padding channel
 
-19 November 2026. **Source review and no-weight plan only. No candidate inference or new output claim.** This design was written after the engineered-sound descriptive result and the 328-call causal study. The latter's independent result audit is still pending. Do not use its provisional outcomes to select cases or adjust this schedule.
+19 November 2026. **Source review and no-weight plan only. No candidate inference or new output claim.** This design was written after the engineered-sound descriptive result and the 328-call causal study. The [independent result audit](INDEPENDENT_CAUSAL_ATTEMPT_002_RESULT_REVIEW_20261119.md) has since completed. Do not use its outcomes to select cases or adjust this schedule.
 
 ## The question
 
