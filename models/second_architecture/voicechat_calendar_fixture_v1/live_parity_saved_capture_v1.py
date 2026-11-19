@@ -12,6 +12,7 @@ import base64
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 from typing import Any
 
@@ -52,9 +53,28 @@ def _total(directory: Path, cap: int) -> int:
     return total
 
 
-def save_capture(value: Any, directory: Path, *, byte_cap: int) -> dict[str, Any]:
+def _validate_directory(directory: Path, trusted_root: Path | None) -> None:
+    """Reject linked capture paths, including ancestors below a trusted root."""
+    _require(not directory.is_symlink(), "Capture directory is a symlink")
+    if trusted_root is None:
+        return
+    root = Path(os.path.abspath(trusted_root))
+    path = Path(os.path.abspath(directory))
+    _require(root.is_dir() and not root.is_symlink()
+             and path.is_relative_to(root),
+             "Capture directory is outside trusted evidence root")
+    cursor = root
+    for part in path.relative_to(root).parts:
+        cursor = cursor / part
+        _require(not cursor.is_symlink(),
+                 "Capture directory has linked ancestor")
+
+
+def save_capture(value: Any, directory: Path, *, byte_cap: int,
+                 trusted_root: Path | None = None) -> dict[str, Any]:
     """Save an exact nested capture; return a manifest hash/byte receipt."""
     _require(type(byte_cap) is int and byte_cap > 0, "Capture byte cap invalid")
+    _validate_directory(directory, trusted_root)
     import numpy as np
     import torch
 
@@ -134,9 +154,11 @@ def save_capture(value: Any, directory: Path, *, byte_cap: int) -> dict[str, Any
 
 
 def load_capture(directory: Path, *, byte_cap: int,
-                 expected_manifest_sha256: str) -> Any:
+                 expected_manifest_sha256: str,
+                 trusted_root: Path | None = None) -> Any:
     """Verify every artifact, then reconstruct values for saved-data comparison."""
     _require(type(byte_cap) is int and byte_cap > 0, "Capture byte cap invalid")
+    _validate_directory(directory, trusted_root)
     _total(directory, byte_cap)
     manifest_path = directory / MANIFEST
     _require(_digest(manifest_path, byte_cap) == expected_manifest_sha256,

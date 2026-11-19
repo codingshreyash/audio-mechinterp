@@ -87,6 +87,27 @@ class SavedCaptureTests(unittest.TestCase):
             saved.load_capture(self.out, byte_cap=65536,
                                expected_manifest_sha256=receipt["manifest_sha256"])
 
+    def test_linked_capture_root_and_parent_are_rejected(self):
+        receipt = saved.save_capture(self._sample(), self.out, byte_cap=65536,
+                                     trusted_root=self.root)
+        alias = self.root / "alias"
+        alias.symlink_to(self.out, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "directory is a symlink"):
+            saved.load_capture(alias, byte_cap=65536,
+                               expected_manifest_sha256=receipt["manifest_sha256"])
+        actual_parent = self.root / "actual_parent"
+        nested = actual_parent / "capture"
+        actual_parent.mkdir()
+        second = saved.save_capture({"a": np.array([1, 2], dtype=np.int16)},
+                                    nested, byte_cap=4096,
+                                    trusted_root=self.root)
+        parent_alias = self.root / "parent_alias"
+        parent_alias.symlink_to(actual_parent, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "linked ancestor"):
+            saved.load_capture(parent_alias / "capture", byte_cap=4096,
+                               expected_manifest_sha256=second["manifest_sha256"],
+                               trusted_root=self.root)
+
     def test_unsupported_object_and_bounded_write_fail_closed(self):
         with self.assertRaisesRegex(ValueError, "type unsupported"):
             saved.save_capture({"bad": object()}, self.out, byte_cap=65536)
