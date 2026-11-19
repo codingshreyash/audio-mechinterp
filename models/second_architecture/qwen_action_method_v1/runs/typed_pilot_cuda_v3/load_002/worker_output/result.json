@@ -1,0 +1,1 @@
+{"case_id":"F_L1__typed","cuda_log_sha256":"02c4bbb7c6383fd84b9a9cf8cce0ab7b53e0ce6be3d90ae8f49929edb8840c1e","model_revision":"f75b40e3da2003cdd6e1829b1f420ca70797c34e","schema":"qwen_action_typed_pilot_cuda_worker_v3","stage":"load","status":"candidate_saved_pending_parent_and_audit"}

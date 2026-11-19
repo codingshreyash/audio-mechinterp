@@ -1,0 +1,1 @@
+{"allocated_bytes":18821549056,"math_mode":{"cudnn_allow_tf32":false,"cudnn_version":91900,"default_dtype":"torch.float32","float32_matmul_precision":"highest","matmul_allow_tf32":false},"monotonic_seconds":1771.729176593,"peak_reserved_bytes":18842910720,"phase":"after_model_load","reserved_bytes":18842910720}
