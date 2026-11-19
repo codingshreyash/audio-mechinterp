@@ -5,11 +5,13 @@ import argparse
 import json
 import math
 import wave
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
 
 from . import natural_tail_runner_v2 as worker
+from models.second_architecture import wav2vec2_fit_noise_norm_causal_host_v1 as host_gate
 
 CONDITIONS = ("base", "z8000", "n8000_s0", "n8000_s1",
               "z32000", "n32000_s0", "n32000_s1")
@@ -102,6 +104,37 @@ def audit(attempt: Path, admission: Path, go: Path, model: str) -> dict:
          and parent["whole_elapsed_seconds"] < worker.WALL_SECONDS
          and parent["evidence_bytes_before_result"] < worker.EVIDENCE_BYTES,
          "parent attempt not eligible")
+    monitor=parent["monitor"]
+    must(monitor["worker_returncode"] == 0
+         and monitor["worker_stop_reason"] == "normal_exit"
+         and not monitor["worker_timed_out"]
+         and 0 < monitor["worker_peak_tree_rss_bytes"] < worker.RSS_BYTES
+         and monitor["worker_rss_samples"] > 0,
+         "parent worker resource verdict invalid")
+    samples_path=attempt/"worker_rss_samples.jsonl"
+    must(samples_path.is_file() and not samples_path.is_symlink()
+         and worker.old.sha_file(samples_path) == monitor["worker_rss_sample_log_sha256"],
+         "resource sample log changed")
+    samples=[json.loads(line) for line in samples_path.read_text().splitlines()]
+    must(len(samples) == monitor["worker_rss_samples"]
+         and [x["sample_index"] for x in samples] == list(range(1,len(samples)+1))
+         and max(x["tree_rss_bytes"] for x in samples)
+         == monitor["worker_peak_tree_rss_bytes"]
+         and all(0 < x["tree_rss_bytes"] < worker.RSS_BYTES
+                 and x["evidence_bytes"] < worker.EVIDENCE_BYTES
+                 for x in samples), "resource samples differ")
+    pre=json.loads((attempt/"pre_host.json").read_text())
+    post=json.loads((attempt/"post_host.json").read_text())
+    host_gate.validate_power(pre)
+    host_gate.validate_power(post)
+    host_gate.load_archive(attempt,pre,"pre")
+    post_log=host_gate.load_archive(attempt,post,"post")
+    started=datetime.fromisoformat(parent["start_utc"])
+    collected=datetime.fromisoformat(post["collected_utc"])
+    host_gate.validate_log(post_log,started,collected,collected)
+    lag=(collected-datetime.fromisoformat(parent["worker_exit_utc"])).total_seconds()
+    must(0 <= lag <= 120 and math.isclose(lag,parent["post_probe_lag_seconds"],abs_tol=1e-3),
+         "post-host lag differs")
     must(sum(x.stat().st_size for x in attempt.rglob("*") if x.is_file())
          < worker.EVIDENCE_BYTES, "whole evidence cap")
     progress = [json.loads(line) for line in (attempt/"progress.jsonl").read_text().splitlines()]
