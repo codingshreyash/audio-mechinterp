@@ -13,6 +13,8 @@ from datetime import datetime
 from pathlib import Path
 
 from models.second_architecture import voxtral_track_b_v6_pilot_saved_auditor_v1 as base
+from models.second_architecture import voxtral_track_b_v6_mps_runtime_adapter_source_v1 as runtime
+from models.second_architecture import voxtral_track_b_v6_launch_freeze_contract_source_v1 as freeze
 
 
 HERE = Path(__file__).resolve().parent
@@ -97,7 +99,21 @@ def audit_composed_saved(pilot_dir: Path, *, admission: Path, qa: Path,
         raise ValueError('Composition pre/post host collection timestamp invalid') from exc
     base.require(pre.tzinfo is not None and post.tzinfo is not None and post > pre,
                  'Composition post-host collection must be strictly later than pre-host')
-    full_bytes = worker_audit['output_bytes'] + sidecar_path.stat().st_size + raw_bytes
+    claim = Path(binding['campaign_claim_path'])
+    watchdog = runtime._claim_path(claim)
+    watchdog_result = watchdog.with_name(watchdog.name + '.result.json')
+    parent_claim = base.read_json(watchdog)
+    parent_result = base.read_json(watchdog_result)
+    base.require(parent_claim.get('schema') == 'voxtral_track_b_v6_parent_deadline_claim_v1' and
+                 parent_claim.get('campaign_claim_path') == str(claim) and
+                 parent_claim.get('output_dir') == str(pilot_dir.resolve()) and
+                 parent_claim.get('deadline_seconds') == runtime.DEADLINE_SECONDS,
+                 'Parent watchdog claim path or identity differs')
+    freeze._audit_parent_result(parent_result)
+    watchdog_bytes = watchdog.stat().st_size
+    watchdog_result_bytes = watchdog_result.stat().st_size
+    full_bytes = (worker_audit['output_bytes'] + sidecar_path.stat().st_size + raw_bytes +
+                  watchdog_bytes + watchdog_result_bytes)
     base.require(full_bytes <= base.MAX_OUTPUT_BYTES and
                  free_disk_bytes >= base.MIN_FREE_BYTES,
                  'Full composed attempt output/free-disk cap exceeded')
@@ -120,6 +136,12 @@ def audit_composed_saved(pilot_dir: Path, *, admission: Path, qa: Path,
         'pilot_output_and_claim_bytes': worker_audit['output_bytes'],
         'composition_sidecar_bytes': sidecar_path.stat().st_size,
         'composition_post_host_raw_bytes': raw_bytes,
+        'watchdog_claim_path': str(watchdog),
+        'watchdog_claim_sha256': base.sha(watchdog),
+        'watchdog_claim_bytes': watchdog_bytes,
+        'watchdog_result_path': str(watchdog_result),
+        'watchdog_result_sha256': base.sha(watchdog_result),
+        'watchdog_result_bytes': watchdog_result_bytes,
         'full_attempt_output_bytes': full_bytes,
         'timing_recomputed': worker_audit['timing_recomputed'],
         'timing_feasible': worker_audit['timing_feasible'],

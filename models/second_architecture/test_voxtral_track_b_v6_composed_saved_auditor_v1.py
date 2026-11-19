@@ -9,6 +9,9 @@ from unittest.mock import patch
 
 from models.second_architecture import voxtral_track_b_v6_composed_saved_auditor_v1 as composed
 from models.second_architecture import voxtral_track_b_v6_pilot_saved_auditor_v1 as base
+from models.second_architecture import voxtral_track_b_v6_mps_runtime_adapter_source_v1 as runtime
+from models.second_architecture import voxtral_track_b_v6_launch_freeze_contract_source_v1 as freeze
+from models.second_architecture import voxtral_track_b_v6_pre_pilot_admission_contract_v1 as contract
 from models.second_architecture.test_voxtral_track_b_v6_pilot_saved_auditor_v1 import (
     make_fixture, write_json)
 
@@ -40,6 +43,28 @@ def composed_fixture(root: Path) -> tuple[Path, dict]:
                 expected_launcher_sha256=base.sha(composed.HERE / composed.LAUNCHER_FILE),
                 expected_review_sha256=base.sha(review),
                 expected_composition_sha256=base.sha(sidecar))
+    claim = Path(base.read_json(args['admission'])['bindings']['campaign_claim_path'])
+    watchdog = runtime._claim_path(claim)
+    write_json(watchdog, {
+        'schema': 'voxtral_track_b_v6_parent_deadline_claim_v1',
+        'campaign_claim_path': str(claim),
+        'output_dir': str(pilot.resolve()),
+        'deadline_seconds': runtime.DEADLINE_SECONDS,
+    })
+    write_json(watchdog.with_name(watchdog.name + '.result.json'), {
+        'status': 'child_completed', 'child_exit_code': 0,
+        'operation_status': 'schedule_complete_resource_unverified',
+        'elapsed_seconds': 120.0,
+        'cap': {'recommended_max_memory_bytes': 40 * 1024**3,
+                'configured_allocator_cap_bytes': runtime.CAP_BYTES,
+                'configured_fraction': runtime.CAP_BYTES / (40 * 1024**3),
+                'allocator_cap_kind': 'PyTorch MPS allocation limit; not exact device peak'},
+        'samples': {'sampled_driver_highwater_lower_bound_bytes': 1024,
+                    'sample_count': 10,
+                    'sample_interval_seconds': runtime.SAMPLE_INTERVAL_SECONDS,
+                    'sampled_lower_bound_by_call_ordinal': {'1': 1024},
+                    'exact_transient_peak_measured': False},
+    })
     return pilot, args
 
 
@@ -53,11 +78,66 @@ class ComposedSavedTests(unittest.TestCase):
             self.assertEqual(result['full_attempt_output_bytes'],
                              result['pilot_output_and_claim_bytes'] +
                              result['composition_sidecar_bytes'] +
-                             result['composition_post_host_raw_bytes'])
+                             result['composition_post_host_raw_bytes'] +
+                             result['watchdog_claim_bytes'] +
+                             result['watchdog_result_bytes'])
             self.assertGreater(result['post_host_collected_utc'],
                                result['pre_host_collected_utc'])
             self.assertEqual(result['sidecar_producer_source_sha256'],
                              args['expected_launcher_sha256'])
+
+    def test_watchdog_bytes_enter_full_total_and_hashes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pilot, args = composed_fixture(Path(tmp))
+            before = composed.audit_composed_saved(pilot, **args)
+            claim = Path(base.read_json(args['admission'])['bindings']['campaign_claim_path'])
+            watchdog = runtime._claim_path(claim)
+            result_path = watchdog.with_name(watchdog.name + '.result.json')
+            watchdog.write_bytes(watchdog.read_bytes() + b' ' * 73)
+            result_path.write_bytes(result_path.read_bytes() + b' ' * 91)
+            after = composed.audit_composed_saved(pilot, **args)
+            self.assertEqual(after['full_attempt_output_bytes'] -
+                             before['full_attempt_output_bytes'], 164)
+            self.assertEqual(after['watchdog_claim_bytes'] -
+                             before['watchdog_claim_bytes'], 73)
+            self.assertEqual(after['watchdog_result_bytes'] -
+                             before['watchdog_result_bytes'], 91)
+            self.assertEqual(after['watchdog_claim_sha256'], base.sha(watchdog))
+            self.assertEqual(after['watchdog_result_sha256'], base.sha(result_path))
+
+    def test_full_total_agrees_with_separate_freeze_inventory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pilot, args = composed_fixture(Path(tmp))
+            binding = base.read_json(pilot / 'pilot_measurement.json')['bindings']
+            pins = freeze.FutureLauncherPins(contract.ExternalPins(
+                base.WORKER_SHA, args['expected_admission_sha256'],
+                args['expected_review_sha256']),
+                base.sha(args['composition_source']))
+            separate = freeze.audit_composition_sidecars(
+                output_dir=pilot, bindings=binding, pins=pins,
+                expected_measurement_sha256=args['expected_measurement_sha256'],
+                free_disk_bytes=100 * 1024**3)
+            composed_result = composed.audit_composed_saved(pilot, **args)
+            self.assertEqual(composed_result['full_attempt_output_bytes'],
+                             separate['total_attempt_bytes'])
+
+    def test_rejects_missing_or_tampered_watchdog_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pilot, args = composed_fixture(Path(tmp))
+            claim = Path(base.read_json(args['admission'])['bindings']['campaign_claim_path'])
+            watchdog = runtime._claim_path(claim)
+            result_path = watchdog.with_name(watchdog.name + '.result.json')
+            result_path.unlink()
+            with self.assertRaisesRegex(ValueError, 'Missing or symlinked'):
+                composed.audit_composed_saved(pilot, **args)
+            write_json(result_path, {'status': 'child_completed'})
+            with self.assertRaisesRegex(ValueError, 'Parent watchdog'):
+                composed.audit_composed_saved(pilot, **args)
+            parent_claim = base.read_json(watchdog)
+            parent_claim['output_dir'] = str(Path(tmp) / 'other')
+            write_json(watchdog, parent_claim)
+            with self.assertRaisesRegex(ValueError, 'Parent watchdog claim path or identity'):
+                composed.audit_composed_saved(pilot, **args)
 
     def test_rejects_missing_or_tampered_actual_launcher_provenance(self):
         with tempfile.TemporaryDirectory() as tmp:

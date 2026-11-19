@@ -33,7 +33,7 @@ ADMISSION_SHA256: str | None = None  # no external A exists
 REVIEW_SHA256: str | None = None  # no independent R exists
 PARENT_RESULT_RESERVE_BYTES = 1024**2
 LAUNCHER_FILE = 'voxtral_track_b_v6_one_shot_launcher_source_v1.py'
-COMPOSED_AUDITOR_SHA256 = '26a1fed4bf71d11e4e4bce33ac430db7b7cc1414e67b1b797155cded07997dce'
+COMPOSED_AUDITOR_SHA256 = 'f12c64f2f64045b2b8aba1efc24a7bec8a37bb32ad7423baa7c79d8895524218'
 
 
 def _frozen_pins() -> freeze.FutureLauncherPins:
@@ -287,6 +287,8 @@ def launch_pilot(*, files: worker.AdmissionFiles, review_path: Path,
         expected_review_sha256=pins.external.review_sha256,
         expected_composition_sha256=sidecar_audit['composition_sha256'],
         free_disk_bytes=shutil.disk_usage(output_dir).free)
+    if saved['full_attempt_output_bytes'] != sidecar_audit['total_attempt_bytes']:
+        raise ValueError('Independent full-attempt byte inventories disagree')
     return {'status': 'HOLD_no_post_pilot_go', 'go_issued': False,
             'sidecar_producer_source_sha256': producer_sha,
             'saved_audit': saved, 'runtime': parent}
