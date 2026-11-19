@@ -1,4 +1,8 @@
-"""Gated Whisper Tiny time-translation worker; importing loads no weights."""
+"""Whisper Tiny time-translation worker; import loads no weights.
+
+The inherited live-parent pipe prevents accidental direct runs under a trusted
+local-owner assumption. It is not cryptographic parent authentication.
+"""
 from __future__ import annotations
 
 import argparse
@@ -191,7 +195,7 @@ def run(stage: str, attempt: Path, admission: Path, go: Path, heartbeat_fd: int)
     from . import whisper_time_translation_gate_v1 as gate
     require(stage in STAGES and attempt == gate.ATTEMPTS[stage]
             and attempt.is_absolute() and attempt.is_dir() and not attempt.is_symlink(),
-            "fixed parent-created translation attempt required")
+            "fixed expected translation attempt required")
     guard = v4.start_parent_guard(attempt, heartbeat_fd)
     guard.check()
     reviewed = gate.validate_go(stage, admission, go)

@@ -5,10 +5,12 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 
 from . import whisper_time_translation_plan_v1 as plan
+from . import whisper_time_translation_gate_v1 as gate
 from . import whisper_time_translation_worker_v1 as worker
 
 
@@ -22,6 +24,14 @@ def fake_outcome(sidecars: Path, stem: str, tokens: list[int], mask: np.ndarray)
 
 
 class WorkerTests(unittest.TestCase):
+    def test_direct_worker_without_parent_attempt_refuses_before_weights(self) -> None:
+        stage = "original"
+        with mock.patch.object(worker.v4.old, "_snapshot_load") as load:
+            with self.assertRaisesRegex(ValueError, "fixed expected"):
+                worker.run(stage, gate.ATTEMPTS[stage], gate.ADMISSIONS[stage],
+                           gate.GOS[stage], -1)
+            load.assert_not_called()
+
     def test_pinned_plan_baseline_and_arm_counts(self) -> None:
         frozen = json.loads(plan.PLAN.read_text())
         for stage, baseline_count, maximum in (
