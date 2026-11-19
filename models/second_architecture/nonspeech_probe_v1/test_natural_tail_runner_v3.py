@@ -147,6 +147,27 @@ class NaturalTailRunnerTests(unittest.TestCase):
         finally:
             os.close(read_fd);os.close(write_fd)
 
+    def test_live_parent_pipe_allows_bounded_no_model_stub(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            attempt=Path(temp)/"stub"
+            attempt.mkdir()
+            nonce="0123456789abcdef0123456789abcdef"
+            deadline=time.monotonic()+600
+            (attempt/"launch_start.json").write_text(json.dumps({
+                "parent_pid":os.getpid(),"deadline_monotonic":deadline,
+                "nonce_sha256":hashlib.sha256(nonce.encode()).hexdigest()}))
+            script=("import sys,time; from pathlib import Path; "
+                    "from models.second_architecture.nonspeech_probe_v1 "
+                    "import natural_tail_runner_v3 as runner; "
+                    "guard=runner.start_parent_guard(Path(sys.argv[1]),int(sys.argv[-1])); "
+                    "time.sleep(.5); guard.check()")
+            observation=parent.run_bounded([sys.executable,"-c",script,str(attempt)],
+                attempt,nonce=nonce,deadline=deadline,seconds=5)
+            self.assertEqual(observation["worker_returncode"],0)
+            self.assertEqual(observation["worker_stop_reason"],"normal_exit")
+            self.assertGreater(observation["parent_heartbeat_count"],0)
+            self.assertGreater(observation["worker_rss_samples"],0)
+
     def test_lossless_sidecar_and_mel_regions(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)
