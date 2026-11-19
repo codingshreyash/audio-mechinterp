@@ -44,6 +44,7 @@ class GateTests(unittest.TestCase):
                     "whisper_tail_causal_parent_v3.py",
                     "whisper_tail_causal_plan_v1.py",
                     "whisper_tail_causal_plan_v3.py",
+                    "WHISPER_TIME_TRANSLATION_EXECUTABLE_HANDOFF_V1.md",
                     "WHISPER_TIME_TRANSLATION_PLAN_V1.json",
                     "runs/whisper_time_translation_v1/source_v1/manifest.json"}
         self.assertTrue(required.issubset(gate.SOURCE_NAMES))

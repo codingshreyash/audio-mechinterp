@@ -1,6 +1,6 @@
 # Whisper time-translation executable handoff, V1
 
-**Source-only handoff, 19 November 2026. No target-model inference has run for this protocol.** The independent executable reviewer must inspect the committed worker, saved auditor, parent, gate, their tests, the frozen plan, and the rendered-source receipt before any admission or GO is made. The design review at commit `15af9b7` passed the protocol and plan only; it did not authorize execution.
+**Source-only handoff, 19 November 2026. No target-model inference has run for this protocol.** The independent executable reviewer must inspect the committed worker, saved auditor, parent, gate, their tests, the frozen plan, and the rendered-source receipt before executable review and GO. The design review at commit `15af9b7` passed the protocol and plan only; it did not authorize execution.
 
 ## Frozen question and schedule
 

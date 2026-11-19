@@ -40,6 +40,7 @@ SOURCE_NAMES = (
     "test_whisper_time_translation_plan_v1.py",
     "test_whisper_time_translation_source_v1.py",
     "WHISPER_TIME_TRANSLATION_PROSPECTIVE_V1.md",
+    "WHISPER_TIME_TRANSLATION_EXECUTABLE_HANDOFF_V1.md",
     "WHISPER_TIME_TRANSLATION_PLAN_V1.json",
     "runs/whisper_time_translation_v1/source_v1/manifest.json",
     "whisper_tail_causal_host_v1.py",
