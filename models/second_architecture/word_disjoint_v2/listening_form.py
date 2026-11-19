@@ -65,8 +65,14 @@ def public_data(bundle: Path) -> dict:
         path = bundle / (ident + ".wav")
         if not path.is_file() or path.is_symlink():
             raise ValueError("anonymous WAV missing or linked")
+        wav_sha = sha(path)
+        derived_id = hashlib.sha256(("word-disjoint-listening-v2|"
+                                     + provenance["manifest_sha256"] + "|"
+                                     + wav_sha).encode()).hexdigest()[:20]
+        if ident != derived_id:
+            raise ValueError("anonymous WAV does not match its derived opaque ID")
         clips.append({"opaque_id": ident, "file": path.name,
-                      "wav_sha256": sha(path)})
+                      "wav_sha256": wav_sha})
     return {"schema": "word_disjoint_blind_form_v1",
             "queue_sha256": sha(queue_file), "planned_clips": 32,
             "clips": clips}

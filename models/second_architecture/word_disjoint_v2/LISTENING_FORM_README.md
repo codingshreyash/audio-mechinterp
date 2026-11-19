@@ -1,6 +1,6 @@
 # Blind listening form for the 32 new clips
 
-The source builder reads only `rendered_v2/listening/QUEUE.json` and the 32 anonymous WAV files beside it. It rejects any extra or missing WAV, duplicate ID, unexpected public queue field, or symlink. It embeds each anonymous WAV filename and SHA-256 in one offline HTML page. It never reads `QA_PRIVATE_CASES.json`, the reference scripts, or model outputs.
+The source builder reads only `rendered_v2/listening/QUEUE.json` and the 32 anonymous WAV files beside it. It rejects any extra or missing WAV, duplicate ID, unexpected public queue field, or symlink. For each WAV it recomputes the queue builder's opaque ID from the queue's manifest SHA-256 and actual WAV SHA-256; swapped anonymous filenames are rejected before the page is written. It embeds each verified anonymous WAV filename and SHA-256 in one offline HTML page. It never reads `QA_PRIVATE_CASES.json`, the reference scripts, or model outputs.
 
 Build the page after the technical audio audit and listening queue are complete:
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import tempfile
 import unittest
@@ -15,13 +16,19 @@ class BlindFormTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.bundle = Path(self.temp.name)
-        self.ids = [f"{i:020x}" for i in range(32)]
-        for ident in self.ids:
-            (self.bundle / f"{ident}.wav").write_bytes(b"RIFF" + ident.encode())
+        self.manifest_sha = "a" * 64
+        self.ids = []
+        for i in range(32):
+            payload = b"RIFF" + i.to_bytes(4, "little")
+            wav_sha = hashlib.sha256(payload).hexdigest()
+            ident = hashlib.sha256(("word-disjoint-listening-v2|"
+                                    + self.manifest_sha + "|" + wav_sha).encode()).hexdigest()[:20]
+            self.ids.append(ident)
+            (self.bundle / f"{ident}.wav").write_bytes(payload)
         self.queue = {
             "status": "blinded_listening_queue_no_results",
             "scope": "Listen to anonymous clips",
-            "provenance": {name: "a" * 64 for name in (
+            "provenance": {name: self.manifest_sha for name in (
                 "manifest_sha256", "technical_binding_sha256",
                 "auditor_sha256", "queue_builder_sha256")},
             "planned_clips": 32, "opaque_ids_in_order": self.ids.copy(),
@@ -80,6 +87,18 @@ class BlindFormTests(unittest.TestCase):
         target = self.bundle / f"{self.ids[1]}.wav"
         path.symlink_to(target)
         with self.assertRaisesRegex(ValueError, "population|linked"):
+            form.public_data(self.bundle)
+
+    def test_rejects_swapped_wavs_under_unchanged_queue(self) -> None:
+        first = self.bundle / f"{self.ids[0]}.wav"
+        second = self.bundle / f"{self.ids[1]}.wav"
+        original_queue_sha = form.sha(self.bundle / "QUEUE.json")
+        temp = self.bundle / "swap.tmp"
+        first.rename(temp)
+        second.rename(first)
+        temp.rename(second)
+        self.assertEqual(form.sha(self.bundle / "QUEUE.json"), original_queue_sha)
+        with self.assertRaisesRegex(ValueError, "derived opaque ID"):
             form.public_data(self.bundle)
 
 
