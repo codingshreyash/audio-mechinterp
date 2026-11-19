@@ -25,6 +25,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
+from urllib.parse import unquote
 
 from models.second_architecture import voicechat_h100_local_preflight as pinned
 
@@ -194,7 +195,7 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
         re.fullmatch(r"https://[^\s#]+(?:\.conda|\.tar\.bz2)#[0-9a-fA-F]{32}(?:[0-9a-fA-F]{32})?", line)
         is not None for line in package_lines),
         "Conda explicit spec lacks hashed package URLs")
-    expected_archives = {line.rsplit("/", 1)[1].split("#", 1)[0]
+    expected_archives = {unquote(line.rsplit("/", 1)[1].split("#", 1)[0])
                          for line in package_lines}
     require(len(expected_archives) == len(package_lines),
             "Conda explicit spec has duplicate archive names")
@@ -224,7 +225,7 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
     for item in archives:
         require(type(item) is dict and set(item) == {"path", "sha256", "bytes"}
                 and isinstance(item["path"], str)
-                and re.fullmatch(r"package-archives/[A-Za-z0-9_+.-]+(?:\.conda|\.tar\.bz2)",
+                and re.fullmatch(r"package-archives/[A-Za-z0-9_+.!-]+(?:\.conda|\.tar\.bz2)",
                                  item["path"]) is not None
                 and isinstance(item["sha256"], str)
                 and re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) is not None

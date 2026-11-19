@@ -622,6 +622,28 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpected files"):
             smoke.native_ffmpeg_runtime(self.base)
 
+    def test_percent_encoded_url_basename_matches_decoded_conda_archive(self):
+        name = "x264-1!164-h123_0.conda"
+        payload = b"synthetic x264 archive"
+        (self.root / "package-archives" / name).write_bytes(payload)
+        (self.metadata / "x264-1!164-h123_0.json").write_bytes(smoke.canonical({
+            "name": "x264", "sha256": smoke.sha(payload)}))
+        spec_path = self.root / "conda-explicit.txt"
+        spec = spec_path.read_bytes() + (
+            "https://conda.anaconda.org/conda-forge/linux-64/"
+            "x264-1%21164-h123_0.conda#" + "b" * 32 + "\n").encode()
+        spec_path.write_bytes(spec)
+        manifest_path = self.root / "native-source-manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["explicit_spec"] = {"path": "conda-explicit.txt",
+                                     "sha256": smoke.sha(spec), "bytes": len(spec)}
+        manifest["package_archives"].append({
+            "path": f"package-archives/{name}", "sha256": smoke.sha(payload),
+            "bytes": len(payload)})
+        manifest_path.write_bytes(smoke.canonical(manifest))
+        receipt = smoke.native_ffmpeg_runtime(self.base)
+        self.assertEqual(receipt["source"]["package_archives_count"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()
