@@ -145,7 +145,11 @@ def natural_norms(recipient: np.ndarray, donor: np.ndarray,
 def checked_audits() -> dict[str, str]:
     hashes = {}
     for label, (path, expected) in PINS.items():
-        require(path.is_file() and not path.is_symlink() and sha(path) == expected,
+        # Hugging Face snapshots store pinned assets as links into their own
+        # content-addressed blobs. Run artifacts and the corpus spec are files.
+        storage_ok = (path.resolve().is_relative_to(SNAPSHOT.parents[1] / "blobs")
+                      if label in ("vocab", "config") else not path.is_symlink())
+        require(path.is_file() and storage_ok and sha(path) == expected,
                 f"pinned input changed: {label}")
         hashes[label] = expected
     for prefix in ("fit_base", "fit_patch", "dev"):
