@@ -1,0 +1,3 @@
+# Narrow CUDA typed-only QA exception V1
+
+19 November 2026. This is a source-only amendment and grants no executable GO. The earlier MPS V3 exception named one consumed MPS attempt; it does not carry over to CUDA. An independent reviewer may authorize one load-only CUDA attempt and, only after its saved audit passes, one `F_L1__typed` CUDA resource/VJP pilot. The exception permits no WAV, audio, other FIT, development, or locked case. It does not permit interpreting a single pilot as a security finding or modifying the frozen text, labels, sites, threshold, dose, or split. Full audio work still needs the two-listener QA record and a separate reviewed runner. Each CUDA stage needs its own GO bound to this file's hash.
