@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -268,6 +269,97 @@ class LauncherTests(unittest.TestCase):
         with patch.object(Path, "open", forbid_read):
             with self.assertRaisesRegex(ValueError, "before read"):
                 launch._artifact_hashes(arm, 8192)
+
+    def test_worker_cannot_relax_caller_caps_after_scope_snapshot(self):
+        for kind, pattern in (("output_bytes", "Arm artifact exceeds output cap"),
+                              ("vram_bytes", "wall or VRAM cap exceeded"),
+                              ("wall_seconds", "wall or VRAM cap exceeded")):
+            with self.subTest(kind=kind):
+                run_dir = self.root / "run"
+                if run_dir.exists():
+                    import shutil
+                    shutil.rmtree(run_dir)
+                self.seen.clear()
+                caps = {**self.caps, "wall_seconds": 1}
+                original = caps[kind]
+                def worker(arm, directory, response_path):
+                    result = self._worker(arm, directory, response_path)
+                    if arm == "official_sample":
+                        caps[kind] = 65536
+                        if kind == "output_bytes":
+                            (directory / "extra.bin").write_bytes(b"x" * 9000)
+                        if kind == "vram_bytes":
+                            result["peak_vram_bytes"] = 2048
+                    return result
+                clock = ([0.0, 2.0] if kind == "wall_seconds" else [0.0, 0.1])
+                with patch.object(launch.time, "monotonic", side_effect=clock):
+                    with self.assertRaisesRegex(ValueError, pattern):
+                        self._run(worker=worker, caps=caps)
+                scope = json.loads((run_dir / "synthetic_scope.json").read_text())
+                self.assertEqual(scope["caps"][kind], original)
+                self.assertEqual(self.seen, ["official_sample"])
+
+    def test_oversized_response_after_rehash_is_not_read_at_stock_precheck(self):
+        response = self.root / "run/api_response.json"
+        original = Path.read_bytes
+        rehash_count = 0
+        def rehash():
+            nonlocal rehash_count
+            rehash_count += 1
+            if rehash_count == 4:
+                response.write_bytes(b"x" * 100000)
+            return self.hashes
+        def forbid_response_read(path):
+            if path == response:
+                raise AssertionError("Oversized response was read in full")
+            return original(path)
+        caps = {**self.caps, "total_output_bytes": 8192}
+        with patch.object(Path, "read_bytes", forbid_response_read):
+            with self.assertRaisesRegex(ValueError, "Total evidence cap exceeded"):
+                self._run(rehash_inputs=rehash, caps=caps)
+        self.assertEqual(self.seen, ["official_sample", "adapter"])
+
+    def test_oversized_response_after_final_rehash_is_not_read(self):
+        response = self.root / "run/api_response.json"
+        original = Path.read_bytes
+        rehash_count = 0
+        def rehash():
+            nonlocal rehash_count
+            rehash_count += 1
+            if rehash_count == 7:
+                response.write_bytes(b"x" * 100000)
+            return self.hashes
+        def forbid_response_read(path):
+            if path == response and rehash_count >= 7:
+                raise AssertionError("Oversized response was read in full")
+            return original(path)
+        caps = {**self.caps, "total_output_bytes": 8192}
+        with patch.object(Path, "read_bytes", forbid_response_read):
+            with self.assertRaisesRegex(ValueError, "Total evidence cap exceeded"):
+                self._run(rehash_inputs=rehash, caps=caps)
+        self.assertEqual(self.seen, list(launch.ORDER))
+        self.assertFalse((self.root / "run/synthetic_comparison.json").exists())
+
+    def test_oversized_response_during_stock_worker_is_not_read(self):
+        response = self.root / "run/api_response.json"
+        original = Path.read_bytes
+        mutated = False
+        def worker(arm, directory, response_path):
+            nonlocal mutated
+            result = self._worker(arm, directory, response_path)
+            if arm == "stock_a":
+                response.write_bytes(b"x" * 100000)
+                mutated = True
+            return result
+        def forbid_response_read(path):
+            if path == response and mutated:
+                raise AssertionError("Oversized response was read in full")
+            return original(path)
+        caps = {**self.caps, "total_output_bytes": 8192}
+        with patch.object(Path, "read_bytes", forbid_response_read):
+            with self.assertRaisesRegex(ValueError, "Total evidence cap exceeded"):
+                self._run(worker=worker, caps=caps)
+        self.assertEqual(self.seen, ["official_sample", "adapter", "stock_a"])
 
     def test_process_seed_prompt_and_output_caps(self):
         for kind, pattern in (("seed", "source/checkpoint/seed"),

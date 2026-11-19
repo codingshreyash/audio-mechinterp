@@ -66,6 +66,26 @@ def _write_bounded(root: Path, path: Path, data: bytes, ceiling: int) -> None:
     _write_exclusive(path, data)
 
 
+def _bounded_file_sha(path: Path, root: Path, ceiling: int) -> str:
+    """Check aggregate/individual sizes before a bounded streaming digest."""
+    _evidence_bytes(root, ceiling)
+    _require(path.is_file() and not path.is_symlink(),
+             "Frozen response is not a regular file")
+    size = path.stat().st_size
+    _require(size <= ceiling, "Frozen response exceeds total cap before read")
+    digest = hashlib.sha256()
+    read = 0
+    with path.open("rb") as stream:
+        while block := stream.read(min(65536, ceiling - read + 1)):
+            read += len(block)
+            _require(read <= ceiling, "Frozen response grew beyond total cap")
+            digest.update(block)
+    _require(read == size and path.stat().st_size == size,
+             "Frozen response changed while hashing")
+    _evidence_bytes(root, ceiling)
+    return digest.hexdigest()
+
+
 def _artifact_hashes(directory: Path, ceiling: int) -> tuple[dict[str, str], int]:
     """Stat before reading, then stream-hash regular files in one arm."""
     result: dict[str, str] = {}
@@ -77,9 +97,15 @@ def _artifact_hashes(directory: Path, ceiling: int) -> tuple[dict[str, str], int
         total += size
         _require(total <= ceiling, "Arm artifact exceeds output cap before read")
         digest = hashlib.sha256()
+        read = 0
         with path.open("rb") as stream:
-            for block in iter(lambda: stream.read(1024 * 1024), b""):
+            while block := stream.read(min(65536, ceiling - total + size - read + 1)):
+                read += len(block)
+                _require(total - size + read <= ceiling,
+                         "Arm artifact grew beyond output cap")
                 digest.update(block)
+        _require(read == size and path.stat().st_size == size,
+                 "Arm artifact changed while hashing")
         result[path.name] = digest.hexdigest()
     return result, total
 
@@ -129,17 +155,18 @@ def run_synthetic_protocol(
     plan_bytes = _validate_synthetic_plan(plan)
     frozen_plan = json.loads(plan_bytes)
     expected_hashes = frozen_plan["input_hashes"]
-    _require(set(caps) == {"wall_seconds", "vram_bytes", "output_bytes",
-                           "total_output_bytes"}
-             and all(type(value) is int and value > 0 for value in caps.values()),
+    frozen_caps = dict(caps)
+    _require(set(frozen_caps) == {"wall_seconds", "vram_bytes", "output_bytes",
+                                  "total_output_bytes"}
+             and all(type(value) is int and value > 0 for value in frozen_caps.values()),
              "Prospective per-arm or total caps invalid")
-    total_cap = caps["total_output_bytes"]
+    total_cap = frozen_caps["total_output_bytes"]
     _require(len(plan_bytes) <= total_cap,
              "Serialized source plan exceeds total evidence cap")
     _require(rehash_inputs() == expected_hashes, "Bound input changed before sample")
     scope_bytes = canonical_bytes({
         "status": "synthetic_test_only_no_model_work",
-        "source_plan_sha256": _sha(plan_bytes), "caps": caps,
+        "source_plan_sha256": _sha(plan_bytes), "caps": frozen_caps,
         "arm_order": list(ORDER), "created_utc": _now(),
     })
     _require(len(plan_bytes) + len(scope_bytes) <= total_cap,
@@ -162,7 +189,7 @@ def run_synthetic_protocol(
                  f"Bound input changed before {arm}")
         if arm in FIXTURE_ARMS and arm != "adapter":
             _require(response_sha is not None and response_path.is_file()
-                     and _sha(response_path.read_bytes()) == response_sha,
+                     and _bounded_file_sha(response_path, output_dir, total_cap) == response_sha,
                      "Stock response absent or changed")
         arm_dir = output_dir / arm
         arm_dir.mkdir(exist_ok=False)
@@ -178,9 +205,9 @@ def run_synthetic_protocol(
             elapsed = time.monotonic() - start
             _require(isinstance(result, dict) and result.get("returncode") == 0,
                      f"{arm} worker failed")
-            _require(elapsed <= caps["wall_seconds"]
+            _require(elapsed <= frozen_caps["wall_seconds"]
                      and type(result.get("peak_vram_bytes")) is int
-                     and 0 <= result["peak_vram_bytes"] <= caps["vram_bytes"],
+                     and 0 <= result["peak_vram_bytes"] <= frozen_caps["vram_bytes"],
                      f"{arm} wall or VRAM cap exceeded")
             provenance = result.get("provenance", {})
             expected = {"source_plan_sha256": _sha(plan_bytes),
@@ -207,11 +234,11 @@ def run_synthetic_protocol(
                     _require(provenance.get("response_sha256") == response_sha,
                              f"{arm} injected response differs")
             _evidence_bytes(output_dir, total_cap)
-            hashes, output_bytes = _artifact_hashes(arm_dir, caps["output_bytes"])
+            hashes, output_bytes = _artifact_hashes(arm_dir, frozen_caps["output_bytes"])
             required = ({"sample_raw.bin"} if arm == "official_sample"
                         else REQUIRED_FIXTURE_ARTIFACTS)
             _require(required <= hashes.keys(), f"{arm} raw artifact missing")
-            _require(output_bytes <= caps["output_bytes"], f"{arm} output cap exceeded")
+            _require(output_bytes <= frozen_caps["output_bytes"], f"{arm} output cap exceeded")
             capture = result.get("capture")
             _require(isinstance(capture, dict), f"{arm} capture missing")
             if arm == "adapter":
@@ -243,7 +270,7 @@ def run_synthetic_protocol(
                 _require(not first_injection and second_injection ==
                          (set() if no_call else set(INJECTION_FIELDS)),
                          f"{arm} replay injection differs")
-                _require(_sha(response_path.read_bytes()) == response_sha,
+                _require(_bounded_file_sha(response_path, output_dir, total_cap) == response_sha,
                          f"{arm} changed the frozen response")
             captures[arm] = capture
             receipts[arm] = {"arm": arm, "returncode": 0,
@@ -254,8 +281,8 @@ def run_synthetic_protocol(
                              "response_sha256": provenance.get("response_sha256")}
             _write_bounded(output_dir, arm_dir / "complete.json",
                            canonical_bytes(receipts[arm]), total_cap)
-            _, final_bytes = _artifact_hashes(arm_dir, caps["output_bytes"])
-            _require(final_bytes <= caps["output_bytes"],
+            _, final_bytes = _artifact_hashes(arm_dir, frozen_caps["output_bytes"])
+            _require(final_bytes <= frozen_caps["output_bytes"],
                      f"{arm} output cap exceeded after receipt")
         except BaseException as error:
             try:
@@ -270,7 +297,8 @@ def run_synthetic_protocol(
             raise
     _require(rehash_inputs() == expected_hashes,
              "Bound input changed before comparison")
-    _require(response_sha is not None and _sha(response_path.read_bytes()) == response_sha,
+    _require(response_sha is not None
+             and _bounded_file_sha(response_path, output_dir, total_cap) == response_sha,
              "Frozen stock response changed before comparison")
     comparison = compare(captures["stock_a"]["stock"],
                          captures["stock_b"]["stock"],
