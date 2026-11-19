@@ -1,0 +1,35 @@
+# Where one spoken word first spreads, and which state changes the transcript
+
+19 November 2026. This is a synthesis of independently reviewed, already-open **FIT** experiments in two English ASR models, `openai/whisper-tiny.en` and `facebook/wav2vec2-base-960h`. It addresses a mechanistic question: when paired recordings differ only in one spoken word, where does the difference first spread outside that word's time span, and does replacing an internal word-window state change the **complete output**? These are model-internal experiments, not a security finding.
+
+## Paired inputs and measurements
+
+Piper and Kokoro rendered `silver`/`teal` and `plate`/`cup` utterances. Within each voice and pair, the int16 PCM is identical outside a frozen inserted-word slot. Both word directions were retained. These are synthetic, previously inspected FIT inputs; the counts below are correlated observations, not independent test samples or estimated deployment rates. The [Whisper case study](WHISPER_TIME_LOCALIZATION_CASE_STUDY_V1.md) and [Wav2Vec2 baseline review](WAV2VEC2_FIT_BASELINE_V2_RESULT_INDEPENDENT_REVIEW_V1.md) give the exact clips, captures and audit trails.
+
+We traced the paired difference from waveform preprocessing through early audio layers and compared a saved full transcript after replacing donor hidden rows inside or outside a fixed word window. A word-transfer count required a *complete* transcript with the intended donor word and every other normalized word unchanged. Wav2Vec2 also has a separate, weaker outcome: matching the model's own donor transcript, which may contain a recognition error.
+
+## First observed spread depends on the architecture
+
+| Model/path | Earliest measured outside-word difference | What the check establishes |
+| --- | --- | --- |
+| Whisper Tiny | The paired post-convolution/position states were identical outside the word window. Differences were present outside it after encoder block 0. | The first **observed** spread in the measured path is inside that block. Its attention and feed-forward components were not isolated by this capture. |
+| Wav2Vec2, stock processor (S) | Full-utterance waveform normalization changed samples outside the substituted PCM slot, before model layers. | A local edit to raw PCM does not remain local at this processor output. |
+| Wav2Vec2, shared outside-word statistics (C) | Input samples and the first raw-convolution output stayed identical outside the word's receptive window. The first time-wide convolutional GroupNorm produced outside-window differences in all four pair/voice cells, before transformer attention. | The [independent formula reconstruction](WAV2VEC2_FIT_GROUPNORM_RECONSTRUCTION_INDEPENDENT_REVIEW_V1.md) matched saved GroupNorm outputs from pinned weights and raw convolutions; outside differences were 2.15–4.80 after the norm versus exact zero before it. Shared statistics are a controlled counterfactual, not the stock input path. |
+
+The GroupNorm reconstruction also applied *shared outside-window statistics* algebraically to the saved raw convolution tensors. The outside-window difference then became exactly zero. This isolates the normalization calculation in those saved tensors; it was **not** a new downstream model forward, and it does not show whether the spread influences transcription.
+
+## A visible difference and a useful state are different questions
+
+In Whisper, donor **word-window** states changed the intended word in complete transcripts in all planned arms of the first FIT assay (12/12), the second FIT pair (12/12), and the later spread-versus-use follow-up (16/16 at two later sites). At those two later sites, replacing the active-audio complement outside the word window gave **0/16** intended-word changes, even though activations differed there. Nearby prefix/postword controls also gave 0/16. The [independent Whisper review](WHISPER_FIT_SPREAD_CAUSAL_RESULT_INDEPENDENT_REVIEW_V1.md) emphasizes that an unsuccessful complement patch does not prove absence of information in those states.
+
+In Wav2Vec2, the [independently audited causal run](WAV2VEC2_FIT_CAUSAL_RESULT_INDEPENDENT_REVIEW_V1.md) replaced hidden rows at feature projection and after encoder block 11. Word-window patches matched the model's **complete donor transcript** in **16/16 directions at each site**. Only **4/16 directions per site** met the stricter two-endpoint intended-word rule; those four were Piper `plate`↔`cup` in S and C modes. The other donor transcripts included `TEEL`, `TIL` and `CUB`, so the 16/16 result is model-output transfer, not intended-word accuracy. Equal-width immediately preceding and following patches preserved the recipient transcript in **64/64** outcomes total. All self and full-donor exact-logit controls passed. Equal-norm random word-window edits produced **0/64** target-only donor transfers but changed the complete transcript to another spelling in **11/64** arms, including two primary eligible `CUP`→`HUP` cases. Wav2Vec2's **full outside-word complement has not yet been patched**; the nearby-window controls cannot settle whether widespread distant states are causally useful.
+
+The supported cross-model observation is that a frozen internal word-window state can control a complete ASR transcript in these tested contexts, while the first measured source of widespread activation differences differs by architecture. A colored activation trace alone would have missed that distinction. The interventions do **not** identify a unique circuit, show that early normalization caused the final answer, or establish a general rule for other words, human voices, languages or audio-language assistants.
+
+## Next decisive checks
+
+1. In Wav2Vec2, prospectively patch the entire active-audio complement at the same two sites under both normalization modes, with complete-transcript, exact self/full-donor, W and norm-matched random controls. This tests whether the distant differences are sufficient in the same patch contexts.
+2. Test the method on fresh word pairs and independent voices with a fixed quality and eligibility rule. Keep ASR errors visible in the full denominator.
+3. In a speech assistant, trace the audio encoder, language state, emitted speech/text and native action path separately. A security claim requires an intelligible attacker-controlled waveform that changes an unmodified model's consequential decision or action under a specified harness.
+
+The [research ledger](../../STATUS.md) links the frozen plans, source reviews, raw records and independent audits for both models. The Wav2Vec2 [offline explorer](explorer/README.md) is being extended to display these time traces and complete patch outputs without projecting high-dimensional states into a misleading two-dimensional view.
