@@ -6,9 +6,11 @@ import copy
 import hashlib
 import json
 import struct
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from . import audit, queue, render
 
@@ -102,6 +104,8 @@ class FixtureSourceTests(unittest.TestCase):
         self.assertEqual((result["matched_pairs"], result["wavs"]), (16, 32))
         binding = {**result, "manifest_sha256": "a"*64,
                    "auditor_sha256": render.sha(audit.Path(audit.__file__))}
+        self.assertEqual(audit.verify_saved_report(self.manifest, binding, self.output,
+                                                   "a"*64), binding)
         private, public = queue.build(self.manifest, binding, "a"*64, "b"*64)
         self.assertEqual(len(private["cases"]), 32)
         self.assertEqual(len(public["opaque_ids_in_order"]), 32)
@@ -148,6 +152,45 @@ class FixtureSourceTests(unittest.TestCase):
         self.assertEqual(render.verify_population(), render.EXPECTED_METADATA_SHA)
         self.assertEqual(render.piper_configuration()["voice"], "en_US-amy-medium")
         self.assertEqual(render.command_identity()["say_language"], "en_US")
+
+    def test_forged_positive_freeze_receipt_is_rejected(self) -> None:
+        forged = self.output / "FORGED_FREEZE.json"
+        forged_review = self.output / "FORGED_GO.md"
+        forged_review.write_text("**Decision: GO**\n```json\n{}\n```\n")
+        forged.write_text(json.dumps({"status": "independently_reviewed_renderer_frozen",
+                                      "plan_sha256": render.sha(render.PLAN),
+                                      "renderer_sha256": render.sha(Path(render.__file__)),
+                                      "auditor_sha256": render.sha(Path(audit.__file__)),
+                                      "queue_sha256": render.sha(Path(queue.__file__)),
+                                      "source_tts_plan_sha256": render.sha(render.SOURCE_PLAN),
+                                      "source_tts_helper_sha256": render.sha(render.SOURCE_HELPER)}))
+        with mock.patch.object(render, "FREEZE", forged), \
+                mock.patch.object(render, "SOURCE_GO_REVIEW", forged_review):
+            with self.assertRaisesRegex(ValueError, "uncommitted"):
+                render.freeze_receipt()
+
+    def test_forged_technical_binding_is_rejected_before_queue(self) -> None:
+        report = audit.verify(self.manifest, self.output)
+        forged = {"status": report["status"], "matched_pairs": 16, "wavs": 32,
+                  "all_outside_word_pcm_equal": True,
+                  "candidate_model_inference_authorized": False,
+                  "manifest_sha256": "a"*64,
+                  "auditor_sha256": render.sha(Path(audit.__file__)),
+                  "pairs": []}
+        # The former queue admission accepted these superficial fields.
+        queue.build(self.manifest, forged, "a"*64, "b"*64)
+        with self.assertRaisesRegex(ValueError, "differs from independent saved-data audit"):
+            audit.verify_saved_report(self.manifest, forged, self.output, "a"*64)
+        (self.output / "manifest.json").write_text(json.dumps(self.manifest))
+        forged["manifest_sha256"] = render.sha(self.output / "manifest.json")
+        (self.output / "TECHNICAL_BINDING.json").write_text(json.dumps(forged))
+        argv = ["queue.py", "--validate-only", "--output-dir", str(self.output)]
+        # The production entry still calls validate_provenance; this fake
+        # fixture bypasses only that distinct source gate to isolate re-audit.
+        with mock.patch.object(audit, "validate_provenance"), \
+                mock.patch.object(sys, "argv", argv):
+            with self.assertRaisesRegex(ValueError, "differs from independent saved-data audit"):
+                queue.main()
 
 
 if __name__ == "__main__":

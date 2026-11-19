@@ -11,6 +11,7 @@ import hashlib
 import importlib.metadata
 import json
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -28,6 +29,8 @@ SOURCE_PLAN = ROOT / "eval/heldout_flow/plan_v1.json"
 SOURCE_HELPER = ROOT / "eval/heldout_flow/render_v1.py"
 TTS_SOURCE = ROOT / "eval/tts/render.py"
 FREEZE = HERE / "RENDER_FREEZE_V2.json"
+PLAN_REVIEW = HERE.parent / "WORD_DISJOINT_TIME_STATE_VALIDATION_PLAN_V2_INDEPENDENT_REVIEW.md"
+SOURCE_GO_REVIEW = HERE / "RENDERER_SOURCE_INDEPENDENT_REREVIEW_GO_V2.md"
 OUTPUT = HERE / "rendered_v2"
 SAY = Path("/usr/bin/say")
 AFCONVERT = Path("/usr/bin/afconvert")
@@ -153,16 +156,82 @@ def command_identity() -> dict:
 
 
 def freeze_receipt() -> dict:
-    require(FREEZE.is_file(), "independently reviewed render freeze receipt absent")
+    """Require an independently committed GO review and a committed freeze.
+
+    A caller-written JSON with a positive status is never sufficient. The GO
+    review binds the exact source blobs in an earlier source commit; the
+    receipt binds that later, separate review commit and file SHA-256.
+    """
+    source_files = {
+        "render.py": HERE / "render.py",
+        "audit.py": HERE / "audit.py",
+        "queue.py": HERE / "queue.py",
+        "test_fixture_source.py": HERE / "test_fixture_source.py",
+        "__init__.py": HERE / "__init__.py",
+        "README.md": HERE / "README.md",
+    }
+    all_paths = list(source_files.values()) + [PLAN, PLAN_REVIEW, SOURCE_GO_REVIEW, FREEZE]
+    require(all(path.is_file() for path in all_paths),
+            "independent source GO review or committed freeze receipt absent")
+    relative = [str(path.relative_to(ROOT)) for path in all_paths]
+    for path in relative:
+        listed = subprocess.run(["git", "-C", str(ROOT), "ls-files", "--error-unmatch", "--", path],
+                                capture_output=True)
+        require(listed.returncode == 0, f"reviewed source/receipt is uncommitted: {path}")
+    dirty = subprocess.run(["git", "-C", str(ROOT), "status", "--porcelain", "--",
+                            *relative], capture_output=True, text=True, check=True)
+    require(not dirty.stdout.strip(), "reviewed source/receipt has uncommitted edits")
+    require("**Decision: GO" in PLAN_REVIEW.read_text(), "V2 plan independent GO absent")
+    review_text = SOURCE_GO_REVIEW.read_text()
+    require("**Decision: GO" in review_text and "**Decision: HOLD" not in review_text,
+            "independent source GO review absent")
+    blocks = re.findall(r"```json\s*\n(.*?)\n```", review_text, flags=re.DOTALL)
+    require(len(blocks) == 1, "source GO review needs one JSON binding block")
+    binding = json.loads(blocks[0])
+    source_hashes = {name: sha(path) for name, path in source_files.items()}
+    require(binding.get("schema") == "word_disjoint_renderer_source_go_v2"
+            and binding.get("source_sha256") == source_hashes
+            and binding.get("plan_sha256") == sha(PLAN)
+            and binding.get("plan_review_sha256") == sha(PLAN_REVIEW)
+            and binding.get("source_tts_plan_sha256") == sha(SOURCE_PLAN)
+            and binding.get("source_tts_helper_sha256") == sha(SOURCE_HELPER)
+            and binding.get("source_tts_renderer_sha256") == sha(TTS_SOURCE),
+            "source GO review does not bind exact source and V2 plan")
+    source_commit = binding.get("reviewed_source_commit")
+    require(isinstance(source_commit, str) and re.fullmatch(r"[0-9a-f]{40}", source_commit),
+            "source GO review lacks full reviewed commit")
+    for name, path in source_files.items():
+        blob = subprocess.run(["git", "-C", str(ROOT), "show",
+                               f"{source_commit}:{path.relative_to(ROOT)}"],
+                              capture_output=True)
+        require(blob.returncode == 0 and sha_bytes(blob.stdout) == source_hashes[name],
+                f"source GO review commit does not contain current {name}")
+    review_rel = str(SOURCE_GO_REVIEW.relative_to(ROOT))
+    review_commit_result = subprocess.run(["git", "-C", str(ROOT), "log", "-1",
+                                           "--format=%H", "--", review_rel],
+                                          capture_output=True, text=True, check=True)
+    review_commit = review_commit_result.stdout.strip()
+    require(re.fullmatch(r"[0-9a-f]{40}", review_commit) and review_commit != source_commit,
+            "source GO review must be a separate later commit")
+    ancestor = subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor",
+                               source_commit, review_commit], capture_output=True)
+    committed_review = subprocess.run(["git", "-C", str(ROOT), "show",
+                                       f"{review_commit}:{review_rel}"], capture_output=True)
+    require(ancestor.returncode == 0 and committed_review.returncode == 0
+            and committed_review.stdout == SOURCE_GO_REVIEW.read_bytes(),
+            "source GO review is not committed after reviewed source")
     receipt = json.loads(FREEZE.read_text())
-    expected = {"plan_sha256": sha(PLAN), "renderer_sha256": sha(Path(__file__)),
-                "auditor_sha256": sha(HERE / "audit.py"),
-                "queue_sha256": sha(HERE / "queue.py"),
+    expected = {"plan_sha256": sha(PLAN), "plan_review_sha256": sha(PLAN_REVIEW),
+                "source_go_review_sha256": sha(SOURCE_GO_REVIEW),
+                "source_go_review_commit": review_commit,
+                "reviewed_source_commit": source_commit,
+                "source_sha256": source_hashes,
                 "source_tts_plan_sha256": sha(SOURCE_PLAN),
-                "source_tts_helper_sha256": sha(SOURCE_HELPER)}
+                "source_tts_helper_sha256": sha(SOURCE_HELPER),
+                "source_tts_renderer_sha256": sha(TTS_SOURCE)}
     require(receipt.get("status") == "independently_reviewed_renderer_frozen"
             and all(receipt.get(key) == value for key, value in expected.items()),
-            "render freeze receipt does not bind reviewed source")
+            "render freeze receipt does not bind independent GO review and exact sources")
     return receipt
 
 

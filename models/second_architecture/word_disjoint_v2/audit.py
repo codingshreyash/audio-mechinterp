@@ -158,18 +158,8 @@ def verify(manifest: dict, output: Path) -> dict:
             "pairs": pair_report}
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
-    args = parser.parse_args()
-    output = args.output_dir.resolve()
-    if not output.is_relative_to(ROOT) or not output.is_dir():
-        raise ValueError("output directory missing or outside repository")
-    manifest_path = output / "manifest.json"
-    binding_path = output / "TECHNICAL_BINDING.json"
-    if binding_path.exists():
-        raise FileExistsError("refusing to replace technical binding")
-    manifest = json.loads(manifest_path.read_text())
+def validate_provenance(manifest: dict) -> None:
+    """Bind a live audit or listening export to reviewed source and metadata."""
     from . import render
     render.freeze_receipt()
     metadata_hashes = render.verify_population()
@@ -185,6 +175,32 @@ def main() -> None:
             or manifest.get("piper_package") != conf["package"]
             or manifest.get("piper_synthesis") != conf["synthesis"]):
         raise ValueError("render provenance does not bind reviewed source and metadata")
+
+
+def verify_saved_report(manifest: dict, binding: dict, output: Path,
+                        manifest_sha: str) -> dict:
+    """Reject a forged/stale technical binding after full byte-level re-audit."""
+    report = verify(manifest, output)
+    expected = {**report, "manifest_sha256": manifest_sha,
+                "auditor_sha256": sha(Path(__file__))}
+    if binding != expected:
+        raise ValueError("technical binding differs from independent saved-data audit")
+    return expected
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    output = args.output_dir.resolve()
+    if not output.is_relative_to(ROOT) or not output.is_dir():
+        raise ValueError("output directory missing or outside repository")
+    manifest_path = output / "manifest.json"
+    binding_path = output / "TECHNICAL_BINDING.json"
+    if binding_path.exists():
+        raise FileExistsError("refusing to replace technical binding")
+    manifest = json.loads(manifest_path.read_text())
+    validate_provenance(manifest)
     report = verify(manifest, output)
     report.update(manifest_sha256=sha(manifest_path), auditor_sha256=sha(Path(__file__)))
     with binding_path.open("x") as stream:

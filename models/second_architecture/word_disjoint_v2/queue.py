@@ -98,8 +98,9 @@ def main() -> None:
     binding_path = output / "TECHNICAL_BINDING.json"
     manifest = json.loads(manifest_path.read_text())
     binding = json.loads(binding_path.read_text())
-    if binding.get("auditor_sha256") != sha(HERE / "audit.py"):
-        raise ValueError("technical auditor source changed")
+    from . import audit
+    audit.validate_provenance(manifest)
+    audit.verify_saved_report(manifest, binding, output, sha(manifest_path))
     private, public = build(manifest, binding, sha(manifest_path), sha(binding_path))
     if args.validate_only:
         print(json.dumps({"status": "validated_blinded_queue_no_audio_copied",
