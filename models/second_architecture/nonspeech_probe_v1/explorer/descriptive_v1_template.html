@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engineered non-speech | audited V2 evidence</title>
+  <style>
+    :root { color-scheme: light; --ink:#17263c; --muted:#566780; --line:#d9e1eb; --blue:#0b5cad; --pale:#edf5fd; --warm:#fff3db; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f6f8fb; color:var(--ink); font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    header { background:#12243e; color:white; padding:2rem max(1.5rem,calc((100vw - 1400px)/2)); }
+    header h1 { margin:0 0 .35rem; font-size:clamp(1.6rem,3vw,2.4rem); }
+    header p { margin:.3rem 0; max-width:1000px; color:#d4e2f3; }
+    main { max-width:1460px; margin:auto; padding:1.3rem; }
+    section { background:white; border:1px solid var(--line); border-radius:12px; margin:0 0 1rem; padding:1.2rem; box-shadow:0 2px 12px #18375809; }
+    h2 { margin:0 0 .5rem; font-size:1.25rem; } h3 { margin:.3rem 0; font-size:1rem; }
+    p { margin:.4rem 0 .8rem; } small,.muted { color:var(--muted); }
+    a { color:var(--blue); } a:hover { text-decoration-thickness:2px; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.7rem; margin:.8rem 0; }
+    .stat { border:1px solid var(--line); border-radius:9px; padding:.8rem; background:#f9fbfe; }
+    .stat strong { font-size:1.35rem; display:block; }
+    .stat span { color:var(--muted); font-size:.88rem; }
+    .notice { background:var(--warm); border-left:4px solid #d59100; padding:.7rem 1rem; border-radius:5px; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; margin:.8rem 0; }
+    .toolbar label { display:flex; gap:.4rem; align-items:center; }
+    select,input { padding:.35rem .5rem; border:1px solid #b8c5d4; border-radius:5px; font:inherit; }
+    .table-wrap { overflow-x:auto; }
+    table { border-collapse:collapse; width:100%; min-width:1110px; }
+    th,td { border-bottom:1px solid var(--line); padding:.5rem .45rem; vertical-align:middle; text-align:left; }
+    th { background:#eef3f9; position:sticky; top:0; font-size:.8rem; }
+    tbody tr:hover { background:#f3f8fe; } tbody tr.selected { background:#e6f2ff; }
+    button { cursor:pointer; background:#e8f2ff; border:1px solid #b9d5f2; border-radius:6px; padding:.32rem .55rem; color:#084c90; font:inherit; }
+    button:hover,button:focus-visible { background:#d5e9ff; }
+    audio { width:176px; height:36px; }
+    code,.mono { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.85em; overflow-wrap:anywhere; }
+    .result { white-space:pre-wrap; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+    .delta { color:#945400; font-weight:650; } .same { color:#54667d; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:.8rem; }
+    .card { border:1px solid var(--line); border-radius:8px; padding:.75rem; background:#fbfcfe; min-width:0; }
+    dl { display:grid; grid-template-columns:minmax(115px,35%) 1fr; gap:.25rem .6rem; margin:.4rem 0; }
+    dt { color:var(--muted); } dd { margin:0; overflow-wrap:anywhere; }
+    .bar { display:flex; height:17px; width:100%; background:#e9eef5; border-radius:5px; overflow:hidden; margin:.35rem 0; }
+    .bar .active { background:#1973c3; } .bar .pad { flex:1; }
+    .sources { columns:2; } .sources li { break-inside:avoid; margin-bottom:.35rem; }
+    .hash { font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; overflow-wrap:anywhere; }
+    @media(max-width:760px) { main { padding:.65rem; } section { padding:.8rem; } .sources { columns:1; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Engineered non-speech, three audio models</h1>
+  <p>Browse 20 fixed WAV inputs and the independently audited V2 descriptive outputs. All audio is embedded in this file. It works offline without a server, model weights, or network calls.</p>
+</header>
+<main>
+  <section>
+    <h2>What these results establish</h2>
+    <div class="stats" id="stats"></div>
+    <p class="notice"><strong>Scope:</strong> These are three small, revision-pinned ASR checkpoints on synthetic sounds. A transcript from non-speech is known prior art. This viewer shows observations, not a located circuit, a human-perception test, a speech-to-speech result, or a security vulnerability.</p>
+    <p>Silence itself produced <code> you</code> in both Whisper checkpoints. “Different from silence” is therefore more informative here than “nonempty.” The four multilingual Whisper differences and three Wav2Vec2 differences occur in the beep family; those are related cases, not independent replications.</p>
+  </section>
+  <section>
+    <h2>All inputs and outputs</h2>
+    <p class="muted">Select a row for token-level detail. The audio controls are the exact audited PCM16 WAV bytes. “Δ” compares the complete transcript with the same model's same-duration silence result.</p>
+    <div class="toolbar"><label>Duration <select id="duration"><option value="all">All</option><option value="2">2 seconds</option><option value="8">8 seconds</option></select></label><label>Sound <select id="family"><option value="all">All families</option><option value="beep_train">Beep train</option><option value="band_noise">Band noise</option><option value="click_train">Click train</option><option value="steady_tone">Steady tone</option><option value="dither">Dither</option><option value="silence">Silence</option></select></label><label><input type="checkbox" id="changed"> Only rows that differ from silence</label></div>
+    <div class="table-wrap"><table><thead><tr><th>Engineered input</th><th>Listen</th><th>Multilingual Whisper Tiny</th><th>English Whisper Tiny</th><th>Wav2Vec2 CTC</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </section>
+  <section id="detail"><h2>Case detail</h2><p>Select a case above.</p></section>
+  <section>
+    <h2>How to read the internal fields</h2>
+    <div class="cards">
+      <div class="card"><h3>Language prefix ≠ transcript</h3><p>Multilingual Whisper chose <code>&lt;|en|&gt;</code> in a separate language-detection forward. Its later generated lexical token is displayed separately. An English prefix alone is not evidence of speech.</p></div>
+      <div class="card"><h3>Raw ≠ processed first token</h3><p>“Raw top” is the highest saved logit before generation processing. “Processed top” is after generation processing and equals the first selected token in these records. Raw IDs 522 and 542 are on this checkpoint's suppression list. This does not isolate one processor as the cause of any full transcript.</p></div>
+      <div class="card"><h3>Active geometry ≠ isolated sound</h3><p>Whisper stored a 3,000-frame, 30-second mel input for each 2- or 8-second file. The measured processor mask has 200 or 800 active mel frames; the nominal encoder map has 100 or 400 active rows of 1,500. The pinned feature extractor's global max-relative mel floor and the model's ignored encoder attention mask mean nominal padding must not be assumed information-free. The descriptive records alone do not establish that padded rows caused a word.</p></div>
+      <div class="card"><h3>CTC and evidence limits</h3><p>Wav2Vec2 saves all CTC frame IDs and their collapsed text, but only a hash of the logits. The independent review verified the saved-ID collapse, not argmax against omitted logits. Whisper saves full first-step raw logits; processed-logit values and most encoder states are represented only by hashes or summaries.</p></div>
+    </div>
+  </section>
+  <section>
+    <h2>Evidence and provenance</h2>
+    <p>Builder verifies these SHA-256 digests before producing this file. The recorded WAV bytes are also individually verified against the manifest. V1 runs are invalid or partial and excluded. No causal-attempt outcomes are shown.</p>
+    <div id="hashes" class="hash"></div>
+    <ul class="sources">
+      <li><a href="../INDEPENDENT_RENDER_REVIEW_20261119_0740Z.md">Independent WAV render review</a> and <a href="../runs/render_20261119_0740Z/manifest.json">WAV manifest</a></li>
+      <li><a href="../INDEPENDENT_MULTILINGUAL_DESCRIPTIVE_V2_RESULT_REVIEW_20261119.md">Independent multilingual result review</a> and <a href="../runs/descriptive_whisper_multilingual_20261119_v2/records.jsonl">full saved records</a></li>
+      <li><a href="../INDEPENDENT_COMPARATOR_V2_RESULT_REVIEW_20261119.md">Independent English and Wav2Vec2 result review</a>, <a href="../runs/descriptive_whisper_english_20261119_v2/records.jsonl">English records</a>, <a href="../runs/descriptive_wav2vec2_20261119_v2/records.jsonl">Wav2Vec2 records</a></li>
+      <li><a href="../NON_SPEECH_MECHANISM_PROSPECTIVE_V1.md">Prospective protocol and prior art</a>, <a href="../descriptive_pins_v1.json">checkpoint and installed-source SHA pins</a>, <a href="../INDEPENDENT_SOURCE_REVIEW_V1.md">generation-path source review</a></li>
+    </ul>
+    <p class="muted">Pinned source facts: <code>feature_extraction_whisper.py</code> SHA <code>dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb</code>, lines 128–130; <code>modeling_whisper.py</code> SHA <code>bf4f022d37ed523d09a472dae267b86007aaae0cd39d2ce37927de44bfc5b9e6</code>, encoder forward ~604–616 and decoder layer call ~806–812. These implementation facts do not by themselves establish an output cause.</p>
+  </section>
+</main>
+<script>
+const EVIDENCE = __EMBEDDED_EVIDENCE_JSON__;
+const ids = Object.keys(EVIDENCE.cases).sort();
+const $ = id => document.getElementById(id);
+const node = (tag, text, cls) => { const e=document.createElement(tag); if(text !== undefined) e.textContent=text; if(cls) e.className=cls; return e; };
+const shown = s => s === '' ? '(empty)' : JSON.stringify(s);
+const silenceId = id => id.slice(0,3) + '_silence';
+const changed = (id,m) => EVIDENCE.cases[id][m].transcript !== EVIDENCE.cases[silenceId(id)][m].transcript;
+let selected = 'd02_beep_train_high';
+
+for (const [name,key] of [['Multilingual Whisper Tiny','multilingual'],['English Whisper Tiny','english'],['Wav2Vec2-base-960h CTC','ctc']]) {
+  const s=EVIDENCE.summary[key], card=node('div',undefined,'stat');
+  card.append(node('strong',`${s.different_from_silence}/18 differ from silence`),node('span',`${name} · ${s.nonempty}/20 nonempty outputs`)); $('stats').append(card);
+}
+function makeAudio(id) { const a=node('audio'); a.controls=true; a.preload='none'; a.src=EVIDENCE.cases[id].asset.audio; a.setAttribute('aria-label',`Listen to ${id}`); return a; }
+function renderRows() {
+  const body=$('rows'); body.replaceChildren();
+  for(const id of ids) {
+    const duration=EVIDENCE.cases[id].asset.duration_s, family=id.slice(4).replace(/_(high|low)$/,'');
+    if($('duration').value!=='all' && Number($('duration').value)!==duration) continue;
+    if($('family').value!=='all' && $('family').value!==family) continue;
+    if($('changed').checked && !['multilingual','english','ctc'].some(m=>changed(id,m))) continue;
+    const tr=node('tr'); if(id===selected) tr.className='selected';
+    const td0=node('td'), b=node('button',id); b.addEventListener('click',()=>{selected=id;renderRows();renderDetail();$('detail').scrollIntoView({behavior:'smooth',block:'start'});}); td0.append(b); tr.append(td0);
+    const audioTd=node('td'); audioTd.append(makeAudio(id)); tr.append(audioTd);
+    for(const m of ['multilingual','english','ctc']) { const td=node('td'); td.append(node('span',shown(EVIDENCE.cases[id][m].transcript),'result')); if(!id.endsWith('_silence')) td.append(node('span',changed(id,m)?' Δ':' =',changed(id,m)?'delta':'same')); tr.append(td); }
+    body.append(tr);
+  }
+}
+function entry(dl,term,value) { dl.append(node('dt',term),node('dd',String(value))); }
+function renderDetail() {
+  const box=$('detail'); box.replaceChildren(); const c=EVIDENCE.cases[selected], base=EVIDENCE.cases[silenceId(selected)];
+  box.append(node('h2',selected));
+  const p=node('p'); p.append('Input: ',makeAudio(selected),'  Same-duration silence: ',makeAudio(silenceId(selected))); box.append(p);
+  box.append(node('p',`Input ${c.asset.duration_s}s · 16-kHz mono PCM16 · RMS ${c.asset.rms.toPrecision(5)} · peak ${c.asset.peak.toPrecision(5)}`,'muted'));
+  const cards=node('div',undefined,'cards');
+  for(const [m,label] of [['multilingual','Multilingual Whisper Tiny'],['english','English Whisper Tiny'],['ctc','Wav2Vec2 CTC']]) {
+    const v=c[m], donor=base[m], card=node('div',undefined,'card'), dl=node('dl');
+    card.append(node('h3',label));
+    entry(dl,'Transcript',shown(v.transcript)); entry(dl,'Silence baseline',shown(donor.transcript));
+    entry(dl,'Compared with silence',changed(selected,m)?'Different':'Same');
+    entry(dl,'Letters',v.unicode_scripts.join(', ')||'none');
+    entry(dl,'Termination',v.termination);
+    if(m==='ctc') {
+      entry(dl,'CTC frames',`${v.frame_count} saved IDs; ${v.active_ctc_frames}/${v.ctc_frames} active`);
+      entry(dl,'Blank ID',v.blank_id); entry(dl,'Collapsed IDs',JSON.stringify(v.collapsed_nonblank_ids));
+      entry(dl,'Logits SHA-256',v.logits_sha256);
+    } else {
+      entry(dl,'Language selection',m==='multilingual'?`${v.language_prefix} · separate detection ID ${JSON.stringify(v.language_detection)}`:'not available (English-only checkpoint)');
+      entry(dl,'Prefix IDs',JSON.stringify(v.prefix_ids));
+      entry(dl,'Generated IDs',JSON.stringify(v.generated_ids));
+      entry(dl,'First raw top ID',v.first_raw_top_id);
+      entry(dl,'First processed top ID',v.first_processed_top_id);
+      entry(dl,'First selected ID',v.first_selected_id);
+      entry(dl,'First raw logits SHA-256',v.first_raw_logits_sha256);
+      entry(dl,'First processed logits SHA-256',v.first_processed_logits_sha256);
+      entry(dl,'EOS / censored',`${v.eos_seen} / ${v.censored}`);
+      entry(dl,'Mel active / padded',`${v.active_mel_frames} / ${v.mel_frames-v.active_mel_frames} (3,000 total)`);
+      entry(dl,'Nominal encoder active / padded',`${v.nominal_active_encoder_rows} / ${v.encoder_frames-v.nominal_active_encoder_rows} (1,500 total)`);
+      const bar=node('div',undefined,'bar'), active=node('div',undefined,'active'); active.style.width=(100*v.active_mel_frames/v.mel_frames)+'%'; bar.append(active,node('div',undefined,'pad')); bar.title=`${v.active_mel_frames} active and ${v.mel_frames-v.active_mel_frames} nominally padded mel frames`; card.append(bar);
+    }
+    card.append(dl); cards.append(card);
+  }
+  box.append(cards);
+  const hashes=node('p',undefined,'hash'); hashes.textContent=`WAV SHA-256 ${c.asset.wav_sha256} · PCM SHA-256 ${c.asset.pcm_sha256}`; box.append(hashes);
+  box.append(node('p','The mel active/padded boundary is the saved processor mask and a nominal encoder time map. It does not prove the padded representation is unchanged by the sound.','muted'));
+}
+for(const id of ['duration','family','changed']) $(id).addEventListener('change',renderRows);
+for(const [rel,digest] of Object.entries(EVIDENCE.hashes)) $('hashes').append(node('div',`${rel}  ${digest}`));
+renderRows(); renderDetail();
+</script>
+</body>
+</html>
