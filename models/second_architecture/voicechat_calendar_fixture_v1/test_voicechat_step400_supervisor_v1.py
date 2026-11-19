@@ -132,7 +132,7 @@ time.sleep(5)
         self.assertTrue(result["truncated_evidence"])
         self.assertLessEqual(retained, 32768)
 
-    def test_child_symlink_is_removed_and_failure_receipt_survives(self):
+    def test_child_symlink_is_preserved_with_external_no_go_receipt(self):
         with tempfile.TemporaryDirectory() as name:
             root = Path(name)
             staged = root / "staged"
@@ -155,6 +155,8 @@ time.sleep(5)
             self.assertEqual(target.read_text(), "untouched")
             self.assertEqual(result["status"], "invalid_or_partial")
             self.assertEqual(result["reason"], "unsealed_child_evidence")
+            self.assertIs(result["no_go"], True)
+            self.assertEqual(result["cap_policy_status"], "failed_no_64mib_proof")
             self.assertNotIn(secret_name.encode(), receipt.read_bytes())
             self.assertNotIn(b"untouched", receipt.read_bytes())
 
