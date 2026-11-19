@@ -59,6 +59,8 @@ def compare_paths(a: list[int], b: list[int], eos: int) -> dict:
     reason_a, reason_b = stop_reason(a, eos), stop_reason(b, eos)
     gate.require(a == b and reason_a == reason_b,
                  "stock/read-only generated path or stop reason diverged")
+    gate.require(reason_a in ("eos", "early_eos_malformed", "length_censored"),
+                 "empty or unexplained short generation cannot pass pilot")
     return {"stock_ids": a, "read_only_ids": b,
             "stock_stop_reason": reason_a, "read_only_stop_reason": reason_b,
             "terminal_eos": reason_a == "eos", "exact_path_parity": True}

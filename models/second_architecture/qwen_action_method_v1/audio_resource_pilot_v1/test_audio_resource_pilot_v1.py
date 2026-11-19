@@ -35,6 +35,15 @@ class PilotSourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             plan.verify_geometry({**row, "mel_frames": 550})
 
+    def test_multi_gpu_slurm_allocation_refused(self) -> None:
+        gate.require_one_slurm_gpu("0", "1")
+        with self.assertRaises(ValueError):
+            gate.require_one_slurm_gpu("0,1", "2")
+        with self.assertRaises(ValueError):
+            gate.require_one_slurm_gpu("0,1", "1")
+        with self.assertRaises(ValueError):
+            gate.require_one_slurm_gpu("0", "2")
+
     def test_direct_worker_refuses_before_model_import(self) -> None:
         cmd = [sys.executable, "-m",
             "models.second_architecture.qwen_action_method_v1.audio_resource_pilot_v1.worker",
@@ -65,6 +74,10 @@ class PilotSourceTests(unittest.TestCase):
         self.assertEqual(worker.compare_paths([9, eos], [9, eos], eos)["exact_path_parity"], True)
         with self.assertRaises(ValueError):
             worker.compare_paths([9, eos], [9, 10, eos], eos)
+        with self.assertRaises(ValueError):
+            worker.compare_paths([], [], eos)
+        with self.assertRaises(ValueError):
+            worker.compare_paths([9], [9], eos)
         with self.assertRaises(ValueError):
             worker.stop_reason([9] * 13, eos)
 

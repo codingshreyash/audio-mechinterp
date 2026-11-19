@@ -5,6 +5,7 @@ import importlib.metadata
 import json
 import os
 import platform
+import re
 import socket
 import subprocess
 from pathlib import Path
@@ -48,6 +49,7 @@ PACKAGES = {"torch": "2.11.0+cu128", "transformers": "5.24.0.dev0",
             "accelerate": "1.16.0", "numpy": "2.5.5", "psutil": "7.2.2",
             "Pillow": "13.0.0", "torchvision": "0.26.0+cu128"}
 IDLE_GPU_BYTES = 512 * 1024**2
+ONE_GPU = re.compile(r"(?:[0-9]+|GPU-[0-9a-fA-F-]{36})\Z")
 
 
 def require(ok: bool, reason: str) -> None:
@@ -120,14 +122,21 @@ def gpu_inventory(*, require_idle: bool = True) -> dict[str, Any]:
             "compute_processes": [], "idle_gpu_limit_bytes": IDLE_GPU_BYTES}
 
 
+def require_one_slurm_gpu(job_gpus: str, gpus_on_node: str) -> None:
+    require(gpus_on_node == "1" and ONE_GPU.fullmatch(job_gpus) is not None,
+            "exactly one Slurm-allocated GPU required")
+
+
 def runtime_identity(*, require_idle: bool = True) -> dict[str, Any]:
     job = os.environ.get("SLURM_JOB_ID", "")
     nodes = os.environ.get("SLURM_JOB_NUM_NODES", "")
     nodelist = os.environ.get("SLURM_JOB_NODELIST", "")
     job_gpus = os.environ.get("SLURM_JOB_GPUS", "")
+    gpus_on_node = os.environ.get("SLURM_GPUS_ON_NODE", "")
     hostname = socket.gethostname().split(".")[0]
-    require(job.isdecimal() and nodes == "1" and bool(nodelist)
-            and bool(job_gpus), "single-node Slurm GPU allocation required")
+    require(job.isdecimal() and nodes == "1" and bool(nodelist),
+            "single-node Slurm GPU allocation required")
+    require_one_slurm_gpu(job_gpus, gpus_on_node)
     hosts = subprocess.run(("scontrol", "show", "hostnames", nodelist),
                            capture_output=True, text=True, timeout=10, check=True)
     listed = [x.strip().split(".")[0] for x in hosts.stdout.splitlines() if x.strip()]
@@ -147,7 +156,8 @@ def runtime_identity(*, require_idle: bool = True) -> dict[str, Any]:
             "packages": actual, "gpu_uuid": gpu["gpu_uuid"],
             "gpu_name": gpu["gpu_name"], "gpu_memory_mib": gpu["gpu_memory_mib"],
             "slurm_job_id": job, "slurm_node": hostname,
-            "slurm_job_gpus": job_gpus, "slurm_nodelist": nodelist,
+            "slurm_job_gpus": job_gpus, "slurm_gpus_on_node": gpus_on_node,
+            "slurm_nodelist": nodelist,
             "math_mode": {"matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
                           "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
                           "float32_matmul_precision": torch.get_float32_matmul_precision(),
