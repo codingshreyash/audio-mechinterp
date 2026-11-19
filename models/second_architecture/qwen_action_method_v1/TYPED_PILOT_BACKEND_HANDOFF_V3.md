@@ -1,0 +1,22 @@
+# Qwen typed pilot V3 executable source handoff
+
+19 November 2026. **Source-only correction after [V2 independent HOLD](TYPED_PILOT_INDEPENDENT_EXECUTABLE_REVIEW_HOLD_V2.md); no weights loaded and no GO issued.** V1/V2 code and reviews remain unchanged. This V3 uses a new fixed `runs/typed_pilot_v3/attempt_001`, `TYPED_PILOT_GO_V3.json`, independent review memo and source identity. It can run only one preselected typed `F_L1` FIT resource/VJP pilot after a separately committed GO. It does not admit audio, the other FIT prompts, development, locked items or any native tool call.
+
+The exact [QA exception amendment](TYPED_PILOT_QA_EXCEPTION_V3.md) permits this **typed-only** pilot before 18/18 two-listener speech review. The GO must bind the amendment hash and state the literal policy `typed_F_L1_only_no_audio_QA_exception`; both parent and worker validate this before model weight load. The pilot's output may not tune subsequent wording, cases, split, method, dose or threshold. All later FIT/audio inference still requires the human QA receipt and its own independently reviewed GO.
+
+For each of the three frozen `LIST`, `ASK`, `CANCEL` plus EOS suffixes, V3 runs **three teacher-forced forwards with identical prompt IDs**: (1) no hooks, retaining complete first and conditional-EOS vocabulary logits; (2) read-only layer-17/34 hooks, retaining the same complete logits and both prompt-last states; (3) the VJP path, replacing layer-17 output with a numerically identical differentiable leaf while keeping layer 34 connected, retaining complete logits, states and gradients. The worker requires maximum absolute differences ≤`1e-5` for stock↔read-only logits and read-only↔leaf logits and states before the VJP is credited. It saves all 36 FP32 binary arrays, both hook-call maps, prompt IDs, scores and generation token paths. The separate V3 auditor rehashes and reconstructs all 36 arrays, repeats those exact parity comparisons from saved bytes and verifies the original V1 full-sequence and cross-suffix gates. A failure makes the pilot invalid. A no-weight fake model test reproduces all three paths and deliberately altered reference logits fail the audit check.
+
+The parent keeps the 300-second whole-attempt deadline, sampled <24-GiB MPS driver allocation, sampled <30-GiB process-tree RSS, 64-MiB evidence cap, and AC/open-lid/sleep/thermal host evidence. V3 fsyncs each `pre/post_power_log.txt.gz` archive and its directory after creation; it fsyncs the worker-output and attempt directories before writing the complete terminal receipt, and fsyncs the terminal directory after writing it. A failed fsync or absent terminal cannot pass; fake tests exercise both. These are sampled memory bounds, not continuous maxima. A failed or partial attempt is preserved and cannot be reused under the one-shot GO.
+
+The deterministic generation call records complete no-hook and read-only token paths and requires exact parity. The worker supplies the frozen `max_new_tokens=12`, `do_sample=False`, `use_cache=True`, explicit EOS and `return_dict_in_generate=True`; it records selected resolved generation-config fields. This is a **typed feasibility pilot**. Even a fully audited run would establish one typed target/gradient and resource feasibility only, not audio transfer, a reusable Jacobian Lens, a model-origin native action or security issue.
+
+No-weight checks from repository root:
+
+```sh
+models/qwen_omni/.venv/bin/python -m unittest models.second_architecture.qwen_action_method_v1.test_typed_pilot_v3 -q
+models/qwen_omni/.venv/bin/python -m models.second_architecture.qwen_action_method_v1.typed_pilot_parent_v3 --source-preflight
+```
+
+The reviewed one-shot candidate command, **only after an independent V3 executable GO**, would be `models/qwen_omni/.venv/bin/python -m models.second_architecture.qwen_action_method_v1.typed_pilot_parent_v3 --run`. The saved auditor uses fixed exclusive destination `runs/typed_pilot_v3/attempt_001_audit.json`. This handoff by itself does not authorize loading weights.
+
+The V3 change binds a fresh parent nonce, PID, GO/source/pre-host hashes and monotonic deadline in `start.json`, then passes the nonce through an inherited pipe. The parent sends heartbeats while it monitors RSS, evidence and time. The worker rejects missing/mismatched parent start or pipe before importing torch, and exits if the pipe stops. Its own alarm enforces the whole-attempt deadline. The read-only audit checks the saved parent and worker start linkage; no saved artifact substitutes for the live pipe.
