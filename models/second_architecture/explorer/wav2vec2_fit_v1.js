@@ -69,7 +69,8 @@ function summary() {
   const recipientText = (r) => BASE.get(`${r.mode}|${r.recipient_key}`).transcript;
   const cards = [
     ["Source recordings", String(Object.keys(DATA.clips).length), "Two paired words × two synthetic voices × two pairs"],
-    ["Complete patched outputs", String(patches.length), "Every planned arm across both internal sites"],
+    ["Audited patch outputs", String(patches.length + DATA.complement_patches.length),
+      "224 original word-window + 192 factorial; same FIT corpus and two sites"],
     ["Primary W transfer", "4/4 per site", "Same four direction/mode cells at two sites; one word pair and voice; S/C correlated"],
     ["Random transcript changes", `${random.filter((r) => r.transcript !== recipientText(r)).length}/${random.length}`, `${randomPrimary.filter((r) => r.target_only_transfer).length}/${randomPrimary.length} primary random edits made the donor-word swap`],
   ];
