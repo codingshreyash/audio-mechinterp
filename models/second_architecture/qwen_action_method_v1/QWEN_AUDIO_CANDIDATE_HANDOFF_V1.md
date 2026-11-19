@@ -6,13 +6,18 @@ to the pinned Qwen audio processor path. It accepts only the six development
 Piper WAVs after the real 18/18 two-listener review, coordinator statement,
 saved V2 QA report and separate independent review receipt all agree. Under
 the reviewed V2 intake, a critical first-review disagreement remains HOLD
-even if a third reviewer documents it. The candidate cannot select an `H_*`
-locked WAV. The original blind exports must be inspected
+even if a third reviewer documents it. The technical source audit hashes all
+18 WAVs, including `H_*`; only the six `D_*` WAVs are eligible for the Qwen
+processor. The original blind exports must be inspected
 by a real independent reviewer; the unit-test mock does not count.
 
 The candidate re-runs the existing 18-WAV technical source and blind-bundle
 audits, hashes the selected final WAV and verifies mono/16-bit/16-kHz/16-second
-geometry. It uses the frozen system prompt and a **single audio content block**
+geometry. Those audits run as a bounded subprocess in the pinned
+`eval/tts/.venv` runtime, because the render auditor needs Piper. The
+processor call requires `models/qwen_omni/.venv`; the candidate verifies its
+executable path and the imported processing source hash before construction.
+It uses the frozen system prompt and a **single audio content block**
 with no text transcription in the user message. A future processor-only call
 verifies nine small files from the exact Qwen checkpoint revision, then
 constructs the processor internally from that verified snapshot. A caller
@@ -35,8 +40,8 @@ this live no-weight check caught that and the code now requires 128.
 Run the no-weight source plan and tests from the repository root:
 
 ```sh
-eval/tts/.venv/bin/python -m models.second_architecture.qwen_action_method_v1.audio_candidate_v1 --source-plan
-eval/tts/.venv/bin/python -m unittest models.second_architecture.qwen_action_method_v1.test_audio_candidate_v1 -v
+models/qwen_omni/.venv/bin/python -m models.second_architecture.qwen_action_method_v1.audio_candidate_v1 --source-plan
+models/qwen_omni/.venv/bin/python -m unittest models.second_architecture.qwen_action_method_v1.test_audio_candidate_v1 -v
 ```
 
 The optional `--prepare-development D_L1__piper_en_US_amy_medium` entrypoint

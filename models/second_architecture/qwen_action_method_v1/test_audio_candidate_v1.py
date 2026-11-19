@@ -53,6 +53,36 @@ class CandidateTests(unittest.TestCase):
         self.assertEqual(tuple(names), ("case_id", "files", "snapshot"))
         self.assertNotIn("processor", names)
 
+    def test_source_drift_blocks_processor_construction(self) -> None:
+        class ForbiddenProcessor:
+            constructed = False
+
+            @classmethod
+            def from_pretrained(cls, *args, **kwargs):
+                cls.constructed = True
+                raise AssertionError("processor constructed before source check")
+
+        absent = Path("/does/not/matter.json")
+        files = candidate.QAFiles(absent, absent, absent, absent, absent)
+        with patch.object(candidate, "reviewed_qa", return_value={"sha256": {}}), \
+             patch.object(candidate, "validate_local_source",
+                          side_effect=ValueError("source drift")), \
+             patch.dict(sys.modules, {"transformers": SimpleNamespace(
+                 Qwen2_5OmniProcessor=ForbiddenProcessor)}):
+            with self.assertRaisesRegex(ValueError, "source drift"):
+                candidate.prepare_development_case("D_L1__piper_en_US_amy_medium",
+                                                   files, Path("/unused"))
+        self.assertFalse(ForbiddenProcessor.constructed)
+
+    def test_wrong_runtime_blocks_before_processor_import(self) -> None:
+        absent = Path("/does/not/matter.json")
+        files = candidate.QAFiles(absent, absent, absent, absent, absent)
+        with patch.object(candidate, "reviewed_qa", return_value={"sha256": {}}), \
+             patch.object(candidate, "QWEN_PYTHON", Path("/different/python")):
+            with self.assertRaisesRegex(ValueError, "pinned Qwen runtime"):
+                candidate.prepare_development_case("D_L1__piper_en_US_amy_medium",
+                                                   files, Path("/unused"))
+
     def test_cli_missing_qa_stops_before_transformers_import(self) -> None:
         result = subprocess.run(
             (sys.executable, "-m",
@@ -124,7 +154,7 @@ class CandidateTests(unittest.TestCase):
                       "original_exports_inspected": True}
             paths[4].write_text(json.dumps(review) + "\n")
             files = candidate.QAFiles(*paths)
-            with patch.object(candidate.human_qa_v2, "audit_reviews", return_value=report), \
+            with patch.object(candidate, "_tts_payload", return_value=report), \
                  patch.object(candidate, "source_plan", return_value=[
                      {"case_id": "D_L1__piper_en_US_amy_medium"}]):
                 admission = candidate.reviewed_qa(files)

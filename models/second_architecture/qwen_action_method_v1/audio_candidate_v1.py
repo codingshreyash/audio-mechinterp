@@ -2,7 +2,8 @@
 
 This candidate can prepare the six development audio prompts only after the
 real two-listener QA and its separate independent review. It never loads model
-weights, calls Thinker, or opens a locked-case WAV. A later executable review
+weights, calls Thinker, or sends a locked WAV to Qwen's processor. The source
+audit does hash all 18 WAVs, including locked files. A later executable review
 and GO must bind any model runner that consumes its output.
 """
 from __future__ import annotations
@@ -10,6 +11,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
+import sys
 import wave
 from dataclasses import dataclass
 from pathlib import Path
@@ -35,6 +38,9 @@ PROCESSOR_FILES = ("added_tokens.json", "chat_template.json", "config.json",
                    "merges.txt", "preprocessor_config.json",
                    "special_tokens_map.json", "tokenizer.json",
                    "tokenizer_config.json", "vocab.json")
+TTS_PYTHON = ROOT / "eval/tts/.venv/bin/python"
+QWEN_PYTHON = ROOT / "models/qwen_omni/.venv/bin/python"
+MODULE = "models.second_architecture.qwen_action_method_v1.audio_candidate_v1"
 
 
 def need(ok: bool, reason: str) -> None:
@@ -77,6 +83,25 @@ class QAFiles:
     third: Path | None = None
 
 
+def _tts_payload(mode: str, files: QAFiles | None = None) -> dict[str, Any]:
+    """Run the audited render/QA code in its pinned TTS runtime, no weights."""
+    need(mode in ("source", "qa") and TTS_PYTHON.is_file(),
+         "pinned TTS runtime missing")
+    args = [str(TTS_PYTHON), "-m", MODULE, "--tts-helper", mode]
+    if mode == "qa":
+        need(files is not None, "QA source files required")
+        args.extend((str(files.first_a), str(files.first_b),
+                     str(files.attestation), str(files.third) if files.third else ""))
+    result = subprocess.run(args, cwd=ROOT, capture_output=True,
+                            timeout=120, check=False)
+    need(result.returncode == 0 and len(result.stdout) <= 2 * 1024 * 1024,
+         f"TTS {mode} audit failed: {result.stderr[-1000:].decode(errors='replace')}")
+    need(result.stdout.count(b"\n") == 1, "TTS audit output is not one JSON line")
+    output = json.loads(result.stdout)
+    need(isinstance(output, dict), "TTS audit result invalid")
+    return output
+
+
 def verify_processor_snapshot(snapshot: Path) -> dict[str, str]:
     """Hash only processor assets from the pinned HF inventory, no weights."""
     spec = load_spec()
@@ -102,7 +127,7 @@ def verify_processor_snapshot(snapshot: Path) -> dict[str, str]:
 
 def source_plan() -> list[dict[str, Any]]:
     """Re-audit all source bytes, then return only D_* Piper audio cases."""
-    source = runner_contract_v1.source_preflight()
+    source = _tts_payload("source")
     need(source["candidate_inference_authorized"] is False
          and source["human_reviews"] == 0, "source preflight changed")
     manifest = read(SOURCE / "manifest.json")
@@ -146,8 +171,7 @@ def reviewed_qa(files: QAFiles) -> dict[str, Any]:
     if files.third is not None:
         sha(files.third)
     observed = read(files.report)
-    recomputed = human_qa_v2.audit_reviews(files.first_a, files.first_b,
-                                            files.attestation, files.third)
+    recomputed = _tts_payload("qa", files)
     need(observed == recomputed and observed.get("status") == QA_PASS
          and observed.get("case_census") == 18
          and observed.get("all_18_initial_pairs_pass") is True
@@ -236,8 +260,15 @@ def prepare_development_case(case_id: str, files: QAFiles,
     """Load only the pinned processor and prepare one QA-cleared D_* batch."""
     admission = reviewed_qa(files)
     need(snapshot is not None, "pinned processor snapshot required")
+    need(Path(sys.executable).absolute() == QWEN_PYTHON.absolute(),
+         "processor preparation requires pinned Qwen runtime")
+    validate_local_source(load_spec())
     processor_hashes = verify_processor_snapshot(snapshot)
     from transformers import Qwen2_5OmniProcessor
+    import inspect
+    need(hashlib.sha256(Path(inspect.getfile(Qwen2_5OmniProcessor)).read_bytes()).hexdigest()
+         == load_spec()["installed_processing_sha256"],
+         "imported processor source differs from pinned Qwen runtime")
     processor = Qwen2_5OmniProcessor.from_pretrained(str(snapshot),
                                                       local_files_only=True)
     need(type(processor).__name__ == "Qwen2_5OmniProcessor"
@@ -260,6 +291,8 @@ def prepare_development_case(case_id: str, files: QAFiles,
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--tts-helper", choices=("source", "qa"))
+    parser.add_argument("helper_args", nargs="*")
     parser.add_argument("--source-plan", action="store_true")
     parser.add_argument("--prepare-development")
     parser.add_argument("--review-a", type=Path)
@@ -269,6 +302,23 @@ def main() -> None:
     parser.add_argument("--independent-review", type=Path)
     parser.add_argument("--snapshot", type=Path)
     args = parser.parse_args()
+    if args.tts_helper:
+        need(Path(sys.executable).absolute() == TTS_PYTHON.absolute()
+             and not any((args.source_plan, args.prepare_development,
+                          args.review_a, args.review_b, args.attestation,
+                          args.qa_report, args.independent_review, args.snapshot)),
+             "TTS helper invocation invalid")
+        if args.tts_helper == "source":
+            need(not args.helper_args, "source helper takes no paths")
+            value = runner_contract_v1.source_preflight()
+        else:
+            need(len(args.helper_args) == 4, "QA helper requires A/B/attestation/optional C")
+            a, b, attestation, third = args.helper_args
+            value = human_qa_v2.audit_reviews(Path(a), Path(b), Path(attestation),
+                                              Path(third) if third else None)
+        print(json.dumps(value, sort_keys=True, allow_nan=False))
+        return
+    need(not args.helper_args, "unexpected helper paths")
     need(args.source_plan != bool(args.prepare_development),
          "choose exactly one source-only action")
     if args.source_plan:
