@@ -66,6 +66,26 @@ def _verify_fresh_host(host: Any) -> None:
         raise ValueError('Fresh host timestamp or raw log binding differs')
 
 
+def _verify_admission_fingerprints(receipt: dict[str, Any],
+                                   bindings: dict[str, Any]) -> None:
+    snapshot = receipt.get('snapshot')
+    installed = receipt.get('installed_source_sha256')
+    if not isinstance(snapshot, dict) or not isinstance(snapshot.get('snapshot_tree'), dict):
+        raise ValueError('Preflight checkpoint tree fingerprint absent')
+    tree_sha = snapshot['snapshot_tree'].get('sha256')
+    worker._sha256_field(tree_sha, 'preflight snapshot tree')
+    if (not isinstance(installed, dict) or not installed or
+            any(not isinstance(key, str) or not key for key in installed)):
+        raise ValueError('Preflight installed source fingerprint map absent')
+    for key, value in installed.items():
+        worker._sha256_field(value, f'installed source {key}')
+    installed_digest = worker.sha_bytes(json.dumps(
+        installed, sort_keys=True, separators=(',', ':')).encode())
+    if (bindings.get('checkpoint_tree_sha256') != tree_sha or
+            bindings.get('transformers_source_sha256') != installed_digest):
+        raise ValueError('Admission checkpoint or Transformers source binding differs')
+
+
 def verify_pre_pilot(*, files: worker.AdmissionFiles, review_path: Path,
                      pins: contract.ExternalPins) -> dict[str, Any]:
     """Recheck actual 32/32 QA, source/processor bytes, and fresh host before load."""
@@ -87,6 +107,8 @@ def verify_pre_pilot(*, files: worker.AdmissionFiles, review_path: Path,
     for key in STABLE_PREFLIGHT_FIELDS:
         if fresh.get(key) != frozen.get(key):
             raise ValueError(f'Fresh source/processor fingerprint changed: {key}')
+    _verify_admission_fingerprints(frozen, bindings)
+    _verify_admission_fingerprints(fresh, bindings)
     _verify_fresh_host(fresh.get('host'))
     return {'admission_sha256': pins.admission_sha256,
             'worker_sha256': pins.worker_sha256,

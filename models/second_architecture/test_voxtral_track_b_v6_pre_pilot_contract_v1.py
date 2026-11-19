@@ -42,7 +42,9 @@ class Fixture:
         self.frozen = {'schema': 'voxtral_fp32_track_b_no_weight_preflight_v1',
                        'candidate_weights_loaded': False, 'candidate_forward_count': 0,
                        'human_qa': {'passed': True},
-                       'v6_synthetic_zero_geometry': geometry}
+                       'v6_synthetic_zero_geometry': geometry,
+                       'snapshot': {'snapshot_tree': {'sha256': 'a' * 64}},
+                       'installed_source_sha256': {'modeling_voxtral': 'b' * 64}}
         for key in launcher.STABLE_PREFLIGHT_FIELDS:
             self.frozen.setdefault(key, {'fake': key})
         self.frozen['host'] = fresh_host()
@@ -80,8 +82,10 @@ class Fixture:
             'synthetic_processor_geometry': {
                 'input_features_shape': [1, 128, 3000],
                 'audio_placeholder_count': 375, 'attention_mask_length': 405},
-            'checkpoint_tree_sha256': 'a' * 64,
-            'transformers_source_sha256': 'b' * 64,
+            'checkpoint_tree_sha256': self.frozen['snapshot']['snapshot_tree']['sha256'],
+            'transformers_source_sha256': worker.sha_bytes(json.dumps(
+                self.frozen['installed_source_sha256'], sort_keys=True,
+                separators=(',', ':')).encode()),
             'synthetic_batch_sha256': 'c' * 64,
             'old_fit_batch_sha256': 'd' * 64,
             'campaign_attempt_id': 'source_only_fake_attempt',
@@ -99,6 +103,15 @@ class Fixture:
             'campaign_attempt_id': self.bindings['campaign_attempt_id'],
             'campaign_claim_path': self.bindings['campaign_claim_path'],
         }
+        review_sha = write_json(self.review_path, self.review)
+        self.pins = contract.ExternalPins(self.bindings['pilot_worker_sha256'],
+                                          self.admission_sha, review_sha)
+
+    def repin_admission_and_review(self):
+        self.admission_sha = write_json(self.files.admission, {
+            'schema': 'voxtral_track_b_v6_external_pilot_admission_v1',
+            'status': 'pilot_go', 'bindings': self.bindings})
+        self.review['admission_sha256'] = self.admission_sha
         review_sha = write_json(self.review_path, self.review)
         self.pins = contract.ExternalPins(self.bindings['pilot_worker_sha256'],
                                           self.admission_sha, review_sha)
@@ -151,6 +164,20 @@ class PrePilotContractTests(unittest.TestCase):
                     launcher, '_fresh_no_weight_preflight', return_value=malformed):
                 with self.assertRaisesRegex(ValueError, 'Fresh host timestamp or raw log'):
                     launcher.verify_pre_pilot(files=f.files, review_path=f.review_path, pins=f.pins)
+
+    def test_repinned_forged_checkpoint_or_source_digest_still_fails(self):
+        for key in ('checkpoint_tree_sha256', 'transformers_source_sha256'):
+            with self.subTest(key=key), tempfile.TemporaryDirectory() as temp:
+                f = Fixture(Path(temp))
+                f.bindings[key] = 'f' * 64
+                f.repin_admission_and_review()
+                self.assertEqual(contract.verify_contract(
+                    f.files, f.review_path, f.pins)['bindings'][key], 'f' * 64)
+                with patch.object(launcher, '_actual_qa', return_value=f.qa), patch.object(
+                        launcher, '_fresh_no_weight_preflight', return_value=f.frozen):
+                    with self.assertRaisesRegex(ValueError, 'Admission checkpoint or Transformers'):
+                        launcher.verify_pre_pilot(files=f.files,
+                                                  review_path=f.review_path, pins=f.pins)
 
     def test_public_launcher_never_calls_loader_even_with_fake_pins(self):
         with tempfile.TemporaryDirectory() as temp:
