@@ -30,9 +30,14 @@ def composed_fixture(root: Path) -> tuple[Path, dict]:
         'post_host_raw_bytes': post_raw.stat().st_size,
         'pre_host_collected_utc': '2026-11-18T12:00:00+00:00',
         'post_host_collected_utc': '2026-11-18T12:00:01+00:00',
+        'producer_source_file': composed.LAUNCHER_FILE,
+        'producer_source_sha256': base.sha(composed.HERE / composed.LAUNCHER_FILE),
+        'composition_schema_source_sha256': composed.COMPOSITION_SOURCE_SHA,
     })
     args.update(review=review,
                 composition_source=composed.HERE / 'voxtral_track_b_v6_pilot_composition_source_v1.py',
+                launcher_source=composed.HERE / composed.LAUNCHER_FILE,
+                expected_launcher_sha256=base.sha(composed.HERE / composed.LAUNCHER_FILE),
                 expected_review_sha256=base.sha(review),
                 expected_composition_sha256=base.sha(sidecar))
     return pilot, args
@@ -51,6 +56,29 @@ class ComposedSavedTests(unittest.TestCase):
                              result['composition_post_host_raw_bytes'])
             self.assertGreater(result['post_host_collected_utc'],
                                result['pre_host_collected_utc'])
+            self.assertEqual(result['sidecar_producer_source_sha256'],
+                             args['expected_launcher_sha256'])
+
+    def test_rejects_missing_or_tampered_actual_launcher_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pilot, args = composed_fixture(Path(tmp))
+            sidecar_path = pilot.with_name(pilot.name + '.composition.json')
+            row = base.read_json(sidecar_path)
+            row.pop('producer_source_sha256')
+            write_json(sidecar_path, row)
+            args['expected_composition_sha256'] = base.sha(sidecar_path)
+            with self.assertRaisesRegex(ValueError, 'producer/schema source provenance'):
+                composed.audit_composed_saved(pilot, **args)
+            row['producer_source_sha256'] = '0' * 64
+            write_json(sidecar_path, row)
+            args['expected_composition_sha256'] = base.sha(sidecar_path)
+            with self.assertRaisesRegex(ValueError, 'producer/schema source provenance'):
+                composed.audit_composed_saved(pilot, **args)
+        with tempfile.TemporaryDirectory() as tmp:
+            pilot, args = composed_fixture(Path(tmp))
+            args['expected_launcher_sha256'] = '0' * 64
+            with self.assertRaisesRegex(ValueError, 'Actual launcher source differs'):
+                composed.audit_composed_saved(pilot, **args)
 
     def test_rejects_post_raw_and_rehashed_late_time_tamper(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -91,7 +119,8 @@ class ComposedSavedTests(unittest.TestCase):
             pilot, args = composed_fixture(Path(tmp))
             worker_and_claim = base.audit_saved(pilot, **{
                 key: value for key, value in args.items() if key not in
-                ('review', 'composition_source', 'expected_review_sha256',
+                ('review', 'composition_source', 'launcher_source',
+                 'expected_launcher_sha256', 'expected_review_sha256',
                  'expected_composition_sha256')})['output_bytes']
             with patch.object(base, 'MAX_OUTPUT_BYTES', worker_and_claim):
                 with self.assertRaisesRegex(ValueError, 'Full composed attempt'):

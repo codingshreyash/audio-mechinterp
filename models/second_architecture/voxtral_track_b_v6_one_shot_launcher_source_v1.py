@@ -32,6 +32,8 @@ COMPOSITION_SHA256 = 'da6ee3f5600f7cb9c32af2eb0ce3fe347257bd451032bd5e2136aa9cf5
 ADMISSION_SHA256: str | None = None  # no external A exists
 REVIEW_SHA256: str | None = None  # no independent R exists
 PARENT_RESULT_RESERVE_BYTES = 1024**2
+LAUNCHER_FILE = 'voxtral_track_b_v6_one_shot_launcher_source_v1.py'
+COMPOSED_AUDITOR_SHA256 = '26a1fed4bf71d11e4e4bce33ac430db7b7cc1414e67b1b797155cded07997dce'
 
 
 def _frozen_pins() -> freeze.FutureLauncherPins:
@@ -43,6 +45,54 @@ def _frozen_pins() -> freeze.FutureLauncherPins:
     return freeze.FutureLauncherPins(
         external=contract.ExternalPins(WORKER_SHA256, ADMISSION_SHA256, REVIEW_SHA256),
         composition_sha256=COMPOSITION_SHA256)
+
+
+def _verify_launcher_source(expected_launcher_sha256: str | None) -> str:
+    """Compare L with a later externally reviewed digest; never self-pin L."""
+    if expected_launcher_sha256 is None:
+        raise ValueError('V6 pilot HOLD: independent final L source pin absent')
+    worker._sha256_field(expected_launcher_sha256, 'expected_launcher_sha256')
+    path = HERE / LAUNCHER_FILE
+    if (not path.is_file() or path.is_symlink() or
+            worker.sha_file(path) != expected_launcher_sha256):
+        raise ValueError('V6 pilot launcher differs from external L source pin')
+    auditor = HERE / 'voxtral_track_b_v6_composed_saved_auditor_v1.py'
+    if (not auditor.is_file() or auditor.is_symlink() or
+            worker.sha_file(auditor) != COMPOSED_AUDITOR_SHA256):
+        raise ValueError('V6 composed saved auditor source differs')
+    return expected_launcher_sha256
+
+
+def _check_attempt_evidence_budget(output_dir: Path, claim: Path,
+                                   external_bytes: int, *, already_written: bool = False) -> int:
+    """Count run files and external sidecars, reserving the parent result."""
+    if (not output_dir.is_dir() or output_dir.is_symlink() or
+            not claim.is_file() or claim.is_symlink() or
+            type(external_bytes) is not int or external_bytes < 0):
+        raise ValueError('Pilot evidence path or pending byte count invalid')
+    watchdog = runtime._claim_path(claim)
+    result_path = watchdog.with_name(watchdog.name + '.result.json')
+    if (not watchdog.is_file() or watchdog.is_symlink() or
+            result_path.exists() or result_path.is_symlink()):
+        raise ValueError('Pilot watchdog claim/result state invalid')
+    total = claim.stat().st_size + watchdog.stat().st_size
+    for path in output_dir.rglob('*'):
+        if path.is_symlink():
+            raise ValueError('Symlink in pilot evidence')
+        if path.is_dir():
+            continue
+        if not path.is_file():
+            raise ValueError('Irregular pilot evidence path')
+        total += path.stat().st_size
+        if total + external_bytes + PARENT_RESULT_RESERVE_BYTES > worker.MAX_OUTPUT_BYTES:
+            raise ValueError('Full child output cap would be exceeded before post-host write')
+    total += external_bytes + PARENT_RESULT_RESERVE_BYTES
+    if total > worker.MAX_OUTPUT_BYTES:
+        raise ValueError('Full child output cap would be exceeded before post-host write')
+    to_write = 0 if already_written else external_bytes
+    if shutil.disk_usage(output_dir).free < worker.MIN_FREE_BYTES + to_write + PARENT_RESULT_RESERVE_BYTES:
+        raise ValueError('Free-disk bound would be exceeded before post-host write')
+    return total
 
 
 def _pinned_pad_before_load(files: worker.AdmissionFiles,
@@ -83,19 +133,24 @@ def _fresh_worker_host(*, post: bool) -> tuple[dict[str, Any], str]:
 def _write_post_host_sidecar(*, files: worker.AdmissionFiles, review_path: Path,
                              pins: freeze.FutureLauncherPins, output_dir: Path,
                              pre_collected: str,
-                             result: Mapping[str, Any]) -> dict[str, Any]:
+                             result: Mapping[str, Any],
+                             expected_launcher_sha256: str) -> dict[str, Any]:
+    producer_sha = _verify_launcher_source(expected_launcher_sha256)
     after, post_collected = _fresh_worker_host(post=True)
+    if (not isinstance(pre_collected, str) or len(pre_collected) > 64 or
+            not isinstance(post_collected, str) or len(post_collected) > 64):
+        raise ValueError('Post-host collection time unbounded')
     if datetime.fromisoformat(post_collected) <= datetime.fromisoformat(pre_collected):
         raise ValueError('Post-host probe is not later than pre-host probe')
     raw = after['raw_power_log']
+    if not isinstance(raw, bytes) or not 0 < len(raw) <= 128 * 1024**2:
+        raise ValueError('Post-host raw log absent or unbounded')
     raw_path = output_dir.with_name(output_dir.name + '.post_host.raw')
     sidecar = output_dir.with_name(output_dir.name + '.composition.json')
-    with raw_path.open('xb') as f:
-        f.write(raw)
-        f.flush()
-        os.fsync(f.fileno())
     bindings = contract.verify_contract(files, review_path, pins.external)['bindings']
-    worker._exclusive_json(sidecar, {
+    worker._sha256_field(result.get('pilot_measurement_sha256'),
+                         'pilot_measurement_sha256')
+    sidecar_value = {
         'schema': 'voxtral_track_b_v6_composition_source_only_v1',
         'status': 'worker_complete_post_host_checked_not_pilot_go',
         'pilot_measurement_sha256': result['pilot_measurement_sha256'],
@@ -107,16 +162,30 @@ def _write_post_host_sidecar(*, files: worker.AdmissionFiles, review_path: Path,
         'review_sha256': pins.external.review_sha256,
         'worker_sha256': pins.external.worker_sha256,
         'campaign_attempt_id': bindings['campaign_attempt_id'],
-    })
+        'producer_source_file': LAUNCHER_FILE,
+        'producer_source_sha256': producer_sha,
+        'composition_schema_source_sha256': COMPOSITION_SHA256,
+    }
+    sidecar_raw = (json.dumps(sidecar_value, sort_keys=True, separators=(',', ':'),
+                             allow_nan=False) + '\n').encode()
     claim = Path(bindings['campaign_claim_path'])
-    total = sum(p.stat().st_size for p in output_dir.rglob('*') if p.is_file())
-    total += claim.stat().st_size + sidecar.stat().st_size + raw_path.stat().st_size
-    # The parent writes its watchdog result only after this child returns.
-    if (total + PARENT_RESULT_RESERVE_BYTES > worker.MAX_OUTPUT_BYTES or
-            shutil.disk_usage(output_dir).free < worker.MIN_FREE_BYTES):
-        raise ValueError('Full child output/free-disk bound exceeded')
+    if raw_path.exists() or raw_path.is_symlink() or sidecar.exists() or sidecar.is_symlink():
+        raise ValueError('Post-host sidecar already exists; no retry')
+    _check_attempt_evidence_budget(output_dir, claim, len(raw) + len(sidecar_raw))
+    for path, payload in ((raw_path, raw), (sidecar, sidecar_raw)):
+        with path.open('xb') as f:
+            f.write(payload)
+            f.flush()
+            os.fsync(f.fileno())
+    if (raw_path.stat().st_size != len(raw) or worker.sha_file(raw_path) != worker.sha_bytes(raw) or
+            sidecar.stat().st_size != len(sidecar_raw) or
+            worker.sha_file(sidecar) != worker.sha_bytes(sidecar_raw)):
+        raise ValueError('Post-host sidecar changed during write')
+    _check_attempt_evidence_budget(output_dir, claim, len(raw) + len(sidecar_raw),
+                                   already_written=True)
     return {'status': 'schedule_complete_resource_unverified',
-            'composition_sha256': worker.sha_file(sidecar)}
+            'composition_sha256': worker.sha_file(sidecar),
+            'sidecar_producer_source_sha256': producer_sha}
 
 
 @dataclass(frozen=True)
@@ -127,8 +196,10 @@ class PilotChild:
     review_path: Path
     pins: freeze.FutureLauncherPins
     output_dir: Path
+    expected_launcher_sha256: str | None = None
 
     def __call__(self) -> dict[str, Any]:
+        _verify_launcher_source(self.expected_launcher_sha256)
         import torch
         if not torch.backends.mps.is_available():
             raise RuntimeError('V6 pilot requires MPS')
@@ -170,13 +241,16 @@ class PilotChild:
             raise ValueError('V6 pilot schedule did not meet resource projection')
         return _write_post_host_sidecar(
             files=self.files, review_path=self.review_path, pins=self.pins,
-            output_dir=self.output_dir, pre_collected=pre_collected, result=result)
+            output_dir=self.output_dir, pre_collected=pre_collected, result=result,
+            expected_launcher_sha256=self.expected_launcher_sha256)
 
 
 def launch_pilot(*, files: worker.AdmissionFiles, review_path: Path,
-                 output_dir: Path) -> dict[str, Any]:
+                 output_dir: Path,
+                 expected_launcher_sha256: str | None = None) -> dict[str, Any]:
     """Exactly one bounded attempt; read-only audit never issues post-pilot GO."""
     pins = _frozen_pins()  # first: no A/R means no child and no model load
+    producer_sha = _verify_launcher_source(expected_launcher_sha256)
     freeze.verify_launch_freeze(
         files=files, review_path=review_path, pins=pins,
         composition_source=HERE / 'voxtral_track_b_v6_pilot_composition_source_v1.py')
@@ -190,7 +264,7 @@ def launch_pilot(*, files: worker.AdmissionFiles, review_path: Path,
         raise ValueError('V6 pilot output path or free-disk gate invalid')
     parent = runtime._guarded_child_attempt(
         campaign_claim_path=claim, output_dir=output_dir,
-        operation=PilotChild(files, review_path, pins, output_dir), mps=None,
+        operation=PilotChild(files, review_path, pins, output_dir, producer_sha), mps=None,
         deadline_seconds=runtime.DEADLINE_SECONDS)
     freeze._audit_parent_result(parent)
     measurement = output_dir / 'pilot_measurement.json'
@@ -206,12 +280,15 @@ def launch_pilot(*, files: worker.AdmissionFiles, review_path: Path,
         worker=HERE / 'voxtral_track_b_v6_pilot_worker_source_v1.py',
         review=review_path,
         composition_source=HERE / 'voxtral_track_b_v6_pilot_composition_source_v1.py',
+        launcher_source=HERE / LAUNCHER_FILE,
+        expected_launcher_sha256=producer_sha,
         expected_measurement_sha256=digest,
         expected_admission_sha256=pins.external.admission_sha256,
         expected_review_sha256=pins.external.review_sha256,
         expected_composition_sha256=sidecar_audit['composition_sha256'],
         free_disk_bytes=shutil.disk_usage(output_dir).free)
     return {'status': 'HOLD_no_post_pilot_go', 'go_issued': False,
+            'sidecar_producer_source_sha256': producer_sha,
             'saved_audit': saved, 'runtime': parent}
 
 
@@ -220,6 +297,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('admission', 'qa', 'qa-review', 'preflight', 'review', 'output-dir'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--expected-launcher-sha256', required=True)
     args = parser.parse_args()
     files = worker.AdmissionFiles(
         admission=args.admission, qa=args.qa, qa_review=args.qa_review,
@@ -227,7 +305,8 @@ def main() -> None:
         study_runner=HERE / 'voxtral_fp32_track_b_study_runner_v1.py',
         pilot_auditor=HERE / 'voxtral_track_b_v6_pilot_saved_auditor_v1.py')
     print(json.dumps(launch_pilot(files=files, review_path=args.review,
-                                  output_dir=args.output_dir), sort_keys=True,
+                                  output_dir=args.output_dir,
+                                  expected_launcher_sha256=args.expected_launcher_sha256), sort_keys=True,
                      indent=2, allow_nan=False))
 
 

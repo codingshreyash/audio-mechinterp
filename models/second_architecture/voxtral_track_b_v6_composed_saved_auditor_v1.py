@@ -19,17 +19,46 @@ HERE = Path(__file__).resolve().parent
 COMPOSITION_SOURCE_SHA = 'da6ee3f5600f7cb9c32af2eb0ce3fe347257bd451032bd5e2136aa9cf57ea02a'
 SCHEMA = 'voxtral_track_b_v6_composition_source_only_v1'
 STATUS = 'worker_complete_post_host_checked_not_pilot_go'
+LAUNCHER_FILE = 'voxtral_track_b_v6_one_shot_launcher_source_v1.py'
+
+
+def verify_launcher_producer(sidecar_path: Path, *, launcher_source: Path,
+                             expected_launcher_sha256: str) -> str:
+    """Check the actual sidecar writer against an externally supplied L pin.
+
+    The caller must separately authenticate the independent executable freeze
+    from which the expected digest came. This check cannot attest that review.
+    """
+    base.require(isinstance(expected_launcher_sha256, str) and
+                 len(expected_launcher_sha256) == 64 and
+                 all(ch in '0123456789abcdef' for ch in expected_launcher_sha256),
+                 'Externally expected launcher SHA invalid')
+    base.require(launcher_source.is_file() and not launcher_source.is_symlink() and
+                 launcher_source.resolve() == (HERE / LAUNCHER_FILE).resolve() and
+                 base.sha(launcher_source) == expected_launcher_sha256,
+                 'Actual launcher source differs from external L pin')
+    sidecar = base.read_json(sidecar_path)
+    base.require(sidecar.get('producer_source_file') == LAUNCHER_FILE and
+                 sidecar.get('producer_source_sha256') == expected_launcher_sha256 and
+                 sidecar.get('composition_schema_source_sha256') == COMPOSITION_SOURCE_SHA,
+                 'Sidecar producer/schema source provenance differs')
+    return expected_launcher_sha256
 
 
 def audit_composed_saved(pilot_dir: Path, *, admission: Path, qa: Path,
                          qa_review: Path, preflight: Path, study_runner: Path,
                          worker: Path, review: Path, composition_source: Path,
+                         launcher_source: Path, expected_launcher_sha256: str,
                          expected_measurement_sha256: str,
                          expected_admission_sha256: str,
                          expected_review_sha256: str,
                          expected_composition_sha256: str,
                          free_disk_bytes: int) -> dict:
     """Bind post-host evidence to the exact worker pilot and full-attempt cap."""
+    sidecar_path = pilot_dir.with_name(pilot_dir.name + '.composition.json')
+    producer_sha = verify_launcher_producer(
+        sidecar_path, launcher_source=launcher_source,
+        expected_launcher_sha256=expected_launcher_sha256)
     base.require(base.sha(composition_source) == COMPOSITION_SOURCE_SHA,
                  'Frozen composition source changed')
     worker_audit = base.audit_saved(
@@ -38,7 +67,6 @@ def audit_composed_saved(pilot_dir: Path, *, admission: Path, qa: Path,
         expected_measurement_sha256=expected_measurement_sha256,
         expected_admission_sha256=expected_admission_sha256,
         free_disk_bytes=free_disk_bytes)
-    sidecar_path = pilot_dir.with_name(pilot_dir.name + '.composition.json')
     raw_path = pilot_dir.with_name(pilot_dir.name + '.post_host.raw')
     sidecar = base.read_json(sidecar_path)
     base.require(base.sha(sidecar_path) == expected_composition_sha256,
@@ -83,6 +111,9 @@ def audit_composed_saved(pilot_dir: Path, *, admission: Path, qa: Path,
         'admission_sha256': expected_admission_sha256,
         'review_sha256': expected_review_sha256,
         'composition_sha256': expected_composition_sha256,
+        'sidecar_producer_source_file': LAUNCHER_FILE,
+        'sidecar_producer_source_sha256': producer_sha,
+        'composition_schema_source_sha256': COMPOSITION_SOURCE_SHA,
         'post_host_raw_sha256': base.sha(raw_path),
         'pre_host_collected_utc': pre.isoformat(),
         'post_host_collected_utc': post.isoformat(),
@@ -100,7 +131,8 @@ def main() -> None:
     for flag in ('pilot-dir', 'admission', 'qa', 'qa-review', 'preflight', 'review'):
         parser.add_argument('--' + flag, type=Path, required=True)
     for flag in ('expected-measurement-sha256', 'expected-admission-sha256',
-                 'expected-review-sha256', 'expected-composition-sha256'):
+                 'expected-review-sha256', 'expected-composition-sha256',
+                 'expected-launcher-sha256'):
         parser.add_argument('--' + flag, required=True)
     args = parser.parse_args()
     result = audit_composed_saved(
@@ -110,6 +142,8 @@ def main() -> None:
         worker=HERE / 'voxtral_track_b_v6_pilot_worker_source_v1.py',
         review=args.review,
         composition_source=HERE / 'voxtral_track_b_v6_pilot_composition_source_v1.py',
+        launcher_source=HERE / LAUNCHER_FILE,
+        expected_launcher_sha256=args.expected_launcher_sha256,
         expected_measurement_sha256=args.expected_measurement_sha256,
         expected_admission_sha256=args.expected_admission_sha256,
         expected_review_sha256=args.expected_review_sha256,
