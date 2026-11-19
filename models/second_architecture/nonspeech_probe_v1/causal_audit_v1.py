@@ -33,6 +33,14 @@ def utc(value: str) -> datetime:
     return when
 
 
+def valid_host_timing(started: datetime, pre_collected: datetime,
+                      exited: datetime, post_collected: datetime) -> bool:
+    """The parent writes launch_start before collecting the pre-run probe."""
+    return (started <= pre_collected <= exited <= post_collected
+            and 0 <= (post_collected-exited).total_seconds()
+            <= parent.MAX_POST_PROBE_LAG_SECONDS)
+
+
 def saved_array(output: Path, ref: dict) -> np.ndarray:
     """Load only an authenticated .npy sidecar under worker output."""
     worker.require(isinstance(ref, dict) and isinstance(ref.get("path"), str),
@@ -102,9 +110,8 @@ def audit_parent(attempt: Path, admission: Path, go: Path) -> tuple[dict, dict]:
     started = utc(start["start_utc"])
     exited = utc(result["worker_exit_observed_utc"])
     collected = utc(post["collected_utc"])
-    worker.require(utc(pre["collected_utc"]) <= started <= exited <= collected
-                   and 0 <= (collected-exited).total_seconds()
-                   <= parent.MAX_POST_PROBE_LAG_SECONDS,
+    worker.require(valid_host_timing(started, utc(pre["collected_utc"]),
+                                     exited, collected),
                    "host timing invalid")
     host_gate.validate_log(pre_log, utc(pre["collected_utc"])-timedelta(minutes=10),
                            utc(pre["collected_utc"]), utc(pre["collected_utc"]))

@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import numpy as np
@@ -16,6 +17,16 @@ from . import causal_worker_v1 as worker
 
 
 class ParentTests(unittest.TestCase):
+    def test_host_probe_follows_launch_start_and_precedes_worker_exit(self) -> None:
+        started = datetime(2026, 11, 19, tzinfo=timezone.utc)
+        pre = started + timedelta(seconds=3)
+        exited = pre + timedelta(seconds=15)
+        post = exited + timedelta(seconds=10)
+        self.assertTrue(audit.valid_host_timing(started, pre, exited, post))
+        self.assertFalse(audit.valid_host_timing(pre, started, exited, post))
+        self.assertFalse(audit.valid_host_timing(started, pre, exited,
+                                                exited + timedelta(seconds=121)))
+
     @staticmethod
     def _save_ref(root: Path, name: str, value: np.ndarray) -> dict:
         path = root / name
