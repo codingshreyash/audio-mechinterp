@@ -1,0 +1,15 @@
+# Independent source review: blind 32-clip listening form V1
+
+19 November 2026. Reviewed committed form source `6b0c727` against the [prospective V2 plan](../WORD_DISJOINT_TIME_STATE_VALIDATION_PLAN_V2.md), [audited render](RENDERED_V2_TECHNICAL_INDEPENDENT_REVIEW_V1.md), and public listening queue. **Decision: HOLD for production form generation or human review until the opaque-ID-to-WAV binding is checked.** No candidate model was run, no human record was created, and the production HTML was not generated.
+
+## Checks that passed
+
+- The builder reads `QUEUE.json` and the anonymous WAV directory only. It embeds 32 opaque IDs, relative anonymous filenames, WAV SHA-256 hashes and the exact public queue SHA-256. It does not embed the private reference map, words, engines, pair IDs, or model outputs. A read-only comparison of the current public queue with the private audited map found **32/32 matching IDs and WAV hashes**; queue provenance hashes matched the committed manifest and technical binding. This check used private data for review only, not for HTML generation.
+- The builder rejects missing/extra WAVs, duplicate queue IDs, unexpected queue fields, a private map placed in the listener directory, symlinks, and overwriting an existing form. Five source tests passed; JavaScript syntax passed.
+- In an isolated browser session using a **fake** 32-WAV bundle, an empty submission was rejected. I programmatically submitted 32 fake entries and verified that the page advanced through all 32 distinct audio sources in order, showed the export control, and resumed the 32-record state after reload. Altering the first saved WAV hash caused resume to reject the saved record. The fake browser fixture was removed; no exported review was used as human evidence.
+
+## Required fix
+
+`public_data()` computes each WAV hash, but it does **not** verify that its filename/opaque ID is the ID derived by the audited queue builder: `SHA256("word-disjoint-listening-v2|" + manifest_sha256 + "|" + wav_sha256)[:20]`. I copied the current anonymous bundle to a temporary directory, swapped the filenames of its first two WAVs while leaving `QUEUE.json` byte-identical, and called `public_data()` again. It **accepted the swapped mapping**; the first two embedded WAV hashes exchanged IDs while the queue SHA-256 remained unchanged. The production bundle was untouched. Later QA auditing may reject that mapping, but a reviewer could already have heard the wrong clip under a trusted ID.
+
+Before building the production form, recompute the opaque ID from the public queue's `provenance.manifest_sha256` and each actual anonymous WAV hash, require exact equality for all 32, and add a negative test that swaps two valid WAV names while preserving the queue. Keep the reference-free source boundary. Then independently rereview the corrected source and browser output. Local storage prevents editing through the form's controls; it does not authenticate a human or make browser data tamper-proof, so the later independent QA audit and reviewer-identity check remain necessary.
