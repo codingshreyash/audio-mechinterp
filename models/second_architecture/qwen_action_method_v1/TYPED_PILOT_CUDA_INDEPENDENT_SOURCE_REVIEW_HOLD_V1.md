@@ -1,0 +1,35 @@
+# Independent CUDA typed pilot source review: HOLD
+
+19 November 2026. Reviewed committed source `5ada663` and `6a0ce68`. This is a **static source and no-weight review only**. No A100 was allocated, no Qwen checkpoint was loaded, no CUDA runtime was inspected, no load or pilot attempt exists, and no stage GO was issued. The two fixed CUDA attempt paths and GO files remained absent at review time. A passing local fake test is not authorization to run either stage.
+
+## Decision
+
+**HOLD before CUDA deployment/source admission.** The V3 scientific computation is carried over coherently: the typed `F_L1` case, LIST/ASK/CANCEL plus EOS teacher forcing, post-block residual 17/34 VJPs, FP32 sidecars, 36-array saved inventory, unmodified/read-only/leaf parity, and complete generation token-path comparison match the reviewed V3 method. The CUDA parent separates a 180-second load-only attempt from a 900-second pilot, binds independent stage GO receipts to source/runtime identity, authenticates the worker with a fresh pipe nonce and heartbeats, and makes partial attempts one-shot. Those are useful controls, but the two admission gaps below defeat the protocol's exact-checkpoint and isolated-GPU promises.
+
+### 1. Loaded checkpoint bytes are not authenticated
+
+`typed_pilot_cuda_source_audit_v1.audit()` verifies the installed Qwen modeling and processing Python files, a **repository copy** of `config.snapshot.json`, three tokenizer files, label IDs and EOS. It does not hash the **active cached** `config.json`, processor/chat-template configuration files, model index, or any weight shard that `load_pinned_thinker()` actually opens. `revision=<frozen commit>` and `local_files_only=True` select the cache path but do not prove that files at that path still have the pinned bytes. Consequently, a locally replaced config or shard can satisfy `source_identity()` and the stage GO while changing the model being measured.
+
+**Required fix:** Before the load GO, independently obtain a pinned checkpoint manifest for the exact HF revision, listing every file consumed by `Qwen2_5OmniProcessor.from_pretrained` and `Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained` (including active config, processor/chat template, model index and all shards) with expected SHA-256 or independently verified LFS object digests. Hash the local files, require exact inventory and digests, and include the verified manifest hash and resolved snapshot path in source/admission identity. Recheck just before model load or make the verified snapshot immutable for the attempt. Hashing large shards belongs to setup, outside the 180-second load worker, but the worker must be bound to the verified bytes. A change to this code requires a new committed source review.
+
+### 2. The parent does not enforce an isolated GPU baseline
+
+The protocol requires one physical/visible A100 and no competing job. `--capture-admission` prints `baseline_gpu_used_bytes`, but neither `validate_go()` nor `launch()` has a baseline occupancy or compute-process gate. The live monitor samples **total** GPU memory and only rejects values at or above 56/60 GiB. A competing process using memory below that cap can coexist with a nominal candidate, confounding resource feasibility and potentially changing run behavior. In an adversarial no-weight parent fixture, `pre_host.gpu_used_bytes=40 GiB`, a `40 GiB` peak below the load limit, and otherwise successful fake worker evidence produced `candidate_saved_pending_audit` and `terminal.json`. This demonstrates the missing isolation precondition; it is not evidence that a real checkpoint would fit alongside that process.
+
+**Required fix:** Record the full physical/MIG inventory and per-GPU compute-process list, plus a small defined idle-memory tolerance, at admission and immediately before starting each stage. Bind the reviewed inventory/baseline policy to the GO. Fail before attempt creation or before worker launch if the physical device, UUID, MIG mode, competing process list, or allowed idle baseline differs. Recheck after the worker exits and record the process list in the saved audit. A UUID alone identifies the device but does not establish exclusive use.
+
+### 3. Installed binary identity is weaker than the written protocol
+
+`source_identity()` binds exact package **version strings** and the Transformers Git commit; `runtime_identity()` binds CUDA version, A100 UUID/name/memory and driver. It checks the installed Qwen Python source hashes. It does not attest the installed PyTorch wheel or other installed package binary bytes, although the protocol states that installed package/source hashes are captured and cites a specific CUDA wheel SHA-256. This does not explain the V3-to-CUDA scientific change, but it leaves the claimed binary pin unproven.
+
+**Required fix:** Keep the exact wheel file and verify its published SHA-256 before installation, record an independently reviewed lock/installation receipt, and bind hashes of the relevant installed torch/CUDA binaries or an equivalent verified immutable environment image to the stage GO. Record and require the actual TF32/math-mode settings so FP32 tensor dtype has an explicit numerical interpretation. If the wheel, runtime, package versions or installed source differ, retain HOLD and review a new pin rather than silently substituting one.
+
+## Checks completed without weights
+
+- `models/qwen_omni/.venv/bin/python -m unittest models.second_architecture.qwen_action_method_v1.test_typed_pilot_cuda_v1 -v`: **5/5 pass** (absent GO before attempt, UUID mismatch, mocked direct-worker rejection, partial one-shot/no terminal, fake three-target VJP plus 36 sidecars and full generation parity).
+- `models/qwen_omni/.venv/bin/python -m models.second_architecture.qwen_action_method_v1.typed_pilot_cuda_parent_v1 --source-preflight`: reports both CUDA GOs and attempts absent.
+- Direct `--worker --stage load --attempt /tmp/nonexistent-cuda-typed-review`: exits with `fixed new pilot output required` before candidate import or weights.
+- Additional no-weight parent fixtures: GPU cap equality, RSS cap equality, and a missing worker result each yield `invalid_or_partial`, save no terminal, and consume the fixed attempt path. The 40-GiB preexisting GPU fixture yielded a terminal, as described above.
+- Static comparison of `teacher_forced_triplet`, `unmodified_references`, and `generation_pair` against `typed_pilot_backend_v3.py` found only the intended CUDA memory-sampling change. `typed_pilot_cuda_audit_v1.py` reuses V3's read-only sidecar reconstruction and parity checks, including the 36-file inventory.
+
+The local Mac cannot validate Linux CUDA 12.8, installed `torch==2.11.0+cu128`, the Transformers Linux installation, A100 UUID/driver/MIG state, or cached checkpoint bytes. Those remain independent runtime review work after a source fix and a real GPU environment. The stage-independent local checks above can be rerun now; `--capture-admission`, load GO and pilot GO cannot be inferred from them. No audio, development, locked, or native action case is admitted by this review.
