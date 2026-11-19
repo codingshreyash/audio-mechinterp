@@ -192,11 +192,14 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
     package_lines = [line for line in spec_lines if line and not line.startswith("#")
                      and line != "@EXPLICIT"]
     require(0 < len(package_lines) <= 512 and all(
-        re.fullmatch(r"https://[^\s#]+(?:\.conda|\.tar\.bz2)#[0-9a-fA-F]{32}(?:[0-9a-fA-F]{32})?", line)
+        re.fullmatch(r"https://[^\s#]+(?:\.conda|\.tar\.bz2)#(?:[0-9a-fA-F]{32}|[0-9a-fA-F]{64}|sha256=[0-9a-fA-F]{64})", line)
         is not None for line in package_lines),
         "Conda explicit spec lacks hashed package URLs")
-    expected_archives = {unquote(line.rsplit("/", 1)[1].split("#", 1)[0])
-                         for line in package_lines}
+    url_digest_by_name = {
+        unquote(line.rsplit("/", 1)[1].split("#", 1)[0]): line.rsplit("#", 1)[1]
+        for line in package_lines
+    }
+    expected_archives = set(url_digest_by_name)
     require(len(expected_archives) == len(package_lines),
             "Conda explicit spec has duplicate archive names")
     metadata_dir = root / "conda-meta"
@@ -241,6 +244,20 @@ def _conda_source_receipt(root: Path) -> dict[str, Any]:
         archive_sha, archive_size = hash_file(archive_path)
         require(archive_sha == item["sha256"] and archive_size == item["bytes"],
                 "Conda package archive bytes changed")
+        url_digest = url_digest_by_name[name]
+        if url_digest.startswith("sha256="):
+            require(archive_sha == url_digest.split("=", 1)[1].lower(),
+                    "Conda explicit URL SHA-256 differs from archive")
+        elif len(url_digest) == 64:
+            require(archive_sha == url_digest.lower(),
+                    "Conda explicit URL SHA-256 differs from archive")
+        else:
+            md5 = hashlib.md5()
+            with archive_path.open("rb") as stream:
+                while block := stream.read(65536):
+                    md5.update(block)
+            require(md5.hexdigest() == url_digest.lower(),
+                    "Conda explicit URL MD5 differs from archive")
         metadata_name = name.removesuffix(".conda").removesuffix(".tar.bz2") + ".json"
         metadata_path = metadata_dir / metadata_name
         metadata_value, _ = _read_json(metadata_path, cap=1 << 20)

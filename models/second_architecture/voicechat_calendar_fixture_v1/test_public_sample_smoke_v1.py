@@ -541,7 +541,8 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         (archive_dir / archive_name).write_bytes(archive_bytes)
         (self.metadata / "ffmpeg-7.0.0-h123_0.json").write_bytes(smoke.canonical({
             "name": "ffmpeg", "sha256": smoke.sha(archive_bytes)}))
-        spec = b"@EXPLICIT\nhttps://conda.anaconda.org/conda-forge/linux-64/ffmpeg-7.0.0-h123_0.conda#" + b"a" * 32 + b"\n"
+        spec = ("@EXPLICIT\nhttps://conda.anaconda.org/conda-forge/linux-64/"
+                f"ffmpeg-7.0.0-h123_0.conda#{hashlib.md5(archive_bytes).hexdigest()}\n").encode()
         (self.root / "conda-explicit.txt").write_bytes(spec)
         (self.root / "native-source-manifest.json").write_bytes(smoke.canonical({
             "schema": "voicechat_native_source_manifest_v1", "kind": "conda_explicit",
@@ -631,7 +632,7 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         spec_path = self.root / "conda-explicit.txt"
         spec = spec_path.read_bytes() + (
             "https://conda.anaconda.org/conda-forge/linux-64/"
-            "x264-1%21164-h123_0.conda#" + "b" * 32 + "\n").encode()
+            "x264-1%21164-h123_0.conda#sha256=" + smoke.sha(payload) + "\n").encode()
         spec_path.write_bytes(spec)
         manifest_path = self.root / "native-source-manifest.json"
         manifest = json.loads(manifest_path.read_text())
@@ -643,6 +644,19 @@ class NativeFFmpegReceiptTests(unittest.TestCase):
         manifest_path.write_bytes(smoke.canonical(manifest))
         receipt = smoke.native_ffmpeg_runtime(self.base)
         self.assertEqual(receipt["source"]["package_archives_count"], 2)
+
+    def test_explicit_url_digest_must_match_preserved_archive(self):
+        spec_path = self.root / "conda-explicit.txt"
+        old = spec_path.read_text()
+        spec = old[:old.rfind("#") + 1] + "0" * 32 + "\n"
+        spec_path.write_text(spec)
+        manifest_path = self.root / "native-source-manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["explicit_spec"]["sha256"] = smoke.sha(spec.encode())
+        manifest["explicit_spec"]["bytes"] = len(spec.encode())
+        manifest_path.write_bytes(smoke.canonical(manifest))
+        with self.assertRaisesRegex(ValueError, "explicit URL MD5 differs"):
+            smoke.native_ffmpeg_runtime(self.base)
 
 
 if __name__ == "__main__":
