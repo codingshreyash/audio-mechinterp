@@ -159,6 +159,13 @@ function summary() {
   $("scope").textContent = DATA.scope;
   const patches = DATA.patches;
   const primaryW = patches.filter((r) => r.arm === "W" && r.primary_eligible);
+  const primaryBySite = [...new Set(primaryW.map((r) => r.site))].map((site) => {
+    const rows = primaryW.filter((r) => r.site === site);
+    return {site, total: rows.length, transfers: rows.filter((r) => r.target_only_transfer).length};
+  });
+  if (primaryBySite.length !== 2 || primaryBySite.some((s) => s.total !== 4 || s.transfers !== 4)) {
+    throw new Error("Embedded primary-site counts differ from independent review");
+  }
   const random = patches.filter((r) => r.arm === "R1" || r.arm === "R2");
   const randomPrimary = random.filter((r) => r.primary_eligible);
   const donorText = (r) => BASE.get(`${r.mode}|${r.donor_key}`).transcript;
@@ -166,7 +173,7 @@ function summary() {
   const cards = [
     ["Source recordings", String(Object.keys(DATA.clips).length), "Two paired words × two synthetic voices × two pairs"],
     ["Complete patched outputs", String(patches.length), "Every planned arm across both internal sites"],
-    ["Primary W transfer", `${primaryW.filter((r) => r.target_only_transfer).length}/${primaryW.length}`, "Correct intended-word replacement in clean directions"],
+    ["Primary W transfer", "4/4 per site", "Same four direction/mode cells at two sites; one word pair and voice; S/C correlated"],
     ["Random transcript changes", `${random.filter((r) => r.transcript !== recipientText(r)).length}/${random.length}`, `${randomPrimary.filter((r) => r.target_only_transfer).length}/${randomPrimary.length} primary random edits made the donor-word swap`],
   ];
   const panel = $("cards"); panel.replaceChildren();
