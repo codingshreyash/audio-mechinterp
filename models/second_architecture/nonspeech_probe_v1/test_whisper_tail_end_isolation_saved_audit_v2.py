@@ -71,6 +71,18 @@ class SavedAuditTests(unittest.TestCase):
                                   eligible, {"status": "not_translated"})
         self.assertFalse(outcome["original_qualified"]["qualified"])
 
+    def test_original_cannot_qualify_without_clean_complete_contrast(self) -> None:
+        evidence, baselines, states, eligible = fixture("original")
+        # Even a forged positive arm bundle cannot replace the clean contrast.
+        baselines[("original", "noise")] = baselines[("original", "zero")]
+        for arm in evidence:
+            arm["checked"] = baselines[("original", "zero")]
+        eligible["original"]["eligible"] = False
+        outcome = audit.summarize("original", evidence, baselines, states,
+                                  eligible, {"status": "not_translated"})
+        self.assertFalse(outcome["original_qualified"]["qualified"])
+        self.assertFalse(outcome["original_qualified"]["clean_contrast_eligible"])
+
     def test_strict_crossover_requires_relocation_and_tracks_new_end_null(self) -> None:
         evidence, baselines, states, eligible = fixture("offset_8000")
         result = audit.summarize("offset_8000", evidence, baselines, states,

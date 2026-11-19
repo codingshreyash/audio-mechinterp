@@ -246,7 +246,11 @@ def summarize(stage: str, evidence: list[dict], baselines: dict, states: dict,
                 "native_delta_l2": native_norm(layout, location)}
 
     if stage == "original":
-        return {"original_qualified": qualified("original", "fixed"),
+        original = qualified("original", "fixed")
+        original["qualified"] = (original["qualified"]
+                                 and eligibility["original"]["eligible"])
+        original["clean_contrast_eligible"] = eligibility["original"]["eligible"]
+        return {"original_qualified": original,
                 "clean_eligible": eligibility["original"]["eligible"],
                 "claim_status": "original_viability_only"}
 
