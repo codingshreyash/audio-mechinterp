@@ -6,6 +6,7 @@ import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import numpy as np
 
@@ -28,6 +29,11 @@ class PatchTests(unittest.TestCase):
                     recipient_arm=recipient_arm, arm=arm)
                 self.assertEqual(patched.shape, causal.STATE_SHAPE)
                 self.assertEqual(proof["arm"], arm)
+                self.assertEqual(proof["realized_edit_sha256"],
+                                 causal.array_sha(patched - self.recipient))
+                self.assertEqual(proof["realized_edit_shape"],
+                                 list(causal.STATE_SHAPE))
+                self.assertEqual(proof["realized_edit_dtype"], "float32")
                 outside = np.setdiff1d(np.arange(286), causal._region_indices(arm))
                 np.testing.assert_array_equal(patched[:, outside, :],
                                               self.recipient[:, outside, :])
@@ -87,12 +93,26 @@ class PatchTests(unittest.TestCase):
                 recipient_state=self.donor, patched_state=patched)
 
     def test_saved_selection_read_only(self) -> None:
+        failed = causal._failed_v1_evidence()
+        self.assertEqual(failed["parent_result_sha256"],
+                         causal.FAILED_V1_RESULT_SHA)
         selected = causal._selected_rows()
         self.assertEqual(set(selected), {"clean", "word_noise"})
         self.assertEqual(selected["clean"]["output"]["transcript"],
                          causal.TRANSCRIPTS["clean"])
         self.assertEqual(selected["word_noise"]["output"]["transcript"],
                          causal.TRANSCRIPTS["word_noise"])
+
+    def test_failed_v1_cannot_be_mutated_or_relabeled_complete(self) -> None:
+        with patch.object(causal, "FAILED_V1_RESULT_SHA", "0" * 64):
+            with self.assertRaisesRegex(ValueError, "bytes changed"):
+                causal._failed_v1_evidence()
+        with patch.object(
+                causal.parent_v1, "audit_saved_attempt",
+                return_value={"status": "complete_evidence_pass",
+                              "result_sha256": causal.FAILED_V1_RESULT_SHA}):
+            with self.assertRaisesRegex(ValueError, "bound failure"):
+                causal._failed_v1_evidence()
 
 
 if __name__ == "__main__":

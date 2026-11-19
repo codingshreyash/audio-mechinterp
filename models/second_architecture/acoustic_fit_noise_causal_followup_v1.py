@@ -18,6 +18,7 @@ import numpy as np
 
 import acoustic_fit_noise_pilot_v2 as pilot
 import acoustic_fit_noise_parent_launch_v2 as parent
+import acoustic_fit_noise_parent_launch_v1 as parent_v1
 
 
 HERE = Path(__file__).resolve().parent
@@ -28,6 +29,13 @@ PRIOR_RECORDS_SHA = "c1badaf305dfaebe9beb9567b73f4e4bfdfab84b45ca8194f4c13c943f6
 PRIOR_RECEIPT = HERE / "ACOUSTIC_FIT_NOISE_PREFLIGHT_V2_RESTRICTED.json"
 PRIOR_WORKER_GO = HERE / "ACOUSTIC_FIT_NOISE_WORKER_SOURCE_GO_V2.json"
 PRIOR_PARENT_GO = HERE / "ACOUSTIC_FIT_NOISE_PARENT_SOURCE_GO_V2.json"
+FAILED_V1 = HERE / "runs/acoustic_fit_noise_parent_v1/wav2vec2_attempt_001"
+FAILED_V1_RESULT_SHA = "b69468b110a06a55ae8b4b96be367dbc27d608bd1ecfc2b5ecd334547a7d6ebd"
+FAILED_V1_RECORDS_SHA = "f1752019284dec76d8cd14203b1d8bc63f5b2890a6f140dbb42d3901c732d5cc"
+FAILED_V1_STDERR_SHA = "a23cc760bf3fd9e1b43ca7d9da914d2111bfcf8a6df2ae5256a59973100dd9b5"
+FAILED_V1_RECEIPT = HERE / "ACOUSTIC_FIT_NOISE_PREFLIGHT_V1.json"
+FAILED_V1_WORKER_GO = HERE / "ACOUSTIC_FIT_NOISE_WORKER_SOURCE_GO_V1.json"
+FAILED_V1_PARENT_GO = HERE / "ACOUSTIC_FIT_NOISE_PARENT_SOURCE_GO_V1.json"
 CASE = "kokoro_teal"
 FRAMES = 91840
 STATE_SHAPE = (1, 286, 768)
@@ -60,6 +68,46 @@ def sha_bytes(raw: bytes) -> str:
 
 def array_sha(value: np.ndarray) -> str:
     return sha_bytes(np.ascontiguousarray(value).tobytes())
+
+
+def _failed_v1_evidence() -> dict[str, str]:
+    """Bind and re-audit the immutable first-forward capture failure."""
+    expected = {
+        "launch_result.json": FAILED_V1_RESULT_SHA,
+        "worker_output/records.jsonl": FAILED_V1_RECORDS_SHA,
+        "worker_stderr.txt": FAILED_V1_STDERR_SHA,
+    }
+    if any(pilot.sha_file(FAILED_V1 / name) != digest
+           for name, digest in expected.items()):
+        raise ValueError("failed V1 attempt bytes changed")
+    audit = parent_v1.audit_saved_attempt(
+        "wav2vec2", FAILED_V1_RECEIPT.resolve(), FAILED_V1_WORKER_GO.resolve(),
+        FAILED_V1_PARENT_GO.resolve(), FAILED_V1.resolve())
+    if (audit.get("status") != "bound_invalid_or_partial"
+            or audit.get("result_sha256") != FAILED_V1_RESULT_SHA):
+        raise ValueError("failed V1 saved audit no longer returns bound failure")
+    result = json.loads((FAILED_V1 / "launch_result.json").read_text())
+    rows = [json.loads(line) for line in
+            (FAILED_V1 / "worker_output/records.jsonl").read_text().splitlines()]
+    if (result.get("model") != "wav2vec2"
+            or result.get("status") != "invalid_or_partial"
+            or result.get("worker_complete") is not False
+            or result.get("worker_returncode") != 1
+            or result.get("errors") != ["worker_exit_1", "worker_matrix_incomplete"]
+            or len(rows) != 2 or rows[0].get("type") != "start"
+            or rows[1].get("type") != "failure"
+            or rows[1].get("error") != "ValueError"
+            or rows[1].get("detail") !=
+            "capture shape mismatch at post_block0: torch.Size([286, 768])"):
+        raise ValueError("failed V1 attempt status or first-forward failure differs")
+    return {
+        "parent_result_sha256": FAILED_V1_RESULT_SHA,
+        "worker_records_sha256": FAILED_V1_RECORDS_SHA,
+        "worker_stderr_sha256": FAILED_V1_STDERR_SHA,
+        "preflight_sha256": pilot.sha_file(FAILED_V1_RECEIPT),
+        "worker_go_sha256": pilot.sha_file(FAILED_V1_WORKER_GO),
+        "parent_go_sha256": pilot.sha_file(FAILED_V1_PARENT_GO),
+    }
 
 
 def _selected_rows() -> dict[str, dict[str, Any]]:
@@ -98,6 +146,7 @@ def _selected_rows() -> dict[str, dict[str, Any]]:
 
 def no_weight_preflight() -> dict[str, Any]:
     """Recompute all frozen source/attempt checks before any model load."""
+    failed_v1 = _failed_v1_evidence()
     selected = _selected_rows()
     current = pilot.preflight()
     if pilot.canonical(json.loads(PRIOR_RECEIPT.read_text())) != pilot.canonical(current):
@@ -111,7 +160,7 @@ def no_weight_preflight() -> dict[str, Any]:
             or np.array_equal(clean[33920:57120], noisy[33920:57120])):
         raise ValueError("selected PCM or word-only change differs")
     return {
-        "schema": "acoustic_fit_noise_causal_followup_preflight_v1",
+        "schema": "acoustic_fit_noise_causal_followup_preflight_v2",
         "source_sha256": pilot.sha_file(Path(__file__)),
         "source_commit": pilot.source_commit(Path(__file__)),
         "protocol_sha256": pilot.sha_file(PROTOCOL),
@@ -121,6 +170,7 @@ def no_weight_preflight() -> dict[str, Any]:
         "prior_preflight_sha256": pilot.sha_file(PRIOR_RECEIPT),
         "prior_worker_go_sha256": pilot.sha_file(PRIOR_WORKER_GO),
         "prior_parent_go_sha256": pilot.sha_file(PRIOR_PARENT_GO),
+        "failed_v1_evidence": failed_v1,
         "selected_pcm_sha256": PCM_HASHES,
         "selected_state_sha256": STATE_HASHES,
         "selected_transcripts": TRANSCRIPTS,
@@ -175,6 +225,7 @@ def construct_patch(recipient: np.ndarray, donor: np.ndarray, *,
         patched[:, indices, :] = recipient[:, indices, :] + edit
     realized = float(np.linalg.norm(
         patched.astype(np.float64) - recipient.astype(np.float64)))
+    realized_edit = np.ascontiguousarray(patched - recipient)
     if (not np.isfinite(patched).all()
             or (arm == "self_W" and not np.array_equal(patched, recipient))
             or (arm == "full_donor" and not np.array_equal(patched, donor))):
@@ -192,6 +243,9 @@ def construct_patch(recipient: np.ndarray, donor: np.ndarray, *,
         "recipient_state_sha256": array_sha(recipient),
         "donor_state_sha256": array_sha(donor),
         "patched_state_sha256": array_sha(patched),
+        "realized_edit_sha256": array_sha(realized_edit),
+        "realized_edit_dtype": str(realized_edit.dtype),
+        "realized_edit_shape": list(realized_edit.shape),
     }
 
 
