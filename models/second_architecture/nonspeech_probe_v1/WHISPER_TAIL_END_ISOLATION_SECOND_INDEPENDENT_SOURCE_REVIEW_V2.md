@@ -1,0 +1,21 @@
+# Second independent executable source review: isolated tail/end V2
+
+19 November 2026. **PASS for source-only readiness, subject to the separately required primary executable review, committed admissions, and one GO per attempt.** This review did not load model weights or run V2 inference. It does not change the prospective protocol or authorize an empirical claim.
+
+## Scope and exact source
+
+I independently checked the frozen V2 protocol and plan against the worker, parent, gate, saved auditor, handoff, and tests committed through `9ab872d`. The plan SHA-256 is `c8df7bc272e8c31ae7a19eed2a3200dbc682a7d2bbcd772fb5ecb15339e15dbd`. A source-only admission rebuild in the pinned `models/second_architecture/.venv` environment succeeded with 39 tracked, clean source entries. The gate also binds inherited V1 runner and auditor dependencies and the pinned V4 model/processor source inventory. All three V2 GO files were absent during this review.
+
+## Design-to-code checks
+
+- The plan schedules **7** maximum original calls and **24** maximum calls at each offset, or **55** in all. The original stage tests only `post_conv_pos` rows `498..502`. At +8,000 samples the translated rows are `523..527`; at +16,000 they are `548..552`. For prepend, those translated rows are aligned and the fixed rows compete. For append, the fixed rows mark the old noise-tail/added-silence interface and the translated rows mark the new waveform end.
+- Each offset has four no-hook baselines before any arm, then ten arms per eligible layout. A no-contrast original records two baselines and skips five arms. One ineligible offset layout still records all four baselines and runs only the other layout's ten arms, for 14 calls. The worker and saved auditor independently reconstruct the conditional plan and exact skipped-arm ordinals.
+- The cross-window control takes the **unscaled** five-row donor-minus-recipient delta from the aligned rows and applies it to the competing rows: translated to fixed for prepend, fixed to new-end rows for append. V3's inherited hook and patch verifier compare the exact edited tensor, all untouched rows, donor/recipient hashes, and applied/source L2 norms within `1e-4`. The primary nonzero threshold is frozen at `1e-3`.
+- A qualified aligned intervention must reproduce the donor's exact full EOS-terminated token path. Identity, unrelated-row, displaced equal-norm and cross-window relocation controls must preserve the recipient's exact complete path; full-donor must reproduce the donor path and first-step raw vector. The competing direct arm must itself finish with EOS and have a different full path from the donor. A censored competing arm no longer counts as evidence of failed donor transfer. Two strict offsets and original viability are required for a within-pair timing claim; an edited PASS JSON cannot substitute for reauditing the three raw attempts.
+- `1dde34d` closes the prospective chronology gap: before either offset launches, its parent reaudits the prior fixed stage and requires saved-audit PASS, then checks recorded end/start order. The joint auditor checks UTC order and same-boot monotonic order. `9ab872d` closes the censored-opposite decision gap.
+
+## Verification and limits
+
+The five V2 source-only test modules passed **25/25** tests in the pinned environment. They include no-model probes of conditional call counts, row mapping and relocation, direct-worker refusal without the fixed attempt, parent process monitoring, prior-stage audit gating, original clean-contrast gating, censored competing output, and joint chronology. Source-only admission built successfully; no GO or model attempt was made.
+
+This PASS covers consistency of the reviewed code with the frozen V2 decision rule. Tests do not prove that any translated clean contrast persists, a 24-call attempt fits its resource cap, or an isolated tail/end intervention changes the model's complete answer. The inherited live-parent pipe is an accidental-run guard under a trusted local-owner assumption, not authentication against a deliberate same-UID launcher. Any V2 result remains conditional on one engineered beep/noise pair until a separately predeclared sound-family replication succeeds.
