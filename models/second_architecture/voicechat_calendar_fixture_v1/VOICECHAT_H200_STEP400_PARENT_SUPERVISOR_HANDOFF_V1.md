@@ -19,21 +19,28 @@ heartbeat, cap breach, NVML failure, observed sampling gap, evidence overflow,
 or child failure. It never converts a pre-400 resource stop to success.
 
 The default telemetry is direct `pynvml`, with one initialization held across
-polls; it uses the staged V5 runtime's pinned NVML binding. Every completed
+polls; it uses the staged V5 runtime's pinned NVML binding. NVML initialization
+is before the first cap-monitor timestamp. Process spawn is included in the
+first observed gap: an unusually slow `Popen` will fail conservatively, even
+if the child has not reached model work. Every completed
 sample has begin/end monotonic timestamps and the gap since the preceding
 completed sample, including launch-to-first-sample. The parent aims for 0.1 s
 polls and rejects **any observed gap above 0.2 s**, including a slow NVML call.
 The JSONL poll ledger, bounded logs, terminal receipt, and SHA-256 file census
 are retained. After a killed child, an aggregate evidence overflow causes
 bounded prefixes to be retained with each truncation declared in the receipt.
+The terminal sealer removes child-created links, special files, directories,
+reserved receipt names and excess files without following links; it records
+the count and first 32 removals. Log writes use `O_NOFOLLOW`.
 The receipt status is only `bounded_child_complete_pending_saved_audit`; it
 does not attest to six checkpoints or a model response.
 
-No-model tests in
+Ten no-model tests in
 [`test_voicechat_step400_supervisor_v1.py`](test_voicechat_step400_supervisor_v1.py)
 passed on the local CPU: a fake child and poll ledger, slow telemetry gap,
 GPU cap stop, missing heartbeat, child nonzero, log limit, evidence overflow,
-disk floor, and consumed attempt rejection. Command:
+disk floor, consumed attempt rejection, symlink and 33-file failure sealing,
+and cleanup of a surviving session descendant. Command:
 
 `python3 -W error::ResourceWarning -m unittest models.second_architecture.voicechat_calendar_fixture_v1.test_voicechat_step400_supervisor_v1 -q`
 
@@ -56,10 +63,12 @@ fake-model test result is unchanged by this constituent.
 3. Independently review this parent source. Its fake tests do not prove that a
    live H200 can sustain 0.2 s coverage under model load. A failed or missing
    poll ledger is a coverage failure, never evidence of an in-cap trajectory.
-   Review failure sealing for unexpected child-created links, special files,
-   or more than 32 files; this candidate currently rejects them and may lack a
-   terminal receipt in those adversarial cases. The admitted child must not
-   create them.
+   Unexpected child-created links, special files, directories, or excess files
+   are treated as invalid evidence and removed to make a bounded terminal
+   receipt; the admitted child must not create them. An NVML initialization or
+   process-spawn exception before the monitor loop can still leave a consumed
+   attempt without a terminal receipt and needs a separate prelaunch failure
+   wrapper before GO.
 4. After a permitted run, an independent saved auditor must rehash all files,
    reconstruct every poll interval, checkpoint order, baseline and step-400
    stop, evidence truncations, cap status, and terminal receipt before making

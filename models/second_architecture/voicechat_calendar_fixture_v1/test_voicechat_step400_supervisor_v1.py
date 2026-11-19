@@ -130,6 +130,71 @@ time.sleep(5)
         self.assertTrue(result["truncated_evidence"])
         self.assertLessEqual(retained, 32768)
 
+    def test_child_symlink_is_removed_and_failure_receipt_survives(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            target = root / "outside.txt"
+            target.write_text("untouched")
+            script = ("import os,time; "
+                      "os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01'); "
+                      f"os.symlink({str(target)!r},'junk.link'); time.sleep(5)")
+            output = root / "attempt"
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=output, staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            self.assertTrue((output / "parent_result.json").is_file())
+            self.assertFalse((output / "junk.link").exists())
+            self.assertEqual(target.read_text(), "untouched")
+            self.assertEqual(result["status"], "invalid_or_partial")
+            self.assertEqual(result["sanitization"]["removed_count"], 1)
+
+    def test_thirty_three_child_files_get_bounded_failure_receipt(self):
+        script = """import os,time
+os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01')
+for i in range(33):
+    open('extra_%02d.bin'%i,'wb').write(b'x')
+time.sleep(5)
+"""
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            output = root / "attempt"
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=output, staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            self.assertTrue((output / "parent_result.json").is_file())
+            self.assertEqual(result["status"], "invalid_or_partial")
+            self.assertGreaterEqual(result["sanitization"]["removed_count"], 5)
+            self.assertLessEqual(len(list(output.iterdir())), 32)
+
+    def test_exited_child_cannot_leave_session_descendant_running(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            staged = root / "staged"
+            staged.mkdir()
+            marker = root / "descendant_survived.txt"
+            grandchild = ("import time,pathlib; time.sleep(.8); "
+                          f"pathlib.Path({str(marker)!r}).write_text('survived')")
+            script = ("import os,subprocess,sys; "
+                      "os.write(int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']),b'\\x01'); "
+                      f"subprocess.Popen([sys.executable,'-c',{grandchild!r}],"
+                      "stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,close_fds=True)")
+            result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=os.environ.copy(),
+                output_dir=root / "attempt", staged_checkpoint_dir=staged,
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            time.sleep(.9)
+            self.assertFalse(marker.exists())
+            self.assertEqual(result["status"], "bounded_child_complete_pending_saved_audit")
+
 
 if __name__ == "__main__":
     unittest.main()

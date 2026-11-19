@@ -11,6 +11,7 @@ import resource
 import selectors
 import shutil
 import signal
+import stat
 import subprocess
 import time
 from dataclasses import dataclass
@@ -65,17 +66,66 @@ def _inventory(root: Path) -> tuple[dict[str, dict], int]:
     return rows, total
 
 
+def _evidence_priority(name: str) -> tuple[int, str]:
+    return (0 if name == "gpu_poll.jsonl" else
+            1 if name.endswith("checkpoints.jsonl") else
+            2 if name in {"stdout.log", "stderr.log"} else 3, name)
+
+
+def _sanitize_evidence(root: Path) -> dict[str, object]:
+    """After the child stops, remove unsafe entries without following links.
+
+    The step-400 worker's evidence is flat. Child-created directories and
+    special entries are out of scope and cannot be opened by the sealer.
+    """
+    import hashlib
+
+    removed: list[dict[str, str]] = []
+    removed_count = 0
+
+    def note(name: str, kind: str) -> None:
+        nonlocal removed_count
+        removed_count += 1
+        if len(removed) < 32:
+            removed.append({"name_prefix": name[:128], "name_sha256":
+                            hashlib.sha256(name.encode("utf-8", "surrogateescape")).hexdigest(),
+                            "kind": kind})
+
+    regular: list[str] = []
+    with os.scandir(root) as entries:
+        for entry in entries:
+            mode = entry.stat(follow_symlinks=False).st_mode
+            if stat.S_ISLNK(mode):
+                os.unlink(entry.path)
+                note(entry.name, "symlink_removed")
+            elif stat.S_ISDIR(mode):
+                # rmtree does not traverse directory symlinks; the child is
+                # already stopped, so this tree cannot be mutated by it.
+                shutil.rmtree(entry.path)
+                note(entry.name, "directory_removed")
+            elif not stat.S_ISREG(mode):
+                os.unlink(entry.path)
+                note(entry.name, "special_entry_removed")
+            elif len(entry.name) > 128 or entry.name == "parent_result.json":
+                os.unlink(entry.path)
+                note(entry.name, "reserved_or_long_name_removed")
+            else:
+                regular.append(entry.name)
+    # Leave one inventory slot for the parent's terminal receipt.
+    for name in sorted(regular, key=_evidence_priority)[31:]:
+        os.unlink(root / name)
+        note(name, "excess_file_removed")
+    return {"removed_count": removed_count, "removed_entries_first_32": removed}
+
+
 def _retain_within_budget(root: Path, budget: int) -> list[dict[str, int | str]]:
     """After a killed child, preserve bounded prefixes with explicit truncations."""
     files, total = _inventory(root)
     if total <= budget:
         return []
-    priority = lambda name: (0 if name == "gpu_poll.jsonl" else
-                             1 if name.endswith("checkpoints.jsonl") else
-                             2 if name.endswith(".log") else 3, name)
     retained = 0
     truncations: list[dict[str, int | str]] = []
-    for name in sorted(files, key=priority):
+    for name in sorted(files, key=_evidence_priority):
         path = root / name
         before = files[name]["bytes"]
         allowed = min(before, max(0, budget - retained))
@@ -201,8 +251,12 @@ def _drain(selector: selectors.BaseSelector, log_sizes: dict[str, int],
         assert path is not None
         if log_sizes[role] + len(block) > MAX_LOG_BYTES:
             return f"{role}_log_cap"
-        with path.open("ab") as stream:
-            stream.write(block)
+        log_fd = os.open(path, os.O_WRONLY | os.O_APPEND | os.O_NOFOLLOW)
+        try:
+            need(stat.S_ISREG(os.fstat(log_fd).st_mode), "log path no longer regular")
+            os.write(log_fd, block)
+        finally:
+            os.close(log_fd)
         log_sizes[role] += len(block)
     return None
 
@@ -261,6 +315,9 @@ def supervise_candidate(
         if gpu_sample is None:
             owned_sampler = NvmlGpuSampler()
             gpu_sample = owned_sampler
+        # NVML initialization is preflight, before the cap-monitor interval.
+        started = clock()
+        heartbeat["last"] = started
         process = subprocess.Popen(command, cwd=output_dir, env=child_env,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    pass_fds=(write_fd,), start_new_session=True,
@@ -334,9 +391,12 @@ def supervise_candidate(
         poll_stream.flush()
         os.fsync(poll_stream.fileno())
         poll_stream.close()
+        sanitization = _sanitize_evidence(output_dir)
         truncations = _retain_within_budget(
             output_dir, MAX_EVIDENCE_BYTES - TERMINAL_RESERVE_BYTES)
         _, final_bytes = _inventory(output_dir)
+        if sanitization["removed_count"]:
+            reason = reason or "unexpected_evidence_removed"
         if truncations:
             reason = reason or "evidence_cap_after_stop"
         if not model_pid_seen:
@@ -355,6 +415,7 @@ def supervise_candidate(
                   "model_pid_seen": model_pid_seen,
                   "heartbeat_count": heartbeat["count"],
                   "retained_evidence_bytes_before_parent_receipt": final_bytes,
+                  "sanitization": sanitization,
                   "truncated_evidence": truncations,
                   "evidence_inventory_before_parent_receipt": _hash_inventory(output_dir),
                   "output_dir": str(output_dir)}
