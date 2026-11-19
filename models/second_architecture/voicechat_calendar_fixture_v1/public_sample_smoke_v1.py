@@ -18,6 +18,7 @@ import platform
 import re
 import resource
 import selectors
+import shutil
 import signal
 import stat
 import subprocess
@@ -42,6 +43,7 @@ SAMPLE_BYTES = {SAMPLE_WAV: 384_652, SAMPLE_RESPONSE: 82}
 AMENDMENT_SHA256 = "9e4fe95f0f3828c8bedfb6d36705a5824feffcb34854371ba6450e0ddb9b8be3"
 MAX_WALL_SECONDS = 1_800
 MAX_VRAM_MIB = 75_000
+H200_MAX_VRAM_MIB = 130_000
 MAX_EVIDENCE_BYTES = 1 << 30
 MIN_EVIDENCE_BYTES = 65_536
 TERMINAL_RESERVE_BYTES = 16_384
@@ -78,6 +80,7 @@ SOURCE_FILES = {
     "amendment": HERE / "VOICECHAT_PUBLIC_SAMPLE_SMOKE_AMENDMENT_V1.md",
     "concept_review": HERE / "VOICECHAT_PUBLIC_SAMPLE_SMOKE_AMENDMENT_INDEPENDENT_CONCEPTUAL_REVIEW_GO_V1.md",
     "native_amendment": HERE / "VOICECHAT_PUBLIC_SAMPLE_NATIVE_FFMPEG_AMENDMENT_V4.md",
+    "h200_amendment": HERE / "VOICECHAT_PUBLIC_SAMPLE_H200_AMENDMENT_V5.md",
 }
 
 
@@ -504,7 +507,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
     paths = [nemo_dir, checkpoint_dir, nano_home, output_dir]
     require(all(path.is_absolute() and path == path.resolve() for path in paths),
             "Freeze paths must be absolute and resolved")
-    require(gpu_policy in ("h100", "a100-80gb"), "GPU policy invalid")
+    require(gpu_policy in ("h100", "a100-80gb", "h200-141gb"), "GPU policy invalid")
     require(hash_file(SOURCE_FILES["amendment"])[0] == AMENDMENT_SHA256,
             "Sample-only amendment changed")
     require(hash_file(SOURCE_FILES["preflight"])[0] == "6233cc01b6bbd69b71aa978f3b2dabc0210bf6175faf4f34bf73eb44ead586a0",
@@ -555,7 +558,9 @@ def validate_freeze(freeze_path: Path, review_path: Path,
     require(type(caps) is dict and set(caps) == {"wall_seconds", "vram_mib", "total_evidence_bytes"}
             and all(type(value) is int and value > 0 for value in caps.values())
             and caps["wall_seconds"] <= MAX_WALL_SECONDS
-            and caps["vram_mib"] <= MAX_VRAM_MIB
+            and caps["vram_mib"] <= (H200_MAX_VRAM_MIB
+                                    if expected["gpu_policy"] == "h200-141gb"
+                                    else MAX_VRAM_MIB)
             and MIN_EVIDENCE_BYTES <= caps["total_evidence_bytes"] <= MAX_EVIDENCE_BYTES,
             "Sample-only caps invalid or relaxed")
     source_review = freeze["source_review"]
@@ -593,6 +598,39 @@ def validate_freeze(freeze_path: Path, review_path: Path,
     return freeze, review, sha(raw)
 
 
+def check_h200_sample_runtime(checkpoint_dir: Path) -> dict[str, Any]:
+    """Sample-only H200 counterpart to the unchanged shared runtime check."""
+    require(sys.version_info[:2] == (3, 12), "Python 3.12 required")
+    versions: dict[str, str] = {}
+    for package, expected in pinned.PINNED_PACKAGES.items():
+        actual = importlib.metadata.version(package)
+        require(actual == expected, f"{package} version {actual}, expected {expected}")
+        versions[package] = actual
+    weight = checkpoint_dir / "model.safetensors"
+    require(weight.is_file() and weight.stat().st_size == pinned.WEIGHT_BYTES,
+            "checkpoint size/missing")
+    pinned.check_file(weight, pinned.WEIGHT_SHA256)
+    gpu = subprocess.run(
+        ["nvidia-smi", "--query-gpu=name,memory.total", "--format=csv,noheader,nounits"],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip().splitlines()
+    require(len(gpu) == 1, "expected exactly one GPU")
+    fields = [part.strip() for part in gpu[0].split(",")]
+    require(len(fields) == 2 and fields[1].isdigit(), "GPU inventory malformed")
+    name, memory = fields
+    require("H200" in name and int(memory) >= H200_MAX_VRAM_MIB,
+            f"H200 >= {H200_MAX_VRAM_MIB:,} MiB required; got {gpu[0]}")
+    free_bytes = shutil.disk_usage(checkpoint_dir).free
+    require(free_bytes >= 60 * 1024**3,
+            "less than 60 GiB disk free after checkpoint staging")
+    return {"weight_bytes": pinned.WEIGHT_BYTES,
+            "weight_sha256": pinned.WEIGHT_SHA256,
+            "gpu_policy": "h200-141gb", "gpu": name,
+            "gpu_memory_mib": int(memory),
+            "disk_free_gib": round(free_bytes / 1024**3, 1),
+            "pinned_packages_verified": versions}
+
+
 def sample_ready_preload(nemo_dir: Path, checkpoint_dir: Path,
                          nano_home: Path, gpu_policy: str,
                          checks: Any = pinned) -> dict[str, Any]:
@@ -606,7 +644,9 @@ def sample_ready_preload(nemo_dir: Path, checkpoint_dir: Path,
         sample = check_sample(nemo_dir)
         nano = checks.check_nano_cache(nano_home)
         nano_ref = check_exact_nano_ref(nano_home)
-        runtime = checks.check_runtime(checkpoint_dir, gpu_policy)
+        runtime = (check_h200_sample_runtime(checkpoint_dir)
+                   if checks is pinned and gpu_policy == "h200-141gb"
+                   else checks.check_runtime(checkpoint_dir, gpu_policy))
         if phase == "ready":
             checks.check_pristine_modules_cache(nano_home)
             offline = checks.verify_nano_offline(nano_home)
@@ -990,7 +1030,8 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--freeze", type=Path, required=True)
     parser.add_argument("--freeze-review", type=Path, required=True)
-    parser.add_argument("--gpu-policy", choices=("h100", "a100-80gb"), default="h100")
+    parser.add_argument("--gpu-policy", choices=("h100", "a100-80gb", "h200-141gb"),
+                        default="h100")
     args = parser.parse_args()
     key_hex = os.environ.get("VOICECHAT_SAMPLE_FREEZE_REVIEW_KEY_HEX", "")
     try:

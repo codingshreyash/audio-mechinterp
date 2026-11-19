@@ -10,6 +10,7 @@ import os
 import sys
 import tempfile
 import unittest
+from contextlib import ExitStack
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -87,9 +88,10 @@ class SampleSmokeTests(unittest.TestCase):
         self.addCleanup(self.native_receipt.stop)
         self.calls: list[list[str]] = []
 
-    def freeze(self, *, cap: int = 65536):
+    def freeze(self, *, cap: int = 65536, gpu_policy: str = "h100",
+               vram_mib: int = 1000):
         expected = smoke.expected_freeze_fields(
-            self.nemo, self.checkpoint, self.nano, self.out, "h100")
+            self.nemo, self.checkpoint, self.nano, self.out, gpu_policy)
         source_record = {"schema": "voicechat_public_sample_source_review_v1",
                          "decision": "GO", "source_sha256": expected["source_sha256"],
                          "reviewer_id": "synthetic-source-reviewer",
@@ -99,7 +101,7 @@ class SampleSmokeTests(unittest.TestCase):
         freeze = {"schema": "voicechat_public_sample_smoke_freeze_v1",
                   "status": "externally_frozen_sample_only", "run_id": self.out.name,
                   "expected": expected,
-                  "caps": {"wall_seconds": 10, "vram_mib": 1000,
+                  "caps": {"wall_seconds": 10, "vram_mib": vram_mib,
                            "total_evidence_bytes": cap},
                   "source_review": {"path": str(self.source_review_path),
                                     "sha256": source_review_sha}}
@@ -130,11 +132,11 @@ class SampleSmokeTests(unittest.TestCase):
         return {"returncode": 0, "process_id": 100, "elapsed_monotonic_seconds": .1,
                 "peak_vram_mib": 10, "cap_reason": None, "logs_complete": True}
 
-    def run_fake(self, checks=None, executor=None):
+    def run_fake(self, checks=None, executor=None, gpu_policy: str = "h100"):
         return smoke.run_sample(
             nemo_dir=self.nemo, checkpoint_dir=self.checkpoint, nano_home=self.nano,
             output_dir=self.out, freeze_path=self.freeze_path,
-            review_path=self.review_path, gpu_policy="h100", review_key=self.key,
+            review_path=self.review_path, gpu_policy=gpu_policy, review_key=self.key,
             checks=checks or FakeChecks(), executor=executor or self.fake_executor)
 
     def test_four_argument_official_sample_and_saved_evidence(self):
@@ -365,6 +367,75 @@ class SampleSmokeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "File exceeds cap"):
             self.run_fake()
         self.assertFalse(self.out.exists())
+
+    def test_h200_sample_freeze_cap_and_old_gpu_caps(self):
+        self.freeze(cap=1 << 20, gpu_policy="h200-141gb", vram_mib=130_000)
+        self.assertEqual(json.loads(self.freeze_path.read_text())["expected"]["gpu_policy"],
+                         "h200-141gb")
+        self.run_fake(gpu_policy="h200-141gb")
+        self.assertEqual(len(self.calls), 1)
+
+        self.out = self.root / "run0002"
+        self.freeze(cap=1 << 20, gpu_policy="h200-141gb", vram_mib=130_001)
+        with self.assertRaisesRegex(ValueError, "caps invalid"):
+            self.run_fake(gpu_policy="h200-141gb")
+        self.assertFalse(self.out.exists())
+
+        self.out = self.root / "run0003"
+        self.freeze(cap=1 << 20, gpu_policy="h100", vram_mib=75_001)
+        with self.assertRaisesRegex(ValueError, "caps invalid"):
+            self.run_fake()
+        self.assertFalse(self.out.exists())
+
+    def test_sample_only_h200_runtime_checks_single_gpu_checkpoint_and_disk(self):
+        weight = self.checkpoint / "model.safetensors"
+        weight.write_bytes(b"abc")
+        with patch.multiple(smoke.pinned, WEIGHT_BYTES=3,
+                            WEIGHT_SHA256=smoke.sha(b"abc"),
+                            PINNED_PACKAGES={"synthetic-package": "1.0"}), \
+             patch.object(smoke.sys, "version_info", (3, 12, 0)), \
+             patch.object(smoke.importlib.metadata, "version", return_value="1.0"), \
+             patch.object(smoke.subprocess, "run", return_value=SimpleNamespace(
+                 stdout="NVIDIA H200 141GB HBM3e, 141000\n")) as smi, \
+             patch.object(smoke.shutil, "disk_usage", return_value=SimpleNamespace(
+                 free=80 * 1024**3)) as disk:
+            receipt = smoke.check_h200_sample_runtime(self.checkpoint)
+            self.assertEqual(receipt["gpu_policy"], "h200-141gb")
+            self.assertEqual(receipt["gpu_memory_mib"], 141_000)
+            self.assertEqual(receipt["pinned_packages_verified"],
+                             {"synthetic-package": "1.0"})
+            self.assertEqual(receipt["weight_sha256"], smoke.sha(b"abc"))
+            for bad, message in [("NVIDIA A100, 141000\n", "H200"),
+                                 ("NVIDIA H200, 129999\n", "H200"),
+                                 ("NVIDIA H200, 141000\nNVIDIA H200, 141000\n",
+                                  "exactly one GPU")]:
+                with self.subTest(bad=bad):
+                    smi.return_value = SimpleNamespace(stdout=bad)
+                    with self.assertRaisesRegex(ValueError, message):
+                        smoke.check_h200_sample_runtime(self.checkpoint)
+            smi.return_value = SimpleNamespace(stdout="NVIDIA H200, 141000\n")
+            disk.return_value = SimpleNamespace(free=59 * 1024**3)
+            with self.assertRaisesRegex(ValueError, "less than 60 GiB"):
+                smoke.check_h200_sample_runtime(self.checkpoint)
+
+    def test_h200_ready_preload_uses_sample_only_runtime_not_shared_gpu_policy(self):
+        names = ("check_source", "check_nano_cache", "check_pristine_modules_cache",
+                 "verify_nano_offline", "check_preload_environment",
+                 "check_generated_modules_cache")
+        with ExitStack() as stack:
+            for name in names:
+                stack.enter_context(patch.object(smoke.pinned, name, return_value={}))
+            shared_runtime = stack.enter_context(patch.object(
+                smoke.pinned, "check_runtime", side_effect=AssertionError(
+                    "shared runtime must not admit H200")))
+            h200_runtime = stack.enter_context(patch.object(
+                smoke, "check_h200_sample_runtime",
+                return_value={"gpu_policy": "h200-141gb", "gpu": "NVIDIA H200"}))
+            result = smoke.sample_ready_preload(
+                self.nemo, self.checkpoint, self.nano, "h200-141gb", checks=smoke.pinned)
+        self.assertEqual(result["status"], "sample_only_ready_preload_passed_no_model_work")
+        self.assertEqual(h200_runtime.call_count, 2)
+        shared_runtime.assert_not_called()
 
     def test_native_ffmpeg_drift_rejected_before_output_and_after_preload(self):
         self.freeze()
