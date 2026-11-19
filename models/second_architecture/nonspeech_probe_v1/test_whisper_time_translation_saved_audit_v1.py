@@ -2,6 +2,11 @@
 from __future__ import annotations
 
 import unittest
+import tempfile
+import wave
+from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 import numpy as np
 
@@ -25,6 +30,36 @@ def row(layout: str, site: str, region: str, location: str, kind: str,
 
 
 class SavedAuditTests(unittest.TestCase):
+    def test_frozen_wav_full_mel_binding_rejects_boundary_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pcm = np.arange(16, dtype="<i2").tobytes()
+            wav = root / "frozen.wav"
+            with wave.open(str(wav), "wb") as output:
+                output.setnchannels(1)
+                output.setsampwidth(2)
+                output.setframerate(16_000)
+                output.writeframes(pcm)
+            item = {"input": {"wav": wav.name, "frames": 16,
+                              "wav_sha256": audit.gate.sha(wav),
+                              "pcm_sha256": worker.hashlib.sha256(pcm).hexdigest()}}
+            mel = np.zeros((80, 3000), dtype=np.float32)
+            mask = np.zeros(3000, dtype=np.int64)
+            class FakeProcessor:
+                def __call__(self, samples, **kwargs):
+                    return SimpleNamespace(input_features=mel[None],
+                                           attention_mask=mask[None])
+            checked = {"mel": mel.copy(), "mask": mask.copy()}
+            audit.verify_baseline_source(item, checked, FakeProcessor(), root)
+            checked["mel"][0, 1000] = 0.01  # Outside the predeclared interior checks.
+            with self.assertRaisesRegex(ValueError, "full mel/mask"):
+                audit.verify_baseline_source(item, checked, FakeProcessor(), root)
+            checked["mel"][0, 1000] = 0
+            with wav.open("ab") as stream:
+                stream.write(b"x")
+            with self.assertRaisesRegex(ValueError, "WAV hash"):
+                audit.verify_baseline_source(item, checked, FakeProcessor(), root)
+
     def test_joint_decision_requires_original_isolated_viability(self) -> None:
         identity = {"frozen": "same"}
         original = {"schema": "whisper_time_translation_saved_audit_v1",
@@ -43,14 +78,21 @@ class SavedAuditTests(unittest.TestCase):
                         {"site": site, "region": region,
                          "strict_translated_crossover": True}
                         for region, site in plan.TRANSLATED_WINDOWS]}}
-        result = audit.join_reports(original, translated("offset_8000"),
+        result = audit._join_verified_reports(original, translated("offset_8000"),
                                     translated("offset_16000"))
         self.assertEqual(result["union_qualified_count_out_of_4"], 4)
         self.assertEqual(result["isolated_source_tail_qualified_count_out_of_2"], 0)
         original["summary"]["original_qualified"]["post_conv_pos:source_tail"] = True
-        result = audit.join_reports(original, translated("offset_8000"),
+        result = audit._join_verified_reports(original, translated("offset_8000"),
                                     translated("offset_16000"))
         self.assertEqual(result["isolated_source_tail_qualified_count_out_of_2"], 2)
+
+    def test_joint_entrypoint_reaudits_fixed_raw_attempts(self) -> None:
+        with mock.patch.object(audit, "audit", side_effect=ValueError("tampered raw evidence")) as rerun:
+            with self.assertRaisesRegex(ValueError, "tampered raw evidence"):
+                audit.audit_joint()
+            rerun.assert_called_once_with("original", audit.gate.ADMISSIONS["original"],
+                                          audit.gate.GOS["original"])
 
     def test_no_contrast_skips_all_crossover_claims(self) -> None:
         baselines = {(layout, kind): checked(10 if kind == "zero" else 20, 1)

@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import wave
 from datetime import datetime
 from pathlib import Path
 
@@ -175,6 +176,37 @@ def _same_complete(left: dict, right: dict) -> bool:
     return worker._complete(left["output"]) and left["output"]["sequence_ids"] == right["output"]["sequence_ids"]
 
 
+def verify_baseline_source(item: dict, checked: dict, processor: object,
+                           source_dir: Path) -> None:
+    """Independently bind a full saved baseline tensor to the frozen WAV."""
+    descriptor = item["input"]
+    name = descriptor["wav"]
+    need(type(name) is str and name == Path(name).name, "frozen WAV name invalid")
+    path = source_dir / name
+    need(path.is_file() and not path.is_symlink()
+         and gate.sha(path) == descriptor["wav_sha256"],
+         "frozen baseline WAV hash changed")
+    with wave.open(str(path), "rb") as audio:
+        frames = descriptor["frames"]
+        need((audio.getnchannels(), audio.getsampwidth(), audio.getframerate(),
+              audio.getnframes()) == (1, 2, 16_000, frames),
+             "frozen baseline WAV geometry changed")
+        pcm = audio.readframes(frames)
+    need(len(pcm) == frames * 2, "frozen baseline PCM truncated")
+    if "pcm_sha256" in descriptor:
+        need(worker.hashlib.sha256(pcm).hexdigest() == descriptor["pcm_sha256"],
+             "frozen baseline PCM hash changed")
+    samples = np.frombuffer(pcm, dtype="<i2").astype(np.float32) / np.float32(32768)
+    processed = processor(samples, sampling_rate=16_000, return_tensors="np",
+                          return_attention_mask=True)
+    mel = np.asarray(processed.input_features)[0]
+    mask = np.asarray(processed.attention_mask)[0]
+    need(mel.shape == (80, 3000) and mask.shape == (3000,)
+         and np.array_equal(mel, checked["mel"])
+         and np.array_equal(mask, checked["mask"]),
+         "saved baseline full mel/mask differs from frozen WAV")
+
+
 def summarize(stage: str, calls: list[dict], evidence: list[dict],
               baselines: dict, eligibility: dict, mel_shift: dict) -> dict:
     keyed = {(row["plan"]["layout"], row["plan"]["site"],
@@ -233,8 +265,8 @@ def summarize(stage: str, calls: list[dict], evidence: list[dict],
             "note": "A later cross-attempt audit must join original viability; no isolated tracking or security claim follows from one attempt."}
 
 
-def join_reports(original: dict, offset_8000: dict, offset_16000: dict) -> dict:
-    """Apply the frozen cross-attempt decision rule to three saved-audit outputs."""
+def _join_verified_reports(original: dict, offset_8000: dict, offset_16000: dict) -> dict:
+    """Apply the decision rule only to outputs freshly made by audit()."""
     reports = (original, offset_8000, offset_16000)
     need(all(item.get("schema") == "whisper_time_translation_saved_audit_v1"
              and item.get("status") == "PASS" for item in reports)
@@ -272,6 +304,13 @@ def join_reports(original: dict, offset_8000: dict, offset_16000: dict) -> dict:
             "interpretation_limit": "Engineered non-speech pair only; qualified timing-linked behavior does not uniquely identify a circuit or establish a security problem."}
 
 
+def audit_joint() -> dict:
+    """Reaudit all three fixed attempts before computing any joint claim."""
+    verified = [audit(stage, gate.ADMISSIONS[stage], gate.GOS[stage])
+                for stage in gate.STAGES]
+    return _join_verified_reports(*verified)
+
+
 def audit(stage: str, admission: Path, go: Path) -> dict:
     receipt = gate.validate_go(stage, admission, go)
     attempt = gate.ATTEMPTS[stage]
@@ -287,6 +326,15 @@ def audit(stage: str, admission: Path, go: Path) -> dict:
     evidence = []
     config = json.loads((Path(receipt["v4_admission"]["assets"]["snapshot"])
                          / "generation_config.json").read_text())
+    from transformers import WhisperProcessor
+    assets = receipt["v4_admission"]["assets"]
+    snapshot = Path(assets["snapshot"])
+    need(snapshot.is_dir() and not snapshot.is_symlink()
+         and snapshot.name == assets["revision"]
+         and all(gate.sha(snapshot / name) == digest for name, digest in
+                 assets["files_sha256"].items() if name != "model.safetensors"),
+         "pinned processor assets changed")
+    processor = WhisperProcessor.from_pretrained(snapshot, local_files_only=True)
     baseline_plan = worker.baselines_for(stage, frozen)
     for index, row in enumerate(rows[:-1], 1):
         need(row["type"] == "call" and row["index"] == index, "call order invalid")
@@ -302,6 +350,9 @@ def audit(stage: str, admission: Path, go: Path) -> dict:
         layout = call["layout"]
         if call["type"] == "baseline":
             kind = call["variant"]
+            verify_baseline_source(call, checked, processor,
+                                   worker.v4.RENDER if stage == "original"
+                                   else worker.source.OUTPUT)
             if stage == "original":
                 worker._original_parity(call, row["output"], attempt / "sidecars")
             refs = row["state_refs"]
@@ -368,13 +419,12 @@ def main() -> None:
     parser.add_argument("--stage", choices=gate.STAGES)
     parser.add_argument("--admission", type=Path)
     parser.add_argument("--go", type=Path)
-    parser.add_argument("--join-reports", nargs=3, type=Path)
+    parser.add_argument("--join", action="store_true")
     args = parser.parse_args()
-    if args.join_reports:
+    if args.join:
         need(args.stage is None and args.admission is None and args.go is None,
-             "join mode takes only three saved audit reports")
-        reports = [json.loads(path.read_text()) for path in args.join_reports]
-        result = join_reports(*reports)
+             "join mode takes no stage or report paths")
+        result = audit_joint()
     else:
         need(args.stage is not None and args.admission is not None and args.go is not None,
              "stage, admission and GO required for one-attempt audit")

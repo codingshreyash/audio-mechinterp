@@ -22,13 +22,13 @@ An attempt writes `progress.jsonl` with attempted/completed pairs, `records.json
 
 `python -m models.second_architecture.nonspeech_probe_v1.whisper_time_translation_saved_audit_v1 --stage original --admission <fixed path> --go <fixed path>`
 
-Run it for each stage only after the parent says `completed_pending_saved_audit`. It verifies the parent receipt and host/resource traces, plan order and skips, exact sidecar bytes and geometry, complete EOS paths, original V4 replay, translated mel shift, unchanged detection and input, and every edited hook row against the frozen donor/recipient states. `PASS` means the saved evidence is internally consistent. It is not an affirmative mechanistic or security finding. The three audit outputs must be joined under the prospective decision rule; if any stage is missing or fails audit, no cross-stage claim is available.
+Run it for each stage only after the parent says `completed_pending_saved_audit`. It verifies the parent receipt and host/resource traces, plan order and skips, exact sidecar bytes and geometry, complete EOS paths, original V4 replay, translated mel shift, unchanged detection and input, and every edited hook row against the frozen donor/recipient states. For each baseline it also rehashes the frozen WAV and recomputes the **entire** mel and mask using the pinned local Whisper processor without loading model weights; the saved tensors must match bitwise. `PASS` means the saved evidence is internally consistent. It is not an affirmative mechanistic or security finding. The three audit outputs must be joined under the prospective decision rule; if any stage is missing or fails audit, no cross-stage claim is available.
 
-Save the three `PASS` JSON outputs in original, 8,000, and 16,000 order, then run the no-weight joint decision:
+After all three one-attempt audits pass, run the no-weight joint decision:
 
-`python -m models.second_architecture.nonspeech_probe_v1.whisper_time_translation_saved_audit_v1 --join-reports <original-audit.json> <offset-8000-audit.json> <offset-16000-audit.json>`
+`python -m models.second_architecture.nonspeech_probe_v1.whisper_time_translation_saved_audit_v1 --join`
 
-This requires all three matching source identities and reports the four union/site/offset cells and two isolated source/tail/offset cells separately. Original isolated viability gates the latter; the original tail/end result remains separate. It will not label a security vulnerability.
+Joint mode reaudits all three fixed raw attempts against their committed admission and GO, then requires matching source identities. It does not trust user-supplied `PASS` JSON summaries. It reports the four union/site/offset cells and two isolated source/tail/offset cells separately. Original isolated viability gates the latter; the original tail/end result remains separate. It will not label a security vulnerability.
 
 ## Source-only verification
 
