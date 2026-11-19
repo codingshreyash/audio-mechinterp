@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import tempfile
+import subprocess
+import sys
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -41,14 +43,40 @@ class CandidateTests(unittest.TestCase):
         process = mock.Mock()
         process.poll.return_value = None
         process.communicate.return_value = ("", "")
-        with mock.patch.object(gate, "validate_go", return_value={}), \
-             mock.patch.object(whisper_tail_causal_host_v1, "quick_probe",
-                               return_value={"external_connected": True}), \
-             mock.patch.object(runner.subprocess, "Popen", return_value=process), \
-             mock.patch.object(runner.time, "monotonic", side_effect=(0.0, 7201.0)):
-            with self.assertRaisesRegex(RuntimeError, "wall_limit"):
-                runner.run()
+        with tempfile.TemporaryDirectory() as temporary:
+            attempt = Path(temporary) / "attempt_001"
+            with mock.patch.object(gate, "ATTEMPT", attempt), \
+                 mock.patch.object(gate, "validate_go", return_value={"go_sha256": "a" * 64}), \
+                 mock.patch.object(whisper_tail_causal_host_v1, "quick_probe",
+                                   return_value={"external_connected": True}), \
+                 mock.patch.object(runner.subprocess, "Popen", return_value=process), \
+                 mock.patch.object(runner.os, "write",
+                                   side_effect=lambda _fd, data: len(data)), \
+                 mock.patch.object(runner.time, "monotonic", side_effect=(0.0, 7201.0)):
+                with self.assertRaisesRegex(RuntimeError, "wall_limit"):
+                    runner.run()
+                self.assertTrue((attempt / "parent_stop.json").is_file())
         process.terminate.assert_called_once()
+
+    def test_direct_worker_has_no_parent_live_channel(self) -> None:
+        with mock.patch.object(gate, "validate_go") as validate, \
+             mock.patch.object(runner, "_target") as target:
+            with self.assertRaisesRegex(ValueError, "parent live channel required"):
+                runner._worker_authorized(None, None)
+            with self.assertRaisesRegex(ValueError, "parent PID mismatch"):
+                runner._worker_authorized(7, 999999)
+            validate.assert_not_called()
+            target.assert_not_called()
+        self.assertFalse(gate.ATTEMPT.exists())
+
+    def test_direct_worker_cli_exits_before_attempt(self) -> None:
+        result = subprocess.run(
+            (sys.executable, "-m", "eval.human_audio_v1.whisper_human_candidate_runner_v1",
+             "worker", "--live-fd", "-1", "--parent-pid", "1"),
+            cwd=gate.ROOT, capture_output=True, text=True, timeout=20)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("parent live channel required", result.stderr)
+        self.assertFalse(gate.ATTEMPT.exists())
 
     def test_admission_does_not_accept_fake_human_receipt(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -95,6 +123,15 @@ class CandidateTests(unittest.TestCase):
         self.assertNotIn("sealed_test", str(gate.ATTEMPT))
         self.assertEqual(gate.DECODE["language"], None)
         self.assertFalse(gate.DECODE["do_sample"])
+
+    def test_source_receipt_bytes_and_pass_status_are_pinned(self) -> None:
+        self.assertEqual(gate.source_receipts(), gate.SOURCE_RECEIPT_HASHES)
+        review = gate.HERE / "WHISPER_HUMAN_SPEECH_PLAN_INDEPENDENT_SOURCE_REVIEW_V1.md"
+        actual_sha = gate.sha
+        with mock.patch.object(gate, "sha", side_effect=lambda path:
+                               "0" * 64 if path == review else actual_sha(path)):
+            with self.assertRaisesRegex(ValueError, "source receipt bytes changed"):
+                gate.source_receipts()
 
     def test_encoder_patch_edits_only_selected_rows(self) -> None:
         import numpy as np

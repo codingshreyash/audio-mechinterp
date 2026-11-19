@@ -29,6 +29,9 @@ SOURCES = (
     "WHISPER_HUMAN_CANDIDATE_HANDOFF_V1.md",
     "human_review_intake_v2.py",
     "blinded_listening_v1.py",
+    "SOURCE_AUDIT_V1.json",
+    "SOURCE_INDEPENDENT_TECHNICAL_REVIEW_V1.md",
+    "WHISPER_HUMAN_SPEECH_PLAN_INDEPENDENT_SOURCE_REVIEW_V1.md",
 )
 EXTERNAL_SOURCES = (
     ROOT / "models/second_architecture/nonspeech_probe_v1/descriptive_worker_v1.py",
@@ -42,6 +45,11 @@ LIMITS = {"wall_seconds": 7200, "worker_rss_bytes": 4 * 1024**3,
 DECODE = {"task": "transcribe", "language": None, "do_sample": False,
           "num_beams": 1, "condition_on_prev_tokens": False,
           "return_timestamps": False, "max_new_tokens": 128}
+SOURCE_RECEIPT_HASHES = {
+    "SOURCE_AUDIT_V1.json": "f8b36f626dc3a813adcba8965f9cc0ada2c3b4406137f8085bee24a686ec0661",
+    "SOURCE_INDEPENDENT_TECHNICAL_REVIEW_V1.md": "2ddd3d7d4d1a57f545a4d07572112db17a58c64da9c889d5f136c22e16fb90fe",
+    "WHISPER_HUMAN_SPEECH_PLAN_INDEPENDENT_SOURCE_REVIEW_V1.md": "f94f2da35a6a620a535ce24d38b2df34cfae7a502f83598b9b21fc758bccd32e",
+}
 
 
 def need(ok: bool, message: str) -> None:
@@ -90,10 +98,32 @@ def sources() -> dict[str, str]:
     return {rel(path): sha(path) for path in source_paths()}
 
 
+def source_receipts() -> dict[str, str]:
+    for name, expected in SOURCE_RECEIPT_HASHES.items():
+        path = HERE / name
+        need(path.is_file() and not path.is_symlink() and sha(path) == expected,
+             f"independent source receipt bytes changed: {name}")
+    receipt = json.loads((HERE / "SOURCE_AUDIT_V1.json").read_text())
+    need(receipt.get("schema") == "human_audio_source_audit_v1"
+         and receipt.get("status") == "PASS"
+         and receipt.get("wavs") == 16
+         and receipt.get("source_recordings") == 4
+         and receipt.get("manifest_sha256") == sha(frozen.MANIFEST),
+         "source audit PASS/census or manifest changed")
+    technical = (HERE / "SOURCE_INDEPENDENT_TECHNICAL_REVIEW_V1.md").read_text()
+    review = (HERE / "WHISPER_HUMAN_SPEECH_PLAN_INDEPENDENT_SOURCE_REVIEW_V1.md").read_text()
+    need("**PASS for source provenance" in technical
+         and "**GO for the frozen source-only plan" in review
+         and "HOLD target Whisper inference" in review,
+         "independent source review status changed")
+    return dict(SOURCE_RECEIPT_HASHES)
+
+
 def admission(*, third: Path, a: Path, b: Path, c: Path | None,
               receipt: Path) -> dict:
     """Build only after real listening exports pass the existing V2 intake."""
     identity = sources()
+    receipt_hashes = source_receipts()
     preflight = frozen.readiness(third=third, a=a, b=b, c=c, receipt=receipt)
     need(preflight["status"] == "HOLD_NO_TARGET_INFERENCE"
          and "listening" in preflight, "reviewed listening unavailable")
@@ -106,6 +136,7 @@ def admission(*, third: Path, a: Path, b: Path, c: Path | None,
         "wav_sha256": {row["wav"]: row["wav_sha256"] for row in frozen.frozen_plan()["calls"]},
         "proxy_audit_sha256": sha(frozen.PROXY_AUDIT),
         "proxy_review_sha256": sha(frozen.PROXY_REVIEW),
+        "source_receipt_sha256": receipt_hashes,
         "human_review": {"third_path": str(third.resolve()),
                          "a_path": str(a.resolve()), "b_path": str(b.resolve()),
                          "c_path": str(c.resolve()) if c else None,
@@ -131,7 +162,7 @@ def _ancestor(before: str, after: str) -> bool:
                           cwd=ROOT, capture_output=True).returncode == 0
 
 
-def validate_go() -> dict:
+def validate_go(*, parent_owned_attempt: bool = False) -> dict:
     """Require reviewed source/admission and an exact later committed GO."""
     for path in (ADMISSION, REVIEW, GO, *source_paths()):
         tracked_clean(path)
@@ -170,5 +201,11 @@ def validate_go() -> dict:
         prior = _last_commit(path, go_commit)
         need(prior != admission_commit and _ancestor(prior, admission_commit),
              f"source must precede admission: {path.name}")
-    need(not ATTEMPT.exists(), "one-shot attempt already exists")
+    if parent_owned_attempt:
+        need(ATTEMPT.is_dir() and not ATTEMPT.is_symlink()
+             and (ATTEMPT / "parent_launch.json").is_file(),
+             "parent-owned attempt missing")
+    else:
+        need(not ATTEMPT.exists() and not ATTEMPT.is_symlink(),
+             "one-shot attempt already exists")
     return {"admission": stored, "go_sha256": sha(GO), "go_commit": go_commit}

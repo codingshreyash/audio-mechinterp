@@ -11,8 +11,11 @@ import argparse
 import json
 import os
 import resource
+import secrets
+import select
 import subprocess
 import sys
+import threading
 import time
 import wave
 from pathlib import Path
@@ -55,6 +58,47 @@ def admission_cli(third: Path, a: Path, b: Path, c: Path | None,
     write_once(output, value)
     return {"status": value["status"], "path": str(output),
             "sha256": gate.sha(output)}
+
+
+def _worker_authorized(live_fd: int | None, parent_pid: int | None) -> dict:
+    """Require the parent-owned one-shot attempt and an inherited live pipe.
+
+    A raw `worker` CLI call cannot acquire this pipe/nonce from the parent.
+    The daemon listener exits the process if the supervising parent disappears.
+    All of this runs before any target model class or weight is imported.
+    """
+    need(type(live_fd) is int and live_fd >= 3
+         and type(parent_pid) is int and parent_pid > 1,
+         "parent live channel required")
+    need(os.getppid() == parent_pid, "worker parent PID mismatch")
+    attempt = gate.ATTEMPT
+    launch_path = attempt / "parent_launch.json"
+    need(attempt.is_dir() and not attempt.is_symlink()
+         and launch_path.is_file() and not launch_path.is_symlink(),
+         "parent launch record missing")
+    launch = json.loads(launch_path.read_text())
+    need(launch.get("schema") == "whisper_human_parent_launch_v1"
+         and launch.get("parent_pid") == parent_pid
+         and launch.get("attempt_path") == str(attempt)
+         and isinstance(launch.get("nonce_sha256"), str)
+         and len(launch["nonce_sha256"]) == 64,
+         "parent launch record invalid")
+    stream = os.fdopen(live_fd, "rb", buffering=0)
+    token = stream.readline(100)
+    need(len(token) == 65 and token.endswith(b"\n")
+         and gate.sha_bytes(token[:-1]) == launch["nonce_sha256"],
+         "parent nonce mismatch")
+
+    def heartbeat() -> None:
+        while True:
+            ready, _, _ = select.select([stream], [], [], 30)
+            if not ready or stream.readline(100) != b"beat\n":
+                os._exit(19)
+
+    threading.Thread(target=heartbeat, name="parent-live-channel", daemon=True).start()
+    go = gate.validate_go(parent_owned_attempt=True)
+    need(go["go_sha256"] == launch["go_sha256"], "parent GO identity mismatch")
+    return go
 
 
 class Budget:
@@ -340,8 +384,9 @@ def _target(go: dict) -> dict:
     need(old.verify_installed_sources() == go["admission"]["installed"],
          "installed source drift")
     attempt = gate.ATTEMPT
-    attempt.parent.mkdir(parents=True, exist_ok=True)
-    attempt.mkdir(exist_ok=False)
+    need(attempt.is_dir() and not attempt.is_symlink()
+         and (attempt / "parent_launch.json").is_file(),
+         "parent-owned one-shot attempt missing")
     (attempt / "sidecars").mkdir()
     write_once(attempt / "launch.json", {"go_sha256": go["go_sha256"],
                                           "go_commit": go["go_commit"],
@@ -478,19 +523,38 @@ def _target(go: dict) -> dict:
 
 def run() -> dict:
     """Bound the single worker live, including a hung forward pass."""
-    gate.validate_go()
+    go = gate.validate_go()
     from models.second_architecture.nonspeech_probe_v1 import whisper_tail_causal_host_v1 as host
 
     before = host.quick_probe(initial=True)
     need(before["external_connected"] is True, "AC power required")
+    attempt = gate.ATTEMPT
+    attempt.parent.mkdir(parents=True, exist_ok=True)
+    attempt.mkdir(exist_ok=False)
+    nonce = secrets.token_hex(32).encode("ascii")
+    write_once(attempt / "parent_launch.json",
+               {"schema": "whisper_human_parent_launch_v1",
+                "attempt_path": str(attempt), "parent_pid": os.getpid(),
+                "nonce_sha256": gate.sha_bytes(nonce),
+                "go_sha256": go["go_sha256"], "host_before": before})
     started = time.monotonic()
     last_host = started
-    process = subprocess.Popen(
-        (sys.executable, "-m", "eval.human_audio_v1.whisper_human_candidate_runner_v1",
-         "worker"), cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    read_fd, write_fd = os.pipe()
+    os.set_blocking(write_fd, False)
+    process = None
     reason = "unknown"
     peak_rss = 0
     try:
+        process = subprocess.Popen(
+            (sys.executable, "-m", "eval.human_audio_v1.whisper_human_candidate_runner_v1",
+             "worker", "--live-fd", str(read_fd), "--parent-pid", str(os.getpid())),
+            cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+            pass_fds=(read_fd,))
+        os.close(read_fd)
+        read_fd = -1
+        handshake = nonce + b"\nbeat\n"
+        need(os.write(write_fd, handshake) == len(handshake),
+             "parent live-channel handshake incomplete")
         while process.poll() is None:
             elapsed = time.monotonic() - started
             if elapsed > gate.LIMITS["wall_seconds"]:
@@ -516,6 +580,12 @@ def run() -> dict:
                 sample = host.quick_probe(initial=False)
                 need(sample["external_connected"] is True, "AC power lost")
                 last_host = time.monotonic()
+            try:
+                need(os.write(write_fd, b"beat\n") == 5,
+                     "parent heartbeat incomplete")
+            except (BrokenPipeError, BlockingIOError) as error:
+                reason = f"live_channel_{type(error).__name__}"
+                break
             time.sleep(0.25)
         if reason != "unknown":
             process.terminate()
@@ -540,7 +610,7 @@ def run() -> dict:
         result["peak_worker_rss_bytes"] = peak_rss
         return result
     except BaseException:
-        if reason == "unknown" and process.poll() is None:
+        if process is not None and reason == "unknown" and process.poll() is None:
             process.terminate()
             try:
                 process.wait(timeout=2)
@@ -548,6 +618,10 @@ def run() -> dict:
                 process.kill()
                 process.wait(timeout=5)
         raise
+    finally:
+        if read_fd >= 0:
+            os.close(read_fd)
+        os.close(write_fd)
 
 
 def main() -> None:
@@ -559,7 +633,9 @@ def main() -> None:
     admit.add_argument("--review-c", type=Path)
     admit.add_argument("--output", type=Path, default=gate.ADMISSION)
     sub.add_parser("run")
-    sub.add_parser("worker")
+    worker = sub.add_parser("worker")
+    worker.add_argument("--live-fd", type=int, required=True)
+    worker.add_argument("--parent-pid", type=int, required=True)
     args = parser.parse_args()
     if args.mode == "admission":
         result = admission_cli(args.third, args.review_a, args.review_b,
@@ -567,7 +643,7 @@ def main() -> None:
     elif args.mode == "run":
         result = run()
     else:
-        result = _target(gate.validate_go())
+        result = _target(_worker_authorized(args.live_fd, args.parent_pid))
     print(canonical(result))
 
 

@@ -12,6 +12,8 @@ run without them. It does not open the sealed-test split.
 16-WAV plan and `whisper_human_preflight_v1.py`. The latter rechecks the source
 WAV hashes and geometry, proxy evidence, pinned model and processor files,
 installed library versions, and authentic human exports through the V2 intake.
+The gate also pins exact bytes and PASS/GO status for the original source audit,
+independent source technical review, and independent Whisper plan review.
 The admission additionally binds exact source hashes, the fixed development
 attempt path, decode settings, limits, and call census. No weight is loaded by
 admission. The later GO gate checks committed, clean bytes and enforces this
@@ -46,6 +48,13 @@ commit is not an independent review or an authorization to run.
 
 The target path is `python -m eval.human_audio_v1.whisper_human_candidate_runner_v1
 run`. This command checks GO **before** `_target`, where model loading occurs.
+The parent creates the one-shot attempt and an exclusive launch record, then
+passes a random nonce over an inherited live pipe. The worker checks the
+parent PID, nonce hash, GO identity, and live heartbeat before `_target`.
+Calling the `worker` CLI directly without that channel fails before target
+model import. The parent polls worker RSS, elapsed time, attempt size and host
+power/thermal state and terminates a worker that exceeds a cap. The worker
+also exits if the parent's heartbeat disappears.
 The source-only admission command requires actual reviewer paths. Running it
 with absent or fake exports fails the V2 intake. The tests use mocks only to
 check gate behavior; they contain no listener judgments and invoke no model.
