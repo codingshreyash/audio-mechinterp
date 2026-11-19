@@ -111,7 +111,24 @@ class SavedAuditTests(unittest.TestCase):
         self.assertTrue(result["strict_translated_crossover"])
         self.assertFalse(result["secondary_opposite_direct_preserved_recipient"])
         append = next(item for item in result["layouts"] if item["layout"] == "append")
-        self.assertTrue(append["competing_direct_third_or_censored"])
+        self.assertTrue(append["competing_direct_third_answer"])
+
+    def test_censored_competing_direct_cannot_qualify_strict_crossover(self) -> None:
+        evidence, baselines, states, eligible = fixture("offset_8000")
+        opposite = next(item for item in evidence
+                        if item["plan"]["layout"] == "prepend"
+                        and item["plan"]["location"] == "fixed"
+                        and item["plan"]["kind"] == "target_transfer")
+        opposite["checked"] = {"output": {"termination": "length_censored",
+                                          "eos_seen": False, "censored": True,
+                                          "sequence_ids": [30] * 128},
+                               "raw": np.array([30], dtype=np.float32)}
+        result = audit.summarize("offset_8000", evidence, baselines, states,
+                                 eligible, {"pass_le_1e_5": True})
+        self.assertFalse(result["strict_translated_crossover"])
+        prepend = next(item for item in result["layouts"] if item["layout"] == "prepend")
+        self.assertTrue(prepend["competing_direct_censored"])
+        self.assertFalse(prepend["competing_direct_failed_donor"])
 
     def test_joint_mode_reaudits_fixed_attempts(self) -> None:
         with mock.patch.object(audit, "audit", side_effect=ValueError("raw tampered")) as rerun:

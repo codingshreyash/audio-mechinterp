@@ -263,7 +263,8 @@ def summarize(stage: str, evidence: list[dict], baselines: dict, states: dict,
         donor, recipient = baselines[(layout, "zero")], baselines[(layout, "noise")]
         opposite = keyed.get((layout, competing, "target_transfer"))
         relocated = keyed.get((layout, competing, "relocated_correct_delta"))
-        opposite_failed_donor = bool(opposite) and not _same_complete(opposite["checked"], donor)
+        opposite_complete = bool(opposite) and worker._complete(opposite["checked"]["output"])
+        opposite_failed_donor = opposite_complete and not _same_complete(opposite["checked"], donor)
         opposite_preserved_recipient = bool(opposite) and _same_complete(opposite["checked"], recipient)
         relocation_preserved = bool(relocated) and _same_complete(relocated["checked"], recipient)
         relocation_source_norm = relocated["patch"].get("target_delta_l2") if relocated else None
@@ -277,8 +278,9 @@ def summarize(stage: str, evidence: list[dict], baselines: dict, states: dict,
                         "aligned": aligned_qualification,
                         "competing_direct_failed_donor": opposite_failed_donor,
                         "competing_direct_preserved_recipient": opposite_preserved_recipient,
-                        "competing_direct_third_or_censored": bool(opposite) and
+                        "competing_direct_third_answer": opposite_complete and
                             opposite_failed_donor and not opposite_preserved_recipient,
+                        "competing_direct_censored": bool(opposite) and not opposite_complete,
                         "relocated_aligned_delta_preserved_recipient": relocation_preserved,
                         "relocation_source_l2": relocation_source_norm,
                         "relocation_applied_l2": relocation_applied_norm,
