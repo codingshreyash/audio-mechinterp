@@ -14,6 +14,7 @@ import json
 import os
 import re
 import shutil
+import stat
 import subprocess
 import sys
 from datetime import datetime
@@ -64,9 +65,34 @@ def digest(data: bytes) -> str:
 
 
 def read_json(path: Path, cap: int) -> tuple[dict[str, Any], bytes]:
-    need(path.is_file() and not path.is_symlink()
-         and 0 < path.stat().st_size <= cap, "missing or oversized review/freeze")
-    raw = path.read_bytes()
+    need(type(cap) is int and 0 < cap <= MAX_FREEZE_BYTES, "invalid read cap")
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    except OSError as error:
+        raise ValueError("review/freeze not a readable regular file") from error
+    try:
+        before = os.fstat(fd)
+        need(stat.S_ISREG(before.st_mode) and 0 < before.st_size <= cap,
+             "missing or oversized review/freeze")
+        chunks: list[bytes] = []
+        remaining = cap + 1
+        while remaining:
+            block = os.read(fd, remaining)
+            if not block:
+                break
+            chunks.append(block)
+            remaining -= len(block)
+        raw = b"".join(chunks)
+        after = os.fstat(fd)
+        named = path.lstat()
+        need(len(raw) <= cap and len(raw) == before.st_size == after.st_size
+             and before.st_dev == after.st_dev == named.st_dev
+             and before.st_ino == after.st_ino == named.st_ino
+             and before.st_mtime_ns == after.st_mtime_ns
+             and before.st_ctime_ns == after.st_ctime_ns,
+             "review/freeze changed during bounded read")
+    finally:
+        os.close(fd)
     def unique(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
         result = dict(pairs)
         need(len(result) == len(pairs), "duplicate JSON field")
@@ -90,8 +116,12 @@ def check_paths(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
          "attempt already consumed")
     need(output_dir.parent.is_dir() and not output_dir.parent.is_symlink(),
          "attempt parent missing or linked")
+    claim = claim_path(output_dir)
+    need(not claim.exists() and not claim.is_symlink(),
+         "one-attempt GO already consumed")
     need(freeze_path != review_path and freeze_path != output_dir
-         and review_path != output_dir
+         and review_path != output_dir and freeze_path != claim
+         and review_path != claim
          and freeze_path.parent.is_dir() and review_path.parent.is_dir(),
          "external admission paths missing or collide")
     need(freeze_path.parent != output_dir and review_path.parent != output_dir,
@@ -100,12 +130,45 @@ def check_paths(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
          "less than 30 GiB free after staging")
 
 
+def claim_path(output_dir: Path) -> Path:
+    return output_dir.parent / (output_dir.name + ".step400-go-consumed")
+
+
+def consume_go(output_dir: Path, freeze_raw: bytes, review_raw: bytes) -> Path:
+    """Atomically reserve this attempt outside its removable evidence tree."""
+    path = claim_path(output_dir)
+    receipt = {"schema": "voicechat_step400_go_consumed_v1",
+               "attempt_id": output_dir.name, "output_dir": str(output_dir),
+               "freeze_sha256": digest(freeze_raw),
+               "review_sha256": digest(review_raw), "status": "consumed_before_spawn"}
+    data = canonical(receipt)
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    try:
+        written = 0
+        while written < len(data):
+            count = os.write(fd, data[written:])
+            need(count > 0, "GO claim short write")
+            written += count
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    parent_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(parent_fd)
+    finally:
+        os.close(parent_fd)
+    return path
+
+
 def project_source() -> dict[str, Any]:
     """Hash executable local source and reject ignored Python bytecode nearby."""
     need(Path.cwd().resolve() == REPO_ROOT, "launcher must run from source root")
     files = {name: sample.hash_file(HERE / name, cap=1 << 20)[0]
              for name in SOURCE_NAMES}
     for package_dir in (REPO_ROOT / "models", REPO_ROOT / "models/second_architecture", HERE):
+        need(not (package_dir / "__init__.py").exists()
+             and not (package_dir / "__init__.py").is_symlink(),
+             "unreviewed package initializer in project import path")
         need(not any(package_dir.glob("*.pyc"))
              and not (package_dir / "__pycache__").exists(),
              "ignored local bytecode present in executable package path")
@@ -117,10 +180,28 @@ def project_source() -> dict[str, Any]:
 
 
 def command(nemo_dir: Path, checkpoint_dir: Path, output_dir: Path) -> list[str]:
-    # -c appends the project checkout after the pinned NeMo PYTHONPATH entry.
-    bootstrap = ("import sys; sys.path.append(" + repr(str(REPO_ROOT)) + "); "
+    # Preseed the three absent project packages with exact paths. This prevents
+    # an installed regular `models` package from shadowing our namespace tree.
+    # Remove the child CWD from sys.path before importing any project module.
+    bootstrap = ("import sys\n"
+                 "sys.path[:] = [p for p in sys.path if p]\n"
+                 "assert sys.path[0] == " + repr(str(nemo_dir)) + "\n"
+                 "sys.path.insert(1, " + repr(str(REPO_ROOT)) + ")\n"
+                 "import types, importlib.machinery\n"
+                 "for name, path in " + repr([
+                     ("models", str(REPO_ROOT / "models")),
+                     ("models.second_architecture", str(REPO_ROOT / "models/second_architecture")),
+                     ("models.second_architecture.voicechat_calendar_fixture_v1", str(HERE)),
+                 ]) + ":\n"
+                 "    assert name not in sys.modules\n"
+                 "    module = types.ModuleType(name)\n"
+                 "    module.__path__ = [path]\n"
+                 "    module.__package__ = name\n"
+                 "    module.__spec__ = importlib.machinery.ModuleSpec(name, loader=None, is_package=True)\n"
+                 "    sys.modules[name] = module\n"
                  "from models.second_architecture.voicechat_calendar_fixture_v1."
-                 "voicechat_step400_worker_v1 import main; main()")
+                 "voicechat_step400_worker_v1 import main\n"
+                 "main()\n")
     return [sys.executable, "-B", "-c", bootstrap,
             "--nemo-dir", str(nemo_dir), "--checkpoint-dir", str(checkpoint_dir),
             "--output-dir", str(output_dir)]
@@ -260,11 +341,14 @@ def verify_review(freeze: dict[str, Any], raw: bytes, review: dict[str, Any],
 def launch(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
            output_dir: Path, freeze_path: Path, review_path: Path,
            review_key: bytes) -> dict[str, Any]:
+    # Keep the HMAC key out of V5's pip-freeze and Nano resolver subprocesses.
+    # It is never restored: a single launch process owns one review.
+    os.environ.pop(KEY_ENV, None)
     check_paths(nemo_dir=nemo_dir, checkpoint_dir=checkpoint_dir,
                 nano_home=nano_home, output_dir=output_dir,
                 freeze_path=freeze_path, review_path=review_path)
     freeze, raw = read_json(freeze_path, MAX_FREEZE_BYTES)
-    review, _ = read_json(review_path, MAX_REVIEW_BYTES)
+    review, review_raw = read_json(review_path, MAX_REVIEW_BYTES)
     need(set(freeze) == {"schema", "status", "attempt_id", "expected", "ready_preload"}
          and freeze["schema"] == SCHEMA
          and freeze["status"] == "unsigned_source_and_host_freeze"
@@ -283,6 +367,7 @@ def launch(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
     child_env = dict(current["child_environment"])
     need(KEY_ENV not in child_env and child_env.get("PYTHONPATH") == str(nemo_dir),
          "review key or unpinned Python path reached child")
+    consume_go(output_dir, raw, review_raw)
     return parent.supervise_candidate(
         command=current["command"], environment=child_env,
         output_dir=output_dir, staged_checkpoint_dir=checkpoint_dir)
@@ -301,7 +386,7 @@ def main() -> None:
     if args.mode == "build":
         result = build(**kwargs)
     else:
-        raw_key = os.environ.get(KEY_ENV, "")
+        raw_key = os.environ.pop(KEY_ENV, "")
         need(re.fullmatch(r"[0-9a-fA-F]{64,}", raw_key) is not None
              and len(raw_key) % 2 == 0, "external review key absent")
         result = launch(**kwargs, review_key=bytes.fromhex(raw_key))
