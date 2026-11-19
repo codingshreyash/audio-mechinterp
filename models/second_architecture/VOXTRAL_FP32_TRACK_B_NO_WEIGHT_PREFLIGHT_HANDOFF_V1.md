@@ -10,7 +10,7 @@ The static FP32 parameter payload implied by the pinned safetensors headers is *
 
 The optional `--check-host` records current AC/lid/ten-minute power-log eligibility and archives exact raw `pmset` bytes in compressed base64 with raw and compressed SHA-256. A malformed UTF-8 byte in an old indented IOKit assertion is preserved and does not invalidate current timestamped events. A fresh host probe is still required at model launch. Current host eligibility is a point-in-time observation, not authorization.
 
-Verification: ten no-model tests passed, including WAV/inventory/source tamper rejection, contextual token-prefix rejection, empty mask rejection, missing QA HOLD, V6 geometry, resource ledger, and raw host-log fallback. `py_compile` and the full processor-only preflight passed. The live optional host check also ran and returned HOLD for the missing scientific/admission gates. No candidate output was read.
+Verification: eleven no-model tests passed, including WAV/inventory/source tamper rejection, contextual token-prefix rejection, empty mask rejection, missing QA HOLD, V6 geometry, resource ledger, and raw host-log fallback. `py_compile` and the full processor-only preflight passed. The live optional host check also ran and returned HOLD for the missing scientific/admission gates. No candidate output was read.
 
 Run with the pinned repository environment:
 
