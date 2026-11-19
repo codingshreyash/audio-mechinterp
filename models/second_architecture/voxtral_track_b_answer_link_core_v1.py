@@ -20,6 +20,7 @@ PROMPT = ('What word did the speaker say between "said" and "and"? '
           'Answer with exactly one word. No explanation or punctuation.')
 EOS = 2
 MAX_NEW_TOKENS = 32
+PROJECTOR_WIDTH = 3072
 ALIAS_CASES = (str.lower, str.capitalize, str.upper)
 
 
@@ -35,15 +36,22 @@ def exact_equal(a: torch.Tensor, b: torch.Tensor) -> bool:
     return a.shape == b.shape and a.dtype == b.dtype and tensor_sha(a) == tensor_sha(b)
 
 
-def word_rows(start: int, stop: int, frames: int, projector_rows: int) -> tuple[int, ...]:
-    """Frozen nominal center rule; this is not a receptive-field claim."""
+def word_rows(start: int, stop: int, frames: int, projector_rows: int,
+              unpadded_projector_rows: int) -> tuple[int, ...]:
+    """Frozen center rule with externally verified active rows; no RF claim.
+
+    `unpadded_projector_rows` must come from a separately reviewed processor
+    geometry check for this exact WAV, never from the requested word mask.
+    """
     if not (isinstance(start, int) and isinstance(stop, int) and
             isinstance(frames, int) and isinstance(projector_rows, int) and
-            0 <= start < stop <= frames and projector_rows > 0):
-        raise ValueError('Invalid PCM word slot or projector length')
+            isinstance(unpadded_projector_rows, int) and
+            0 <= start < stop <= frames and
+            0 < unpadded_projector_rows <= projector_rows):
+        raise ValueError('Invalid PCM slot or unpadded projector geometry')
     rows = tuple(r for r in range(projector_rows)
                  if start <= 160 * (8 * r + 3) < stop)
-    if not rows or any(160 * (8 * r + 3) >= frames + 200 for r in rows):
+    if not rows or any(r >= unpadded_projector_rows for r in rows):
         raise ValueError('Empty or padded word-row mask')
     return rows
 
@@ -60,6 +68,7 @@ def checked_rows(rows: Sequence[int], t: int) -> tuple[int, ...]:
 def mean_direction(recipient: torch.Tensor, donor: torch.Tensor,
                    rows: Sequence[int]) -> torch.Tensor:
     if (recipient.ndim != 2 or recipient.shape != donor.shape or
+            recipient.shape[1] != PROJECTOR_WIDTH or
             recipient.dtype != torch.float32 or donor.dtype != torch.float32 or
             not bool(torch.isfinite(recipient).all()) or
             not bool(torch.isfinite(donor).all())):
@@ -92,9 +101,9 @@ def random_control(direction: torch.Tensor, context_id: str) -> tuple[torch.Tens
     return u, {'seed_label': label, 'seed': seed, 'direction_sha256': tensor_sha(u)}
 
 
-def freeze_aliases(tokenizer: Any, word: str, *, prompt_ids: Sequence[int],
-                   contextual_encode: Callable[[str], Sequence[int]],
-                   eos: int = EOS) -> tuple[tuple[int, ...], ...]:
+def freeze_alias_inventory(tokenizer: Any, word: str, *, prompt_ids: Sequence[int],
+                           contextual_encode: Callable[[str], Sequence[int]],
+                           eos: int = EOS) -> tuple[dict[str, Any], ...]:
     """Freeze only aliases whose full contextual encoding preserves prompt IDs.
 
     ``contextual_encode(surface)`` must encode the actual pinned chat prompt
@@ -106,7 +115,8 @@ def freeze_aliases(tokenizer: Any, word: str, *, prompt_ids: Sequence[int],
     prompt = tuple(int(x) for x in prompt_ids)
     if not prompt:
         raise ValueError('Prompt IDs required for contextual alias validation')
-    sequences: set[tuple[int, ...]] = set()
+    seen: set[tuple[int, ...]] = set()
+    inventory: list[dict[str, Any]] = []
     for fn in ALIAS_CASES:
         for prefix in ('', ' '):
             surface = prefix + fn(word)
@@ -116,8 +126,20 @@ def freeze_aliases(tokenizer: Any, word: str, *, prompt_ids: Sequence[int],
                 raise ValueError('Alias tokenization differs at actual prompt boundary')
             if not tokens or eos in tokens or any(t < 0 for t in tokens):
                 raise ValueError('Invalid alias tokenization')
-            sequences.add((*tokens, eos))
-    return tuple(sorted(sequences))
+            sequence = (*tokens, eos)
+            if sequence not in seen:
+                seen.add(sequence)
+                inventory.append({'surface': surface, 'token_ids_with_eos': sequence})
+    return tuple(inventory)
+
+
+def freeze_aliases(tokenizer: Any, word: str, *, prompt_ids: Sequence[int],
+                   contextual_encode: Callable[[str], Sequence[int]],
+                   eos: int = EOS) -> tuple[tuple[int, ...], ...]:
+    """Return unique alias IDs in V5 first-surface occurrence order."""
+    return tuple(row['token_ids_with_eos'] for row in freeze_alias_inventory(
+        tokenizer, word, prompt_ids=prompt_ids, contextual_encode=contextual_encode,
+        eos=eos))
 
 
 def classify(ids: Sequence[int], decoded: str, special_ids: set[int], eos: int,
@@ -152,7 +174,8 @@ class ProjectorHook:
 
     def __init__(self, model: Any, source: torch.Tensor, batch_size: int,
                  placeholders_per_alias: int, edit: Edit, grad: bool = False):
-        if (source.ndim != 2 or source.dtype != torch.float32 or
+        if (source.ndim != 2 or source.shape[1] != PROJECTOR_WIDTH or
+                source.dtype != torch.float32 or
                 not bool(torch.isfinite(source).all())):
             raise ValueError('Source must be finite FP32 [T,D]')
         if batch_size < 1 or placeholders_per_alias != source.shape[0]:
@@ -287,7 +310,7 @@ def capture_projector(model: Any, batch: Mapping[str, torch.Tensor],
     found: list[torch.Tensor] = []
 
     def hook(_module: Any, _args: Any, output: torch.Tensor) -> None:
-        if (output.shape[0] != t or output.ndim != 2 or
+        if (output.shape != (t, PROJECTOR_WIDTH) or output.ndim != 2 or
                 output.dtype != torch.float32 or not bool(torch.isfinite(output).all())):
             raise ValueError('Passive projector geometry/dtype differs')
         found.append(output.detach().clone())
@@ -306,7 +329,8 @@ def capture_projector(model: Any, batch: Mapping[str, torch.Tensor],
 def score_alias_class(model: Any, batch: Mapping[str, torch.Tensor],
                       aliases: Sequence[Sequence[int]], source: torch.Tensor,
                       edit: Edit | None, *, pad: int, audio_token: int = 24,
-                      grad: bool = False) -> dict[str, Any]:
+                      grad: bool = False,
+                      gradient_rows: Sequence[int] | None = None) -> dict[str, Any]:
     """Sequential B=1, EOS-inclusive class mass and its exact weighted gradient.
 
     The `pad` parameter is checked for interface parity with generation but no
@@ -321,12 +345,16 @@ def score_alias_class(model: Any, batch: Mapping[str, torch.Tensor],
                 any(not isinstance(t, int) or t < 0 for t in a)
                 for a in aliases)):
         raise ValueError('Invalid frozen EOS-inclusive aliases or grad edit')
+    selected_rows = checked_rows(gradient_rows, source.shape[0]) if grad and gradient_rows is not None else None
+    if grad and selected_rows is None:
+        raise ValueError('Gradient rows required for lossless selected-row evidence')
     inputs = _batch_inputs(batch, source.device)
     prompt_len = inputs['input_ids'].shape[1]
     t = _placeholder_count(inputs['input_ids'], audio_token)
     per_alias: list[float] = []
     per_token: list[list[float]] = []
     per_gradient: list[torch.Tensor] = []
+    per_selected_gradient: list[torch.Tensor] = []
     hooks: list[dict[str, Any] | None] = []
     input_shapes: list[list[int]] = []
     logits_shapes: list[list[int]] = []
@@ -359,6 +387,9 @@ def score_alias_class(model: Any, batch: Mapping[str, torch.Tensor],
                 if gradient.shape != source.shape or not bool(torch.isfinite(gradient).all()):
                     raise ValueError('Nonfinite or wrong-shape alias source gradient')
                 per_gradient.append(gradient.detach())
+                if selected_rows is None:
+                    raise ValueError('Selected gradient rows missing')
+                per_selected_gradient.append(gradient.detach()[list(selected_rows)].cpu().contiguous().clone())
             per_alias.append(float(ll.detach()))
             per_token.append([float(v.detach()) for v in token_lp])
             hooks.append(hooked.evidence())
@@ -378,6 +409,18 @@ def score_alias_class(model: Any, batch: Mapping[str, torch.Tensor],
         'token_logprobs_including_eos': per_token,
         'alias_logprobs': per_alias, 'alias_softmax_weights': weights.tolist(),
         'log_mass': float(mass), 'gradient': source_grad,
+        'gradient_rows': list(selected_rows) if selected_rows is not None else None,
+        'per_alias_selected_gradients': per_selected_gradient,
+        'per_alias_selected_gradient_sha256': [tensor_sha(g) for g in per_selected_gradient],
+        'per_alias_selected_gradient_l2': [float(torch.linalg.vector_norm(g))
+                                           for g in per_selected_gradient],
+        'per_alias_gradient_finite': [bool(torch.isfinite(g).all()) for g in per_selected_gradient],
+        'per_alias_full_gradient_l2': [float(torch.linalg.vector_norm(g))
+                                       for g in per_gradient],
+        'per_alias_full_gradient_finite': [bool(torch.isfinite(g).all())
+                                           for g in per_gradient],
+        'gradient_accumulation_dtype': str(source_grad.dtype) if source_grad is not None else None,
+        'alias_weight_dtype': str(weights.dtype),
         'alias_lengths_including_eos': [len(a) for a in aliases],
         'full_input_shapes': input_shapes, 'answer_logits_shapes': logits_shapes,
         'hooks': hooks, 'forward_count': len(aliases),
@@ -392,9 +435,11 @@ def answer_jacobian(model: Any, batch: Mapping[str, torch.Tensor],
     fixed = checked_rows(rows, source.shape[0])
     zero = Edit('zero')
     r = score_alias_class(model, batch, recipient_aliases, source, zero,
-                          pad=pad, audio_token=audio_token, grad=True)
+                          pad=pad, audio_token=audio_token, grad=True,
+                          gradient_rows=fixed)
     d = score_alias_class(model, batch, donor_aliases, source, zero,
-                          pad=pad, audio_token=audio_token, grad=True)
+                          pad=pad, audio_token=audio_token, grad=True,
+                          gradient_rows=fixed)
     if r['gradient'] is None or d['gradient'] is None:
         raise ValueError('Class-mass gradients missing')
     grad_s = d['gradient'] - r['gradient']

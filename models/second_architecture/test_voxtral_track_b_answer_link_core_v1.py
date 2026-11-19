@@ -67,9 +67,9 @@ class FakeProcessor:
 
 def fixture():
     model = FakeVoxtral()
-    source = torch.tensor([[[0.0, 0.0, 0.0, 0.0],
-                            [1.0, -0.0, 0.0, 0.0],
-                            [0.0, 0.0, 0.0, 0.0]]], dtype=torch.float32)
+    source = torch.zeros((1, 3, core.PROJECTOR_WIDTH), dtype=torch.float32)
+    source[0, 1, 0] = 1.0
+    source[0, 1, 1] = -0.0
     donor = source.clone()
     donor[0, 1, 0] = -2.0
     batch = {'input_ids': torch.tensor([[24, 24, 24, 5]]),
@@ -84,6 +84,11 @@ class TinyTokenizer:
         return [ord(ch) for ch in text]
 
 
+class CaseInsensitiveTokenizer(TinyTokenizer):
+    def encode(self, text, add_special_tokens=False):
+        return super().encode(text.lower(), add_special_tokens=add_special_tokens)
+
+
 class CoreTests(unittest.TestCase):
     def test_contextual_alias_freeze_rejects_boundary_change(self):
         tok = TinyTokenizer()
@@ -92,19 +97,32 @@ class CoreTests(unittest.TestCase):
                                       contextual_encode=lambda s: prompt + tok.encode(s))
         self.assertEqual(len(aliases), 6)
         self.assertTrue(all(a[-1] == core.EOS for a in aliases))
+        expected = ('banana', ' banana', 'Banana', ' Banana', 'BANANA', ' BANANA')
+        inventory = core.freeze_alias_inventory(tok, 'banana', prompt_ids=prompt,
+                                                 contextual_encode=lambda s: prompt + tok.encode(s))
+        self.assertEqual(tuple(row['surface'] for row in inventory), expected)
+        self.assertEqual(aliases, tuple(row['token_ids_with_eos'] for row in inventory))
+        self.assertEqual([a[0] for a in aliases], [98, 32, 66, 32, 66, 32])
+        insensitive = CaseInsensitiveTokenizer()
+        collapsed = core.freeze_alias_inventory(insensitive, 'banana', prompt_ids=prompt,
+                                                 contextual_encode=lambda s: prompt + insensitive.encode(s))
+        self.assertEqual([r['surface'] for r in collapsed], ['banana', ' banana'])
         with self.assertRaisesRegex(ValueError, 'boundary'):
             core.freeze_aliases(tok, 'banana', prompt_ids=prompt,
                                 contextual_encode=lambda s: prompt[:-1] + tok.encode(s))
 
     def test_rows_and_direction_are_fixed_and_nonempty(self):
-        self.assertEqual(core.word_rows(400, 1900, 2400, 3), (0, 1))
+        self.assertEqual(core.word_rows(400, 1900, 2400, 3, 2), (0, 1))
         with self.assertRaisesRegex(ValueError, 'Empty'):
-            core.word_rows(1000, 1100, 2400, 3)
+            core.word_rows(1000, 1100, 2400, 3, 2)
+        with self.assertRaisesRegex(ValueError, 'padded'):
+            core.word_rows(400, 1900, 2400, 3, 1)
         with self.assertRaisesRegex(ValueError, 'out-of-range'):
             core.checked_rows((1, 3), 3)
         _model, _batch, source, donor = fixture()
         d = core.mean_direction(source, donor, (1,))
-        self.assertEqual(d.tolist(), [-3.0, 0.0, 0.0, 0.0])
+        self.assertEqual(float(d[0]), -3.0)
+        self.assertEqual(float(torch.linalg.vector_norm(d[1:])), 0.0)
         u1, info1 = core.random_control(d, 'pair_00|piper|banana')
         u2, info2 = core.random_control(d, 'pair_00|piper|banana')
         self.assertTrue(core.exact_equal(u1, u2))
@@ -117,14 +135,14 @@ class CoreTests(unittest.TestCase):
         d = core.mean_direction(source, donor, (1,))
         with core.ProjectorHook(model, source, 2, 3, core.Edit('vector', (1,), d, 0.1)) as hook:
             result = model.model.multi_modal_projector(source.repeat(2, 1))
-            self.assertEqual(result.shape, (6, 4))
+            self.assertEqual(result.shape, (6, core.PROJECTOR_WIDTH))
             self.assertTrue(core.exact_equal(result[0], source[0]))
             self.assertTrue(core.exact_equal(result[2], source[2]))
             self.assertTrue(core.exact_equal(result[3], source[0]))
             self.assertTrue(core.exact_equal(result[5], source[2]))
             self.assertTrue(core.exact_equal(result[1], result[4]))
             self.assertAlmostEqual(float(result[1, 0]), 0.7, places=6)
-        self.assertEqual(hook.evidence()['flat_shape'], [6, 4])
+        self.assertEqual(hook.evidence()['flat_shape'], [6, core.PROJECTOR_WIDTH])
         changed = source.repeat(2, 1)
         changed[4, 0] += 0.01
         with self.assertRaisesRegex(ValueError, 'Alias 1 prepatch'):
@@ -137,6 +155,17 @@ class CoreTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'exactly one'):
             with core.ProjectorHook(model, source, 1, 3, core.Edit('zero')):
                 pass
+
+    def test_fixed_projector_width_rejected_in_hook_and_capture(self):
+        model, batch, source, donor = fixture()
+        narrow = source[:, :4].clone()
+        with self.assertRaisesRegex(ValueError, 'Source must'):
+            core.ProjectorHook(model, narrow, 1, 3, core.Edit('zero'))
+        with self.assertRaisesRegex(ValueError, 'finite FP32'):
+            core.mean_direction(narrow, donor[:, :4], (1,))
+        narrowed_batch = dict(batch, input_features=batch['input_features'][:, :, :4].clone())
+        with self.assertRaisesRegex(ValueError, 'Passive projector geometry'):
+            core.capture_projector(model, narrowed_batch)
 
     def test_zero_and_full_donor_complete_generation(self):
         model, batch, source, donor = fixture()
@@ -182,8 +211,22 @@ class CoreTests(unittest.TestCase):
                                    no_hook['token_logprobs_including_eos'][0][-1], places=5)
         expected = torch.logsumexp(torch.tensor(scored['alias_logprobs'], dtype=torch.float64), 0)
         self.assertAlmostEqual(scored['log_mass'], float(expected), places=7)
-        grad = core.score_alias_class(model, batch, aliases, source, core.Edit('zero'), pad=0, grad=True)
+        grad = core.score_alias_class(model, batch, aliases, source, core.Edit('zero'),
+                                      pad=0, grad=True, gradient_rows=(1,))
         core.assert_score_parity(grad, scored)
+        self.assertEqual(grad['gradient_accumulation_dtype'], 'torch.float32')
+        self.assertEqual(grad['alias_weight_dtype'], 'torch.float64')
+        self.assertEqual(grad['gradient_rows'], [1])
+        self.assertEqual(len(grad['per_alias_selected_gradients']), 2)
+        self.assertTrue(all(g.shape == (1, core.PROJECTOR_WIDTH)
+                            for g in grad['per_alias_selected_gradients']))
+        self.assertTrue(all(grad['per_alias_gradient_finite']))
+        self.assertTrue(all(grad['per_alias_full_gradient_finite']))
+        self.assertTrue(all(math.isfinite(n) and n >= 0 for n in grad['per_alias_full_gradient_l2']))
+        restored = sum((w * g for w, g in zip(grad['alias_softmax_weights'],
+                                             grad['per_alias_selected_gradients'])),
+                       torch.zeros_like(grad['per_alias_selected_gradients'][0]))
+        self.assertTrue(torch.allclose(restored, grad['gradient'][[1]].cpu(), atol=1e-6))
         with self.assertRaisesRegex(ValueError, 'likelihood'):
             tampered = dict(scored, token_logprobs_including_eos=[[-99.0, -99.0],
                                                                   scored['token_logprobs_including_eos'][1]])
