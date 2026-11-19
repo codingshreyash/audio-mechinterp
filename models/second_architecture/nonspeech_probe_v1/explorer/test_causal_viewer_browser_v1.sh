@@ -11,6 +11,15 @@ cat <<'JS' | agent-browser --session "$SESSION" eval --stdin >/dev/null
  const data=JSON.parse(document.querySelector('#causal-data').textContent);
  const rows=[...document.querySelectorAll('#case-rows tr')];
  if(rows.length!==18 || Object.keys(data.cases).length!==18) throw Error('missing case census');
+ const donorRows=[...document.querySelectorAll('#donor-rows tr')];
+ if(donorRows.length!==4) throw Error('missing donor control census');
+ for(const [i,id,arm] of [[0,'d02_silence','no_hook'],[1,'d02_silence','read_only'],[2,'d08_silence','no_hook'],[3,'d08_silence','read_only']]) {
+   const record=data.donors[id][arm],cells=[...donorRows[i].cells].map(x=>x.textContent);
+   if(!cells[0].includes(id) || !cells[1].includes(record.call_name)) throw Error('wrong donor call '+i);
+   if(!cells[2].includes(JSON.stringify(record.transcript)) || !cells[3].includes(JSON.stringify(record.generated_ids)) || !cells[4].includes(JSON.stringify(record.sequence_ids))) throw Error('donor output not visible '+i);
+   if(!cells[5].includes('EOS '+record.eos_seen) || !cells[5].includes('censored '+record.censored) || !cells[6].includes(JSON.stringify(record.parity))) throw Error('donor termination or comparison flags hidden '+i);
+ }
+ if(rows.length*18+donorRows.length!==328) throw Error('328 call arithmetic failed');
  if(!document.querySelector('#detail h2')?.textContent.startsWith('d02_')) throw Error('initial detail absent');
  if(document.querySelectorAll('#detail audio').length!==2) throw Error('missing paired audio');
  if(document.querySelectorAll('#detail h3').length!==2) throw Error('missing stages');
@@ -55,7 +64,8 @@ cat <<'JS' | agent-browser --session "$SESSION" eval --stdin >/dev/null
 (() => {
  if(document.querySelectorAll('#case-rows tr button').length!==2) throw Error('filter recovery failed');
  if(document.querySelectorAll('#case-rows tr.selected').length!==1) throw Error('selection recovery failed');
+ if(document.querySelectorAll('#donor-rows tr').length!==4) throw Error('donor controls lost under filter');
  return true;
 })()
 JS
-echo 'PASS: causal viewer inventory, stages, audio, hashes, filters, censor, and selection'
+echo 'PASS: causal viewer 328-call census, donor controls, stages, audio, hashes, filters, censor, and selection'

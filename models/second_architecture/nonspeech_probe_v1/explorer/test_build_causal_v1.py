@@ -26,6 +26,14 @@ class CausalViewerTest(unittest.TestCase):
         self.assertEqual(set(data["informative_cases"]), {
             "d02_beep_train_high", "d02_beep_train_low", "d08_beep_train_high", "d08_beep_train_low"})
         self.assertEqual(sum(len(c["stages"][s]) for c in data["cases"].values() for s in ("A", "B")) + 4, 328)
+        self.assertEqual({r["call_index"] for donor in data["donors"].values() for r in donor.values()}, {1, 2, 3, 4})
+        for donor in data["donors"].values():
+            baseline, read_only = donor["no_hook"], donor["read_only"]
+            self.assertEqual(baseline["sequence_ids"], read_only["sequence_ids"])
+            self.assertEqual(baseline["transcript"], read_only["transcript"])
+            self.assertTrue(baseline["eos_seen"] and read_only["eos_seen"])
+            self.assertFalse(baseline["censored"] or read_only["censored"])
+            self.assertTrue(all(read_only["parity"].values()))
         for case in data["cases"].values():
             for stage in ("A", "B"):
                 base = case["stages"][stage]["no_hook"]["sequence_ids"]

@@ -35,6 +35,7 @@ details { margin:4px 0 } summary { cursor:pointer; color:var(--cyan) } .caption 
 <li>Nominal padding is not a clean null: all four beep clips differ from silence in every padded mel frame, and in every padded pre-block-0 encoder row. This run does not establish padding’s causal contribution.</li>
 <li>Five arms hit the 128-token cap without EOS. They remain visible and in every denominator. A censored output is not a negative result.</li>
 </ul></section>
+<section class="panel"><h2>Four silence-donor control calls</h2><p>These are the saved baseline and read-only calls for each matched silence donor. They complete the 328-call census: 324 recipient arms below plus four donor controls here. Full token paths and source/donor comparison flags are shown directly.</p><div class="scroll"><table><thead><tr><th>Donor / duration</th><th>Arm / call</th><th>Transcript</th><th>Generated IDs</th><th>Full sequence IDs</th><th>Termination</th><th>Saved comparison flags</th></tr></thead><tbody id="donor-rows"></tbody></table></div></section>
 <section class="panel"><h2>All 18 recipients</h2><div class="controls">
 <label>Duration<select id="duration"><option value="all">All</option><option value="d02">2 seconds</option><option value="d08">8 seconds</option></select></label>
 <label>Sound<select id="family"><option value="all">All</option><option value="beep_train">Beep train</option><option value="band_noise">Band noise</option><option value="click_train">Click train</option><option value="dither">Dither</option><option value="steady_tone">Steady tone</option></select></label>
@@ -59,6 +60,14 @@ function same(a,b) { return JSON.stringify(a)===JSON.stringify(b); }
 function word(s) { return JSON.stringify(s); }
 function rowCells(tr, values) { values.forEach(v => tr.appendChild(el('td',v))); }
 function donor(c) { return D.donors[c.donor_id].no_hook; }
+function renderDonorControls() {
+  const body=$('donor-rows');
+  for(const id of ['d02_silence','d08_silence']) for(const arm of ['no_hook','read_only']) {
+    const r=D.donors[id][arm],tr=el('tr');
+    rowCells(tr,[id+' / '+(id.startsWith('d02')?'2 s':'8 s'),arm+' / #'+r.call_index+' · '+r.call_name,word(r.transcript),JSON.stringify(r.generated_ids),JSON.stringify(r.sequence_ids),r.termination+' · EOS '+r.eos_seen+' · censored '+r.censored,JSON.stringify(r.parity)]);
+    body.append(tr);
+  }
+}
 function label(c, r, stage) {
   if(r.censored) return 'CENSORED';
   if(same(r.sequence_ids, donor(c).sequence_ids) && c.informative) return 'donor match';
@@ -105,5 +114,5 @@ function renderDetail() {
  for(const stage of ['A','B']) {root.append(el('h3',stage==='A'?'Stage A · final encoder state':'Stage B · pre-block-0 state'));const wrap=el('div',undefined,'scroll');const table=el('table');const head=el('thead');const tr=el('tr');['Arm','Transcript (partial if censored)','Generated token IDs','Termination','Full path and controls'].forEach(x=>tr.append(el('th',x)));head.append(tr);table.append(head);const body=el('tbody');for(const [arm,r] of Object.entries(c.stages[stage]))outputRow(body,c,stage,arm,r);table.append(body);wrap.append(table);root.append(wrap)}
 }
 ['duration','family','contrast'].forEach(id=>$(id).addEventListener('change',renderTable));
-renderStats();renderTable();
+renderStats();renderDonorControls();renderTable();
 </script></body></html>

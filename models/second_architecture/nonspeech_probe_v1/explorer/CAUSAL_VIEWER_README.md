@@ -4,6 +4,9 @@ Open `causal_v1.html` directly in a browser. It embeds the frozen 20 WAVs and
 compact output records for all 18 recipients and both silence donors. It needs
 no network connection. The page links to the sibling independent audit memo,
 summary, full JSONL record, and descriptive viewer for deeper inspection.
+The four donor no-hook/read-only controls have a visible table with full token
+paths, termination and saved comparison flags; together with the 324 recipient
+arms, they account for all 328 saved forward calls.
 
 Rebuild and check:
 
