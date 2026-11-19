@@ -21,6 +21,21 @@ CONTROLS = (
     "random_padding_1", "random_padding_2",
 )
 PHASE_SPLITS = ("padding_detect_only", "padding_transcribe_only")
+MAX_NEW_TOKENS = 128
+VOCAB_SIZE = 51865
+DECODER_WIDTH = 384
+WALL_SECONDS = 1800
+RSS_LIMIT_BYTES = 4 * 1024**3
+EVIDENCE_LIMIT_BYTES = 2 * 1024**3
+EVIDENCE_RESERVE_BYTES = 128 * 1024**2
+METADATA_ALLOWANCE_BYTES = 256 * 1024**2
+SOURCE_SHA256 = {
+    "feature_extraction_whisper.py": "dcce2e7820be059e657a9e12a60e8a55cfd37b1a82ee202ca15fc7d0934374cb",
+    "modeling_whisper.py": "bf4f022d37ed523d09a472dae267b86007aaae0cd39d2ce37927de44bfc5b9e6",
+    "generation_whisper.py": "e1531401f2cc2e389f13a7a55fa22542132164fefe9d431644c9368f3147583a",
+}
+PINNED_MODEL = "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
+PINNED_WEIGHT_SHA256 = "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395"
 
 
 def digest(path: Path) -> str:
@@ -84,21 +99,54 @@ def schedule() -> tuple[dict, ...]:
     rows: list[dict] = []
     for donor in SILENCE:
         rows.append({"site": "none", "case_id": donor, "donor_id": donor,
-                     "arm": "no_hook", "geometry": geometry(donor, "log_mel")})
+                     "arm": "no_hook", "hook_policy": "none",
+                     "geometry": geometry(donor, "log_mel")})
+        rows.append({"site": "both", "case_id": donor, "donor_id": donor,
+                     "arm": "read_only_donor_capture", "hook_policy": "capture_both_sites_both_phases",
+                     "geometry": geometry(donor, "log_mel")})
     for site in SITES:
         for case_id in cases:
             common = {"site": site, "case_id": case_id,
                       "donor_id": donor_for(case_id),
                       "geometry": geometry(case_id, site)}
             for arm in CELLS + CONTROLS + PHASE_SPLITS:
-                row = {**common, "arm": arm}
+                policy = "none" if arm == "RR" else (
+                    "capture_both_sites_both_phases" if arm == "read_only" else "edit")
+                row = {**common, "arm": arm, "hook_policy": policy}
                 if arm.startswith("random_"):
                     row["seeds"] = {phase: seed(case_id, site, arm, phase)
                                     for phase in PHASES}
                 rows.append(row)
-    if len(rows) != 434:
+    if len(rows) != 436:
         raise ValueError("padding-channel arm count changed")
     return tuple(rows)
+
+
+def worst_case_core_evidence_bytes() -> int:
+    """Conservative float32 core estimate; actual writes still need a hard cap."""
+    rows = schedule()
+    # Full per-step raw logits: both no-hook donors and all 36 DD calls.
+    full_calls = sum(row["arm"] in ("no_hook", "DD") for row in rows)
+    first_vectors = len(rows) * 2  # raw logits and processed scores
+    # Conservative common tensor shape for both sites, both phases, all 20 files.
+    native_states = 20 * len(SITES) * len(PHASES)
+    return ((full_calls * MAX_NEW_TOKENS + first_vectors) * VOCAB_SIZE * 4
+            + native_states * 1500 * 384 * 4
+            + len(rows) * DECODER_WIDTH * 4
+            + len(rows) * MAX_NEW_TOKENS * 4)  # selected-token score scalars
+
+
+def resource_budget_fits() -> bool:
+    return (worst_case_core_evidence_bytes() + METADATA_ALLOWANCE_BYTES
+            + EVIDENCE_RESERVE_BYTES < EVIDENCE_LIMIT_BYTES)
+
+
+def verify_installed_source_bytes() -> None:
+    base = (HERE.parent / ".venv/lib/python3.12/site-packages/transformers/models/whisper")
+    for filename, expected in SOURCE_SHA256.items():
+        source = base / filename
+        if not source.is_file() or digest(source) != expected:
+            raise ValueError(f"pinned Whisper source changed: {filename}")
 
 
 def schedule_sha256() -> str:
@@ -107,7 +155,10 @@ def schedule_sha256() -> str:
 
 
 if __name__ == "__main__":
-    print(json.dumps({"schema": "nonspeech_padding_channel_plan_v1",
+    print(json.dumps({"schema": "nonspeech_padding_channel_plan_v2",
                       "non_silence_cases": 18, "silence_baselines": 2,
+                      "donor_read_only_capture_calls": 2,
                       "per_case_site_arms": 12, "total_calls": len(schedule()),
+                      "worst_case_core_evidence_bytes": worst_case_core_evidence_bytes(),
+                      "resource_budget_fits": resource_budget_fits(),
                       "schedule_sha256": schedule_sha256()}, sort_keys=True))

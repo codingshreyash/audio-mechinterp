@@ -11,12 +11,22 @@ from models.second_architecture.nonspeech_probe_v1 import padding_channel_plan_v
 class PaddingChannelPlanTests(unittest.TestCase):
     def test_frozen_population_and_full_factorial(self) -> None:
         rows = plan.schedule()
-        self.assertEqual(len(rows), 434)
+        self.assertEqual(len(rows), 436)
         self.assertEqual(len({(row["case_id"], row["site"], row["arm"])
-                              for row in rows}), 434)
+                              for row in rows}), 436)
         self.assertEqual(Counter(row["arm"] for row in rows), {
-            "no_hook": 2, **{arm: 36 for arm in
+            "no_hook": 2, "read_only_donor_capture": 2,
+            **{arm: 36 for arm in
                               plan.CELLS + plan.CONTROLS + plan.PHASE_SPLITS}})
+        self.assertEqual(Counter(row["hook_policy"] for row in rows),
+                         {"none": 38, "capture_both_sites_both_phases": 38,
+                          "edit": 360})
+        for donor in plan.SILENCE:
+            donor_rows = [row for row in rows if row["case_id"] == donor]
+            self.assertEqual([row["arm"] for row in donor_rows],
+                             ["no_hook", "read_only_donor_capture"])
+            self.assertEqual([row["hook_policy"] for row in donor_rows],
+                             ["none", "capture_both_sites_both_phases"])
         cases = set(plan.population()) - set(plan.SILENCE)
         self.assertEqual(len(cases), 18)
         for site in plan.SITES:
@@ -26,6 +36,14 @@ class PaddingChannelPlanTests(unittest.TestCase):
                 self.assertEqual(actual,
                                  set(plan.CELLS + plan.CONTROLS + plan.PHASE_SPLITS))
                 self.assertIn(plan.donor_for(case_id), plan.SILENCE)
+                rr = next(row for row in rows if row["site"] == site
+                          and row["case_id"] == case_id and row["arm"] == "RR")
+                read_only = next(row for row in rows if row["site"] == site
+                                 and row["case_id"] == case_id
+                                 and row["arm"] == "read_only")
+                self.assertEqual(rr["hook_policy"], "none")
+                self.assertEqual(read_only["hook_policy"],
+                                 "capture_both_sites_both_phases")
 
 
     def test_fixed_geometry_and_boundary_partition(self) -> None:
@@ -59,6 +77,23 @@ class PaddingChannelPlanTests(unittest.TestCase):
             with patch.object(plan, "MANIFEST", changed):
                 with self.assertRaisesRegex(ValueError, "manifest changed"):
                     plan.schedule()
+
+    def test_source_pins_and_resource_ceilings(self) -> None:
+        plan.verify_installed_source_bytes()
+        self.assertEqual(plan.PINNED_MODEL,
+                         "openai/whisper-tiny@169d4a4341b33bc18d8881c4b69c2e104e1cc0af")
+        self.assertEqual(plan.WALL_SECONDS, 1800)
+        self.assertEqual(plan.RSS_LIMIT_BYTES, 4 * 1024**3)
+        self.assertEqual(plan.EVIDENCE_LIMIT_BYTES, 2 * 1024**3)
+        self.assertEqual(plan.worst_case_core_evidence_bytes(), 1_375_203_488)
+        self.assertTrue(plan.resource_budget_fits())
+        with patch.object(plan, "EVIDENCE_LIMIT_BYTES",
+                          plan.worst_case_core_evidence_bytes()):
+            self.assertFalse(plan.resource_budget_fits())
+        with patch.dict(plan.SOURCE_SHA256,
+                        {"modeling_whisper.py": "0" * 64}):
+            with self.assertRaisesRegex(ValueError, "source changed"):
+                plan.verify_installed_source_bytes()
 
 
 if __name__ == "__main__":
