@@ -1,0 +1,15 @@
+# VoiceChat public-sample smoke source handoff
+
+19 November 2026. `public_sample_smoke_v1.py` implements the separate public-sample-only path in amendment `91a6d83` and conceptual review `cf399b0`. It is a source candidate awaiting independent source review and an externally reviewed executable freeze. **No VoiceChat weights, GPU, Brev host, public sample, or calendar fixture were run while developing it.** The no-model tests inject fake preflight checks and an executor. They do not create a real freeze or authorize model use.
+
+The production CLI has no dependency-injection switch. It requires an externally keyed freeze review binding the exact freeze bytes and independent source-review hash. The source reviewer must separately create a JSON record with schema `voicechat_public_sample_source_review_v1`, decision `GO`, the exact six-role `source_sha256` map, reviewer ID and UTC review time. The freeze binds that record, an explicit run ID equal to the output directory name, this runner, tests, handoff, shared preflight, amendment, conceptual review, absolute paths, exact four-argument official command, pinned NeMo/source/sample/checkpoint/Nano identities, inherited environment hash, and finite caps. The runner reserves a new exclusive output directory before its `ready` then `preload` checks, so a failed attempt consumes the run ID. Both phases reuse the shared pinned source, checkpoint, Nano, package, GPU and disk checks; they add the exact public WAV and response hashes and the exact Nano `refs/main` bytes, and omit only calendar QA, controller grants and anchor. The official script process starts only after those checks, the offline environment check, and another frozen-source/environment comparison. It receives no calendar tool, WAV, stub, adapter or dispatcher.
+
+The launcher streams complete stdout/stderr into bounded evidence, samples process-tree GPU memory with `nvidia-smi`, checks wall time and aggregate output, terminates its process group on a cap failure, and retains partial evidence. Successful output is labeled only `environment_smoke_only`, with transport-file hashes. A failure is labeled `failed_or_incomplete_environment_smoke`. Sampled GPU telemetry cannot prove that a shorter transient peak never occurred; independent source review must assess whether this monitor and the provisional caps suffice before a live freeze. A future controller must protect the review HMAC key and attest the reviewer; a caller-supplied key alone is not proof of independence.
+
+The existing fixture protocol is untouched. An early sample smoke cannot replace independently authenticated 12/12 human listening QA, adjudications, both C grants, external anchor, fixture-specific ready/preload, fixture worker review or fixture executable freeze. The sample output proves no calendar parity, model mechanism, or security finding.
+
+No-model check:
+
+```sh
+reproductions/audio_prior/.venv/bin/python -m unittest models.second_architecture.voicechat_calendar_fixture_v1.test_public_sample_smoke_v1 -v
+```
