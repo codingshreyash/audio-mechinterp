@@ -86,10 +86,16 @@ def make_fixture(base:Path,model:str)->tuple[Path,Path,Path,dict]:
         [*records,{"type":"complete","calls":56}])+"\n")
     (attempt/"progress.jsonl").write_text("\n".join(json.dumps(p) for p in progress)+"\n")
     start=datetime(2026,11,19,12,0,tzinfo=timezone.utc)
-    host_samples=[{"monotonic_seconds":100.1,"battery_percent":99,"lid_open":True,
-                   "thermal_ok":True,"collected_utc":(start+timedelta(milliseconds=100)).isoformat()},
-                  {"monotonic_seconds":101.9,"battery_percent":98,"lid_open":True,
-                   "thermal_ok":True,"collected_utc":(start+timedelta(seconds=1.9)).isoformat()}]
+    host_samples=[{"monotonic_seconds":100.1,"battery_percent":99,"pmset_percent":99,
+                   "external_connected":False,"power_text":"Now drawing from 'Battery Power' 99%;",
+                   "thermal_text":"No thermal warning level has been recorded\nNo performance warning level has been recorded",
+                   "lid_open":True,"thermal_ok":True,
+                   "collected_utc":(start+timedelta(milliseconds=100)).isoformat()},
+                  {"monotonic_seconds":101.9,"battery_percent":98,"pmset_percent":98,
+                   "external_connected":False,"power_text":"Now drawing from 'Battery Power' 98%;",
+                   "thermal_text":"No thermal warning level has been recorded\nNo performance warning level has been recorded",
+                   "lid_open":True,"thermal_ok":True,
+                   "collected_utc":(start+timedelta(seconds=1.9)).isoformat()}]
     (attempt/"host_samples.jsonl").write_text("\n".join(json.dumps(x) for x in host_samples)+"\n")
     rss={"sample_index":1,"monotonic_seconds":100.5,"tree_rss_bytes":123456,
          "evidence_bytes":1000}

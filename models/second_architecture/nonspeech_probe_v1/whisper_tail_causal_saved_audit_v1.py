@@ -186,6 +186,7 @@ def audit(model:str,admission:Path,go:Path)->dict:
             <=result["deadline_monotonic"],"host monitor end invalid")
     host.validate_cadence(samples,start=result["start_monotonic"],
                           end=result["host_monitor_end_monotonic"])
+    for sample in samples:host.validate_saved_text(sample)
     start_utc=datetime.fromisoformat(result["start_utc"])
     worker_exit=datetime.fromisoformat(result["worker_exit_utc"])
     end_utc=datetime.fromisoformat(result["end_utc"])
@@ -194,7 +195,9 @@ def audit(model:str,admission:Path,go:Path)->dict:
             "whole clock proof invalid")
     post_log=attempt/"post_power_log.txt"
     require(worker.sha(post_log)==result["post_power_log_sha256"],"post power log hash invalid")
-    old_host.validate_log(post_log.read_text(),start_utc,worker_exit,
+    final_host_utc=datetime.fromisoformat(samples[-1]["collected_utc"])
+    require(worker_exit<=final_host_utc<=end_utc,"post-worker host sample time invalid")
+    old_host.validate_log(post_log.read_text(),start_utc,final_host_utc,
                           datetime.fromisoformat(result["post_power_log_collected_utc"]))
     require(parent.progress_census(attempt/"progress.jsonl")
             =={"complete":56,"attempted_incomplete":None}

@@ -91,6 +91,20 @@ def validate_cadence(samples: list[dict], *, start: float, end: float) -> None:
                 "saved lid or thermal warning")
 
 
+def validate_saved_text(sample:dict)->None:
+    """Recheck archived pmset/thermal text against the sanitized live summary."""
+    power_text=sample.get("power_text")
+    thermal_text=sample.get("thermal_text")
+    match=re.search(r"\b(\d{1,3})%;",power_text) if isinstance(power_text,str) else None
+    require(bool(match) and int(match.group(1))==sample.get("pmset_percent")
+            and abs(sample["battery_percent"]-sample["pmset_percent"])<=2
+            and sample.get("external_connected") is ("'AC Power'" in power_text)
+            and isinstance(thermal_text,str)
+            and "No thermal warning level has been recorded" in thermal_text
+            and "No performance warning level has been recorded" in thermal_text,
+            "saved host sample text/summary invalid")
+
+
 def power_log(start: datetime, end: datetime) -> str:
     log = old.command(old.COMMANDS["power_log"])
     old.validate_log(log,start,end,datetime.now(timezone.utc))
