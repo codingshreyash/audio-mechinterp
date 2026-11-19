@@ -1,0 +1,494 @@
+{
+  "baseline_count": 16,
+  "baselines": [
+    {
+      "case": "color_05_kokoro_silver",
+      "eligible": true,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS SILVER WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_kokoro_teal",
+      "eligible": false,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS TIL WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_piper_silver",
+      "eligible": true,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS SILVER WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_piper_teal",
+      "eligible": false,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS TEEL WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_kokoro_cup",
+      "eligible": false,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS CUB WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_kokoro_plate",
+      "eligible": true,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS PLATE WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_piper_cup",
+      "eligible": true,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS CUP WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_piper_plate",
+      "eligible": true,
+      "mode": "C",
+      "transcript": "THE WORD I CHOSE IS PLATE WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_kokoro_silver",
+      "eligible": true,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS SILVER WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_kokoro_teal",
+      "eligible": false,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS TIL WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_piper_silver",
+      "eligible": true,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS SILVER WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "color_05_piper_teal",
+      "eligible": false,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS TEEL WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_kokoro_cup",
+      "eligible": false,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS CUB WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_kokoro_plate",
+      "eligible": true,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS PLATE WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_piper_cup",
+      "eligible": true,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS CUP WHAT WORD DID I CHOOSE"
+    },
+    {
+      "case": "object_02_piper_plate",
+      "eligible": true,
+      "mode": "S",
+      "transcript": "THE WORD I CHOSE IS PLATE WHAT WORD DID I CHOOSE"
+    }
+  ],
+  "eligibility_by_mode": {
+    "C": {
+      "eligible": 5,
+      "ineligible": 3
+    },
+    "S": {
+      "eligible": 5,
+      "ineligible": 3
+    }
+  },
+  "limits": "Saved-data consistency only; model execution cannot be independently proven from files.",
+  "preflight_sha256": "00fe5020a17f95f9461d1e957787e34c2bd808d8533831fd2a5ca3b8833e085b",
+  "records_sha256": "c9865f4ec306e57baf7dbfc7bd05037ec769034d95db70440972904fcab2507c",
+  "status": "independent_saved_data_audit_pass",
+  "trace": [
+    {
+      "engine": "piper",
+      "mode": "S",
+      "pair_id": "color_05",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.9917923808097839
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.4704008102416992
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.008143801242113113
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.1521453857421875
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.4426136016845703
+        },
+        "input_values": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.2664613723754883
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 11.267951011657715
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.7740546464920044
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.184737205505371
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.7888290882110596
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "mode": "C",
+      "pair_id": "color_05",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.991794228553772
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.47034597396850586
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.008142955601215363
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.1520462036132812
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 6104,
+          "offslot_maxabs": 0.0
+        },
+        "input_values": {
+          "first_nonzero_index": 30527,
+          "offslot_maxabs": 0.0
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 11.272212982177734
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.7740561366081238
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.185279130935669
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.7888355255126953
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "mode": "S",
+      "pair_id": "color_05",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.3965793251991272
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.21528315544128418
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.006842330098152161
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.710712432861328
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.3548412322998047
+        },
+        "input_values": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.22046661376953125
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 8.780998229980469
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.29622596502304077
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.9990108609199524
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.588567852973938
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "mode": "C",
+      "pair_id": "color_05",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.3966521620750427
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.21510910987854004
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.006839334964752197
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.7117156982421875
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 6784,
+          "offslot_maxabs": 0.0
+        },
+        "input_values": {
+          "first_nonzero_index": 33927,
+          "offslot_maxabs": 0.0
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 8.760987281799316
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.2962620258331299
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.997978150844574
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.5872793197631836
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "mode": "S",
+      "pair_id": "object_02",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.46735507249832153
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.7844756841659546
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.016653046011924744
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 4.797883987426758
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.2883024215698242
+        },
+        "input_values": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.18251419067382812
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 18.840225219726562
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.425498902797699
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.6979656219482422
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.571080207824707
+        }
+      }
+    },
+    {
+      "engine": "piper",
+      "mode": "C",
+      "pair_id": "object_02",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.4673539400100708
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.7844173908233643
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.016653485596179962
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 4.797819137573242
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 6118,
+          "offslot_maxabs": 0.0
+        },
+        "input_values": {
+          "first_nonzero_index": 30595,
+          "offslot_maxabs": 0.0
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 18.84278106689453
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.42549723386764526
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.6981027126312256
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.5710670948028564
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "mode": "S",
+      "pair_id": "object_02",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.34086358547210693
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.2835578918457031
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.003928288817405701
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.508502960205078
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.42835426330566406
+        },
+        "input_values": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.2661409378051758
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 15.849146842956543
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.21804063022136688
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.3885670900344849
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.477028489112854
+        }
+      }
+    },
+    {
+      "engine": "kokoro",
+      "mode": "C",
+      "pair_id": "object_02",
+      "stages": {
+        "encoder_pre_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.3408812880516052
+        },
+        "feature_projection": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.2834286689758301
+        },
+        "final_feature_conv": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.003927059471607208
+        },
+        "first_conv_norm": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 2.5044631958007812
+        },
+        "first_conv_raw": {
+          "first_nonzero_index": 6783,
+          "offslot_maxabs": 0.0
+        },
+        "input_values": {
+          "first_nonzero_index": 33921,
+          "offslot_maxabs": 0.0
+        },
+        "logits": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 15.846809387207031
+        },
+        "post_block0": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 0.21803589165210724
+        },
+        "post_block11": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.388499140739441
+        },
+        "post_block5": {
+          "first_nonzero_index": 0,
+          "offslot_maxabs": 1.4759502410888672
+        }
+      }
+    }
+  ],
+  "trace_count": 8
+}

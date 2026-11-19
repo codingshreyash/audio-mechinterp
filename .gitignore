@@ -24,6 +24,10 @@ __pycache__/
 *.pyc
 *.log
 
+# Large, locally retained Wav2Vec2 FIT tensor captures are bound by a tracked hash manifest.
+models/second_architecture/runs/wav2vec2_fit_baseline_stage_capture_v1/*/captures/*.npy
+models/second_architecture/runs/wav2vec2_fit_baseline_stage_capture_v1/*/traces/*.npy
+
 # Cloned upstream repositories are pinned in reproduction manifests
 reproductions/anthropic_jlens/jacobian-lens/
 reproductions/audio_prior/audiolens/
