@@ -1,0 +1,3 @@
+# Narrow CUDA typed-only QA exception V2
+
+19 November 2026. This source-only amendment grants no executable GO. It supersedes the V1 CUDA exception only for the fresh V2 CUDA paths. V1 remains under independent source HOLD. An independent reviewer may approve one load-only V2 attempt, then one typed `F_L1` V2 pilot only after a passing saved load audit. No WAV, audio, other FIT, development, or locked case is admitted. The frozen wording, labels, sites, score, threshold, dose and split stay fixed. A one-case pilot is a technical feasibility check, not a security finding. Full audio work still requires two-listener QA and a separate reviewed runner.
