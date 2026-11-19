@@ -87,7 +87,7 @@ def verified_file(path: Path, expected: str) -> None:
             f"missing or changed source file: {path}")
 
 
-def verified_complement() -> list[dict]:
+def verified_complement() -> tuple[dict, list[dict]]:
     for key, path in (
         ("complement_records", COMPLEMENT / "records.jsonl"),
         ("complement_audit", COMPLEMENT / "audit.json"),
@@ -134,11 +134,11 @@ def verified_complement() -> list[dict]:
             verified_file(COMPLEMENT / rel, item["sha256"])
     actual = {p.relative_to(COMPLEMENT).as_posix() for p in COMPLEMENT.rglob("*.npy")}
     require(actual == expected == set(by_path), "complement sidecar population differs")
-    return patches
+    return rows[0]["receipt"], patches
 
 
 def load_verified() -> dict:
-    complement_patches = verified_complement()
+    complement_receipt, complement_patches = verified_complement()
     for key, path in (
         ("baseline_records", BASELINE / "records.jsonl"),
         ("baseline_audit", BASELINE / "audit.json"),
@@ -168,6 +168,15 @@ def load_verified() -> dict:
 
     base_rows = read_jsonl(BASELINE / "records.jsonl")
     causal_rows = read_jsonl(CAUSAL / "records.jsonl")
+    causal_receipt = causal_rows[0]["receipt"]
+    require(complement_receipt["prior_records_sha256"] == EXPECTED_SHA["causal_records"]
+            and complement_receipt["prior_audit_sha256"] == EXPECTED_SHA["causal_audit"]
+            and complement_receipt["prior_manifest_sha256"] == EXPECTED_SHA["causal_inventory"]
+            and complement_receipt["base_preflight"] == causal_receipt["base_preflight"]
+            and all(complement_receipt[k] == causal_receipt[k] for k in
+                    ("baseline_records_sha256", "baseline_audit_sha256",
+                     "baseline_manifest_sha256")),
+            "complement does not bind to the prior causal cohort")
     require(len(base_rows) == 26 and len(causal_rows) == 226,
             "frozen run row counts differ")
     require(base_rows[0]["type"] == causal_rows[0]["type"] == "preflight"
