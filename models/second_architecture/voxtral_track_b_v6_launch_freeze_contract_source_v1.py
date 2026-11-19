@@ -8,6 +8,7 @@ run the pilot, or authorize a model weight load.
 from __future__ import annotations
 
 import json
+import math
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -115,6 +116,53 @@ def prepare_bound_inputs_for_child(*, files: worker.AdmissionFiles,
                        'transfer_device': device}
 
 
+def _audit_parent_result(parent_result: Mapping[str, Any]) -> None:
+    """Require all runtime fields despite a forged or re-pinned result file."""
+    if not isinstance(parent_result, dict):
+        raise ValueError('Parent watchdog result is not an object')
+    elapsed = parent_result.get('elapsed_seconds')
+    if (parent_result.get('status') != 'child_completed' or
+            type(parent_result.get('child_exit_code')) is not int or
+            parent_result['child_exit_code'] != 0 or
+            parent_result.get('operation_status') != 'schedule_complete_resource_unverified' or
+            type(elapsed) not in (int, float) or not math.isfinite(elapsed) or
+            not 0 < elapsed <= runtime.DEADLINE_SECONDS):
+        raise ValueError('Parent watchdog status, operation or 240-second elapsed invalid')
+    cap = parent_result.get('cap')
+    samples = parent_result.get('samples')
+    if not isinstance(cap, dict) or not isinstance(samples, dict):
+        raise ValueError('Parent allocator or MPS sampler evidence missing')
+    recommended = cap.get('recommended_max_memory_bytes')
+    fraction = cap.get('configured_fraction')
+    if (type(recommended) is not int or recommended < runtime.CAP_BYTES or
+            type(cap.get('configured_allocator_cap_bytes')) is not int or
+            cap['configured_allocator_cap_bytes'] != runtime.CAP_BYTES or
+            cap.get('allocator_cap_kind') !=
+                'PyTorch MPS allocation limit; not exact device peak' or
+            type(fraction) not in (int, float) or not math.isfinite(fraction) or
+            not math.isclose(fraction, runtime.CAP_BYTES / recommended,
+                             rel_tol=1e-12, abs_tol=0)):
+        raise ValueError('Parent PyTorch MPS allocator cap evidence invalid')
+    highwater = samples.get('sampled_driver_highwater_lower_bound_bytes')
+    count = samples.get('sample_count')
+    interval = samples.get('sample_interval_seconds')
+    by_call = samples.get('sampled_lower_bound_by_call_ordinal')
+    if (type(highwater) is not int or not 0 < highwater <= runtime.CAP_BYTES or
+            type(count) is not int or count < 2 or
+            type(interval) not in (int, float) or not math.isfinite(interval) or
+            interval != runtime.SAMPLE_INTERVAL_SECONDS or
+            samples.get('exact_transient_peak_measured') is not False or
+            not isinstance(by_call, dict) or not by_call):
+        raise ValueError('Parent MPS sampled lower-bound evidence invalid')
+    for key, value in by_call.items():
+        if (not isinstance(key, str) or not key.isdecimal() or
+                str(int(key)) != key or not 1 <= int(key) <= 88 or type(value) is not int or
+                not 0 <= value <= highwater):
+            raise ValueError('Parent per-call MPS sample evidence invalid')
+    if not any(value > 0 for value in by_call.values()):
+        raise ValueError('Parent per-call MPS samples have no positive observation')
+
+
 def audit_composition_sidecars(*, output_dir: Path, bindings: Mapping[str, Any],
                                pins: FutureLauncherPins,
                                expected_measurement_sha256: str,
@@ -149,13 +197,19 @@ def audit_composition_sidecars(*, output_dir: Path, bindings: Mapping[str, Any],
         raise ValueError('Post-host collection is not strictly later')
     parent_claim = json.loads(watchdog.read_text())
     parent_result = json.loads(watchdog_result.read_text())
-    if (parent_claim.get('schema') != 'voxtral_track_b_v6_parent_deadline_claim_v1' or
+    worker_claim = json.loads(claim.read_text())
+    if (not isinstance(parent_claim, dict) or not isinstance(worker_claim, dict) or
+            parent_claim.get('schema') != 'voxtral_track_b_v6_parent_deadline_claim_v1' or
             parent_claim.get('campaign_claim_path') != str(claim) or
             parent_claim.get('output_dir') != str(output_dir.resolve()) or
             parent_claim.get('deadline_seconds') != runtime.DEADLINE_SECONDS or
-            parent_result.get('status') != 'child_completed' or
-            parent_result.get('child_exit_code') != 0):
-        raise ValueError('Parent watchdog claim/result incomplete or failed')
+            worker_claim.get('schema') != 'voxtral_track_b_v6_campaign_claim_v1' or
+            worker_claim.get('campaign_attempt_id') != bindings.get('campaign_attempt_id') or
+            worker_claim.get('output_dir') != str(output_dir.resolve()) or
+            worker_claim.get('bindings_sha256') != worker.sha_bytes(json.dumps(
+                dict(bindings), sort_keys=True, separators=(',', ':')).encode())):
+        raise ValueError('Parent/worker campaign claim incomplete or changed')
+    _audit_parent_result(parent_result)
     worker_files = [p for p in output_dir.rglob('*') if p.is_file()]
     if any(p.is_symlink() for p in output_dir.rglob('*')):
         raise ValueError('Symlink in pilot output')
