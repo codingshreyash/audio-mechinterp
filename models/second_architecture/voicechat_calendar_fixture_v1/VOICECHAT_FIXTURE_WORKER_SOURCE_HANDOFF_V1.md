@@ -9,7 +9,8 @@ the passive recorder, sends it through the existing QA-gated adapter, and
 saves the raw result and observer frames with the reviewed lossless capture
 codec. The high-level adapter writes to a *new child directory* beneath the
 supervisor's already prepared arm directory. The stock arms use the pinned
-official helper with a bounded, hash-bound, inert response file. The two
+official helper with a bounded, inert response file checked against the
+caller's expected hash. The two
 TTS-wrapped arms and the no-TTS arm use the same helper path.
 
 The default admission callback always raises before NeMo import or model
@@ -22,8 +23,8 @@ output. A test-only status is the only status this worker accepts.
 ## Verified in this increment
 
 - Default admission fails before any factory or artifact write.
-- Admission and QA checks run before NeMo/model factories; wrong QA source-plan
-  hashes and wrong stock response hash fail at that boundary.
+- Admission and QA checks run before NeMo/model factories; wrong QA hashes in
+  the request and wrong stock response hash fail at that boundary.
 - Adapter capture observes exactly two passes in the fixed decode order and
   persists re-loadable raw tensors and observer frames.
 - Three stock arm variants use an inert response and persist raw stock helper
@@ -50,7 +51,9 @@ output. A test-only status is the only status this worker accepts.
 4. A pre-use check of exact system/tool/template/helper/checkpoint bytes at
    each arm, and post-use checks for mutation. This worker compares the
    selected QA hashes to the source plan and pins the stock response hash;
-   other source identity is still an admission/supervisor responsibility.
+   other source identity is still an admission/supervisor responsibility. The
+   supervisor must prove that the expected stock response hash came from the
+   saved adapter decision, rather than accepting an arbitrary request value.
 5. Verify that the recorder's per-step TTS codes correspond to the official
    final trimmed `gen_codes`, and verify stock versus zero-edit adapter
    identity using *reloaded* saved captures. No such comparison is claimed

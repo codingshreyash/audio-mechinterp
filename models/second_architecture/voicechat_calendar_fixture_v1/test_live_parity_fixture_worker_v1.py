@@ -225,7 +225,7 @@ class FixtureWorkerTests(unittest.TestCase):
         self.request["input_hashes"]["selected_wav"] = "0" * 64
         self.request["arm"] = "stock_a"
         self.request["response_sha256"] = "1" * 64
-        with self.assertRaisesRegex(ValueError, "adapter-bound response"):
+        with self.assertRaisesRegex(ValueError, "expected response hash"):
             self._run()
         self.assertEqual(self.events, ["gate", "qa"])
 

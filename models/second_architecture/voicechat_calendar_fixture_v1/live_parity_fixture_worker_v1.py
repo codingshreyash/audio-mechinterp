@@ -153,7 +153,7 @@ def run_fixture_arm(
             Path(request["response_path"]),
             byte_cap=request["capture_byte_cap"])
         _require(response_sha == request.get("response_sha256"),
-                 "Stock response differs from adapter-bound response hash")
+                 "Stock response differs from expected response hash")
 
     # These calls occur only after the admission callback has returned.
     official = official_factory()
