@@ -1,4 +1,4 @@
-"""Read-only, no-weight audit of a gated Whisper time-translation attempt."""
+"""Read-only, no-weight audit of isolated Whisper tail/end V2 attempts."""
 from __future__ import annotations
 
 import argparse
