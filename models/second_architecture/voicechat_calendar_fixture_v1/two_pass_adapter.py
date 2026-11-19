@@ -519,11 +519,14 @@ def run_live_case_from_audited_wav(
     confirmation_state: dict[str, Any] | None = None,
     controller_key: bytes | None = None,
     trusted_controller_id: str | None = None,
+    inference_runner: Callable[..., dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Future live entry point with input, prompt, and immediate-snapshot gates.
 
     This function is implemented but has not been invoked with a real model.
-    Independent source review and external WAV QA are prerequisites.
+    Independent source review and external WAV QA are prerequisites. A
+    separately reviewed passive observer may wrap ``inference_runner``;
+    omission preserves the original pinned-model call path.
     """
     # Run the all-12 v2 gate before any model or NeMo import and bind this case
     # to the exact receipt bytes. A v1 per-WAV receipt cannot enter this path.
@@ -603,6 +606,8 @@ def run_live_case_from_audited_wav(
         prompt_tokens=prompt_tokens, prompt_token_lens=prompt_token_lens,
         device=device, confirmation_state=confirmation_state,
         controller_key=controller_key, trusted_controller_id=trusted_controller_id,
+        inference_runner=(_default_inference_runner if inference_runner is None
+                          else inference_runner),
         on_pass_complete=snapshot,
     )
     if sha256_file(out / "input_wav_exact.wav") != trace["source"]["source_wav_sha256"] or \
