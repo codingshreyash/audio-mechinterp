@@ -1,0 +1,3 @@
+# Typed CUDA V4 pilot-only QA exception
+
+19 November 2026. This exception permits **one fresh typed `F_L1__typed` pilot only** at `runs/typed_pilot_cuda_v4/pilot_003`, after committed V4 source, a committed no-weight V4 admission candidate, an independent source review, and a separate V4 pilot GO. The V3 `load_002` attempt remains immutable and is not rerun. Its posthoc saved audit, independent posthoc GO, and independent load-result review are prerequisites, not a pilot authorization. The V3 `pilot_002` remains blocked. No audio, development, locked, or broader benchmark cases are permitted. A failed or partial V4 attempt is consumed and cannot be retried under this exception.
