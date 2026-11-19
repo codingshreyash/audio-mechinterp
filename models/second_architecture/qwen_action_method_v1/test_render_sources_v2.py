@@ -7,12 +7,15 @@ from contextlib import ExitStack
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
+from types import SimpleNamespace
 
 import numpy as np
 
 from . import audit_sources_v2 as audit
 from . import listening_bundle_v2 as bundle
 from . import render_sources_v2 as source
+
+REAL_VALIDATE_GO = source.validate_go
 
 
 class FakeTTS:
@@ -118,6 +121,23 @@ class V2Tests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "no reviewed GO"):
                 source.render(other)
         self.assertFalse(other.exists())
+
+    def test_independent_go_binds_exact_review_and_source(self):
+        expected = {"render.py": "frozen-source-hash"}
+        receipt = {"schema": "qwen_action_speech_render_go_v2",
+                   "status": "independent_executable_go",
+                   "sources": expected, "review_sha256": source.sha(self.review)}
+        with patch.object(source, "validate_go", REAL_VALIDATE_GO), \
+             patch.object(source, "ROOT", self.base), \
+             patch.object(source, "reviewed_sources", return_value=expected), \
+             patch.object(source.subprocess, "run",
+                          return_value=SimpleNamespace(returncode=0)):
+            self.go.write_text(json.dumps(receipt))
+            self.assertEqual(source.validate_go()["sources"], expected)
+            receipt["sources"] = {"render.py": "changed"}
+            self.go.write_text(json.dumps(receipt))
+            with self.assertRaisesRegex(ValueError, "does not bind current source"):
+                source.validate_go()
 
 
 if __name__ == "__main__":
