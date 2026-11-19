@@ -4,13 +4,17 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
+import sys
 import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
 from .voicechat_step400_saved_auditor_v1 import (
     PINNED_SAMPLES, PINNED_SAMPLE_BYTES, PINNED_SOURCES, audit_saved_attempt,
 )
+from . import voicechat_step400_supervisor_v1 as parent
 
 IDENTITY = {
     "nemo_revision": "097dfe9e2f55baf653b83035868bdc89849f1b47",
@@ -126,7 +130,81 @@ def reseal_parent(root: Path, **overrides) -> None:
     (root / "parent_result.json").write_bytes(encoded(parent))
 
 
+def rewrite_ledger(root: Path, rows: list[dict]) -> None:
+    data = b"".join(map(encoded, rows))
+    (root / "checkpoints.jsonl").write_bytes(data)
+    worker = json.loads((root / "worker_completion.json").read_bytes())
+    worker["core"]["ledger"].update(sha256=hashlib.sha256(data).hexdigest(),
+                                     bytes=len(data))
+    (root / "worker_completion.json").write_bytes(encoded(worker))
+    reseal_parent(root)
+
+
 class SavedAuditorTests(unittest.TestCase):
+    def test_real_probe_worker_parent_fake_process_to_saved_audit(self):
+        script = textwrap.dedent('''
+            import os, time, types
+            from pathlib import Path
+            from unittest.mock import patch
+            import torch
+            from models.second_architecture.voicechat_calendar_fixture_v1 import voicechat_step400_worker_v1 as worker
+            from models.second_architecture.voicechat_calendar_fixture_v1 import voicechat_step400_probe_core_v1 as probe
+            from models.second_architecture.voicechat_calendar_fixture_v1.test_voicechat_step400_saved_auditor_v1 import IDENTITY
+
+            class STT:
+                def _step_inference(self, t, state, *args, **kwargs):
+                    return None
+            class TTS:
+                def infer_codes_one_step(self, **kwargs):
+                    return (None, None)
+            model = types.SimpleNamespace(stt_model=STT(), tts_model=TTS())
+            def offline(current_model, **kwargs):
+                assert current_model is model and kwargs['decode_audio'] is False
+                state = {'T': 859}
+                for t in range(1, 401):
+                    current_model.stt_model._step_inference(t, state, None, None)
+                    current_model.tts_model.infer_codes_one_step(**{
+                        key: (True if key == 'ignore_eos_flag_stop' else None)
+                        for key in probe.TTS_KWARGS})
+            def nvml(pid):
+                return {'used_bytes': 1024, 'model_pid_present': True,
+                        'sample_monotonic': time.monotonic(), 'query_seconds': 0.0}
+            fake_cuda = {
+                'synchronize': lambda device: None,
+                'memory_allocated': lambda device: 100,
+                'memory_reserved': lambda device: 200,
+                'max_memory_allocated': lambda device: 150,
+                'max_memory_reserved': lambda device: 220,
+                'reset_peak_memory_stats': lambda device: None,
+            }
+            root = Path.cwd().parent
+            with patch.object(worker, 'verify_pinned_public_sample', return_value=dict(IDENTITY)), \\
+                 patch.object(worker, 'import_pinned_official', return_value=(object(), types.SimpleNamespace(run_offline_inference=offline))), \\
+                 patch.object(worker, 'prepare_official_inputs', return_value=(model, None, None, None, None, {})), \\
+                 patch.object(probe, 'nvml_process_sample', side_effect=nvml), \\
+                 patch.multiple(torch.cuda, **fake_cuda):
+                worker.run_worker(nemo_dir=root / 'nemo', checkpoint_dir=root / 'staged',
+                                  output_dir=Path.cwd(),
+                                  heartbeat_fd=int(os.environ['VOICECHAT_DIAG_HEARTBEAT_FD']))
+            time.sleep(.25)
+        ''')
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder).resolve()
+            (root / "nemo").mkdir()
+            (root / "staged").mkdir()
+            environment = os.environ.copy()
+            repo = Path(__file__).resolve().parents[3]
+            environment["PYTHONPATH"] = str(repo)
+            parent_result = parent.supervise_candidate(
+                command=[sys.executable, "-c", script], environment=environment,
+                output_dir=root / "attempt", staged_checkpoint_dir=root / "staged",
+                gpu_sample=lambda _pid: parent.GpuSample(1, 1, True),
+                disk_free_bytes=lambda _path: 31 * 1024**3)
+            self.assertEqual(parent_result["status"],
+                             "bounded_child_complete_pending_saved_audit", parent_result)
+            audited = audit_saved_attempt(root / "attempt", expected_identity=IDENTITY)
+            self.assertEqual(audited["status"], "PASS", audited)
+
     def test_complete_six_checkpoint_fixture_passes(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder) / "attempt"
@@ -217,6 +295,47 @@ class SavedAuditorTests(unittest.TestCase):
             write_fixture(root)
             other = {**IDENTITY, "prompt_sha256": "0" * 64}
             self.assertEqual(audit_saved_attempt(root, expected_identity=other)["status"], "NO_GO")
+
+    def test_resealed_impossible_measurements_fail(self):
+        def long_query(rows):
+            rows[1]["nvml"]["query_seconds"] = 100.0
+
+        def oversized_cuda(rows):
+            huge = 140_000 * 1024**2
+            rows[1]["cuda"].update(allocated_bytes=huge,
+                                   reserved_bytes=huge,
+                                   max_allocated_bytes=huge,
+                                   max_reserved_bytes=huge)
+
+        def oversized_carried(rows):
+            huge = 1024**4
+            state = rows[1]["carried"]
+            state["tensor_rows"][0]["storage_bytes"] = huge
+            state["families"]["stt"]["unique_storage_bytes"] = huge
+            state["families"]["stt"]["unique_cuda_storage_bytes"] = huge
+            state["global_unique_storage_bytes"] = huge
+            state["global_unique_cuda_storage_bytes"] = huge
+
+        def float_step(rows):
+            rows[2]["t"] = 100.0
+
+        for mutation in (long_query, oversized_cuda, oversized_carried, float_step):
+            with self.subTest(mutation=mutation.__name__), tempfile.TemporaryDirectory() as folder:
+                root = Path(folder) / "attempt"
+                write_fixture(root)
+                rows = checkpoints()
+                mutation(rows)
+                rewrite_ledger(root, rows)
+                result = audit_saved_attempt(root, expected_identity=IDENTITY)
+                self.assertEqual(result["status"], "NO_GO", result)
+
+    def test_parent_elapsed_shorter_than_poll_span_fails(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder) / "attempt"
+            write_fixture(root)
+            reseal_parent(root, elapsed_monotonic_seconds=.001)
+            self.assertEqual(audit_saved_attempt(root, expected_identity=IDENTITY)["status"],
+                             "NO_GO")
 
     def test_content_in_tensor_path_fails(self):
         with tempfile.TemporaryDirectory() as folder:

@@ -22,6 +22,7 @@ MAX_LEDGER_BYTES = 8 * 1024**2
 MAX_RECORD_BYTES = 1 << 20
 MAX_GAP = .2
 MAX_GPU_MIB = 130_000
+MAX_GPU_BYTES = MAX_GPU_MIB * 1024**2
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 PATH = re.compile(r"(?:stt|tts)(?:\[entry:[0-9]+\]|\[[0-9]+\]|\.(?:layers|keys|values))*\Z")
 TYPE = re.compile(r"[A-Za-z_][\w.]*(?:\.[A-Za-z_][\w]*)?\Z")
@@ -202,6 +203,8 @@ def _check_poll(rows: list[dict[str, Any]], parent: dict[str, Any]) -> tuple[flo
     require(math.isclose(max(gaps), finite(parent.get("largest_sample_gap_seconds"),
                                            "bad parent gap"), abs_tol=1e-6),
             "parent largest poll gap mismatch")
+    require(finite(parent["elapsed_monotonic_seconds"], "bad parent elapsed")
+            >= ends[-1] - starts[0], "parent elapsed shorter than GPU polling span")
     return starts[0], ends[-1], max(gaps)
 
 
@@ -262,7 +265,7 @@ def _check_carried(value: Any) -> dict[str, Any]:
             "shared_bytes": shared, "global_unique_bytes": global_bytes}
 
 
-def _check_cuda(cuda: Any) -> None:
+def _check_cuda(cuda: Any) -> int:
     keys(cuda, {"allocated_bytes", "reserved_bytes", "max_allocated_bytes",
                 "max_reserved_bytes"}, "CUDA counter schema changed")
     allocated, reserved, peak_allocated, peak_reserved = (
@@ -272,11 +275,16 @@ def _check_cuda(cuda: Any) -> None:
     require(allocated <= reserved and allocated <= peak_allocated
             and reserved <= peak_reserved and peak_allocated <= peak_reserved,
             "CUDA counters inconsistent")
+    require(peak_reserved <= MAX_GPU_BYTES,
+            "observed CUDA peak exceeds GPU cap")
+    return allocated
 
 
 def _check_checkpoint_rows(rows: list[dict[str, Any]], first_poll: float,
                            last_poll: float) -> list[dict[str, Any]]:
-    require(len(rows) == len(STEPS) and tuple(row.get("t") for row in rows) == STEPS,
+    require(len(rows) == len(STEPS)
+            and all(type(row.get("t")) is int and row["t"] == expected
+                    for row, expected in zip(rows, STEPS)),
             "checkpoint order incomplete")
     summaries: list[dict[str, Any]] = []
     previous_nvml: float | None = None
@@ -289,7 +297,8 @@ def _check_checkpoint_rows(rows: list[dict[str, Any]], first_poll: float,
             expected.add("pre_step_1_baseline")
         keys(row, expected, "checkpoint schema changed")
         require(row["schema"] == "voicechat_step400_checkpoint_v1"
-                and row["T"] == 859, "checkpoint identity changed")
+                and type(row["T"]) is int and row["T"] == 859,
+                "checkpoint identity changed")
         require(type(row["device_id"]) is str and
                 re.fullmatch(r"(?:[0-9]+|cuda:[0-9]+)", row["device_id"]) is not None,
                 "checkpoint device invalid")
@@ -306,9 +315,10 @@ def _check_checkpoint_rows(rows: list[dict[str, Any]], first_poll: float,
         require(nvml["model_pid_present"] is True
                 and nonnegative(nvml["used_bytes"], "bad checkpoint process bytes")
                 <= MAX_GPU_MIB * 1024**2, "checkpoint PID absent or GPU cap exceeded")
-        finite(nvml["query_seconds"], "bad checkpoint query time")
+        query = finite(nvml["query_seconds"], "bad checkpoint query time")
         require(first_poll <= start < snap <= sample <= last_poll
-                and math.isclose(lag, sample - snap, abs_tol=1e-6),
+                and math.isclose(lag, sample - snap, abs_tol=1e-6)
+                and query <= lag + 1e-6,
                 "checkpoint interval or telemetry outside parent coverage")
         if previous_nvml is not None:
             require(previous_nvml <= start, "checkpoint intervals overlap")
@@ -321,7 +331,8 @@ def _check_checkpoint_rows(rows: list[dict[str, Any]], first_poll: float,
             base_nvml = baseline["nvml"]
             keys(base_nvml, {"used_bytes", "model_pid_present", "sample_monotonic",
                              "query_seconds"}, "baseline NVML schema changed")
-            require(baseline["T"] == 859 and first_poll <= base_snap
+            require(type(baseline["T"]) is int and baseline["T"] == 859
+                    and first_poll <= base_snap
                     <= finite(base_nvml["sample_monotonic"], "bad baseline NVML time")
                     <= base_reset == start and base_reset < snap
                     and base_nvml["model_pid_present"] is True,
@@ -329,14 +340,19 @@ def _check_checkpoint_rows(rows: list[dict[str, Any]], first_poll: float,
             nonnegative(base_nvml["used_bytes"], "bad baseline NVML bytes")
             require(base_nvml["used_bytes"] <= MAX_GPU_MIB * 1024**2,
                     "baseline GPU cap exceeded")
-            finite(base_nvml["query_seconds"], "bad baseline query")
+            require(finite(base_nvml["query_seconds"], "bad baseline query")
+                    <= base_nvml["sample_monotonic"] - base_snap + 1e-6,
+                    "baseline NVML query exceeds elapsed time")
             _check_cuda(baseline["cuda"])
-        _check_cuda(row["cuda"])
+        allocated = _check_cuda(row["cuda"])
         carried = _check_carried(row["carried"])
+        require(row["carried"]["global_unique_cuda_storage_bytes"] <= allocated,
+                "enumerated CUDA storage exceeds PyTorch allocated bytes")
         summaries.append({"t": row["t"], "allocated_bytes": row["cuda"]["allocated_bytes"],
                           "max_allocated_bytes": row["cuda"]["max_allocated_bytes"],
                           "reserved_bytes": row["cuda"]["reserved_bytes"],
                           "checkpoint_process_bytes": nvml["used_bytes"],
+                          "nvml_lag_seconds": lag,
                           **carried})
         previous_nvml = sample
     return summaries
