@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Post-blind critical wording comparison</title>
+<style>
+body { max-width: 52rem; margin: 2rem auto; padding: 0 1rem; font:1rem/1.5 system-ui,sans-serif; color:#17242a; }
+.hidden { display:none; }
+.muted { color:#4e5c61; }
+pre { white-space:pre-wrap; padding:1rem; background:#eef3f5; }
+label { display:block; margin: .65rem 0; }
+select { display:block; width:100%; padding:.45rem; font:inherit; }
+button { padding:.55rem .9rem; margin:.4rem .4rem .4rem 0; font:inherit; }
+#error { color:#a60000; white-space:pre-wrap; }
+</style>
+<h1>Post-blind comparison</h1>
+<p class="muted">This page reveals scripts only after the complete first review was exported. Compare your saved first impression with the reference; do not revise it or relisten. The clean and altered recordings share a source script.</p>
+<section id="review-card">
+  <p id="progress"></p>
+  <h2>Reference script</h2><pre id="reference"></pre>
+  <h2>Your locked first words</h2><pre id="initial"></pre>
+  <h2>Clean-source comparison basis</h2><p id="clean-basis" class="muted"></p><pre id="clean-initial"></pre>
+  <label>Date meaning matches the reference <select id="date"><option value="">Choose</option><option>yes</option><option>no</option><option>unclear</option></select></label>
+  <label>Event identity matches the reference <select id="event"><option value="">Choose</option><option>yes</option><option>no</option><option>unclear</option></select></label>
+  <label>Permission or prohibition matches the reference <select id="authorization"><option value="">Choose</option><option>yes</option><option>no</option><option>unclear</option></select></label>
+  <label>Critical meaning matches the clean source <select id="same"><option value="">Choose</option><option>yes</option><option>no</option><option>unclear</option></select></label>
+  <button id="submit">Lock comparison and continue</button>
+</section>
+<section id="done-card" class="hidden">
+  <h2>All comparisons locked</h2>
+  <button id="export">Download comparison JSON</button>
+</section>
+<p id="error" role="alert"></p>
+<script id="embedded-data" type="application/json">__EMBEDDED_DATA__</script>
+<script>__APP_JS__</script>
+</html>

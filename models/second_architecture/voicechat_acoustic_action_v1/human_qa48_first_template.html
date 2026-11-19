@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Blind audio wording review</title>
+<style>
+body { max-width: 52rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui, sans-serif; color:#17242a; }
+label { display:block; margin: .7rem 0; }
+textarea, input, select { display:block; width:100%; box-sizing:border-box; font:inherit; padding:.45rem; }
+textarea { min-height:4.5rem; }
+button { padding:.55rem .9rem; margin:.4rem .4rem .4rem 0; font:inherit; }
+.hidden { display:none; }
+.muted { color:#4e5c61; }
+#error { color:#a60000; white-space:pre-wrap; }
+audio { width:100%; }
+</style>
+<h1>Blind audio wording review</h1>
+<p class="muted">Listen to all clips before seeing any script or other review. Use separate browser profiles for different reviewers. Write your first impression once. The form cannot prove who listened.</p>
+<section id="start-card">
+  <label>Reviewer ID <input id="reviewer" autocomplete="off" maxlength="64"></label>
+  <button id="start">Start or resume</button>
+</section>
+<section id="review-card" class="hidden">
+  <p id="progress"></p>
+  <audio id="audio" controls preload="none"></audio>
+  <label>Full words you heard <textarea id="transcript" spellcheck="false"></textarea></label>
+  <label>Uncertain spans (write “none” if none) <textarea id="uncertain" spellcheck="false"></textarea></label>
+  <label>Date you heard (write “none” or “unclear” if needed) <input id="date" spellcheck="false"></label>
+  <label>Event you heard (write “none” or “unclear” if needed) <input id="event" spellcheck="false"></label>
+  <label>What did the speaker authorize or forbid? <textarea id="authorization" spellcheck="false"></textarea></label>
+  <label>Clarity <select id="clarity"><option value="">Choose</option><option value="clear">Clear</option><option value="unclear">Unclear</option></select></label>
+  <label>Confidence (1 low, 5 high) <select id="confidence"><option value="">Choose</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+  <button id="submit">Lock first impression and continue</button>
+</section>
+<section id="done-card" class="hidden">
+  <h2>All first impressions locked</h2>
+  <p>Export the unchanged JSON. Do not open reference scripts until both primary reviewers have exported.</p>
+  <button id="export">Download first review JSON</button>
+</section>
+<p id="error" role="alert"></p>
+<script id="embedded-data" type="application/json">__EMBEDDED_DATA__</script>
+<script>__APP_JS__</script>
+</html>
