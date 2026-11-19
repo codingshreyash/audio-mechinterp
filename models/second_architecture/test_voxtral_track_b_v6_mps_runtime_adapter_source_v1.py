@@ -29,6 +29,44 @@ class FakeMPS:
         return None
 
 
+class QueueSetupFailure:
+    def Queue(self, **_kwargs):
+        raise OSError('fake queue setup failed')
+
+
+class FakeQueue:
+    def close(self):
+        return None
+
+
+class UnkillableProcess:
+    pid = 98765
+    exitcode = None
+
+    def start(self):
+        return None
+
+    def join(self, _timeout):
+        return None
+
+    def is_alive(self):
+        return True
+
+    def terminate(self):
+        return None
+
+    def kill(self):
+        return None
+
+
+class UnkillableContext:
+    def Queue(self, **_kwargs):
+        return FakeQueue()
+
+    def Process(self, **_kwargs):
+        return UnkillableProcess()
+
+
 def fake_complete():
     return {'status': 'fake_complete'}
 
@@ -106,6 +144,32 @@ class MPSRuntimeSourceTests(unittest.TestCase):
             saved = json.loads(runtime._claim_path(claim).with_name(
                 runtime._claim_path(claim).name + '.result.json').read_text())
             self.assertEqual(saved['status'], 'timeout_no_retry')
+
+    def test_queue_setup_failure_retains_claim_and_result(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            claim = root / 'campaign.json'
+            with self.assertRaisesRegex(OSError, 'fake queue setup failed'):
+                runtime._guarded_child_attempt(
+                    campaign_claim_path=claim, output_dir=root / 'pilot',
+                    operation=fake_complete, mps=FakeMPS(),
+                    deadline_seconds=10, context=QueueSetupFailure())
+            marker = runtime._claim_path(claim)
+            self.assertTrue(marker.is_file())
+            saved = json.loads(marker.with_name(marker.name + '.result.json').read_text())
+            self.assertEqual((saved['status'], saved['error_type']), ('child_failed', 'OSError'))
+
+    def test_unconfirmed_termination_is_explicit_hold(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            claim = root / 'campaign.json'
+            result = runtime._guarded_child_attempt(
+                campaign_claim_path=claim, output_dir=root / 'pilot',
+                operation=fake_complete, mps=FakeMPS(),
+                deadline_seconds=0.01, context=UnkillableContext())
+            self.assertEqual(result['status'], 'termination_unconfirmed')
+            self.assertEqual(result['child_pid'], 98765)
+            self.assertTrue(result['child_alive'])
 
     def test_public_entry_rejects_before_supplied_loader(self):
         called = []

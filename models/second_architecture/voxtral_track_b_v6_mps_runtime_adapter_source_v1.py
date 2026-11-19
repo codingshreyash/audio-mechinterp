@@ -170,11 +170,13 @@ def _guarded_child_attempt(*, campaign_claim_path: Path, output_dir: Path,
                                    'campaign_claim_path': str(campaign_claim_path),
                                    'output_dir': str(output_dir.resolve()),
                                    'deadline_seconds': deadline_seconds})
-    ctx = context or mp.get_context('spawn')
-    results = ctx.Queue(maxsize=1)
-    process = ctx.Process(target=_child_entry,
-                          args=(operation, mps, output_dir / 'calls.jsonl', results))
+    results = None
+    process = None
     try:
+        ctx = context or mp.get_context('spawn')
+        results = ctx.Queue(maxsize=1)
+        process = ctx.Process(target=_child_entry,
+                              args=(operation, mps, output_dir / 'calls.jsonl', results))
         process.start()
         remaining = max(0.0, deadline_seconds - (time.monotonic() - start))
         process.join(remaining)
@@ -184,7 +186,13 @@ def _guarded_child_attempt(*, campaign_claim_path: Path, output_dir: Path,
             if process.is_alive():
                 process.kill()
                 process.join(2)
-            outcome = {'status': 'timeout_no_retry', 'error_type': 'TimeoutError'}
+            if process.is_alive():
+                outcome = {'status': 'termination_unconfirmed',
+                           'error_type': 'UnconfirmedProcessTermination',
+                           'child_pid': process.pid, 'child_alive': True}
+            else:
+                outcome = {'status': 'timeout_no_retry', 'error_type': 'TimeoutError',
+                           'child_pid': process.pid, 'child_alive': False}
         else:
             try:
                 outcome = results.get_nowait()
@@ -200,7 +208,7 @@ def _guarded_child_attempt(*, campaign_claim_path: Path, output_dir: Path,
         worker._exclusive_json(result_path, outcome)
         return outcome
     except BaseException as exc:
-        if process.is_alive():
+        if process is not None and process.pid is not None and process.is_alive():
             process.terminate()
             process.join(2)
             if process.is_alive():
@@ -209,10 +217,15 @@ def _guarded_child_attempt(*, campaign_claim_path: Path, output_dir: Path,
         if not result_path.exists():
             worker._exclusive_json(result_path, {'status': 'child_failed',
                                                  'error_type': type(exc).__name__,
-                                                 'error': str(exc)})
+                                                 'error': str(exc),
+                                                 'child_pid': process.pid if process else None,
+                                                 'termination_unconfirmed': bool(
+                                                     process is not None and process.pid is not None and
+                                                     process.is_alive())})
         raise
     finally:
-        results.close()
+        if results is not None:
+            results.close()
 
 
 def launch_v6_pilot(*_args: Any, **_kwargs: Any) -> None:
