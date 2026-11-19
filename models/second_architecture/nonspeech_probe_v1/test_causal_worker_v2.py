@@ -49,6 +49,12 @@ class WorkerSourceTests(unittest.TestCase):
             repeated = next(row for row in changed if row.get("run_id") == "d02_silence__repeat")
             repeated["pcm_sha256"] = "0" * 64
             reject(changed, "case metadata changed")
+            changed = json.loads(json.dumps(rows))
+            diff_positions = [index for index, row in enumerate(changed)
+                              if row["type"] == "silence_difference"]
+            changed[diff_positions[0]], changed[diff_positions[1]] = (
+                changed[diff_positions[1]], changed[diff_positions[0]])
+            reject(changed, "row chronology changed")
 
     def test_executable_go_requires_committed_receipts_and_ancestry(self) -> None:
         """A staged GO or uncommitted admission cannot authorize a model load."""

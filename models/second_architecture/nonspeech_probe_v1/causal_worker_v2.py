@@ -515,6 +515,31 @@ def save_native_states(output_dir: Path, case_id: str,
     return refs
 
 
+def expected_descriptive_record_order(case_names: tuple[str, ...]) -> list[tuple[str, str | None]]:
+    """Rebuild the descriptive worker's pending/silence-flush row chronology."""
+    order: list[tuple[str, str | None]] = [("start", None)]
+    pending: dict[str, str] = {}
+    seen_silence: set[str] = set()
+    for case_id in case_names:
+        order.append(("case", case_id))
+        donor_id = plan.donor_for(case_id)
+        if case_id == donor_id:
+            seen_silence.add(donor_id)
+            for prior, prior_donor in list(pending.items()):
+                if prior_donor == donor_id:
+                    order.append(("silence_difference", prior))
+                    del pending[prior]
+        elif donor_id in seen_silence:
+            order.append(("silence_difference", case_id))
+        else:
+            pending[case_id] = donor_id
+    require(not pending and seen_silence == set(plan.DONORS),
+            "descriptive silence comparison plan incomplete")
+    order.extend(("case", donor_id) for donor_id in plan.DONORS)
+    order.append(("complete", None))
+    return order
+
+
 def load_valid_v2_outputs(cases: dict[str, dict],
                           records_path: Path = DESCRIPTIVE_V2_RECORDS,
                           expected_sha: str = DESCRIPTIVE_V2_RECORDS_SHA) -> dict[str, dict]:
@@ -531,6 +556,9 @@ def load_valid_v2_outputs(cases: dict[str, dict],
     require(len(rows) == 42 and len(case_names) == 20
             and set(case_names) == set(plan.frozen_cases()),
             "valid descriptive V2 row or case census changed")
+    require([(item.get("type"), item.get("case_id")) for item in rows]
+            == expected_descriptive_record_order(case_names),
+            "valid descriptive V2 row chronology changed")
     require(rows[0].get("type") == "start"
             and rows[0].get("schema") == "nonspeech_descriptive_v1"
             and rows[0].get("model") == "whisper_multilingual"
