@@ -367,18 +367,21 @@ def supervise_candidate(
         if not poll_stream.closed:
             poll_stream.close()
         selector.close()
-        if process is not None and process.poll() is None:
-            _kill_group(process)
-        if process is not None:
-            for stream in (process.stdout, process.stderr):
-                if stream is not None and not stream.closed:
-                    stream.close()
-        if read_fd >= 0:
-            try:
-                os.close(read_fd)
-            except OSError:
-                pass
-        if write_fd >= 0:
-            os.close(write_fd)
-        if owned_sampler is not None:
-            owned_sampler.close()
+        try:
+            if process is not None:
+                # Even if the leader exited, descendants can remain in its session.
+                _kill_group(process)
+        finally:
+            if process is not None:
+                for stream in (process.stdout, process.stderr):
+                    if stream is not None and not stream.closed:
+                        stream.close()
+            if read_fd >= 0:
+                try:
+                    os.close(read_fd)
+                except OSError:
+                    pass
+            if write_fd >= 0:
+                os.close(write_fd)
+            if owned_sampler is not None:
+                owned_sampler.close()
