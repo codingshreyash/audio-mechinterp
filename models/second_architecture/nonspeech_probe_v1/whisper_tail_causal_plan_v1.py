@@ -127,6 +127,8 @@ def _input(record: dict) -> dict:
             "sequence_ids":record["output"]["sequence_ids"],
             "prefix_ids":record["output"]["prefix_ids"],
             "termination":record["output"]["termination"],
+            "mel":record["sidecars"]["mel"],
+            "mask":record["sidecars"]["mask"],
             "first_raw_logits":record["sidecars"]["first_raw_logits"],
             "first_processed_scores":record["sidecars"]["first_processed_scores"]}
 
