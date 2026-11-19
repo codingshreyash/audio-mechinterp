@@ -47,6 +47,9 @@ class HostGateIndependentTests(unittest.TestCase):
         outputs["power"] = "battery status unknown"
         cases.append(outputs)
         outputs = fixture()
+        outputs["power"] = outputs["power"].replace("Battery Power", "Unknown Power")
+        cases.append(outputs)
+        outputs = fixture()
         outputs["battery"] = "not plist"
         cases.append(outputs)
         cases.append(fixture(lid_closed=True))
