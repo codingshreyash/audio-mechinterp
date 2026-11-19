@@ -76,7 +76,7 @@ For the CUDA and source stages, use the venv Python, task-local temp, no persist
 df -B1 / | tee "$TASK/receipts/df-after-torch.txt"
 ```
 
-For a full version-pinned replay, first transfer the saved 430-line A100 inventory into `"$TASK/a100-freeze-after-mamba.txt"` and verify its **file** SHA-256 `0cf5115ff69b9b5a39efed85049bb19a015016660d5e39b3241f17401d76bc7d`. That is separate from the runner's normalized inventory digest. Make an install list from it by replacing only the machine-local PyArrow URL with `pyarrow==25.0.1` and deferring the two CUDA source builds and local NeMo package. The existing PyArrow wheel had SHA-256 `5389cdf79447ed1515c9e31620e6e1e2302249564d603f2ad727d4f6d313e4c3`; prefer that exact `cp312`/manylinux wheel when its official URL and hash can be verified, otherwise record a new wheel hash and review the difference. The [Mamba closure plan](VOICECHAT_MAMBA_DEPENDENCY_CLOSURE_SOURCE_PLAN_20261119.md) explains why all eight declared dependencies, already present in the A100 inventory, must remain. Proposed package replay:
+For a full version-pinned replay, first transfer the saved 430-line A100 inventory into `"$TASK/a100-freeze-after-mamba.txt"` and verify its **file** SHA-256 `0cf5115ff69b9b5a39efed85049bb19a015016660d5e39b3241f17401d76bc7d`. That is separate from the runner's normalized inventory digest. Make an install list from it by replacing only the machine-local PyArrow URL with the exact official PyPI wheel URL and deferring the two CUDA source builds and local NeMo package. [PyPI 25.0.1 metadata](https://pypi.org/pypi/pyarrow/25.0.1/json) reports the matching `cp312`/manylinux wheel SHA-256 `5389cdf79447ed1515c9e31620e6e1e2302249564d603f2ad727d4f6d313e4c3` and size 50,102,437 bytes. The [Mamba closure plan](VOICECHAT_MAMBA_DEPENDENCY_CLOSURE_SOURCE_PLAN_20261119.md) explains why all eight declared dependencies, already present in the A100 inventory, must remain. Proposed package replay:
 
 ```bash
 A100_INV="$TASK/a100-freeze-after-mamba.txt"
@@ -90,7 +90,7 @@ out = []
 for line in lines:
     name = line.split("==", 1)[0].lower().replace("_", "-")
     if line.startswith("pyarrow @ file:///home/ubuntu/voicechat-sample-wheelhouse/"):
-        out.append("pyarrow==25.0.1")
+        out.append("pyarrow @ https://files.pythonhosted.org/packages/60/c9/711ca85d79f1ec98f29a5eae2b051e25b4ecec5de3e3c0e2d5c5dcb15664/pyarrow-25.0.1-cp312-cp312-manylinux_2_28_x86_64.whl#sha256=5389cdf79447ed1515c9e31620e6e1e2302249564d603f2ad727d4f6d313e4c3")
     elif name in {"nemo-toolkit", "mamba-ssm", "causal-conv1d"}:
         continue
     else:
