@@ -1,0 +1,7 @@
+# Independent correction review: V6 pilot saved-data auditor
+
+18 November 2026. Reviewed correction `9a6a15f` against prior independent HOLD `ea0626e`, worker `e07ce77` and the V6 design. **GO for the corrected read-only saved-data auditor as a source-only HOLD evidence checker. This is not pilot or post-pilot GO.** I loaded no model and ran no inference.
+
+The two recorded gaps are fixed. Every one of the 72 no-grad and 12 gradient score completion rows must now carry the same prepatch source SHA-256 as the forced-clean generation's captured projector state. The auditor also requires the campaign claim outside the pilot directory and includes its file bytes in the 2-GiB full-attempt output total. New tests tamper a score source hash while rehashing the call log and measurement, and set the output cap exactly at the pilot-directory byte count so the external claim forces rejection.
+
+All **7/7 no-model tests passed**, and Python compilation passed. The 88-call fixed ledger, clean/zero suffix parity, timing formulas, claim/host/clock checks and false-resource-attestation rejection remain in place. A complete timing-feasible ledger still yields only `HOLD_no_post_pilot_go`: the existing worker cannot attest within-call MPS high-water, a hard watchdog, independent host interpretation, raw clock pairs or the permitted numeric repeat-parity tolerance from saved hashes. A future measured worker and independent post-pilot review are separate gates.
