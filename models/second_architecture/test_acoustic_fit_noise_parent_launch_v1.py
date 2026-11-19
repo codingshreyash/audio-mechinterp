@@ -91,6 +91,11 @@ class ParentLauncherTests(unittest.TestCase):
         missing_metric = [*rows]
         missing_metric[3] = {**missing_metric[3], "metrics": {}}
         self.assertFalse(check(missing_metric))
+        bool_metric = [*rows]
+        edited = {**bool_metric[3]["metrics"]}
+        edited["post_block0"] = {**edited["post_block0"], "whole_l2": True}
+        bool_metric[3] = {**bool_metric[3], "metrics": edited}
+        self.assertFalse(check(bool_metric))
         over_time = [*rows]
         over_time[-1] = {**over_time[-1], "elapsed_seconds": 1801}
         self.assertFalse(check(over_time))
@@ -181,6 +186,8 @@ class ParentLauncherTests(unittest.TestCase):
                       "launcher_review_sha256": parent.pilot.sha_file(launcher_review),
                       "status": "invalid_or_partial",
                       "evidence_sha256": parent.evidence_inventory(attempt)}
+            result["capture_bytes_before_result"] = sum(
+                value["bytes"] for value in result["evidence_sha256"].values())
             (attempt / "launch_result.json").write_text(json.dumps(result))
             with (mock.patch.object(parent, "source_binding", return_value=binding),
                   mock.patch.object(parent.pilot, "require_review"),
@@ -192,6 +199,32 @@ class ParentLauncherTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "inventory mismatch"):
                     parent.audit_saved_attempt("whisper", receipt, worker_review,
                                                launcher_review, attempt)
+                result["evidence_sha256"] = parent.evidence_inventory(attempt, allow_result=True)
+                (attempt / "launch_result.json").write_text(json.dumps(result))
+                with self.assertRaisesRegex(ValueError, "capture byte count mismatch"):
+                    parent.audit_saved_attempt("whisper", receipt, worker_review,
+                                               launcher_review, attempt)
+                (attempt / "large.bin").write_bytes(b"x" * (17 * 1024**2))
+                result["evidence_sha256"] = parent.evidence_inventory(attempt, allow_result=True)
+                result["capture_bytes_before_result"] = sum(
+                    value["bytes"] for value in result["evidence_sha256"].values())
+                result["status"] = "complete"
+                (attempt / "launch_result.json").write_text(json.dumps(result))
+                with self.assertRaisesRegex(ValueError, "byte cap"):
+                    parent.audit_saved_attempt("whisper", receipt, worker_review,
+                                               launcher_review, attempt)
+
+    def test_timeline_rejects_negative_and_bool_intervals(self):
+        result = {"start_utc": "2026-11-19T01:00:00+00:00",
+                  "end_utc": "2026-11-19T01:00:10+00:00",
+                  "start_monotonic": 100.0, "end_monotonic": 110.0,
+                  "wall_seconds": 10.0, "monotonic_seconds": 10.0}
+        pre = "2026-11-19T01:00:01+00:00"
+        post = "2026-11-19T01:00:09+00:00"
+        self.assertTrue(parent.valid_timeline(result, pre, post))
+        self.assertFalse(parent.valid_timeline({**result, "end_monotonic": 90.0}, pre, post))
+        self.assertFalse(parent.valid_timeline({**result, "wall_seconds": True}, pre, post))
+        self.assertFalse(parent.valid_timeline(result, post, pre))
 
     def test_launcher_review_cannot_share_worker_review_commit(self):
         with tempfile.TemporaryDirectory() as tmp:

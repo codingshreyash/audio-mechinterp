@@ -39,6 +39,10 @@ WAV_STAGES = ("input_values", "first_conv_raw", "first_conv_norm",
               "post_block0", "post_block5", "post_block11", "logits")
 
 
+def finite_number(value: object) -> bool:
+    return type(value) in (int, float) and math.isfinite(value)
+
+
 def utc() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -189,7 +193,7 @@ def valid_worker_rows(rows: list[dict], model: str, cases_expected: dict,
                 or row.get("pcm_sha256") != cases_expected[key][arm]):
             return False
         elapsed, rss = row.get("elapsed_seconds"), row.get("rss_bytes")
-        if (not isinstance(elapsed, (int, float)) or not math.isfinite(elapsed)
+        if (not finite_number(elapsed)
                 or not previous_time <= elapsed <= MAX_WORKER_SECONDS
                 or type(rss) is not int or not 0 < rss <= pilot.MAX_RSS_BYTES):
             return False
@@ -225,7 +229,7 @@ def valid_worker_rows(rows: list[dict], model: str, cases_expected: dict,
                 return False
             values = [metric.get(name) for name in ("whole_l2", "word_l2",
                                                        "outside_l2", "outside_maxabs")]
-            if any(not isinstance(v, (int, float)) or not math.isfinite(v) or v < 0
+            if any(not finite_number(v) or v < 0
                    for v in values):
                 return False
             whole, word, outside, maxabs = values
@@ -243,8 +247,31 @@ def valid_worker_rows(rows: list[dict], model: str, cases_expected: dict,
                            for s in stages)):
                 return False
     finish_time = complete.get("elapsed_seconds")
-    return (isinstance(finish_time, (int, float)) and math.isfinite(finish_time)
+    return (finite_number(finish_time)
             and previous_time <= finish_time <= MAX_WORKER_SECONDS)
+
+
+def valid_timeline(result: dict, pre_collected: str, post_collected: str) -> bool:
+    names = ("start_monotonic", "end_monotonic", "wall_seconds",
+             "monotonic_seconds")
+    if any(not finite_number(result.get(name)) for name in names):
+        return False
+    try:
+        start = datetime.fromisoformat(result["start_utc"])
+        end = datetime.fromisoformat(result["end_utc"])
+        pre = datetime.fromisoformat(pre_collected)
+        post = datetime.fromisoformat(post_collected)
+        if any(value.tzinfo is None for value in (start, end, pre, post)):
+            return False
+        wall = (end - start).total_seconds()
+        monotonic = result["end_monotonic"] - result["start_monotonic"]
+        return (start <= pre < post <= end
+                and 0 < wall and 0 < monotonic
+                and abs(wall - monotonic) <= 5
+                and abs(wall - result["wall_seconds"]) <= 1e-3
+                and abs(monotonic - result["monotonic_seconds"]) <= 1e-3)
+    except (KeyError, TypeError, ValueError):
+        return False
 
 
 def evidence_inventory(attempt: Path, *, allow_result: bool = False) -> dict[str, dict]:
@@ -417,6 +444,16 @@ def audit_saved_attempt(model: str, receipt: Path, worker_review: Path,
     actual_inventory = evidence_inventory(attempt, allow_result=True)
     if actual_inventory != result.get("evidence_sha256"):
         raise ValueError("saved evidence SHA-256/size inventory mismatch")
+    parent_bytes = sum(entry["bytes"] for name, entry in actual_inventory.items()
+                       if not name.startswith("worker_output/"))
+    worker_bytes = actual_inventory.get("worker_output/records.jsonl", {}).get("bytes")
+    if (type(result.get("capture_bytes_before_result")) is not int
+            or result["capture_bytes_before_result"] != parent_bytes):
+        raise ValueError("saved parent capture byte count mismatch")
+    if result.get("status") == "complete" and (
+            parent_bytes > MAX_CAPTURE_BYTES or type(worker_bytes) is not int
+            or worker_bytes > pilot.MAX_OUTPUT_BYTES):
+        raise ValueError("saved complete attempt exceeds parent/worker byte cap")
     if result.get("status") != "complete":
         return {"schema": "acoustic_fit_noise_parent_audit_v1",
                 "status": "bound_invalid_or_partial", "attempt_path": str(attempt.resolve()),
@@ -435,27 +472,25 @@ def audit_saved_attempt(model: str, receipt: Path, worker_review: Path,
             or start.get("start_monotonic") != result["start_monotonic"]):
         raise ValueError("launch start and result identity mismatch")
     worker_time = result.get("worker_elapsed_seconds")
-    if (result.get("errors") != [] or result.get("worker_returncode") != 0
+    if (result.get("errors") != [] or result.get("worker_started") is not True
+            or type(result.get("worker_returncode")) is not int
+            or result.get("worker_returncode") != 0
             or result.get("worker_timed_out") is not False
-            or not isinstance(worker_time, (int, float))
-            or not math.isfinite(worker_time) or not 0 < worker_time <= MAX_WORKER_SECONDS
+            or not finite_number(worker_time) or not 0 < worker_time <= MAX_WORKER_SECONDS
             or result.get("worker_complete") is not True):
         raise ValueError("completed result has invalid worker outcome")
     rows = [json.loads(line) for line in (attempt / "worker_output/records.jsonl").read_text().splitlines()]
     if not valid_worker_rows(rows, model, current["cases"], result["preflight_sha256"],
                              result["worker_review_sha256"]):
         raise ValueError("saved worker matrix fails complete-row audit")
+    host_rows = {label: json.loads((attempt / f"{label}_host.json").read_text())
+                 for label in ("pre", "post")}
+    if not valid_timeline(result, host_rows["pre"].get("collected_utc"),
+                          host_rows["post"].get("collected_utc")):
+        raise ValueError("saved UTC/monotonic/host chronology mismatch")
     start_dt = datetime.fromisoformat(result["start_utc"])
-    end_dt = datetime.fromisoformat(result["end_utc"])
-    wall = (end_dt - start_dt).total_seconds()
-    monotonic = result["end_monotonic"] - result["start_monotonic"]
-    if (not math.isfinite(wall) or not math.isfinite(monotonic)
-            or abs(wall - monotonic) > 5
-            or abs(wall - result["wall_seconds"]) > 1e-3
-            or abs(monotonic - result["monotonic_seconds"]) > 1e-3):
-        raise ValueError("saved UTC/monotonic timing mismatch")
     for label in ("pre", "post"):
-        host = json.loads((attempt / f"{label}_host.json").read_text())
+        host = host_rows[label]
         outputs = host["outputs"]
         if ("Now drawing from 'AC Power'" not in outputs["power"]
                 or plistlib.loads(outputs["clamshell"].encode())[0].get("AppleClamshellState") is not False
