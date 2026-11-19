@@ -216,6 +216,49 @@ class FakeExecutionTests(unittest.TestCase):
         self.assertEqual(parent_census["completed_call_names"], names[:4])
         self.assertEqual(parent_census["censored_call_names"], names[5:])
 
+    def test_early_model_setup_failure_records_all_88_censors(self):
+        from transformers import Wav2Vec2Processor
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "worker_output"
+            admission, go = root / "admission.json", root / "go.json"
+            admission.write_text("{}")
+            go.write_text("{}")
+            with patch.object(worker, "validate_go", return_value={}), \
+                 patch.object(Wav2Vec2Processor, "from_pretrained",
+                              side_effect=RuntimeError("fake setup failure")):
+                with self.assertRaisesRegex(RuntimeError, "fake setup failure"):
+                    worker.run(output, admission, go)
+            rows = [json.loads(line) for line in (output / "records.jsonl").read_text().splitlines()]
+            names = worker.ordered_forward_names(worker.execution_plan())
+            self.assertEqual([r["type"] for r in rows], ["start", "failure"])
+            self.assertEqual(rows[-1]["attempted_forwards"], 0)
+            self.assertIsNone(rows[-1]["failed_attempted_call_name"])
+            self.assertEqual(rows[-1]["censored_call_names"], names)
+            self.assertEqual(rows[-1]["remaining_censored"], 88)
+
+    def test_plan_change_does_not_consume_one_shot_worker_directory(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "worker_output"
+            with patch.object(worker, "validate_go", return_value={}), \
+                 patch.object(worker, "execution_plan", side_effect=ValueError("changed plan")):
+                with self.assertRaisesRegex(ValueError, "changed plan"):
+                    worker.run(output, root / "admission.json", root / "go.json")
+            self.assertFalse(output.exists())
+
+    def test_parent_plan_change_does_not_consume_one_shot_attempt(self):
+        with tempfile.TemporaryDirectory() as directory:
+            attempt = Path(directory) / "attempt"
+            with patch.object(launcher, "ATTEMPT", attempt), \
+                 patch.object(worker, "validate_go", return_value={}), \
+                 patch.object(worker, "execution_plan", side_effect=ValueError("changed plan")):
+                with self.assertRaisesRegex(ValueError, "changed plan"):
+                    launcher.launch(Path(directory) / "admission.json",
+                                    Path(directory) / "go.json")
+            self.assertFalse(attempt.exists())
+
     def test_frozen_execution_plan_and_audit_name_order(self):
         plan = worker.execution_plan()  # hashes old source and all frozen FIT PCM
         self.assertEqual(plan["total_forward_ceiling"], 88)

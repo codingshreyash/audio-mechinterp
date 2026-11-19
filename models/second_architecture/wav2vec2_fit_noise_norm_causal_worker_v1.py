@@ -543,10 +543,11 @@ def run(output: Path, admission_path: Path, go_path: Path) -> None:
     from models.second_architecture import acoustic_fit_noise_pilot_v2 as old
 
     validate_go(admission_path, go_path)
+    plan = execution_plan()  # never consume the one-shot path if the plan changed
+    names = ordered_forward_names(plan)
     require(not output.exists(), "one-shot output directory already exists")
     output.mkdir(parents=True)
-    plan = execution_plan()
-    budget = Budget(output, expected_names=ordered_forward_names(plan),
+    budget = Budget(output, expected_names=names,
                     progress_path=output / "call_progress.jsonl")
     record_path = output / "records.jsonl"
 
@@ -557,10 +558,11 @@ def run(output: Path, admission_path: Path, go_path: Path) -> None:
             os.fsync(stream.fileno())
         budget.check()
 
-    record({"type": "start", "admission_sha256": source.sha_file(admission_path),
-            "go_sha256": source.sha_file(go_path), "plan_sha256": bytes_sha(canonical(plan).encode()),
-            "planned_forwards": MAX_FORWARDS, "utc_seconds": time.time()})
     try:
+        record({"type": "start", "admission_sha256": source.sha_file(admission_path),
+                "go_sha256": source.sha_file(go_path),
+                "plan_sha256": bytes_sha(canonical(plan).encode()),
+                "planned_forwards": MAX_FORWARDS, "utc_seconds": time.time()})
         torch.set_num_threads(4)
         processor = Wav2Vec2Processor.from_pretrained(SNAPSHOT, local_files_only=True)
         model, loading = Wav2Vec2ForCTC.from_pretrained(

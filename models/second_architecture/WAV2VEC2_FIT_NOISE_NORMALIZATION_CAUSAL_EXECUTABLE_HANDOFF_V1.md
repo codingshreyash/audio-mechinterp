@@ -34,6 +34,9 @@ It never retries. Its fixed
 output directory is supplied by the launcher at
 `runs/wav2vec2_fit_noise_norm_causal_v1/attempt_001/worker_output`.
 The parent refuses an existing attempt directory, even if it failed.
+Both parent and worker derive the 88-name plan before creating their
+one-shot directory. If model setup fails after creation but before any
+forward, the worker records all 88 names as censored.
 
 ## Admission and independent GO
 

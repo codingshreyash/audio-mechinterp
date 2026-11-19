@@ -148,6 +148,7 @@ def progress_census(path: Path, expected_names: list[str]) -> dict:
 
 def launch(admission_path: Path, go_path: Path) -> dict:
     admission = worker.validate_go(admission_path, go_path)
+    expected_names = worker.ordered_forward_names(worker.execution_plan())
     worker.require(not ATTEMPT.exists(), "frozen one-shot attempt already exists")
     ATTEMPT.mkdir(parents=True)
     start_utc = datetime.now(timezone.utc)
@@ -178,8 +179,7 @@ def launch(admission_path: Path, go_path: Path) -> dict:
         progress_path = ATTEMPT / "worker_output/call_progress.jsonl"
         result["worker_call_progress_sha256"] = (
             worker.source.sha_file(progress_path) if progress_path.is_file() else None)
-        result["worker_call_census"] = progress_census(
-            progress_path, worker.ordered_forward_names(worker.execution_plan()))
+        result["worker_call_census"] = progress_census(progress_path, expected_names)
         post = probe_host(ATTEMPT, "post", run_start=start_utc)
         result["pre_host_sha256"] = worker.source.sha_file(ATTEMPT / "pre_host.json")
         result["post_host_sha256"] = worker.source.sha_file(ATTEMPT / "post_host.json")
