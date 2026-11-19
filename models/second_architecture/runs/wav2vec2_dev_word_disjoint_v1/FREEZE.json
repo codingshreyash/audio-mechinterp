@@ -1,0 +1,22 @@
+{
+  "auditor_review": {
+    "path": "models/second_architecture/WAV2VEC2_DEV_WORD_DISJOINT_SOURCE_INDEPENDENT_REVIEW_V1.md",
+    "sha256": "56bb06e29828b5ac49db15c042599cd66d35e7ef42c9865de4c2506a2e6e1f64"
+  },
+  "auditor_sha256": "d106d1c03f5bc6410d49ea5b05eeaa78cf7a45a92e84dbc91da4a3c1bd127141",
+  "fit_hook_helper_sha256": "79932d09efbadf784b53f28e744bb7397d3908e2da43c41f1dd0240d5c3f9202",
+  "plan_review": {
+    "path": "models/second_architecture/WORD_DISJOINT_TIME_STATE_VALIDATION_PLAN_V2_INDEPENDENT_REVIEW.md",
+    "sha256": "2d96fc8104a81bcd3dda4dfdc9f84e5a773eca7481415bfdfd6492f2c747d4cd"
+  },
+  "plan_sha256": "a2065c2bf74b9acb56c511f89142e86aa653e3b2a910215ab42a1c478034d9e6",
+  "preflight_sha256": "105884efa6cd8963dad579ebdd47e1fb2e776e59399267477b198978800a224f",
+  "runner_review": {
+    "path": "models/second_architecture/WAV2VEC2_DEV_WORD_DISJOINT_SOURCE_INDEPENDENT_REVIEW_V1.md",
+    "sha256": "56bb06e29828b5ac49db15c042599cd66d35e7ef42c9865de4c2506a2e6e1f64"
+  },
+  "runner_sha256": "ea1f949aa039ff3d5cf96ca14932384f4f5197801976ab95b8bddacb66462f74",
+  "schema": "wav2vec2_dev_word_disjoint_v1_freeze",
+  "scope": "One exploratory CPU Track A run; no locked WAVs; no security claim",
+  "status": "independently_reviewed_frozen"
+}

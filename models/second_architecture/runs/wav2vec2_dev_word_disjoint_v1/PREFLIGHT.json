@@ -1,0 +1,2881 @@
+{
+  "arms": [
+    "self",
+    "W",
+    "O",
+    "full",
+    "random_W",
+    "random_O"
+  ],
+  "auditor_commit": "d255534366645200a14ec218a6cf6a89d86c0e44",
+  "auditor_sha256": "d106d1c03f5bc6410d49ea5b05eeaa78cf7a45a92e84dbc91da4a3c1bd127141",
+  "base_preflight": {
+    "cases": [
+      {
+        "engine": "piper",
+        "frames": 86876,
+        "key": "color_05_piper_silver",
+        "pair_id": "color_05",
+        "pcm_sha256": "79fc004685c31d196182f02deee103ec73b031917e88111338db853739e6cdc6",
+        "slot_samples": [
+          30527,
+          49847
+        ],
+        "wav_sha256": "fe554972f68b470fb0f4a1c844b874e70758279c281bba47e963792bef2634a9",
+        "word": "silver"
+      },
+      {
+        "engine": "piper",
+        "frames": 86876,
+        "key": "color_05_piper_teal",
+        "pair_id": "color_05",
+        "pcm_sha256": "dde8bdd8bb927aab4c4cc60925ba9a518e59d0d18d3995e36bffb6b8f331dd85",
+        "slot_samples": [
+          30527,
+          49847
+        ],
+        "wav_sha256": "112ed36abf5fb2be1ce77dcfffa9d1bb6deba10b4ecb2d14fc5960b8106626e9",
+        "word": "teal"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 91840,
+        "key": "color_05_kokoro_silver",
+        "pair_id": "color_05",
+        "pcm_sha256": "96bff0e029bd9f033b76e84258bc8ea75fe0f8c23bf965fbfe8f68a673f16386",
+        "slot_samples": [
+          33920,
+          57120
+        ],
+        "wav_sha256": "bcad702fa8b55c453286cb0e83ee3336a4bb6ade5e5ac9d4a42dc82c1a97c26e",
+        "word": "silver"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 91840,
+        "key": "color_05_kokoro_teal",
+        "pair_id": "color_05",
+        "pcm_sha256": "84e07ded47cb6410b0840e7d502f10810018319b5d55b50fe22aaed890848006",
+        "slot_samples": [
+          33920,
+          57120
+        ],
+        "wav_sha256": "5038dbe167ae2ba6c9317f74c17bd9bb8ef7d07bbdee9da49f6dc0731e119365",
+        "word": "teal"
+      },
+      {
+        "engine": "piper",
+        "frames": 79817,
+        "key": "object_02_piper_plate",
+        "pair_id": "object_02",
+        "pcm_sha256": "7aa1d0e13f984f4157930d28b7a10e81e25a47c36e062f565fa435892ed7043c",
+        "slot_samples": [
+          30527,
+          42788
+        ],
+        "wav_sha256": "42d0d964d124001db5d0eebc214f4dc8efeeee38f81850b22ae12d4bf0155a92",
+        "word": "plate"
+      },
+      {
+        "engine": "piper",
+        "frames": 79817,
+        "key": "object_02_piper_cup",
+        "pair_id": "object_02",
+        "pcm_sha256": "5712f0829c59432816c20284638232c619c7dfc3b5f6b515d50c1cb3b3255d8e",
+        "slot_samples": [
+          30527,
+          42788
+        ],
+        "wav_sha256": "12537b7770110e07b9e4f7764051df268096ed60cd993ae98ba4fa37e6c0cd0d",
+        "word": "cup"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 89040,
+        "key": "object_02_kokoro_plate",
+        "pair_id": "object_02",
+        "pcm_sha256": "86fb91e4622267279e3d5515374c9702f4f971687d91424cf6863b6f5dbde96e",
+        "slot_samples": [
+          33920,
+          54320
+        ],
+        "wav_sha256": "2fbb5182032f95dc70bb57545f9c94aa245ed73371edb2281f51eceb56fd24db",
+        "word": "plate"
+      },
+      {
+        "engine": "kokoro",
+        "frames": 89040,
+        "key": "object_02_kokoro_cup",
+        "pair_id": "object_02",
+        "pcm_sha256": "60acca534e9453f9c48b91028a155dbac5ac12c7cda400caaf84ebdd082b39f4",
+        "slot_samples": [
+          33920,
+          54320
+        ],
+        "wav_sha256": "c94cac1885730ce36238a9e8a7b736bc469daa96e711c956fabadd206222766a",
+        "word": "cup"
+      }
+    ],
+    "checkpoint_sha256": "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a",
+    "device": "cpu",
+    "expected_success_rows": 26,
+    "limits": {
+      "budget_check_limit": "operator-level forward peak is verified after return, not interruptible within one forward",
+      "max_output_bytes": 2147483648,
+      "max_rss_bytes": 4294967296,
+      "max_seconds": 1800,
+      "preforward_output_reserve": 134217728,
+      "preforward_rss_reserve": 1073741824
+    },
+    "locality_preflight_sha256": "15074ffee8bde339810b4be667e3ce40bd6a45e234739ea37c614497b6eba4a2",
+    "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+    "masking_load_note": {
+      "checkpoint_key_absent": true,
+      "expected_missing_key": "wav2vec2.masked_spec_embed",
+      "inactive_condition": "eval mode; mask_time_indices=None; mask_feature_prob=0.0",
+      "loading_info_gate": "exactly this missing key; no unexpected/mismatched/error keys"
+    },
+    "model_id": "facebook/wav2vec2-base-960h",
+    "model_revision": "22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
+    "modes": [
+      "S",
+      "C"
+    ],
+    "normalization": {
+      "C": "float32 (pcm/32768 - shared outside-slot mean) / sqrt(shared outside-slot variance + 1e-7)",
+      "S": "stock Wav2Vec2Processor; unpadded; per-utterance mean/variance; no attention mask",
+      "common_stats": {
+        "color_05_kokoro": {
+          "mean": -0.00034492244594730437,
+          "variance": 0.004016207531094551
+        },
+        "color_05_piper": {
+          "mean": -2.8228172595845535e-05,
+          "variance": 0.008134594187140465
+        },
+        "object_02_kokoro": {
+          "mean": -0.00034492244594730437,
+          "variance": 0.004016207531094551
+        },
+        "object_02_piper": {
+          "mean": -2.8228172595845535e-05,
+          "variance": 0.008134594187140465
+        }
+      }
+    },
+    "python_version": "3.12.13",
+    "run_schema": "wav2vec2_fit_baseline_run_v1",
+    "runner_sha256": "89497c216aea0437b8e5076dfdb76fa002c69800daf7a8ae231b8457b15486d2",
+    "runner_source_git_commit": "fe75bea4531faa5fe362bfa743dfeabdea6ab4fb",
+    "schema": "wav2vec2_fit_baseline_preflight_v1",
+    "snapshot_files_sha256": {
+      "config.json": "d3ec255c063d9f95057b553b19c20135b259875834a4fe9deb218a6be25b4cf3",
+      "model.safetensors": "8aa76ab2243c81747a1f832954586bc566090c83a0ac167df6f31f0fa917d74a",
+      "preprocessor_config.json": "b225d617c025463b9e157e06afea8b90dc7078fc70b013c533328423e0486b4a",
+      "special_tokens_map.json": "bb7068de1150661a10b55f9e4b12a0e77af8bf91f5e45e1b58afaf1d0e17f675",
+      "tokenizer_config.json": "dc790594f5bc351a4311c6624f40acd95850d4aaf2a5cb3c656c9b610720b608",
+      "vocab.json": "19727f8944fe6459fc3f240ae2c198395b740f6a029bd23e06656266b83bcf64"
+    },
+    "soundfile_version": "0.14.0",
+    "source_hashes": {
+      "transformers.models.wav2vec2.feature_extraction_wav2vec2": "e5e9a0baf70716fee503f4f66a7a61312a132be989b2d7e2649e057ccbefa2cc",
+      "transformers.models.wav2vec2.modeling_wav2vec2": "c404982e3a063a5f68ee85809356c8a5ed29ad24c8441eea1d56346a57b5da0c",
+      "transformers.models.wav2vec2.processing_wav2vec2": "95adaf4e8398ca3d72570eba32925dcd964ed3b0027ef9abff1fd2454a96d559",
+      "transformers.models.wav2vec2.tokenization_wav2vec2": "b4f8f80838e462bc5d77b3998aa500879bdcce951779223c94ce126f7ffa68f2"
+    },
+    "stage_names": [
+      "input_values",
+      "first_conv_raw",
+      "first_conv_norm",
+      "final_feature_conv",
+      "feature_projection",
+      "encoder_pre_block0",
+      "post_block0",
+      "post_block5",
+      "post_block11",
+      "logits"
+    ],
+    "threads": 4,
+    "torch_version": "2.15.0",
+    "transformers_version": "5.12.1"
+  },
+  "byte_ledger": {
+    "cap": 536870912,
+    "clean_payload_bound": 135567360,
+    "contingency": 67108864,
+    "max_frames": 101040,
+    "max_t": 315,
+    "metadata_bound": 33554432,
+    "npy_header_bound": 221184,
+    "patch_logits_payload_bound": 23224320,
+    "total_bound": 259676160
+  },
+  "cases": [
+    {
+      "frames": 97040,
+      "key": "animal_00_kokoro_bear",
+      "pcm_sha256": "d81e46afff5c6e128113e40922c4c50f7d72a57424d6d9afc91402c0fe89b393",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "bear",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        61920
+      ],
+      "wav_sha256": "4f29814b40716f7051caaa993ec19480ffdbb534ab19acde5ac1a5f812d8d417"
+    },
+    {
+      "frames": 97040,
+      "key": "animal_00_kokoro_wolf",
+      "pcm_sha256": "120010da9a0e322d9c2b45d533dcb4535e8b18218aaf9d86a47428395f295362",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "wolf",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        61920
+      ],
+      "wav_sha256": "d0bb294af16c6e65235a8c3894157c762d735c9e51a6b863827016ce0a655b95"
+    },
+    {
+      "frames": 89105,
+      "key": "animal_00_piper_bear",
+      "pcm_sha256": "21bd077fc8ca18c4d01f358927b93a531ed73a1d48c9cdd000bbb509cefb2c7c",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "bear",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        54305
+      ],
+      "wav_sha256": "fddcd99aa37a83fbbe6510b981669e2cb319de39ef049782be7389024903860c"
+    },
+    {
+      "frames": 89105,
+      "key": "animal_00_piper_wolf",
+      "pcm_sha256": "2bde7b975b2f73ef52baf27be1bce63489165064f54ee323b9f0f6cc01840a59",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "wolf",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        54305
+      ],
+      "wav_sha256": "f64806bf6a2980b7f49057922b07182ad9fd4b128b0337a9e6c5e741fe35b5e4"
+    },
+    {
+      "frames": 97840,
+      "key": "animal_04_kokoro_goose",
+      "pcm_sha256": "13b76cc981eca14d1dc557420b2e5620533d0ce0f2ca8ae97eed33f80a7c87c6",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "goose",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        62720
+      ],
+      "wav_sha256": "53253148b13700d6f04b41765331e083beddb22067db3484f4faaeccb42be419"
+    },
+    {
+      "frames": 97840,
+      "key": "animal_04_kokoro_mouse",
+      "pcm_sha256": "55e513649086cdf1251776d590b01c116e42ec058fdfcc1159471ffcc0d340dc",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "mouse",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        62720
+      ],
+      "wav_sha256": "02f52448246cfe2c14c4cb7180869f3cd336ce7d668668190d10ab38958e1301"
+    },
+    {
+      "frames": 90034,
+      "key": "animal_04_piper_goose",
+      "pcm_sha256": "8709c4f6626531383eadc9a238475d9c023c4fb1fd7d87084264af4fe2fd963e",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "goose",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55234
+      ],
+      "wav_sha256": "47e0f89a07e02ebb56b86795a16949297e57c24c1144df9a4c8f16af0d07f860"
+    },
+    {
+      "frames": 90034,
+      "key": "animal_04_piper_mouse",
+      "pcm_sha256": "ea2f0b88f73b033966b4b490529c2217b859fc48750938bc01aeac5a6964efa8",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "mouse",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55234
+      ],
+      "wav_sha256": "46b18e6fdba8425834b7025faac2e9c2f1f34c4e168046e52f6a87b712416fb3"
+    },
+    {
+      "frames": 98640,
+      "key": "animal_05_kokoro_rabbit",
+      "pcm_sha256": "4a5b7b11c1d850094f990d1b9fb2464bb40e1b854dea344bcd53bdcded853084",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "rabbit",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63520
+      ],
+      "wav_sha256": "c2763f7550353b636a741255df09e3557cf70fdf867748bf79c7d4e17c630699"
+    },
+    {
+      "frames": 98640,
+      "key": "animal_05_kokoro_fox",
+      "pcm_sha256": "dcc0ccdfa5add30a2a8cf00ebeb55a4205176d281d77bdee5af2377c1c505800",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "fox",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63520
+      ],
+      "wav_sha256": "eab759301018837b852223d6c39335c0607f3ce6fa7e7aa5aa983d74df05312f"
+    },
+    {
+      "frames": 90591,
+      "key": "animal_05_piper_rabbit",
+      "pcm_sha256": "31953811e69380f0380e24e080bd714807460dafa4adea8d3cd1f5a975409095",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "rabbit",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55791
+      ],
+      "wav_sha256": "3b5717c3b7abcfa1acb93618806118c2c4dffc9f597fadbf75a42e2600901530"
+    },
+    {
+      "frames": 90591,
+      "key": "animal_05_piper_fox",
+      "pcm_sha256": "f5de3b3a5bfbcf9d65bd0aedee024df8f888e0e740eefeba92e67a5da7dbc678",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "fox",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55791
+      ],
+      "wav_sha256": "43905f45e757de80e8ce7b4179c0fb997181db9b6d3baccae568f273e3bfc259"
+    },
+    {
+      "frames": 97840,
+      "key": "color_04_kokoro_gray",
+      "pcm_sha256": "d663a8894590f7269818ed8ec15fc105d39ce0dd09e10f9a96e71e969619cdc1",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "gray",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        62720
+      ],
+      "wav_sha256": "28229e43a84d88f053e8778e429565d610d5428b236b334b93a5b309ba93805d"
+    },
+    {
+      "frames": 97840,
+      "key": "color_04_kokoro_gold",
+      "pcm_sha256": "59af20a2c3090a100843822203201afd2ab321ad42c91303772ef7b093f6e0ff",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "gold",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        62720
+      ],
+      "wav_sha256": "0c8a319e75571a7d628458487891237a60ab1b408ccf7f954f88986bf4345068"
+    },
+    {
+      "frames": 89477,
+      "key": "color_04_piper_gray",
+      "pcm_sha256": "d8090fe423430d0769419986becfdace4bc7a344832d82625ae8c2de5b49a2ef",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "gray",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        54677
+      ],
+      "wav_sha256": "9d4471d204eefb5b6bc4c94d1c20aa4a5c9483a749b1485b403f0c3b43e8bfc7"
+    },
+    {
+      "frames": 89477,
+      "key": "color_04_piper_gold",
+      "pcm_sha256": "6e3b20c0c9a1a54197a4d78b8f8a96d9032db5fb23efeae3238a165f4e3a1989",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "gold",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        54677
+      ],
+      "wav_sha256": "f2865ed680f36a5d8a7d860f16e3a34968131b0837605f09956b8dac891c75c1"
+    },
+    {
+      "frames": 98240,
+      "key": "color_08_kokoro_olive",
+      "pcm_sha256": "a53734b3380357e29680a014a60bae1661ca9d326abdacd9180a1755cd7f3716",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "olive",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63120
+      ],
+      "wav_sha256": "e8450eab1f6a2b80f4d40208f62867058aef4cf75567ca5dad8bca525b77404f"
+    },
+    {
+      "frames": 98240,
+      "key": "color_08_kokoro_navy",
+      "pcm_sha256": "7664864fe9c4b9cef20b74d43453f35614b8844192efde034ff8e257f96d32db",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "navy",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63120
+      ],
+      "wav_sha256": "052316ad41179f111bf1ad2c01336499ed607508386cfbb767e4c3b3301fa909"
+    },
+    {
+      "frames": 91520,
+      "key": "color_08_piper_olive",
+      "pcm_sha256": "a965abbffa59baba4a091fb119ef5683ac842218ac7f4f10baec9ade8dfcba6f",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "olive",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        56720
+      ],
+      "wav_sha256": "7a7f3710571a7faf09c6d3f4f34b546290aafb2c2da06c2a77168673ed3b1663"
+    },
+    {
+      "frames": 91520,
+      "key": "color_08_piper_navy",
+      "pcm_sha256": "bcf521e0387f8e5e71b2532f0e9d1be744d64621829cf71b9a10b3bd834df098",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "navy",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        56720
+      ],
+      "wav_sha256": "55be7904e8840415bbdbad15edd0d245bdc50b2906e417d7b1ed9a4fab4166e2"
+    },
+    {
+      "frames": 101040,
+      "key": "color_09_kokoro_lavender",
+      "pcm_sha256": "4788a394271af46eb6cf5a58534c75ef1716c615d6dc4e99aa10014e31dd101f",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "lavender",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        65920
+      ],
+      "wav_sha256": "d2f9de717a2fe70b2a96f6a91470eb4d6444cfe3e817736a972604f4d8b2eddb"
+    },
+    {
+      "frames": 101040,
+      "key": "color_09_kokoro_turquoise",
+      "pcm_sha256": "4e3a406e4da4de7f481d41157f03125b77ea7c475ae2389086ade18d5106b17d",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "turquoise",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        65920
+      ],
+      "wav_sha256": "fc976e1bd80bbd224e59db1c756fb52ac41733fc8f93ff0b314bf765fadfcfb9"
+    },
+    {
+      "frames": 93563,
+      "key": "color_09_piper_lavender",
+      "pcm_sha256": "e44ed3fe1a0663125c6e74b3b15d7023380885d8f36efe9ad20155d06daabd37",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "lavender",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        58763
+      ],
+      "wav_sha256": "fcf4a3dd2fa7b1c76f6fa5ae96d8f7c21773c2689ea01287a5080363600166ac"
+    },
+    {
+      "frames": 93563,
+      "key": "color_09_piper_turquoise",
+      "pcm_sha256": "cb67c2bead39f7db813b1549e524fc492c93ef77a171f04c31fa3a4fabee0fc5",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "turquoise",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        58763
+      ],
+      "wav_sha256": "9531fc3bdf9c2d8dc18efd581e0a1621d9537a9c0bd0a8bfc2d246cfe2f43d40"
+    },
+    {
+      "frames": 99440,
+      "key": "nature_01_kokoro_ocean",
+      "pcm_sha256": "502089a237bfcba1ae0269eb6f1df354b3ab2a68a1cc1b1c5345b4301bffc805",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "ocean",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        64320
+      ],
+      "wav_sha256": "a0335db90ca1d880924527c59aeebb4199a454ab7e794ec58473913374df22dd"
+    },
+    {
+      "frames": 99440,
+      "key": "nature_01_kokoro_forest",
+      "pcm_sha256": "21a073d7ca4c9b0e2eae5b4de50bd143a513e57929b157f976f17d3b667f410d",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "forest",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        64320
+      ],
+      "wav_sha256": "cb01b40fa471622543dfc77f18a5621a5019101ddfbe09963926f92e9bbbe3a0"
+    },
+    {
+      "frames": 90777,
+      "key": "nature_01_piper_ocean",
+      "pcm_sha256": "218f4a24d66830c7037e7ce00cd592ac7fbdcee8a6807a5d0d3edc2e32f98cf0",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "ocean",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55977
+      ],
+      "wav_sha256": "bcb0788e02aaf8fd8c6fa102023ddcf2ddb092bdce7d52c01ebad97588bceccc"
+    },
+    {
+      "frames": 90777,
+      "key": "nature_01_piper_forest",
+      "pcm_sha256": "d6e7e78fe36413b7e393ac60e9f137cd40fd5e5136d6b6ad9a4378bf54fdd5f7",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "forest",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55977
+      ],
+      "wav_sha256": "67817e4a6ce47fa0c0199ecd967dd1d3553b702245d335b095427a1806b1f327"
+    },
+    {
+      "frames": 99040,
+      "key": "nature_06_kokoro_meadow",
+      "pcm_sha256": "e3445e8a28d32790fd543e0ee405e4356623f455691094866825fcbb1d25769b",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "meadow",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63920
+      ],
+      "wav_sha256": "576ad8661567ead4bd79fa02d303f6887ea9cf914ff84b62e620411ccc518a9b"
+    },
+    {
+      "frames": 99040,
+      "key": "nature_06_kokoro_swamp",
+      "pcm_sha256": "e05faed9e624e320f7bd74ea6d9724b5c35967e493878b3d4c05f63d5c6b3623",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "swamp",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63920
+      ],
+      "wav_sha256": "87e62d4ddc9da65054b587d1798054f51758a813fc4108362c1319a3f700d07a"
+    },
+    {
+      "frames": 93378,
+      "key": "nature_06_piper_meadow",
+      "pcm_sha256": "f8cac13c136408b01167ca80b47a39914a736b2f9719ebbb2a415b2365f4a147",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "meadow",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        58578
+      ],
+      "wav_sha256": "a48bb6940a95f73e97ef7cc91b9491a793a2dc63af5e260a7f89ab3cd01932d1"
+    },
+    {
+      "frames": 93378,
+      "key": "nature_06_piper_swamp",
+      "pcm_sha256": "3632d4d3294629f1ebfdad5b5958db6680719dc4f02d8b7f32cc312a8d6a9c12",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "swamp",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        58578
+      ],
+      "wav_sha256": "be4a66fce713f5f5a9876409f373c1cdad1f82ff7bc531eb8014df8fc59de53e"
+    },
+    {
+      "frames": 98240,
+      "key": "nature_11_kokoro_reef",
+      "pcm_sha256": "c4f2f7cfbb82f40574a32616dbca076b6fb488204c74f713789697d5ecc07c54",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "reef",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63120
+      ],
+      "wav_sha256": "33972c60f6b34bb35f01541f4cd1c263f35cf9ff98079162a7459d3612918e9b"
+    },
+    {
+      "frames": 98240,
+      "key": "nature_11_kokoro_rain",
+      "pcm_sha256": "674f82bd9d5cd7dafe123db3af22cd4ac5699f28b982542563b3c50483749d3a",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "rain",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        63120
+      ],
+      "wav_sha256": "ccdfc8ee270a96de3b8fc93842f94a687c4ea28665b40677202d7854c6796c07"
+    },
+    {
+      "frames": 89848,
+      "key": "nature_11_piper_reef",
+      "pcm_sha256": "5e7f86b7c34c14cabe70b5b7bbe5542b7a67d43b42203c02752a6b184a7e6846",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "reef",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55048
+      ],
+      "wav_sha256": "edf4a35fccc7c22366298f1d7511376bd0c0207d40729bc6f8733a3077c67ab5"
+    },
+    {
+      "frames": 89848,
+      "key": "nature_11_piper_rain",
+      "pcm_sha256": "be1f16af277f43eec576e6683adcbdf3bcc85c08003115765a59aaf752a4ef2d",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "rain",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55048
+      ],
+      "wav_sha256": "576a714e00a2487fe2e0afd10e562a9d8ffb52ad91b6791a258d6a2bc0a0713a"
+    },
+    {
+      "frames": 97840,
+      "key": "object_00_kokoro_chair",
+      "pcm_sha256": "5be46c73f0194d6f993d1f2db5c1363cf0ff228583b5e7e939121b2980aa5d47",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "chair",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        62720
+      ],
+      "wav_sha256": "acbee6a12d354487b253e99740ac5dd7e8dd967a745ef652f1c00ee660cf58d7"
+    },
+    {
+      "frames": 97840,
+      "key": "object_00_kokoro_table",
+      "pcm_sha256": "f8087184803562f521bfeb5c7bfb0ab69493f59590730ef4b60e893dfef26d98",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "table",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        62720
+      ],
+      "wav_sha256": "f8dccdf9429a12bf9755589fca13ce14b031ce40b8e529d77d7306be32da6e57"
+    },
+    {
+      "frames": 90220,
+      "key": "object_00_piper_chair",
+      "pcm_sha256": "9124ba877422687ea6453d31947eef9053c94f07a5dd770dccbf7fb666f953bd",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "chair",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55420
+      ],
+      "wav_sha256": "f13780ad091671be2afb009496f84f01973ffb665f41b40cdbbe0af8855ec12c"
+    },
+    {
+      "frames": 90220,
+      "key": "object_00_piper_table",
+      "pcm_sha256": "108e984c94661ae16a9eb6dccb503df462b06c2fa2fe00cd4ad3a7acfee55771",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "table",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        55420
+      ],
+      "wav_sha256": "08311306a72abaad8874fdac3bac45ca74653c3f4dd9c5e4e4c31ffbd0459470"
+    },
+    {
+      "frames": 96640,
+      "key": "object_04_kokoro_lamp",
+      "pcm_sha256": "9d61faf9553a1e5d4d4a910ffee501bcde2ca73722044b3e0707e1cbbe4d5f03",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "lamp",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        61520
+      ],
+      "wav_sha256": "1f7ca2fd0dea26deb99c2550dff0bf4d7a32d3f1935cf2e8e368f5ae8bb4f970"
+    },
+    {
+      "frames": 96640,
+      "key": "object_04_kokoro_clock",
+      "pcm_sha256": "dc2a1ecbe6607100ab67722c65e097994984134b2e69c9664e07043ed568e1d1",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "clock",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        61520
+      ],
+      "wav_sha256": "ac844e2818c6c695d7e660b109ab35ae3dcceb47ead4c2ea8b71a51e290b452a"
+    },
+    {
+      "frames": 89291,
+      "key": "object_04_piper_lamp",
+      "pcm_sha256": "e8beeee67bfbf017c64f1e3dc95719ba22b8da96e1081cac4cf101f425f9fcaa",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "lamp",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        54491
+      ],
+      "wav_sha256": "8fe260b7f29fecadf7e5fbc7a714ed16c695d95bc54e4e37e13415ad41678aa4"
+    },
+    {
+      "frames": 89291,
+      "key": "object_04_piper_clock",
+      "pcm_sha256": "dea3a549b7a3015ab365f90a1221cd15d988b5ccad51d2d5047f1adac89f377d",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "clock",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        54491
+      ],
+      "wav_sha256": "9b201028c301b5098c8debf016aefe311dece08d13f9ecdc9ec61ae10a1daa2a"
+    },
+    {
+      "frames": 99840,
+      "key": "object_08_kokoro_mirror",
+      "pcm_sha256": "e033483d7843a3b461d632c5812a11de5b1fcc376ad1b71f014e7908d61ecf34",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "mirror",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        64720
+      ],
+      "wav_sha256": "1436e81f088eb96393539017e60e8c75ae5baa4f1356d1d03ca9f9d33a913d0f"
+    },
+    {
+      "frames": 99840,
+      "key": "object_08_kokoro_blanket",
+      "pcm_sha256": "dc32900d22671520458f285ecf20ff231bb632b50fc97990683bbb3d8715e353",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "blanket",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        41120,
+        64720
+      ],
+      "wav_sha256": "161bac123463090988a510525441548193842bc040605c49565c7902beffb88a"
+    },
+    {
+      "frames": 91148,
+      "key": "object_08_piper_mirror",
+      "pcm_sha256": "b4c65145ba5e46752512ea3523223cabfa1dcda0571fd038a52dcd1c44cfd3f0",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "mirror",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        56348
+      ],
+      "wav_sha256": "c722ac12e72c978afffa9166dc91a7d969b5a37fb2e1311c67cb150cfcbb9a27"
+    },
+    {
+      "frames": 91148,
+      "key": "object_08_piper_blanket",
+      "pcm_sha256": "ace4f85918bd545b411a3c29ac3f1734d5965e54d20a6bb57a4babaa33069995",
+      "reference_tokens": [
+        "listen",
+        "for",
+        "my",
+        "chosen",
+        "word",
+        "blanket",
+        "tell",
+        "me",
+        "the",
+        "chosen",
+        "word"
+      ],
+      "slot": [
+        39258,
+        56348
+      ],
+      "wav_sha256": "f67f722439e36a14c953e9dcce9f4f9a77d3263bcf2543f069e6e81e8d884f22"
+    }
+  ],
+  "directions": [
+    {
+      "donor_key": "animal_00_kokoro_wolf",
+      "donor_word": "wolf",
+      "engine": "kokoro",
+      "frames": 97040,
+      "index": 0,
+      "mode": "S",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_kokoro_bear",
+      "recipient_word": "bear",
+      "slot": [
+        41120,
+        61920
+      ]
+    },
+    {
+      "donor_key": "animal_00_kokoro_wolf",
+      "donor_word": "wolf",
+      "engine": "kokoro",
+      "frames": 97040,
+      "index": 1,
+      "mode": "C",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_kokoro_bear",
+      "recipient_word": "bear",
+      "slot": [
+        41120,
+        61920
+      ]
+    },
+    {
+      "donor_key": "animal_00_kokoro_bear",
+      "donor_word": "bear",
+      "engine": "kokoro",
+      "frames": 97040,
+      "index": 2,
+      "mode": "S",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_kokoro_wolf",
+      "recipient_word": "wolf",
+      "slot": [
+        41120,
+        61920
+      ]
+    },
+    {
+      "donor_key": "animal_00_kokoro_bear",
+      "donor_word": "bear",
+      "engine": "kokoro",
+      "frames": 97040,
+      "index": 3,
+      "mode": "C",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_kokoro_wolf",
+      "recipient_word": "wolf",
+      "slot": [
+        41120,
+        61920
+      ]
+    },
+    {
+      "donor_key": "animal_00_piper_wolf",
+      "donor_word": "wolf",
+      "engine": "piper",
+      "frames": 89105,
+      "index": 4,
+      "mode": "S",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_piper_bear",
+      "recipient_word": "bear",
+      "slot": [
+        39258,
+        54305
+      ]
+    },
+    {
+      "donor_key": "animal_00_piper_wolf",
+      "donor_word": "wolf",
+      "engine": "piper",
+      "frames": 89105,
+      "index": 5,
+      "mode": "C",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_piper_bear",
+      "recipient_word": "bear",
+      "slot": [
+        39258,
+        54305
+      ]
+    },
+    {
+      "donor_key": "animal_00_piper_bear",
+      "donor_word": "bear",
+      "engine": "piper",
+      "frames": 89105,
+      "index": 6,
+      "mode": "S",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_piper_wolf",
+      "recipient_word": "wolf",
+      "slot": [
+        39258,
+        54305
+      ]
+    },
+    {
+      "donor_key": "animal_00_piper_bear",
+      "donor_word": "bear",
+      "engine": "piper",
+      "frames": 89105,
+      "index": 7,
+      "mode": "C",
+      "pair_id": "animal_00",
+      "recipient_key": "animal_00_piper_wolf",
+      "recipient_word": "wolf",
+      "slot": [
+        39258,
+        54305
+      ]
+    },
+    {
+      "donor_key": "animal_04_kokoro_mouse",
+      "donor_word": "mouse",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 8,
+      "mode": "S",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_kokoro_goose",
+      "recipient_word": "goose",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "animal_04_kokoro_mouse",
+      "donor_word": "mouse",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 9,
+      "mode": "C",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_kokoro_goose",
+      "recipient_word": "goose",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "animal_04_kokoro_goose",
+      "donor_word": "goose",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 10,
+      "mode": "S",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_kokoro_mouse",
+      "recipient_word": "mouse",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "animal_04_kokoro_goose",
+      "donor_word": "goose",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 11,
+      "mode": "C",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_kokoro_mouse",
+      "recipient_word": "mouse",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "animal_04_piper_mouse",
+      "donor_word": "mouse",
+      "engine": "piper",
+      "frames": 90034,
+      "index": 12,
+      "mode": "S",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_piper_goose",
+      "recipient_word": "goose",
+      "slot": [
+        39258,
+        55234
+      ]
+    },
+    {
+      "donor_key": "animal_04_piper_mouse",
+      "donor_word": "mouse",
+      "engine": "piper",
+      "frames": 90034,
+      "index": 13,
+      "mode": "C",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_piper_goose",
+      "recipient_word": "goose",
+      "slot": [
+        39258,
+        55234
+      ]
+    },
+    {
+      "donor_key": "animal_04_piper_goose",
+      "donor_word": "goose",
+      "engine": "piper",
+      "frames": 90034,
+      "index": 14,
+      "mode": "S",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_piper_mouse",
+      "recipient_word": "mouse",
+      "slot": [
+        39258,
+        55234
+      ]
+    },
+    {
+      "donor_key": "animal_04_piper_goose",
+      "donor_word": "goose",
+      "engine": "piper",
+      "frames": 90034,
+      "index": 15,
+      "mode": "C",
+      "pair_id": "animal_04",
+      "recipient_key": "animal_04_piper_mouse",
+      "recipient_word": "mouse",
+      "slot": [
+        39258,
+        55234
+      ]
+    },
+    {
+      "donor_key": "animal_05_kokoro_fox",
+      "donor_word": "fox",
+      "engine": "kokoro",
+      "frames": 98640,
+      "index": 16,
+      "mode": "S",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_kokoro_rabbit",
+      "recipient_word": "rabbit",
+      "slot": [
+        41120,
+        63520
+      ]
+    },
+    {
+      "donor_key": "animal_05_kokoro_fox",
+      "donor_word": "fox",
+      "engine": "kokoro",
+      "frames": 98640,
+      "index": 17,
+      "mode": "C",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_kokoro_rabbit",
+      "recipient_word": "rabbit",
+      "slot": [
+        41120,
+        63520
+      ]
+    },
+    {
+      "donor_key": "animal_05_kokoro_rabbit",
+      "donor_word": "rabbit",
+      "engine": "kokoro",
+      "frames": 98640,
+      "index": 18,
+      "mode": "S",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_kokoro_fox",
+      "recipient_word": "fox",
+      "slot": [
+        41120,
+        63520
+      ]
+    },
+    {
+      "donor_key": "animal_05_kokoro_rabbit",
+      "donor_word": "rabbit",
+      "engine": "kokoro",
+      "frames": 98640,
+      "index": 19,
+      "mode": "C",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_kokoro_fox",
+      "recipient_word": "fox",
+      "slot": [
+        41120,
+        63520
+      ]
+    },
+    {
+      "donor_key": "animal_05_piper_fox",
+      "donor_word": "fox",
+      "engine": "piper",
+      "frames": 90591,
+      "index": 20,
+      "mode": "S",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_piper_rabbit",
+      "recipient_word": "rabbit",
+      "slot": [
+        39258,
+        55791
+      ]
+    },
+    {
+      "donor_key": "animal_05_piper_fox",
+      "donor_word": "fox",
+      "engine": "piper",
+      "frames": 90591,
+      "index": 21,
+      "mode": "C",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_piper_rabbit",
+      "recipient_word": "rabbit",
+      "slot": [
+        39258,
+        55791
+      ]
+    },
+    {
+      "donor_key": "animal_05_piper_rabbit",
+      "donor_word": "rabbit",
+      "engine": "piper",
+      "frames": 90591,
+      "index": 22,
+      "mode": "S",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_piper_fox",
+      "recipient_word": "fox",
+      "slot": [
+        39258,
+        55791
+      ]
+    },
+    {
+      "donor_key": "animal_05_piper_rabbit",
+      "donor_word": "rabbit",
+      "engine": "piper",
+      "frames": 90591,
+      "index": 23,
+      "mode": "C",
+      "pair_id": "animal_05",
+      "recipient_key": "animal_05_piper_fox",
+      "recipient_word": "fox",
+      "slot": [
+        39258,
+        55791
+      ]
+    },
+    {
+      "donor_key": "color_04_kokoro_gold",
+      "donor_word": "gold",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 24,
+      "mode": "S",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_kokoro_gray",
+      "recipient_word": "gray",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "color_04_kokoro_gold",
+      "donor_word": "gold",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 25,
+      "mode": "C",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_kokoro_gray",
+      "recipient_word": "gray",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "color_04_kokoro_gray",
+      "donor_word": "gray",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 26,
+      "mode": "S",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_kokoro_gold",
+      "recipient_word": "gold",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "color_04_kokoro_gray",
+      "donor_word": "gray",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 27,
+      "mode": "C",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_kokoro_gold",
+      "recipient_word": "gold",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "color_04_piper_gold",
+      "donor_word": "gold",
+      "engine": "piper",
+      "frames": 89477,
+      "index": 28,
+      "mode": "S",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_piper_gray",
+      "recipient_word": "gray",
+      "slot": [
+        39258,
+        54677
+      ]
+    },
+    {
+      "donor_key": "color_04_piper_gold",
+      "donor_word": "gold",
+      "engine": "piper",
+      "frames": 89477,
+      "index": 29,
+      "mode": "C",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_piper_gray",
+      "recipient_word": "gray",
+      "slot": [
+        39258,
+        54677
+      ]
+    },
+    {
+      "donor_key": "color_04_piper_gray",
+      "donor_word": "gray",
+      "engine": "piper",
+      "frames": 89477,
+      "index": 30,
+      "mode": "S",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_piper_gold",
+      "recipient_word": "gold",
+      "slot": [
+        39258,
+        54677
+      ]
+    },
+    {
+      "donor_key": "color_04_piper_gray",
+      "donor_word": "gray",
+      "engine": "piper",
+      "frames": 89477,
+      "index": 31,
+      "mode": "C",
+      "pair_id": "color_04",
+      "recipient_key": "color_04_piper_gold",
+      "recipient_word": "gold",
+      "slot": [
+        39258,
+        54677
+      ]
+    },
+    {
+      "donor_key": "color_08_kokoro_navy",
+      "donor_word": "navy",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 32,
+      "mode": "S",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_kokoro_olive",
+      "recipient_word": "olive",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "color_08_kokoro_navy",
+      "donor_word": "navy",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 33,
+      "mode": "C",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_kokoro_olive",
+      "recipient_word": "olive",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "color_08_kokoro_olive",
+      "donor_word": "olive",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 34,
+      "mode": "S",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_kokoro_navy",
+      "recipient_word": "navy",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "color_08_kokoro_olive",
+      "donor_word": "olive",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 35,
+      "mode": "C",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_kokoro_navy",
+      "recipient_word": "navy",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "color_08_piper_navy",
+      "donor_word": "navy",
+      "engine": "piper",
+      "frames": 91520,
+      "index": 36,
+      "mode": "S",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_piper_olive",
+      "recipient_word": "olive",
+      "slot": [
+        39258,
+        56720
+      ]
+    },
+    {
+      "donor_key": "color_08_piper_navy",
+      "donor_word": "navy",
+      "engine": "piper",
+      "frames": 91520,
+      "index": 37,
+      "mode": "C",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_piper_olive",
+      "recipient_word": "olive",
+      "slot": [
+        39258,
+        56720
+      ]
+    },
+    {
+      "donor_key": "color_08_piper_olive",
+      "donor_word": "olive",
+      "engine": "piper",
+      "frames": 91520,
+      "index": 38,
+      "mode": "S",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_piper_navy",
+      "recipient_word": "navy",
+      "slot": [
+        39258,
+        56720
+      ]
+    },
+    {
+      "donor_key": "color_08_piper_olive",
+      "donor_word": "olive",
+      "engine": "piper",
+      "frames": 91520,
+      "index": 39,
+      "mode": "C",
+      "pair_id": "color_08",
+      "recipient_key": "color_08_piper_navy",
+      "recipient_word": "navy",
+      "slot": [
+        39258,
+        56720
+      ]
+    },
+    {
+      "donor_key": "color_09_kokoro_turquoise",
+      "donor_word": "turquoise",
+      "engine": "kokoro",
+      "frames": 101040,
+      "index": 40,
+      "mode": "S",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_kokoro_lavender",
+      "recipient_word": "lavender",
+      "slot": [
+        41120,
+        65920
+      ]
+    },
+    {
+      "donor_key": "color_09_kokoro_turquoise",
+      "donor_word": "turquoise",
+      "engine": "kokoro",
+      "frames": 101040,
+      "index": 41,
+      "mode": "C",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_kokoro_lavender",
+      "recipient_word": "lavender",
+      "slot": [
+        41120,
+        65920
+      ]
+    },
+    {
+      "donor_key": "color_09_kokoro_lavender",
+      "donor_word": "lavender",
+      "engine": "kokoro",
+      "frames": 101040,
+      "index": 42,
+      "mode": "S",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_kokoro_turquoise",
+      "recipient_word": "turquoise",
+      "slot": [
+        41120,
+        65920
+      ]
+    },
+    {
+      "donor_key": "color_09_kokoro_lavender",
+      "donor_word": "lavender",
+      "engine": "kokoro",
+      "frames": 101040,
+      "index": 43,
+      "mode": "C",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_kokoro_turquoise",
+      "recipient_word": "turquoise",
+      "slot": [
+        41120,
+        65920
+      ]
+    },
+    {
+      "donor_key": "color_09_piper_turquoise",
+      "donor_word": "turquoise",
+      "engine": "piper",
+      "frames": 93563,
+      "index": 44,
+      "mode": "S",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_piper_lavender",
+      "recipient_word": "lavender",
+      "slot": [
+        39258,
+        58763
+      ]
+    },
+    {
+      "donor_key": "color_09_piper_turquoise",
+      "donor_word": "turquoise",
+      "engine": "piper",
+      "frames": 93563,
+      "index": 45,
+      "mode": "C",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_piper_lavender",
+      "recipient_word": "lavender",
+      "slot": [
+        39258,
+        58763
+      ]
+    },
+    {
+      "donor_key": "color_09_piper_lavender",
+      "donor_word": "lavender",
+      "engine": "piper",
+      "frames": 93563,
+      "index": 46,
+      "mode": "S",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_piper_turquoise",
+      "recipient_word": "turquoise",
+      "slot": [
+        39258,
+        58763
+      ]
+    },
+    {
+      "donor_key": "color_09_piper_lavender",
+      "donor_word": "lavender",
+      "engine": "piper",
+      "frames": 93563,
+      "index": 47,
+      "mode": "C",
+      "pair_id": "color_09",
+      "recipient_key": "color_09_piper_turquoise",
+      "recipient_word": "turquoise",
+      "slot": [
+        39258,
+        58763
+      ]
+    },
+    {
+      "donor_key": "nature_01_kokoro_forest",
+      "donor_word": "forest",
+      "engine": "kokoro",
+      "frames": 99440,
+      "index": 48,
+      "mode": "S",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_kokoro_ocean",
+      "recipient_word": "ocean",
+      "slot": [
+        41120,
+        64320
+      ]
+    },
+    {
+      "donor_key": "nature_01_kokoro_forest",
+      "donor_word": "forest",
+      "engine": "kokoro",
+      "frames": 99440,
+      "index": 49,
+      "mode": "C",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_kokoro_ocean",
+      "recipient_word": "ocean",
+      "slot": [
+        41120,
+        64320
+      ]
+    },
+    {
+      "donor_key": "nature_01_kokoro_ocean",
+      "donor_word": "ocean",
+      "engine": "kokoro",
+      "frames": 99440,
+      "index": 50,
+      "mode": "S",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_kokoro_forest",
+      "recipient_word": "forest",
+      "slot": [
+        41120,
+        64320
+      ]
+    },
+    {
+      "donor_key": "nature_01_kokoro_ocean",
+      "donor_word": "ocean",
+      "engine": "kokoro",
+      "frames": 99440,
+      "index": 51,
+      "mode": "C",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_kokoro_forest",
+      "recipient_word": "forest",
+      "slot": [
+        41120,
+        64320
+      ]
+    },
+    {
+      "donor_key": "nature_01_piper_forest",
+      "donor_word": "forest",
+      "engine": "piper",
+      "frames": 90777,
+      "index": 52,
+      "mode": "S",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_piper_ocean",
+      "recipient_word": "ocean",
+      "slot": [
+        39258,
+        55977
+      ]
+    },
+    {
+      "donor_key": "nature_01_piper_forest",
+      "donor_word": "forest",
+      "engine": "piper",
+      "frames": 90777,
+      "index": 53,
+      "mode": "C",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_piper_ocean",
+      "recipient_word": "ocean",
+      "slot": [
+        39258,
+        55977
+      ]
+    },
+    {
+      "donor_key": "nature_01_piper_ocean",
+      "donor_word": "ocean",
+      "engine": "piper",
+      "frames": 90777,
+      "index": 54,
+      "mode": "S",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_piper_forest",
+      "recipient_word": "forest",
+      "slot": [
+        39258,
+        55977
+      ]
+    },
+    {
+      "donor_key": "nature_01_piper_ocean",
+      "donor_word": "ocean",
+      "engine": "piper",
+      "frames": 90777,
+      "index": 55,
+      "mode": "C",
+      "pair_id": "nature_01",
+      "recipient_key": "nature_01_piper_forest",
+      "recipient_word": "forest",
+      "slot": [
+        39258,
+        55977
+      ]
+    },
+    {
+      "donor_key": "nature_06_kokoro_swamp",
+      "donor_word": "swamp",
+      "engine": "kokoro",
+      "frames": 99040,
+      "index": 56,
+      "mode": "S",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_kokoro_meadow",
+      "recipient_word": "meadow",
+      "slot": [
+        41120,
+        63920
+      ]
+    },
+    {
+      "donor_key": "nature_06_kokoro_swamp",
+      "donor_word": "swamp",
+      "engine": "kokoro",
+      "frames": 99040,
+      "index": 57,
+      "mode": "C",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_kokoro_meadow",
+      "recipient_word": "meadow",
+      "slot": [
+        41120,
+        63920
+      ]
+    },
+    {
+      "donor_key": "nature_06_kokoro_meadow",
+      "donor_word": "meadow",
+      "engine": "kokoro",
+      "frames": 99040,
+      "index": 58,
+      "mode": "S",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_kokoro_swamp",
+      "recipient_word": "swamp",
+      "slot": [
+        41120,
+        63920
+      ]
+    },
+    {
+      "donor_key": "nature_06_kokoro_meadow",
+      "donor_word": "meadow",
+      "engine": "kokoro",
+      "frames": 99040,
+      "index": 59,
+      "mode": "C",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_kokoro_swamp",
+      "recipient_word": "swamp",
+      "slot": [
+        41120,
+        63920
+      ]
+    },
+    {
+      "donor_key": "nature_06_piper_swamp",
+      "donor_word": "swamp",
+      "engine": "piper",
+      "frames": 93378,
+      "index": 60,
+      "mode": "S",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_piper_meadow",
+      "recipient_word": "meadow",
+      "slot": [
+        39258,
+        58578
+      ]
+    },
+    {
+      "donor_key": "nature_06_piper_swamp",
+      "donor_word": "swamp",
+      "engine": "piper",
+      "frames": 93378,
+      "index": 61,
+      "mode": "C",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_piper_meadow",
+      "recipient_word": "meadow",
+      "slot": [
+        39258,
+        58578
+      ]
+    },
+    {
+      "donor_key": "nature_06_piper_meadow",
+      "donor_word": "meadow",
+      "engine": "piper",
+      "frames": 93378,
+      "index": 62,
+      "mode": "S",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_piper_swamp",
+      "recipient_word": "swamp",
+      "slot": [
+        39258,
+        58578
+      ]
+    },
+    {
+      "donor_key": "nature_06_piper_meadow",
+      "donor_word": "meadow",
+      "engine": "piper",
+      "frames": 93378,
+      "index": 63,
+      "mode": "C",
+      "pair_id": "nature_06",
+      "recipient_key": "nature_06_piper_swamp",
+      "recipient_word": "swamp",
+      "slot": [
+        39258,
+        58578
+      ]
+    },
+    {
+      "donor_key": "nature_11_kokoro_rain",
+      "donor_word": "rain",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 64,
+      "mode": "S",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_kokoro_reef",
+      "recipient_word": "reef",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "nature_11_kokoro_rain",
+      "donor_word": "rain",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 65,
+      "mode": "C",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_kokoro_reef",
+      "recipient_word": "reef",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "nature_11_kokoro_reef",
+      "donor_word": "reef",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 66,
+      "mode": "S",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_kokoro_rain",
+      "recipient_word": "rain",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "nature_11_kokoro_reef",
+      "donor_word": "reef",
+      "engine": "kokoro",
+      "frames": 98240,
+      "index": 67,
+      "mode": "C",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_kokoro_rain",
+      "recipient_word": "rain",
+      "slot": [
+        41120,
+        63120
+      ]
+    },
+    {
+      "donor_key": "nature_11_piper_rain",
+      "donor_word": "rain",
+      "engine": "piper",
+      "frames": 89848,
+      "index": 68,
+      "mode": "S",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_piper_reef",
+      "recipient_word": "reef",
+      "slot": [
+        39258,
+        55048
+      ]
+    },
+    {
+      "donor_key": "nature_11_piper_rain",
+      "donor_word": "rain",
+      "engine": "piper",
+      "frames": 89848,
+      "index": 69,
+      "mode": "C",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_piper_reef",
+      "recipient_word": "reef",
+      "slot": [
+        39258,
+        55048
+      ]
+    },
+    {
+      "donor_key": "nature_11_piper_reef",
+      "donor_word": "reef",
+      "engine": "piper",
+      "frames": 89848,
+      "index": 70,
+      "mode": "S",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_piper_rain",
+      "recipient_word": "rain",
+      "slot": [
+        39258,
+        55048
+      ]
+    },
+    {
+      "donor_key": "nature_11_piper_reef",
+      "donor_word": "reef",
+      "engine": "piper",
+      "frames": 89848,
+      "index": 71,
+      "mode": "C",
+      "pair_id": "nature_11",
+      "recipient_key": "nature_11_piper_rain",
+      "recipient_word": "rain",
+      "slot": [
+        39258,
+        55048
+      ]
+    },
+    {
+      "donor_key": "object_00_kokoro_table",
+      "donor_word": "table",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 72,
+      "mode": "S",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_kokoro_chair",
+      "recipient_word": "chair",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "object_00_kokoro_table",
+      "donor_word": "table",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 73,
+      "mode": "C",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_kokoro_chair",
+      "recipient_word": "chair",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "object_00_kokoro_chair",
+      "donor_word": "chair",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 74,
+      "mode": "S",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_kokoro_table",
+      "recipient_word": "table",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "object_00_kokoro_chair",
+      "donor_word": "chair",
+      "engine": "kokoro",
+      "frames": 97840,
+      "index": 75,
+      "mode": "C",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_kokoro_table",
+      "recipient_word": "table",
+      "slot": [
+        41120,
+        62720
+      ]
+    },
+    {
+      "donor_key": "object_00_piper_table",
+      "donor_word": "table",
+      "engine": "piper",
+      "frames": 90220,
+      "index": 76,
+      "mode": "S",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_piper_chair",
+      "recipient_word": "chair",
+      "slot": [
+        39258,
+        55420
+      ]
+    },
+    {
+      "donor_key": "object_00_piper_table",
+      "donor_word": "table",
+      "engine": "piper",
+      "frames": 90220,
+      "index": 77,
+      "mode": "C",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_piper_chair",
+      "recipient_word": "chair",
+      "slot": [
+        39258,
+        55420
+      ]
+    },
+    {
+      "donor_key": "object_00_piper_chair",
+      "donor_word": "chair",
+      "engine": "piper",
+      "frames": 90220,
+      "index": 78,
+      "mode": "S",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_piper_table",
+      "recipient_word": "table",
+      "slot": [
+        39258,
+        55420
+      ]
+    },
+    {
+      "donor_key": "object_00_piper_chair",
+      "donor_word": "chair",
+      "engine": "piper",
+      "frames": 90220,
+      "index": 79,
+      "mode": "C",
+      "pair_id": "object_00",
+      "recipient_key": "object_00_piper_table",
+      "recipient_word": "table",
+      "slot": [
+        39258,
+        55420
+      ]
+    },
+    {
+      "donor_key": "object_04_kokoro_clock",
+      "donor_word": "clock",
+      "engine": "kokoro",
+      "frames": 96640,
+      "index": 80,
+      "mode": "S",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_kokoro_lamp",
+      "recipient_word": "lamp",
+      "slot": [
+        41120,
+        61520
+      ]
+    },
+    {
+      "donor_key": "object_04_kokoro_clock",
+      "donor_word": "clock",
+      "engine": "kokoro",
+      "frames": 96640,
+      "index": 81,
+      "mode": "C",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_kokoro_lamp",
+      "recipient_word": "lamp",
+      "slot": [
+        41120,
+        61520
+      ]
+    },
+    {
+      "donor_key": "object_04_kokoro_lamp",
+      "donor_word": "lamp",
+      "engine": "kokoro",
+      "frames": 96640,
+      "index": 82,
+      "mode": "S",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_kokoro_clock",
+      "recipient_word": "clock",
+      "slot": [
+        41120,
+        61520
+      ]
+    },
+    {
+      "donor_key": "object_04_kokoro_lamp",
+      "donor_word": "lamp",
+      "engine": "kokoro",
+      "frames": 96640,
+      "index": 83,
+      "mode": "C",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_kokoro_clock",
+      "recipient_word": "clock",
+      "slot": [
+        41120,
+        61520
+      ]
+    },
+    {
+      "donor_key": "object_04_piper_clock",
+      "donor_word": "clock",
+      "engine": "piper",
+      "frames": 89291,
+      "index": 84,
+      "mode": "S",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_piper_lamp",
+      "recipient_word": "lamp",
+      "slot": [
+        39258,
+        54491
+      ]
+    },
+    {
+      "donor_key": "object_04_piper_clock",
+      "donor_word": "clock",
+      "engine": "piper",
+      "frames": 89291,
+      "index": 85,
+      "mode": "C",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_piper_lamp",
+      "recipient_word": "lamp",
+      "slot": [
+        39258,
+        54491
+      ]
+    },
+    {
+      "donor_key": "object_04_piper_lamp",
+      "donor_word": "lamp",
+      "engine": "piper",
+      "frames": 89291,
+      "index": 86,
+      "mode": "S",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_piper_clock",
+      "recipient_word": "clock",
+      "slot": [
+        39258,
+        54491
+      ]
+    },
+    {
+      "donor_key": "object_04_piper_lamp",
+      "donor_word": "lamp",
+      "engine": "piper",
+      "frames": 89291,
+      "index": 87,
+      "mode": "C",
+      "pair_id": "object_04",
+      "recipient_key": "object_04_piper_clock",
+      "recipient_word": "clock",
+      "slot": [
+        39258,
+        54491
+      ]
+    },
+    {
+      "donor_key": "object_08_kokoro_blanket",
+      "donor_word": "blanket",
+      "engine": "kokoro",
+      "frames": 99840,
+      "index": 88,
+      "mode": "S",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_kokoro_mirror",
+      "recipient_word": "mirror",
+      "slot": [
+        41120,
+        64720
+      ]
+    },
+    {
+      "donor_key": "object_08_kokoro_blanket",
+      "donor_word": "blanket",
+      "engine": "kokoro",
+      "frames": 99840,
+      "index": 89,
+      "mode": "C",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_kokoro_mirror",
+      "recipient_word": "mirror",
+      "slot": [
+        41120,
+        64720
+      ]
+    },
+    {
+      "donor_key": "object_08_kokoro_mirror",
+      "donor_word": "mirror",
+      "engine": "kokoro",
+      "frames": 99840,
+      "index": 90,
+      "mode": "S",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_kokoro_blanket",
+      "recipient_word": "blanket",
+      "slot": [
+        41120,
+        64720
+      ]
+    },
+    {
+      "donor_key": "object_08_kokoro_mirror",
+      "donor_word": "mirror",
+      "engine": "kokoro",
+      "frames": 99840,
+      "index": 91,
+      "mode": "C",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_kokoro_blanket",
+      "recipient_word": "blanket",
+      "slot": [
+        41120,
+        64720
+      ]
+    },
+    {
+      "donor_key": "object_08_piper_blanket",
+      "donor_word": "blanket",
+      "engine": "piper",
+      "frames": 91148,
+      "index": 92,
+      "mode": "S",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_piper_mirror",
+      "recipient_word": "mirror",
+      "slot": [
+        39258,
+        56348
+      ]
+    },
+    {
+      "donor_key": "object_08_piper_blanket",
+      "donor_word": "blanket",
+      "engine": "piper",
+      "frames": 91148,
+      "index": 93,
+      "mode": "C",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_piper_mirror",
+      "recipient_word": "mirror",
+      "slot": [
+        39258,
+        56348
+      ]
+    },
+    {
+      "donor_key": "object_08_piper_mirror",
+      "donor_word": "mirror",
+      "engine": "piper",
+      "frames": 91148,
+      "index": 94,
+      "mode": "S",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_piper_blanket",
+      "recipient_word": "blanket",
+      "slot": [
+        39258,
+        56348
+      ]
+    },
+    {
+      "donor_key": "object_08_piper_mirror",
+      "donor_word": "mirror",
+      "engine": "piper",
+      "frames": 91148,
+      "index": 95,
+      "mode": "C",
+      "pair_id": "object_08",
+      "recipient_key": "object_08_piper_blanket",
+      "recipient_word": "blanket",
+      "slot": [
+        39258,
+        56348
+      ]
+    }
+  ],
+  "expected_clean": 96,
+  "expected_patches": 576,
+  "fit_hook_helper_commit": "ec894107e1d0165ca66b9f23fb50478e17f678ec",
+  "fit_hook_helper_sha256": "79932d09efbadf784b53f28e744bb7397d3908e2da43c41f1dd0240d5c3f9202",
+  "limits": {
+    "output": 536870912,
+    "output_reserve": 33554432,
+    "rss": 4294967296,
+    "rss_reserve": 1073741824,
+    "seconds": 1800
+  },
+  "manifest_sha256": "adf8cd02d24a43ef576bcb993dc54bd2527440a62798e12fc788def3c063971f",
+  "plan_sha256": "a2065c2bf74b9acb56c511f89142e86aa653e3b2a910215ab42a1c478034d9e6",
+  "python_version": "3.12.13",
+  "runner_commit": "da1e6b3cad3c905dfd123313ba3e5c6f0c15e113",
+  "runner_sha256": "ea1f949aa039ff3d5cf96ca14932384f4f5197801976ab95b8bddacb66462f74",
+  "schema": "wav2vec2_dev_word_disjoint_v1_preflight",
+  "seed_rule": "16048191 + 2*direction_index + (0=random_W,1=random_O)",
+  "site": "post_block11",
+  "spec_sha256": "4c4cb6beafdd27509a073872f71dea004be686a6d8fafccbae410b8b11d7f265",
+  "stats": {
+    "animal_00|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "animal_00|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "animal_04|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "animal_04|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "animal_05|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "animal_05|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "color_04|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "color_04|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "color_08|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "color_08|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "color_09|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "color_09|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "nature_01|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "nature_01|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "nature_06|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "nature_06|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "nature_11|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "nature_11|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "object_00|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "object_00|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "object_04|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "object_04|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    },
+    "object_08|kokoro": {
+      "mean": -0.00031414011027663946,
+      "variance": 0.004084909334778786
+    },
+    "object_08|piper": {
+      "mean": -1.8617214664118364e-05,
+      "variance": 0.006695777177810669
+    }
+  },
+  "torch_version": "2.15.0",
+  "transformers_version": "5.12.1"
+}
