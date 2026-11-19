@@ -30,14 +30,21 @@ def logits_for(code: int) -> np.ndarray:
 
 class CausalLiveSourceOnlyTest(unittest.TestCase):
     def test_public_go_absent_and_parent_does_not_create_attempt(self):
-        self.assertFalse(worker.WORKER_GO.exists())
-        self.assertFalse(parent.PARENT_GO.exists())
-        with self.assertRaisesRegex(ValueError, "HOLD"):
-            worker.verify_worker_go()
         with tempfile.TemporaryDirectory() as temp:
-            candidate = Path(temp) / "attempt"
-            with self.assertRaises(ValueError):
-                parent.execute(candidate)
+            root = Path(temp)
+            candidate = root / "attempt"
+            missing_worker_go = root / "missing_worker_go.json"
+            missing_parent_go = root / "missing_parent_go.json"
+            with (mock.patch.object(worker, "WORKER_GO", missing_worker_go),
+                  mock.patch.object(parent, "PARENT_GO", missing_parent_go),
+                  mock.patch.object(parent, "ATTEMPT", candidate)):
+                with self.assertRaisesRegex(ValueError, "worker HOLD"):
+                    worker.verify_worker_go()
+                with self.assertRaisesRegex(ValueError, "worker HOLD"):
+                    parent.execute(candidate)
+                with mock.patch.object(worker, "verify_worker_go", return_value={}):
+                    with self.assertRaisesRegex(ValueError, "parent HOLD"):
+                        parent.verify_parent_go()
             self.assertFalse(candidate.exists())
 
     def test_fake_matrix_and_saved_audit_with_mutation(self):
