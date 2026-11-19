@@ -1,0 +1,30 @@
+# Independent saved-result review: Wav2Vec2 FIT acoustic-noise V2
+
+19 November 2026. **GO for this one saved engineering attempt; no causal or security finding.** I reviewed the frozen V2 [protocol](ACOUSTIC_FIT_NOISE_PILOT_PROSPECTIVE_V2.md), [worker](acoustic_fit_noise_pilot_v2.py), [parent launcher](acoustic_fit_noise_parent_launch_v2.py), and `runs/acoustic_fit_noise_parent_v2/wav2vec2_attempt_002`. The launcher's read-only `audit` returned `complete_evidence_pass`: parent result SHA-256 `5862c0b0e326840727473a5ffee9356ffb5181ca8a4d1c9053f9a27992d9e453` and worker JSONL SHA-256 `c1badaf305dfaebe9beb9567b73f4e4bfdfab84b45ca8194f4c13c943f60038c`. I separately rehashed all eight files in the parent inventory and matched their byte counts. The parent recorded AC power, an open lid, no interval sleep or thermal event, zero errors, a completed 20-arm matrix and a passing saved audit. This review did not rerun model inference.
+
+The original V1 `wav2vec2_attempt_001` remains `invalid_or_partial`, with no case rows. Its parent result, worker JSONL and stderr SHA-256 values still match the V2 frozen prior-attempt pins (`b69468b1…`, `f1752019…`, `a23cc760…`). V2 fixes a capture hook for the installed Transformers version; the V1 failure is not a negative acoustic outcome.
+
+## Complete CTC transcript outcomes
+
+The saved JSONL has **20/20 planned case rows**: four previously inspected synthetic FIT clips × clean, clean-repeat, full noise, word-slot noise and outside-slot noise. All ten planned capture sites fired once per row. The clean-repeat transcript, full greedy frame-ID path and all ten state hashes matched clean exactly for each clip. Every metric is finite; the largest relative discrepancy in `whole_l2² = word_l2² + outside_l2²` is below `9.3×10⁻¹⁵` across saved stages and arms. These checks validate the saved result and its accounting, not an independent replay of checkpoint inference.
+
+**Ten of twelve noise arms produced a complete CTC transcript identical to their own clean recording.** All four full-noise arms were identical. The two changes were:
+
+| Source | Arm | Clean transcript fragment | Noisy transcript fragment | Interpretation |
+| --- | --- | --- | --- | --- |
+| Kokoro/teal | Word-slot noise | `IS TIL WHAT` | `IS TEAL WHAT` | The noisy clip corrected this model's clean target-word error. |
+| Kokoro/silver | Outside-slot noise | `IS SILVER WHAT` | `ISE SILVER WHAT` | The target word stayed correct; a preceding word changed. |
+
+The other clean teal clip, Piper/teal, was transcribed as `TEEL` in all five arms. Thus clean recognition was already wrong for **2/4 source clips**. Across the twelve noise arms, the intended silver/teal word appeared correctly in **7/12**: all six silver variants and only Kokoro/teal word-slot noise among the six teal variants. These are correlated variants of four FIT recordings under one frozen noise realization, not an attack success rate or a general noise robustness estimate. The model emits CTC transcripts, not a speech-assistant authorization or action.
+
+## First measured outside-word difference
+
+For every word-slot-noise arm, the frozen raw PCM is byte-identical to clean **outside** the original word slot; I independently checked this from the source and transform. Yet the stock utterance-normalizing processor already changed the `input_values` outside that slot: outside-window L2 was `0.3784` (Kokoro/silver), `0.3832` (Kokoro/teal), `0.2753` (Piper/silver) and `0.2731` (Piper/teal). The first **observed** spread is therefore before the Wav2Vec2 network in this stock path. Outside differences were also present at the first raw convolution and its GroupNorm output. The larger norms at later sites cannot by themselves attribute a decision to GroupNorm, attention or a unique circuit. Full- and outside-slot-noise arms directly alter outside-word PCM, so their earliest outside difference is not a propagation result.
+
+This differs in location from the independently audited [Whisper FIT noise result](ACOUSTIC_FIT_NOISE_WHISPER_RESULT_INDEPENDENT_REVIEW_V1.md): under the same four source clips and nominal noise arms, Whisper word-slot noise had zero outside-row difference at its saved mel and pre-block states, with the first saved outside change after encoder block 0. Hidden-state coordinates, scales, time resolutions and output tasks differ, so their L2 values and raw transcript rates should not be pooled. The bounded observation is that two audio pathways can spread a word-local acoustic edit at different measured boundaries while mostly preserving their own complete transcripts.
+
+## Prospective causal follow-up, separate from this result
+
+The Kokoro/teal `TIL`→`TEAL` switch is a **post hoc selected FIT case**. To test whether word-window state mediates that switch, freeze one site such as feature projection and its aligned word rows before another forward. With clean and word-noise runs as a pair, test word-row-only, outside-row-only and full-state donor transplants in both directions, plus self/zero edits and independently seeded equal-norm random edits matched to each natural patch. Require full-donor and zero parity, and compare the **whole CTC transcript and frame-ID path**, reporting intended-word correction separately. A word-row patch producing `TEAL` while the outside-only and random controls do not would support sufficiency at that site in this FIT pair; the converse would implicate the outside complement or an interaction. A shared-statistics preprocessing counterfactual could separately ask how much of the early outside spread comes from stock utterance normalization, but it is not the deployed preprocessing path. None of these interventions has been run in this review.
+
+Any broader acoustic-mechanism claim needs fresh word- and speaker-disjoint recordings with human intelligibility checks. A security finding additionally needs an attacker-suppliable waveform to change a consequential decision in an unmodified assistant. Neither condition is met here.
