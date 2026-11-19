@@ -183,6 +183,27 @@ class LauncherTests(unittest.TestCase):
             self._run(worker=worker)
         self.assertEqual(self.seen, ["official_sample", "adapter", "stock_a"])
 
+    def test_parsed_call_response_uses_default_json_and_full_injection(self):
+        def worker(arm, directory, response_path):
+            result = self._worker(arm, directory, response_path)
+            if arm == "adapter":
+                result["capture"]["trace"]["replay"] = {
+                    "response_selector": {
+                        "tool_name": "list_calendar_events",
+                        "response": {"status": "ok", "events": [], "executed": False}}}
+                result["capture"]["calls"][1].update({
+                    field: [1] for field in launch.INJECTION_FIELDS})
+            elif arm.startswith("stock_"):
+                result["capture"]["stock"]["pass2"]["kwargs"].update({
+                    field: [1] for field in launch.INJECTION_FIELDS})
+            return result
+        result = self._run(worker=worker, compare=lambda *_args, **_kwargs: {
+            "status": "source_comparison_passed_pending_live_provenance_review"})
+        self.assertFalse(result["no_call"])
+        self.assertEqual((self.root / "run/api_response.json").read_bytes(),
+                         b'{"tool_name": "list_calendar_events", "response": '
+                         b'{"status": "ok", "events": [], "executed": false}}\n')
+
     def test_process_seed_prompt_and_output_caps(self):
         for kind, pattern in (("seed", "source/checkpoint/seed"),
                               ("pid", "fresh process"),
