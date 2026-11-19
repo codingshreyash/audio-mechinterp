@@ -16,7 +16,7 @@ After independent executable review and one stage's committed admission and GO, 
 
 `models/second_architecture/.venv/bin/python -m models.second_architecture.nonspeech_probe_v1.whisper_tail_end_isolation_parent_v2 --stage original --admission <fixed V2 path> --go <fixed V2 path>`
 
-Substitute `offset_8000` or `offset_16000` for the later stages. The parent checks a fresh fixed path, an open lid, no thermal warning, battery at least 80% initially and above 70% while running, and power samples at most 15 seconds apart. It limits the full attempt to 1,800 seconds, process-tree RSS below 4 GiB, and retained evidence below 1 GiB. It creates the fixed attempt, records host/power/resource evidence, and sends a live heartbeat. The inherited pipe prevents accidental direct runs under a trusted local-owner assumption; it is not cryptographic parent authentication.
+Substitute `offset_8000` or `offset_16000` for the later stages. **Before** host sampling or creating a translated attempt, the parent reruns the prior fixed stage's complete saved audit and requires `PASS`; a control-negative original may still pass evidence audit and allow descriptive translated stages. It also requires the previous end to precede the new start. The parent checks a fresh fixed path, an open lid, no thermal warning, battery at least 80% initially and above 70% while running, and power samples at most 15 seconds apart. It limits the full attempt to 1,800 seconds, process-tree RSS below 4 GiB, and retained evidence below 1 GiB. It creates the fixed attempt, records host/power/resource evidence and a Mac boot identity, and sends a live heartbeat. The inherited pipe prevents accidental direct runs under a trusted local-owner assumption; it is not cryptographic parent authentication.
 
 After the parent reports `completed_pending_saved_audit`, the read-only no-weight auditor command for each stage is:
 
@@ -26,7 +26,7 @@ The saved auditor checks parent and host receipts, call order and skips, full EO
 
 `models/second_architecture/.venv/bin/python -m models.second_architecture.nonspeech_probe_v1.whisper_tail_end_isolation_saved_audit_v2 --join`
 
-It reports 0/2, 1/2 or 2/2 strict offsets, original viability, the stronger competing-patch secondary condition, and the append new-end native-delta caveat.
+It verifies UTC chronology and, when the recorded Mac boot identity matches, monotonic chronology. It reports 0/2, 1/2 or 2/2 strict offsets, original viability, the stronger competing-patch secondary condition, and the append new-end native-delta caveat.
 
 ## Source-only checks
 

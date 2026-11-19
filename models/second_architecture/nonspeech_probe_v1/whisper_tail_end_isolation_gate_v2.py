@@ -40,6 +40,7 @@ SOURCE_NAMES = (
     "WHISPER_TAIL_END_ISOLATION_PROSPECTIVE_V2.md",
     "WHISPER_TAIL_END_ISOLATION_EXECUTABLE_HANDOFF_V2.md",
     "WHISPER_TAIL_END_ISOLATION_PLAN_V2.json",
+    "runs/whisper_tail_end_isolation_v2/.gitkeep",
     "whisper_time_translation_gate_v1.py",
     "whisper_time_translation_parent_v1.py",
     "whisper_time_translation_worker_v1.py",

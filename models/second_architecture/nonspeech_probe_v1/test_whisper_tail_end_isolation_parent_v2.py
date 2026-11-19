@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from . import whisper_tail_end_isolation_parent_v2 as parent
+from . import whisper_tail_end_isolation_saved_audit_v2 as saved_audit
 
 
 def write_rows(path: Path, rows: list[dict]) -> None:
@@ -112,6 +113,20 @@ class ParentTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "no GO"):
                 parent.launch("original", parent.gate.ADMISSIONS["original"],
                               parent.gate.GOS["original"])
+            host_probe.assert_not_called()
+            spawn.assert_not_called()
+
+    def test_translated_stage_requires_prior_full_saved_audit(self):
+        with patch.object(parent.gate, "validate_go", return_value={}), \
+             patch.object(saved_audit, "audit", side_effect=ValueError("prior raw invalid")) as prior_audit, \
+             patch.object(parent.host, "quick_probe") as host_probe, \
+             patch.object(parent.subprocess, "Popen") as spawn:
+            with self.assertRaisesRegex(ValueError, "prior raw invalid"):
+                parent.launch("offset_8000", parent.gate.ADMISSIONS["offset_8000"],
+                              parent.gate.GOS["offset_8000"])
+            prior_audit.assert_called_once_with(
+                "original", parent.gate.ADMISSIONS["original"],
+                parent.gate.GOS["original"])
             host_probe.assert_not_called()
             spawn.assert_not_called()
 

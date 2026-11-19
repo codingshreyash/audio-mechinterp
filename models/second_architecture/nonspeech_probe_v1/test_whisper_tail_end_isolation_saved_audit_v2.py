@@ -120,6 +120,35 @@ class SavedAuditTests(unittest.TestCase):
             rerun.assert_called_once_with("original", audit.gate.ADMISSIONS["original"],
                                           audit.gate.GOS["original"])
 
+    def test_joint_rejects_out_of_order_attempts(self) -> None:
+        identity = {"source": "same"}
+        def report(stage: str, start: str, end: str, monotonic: float) -> dict:
+            return {"schema": "whisper_tail_end_isolation_saved_audit_v2",
+                    "status": "PASS", "stage": stage, "source_identity": identity,
+                    "plan_sha256": "pinned", "parent_start_utc": start,
+                    "parent_end_utc": end, "parent_start_monotonic": monotonic,
+                    "whole_elapsed_seconds": 5.0, "boot_time_unix_us": 1,
+                    "summary": {"original_qualified": {"qualified": True}} if stage == "original"
+                    else {"strict_translated_crossover": True,
+                          "secondary_opposite_direct_preserved_recipient": True,
+                          "layouts": [{"layout": "append",
+                                       "append_new_end_native_below_threshold": True}]}}
+        original = report("original", "2026-11-19T10:00:00+00:00",
+                          "2026-11-19T10:00:05+00:00", 100.0)
+        offset8 = report("offset_8000", "2026-11-19T10:01:00+00:00",
+                         "2026-11-19T10:01:05+00:00", 160.0)
+        offset16 = report("offset_16000", "2026-11-19T10:02:00+00:00",
+                          "2026-11-19T10:02:05+00:00", 220.0)
+        result = audit._join_verified_reports(original, offset8, offset16)
+        self.assertEqual(result["strict_count_out_of_2"], 2)
+        offset8["parent_start_utc"] = "2026-11-19T10:00:04+00:00"
+        with self.assertRaisesRegex(ValueError, "UTC order"):
+            audit._join_verified_reports(original, offset8, offset16)
+        offset8["parent_start_utc"] = "2026-11-19T10:01:00+00:00"
+        offset8["parent_start_monotonic"] = 104.0
+        with self.assertRaisesRegex(ValueError, "monotonic stage order"):
+            audit._join_verified_reports(original, offset8, offset16)
+
 
 if __name__ == "__main__":
     unittest.main()

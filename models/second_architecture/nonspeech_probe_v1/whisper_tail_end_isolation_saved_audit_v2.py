@@ -37,7 +37,8 @@ def audit_parent(stage: str, receipt: dict, attempt: Path,
                  admission: Path, go: Path) -> dict:
     start = json.loads((attempt / "launch_start.json").read_text())
     result = json.loads((attempt / "parent_result.json").read_text())
-    shared = ("stage", "attempt", "parent_pid", "start_utc", "start_monotonic",
+    shared = ("stage", "attempt", "parent_pid", "boot_time_unix_us",
+              "start_utc", "start_monotonic",
               "deadline_monotonic", "nonce_sha256", "admission_sha256",
               "go_sha256", "source_identity")
     need(start.get("schema") == result.get("schema") == "whisper_tail_end_isolation_parent_v2"
@@ -47,7 +48,9 @@ def audit_parent(stage: str, receipt: dict, attempt: Path,
          and result["stage"] == stage and result["attempt"] == str(attempt)
          and result["source_identity"] == receipt["source_identity"]
          and result["admission_sha256"] == gate.sha(admission)
-         and result["go_sha256"] == gate.sha(go), "parent/GO binding invalid")
+         and result["go_sha256"] == gate.sha(go)
+         and type(result["boot_time_unix_us"]) is int
+         and result["boot_time_unix_us"] > 0, "parent/GO binding invalid")
     elapsed = result["whole_elapsed_seconds"]
     need(0 < elapsed < gate.WALL_SECONDS
          and result["deadline_monotonic"] - result["start_monotonic"] == gate.WALL_SECONDS
@@ -305,6 +308,15 @@ def _join_verified_reports(original: dict, offset_8000: dict, offset_16000: dict
          and all(item["source_identity"] == original["source_identity"]
                  for item in reports), "three matched V2 audited stages required")
     viability = original["summary"]["original_qualified"]["qualified"]
+    for earlier, later in ((original, offset_8000), (offset_8000, offset_16000)):
+        need(datetime.fromisoformat(earlier["parent_end_utc"])
+             <= datetime.fromisoformat(later["parent_start_utc"]),
+             "V2 stage UTC order invalid")
+        if earlier["boot_time_unix_us"] == later["boot_time_unix_us"]:
+            need(earlier["parent_start_monotonic"]
+                 + earlier["whole_elapsed_seconds"]
+                 <= later["parent_start_monotonic"],
+                 "V2 same-boot monotonic stage order invalid")
     cells = []
     for report in (offset_8000, offset_16000):
         candidate = report["summary"]["strict_translated_crossover"]
@@ -427,6 +439,10 @@ def audit(stage: str, admission: Path, go: Path) -> dict:
             "stage": stage, "attempt": str(attempt), "calls": len(calls),
             "plan_sha256": gate.sha(plan_source.PLAN),
             "source_identity": receipt["source_identity"],
+            "parent_start_utc": result["start_utc"],
+            "parent_end_utc": result["end_utc"],
+            "parent_start_monotonic": result["start_monotonic"],
+            "boot_time_unix_us": result["boot_time_unix_us"],
             "planned_max_calls": frozen["stages"][stage]["max_calls"],
             "skipped_arms": skipped, "eligibility": eligibility,
             "mel_shift": mel_shift, "summary": summary,

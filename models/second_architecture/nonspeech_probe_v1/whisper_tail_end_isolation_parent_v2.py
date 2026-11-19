@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import secrets
 import shutil
 import signal
@@ -26,6 +27,7 @@ from . import whisper_tail_end_isolation_gate_v2 as gate
 
 ROOT = gate.ROOT
 LOCK = gate.RUNS / "active_model_lock"
+PREDECESSOR = {"offset_8000": "original", "offset_16000": "offset_8000"}
 POLL_SECONDS = 0.1
 HOST_PROBE_SECONDS = 2.0
 HOST_MAX_GAP_SECONDS = 15.0
@@ -38,6 +40,15 @@ MAX_RECORD_BYTES = 4 * 1024**2
 def need(ok: bool, reason: str) -> None:
     if not ok:
         raise ValueError(reason)
+
+
+def boot_time_unix_us() -> int:
+    """Record a stable Mac boot identity for comparable monotonic clocks."""
+    result = subprocess.run(("sysctl", "-n", "kern.boottime"), text=True,
+                            capture_output=True, timeout=3)
+    match = re.search(r"\{ sec = (\d+), usec = (\d+) \}", result.stdout)
+    need(result.returncode == 0 and bool(match), "Mac boot identity unavailable")
+    return int(match.group(1)) * 1_000_000 + int(match.group(2))
 
 
 def canonical(value: object) -> bytes:
@@ -274,6 +285,15 @@ def run_bounded(command: list[str], attempt: Path, stage: str, *, nonce: str,
 
 def launch(stage: str, admission: Path, go: Path) -> dict:
     receipt = gate.validate_go(stage, admission, go)
+    prior_report = None
+    if stage in PREDECESSOR:
+        from . import whisper_tail_end_isolation_saved_audit_v2 as saved_audit
+        previous = PREDECESSOR[stage]
+        prior_report = saved_audit.audit(
+            previous, gate.ADMISSIONS[previous], gate.GOS[previous])
+        need(prior_report.get("status") == "PASS"
+             and prior_report.get("stage") == previous,
+             "prior fixed V2 stage lacks full saved-audit PASS")
     attempt = gate.ATTEMPTS[stage]
     need(attempt.is_absolute() and attempt.parent.is_dir() and not attempt.exists(),
          "fresh fixed time-translation attempt required")
@@ -285,6 +305,14 @@ def launch(stage: str, admission: Path, go: Path) -> dict:
     started = time.monotonic()
     deadline = started + gate.WALL_SECONDS
     start_utc = datetime.now(timezone.utc)
+    boot_us = boot_time_unix_us()
+    if prior_report is not None:
+        need(datetime.fromisoformat(prior_report["parent_end_utc"]) <= start_utc,
+             "prior audited V2 stage ended after current start")
+        if prior_report["boot_time_unix_us"] == boot_us:
+            need(prior_report["parent_start_monotonic"]
+                 + prior_report["whole_elapsed_seconds"] <= started,
+                 "prior audited V2 monotonic clock overlaps current stage")
     initial = host.quick_probe(initial=True)
     need(0 <= initial["monotonic_seconds"] - started <= HOST_MAX_GAP_SECONDS
          and time.monotonic() < deadline - POST_RESERVE_SECONDS,
@@ -299,6 +327,7 @@ def launch(stage: str, admission: Path, go: Path) -> dict:
     result = {"schema": "whisper_tail_end_isolation_parent_v2",
               "status": "invalid_or_partial", "stage": stage,
               "attempt": str(attempt), "parent_pid": os.getpid(),
+              "boot_time_unix_us": boot_us,
               "start_utc": start_utc.isoformat(),
               "start_monotonic": started, "deadline_monotonic": deadline,
               "nonce_sha256": hashlib.sha256(nonce.encode()).hexdigest(),
