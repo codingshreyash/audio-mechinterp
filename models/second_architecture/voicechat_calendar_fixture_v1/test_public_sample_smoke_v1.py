@@ -78,6 +78,13 @@ class SampleSmokeTests(unittest.TestCase):
         })
         self.environment_receipt_mock = self.environment_receipt.start()
         self.addCleanup(self.environment_receipt.stop)
+        self.native_receipt = patch.object(smoke, "native_ffmpeg_runtime", return_value={
+            "schema": "voicechat_native_ffmpeg_runtime_v1", "ffmpeg_major": 7,
+            "isolated_libdir": str(self.root / "voicechat-sample-ffmpeg-conda7" / "lib"),
+            "public_wav_sha256": smoke.SAMPLE_SHA256[smoke.SAMPLE_WAV],
+        })
+        self.native_receipt_mock = self.native_receipt.start()
+        self.addCleanup(self.native_receipt.stop)
         self.calls: list[list[str]] = []
 
     def freeze(self, *, cap: int = 65536):
@@ -336,6 +343,21 @@ class SampleSmokeTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
         self.assertTrue((self.out / "failure.json").is_file())
 
+    def test_native_ffmpeg_drift_rejected_before_output_and_after_preload(self):
+        self.freeze()
+        original = copy.deepcopy(self.native_receipt_mock.return_value)
+        changed = copy.deepcopy(original)
+        changed["library_targets"] = {"libavcodec.so.61": {"sha256": "f" * 64}}
+        self.native_receipt_mock.return_value = changed
+        with self.assertRaisesRegex(ValueError, "freeze scope differs"):
+            self.run_fake()
+        self.assertFalse(self.out.exists())
+        self.native_receipt_mock.side_effect = [original, changed]
+        with self.assertRaisesRegex(ValueError, "bound source/environment changed after preload"):
+            self.run_fake()
+        self.assertEqual(self.calls, [])
+        self.assertTrue((self.out / "failure.json").is_file())
+
     def test_installed_environment_receipt_sorts_full_freeze_and_checks_versions(self):
         try:
             import packaging.specifiers  # noqa: F401
@@ -500,6 +522,105 @@ class SampleSmokeTests(unittest.TestCase):
         killed.assert_called_once()
         self.assertEqual(json.loads((self.out / "process_start.json").read_text())
                          ["process_id"], 999_993)
+
+
+class NativeFFmpegReceiptTests(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.base = Path(temp.name).resolve()
+        self.root = self.base / "voicechat-sample-ffmpeg-conda7"
+        self.libdir = self.root / "lib"
+        self.libdir.mkdir(parents=True)
+        self.metadata = self.root / "conda-meta"
+        self.metadata.mkdir()
+        archive_name = "ffmpeg-7.0.0-h123_0.conda"
+        archive_bytes = b"synthetic conda package archive"
+        archive_dir = self.root / "package-archives"
+        archive_dir.mkdir()
+        (archive_dir / archive_name).write_bytes(archive_bytes)
+        (self.metadata / "ffmpeg-7.0.0-h123_0.json").write_bytes(smoke.canonical({
+            "name": "ffmpeg", "sha256": smoke.sha(archive_bytes)}))
+        spec = b"@EXPLICIT\nhttps://conda.anaconda.org/conda-forge/linux-64/ffmpeg-7.0.0-h123_0.conda#" + b"a" * 32 + b"\n"
+        (self.root / "conda-explicit.txt").write_bytes(spec)
+        (self.root / "native-source-manifest.json").write_bytes(smoke.canonical({
+            "schema": "voicechat_native_source_manifest_v1", "kind": "conda_explicit",
+            "ffmpeg_major": 7, "explicit_spec": {
+                "path": "conda-explicit.txt", "sha256": smoke.sha(spec), "bytes": len(spec)},
+            "package_archives": [{"path": f"package-archives/{archive_name}",
+                                  "sha256": smoke.sha(archive_bytes),
+                                  "bytes": len(archive_bytes)}],
+        }))
+        for soname in smoke.FFMPEG_REQUIRED_SONAMES.values():
+            (self.libdir / soname).write_bytes(soname.encode())
+        (self.libdir / "libavcodec.so").symlink_to("libavcodec.so.61")
+        self.core = self.base / "libtorchcodec_core7.so"
+        self.core.write_bytes(b"synthetic torchcodec core 7")
+        self.env = patch.dict(os.environ, {"LD_LIBRARY_PATH": str(self.libdir)}, clear=False)
+        self.env.start()
+        self.addCleanup(self.env.stop)
+        for target, name, value in [
+            (smoke, "_torchcodec_core_path", self.core),
+            (smoke, "_os_release_identity", {"id": "ubuntu", "version_id": "22.04"}),
+            (smoke, "check_sample", smoke.SAMPLE_SHA256),
+            (smoke.platform, "system", "Linux"),
+            (smoke.platform, "machine", "x86_64"),
+        ]:
+            mocked = patch.object(target, name, return_value=value)
+            mocked.start()
+            self.addCleanup(mocked.stop)
+
+    def test_receipt_binds_every_alias_target_core_source_and_wav(self):
+        receipt = smoke.native_ffmpeg_runtime(self.base)
+        self.assertEqual(receipt["ffmpeg_major"], 7)
+        self.assertEqual(receipt["required_sonames"], smoke.FFMPEG_REQUIRED_SONAMES)
+        self.assertEqual(receipt["library_aliases"]["libavcodec.so"]["resolved_target"],
+                         "libavcodec.so.61")
+        self.assertEqual(receipt["library_targets"]["libavcodec.so.61"]["sha256"],
+                         smoke.sha(b"libavcodec.so.61"))
+        self.assertEqual(receipt["torchcodec_core"]["sha256"],
+                         smoke.sha(b"synthetic torchcodec core 7"))
+        self.assertEqual(receipt["public_wav_sha256"], smoke.SAMPLE_SHA256[smoke.SAMPLE_WAV])
+        self.assertEqual(receipt["source"]["explicit_spec"]["package_count"], 1)
+        self.assertEqual(receipt["source"]["package_archives_count"], 1)
+
+    def test_tampered_target_and_source_spec_reject_or_change_receipt(self):
+        first = smoke.native_ffmpeg_runtime(self.base)
+        (self.libdir / "libavcodec.so.61").write_bytes(b"changed")
+        second = smoke.native_ffmpeg_runtime(self.base)
+        self.assertNotEqual(first, second)
+        (self.root / "conda-explicit.txt").write_text("@EXPLICIT\nchanged\n")
+        with self.assertRaisesRegex(ValueError, "Conda explicit spec changed"):
+            smoke.native_ffmpeg_runtime(self.base)
+
+    def test_symlink_escape_missing_soname_and_unexpected_major_reject(self):
+        (self.libdir / "libavutil.so.59").unlink()
+        (self.libdir / "libavutil.so.59").symlink_to(self.core)
+        with self.assertRaisesRegex(ValueError, "symlink escapes"):
+            smoke.native_ffmpeg_runtime(self.base)
+        (self.libdir / "libavutil.so.59").unlink()
+        with self.assertRaisesRegex(ValueError, "Required FFmpeg soname missing"):
+            smoke.native_ffmpeg_runtime(self.base)
+        (self.libdir / "libavutil.so.59").write_bytes(b"restored")
+        (self.libdir / "libavutil.so.58").write_bytes(b"wrong major")
+        with self.assertRaisesRegex(ValueError, "Unexpected FFmpeg library major"):
+            smoke.native_ffmpeg_runtime(self.base)
+
+    def test_archive_or_installed_metadata_tamper_rejects(self):
+        archive = self.root / "package-archives" / "ffmpeg-7.0.0-h123_0.conda"
+        archive.write_bytes(b"different archive bytes")
+        with self.assertRaisesRegex(ValueError, "archive bytes changed"):
+            smoke.native_ffmpeg_runtime(self.base)
+        archive.write_bytes(b"synthetic conda package archive")
+        metadata = self.metadata / "ffmpeg-7.0.0-h123_0.json"
+        metadata.write_bytes(smoke.canonical({"name": "ffmpeg", "sha256": "0" * 64}))
+        with self.assertRaisesRegex(ValueError, "does not match installed metadata"):
+            smoke.native_ffmpeg_runtime(self.base)
+
+    def test_unlisted_archive_rejects(self):
+        (self.root / "package-archives" / "unlisted.conda").write_bytes(b"extra")
+        with self.assertRaisesRegex(ValueError, "unexpected files"):
+            smoke.native_ffmpeg_runtime(self.base)
 
 
 if __name__ == "__main__":

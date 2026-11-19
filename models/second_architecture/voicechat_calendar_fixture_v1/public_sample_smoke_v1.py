@@ -14,6 +14,7 @@ import hmac
 import importlib.metadata
 import json
 import os
+import platform
 import re
 import resource
 import selectors
@@ -46,6 +47,16 @@ MAX_FREEZE_BYTES = 65_536
 RUNNER_PACKAGE_PINS = {"numpy": "1.26.4", "pyarrow": "25.0.1", "datasets": "5.0.1"}
 MAMBA_DEPENDENCY_SPECS = {"tilelang": "==0.1.8", "apache-tvm-ffi": "<=0.1.9",
                           "quack-kernels": ">=0.3.4"}
+FFMPEG_MAJOR = 7
+FFMPEG_REQUIRED_SONAMES = {
+    "libavutil": "libavutil.so.59", "libavcodec": "libavcodec.so.61",
+    "libavformat": "libavformat.so.61", "libswresample": "libswresample.so.5",
+    "libswscale": "libswscale.so.8",
+}
+FFMPEG_OPTIONAL_SONAMES = {
+    "libavfilter": "libavfilter.so.10", "libavdevice": "libavdevice.so.61",
+    "libpostproc": "libpostproc.so.58",
+}
 CHILD_ENV_KEYS = (
     "PATH", "HOME", "LANG", "LC_ALL", "LC_CTYPE", "TZ", "TMPDIR",
     "VIRTUAL_ENV", "LD_LIBRARY_PATH", "PYTHONPATH", "PYTHONHASHSEED",
@@ -63,6 +74,7 @@ SOURCE_FILES = {
     "preflight": HERE.parent / "voicechat_h100_local_preflight.py",
     "amendment": HERE / "VOICECHAT_PUBLIC_SAMPLE_SMOKE_AMENDMENT_V1.md",
     "concept_review": HERE / "VOICECHAT_PUBLIC_SAMPLE_SMOKE_AMENDMENT_INDEPENDENT_CONCEPTUAL_REVIEW_GO_V1.md",
+    "native_amendment": HERE / "VOICECHAT_PUBLIC_SAMPLE_NATIVE_FFMPEG_AMENDMENT_V4.md",
 }
 
 
@@ -137,6 +149,194 @@ def installed_environment_receipt() -> dict[str, Any]:
             "runner_package_versions": {name: versions[name] for name in RUNNER_PACKAGE_PINS},
             "mamba_dependency_versions": {name: versions[name] for name in MAMBA_DEPENDENCY_SPECS},
             "mamba_dependency_specs": MAMBA_DEPENDENCY_SPECS}
+
+
+def _os_release_identity() -> dict[str, str]:
+    path = Path("/etc/os-release")
+    require(path.is_file() and path.stat().st_size <= 4096, "OS release file unavailable")
+    values: dict[str, str] = {}
+    for line in path.read_text().splitlines():
+        if "=" not in line or line.startswith("#"):
+            continue
+        name, value = line.split("=", 1)
+        if name in {"ID", "VERSION_ID"}:
+            values[name] = value.strip('"')
+    require(values.get("ID") and values.get("VERSION_ID"), "OS release identity missing")
+    return {"id": values["ID"], "version_id": values["VERSION_ID"]}
+
+
+def _conda_source_receipt(root: Path) -> dict[str, Any]:
+    manifest_path = root / "native-source-manifest.json"
+    manifest, _ = _read_json(manifest_path)
+    require(set(manifest) == {"schema", "kind", "ffmpeg_major", "explicit_spec",
+                              "package_archives"}
+            and manifest["schema"] == "voicechat_native_source_manifest_v1"
+            and manifest["kind"] == "conda_explicit"
+            and manifest["ffmpeg_major"] == FFMPEG_MAJOR,
+            "Native source manifest scope differs")
+    descriptor = manifest["explicit_spec"]
+    require(type(descriptor) is dict
+            and set(descriptor) == {"path", "sha256", "bytes"}
+            and descriptor["path"] == "conda-explicit.txt"
+            and isinstance(descriptor["sha256"], str)
+            and re.fullmatch(r"[0-9a-f]{64}", descriptor["sha256"]) is not None
+            and type(descriptor["bytes"]) is int and 0 < descriptor["bytes"] <= (1 << 20),
+            "Native conda explicit-spec descriptor invalid")
+    spec_path = root / descriptor["path"]
+    digest, size = hash_file(spec_path, cap=1 << 20)
+    require(digest == descriptor["sha256"] and size == descriptor["bytes"],
+            "Conda explicit spec changed")
+    spec_lines = spec_path.read_text().splitlines()
+    require(spec_lines.count("@EXPLICIT") == 1, "Conda explicit spec header missing")
+    package_lines = [line for line in spec_lines if line and not line.startswith("#")
+                     and line != "@EXPLICIT"]
+    require(0 < len(package_lines) <= 512 and all(
+        re.fullmatch(r"https://[^\s#]+(?:\.conda|\.tar\.bz2)#[0-9a-fA-F]{32}(?:[0-9a-fA-F]{32})?", line)
+        is not None for line in package_lines),
+        "Conda explicit spec lacks hashed package URLs")
+    expected_archives = {line.rsplit("/", 1)[1].split("#", 1)[0]
+                         for line in package_lines}
+    require(len(expected_archives) == len(package_lines),
+            "Conda explicit spec has duplicate archive names")
+    metadata_dir = root / "conda-meta"
+    require(metadata_dir.is_dir() and not metadata_dir.is_symlink(),
+            "Conda package metadata directory missing")
+    metadata_paths = sorted(metadata_dir.iterdir(), key=lambda item: item.name)
+    require(0 < len(metadata_paths) <= 512
+            and any(item.name.endswith(".json") for item in metadata_paths),
+            "Conda package metadata count invalid")
+    metadata: list[dict[str, Any]] = []
+    for item in metadata_paths:
+        require(item.is_file() and not item.is_symlink(),
+                "Unexpected Conda package metadata entry")
+        item_sha, item_size = hash_file(item, cap=1 << 20)
+        metadata.append({"path": str(item.relative_to(root)),
+                         "sha256": item_sha, "bytes": item_size})
+    archives = manifest["package_archives"]
+    require(type(archives) is list and len(archives) == len(package_lines),
+            "Conda package archive count differs from explicit spec")
+    archive_dir = root / "package-archives"
+    require(archive_dir.is_dir() and not archive_dir.is_symlink()
+            and archive_dir == archive_dir.resolve(),
+            "Conda package archive directory is missing or linked")
+    seen_archives: set[str] = set()
+    archive_hashes: list[dict[str, Any]] = []
+    for item in archives:
+        require(type(item) is dict and set(item) == {"path", "sha256", "bytes"}
+                and isinstance(item["path"], str)
+                and re.fullmatch(r"package-archives/[A-Za-z0-9_+.-]+(?:\.conda|\.tar\.bz2)",
+                                 item["path"]) is not None
+                and isinstance(item["sha256"], str)
+                and re.fullmatch(r"[0-9a-f]{64}", item["sha256"]) is not None
+                and type(item["bytes"]) is int and item["bytes"] > 0,
+                "Conda package archive descriptor invalid")
+        name = Path(item["path"]).name
+        require(name in expected_archives and name not in seen_archives,
+                "Conda archive differs from explicit spec or is duplicated")
+        seen_archives.add(name)
+        archive_path = root / item["path"]
+        require(archive_path == archive_path.resolve(),
+                "Conda package archive path is linked")
+        archive_sha, archive_size = hash_file(archive_path)
+        require(archive_sha == item["sha256"] and archive_size == item["bytes"],
+                "Conda package archive bytes changed")
+        metadata_name = name.removesuffix(".conda").removesuffix(".tar.bz2") + ".json"
+        metadata_path = metadata_dir / metadata_name
+        metadata_value, _ = _read_json(metadata_path, cap=1 << 20)
+        require(metadata_value.get("sha256") == archive_sha,
+                "Conda package archive does not match installed metadata SHA-256")
+        archive_hashes.append({"path": item["path"], "sha256": archive_sha,
+                               "bytes": archive_size})
+    require(seen_archives == expected_archives, "Conda package archives incomplete")
+    require({item.name for item in archive_dir.iterdir()} == seen_archives,
+            "Conda package archive directory has unexpected files")
+    manifest_sha, manifest_size = hash_file(manifest_path, cap=MAX_FREEZE_BYTES)
+    return {"kind": "conda_explicit", "manifest_path": str(manifest_path),
+            "manifest_sha256": manifest_sha, "manifest_bytes": manifest_size,
+            "explicit_spec": {"path": str(spec_path), "sha256": digest,
+                              "bytes": size, "package_count": len(package_lines)},
+            "conda_metadata": metadata,
+            "package_archives_count": len(archive_hashes),
+            "package_archives_sorted_sha256": sha(canonical(sorted(
+                archive_hashes, key=lambda entry: entry["path"])))}
+
+
+def _torchcodec_core_path() -> Path:
+    try:
+        distribution = importlib.metadata.distribution("torchcodec")
+    except importlib.metadata.PackageNotFoundError as error:
+        raise ValueError("TorchCodec distribution unavailable") from error
+    path = Path(distribution.locate_file(f"torchcodec/libtorchcodec_core{FFMPEG_MAJOR}.so"))
+    require(path.is_absolute() and path == path.resolve()
+            and path.is_file() and not path.is_symlink()
+            and path.is_relative_to(Path(sys.prefix).resolve()),
+            "TorchCodec matching FFmpeg core missing or outside Python environment")
+    return path
+
+
+def native_ffmpeg_runtime(nemo_dir: Path) -> dict[str, Any]:
+    """Bind a task-local Conda FFmpeg prefix, its source manifest, and native bytes."""
+    value = os.environ.get("LD_LIBRARY_PATH", "")
+    components = value.split(":")
+    require(value and all(component and Path(component).is_absolute()
+                          for component in components),
+            "LD_LIBRARY_PATH must contain only absolute nonempty components")
+    libdir = Path(components[0])
+    require(libdir.name == "lib" and libdir == libdir.resolve() and libdir.is_dir(),
+            "First LD_LIBRARY_PATH component is not an isolated FFmpeg lib directory")
+    root = libdir.parent
+    require(root.is_dir() and root == root.resolve()
+            and root.name.startswith("voicechat-sample-"),
+            "FFmpeg root is not a task-local prefix")
+    require(platform.system() == "Linux" and platform.machine() == "x86_64",
+            "FFmpeg runtime requires Linux x86_64")
+    release = _os_release_identity()
+    source = _conda_source_receipt(root)
+
+    entries = sorted((item for item in libdir.iterdir() if ".so" in item.name),
+                     key=lambda item: item.name)
+    require(5 <= len(entries) <= 2048, "FFmpeg shared-library count invalid")
+    target_hashes: dict[str, dict[str, Any]] = {}
+    aliases: dict[str, dict[str, str | None]] = {}
+    present: set[str] = set()
+    sonames = {**FFMPEG_REQUIRED_SONAMES, **FFMPEG_OPTIONAL_SONAMES}
+    for entry in entries:
+        require(entry.is_file() or entry.is_symlink(),
+                "Unexpected FFmpeg library directory entry")
+        require(re.fullmatch(r"[A-Za-z0-9_+.-]+\.so(?:\.[A-Za-z0-9_.+-]+)?", entry.name)
+                is not None, "Unexpected FFmpeg shared-library filename")
+        for family, soname in sonames.items():
+            if entry.name.startswith(family + ".so."):
+                require(entry.name == soname or entry.name.startswith(soname + "."),
+                        "Unexpected FFmpeg library major version")
+                present.add(entry.name)
+        target = entry.resolve()
+        require(target.is_relative_to(libdir) and target.is_file()
+                and not target.is_symlink(),
+                "FFmpeg library symlink escapes isolated directory")
+        relative = str(target.relative_to(libdir))
+        if relative not in target_hashes:
+            digest, size = hash_file(target)
+            target_hashes[relative] = {"sha256": digest, "bytes": size}
+        aliases[entry.name] = {"resolved_target": relative,
+                               "symlink_target": os.readlink(entry) if entry.is_symlink() else None}
+    require(set(FFMPEG_REQUIRED_SONAMES.values()) <= present,
+            "Required FFmpeg soname missing")
+    core_path = _torchcodec_core_path()
+    core_sha, core_size = hash_file(core_path)
+    sample_hashes = check_sample(nemo_dir)
+    return {"schema": "voicechat_native_ffmpeg_runtime_v1",
+            "platform": {"system": platform.system(), "machine": platform.machine(),
+                         "distribution": release},
+            "ffmpeg_major": FFMPEG_MAJOR,
+            "isolated_root": str(root), "isolated_libdir": str(libdir),
+            "ld_library_path": value,
+            "required_sonames": FFMPEG_REQUIRED_SONAMES,
+            "source": source,
+            "library_aliases": aliases, "library_targets": target_hashes,
+            "torchcodec_core": {"path": str(core_path), "sha256": core_sha,
+                                "bytes": core_size},
+            "public_wav_sha256": sample_hashes[SAMPLE_WAV]}
 
 
 def _utc_record(value: Any) -> bool:
@@ -224,6 +424,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
             "Shared pinned preflight changed")
     source_hashes = {name: hash_file(path)[0] for name, path in SOURCE_FILES.items()}
     installed_environment = installed_environment_receipt()
+    native_runtime = native_ffmpeg_runtime(nemo_dir)
     return {
         "paths": {"nemo_dir": str(nemo_dir), "checkpoint_dir": str(checkpoint_dir),
                   "nano_hf_home": str(nano_home), "output_dir": str(output_dir)},
@@ -248,6 +449,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
         "child_environment": child_environment(),
         "child_environment_sha256": sha(canonical(child_environment())),
         "installed_environment": installed_environment,
+        "native_ffmpeg_runtime": native_runtime,
     }
 
 
@@ -646,6 +848,7 @@ def run_sample(*, nemo_dir: Path, checkpoint_dir: Path, nano_home: Path,
             "freeze_sha256": freeze_sha, "review_sha256": hash_file(review_path)[0],
             "started_utc": utc(), "command": expected["command"],
             "child_environment": expected["child_environment"], "caps": caps,
+            "native_ffmpeg_runtime": expected["native_ffmpeg_runtime"],
         }), caps["total_evidence_bytes"] - terminal_reserve(caps["total_evidence_bytes"]))
         admission = sample_ready_preload(nemo_dir, checkpoint_dir, nano_home,
                                          gpu_policy, checks)
