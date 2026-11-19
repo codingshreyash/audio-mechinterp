@@ -107,6 +107,30 @@ class TimingBundleTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "queue differs"):
                 bundle.assemble(output, first, second, root / "assembled.json")
 
+    def test_tampered_rendered_form_rejected_before_assembly(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output, queue = self._built(root)
+            first, second = root / "one.json", root / "two.json"
+            self._export(first, queue, "reviewer-one")
+            self._export(second, queue, "reviewer-two")
+            (output / "TIMING_FORM.html").write_text("<script>/* altered page */</script>")
+            with self.assertRaisesRegex(ValueError, "form, queue, or README bytes changed"):
+                bundle.assemble(output, first, second, root / "assembled.json")
+            self.assertFalse((root / "assembled.json").exists())
+
+    def test_extra_bundle_file_rejected_before_assembly(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output, queue = self._built(root)
+            first, second = root / "one.json", root / "two.json"
+            self._export(first, queue, "reviewer-one")
+            self._export(second, queue, "reviewer-two")
+            (output / "unexpected.txt").write_text("extra")
+            with self.assertRaisesRegex(ValueError, "inventory differs"):
+                bundle.assemble(output, first, second, root / "assembled.json")
+            self.assertFalse((root / "assembled.json").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

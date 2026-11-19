@@ -20,8 +20,18 @@ ANNOTATION_TEMPLATE_SHA256 = "ebac0ab9ab1804eb7d225313f47ad0fd9e417b1ab6a80316a8
 SOURCE_REVIEW = HERE / "SOURCE_RENDERED_INDEPENDENT_REVIEW_GO_V1.md"
 SOURCE_ADMISSION = HERE / "SOURCE_RENDERED_INDEPENDENT_ADMISSION_GO_V1.json"
 TEMPLATE = HERE / "timing_form.html"
+TEMPLATE_SHA256 = "d5eac51cb53bd76c33deed5e4d91237445825fded8286ef3e4b8c0c05cf72efe"
 SCHEMA = "voicechat_timing_independent_review_v1"
 GAP = 2560
+README_TEXT = (
+    "# Model-blind timing annotation\n\n"
+    "Open TIMING_FORM.html locally. Each reviewer uses a separate browser profile and unique ID. "
+    "Listen to all 12 clips, mark the stated phrase and a same-width speech interval elsewhere, "
+    "then export the JSON. Use the Cannot mark option if either interval cannot be identified. "
+    "Do not discuss marks, view model outputs, or edit an export before both first impressions are locked. "
+    "A third person uses the same form if any intervals differ. The coordinator keeps all original exports. "
+    "No interval is supplied or inferred by this bundle.\n"
+)
 
 
 def _require(condition: bool, reason: str) -> None:
@@ -85,6 +95,18 @@ def _queue(template: dict) -> dict:
             "sample_rate_hz": 16000, "min_gap_frames": GAP, "rows": rows}
 
 
+def _rendered_bytes(queue: dict) -> tuple[bytes, bytes, bytes]:
+    _require(_sha(TEMPLATE) == TEMPLATE_SHA256, "Reviewed timing form template changed")
+    queue_bytes = (json.dumps(queue, sort_keys=True, indent=2) + "\n").encode()
+    payload = json.dumps(queue, separators=(",", ":")).replace("<", "\\u003c")
+    html = TEMPLATE.read_text(encoding="utf-8")
+    html = html.replace("__EMBEDDED_QUEUE__", payload)
+    html = html.replace("__QUEUE_SHA256__", hashlib.sha256(queue_bytes).hexdigest())
+    _require("__EMBEDDED_QUEUE__" not in html and "__QUEUE_SHA256__" not in html,
+             "Form template insertion failed")
+    return queue_bytes, html.encode("utf-8"), README_TEXT.encode("utf-8")
+
+
 def build(output_dir: Path) -> dict:
     _manifest, template = _source()
     _require(output_dir.is_absolute() and not output_dir.exists(),
@@ -95,23 +117,10 @@ def build(output_dir: Path) -> dict:
         shutil.copyfile(SOURCE / name, output_dir / name)
         _require(_sha(output_dir / name) == record["clean_wav_sha256"], "Bundle WAV copy differs")
     queue = _queue(template)
-    queue_bytes = (json.dumps(queue, sort_keys=True, indent=2) + "\n").encode()
+    queue_bytes, html_bytes, readme_bytes = _rendered_bytes(queue)
     (output_dir / "QUEUE.json").write_bytes(queue_bytes)
-    html = TEMPLATE.read_text(encoding="utf-8")
-    payload = json.dumps(queue, separators=(",", ":")).replace("<", "\\u003c")
-    html = html.replace("__EMBEDDED_QUEUE__", payload)
-    html = html.replace("__QUEUE_SHA256__", hashlib.sha256(queue_bytes).hexdigest())
-    _require("__EMBEDDED_QUEUE__" not in html and "__QUEUE_SHA256__" not in html,
-             "Form template insertion failed")
-    (output_dir / "TIMING_FORM.html").write_text(html, encoding="utf-8")
-    (output_dir / "README.md").write_text(
-        "# Model-blind timing annotation\n\n"
-        "Open TIMING_FORM.html locally. Each reviewer uses a separate browser profile and unique ID. "
-        "Listen to all 12 clips, mark the stated phrase and a same-width speech interval elsewhere, "
-        "then export the JSON. Use the Cannot mark option if either interval cannot be identified. "
-        "Do not discuss marks, view model outputs, or edit an export before both first impressions are locked. "
-        "A third person uses the same form if any intervals differ. The coordinator keeps all original exports. "
-        "No interval is supplied or inferred by this bundle.\n", encoding="utf-8")
+    (output_dir / "TIMING_FORM.html").write_bytes(html_bytes)
+    (output_dir / "README.md").write_bytes(readme_bytes)
     return {"status": "human_annotation_pending", "rows": 12, "queue_sha256": _sha(output_dir / "QUEUE.json")}
 
 
@@ -162,8 +171,20 @@ def _review(path: Path, queue: dict) -> dict:
 def assemble(bundle: Path, first: Path, second: Path, output: Path,
              third: Path | None = None) -> dict:
     _manifest, template = _source()
+    _require(bundle.is_dir() and not bundle.is_symlink(), "Timing bundle directory invalid")
+    expected_names = {record["clean_wav_path"] for record in template["records"]}
+    expected_names.update(("QUEUE.json", "TIMING_FORM.html", "README.md"))
+    actual_entries = list(bundle.iterdir())
+    _require(len(actual_entries) == 15 and {p.name for p in actual_entries} == expected_names
+             and all(p.is_file() and not p.is_symlink() for p in actual_entries),
+             "Timing bundle inventory differs from reviewed 15 files")
     queue = _load(bundle / "QUEUE.json")
     _require(queue == _queue(template), "Timing bundle queue differs from audited source")
+    expected_queue, expected_html, expected_readme = _rendered_bytes(_queue(template))
+    _require((bundle / "QUEUE.json").read_bytes() == expected_queue
+             and (bundle / "TIMING_FORM.html").read_bytes() == expected_html
+             and (bundle / "README.md").read_bytes() == expected_readme,
+             "Timing bundle form, queue, or README bytes changed")
     for row in queue["rows"]:
         _require((bundle / row["clean_wav_path"]).is_file()
                  and _sha(bundle / row["clean_wav_path"]) == row["clean_wav_sha256"],
