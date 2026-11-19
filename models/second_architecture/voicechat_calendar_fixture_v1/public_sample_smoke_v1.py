@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import hmac
+import importlib.metadata
 import json
 import os
 import re
@@ -42,6 +43,9 @@ MAX_EVIDENCE_BYTES = 1 << 30
 MIN_EVIDENCE_BYTES = 65_536
 TERMINAL_RESERVE_BYTES = 16_384
 MAX_FREEZE_BYTES = 65_536
+RUNNER_PACKAGE_PINS = {"numpy": "1.26.4", "pyarrow": "25.0.1", "datasets": "5.0.1"}
+MAMBA_DEPENDENCY_SPECS = {"tilelang": "==0.1.8", "apache-tvm-ffi": "<=0.1.9",
+                          "quack-kernels": ">=0.3.4"}
 CHILD_ENV_KEYS = (
     "PATH", "HOME", "LANG", "LC_ALL", "LC_CTYPE", "TZ", "TMPDIR",
     "VIRTUAL_ENV", "LD_LIBRARY_PATH", "PYTHONPATH", "PYTHONHASHSEED",
@@ -87,6 +91,52 @@ def child_environment() -> dict[str, str]:
             and "VOICECHAT_CONTROLLER_KEY_HEX" not in result,
             "Review/controller key reached child environment")
     return result
+
+
+def installed_environment_receipt() -> dict[str, Any]:
+    """Bind every installed Python distribution and check sample-specific imports.
+
+    This runs pip only; it does not import NeMo, a model, or third-party packages.
+    The full sorted inventory is represented by its digest and line count.
+    """
+    try:
+        completed = subprocess.run(
+            [sys.executable, "-m", "pip", "freeze", "--all"],
+            check=False, capture_output=True, text=True, timeout=60,
+        )
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise ValueError("Full pip freeze unavailable") from error
+    require(completed.returncode == 0 and len(completed.stdout) <= (1 << 20),
+            "Full pip freeze failed or exceeded size cap")
+    lines = [line for line in completed.stdout.splitlines() if line]
+    require(0 < len(lines) <= 10_000 and all(line == line.strip() for line in lines),
+            "Full pip freeze contains invalid lines")
+    inventory = ("\n".join(sorted(lines)) + "\n").encode("utf-8")
+
+    versions: dict[str, str | None] = {}
+    for name in (*RUNNER_PACKAGE_PINS, *MAMBA_DEPENDENCY_SPECS):
+        try:
+            versions[name] = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            versions[name] = None
+    for name, expected in RUNNER_PACKAGE_PINS.items():
+        require(versions[name] == expected,
+                f"Sample runtime requires {name}=={expected}")
+    try:
+        from packaging.specifiers import SpecifierSet
+    except ImportError as error:
+        raise ValueError("Version specifier checker unavailable") from error
+    for name, spec in MAMBA_DEPENDENCY_SPECS.items():
+        version = versions[name]
+        require(version is None or version in SpecifierSet(spec),
+                f"Installed Mamba dependency {name} violates {spec}")
+    return {"schema": "voicechat_full_python_environment_v1",
+            "python_executable": sys.executable,
+            "pip_freeze_all_sorted_sha256": sha(inventory),
+            "pip_freeze_all_line_count": len(lines),
+            "runner_package_versions": {name: versions[name] for name in RUNNER_PACKAGE_PINS},
+            "mamba_dependency_versions": {name: versions[name] for name in MAMBA_DEPENDENCY_SPECS},
+            "mamba_dependency_specs": MAMBA_DEPENDENCY_SPECS}
 
 
 def _utc_record(value: Any) -> bool:
@@ -173,6 +223,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
     require(hash_file(SOURCE_FILES["preflight"])[0] == "6233cc01b6bbd69b71aa978f3b2dabc0210bf6175faf4f34bf73eb44ead586a0",
             "Shared pinned preflight changed")
     source_hashes = {name: hash_file(path)[0] for name, path in SOURCE_FILES.items()}
+    installed_environment = installed_environment_receipt()
     return {
         "paths": {"nemo_dir": str(nemo_dir), "checkpoint_dir": str(checkpoint_dir),
                   "nano_hf_home": str(nano_home), "output_dir": str(output_dir)},
@@ -196,6 +247,7 @@ def expected_freeze_fields(nemo_dir: Path, checkpoint_dir: Path,
         },
         "child_environment": child_environment(),
         "child_environment_sha256": sha(canonical(child_environment())),
+        "installed_environment": installed_environment,
     }
 
 

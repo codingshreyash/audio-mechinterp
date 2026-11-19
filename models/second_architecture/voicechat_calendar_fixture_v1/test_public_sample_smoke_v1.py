@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import hmac
 import hashlib
+import copy
 import json
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from . import public_sample_smoke_v1 as smoke
@@ -63,6 +66,18 @@ class SampleSmokeTests(unittest.TestCase):
         self.nano_ref = patch.object(smoke, "check_exact_nano_ref", return_value="synthetic-ref-hash")
         self.nano_ref.start()
         self.addCleanup(self.nano_ref.stop)
+        self.environment_receipt = patch.object(smoke, "installed_environment_receipt",
+                                                return_value={
+            "schema": "voicechat_full_python_environment_v1",
+            "python_executable": sys.executable,
+            "pip_freeze_all_sorted_sha256": "0" * 64,
+            "pip_freeze_all_line_count": 7,
+            "runner_package_versions": dict(smoke.RUNNER_PACKAGE_PINS),
+            "mamba_dependency_versions": {name: None for name in smoke.MAMBA_DEPENDENCY_SPECS},
+            "mamba_dependency_specs": dict(smoke.MAMBA_DEPENDENCY_SPECS),
+        })
+        self.environment_receipt_mock = self.environment_receipt.start()
+        self.addCleanup(self.environment_receipt.stop)
         self.calls: list[list[str]] = []
 
     def freeze(self, *, cap: int = 65536):
@@ -300,6 +315,61 @@ class SampleSmokeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "freeze scope differs"):
             self.run_fake()
         self.assertFalse(self.out.exists())
+
+    def test_full_installed_environment_drift_rejected_before_output(self):
+        self.freeze()
+        changed = copy.deepcopy(self.environment_receipt_mock.return_value)
+        changed["pip_freeze_all_sorted_sha256"] = "f" * 64
+        self.environment_receipt_mock.return_value = changed
+        with self.assertRaisesRegex(ValueError, "freeze scope differs"):
+            self.run_fake()
+        self.assertFalse(self.out.exists())
+
+    def test_full_installed_environment_drift_rejected_after_preload(self):
+        self.freeze()
+        original = copy.deepcopy(self.environment_receipt_mock.return_value)
+        changed = copy.deepcopy(original)
+        changed["mamba_dependency_versions"]["tilelang"] = "0.1.8"
+        self.environment_receipt_mock.side_effect = [original, changed]
+        with self.assertRaisesRegex(ValueError, "bound source/environment changed after preload"):
+            self.run_fake()
+        self.assertEqual(self.calls, [])
+        self.assertTrue((self.out / "failure.json").is_file())
+
+    def test_installed_environment_receipt_sorts_full_freeze_and_checks_versions(self):
+        try:
+            import packaging.specifiers  # noqa: F401
+        except ImportError:
+            self.skipTest("packaging is unavailable in this no-model test environment")
+        self.environment_receipt.stop()
+        versions = {**smoke.RUNNER_PACKAGE_PINS,
+                    "tilelang": "0.1.8", "apache-tvm-ffi": "0.1.9",
+                    "quack-kernels": "0.3.4"}
+        def installed_version(name):
+            return versions[name]
+        first = SimpleNamespace(returncode=0, stdout="zpkg==1\nnumpy==1.26.4\nApkg==2\n")
+        second = SimpleNamespace(returncode=0, stdout="Apkg==2\nzpkg==1\nnumpy==1.26.4\n")
+        with patch.object(smoke.subprocess, "run", side_effect=[first, second]) as run_pip, \
+             patch.object(smoke.importlib.metadata, "version", side_effect=installed_version):
+            left = smoke.installed_environment_receipt()
+            right = smoke.installed_environment_receipt()
+        self.assertEqual(left, right)
+        self.assertEqual(left["pip_freeze_all_line_count"], 3)
+        self.assertEqual(left["pip_freeze_all_sorted_sha256"],
+                         smoke.sha(b"Apkg==2\nnumpy==1.26.4\nzpkg==1\n"))
+        self.assertEqual(run_pip.call_args.args[0],
+                         [sys.executable, "-m", "pip", "freeze", "--all"])
+        versions["pyarrow"] = "26.0.1"
+        with patch.object(smoke.subprocess, "run", return_value=first), \
+             patch.object(smoke.importlib.metadata, "version", side_effect=installed_version):
+            with self.assertRaisesRegex(ValueError, "pyarrow==25.0.1"):
+                smoke.installed_environment_receipt()
+        versions["pyarrow"] = "25.0.1"
+        versions["tilelang"] = "0.1.9"
+        with patch.object(smoke.subprocess, "run", return_value=first), \
+             patch.object(smoke.importlib.metadata, "version", side_effect=installed_version):
+            with self.assertRaisesRegex(ValueError, "tilelang violates ==0.1.8"):
+                smoke.installed_environment_receipt()
 
     def test_extra_file_symlink_and_tamper_are_rejected(self):
         self.freeze()

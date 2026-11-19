@@ -4,6 +4,8 @@
 
 **Repair notice, 19 November 2026:** the first existing-A100 sample attempt stopped before model import because the prior Nano `refs/main` recipe included a newline. The source hashes and source GO below describe the historical pre-repair version. A rerun must use the repaired exact 40-byte ref and obtain a new independent six-role source review and host-specific executable freeze; see [the repair note](VOICECHAT_NANO_REF_REPAIR_V1.md).
 
+The later [full-environment amendment](VOICECHAT_FULL_ENVIRONMENT_FREEZE_AMENDMENT_V1.md) also requires a signed digest of `pip freeze --all`, exact NumPy/PyArrow/Datasets versions, import-only checks and a fresh source review. Do not reuse the package inventory or source GO named below for a new attempt.
+
 ## Capacity and cost decision
 
 The existing stopped Brev `qwen-audio-mechinterp-a100` is `a100-80gb.1x` ($1.98/hour, 128GB advertised disk). A read-only start showed an A100 80GB PCIe with 81,920 MiB VRAM and 92,438,929,408 bytes (86.09 GiB) free on the 124 GiB root filesystem. No VoiceChat checkpoint or NeMo checkout was found in `/home/ubuntu`. The frozen VoiceChat weight is 44,382,749,892 bytes (41.33 GiB), and [preflight](../voicechat_h100_local_preflight.py) requires 60 GiB free **after** checkpoint staging. Thus at least 101.33 GiB must be free before the weight is staged; this A100 is short by 15.24 GiB before packages or caches. The read-only check ended with `brev ls` showing the instance `STOPPED`. Do not erase the existing Qwen environment to force a pass.

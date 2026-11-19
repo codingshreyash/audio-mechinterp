@@ -13,3 +13,9 @@ No-model check:
 ```sh
 reproductions/audio_prior/.venv/bin/python -m unittest models.second_architecture.voicechat_calendar_fixture_v1.test_public_sample_smoke_v1 -v
 ```
+
+## Full Python environment binding for the next sample
+
+The runner now computes a receipt from `sys.executable -m pip freeze --all` whenever it constructs or revalidates `expected_freeze_fields`. It strips no package lines, sorts the nonempty lines lexicographically, adds one final LF, and binds the SHA-256 plus line count in `expected.installed_environment`. It also requires NumPy 1.26.4, PyArrow 25.0.1, and Datasets 5.0.1 by installed distribution metadata. It records the installed versions, or absence, of `tilelang`, `apache-tvm-ffi`, and `quack-kernels` and rejects installed versions outside Mamba 2.3.2.post1's declared bounds. The full receipt is recomputed before a new output directory is reserved and again after the ready/preload checks, immediately before the official child starts. A signed freeze made with an old package inventory cannot pass these comparisons.
+
+The digest binds installed Python distribution **version lines**, including editable install locators, not wheel bytes, GPU driver, CUDA runtime binaries or arbitrary files. A new independent executable review must inspect the raw `pip freeze --all`, wheel hash and `pip check` receipts against the digest and decide how any missing declared Mamba dependencies are handled. The runner records missing optional-decision entries as `null`; that is not an implicit exception to the dependency gate. The eleven model-card pins and the separate shared preflight remain in force. Historical source reviews and failed sample freezes do not bind this amended runner.
