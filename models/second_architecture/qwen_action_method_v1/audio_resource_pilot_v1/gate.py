@@ -141,6 +141,14 @@ def require_one_slurm_gpu(job_gpus: str, step_gpus: str,
     return {"source": "SLURM_STEP_GPUS", "value": step_gpus}
 
 
+def require_torch_binary_preflight(admission: dict[str, Any], actual: dict[str, Any]) -> None:
+    from .. import typed_pilot_cuda_admission_v2
+    require(isinstance(admission.get("torch_binary_preflight"), dict)
+            and actual.get("wheel_sha256") == typed_pilot_cuda_admission_v2.WHEEL_SHA256
+            and actual == admission["torch_binary_preflight"],
+            "pinned Torch wheel/installed CUDA binaries differ from admission")
+
+
 def runtime_identity(*, require_idle: bool = True) -> dict[str, Any]:
     job = os.environ.get("SLURM_JOB_ID", "")
     nodes = os.environ.get("SLURM_JOB_NUM_NODES", "")
@@ -242,6 +250,9 @@ def validate_go(*, live: bool = True) -> dict[str, Any]:
         require(typed_pilot_cuda_admission_v3.preflight(snapshot) ==
                 admission["processor_preflight"],
                 "live cached snapshot/processor/wheel differs from admission")
+        from .. import typed_pilot_cuda_admission_v2
+        require_torch_binary_preflight(admission,
+            typed_pilot_cuda_admission_v2.verify_binaries())
     return go
 
 
@@ -250,14 +261,16 @@ def capture_admission() -> dict[str, Any]:
     require(not plan.ADMISSION.exists() and not plan.ATTEMPT.exists(),
             "pilot already admitted or attempted")
     identity = source_identity()
-    from .. import typed_pilot_cuda_admission_v3
+    from .. import typed_pilot_cuda_admission_v2, typed_pilot_cuda_admission_v3
     processor = typed_pilot_cuda_admission_v3.preflight()
+    torch_binaries = typed_pilot_cuda_admission_v2.verify_binaries()
     gpu = gpu_inventory()
     result = {"schema": "qwen_audio_resource_admission_v1",
               "status": "source_only_no_weights", "source_identity": identity,
               "runtime_identity": runtime_identity(require_idle=False),
               "gpu_baseline": gpu,
               "processor_preflight": processor,
+              "torch_binary_preflight": torch_binaries,
               "approved_attempt": str(plan.ATTEMPT.resolve()),
               "wav_sha256": plan.WAV_SHA256}
     write_once(plan.ADMISSION, result)

@@ -53,6 +53,17 @@ class PilotSourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             gate.require_one_slurm_gpu("0", "", "2")
 
+    def test_torch_binary_admission_binding_rejects_missing_or_changed(self) -> None:
+        from .. import typed_pilot_cuda_admission_v2
+        actual = {"wheel_sha256": typed_pilot_cuda_admission_v2.WHEEL_SHA256,
+                  "installed_torch_binary_sha256": {"libtorch_cuda.so": "fixed"}}
+        gate.require_torch_binary_preflight({"torch_binary_preflight": actual}, actual)
+        with self.assertRaises(ValueError):
+            gate.require_torch_binary_preflight({}, actual)
+        with self.assertRaises(ValueError):
+            gate.require_torch_binary_preflight({"torch_binary_preflight": actual},
+                {**actual, "installed_torch_binary_sha256": {"libtorch_cuda.so": "changed"}})
+
     def test_direct_worker_refuses_before_model_import(self) -> None:
         cmd = [sys.executable, "-m",
             "models.second_architecture.qwen_action_method_v1.audio_resource_pilot_v1.worker",

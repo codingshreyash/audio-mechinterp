@@ -42,6 +42,9 @@ def verify_generation_shapes(shapes: dict, prompt_length: int) -> None:
 
 def audit() -> dict:
     go = gate.validate_go(live=False)
+    from .. import typed_pilot_cuda_admission_v2
+    gate.require_torch_binary_preflight(gate.read(plan.ADMISSION),
+        typed_pilot_cuda_admission_v2.verify_binaries())
     attempt = plan.ATTEMPT
     gate.require(attempt.is_dir() and not attempt.is_symlink()
                  and parent.output_bytes(attempt) < plan.EVIDENCE_BYTES,
