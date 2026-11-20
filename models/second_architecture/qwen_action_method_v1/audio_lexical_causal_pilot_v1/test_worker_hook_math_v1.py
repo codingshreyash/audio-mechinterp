@@ -97,6 +97,17 @@ class WorkerHookMathTests(unittest.TestCase):
                                                      plan.NOISE_SEED, torch)
                         torch.testing.assert_close(repeat, patched)
 
+    def test_tiny_local_donor_delta_fails_numerical_floor(self):
+        site = "audio.to_language"
+        w = plan.WINDOWS[site]
+        clean = torch.zeros((w["total"], w["width"]), dtype=torch.float32)
+        donor = clean.clone()
+        lo, hi = w["local"]
+        donor[lo:hi] = 1e-7
+        with self.assertRaisesRegex(ValueError, "numerical floor"):
+            worker.make_edit(site, "local_donor", clean, clean, donor,
+                             plan.NOISE_SEED, torch)
+
 
 if __name__ == "__main__":
     unittest.main()

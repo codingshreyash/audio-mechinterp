@@ -235,7 +235,8 @@ def make_edit(site: str, arm: str, live: Any, recipient: Any, donor: Any,
     a, b = w["chunk"]
     delta = donor[lo:hi] - recipient[lo:hi]
     local_norm = float(torch.linalg.vector_norm(delta).item())
-    gate.require(local_norm > 0 and np.isfinite(local_norm), "zero or invalid local donor delta")
+    gate.require(local_norm >= plan.MIN_LOCAL_DELTA_L2 and np.isfinite(local_norm),
+                 "local donor delta below frozen numerical floor")
     patched = live.clone()
     if arm == "local_donor":
         patched[lo:hi] = donor[lo:hi]
@@ -397,11 +398,19 @@ def run(attempt: Path) -> None:
                 seed = plan.NOISE_SEED + site_index*100 + direction_index*10
                 def edit(live: Any) -> Any:
                     gate.require(not calls, "intervention hook fired more than once")
-                    drift = _maxabs(live-recipient, torch)
-                    gate.require(drift <= plan.SOURCE_DRIFT_TOLERANCE,
+                    drift_tensor = live-recipient
+                    drift = _maxabs(drift_tensor, torch)
+                    drift_l2 = float(torch.linalg.vector_norm(drift_tensor).item())
+                    local_lo, local_hi = plan.WINDOWS[site]["local"]
+                    signal_l2 = float(torch.linalg.vector_norm(
+                        donor[local_lo:local_hi]-recipient[local_lo:local_hi]).item())
+                    gate.require(drift <= plan.SOURCE_DRIFT_TOLERANCE
+                                 and signal_l2 >= plan.MIN_LOCAL_DELTA_L2
+                                 and drift_l2 <= signal_l2*plan.MAX_PREPATCH_DRIFT_FRACTION,
                                  "intervention live source differs from captured recipient")
                     patched, info = make_edit(site, arm, live, recipient, donor, seed, torch)
-                    calls.append({"source_drift_maxabs": drift, **info})
+                    calls.append({"source_drift_maxabs": drift,
+                                  "source_drift_l2": drift_l2, **info})
                     return patched
                 output = _generate(model, batch, processor.tokenizer, torch,
                                    [hook_one(modules, site, edit)])
