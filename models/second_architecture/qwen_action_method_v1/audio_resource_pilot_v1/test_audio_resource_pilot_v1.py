@@ -45,6 +45,8 @@ class PilotSourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             gate.require_one_slurm_gpu("0,1", "0", "1")
         with self.assertRaises(ValueError):
+            gate.require_one_slurm_gpu("0", "1", "1")
+        with self.assertRaises(ValueError):
             gate.require_one_slurm_gpu("", "0,1", "1")
         with self.assertRaises(ValueError):
             gate.require_one_slurm_gpu("", "", "1")

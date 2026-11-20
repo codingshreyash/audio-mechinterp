@@ -132,6 +132,9 @@ def require_one_slurm_gpu(job_gpus: str, step_gpus: str,
     if step_gpus:
         require(ONE_GPU.fullmatch(step_gpus) is not None,
                 "SLURM_STEP_GPUS is not one GPU")
+    if job_gpus and step_gpus:
+        require(job_gpus == step_gpus,
+                "Slurm job and step GPU allocation identifiers disagree")
     if job_gpus:
         return {"source": "SLURM_JOB_GPUS", "value": job_gpus}
     require(bool(step_gpus), "both Slurm GPU allocation fields empty")
