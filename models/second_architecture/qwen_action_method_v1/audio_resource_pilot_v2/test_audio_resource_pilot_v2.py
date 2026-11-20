@@ -36,6 +36,25 @@ class PilotSourceTests(unittest.TestCase):
             self.assertFalse(parent.clean_exit_at_closed_heartbeat(
                 Mock(wait=Mock(return_value=0)), deadline, output))
 
+    def test_saved_boundary_time_rejects_forged_or_late_receipt(self) -> None:
+        valid = {"heartbeat_clean_exit_boundary": True,
+                 "heartbeat_boundary_elapsed_seconds": 10.5,
+                 "worker_elapsed_seconds": 15.0,
+                 "worker_returncode": 0, "worker_stop_reason": "normal_exit"}
+        saved_audit.verify_heartbeat_boundary(valid, 10.0)
+        saved_audit.verify_heartbeat_boundary({**valid,
+            "heartbeat_clean_exit_boundary": False,
+            "heartbeat_boundary_elapsed_seconds": None}, 10.0)
+        with self.assertRaises(ValueError):
+            saved_audit.verify_heartbeat_boundary({**valid,
+                "heartbeat_boundary_elapsed_seconds": 13.0}, 10.0)
+        with self.assertRaises(ValueError):
+            saved_audit.verify_heartbeat_boundary({**valid,
+                "worker_returncode": 1}, 10.0)
+        with self.assertRaises(ValueError):
+            saved_audit.verify_heartbeat_boundary({**valid,
+                "heartbeat_clean_exit_boundary": False}, 10.0)
+
     def test_rendered_nonstudy_wav_is_exact(self) -> None:
         row = plan.verify_wav()
         self.assertEqual(row["pcm_samples"], 256000)

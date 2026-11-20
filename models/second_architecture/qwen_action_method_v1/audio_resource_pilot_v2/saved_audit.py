@@ -40,6 +40,21 @@ def verify_generation_shapes(shapes: dict, prompt_length: int) -> None:
                      "read-only generation hook shape invalid")
 
 
+def verify_heartbeat_boundary(result: dict, last_sample_elapsed: float) -> None:
+    marker = result.get("heartbeat_clean_exit_boundary")
+    observed = result.get("heartbeat_boundary_elapsed_seconds")
+    gate.require(type(marker) is bool, "closed-heartbeat marker missing")
+    if marker:
+        gate.require(type(observed) in (int, float)
+                     and 0 <= observed - last_sample_elapsed <= 2.0
+                     and observed <= result["worker_elapsed_seconds"]
+                     and result["worker_returncode"] == 0
+                     and result["worker_stop_reason"] == "normal_exit",
+                     "closed-heartbeat receipt is not at clean worker exit")
+    else:
+        gate.require(observed is None, "unexpected closed-heartbeat time")
+
+
 def audit() -> dict:
     go = gate.validate_go(live=False)
     from .. import typed_pilot_cuda_admission_v2
@@ -102,7 +117,6 @@ def audit() -> dict:
                  and result["worker_returncode"] == 0
                  and result["worker_stop_reason"] == "normal_exit"
                  and result["worker_monitor_error"] is None
-                 and type(result.get("heartbeat_clean_exit_boundary")) is bool
                  and 0 < result["worker_elapsed_seconds"] <= result["worker_seconds_granted"]
                  and result["worker_resource_samples"] > 0
                  and result["worker_parent_heartbeats"] > 0,
@@ -123,10 +137,7 @@ def audit() -> dict:
                  and max(x["gpu_used_bytes"] for x in rows)
                     == result["worker_peak_gpu_used_bytes"],
                  "resource sampling invalid")
-    if result["heartbeat_clean_exit_boundary"]:
-        gate.require(0 <= result["worker_elapsed_seconds"]
-                     - rows[-1]["elapsed_seconds"] <= 2.0,
-                     "closed-heartbeat marker is not at worker exit boundary")
+    verify_heartbeat_boundary(result, rows[-1]["elapsed_seconds"])
     cuda_path = folder / "cuda_samples.jsonl"
     cuda = [json.loads(line) for line in cuda_path.read_text().splitlines()]
     gate.require(plan.sha(cuda_path) == payload.get("cuda_log_sha256")
@@ -201,6 +212,7 @@ def audit() -> dict:
             "generation_stop_reason": generation["stock_stop_reason"],
             "generation_terminal_eos": generation["terminal_eos"],
             "heartbeat_clean_exit_boundary": result["heartbeat_clean_exit_boundary"],
+            "heartbeat_boundary_elapsed_seconds": result["heartbeat_boundary_elapsed_seconds"],
             "peak_gpu_used_bytes": result["worker_peak_gpu_used_bytes"],
             "peak_tree_rss_bytes": result["worker_peak_tree_rss_bytes"],
             "peak_framework_reserved_bytes": max(x["peak_reserved_bytes"] for x in cuda)}

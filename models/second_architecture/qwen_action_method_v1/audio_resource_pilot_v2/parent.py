@@ -87,6 +87,7 @@ def _monitor(deadline: float, nonce: bytes) -> dict:
     started = time.monotonic()
     process = None
     reason, error, clean_boundary = "normal_exit", None, False
+    boundary_elapsed = None
     samples, beats, peak_rss, peak_gpu = 0, 0, 0, 0
     resource_path = plan.ATTEMPT / "worker_resource_samples.jsonl"
     try:
@@ -143,6 +144,7 @@ def _monitor(deadline: float, nonce: bytes) -> dict:
                     if clean_exit_at_closed_heartbeat(
                             process, deadline, plan.ATTEMPT / "worker_output/result.json"):
                         clean_boundary = True
+                        boundary_elapsed = time.monotonic() - started
                     else:
                         reason = "parent_pipe_closed"
                         kill_group(process)
@@ -163,6 +165,7 @@ def _monitor(deadline: float, nonce: bytes) -> dict:
             "worker_peak_tree_rss_bytes": peak_rss,
             "worker_peak_gpu_used_bytes": peak_gpu,
             "heartbeat_clean_exit_boundary": clean_boundary,
+            "heartbeat_boundary_elapsed_seconds": boundary_elapsed,
             "worker_resource_log_sha256": plan.sha(resource_path)}
 
 
