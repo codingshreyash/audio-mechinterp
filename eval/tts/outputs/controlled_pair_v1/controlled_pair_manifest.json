@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "purpose": "fit-only matched one-word acoustic change",
+  "source_fragment_manifest_sha256": "84404163e33e9ef6bb616afcc0244e8a3c5722808cab47bc71c7cfd18b792b63",
+  "source_fragment_input_sha256": "490f116213c426a0e1886b8a1a070aa8012f08383576000f15d88765cce10044",
+  "sample_rate": 16000,
+  "gap_samples": 1920,
+  "system_prompt": "Answer the spoken question with one color word.",
+  "engines": {
+    "piper": {
+      "prefix_source": {
+        "path": "eval/tts/outputs/controlled_fragments_v1/processed/piper/0000_d78525db57f18f12.wav",
+        "file_sha256": "462ae8b8685c871167bf69df50f8b15a23168e736dd37baf7ec750811f3926d6"
+      },
+      "suffix_source": {
+        "path": "eval/tts/outputs/controlled_fragments_v1/processed/piper/0003_1115beba5bc1f910.wav",
+        "file_sha256": "662579a85f4384a43bfcc9e8107cfd0b75e3097f3055a1f870c7c61861064e25"
+      },
+      "word_slot_start_sample": 18082,
+      "word_slot_end_sample_exclusive": 26627,
+      "word_slot_start_seconds": 1.130125,
+      "word_slot_end_seconds": 1.6641875,
+      "prefix_and_suffix_pcm_identical": true,
+      "outputs": {
+        "red": {
+          "path": "eval/tts/outputs/controlled_pair_v1/piper_red.wav",
+          "file_sha256": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5",
+          "frames": 49724,
+          "duration_seconds": 3.10775,
+          "word_source": {
+            "path": "eval/tts/outputs/controlled_fragments_v1/processed/piper/0001_b9c60c3ea3b41c81.wav",
+            "file_sha256": "0dd10b1bc5e8404f390335666fceb45bfb6536377d065227278de757d3d57d46"
+          },
+          "word_source_frames": 8545,
+          "peak": 0.63623046875,
+          "rms": 0.09037799076220758
+        },
+        "blue": {
+          "path": "eval/tts/outputs/controlled_pair_v1/piper_blue.wav",
+          "file_sha256": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+          "frames": 49724,
+          "duration_seconds": 3.10775,
+          "word_source": {
+            "path": "eval/tts/outputs/controlled_fragments_v1/processed/piper/0002_1d904d3c39fe7c52.wav",
+            "file_sha256": "63f296fe6b60509e86aae49fe033d365e2cd34ffc3081e6c26b687b56703aada"
+          },
+          "word_source_frames": 8360,
+          "peak": 0.63714599609375,
+          "rms": 0.10197943709965562
+        }
+      }
+    },
+    "kokoro": {
+      "prefix_source": {
+        "path": "eval/tts/outputs/controlled_fragments_v1/processed/kokoro/0000_d78525db57f18f12.wav",
+        "file_sha256": "9c929ebac28c9d4a424f5addd79c49974d2e586aa746db387fa8261ba87c192a"
+      },
+      "suffix_source": {
+        "path": "eval/tts/outputs/controlled_fragments_v1/processed/kokoro/0003_1115beba5bc1f910.wav",
+        "file_sha256": "d134213116bf8002e6aa668e8f0619fc2d225c8f352394a8bbbd9638381a4f54"
+      },
+      "word_slot_start_sample": 35920,
+      "word_slot_end_sample_exclusive": 61120,
+      "word_slot_start_seconds": 2.245,
+      "word_slot_end_seconds": 3.82,
+      "prefix_and_suffix_pcm_identical": true,
+      "outputs": {
+        "red": {
+          "path": "eval/tts/outputs/controlled_pair_v1/kokoro_red.wav",
+          "file_sha256": "b3f09333295ede3cc909f3e1b6f1d84493f3f0d730d7bde8b3ed068ec267cfdb",
+          "frames": 101840,
+          "duration_seconds": 6.365,
+          "word_source": {
+            "path": "eval/tts/outputs/controlled_fragments_v1/processed/kokoro/0001_b9c60c3ea3b41c81.wav",
+            "file_sha256": "bf37e9e01856a95c915be474dbb3883bb1c03ce7e266bbc1fc6f3cdeeae36600"
+          },
+          "word_source_frames": 20000,
+          "peak": 0.999969482421875,
+          "rms": 0.07388316386155425
+        },
+        "blue": {
+          "path": "eval/tts/outputs/controlled_pair_v1/kokoro_blue.wav",
+          "file_sha256": "fd7864c3bc14c210fc22f49888ee6274e7a0c64e4283d12303d915db2aeeb962",
+          "frames": 101840,
+          "duration_seconds": 6.365,
+          "word_source": {
+            "path": "eval/tts/outputs/controlled_fragments_v1/processed/kokoro/0002_1d904d3c39fe7c52.wav",
+            "file_sha256": "75471c256cd66485c7c77672ec977f2d3b5e5afe032cbb98ea06a4f94ab9973a"
+          },
+          "word_source_frames": 25200,
+          "peak": 0.999969482421875,
+          "rms": 0.07764209702044574
+        }
+      }
+    }
+  }
+}
