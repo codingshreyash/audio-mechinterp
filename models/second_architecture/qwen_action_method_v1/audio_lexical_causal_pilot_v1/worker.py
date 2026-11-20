@@ -396,6 +396,8 @@ def run(attempt: Path) -> None:
             for arm in plan.ARMS:
                 calls = []
                 seed = plan.NOISE_SEED + site_index*100 + direction_index*10
+                arm_id = f"{site_index}_{direction_index}_{arm}"
+                call_nonce = os.urandom(16).hex()
                 def edit(live: Any) -> Any:
                     gate.require(not calls, "intervention hook fired more than once")
                     drift_tensor = live-recipient
@@ -409,15 +411,31 @@ def run(attempt: Path) -> None:
                                  and drift_l2 <= signal_l2*plan.MAX_PREPATCH_DRIFT_FRACTION,
                                  "intervention live source differs from captured recipient")
                     patched, info = make_edit(site, arm, live, recipient, donor, seed, torch)
+                    effective = patched-live
+                    window_lo, window_hi = info["window"]
+                    outside_maxabs = max(
+                        _maxabs(effective[:window_lo], torch) if window_lo else 0.0,
+                        _maxabs(effective[window_hi:], torch)
+                        if window_hi < effective.shape[0] else 0.0)
+                    gate.require(outside_maxabs == 0.0,
+                                 "intervention changed values outside frozen window")
+                    effective_sidecar = save_array(folder, f"effective_delta_{arm_id}_{call_nonce}",
+                        effective.detach().float().cpu().numpy().astype(np.float32))
+                    prepatch_sha = hashlib.sha256(
+                        live.detach().float().cpu().numpy().astype(np.float32).tobytes()).hexdigest()
                     calls.append({"source_drift_maxabs": drift,
-                                  "source_drift_l2": drift_l2, **info})
+                                  "source_drift_l2": drift_l2,
+                                  "prepatch_state_sha256": prepatch_sha,
+                                  "outside_window_maxabs": outside_maxabs,
+                                  "effective_delta": effective_sidecar, **info})
                     return patched
                 output = _generate(model, batch, processor.tokenizer, torch,
                                    [hook_one(modules, site, edit)])
                 gate.require(len(calls) == 1, "intervention hook census changed")
                 require_same_batch(batch, cpu_batches["calibrated"][recipient_word], torch)
                 row = {"site": site, "recipient": recipient_word, "donor": donor_word,
-                       "arm": arm, "output": output, "hook_calls": len(calls), **calls[0]}
+                       "arm": arm, "arm_id": arm_id, "call_nonce": call_nonce,
+                       "output": output, "hook_calls": len(calls), **calls[0]}
                 interventions.append(row)
                 progress(folder, {"kind": "intervention", **row})
                 measure_cuda(torch, folder,

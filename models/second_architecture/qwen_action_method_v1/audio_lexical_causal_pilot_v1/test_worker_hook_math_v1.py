@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 import unittest
+import tempfile
+from pathlib import Path
 
+import numpy as np
 import torch
 
 from . import plan, worker
@@ -75,6 +78,9 @@ class WorkerHookMathTests(unittest.TestCase):
                     patched, info = worker.make_edit(site, arm, clean, clean, donor,
                                                       plan.NOISE_SEED, torch)
                     delta = patched-clean
+                    edit_lo, edit_hi = info["window"]
+                    self.assertEqual(torch.count_nonzero(delta[:edit_lo]).item(), 0)
+                    self.assertEqual(torch.count_nonzero(delta[edit_hi:]).item(), 0)
                     changed = torch.any(delta != 0, dim=1).nonzero().flatten().tolist()
                     if arm == "local_donor":
                         self.assertEqual(changed, list(range(lo, hi)))
@@ -107,6 +113,20 @@ class WorkerHookMathTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "numerical floor"):
             worker.make_edit(site, "local_donor", clean, clean, donor,
                              plan.NOISE_SEED, torch)
+
+    def test_full_effective_delta_sidecar_retains_zero_rows(self):
+        full = np.zeros((400, 2048), dtype=np.float32)
+        full[29:41] = 0.25
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            descriptor = worker.save_array(folder, "effective_test", full)
+            self.assertEqual(descriptor["shape"], [400, 2048])
+            self.assertEqual(descriptor["dtype"], "float32")
+            self.assertEqual(descriptor["sha256"], plan.sha(folder / descriptor["path"]))
+            loaded = np.load(folder / descriptor["path"], allow_pickle=False)
+            np.testing.assert_array_equal(loaded, full)
+            self.assertEqual(np.count_nonzero(loaded[:29]), 0)
+            self.assertEqual(np.count_nonzero(loaded[41:]), 0)
 
 
 if __name__ == "__main__":
