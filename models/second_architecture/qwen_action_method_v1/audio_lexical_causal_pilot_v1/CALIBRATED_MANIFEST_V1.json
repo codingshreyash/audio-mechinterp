@@ -1,0 +1,20 @@
+{
+  "calibrated_wav_sha256": {
+    "blue": "d1c93162f9fdf0976ca2a4d600b82397e62828a4e1073e6fe6e6a86b7c43f17a",
+    "red": "df3927b62935c6fa27de3e6d4a137965e547f94bb3f3a6aa68886ae37c274214"
+  },
+  "edited_pcm_support": [
+    18082,
+    26626
+  ],
+  "gain_denominator": 100,
+  "gain_numerator": 73,
+  "original_manifest_sha256": "592203f23c66dd8e661084f78ad91a5ae696c94a6c47d3d7776d49aed10a424f",
+  "original_wav_sha256": {
+    "blue": "a1cd7aaa954c764d058e0b23bd9150c94e7ee3c71e153c1251dc0ec5ee7a7d77",
+    "red": "4c8a5174ba10a634777332dd46b23604e7351b4bf2b39f1300986becffd94d5e"
+  },
+  "rounding": "nearest_integer_ties_to_even_exact_rational",
+  "schema": "qwen_lexical_calibrated_audio_manifest_v1",
+  "selection": "processor_only_before_model_weights"
+}

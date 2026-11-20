@@ -1,0 +1,20 @@
+{
+  "claim_scope": "fit-only synthetic speech; no independent human lexical QA",
+  "final_pcm_samples": 256000,
+  "final_wav_sha256": {
+    "blue": "a1cd7aaa954c764d058e0b23bd9150c94e7ee3c71e153c1251dc0ec5ee7a7d77",
+    "red": "4c8a5174ba10a634777332dd46b23604e7351b4bf2b39f1300986becffd94d5e"
+  },
+  "pcm_difference_support": [
+    18082,
+    26626
+  ],
+  "sample_rate": 16000,
+  "schema": "qwen_lexical_audio_manifest_v1",
+  "source_manifest_sha256": "318807c92971babacad93b69b7d8478e29f397219da0cb9ed6e3134649aea98b",
+  "source_pcm_samples": 49724,
+  "source_wav_sha256": {
+    "blue": "b0ba6c0ef01f1df4cb385429e856c79e47e0eca276324d25582c704ac0d296fa",
+    "red": "8265e7183fc7ec76500ff63aeac27e28a0676726353c60f67b2234309eed6dd5"
+  }
+}
