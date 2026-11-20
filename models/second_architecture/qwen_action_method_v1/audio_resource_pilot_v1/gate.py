@@ -122,9 +122,20 @@ def gpu_inventory(*, require_idle: bool = True) -> dict[str, Any]:
             "compute_processes": [], "idle_gpu_limit_bytes": IDLE_GPU_BYTES}
 
 
-def require_one_slurm_gpu(job_gpus: str, gpus_on_node: str) -> None:
-    require(gpus_on_node == "1" and ONE_GPU.fullmatch(job_gpus) is not None,
-            "exactly one Slurm-allocated GPU required")
+def require_one_slurm_gpu(job_gpus: str, step_gpus: str,
+                          gpus_on_node: str) -> dict[str, str]:
+    """Accept a single step allocation only if this Slurm leaves job GPUs empty."""
+    require(gpus_on_node == "1", "exactly one Slurm GPU on node required")
+    if job_gpus:
+        require(ONE_GPU.fullmatch(job_gpus) is not None,
+                "SLURM_JOB_GPUS is not one GPU")
+    if step_gpus:
+        require(ONE_GPU.fullmatch(step_gpus) is not None,
+                "SLURM_STEP_GPUS is not one GPU")
+    if job_gpus:
+        return {"source": "SLURM_JOB_GPUS", "value": job_gpus}
+    require(bool(step_gpus), "both Slurm GPU allocation fields empty")
+    return {"source": "SLURM_STEP_GPUS", "value": step_gpus}
 
 
 def runtime_identity(*, require_idle: bool = True) -> dict[str, Any]:
@@ -132,11 +143,12 @@ def runtime_identity(*, require_idle: bool = True) -> dict[str, Any]:
     nodes = os.environ.get("SLURM_JOB_NUM_NODES", "")
     nodelist = os.environ.get("SLURM_JOB_NODELIST", "")
     job_gpus = os.environ.get("SLURM_JOB_GPUS", "")
+    step_gpus = os.environ.get("SLURM_STEP_GPUS", "")
     gpus_on_node = os.environ.get("SLURM_GPUS_ON_NODE", "")
     hostname = socket.gethostname().split(".")[0]
     require(job.isdecimal() and nodes == "1" and bool(nodelist),
             "single-node Slurm GPU allocation required")
-    require_one_slurm_gpu(job_gpus, gpus_on_node)
+    selected_gpu = require_one_slurm_gpu(job_gpus, step_gpus, gpus_on_node)
     hosts = subprocess.run(("scontrol", "show", "hostnames", nodelist),
                            capture_output=True, text=True, timeout=10, check=True)
     listed = [x.strip().split(".")[0] for x in hosts.stdout.splitlines() if x.strip()]
@@ -156,7 +168,9 @@ def runtime_identity(*, require_idle: bool = True) -> dict[str, Any]:
             "packages": actual, "gpu_uuid": gpu["gpu_uuid"],
             "gpu_name": gpu["gpu_name"], "gpu_memory_mib": gpu["gpu_memory_mib"],
             "slurm_job_id": job, "slurm_node": hostname,
-            "slurm_job_gpus": job_gpus, "slurm_gpus_on_node": gpus_on_node,
+            "slurm_job_gpus": job_gpus, "slurm_step_gpus": step_gpus,
+            "slurm_selected_gpu": selected_gpu,
+            "slurm_gpus_on_node": gpus_on_node,
             "slurm_nodelist": nodelist,
             "math_mode": {"matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
                           "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,

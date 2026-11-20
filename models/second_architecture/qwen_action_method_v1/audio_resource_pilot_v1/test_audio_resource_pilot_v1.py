@@ -36,13 +36,20 @@ class PilotSourceTests(unittest.TestCase):
             plan.verify_geometry({**row, "mel_frames": 550})
 
     def test_multi_gpu_slurm_allocation_refused(self) -> None:
-        gate.require_one_slurm_gpu("0", "1")
+        self.assertEqual(gate.require_one_slurm_gpu("0", "", "1"),
+                         {"source": "SLURM_JOB_GPUS", "value": "0"})
+        self.assertEqual(gate.require_one_slurm_gpu("", "0", "1"),
+                         {"source": "SLURM_STEP_GPUS", "value": "0"})
         with self.assertRaises(ValueError):
-            gate.require_one_slurm_gpu("0,1", "2")
+            gate.require_one_slurm_gpu("0,1", "", "2")
         with self.assertRaises(ValueError):
-            gate.require_one_slurm_gpu("0,1", "1")
+            gate.require_one_slurm_gpu("0,1", "0", "1")
         with self.assertRaises(ValueError):
-            gate.require_one_slurm_gpu("0", "2")
+            gate.require_one_slurm_gpu("", "0,1", "1")
+        with self.assertRaises(ValueError):
+            gate.require_one_slurm_gpu("", "", "1")
+        with self.assertRaises(ValueError):
+            gate.require_one_slurm_gpu("0", "", "2")
 
     def test_direct_worker_refuses_before_model_import(self) -> None:
         cmd = [sys.executable, "-m",
